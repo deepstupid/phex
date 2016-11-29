@@ -1,0 +1,61 @@
+# Evaluation of the HrrnQueuePerformanceTest
+
+# Test data generated with 
+# mvn -Dtest=phex.upload.HrrnQueuePerformanceTest integration-test -e
+
+# This script can be loaded with pyxplot: http://www.pyxplot.org.uk/
+# pyxplot 
+# pyxplot> load "plot_data.pyxplot"
+
+set width 10
+
+set title "Wait times for uploads using a FIFO or a Hrrn scheduler"
+set ylabel "time [ms]"
+set xlabel "filesize [kiB]"
+
+# Show the whole filesize range
+set xrange [0:1210000]
+
+# Only show positive times. 
+set yrange [0:]
+
+# Plot the old data, both data fields. 
+#plot "phex_fifo_results.log" using 1:2 title "fifo completion", "phex_fifo_results.log" using 1:3 title "fifo wait", "phex_hrrn_results.log" using 1:2 title "hrrn completion", "phex_hrrn_results.log" using 1:3 title "hrrn wait"
+
+# Plot only the wait time
+#plot "phex_fifo_x.log" using 1:2 title "fifo wait", "phex_hrrn_x.log" using 1:2 title "hrrn wait", 
+plot "phex_fifo_x_fr.log" using 1:2 title "fifo wait Full Range", "phex_hrrn_x_fr.log" using 1:2 title "hrrn wait Full Range" with points c 3
+
+# Plot the new data files, only the wait time
+# plot "phex_fifo_results_200.log" using 1:2 title "fifo wait", "phex_hrrn_results_200.log" using 1:2 title "hrrn wait"
+
+# Output as image. 
+set term png
+set output "evaluation-fifo-hrrn-only-wait.png"
+replot
+set term X11_singlewindow
+
+
+# Plot the download time as box with the wait time as errorbar. 
+#plot "phex_fifo_x.log" using 1:2:3 title "fifo wait time $\pm$ transfer time" with yerrorbars, "phex_hrrn_x.log" using 1:2:3 title "hrrn wait time $\pm$ transfer time" with yerrorbars, "phex_fifo_x_fr.log" using 1:2:3 title "fifo wait time $\pm$ transfer time, Full Range" with yerrorbars, "phex_hrrn_x_fr.log" using 1:2:3 title "hrrn wait time $\pm$ transfer time Full Range" with yerrorbars
+
+set boxwidth 30000
+
+plot "phex_fifo_x_fr.log" using 1:2 title "fifo wait time" with boxes fc 1 c 1, "phex_fifo_x_fr.log" using 1:2:3 title "fifo transfer time" with yerrorbars, "phex_hrrn_x_fr.log" using 1:2 title "hrrn wait time" with boxes fc 3 c 3, "phex_hrrn_x_fr.log" using 1:2:3 title "hrrn transfer time" with yerrorbars c 3
+
+# Output as image. 
+set term png
+set output "evaluation-fifo-hrrn-wait-and-transfer.png"
+replot
+set term X11_singlewindow
+
+# Show only small files
+set xrange [2048:4200]
+set boxwidth 30
+replot
+
+# Output as image. 
+set term png
+set output "evaluation-fifo-hrrn-wait-and-transfer-only-small.png"
+replot
+set term X11_singlewindow

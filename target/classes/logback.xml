@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <include resource="logback.inc.xml"/>
+	<root>
+		<level value="error" />
+		<appender-ref ref="DefaultFileAppender" />
+		<appender-ref ref="ErrorFileAppender" />
+		<appender-ref ref="ConsoleAppender" />
+	</root>
+</configuration>

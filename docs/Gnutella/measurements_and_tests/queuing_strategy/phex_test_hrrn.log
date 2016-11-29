@@ -1,0 +1,1671 @@
++ Error stacktraces are turned on.
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Phex
+[INFO]    task-segment: [integration-test]
+[INFO] ------------------------------------------------------------------------
+[WARNING] While downloading xerces:xerces:2.4.0
+  This artifact has been relocated to xerces:xercesImpl:2.4.0.
+
+
+[INFO] [antrun:run {execution: copy-version}]
+[INFO] Executing tasks
+     [copy] Copying 1 file to /home/arne/Dokumente/1-noch-zu-backuppen/Programme/phex/trunk/src/main/java/phex/common
+[INFO] Executed tasks
+[INFO] [resources:resources]
+[INFO] Using default encoding to copy filtered resources.
+[INFO] [compiler:compile]
+[INFO] Compiling 1 source file to /home/arne/Dokumente/1-noch-zu-backuppen/Programme/phex/trunk/target/classes
+[INFO] [resources:testResources]
+[INFO] Using default encoding to copy filtered resources.
+[INFO] [compiler:testCompile]
+[INFO] Nothing to compile - all classes are up to date
+[INFO] [surefire:test]
+[INFO] Tests are skipped.
+[INFO] [jar:jar]
+[INFO] Building jar: /home/arne/Dokumente/1-noch-zu-backuppen/Programme/phex/trunk/target/phex.jar
+[INFO] [dependency:copy-dependencies {execution: copy-dependencies}]
+[INFO] bcpg-jdk15-140.jar already exists in destination.
+[INFO] bcprov-jdk15-140.jar already exists in destination.
+[INFO] logback-classic-0.9.14.jar already exists in destination.
+[INFO] logback-core-0.9.14.jar already exists in destination.
+[INFO] forms-1.2.1.jar already exists in destination.
+[INFO] looks-2.2.1.jar already exists in destination.
+[INFO] commons-collections-3.2.jar already exists in destination.
+[INFO] commons-httpclient-3.0.1.jar already exists in destination.
+[INFO] mrjadapter-1.1.jar already exists in destination.
+[INFO] jcl-over-slf4j-1.5.6.jar already exists in destination.
+[INFO] slf4j-api-1.5.6.jar already exists in destination.
+[INFO] xSocket-2.4.1.jar already exists in destination.
+[INFO] [surefire:test {execution: surefire-it}]
+[INFO] Surefire report directory: /home/arne/Dokumente/1-noch-zu-backuppen/Programme/phex/trunk/target/surefire-reports
+
+-------------------------------------------------------
+ T E S T S
+-------------------------------------------------------
+Running phex.upload.HrrnQueuePerformanceTest
+----------FIFO--------------
+Queued (1): #1 - 974757kb
+Queued (2): #2 - 660839kb
+Queued (3): #3 - 1076237kb
+Queued (4): #4 - 672139kb
+Queued (5): #5 - 2581kb
+Queued (6): #6 - 1017380kb
+Queued (7): #7 - 1112014kb
+Queued (8): #8 - 977727kb
+Queued (9): #9 - 1104484kb
+Queued (10): #10 - 692897kb
+Uploading: #1 - 110ms
+Uploading: #2 - 111ms
+Uploading: #3 - 111ms
+Queued (8): #11 - 1036648kb
+Queued (9): #12 - 692352kb
+Queued (10): #13 - 915145kb
+Uploaded: #1 - 974757KB - 21023ms - 46366.21795176711KB/s
+Uploading: #4 - 21135ms
+Queued (10): #14 - 3735kb
+Uploaded: #2 - 660839KB - 24828ms - 26616.682777509264KB/s
+Uploading: #5 - 24939ms
+Queued (10): #15 - 1032746kb
+Uploaded: #5 - 2581KB - 400ms - 6452.5KB/s
+Uploading: #6 - 25339ms
+Queued (10): #16 - 4044kb
+Uploaded: #3 - 1076237KB - 31252ms - 34437.38000767951KB/s
+Uploading: #7 - 31363ms
+Queued (10): #17 - 2462kb
+Uploaded: #4 - 672139KB - 21456ms - 31326.38888888889KB/s
+Uploading: #8 - 42590ms
+Queued (10): #18 - 3816kb
+Uploaded: #6 - 1017380KB - 26703ms - 38099.83896940419KB/s
+Uploading: #9 - 52042ms
+Queued (10): #19 - 2980kb
+Uploaded: #7 - 1112014KB - 30779ms - 36128.984047564896KB/s
+Uploading: #10 - 62164ms
+Queued (10): #20 - 2274kb
+Uploaded: #8 - 977727KB - 28783ms - 33968.90525657506KB/s
+Uploading: #11 - 71174ms
+Queued (10): #21 - 2711kb
+Uploaded: #9 - 1104484KB - 31986ms - 34530.23197648971KB/s
+Uploading: #12 - 83827ms
+Queued (10): #22 - 1136970kb
+Uploaded: #10 - 692897KB - 26715ms - 25936.627362904735KB/s
+Uploading: #13 - 88678ms
+Queued (10): #23 - 1195961kb
+Uploaded: #11 - 1036648KB - 27752ms - 37353.992505044684KB/s
+Uploading: #14 - 77907ms
+Queued (10): #24 - 2335kb
+Uploaded: #14 - 3735KB - 400ms - 9337.5KB/s
+Uploading: #15 - 74498ms
+Queued (10): #25 - 1011269kb
+Uploaded: #12 - 692352KB - 24542ms - 28210.90375682503KB/s
+Uploading: #16 - 83141ms
+Queued (10): #26 - 842807kb
+Uploaded: #16 - 4044KB - 615ms - 6575.609756097561KB/s
+Uploading: #17 - 77754ms
+Queued (10): #27 - 817335kb
+Uploaded: #17 - 2462KB - 599ms - 4110.183639398999KB/s
+Uploading: #18 - 67133ms
+Queued (10): #28 - 869794kb
+Uploaded: #18 - 3816KB - 801ms - 4764.044943820224KB/s
+Uploading: #19 - 58518ms
+Queued (10): #29 - 2762kb
+Uploaded: #19 - 2980KB - 200ms - 14900.0KB/s
+Uploading: #20 - 48601ms
+Queued (10): #30 - 2507kb
+Uploaded: #20 - 2274KB - 419ms - 5427.207637231504KB/s
+Uploading: #21 - 39795ms
+Queued (10): #31 - 617153kb
+Uploaded: #21 - 2711KB - 199ms - 13623.115577889446KB/s
+Uploading: #22 - 27355ms
+Queued (10): #32 - 855252kb
+Uploaded: #13 - 915145KB - 28178ms - 32477.287245368727KB/s
+Uploading: #23 - 28109ms
+Queued (10): #33 - 957540kb
+Uploaded: #15 - 1032746KB - 27824ms - 37117.093156986775KB/s
+Uploading: #24 - 28187ms
+Queued (10): #34 - 3236kb
+Uploaded: #24 - 2335KB - 200ms - 11675.0KB/s
+Uploading: #25 - 27987ms
+Queued (10): #35 - 3116kb
+Uploaded: #22 - 1136970KB - 31230ms - 36406.34005763689KB/s
+Uploading: #26 - 33965ms
+Queued (10): #36 - 2350kb
+Uploaded: #23 - 1195961KB - 37277ms - 32083.080720015023KB/s
+Uploading: #27 - 45071ms
+Queued (10): #37 - 2875kb
+Uploaded: #25 - 1011269KB - 29597ms - 34167.95621177822KB/s
+Uploading: #28 - 47278ms
+Queued (10): #38 - 1068119kb
+Uploaded: #26 - 842807KB - 23822ms - 35379.35521786584KB/s
+Uploading: #29 - 55788ms
+Queued (10): #39 - 814248kb
+Uploaded: #29 - 2762KB - 1020ms - 2707.843137254902KB/s
+Uploading: #30 - 56608ms
+Queued (10): #40 - 925257kb
+Uploaded: #30 - 2507KB - 200ms - 12535.0KB/s
+Uploading: #31 - 56407ms
+Queued (10): #41 - 3003kb
+Uploaded: #27 - 817335KB - 21629ms - 37788.84830551574KB/s
+Uploading: #32 - 64497ms
+Queued (10): #42 - 2881kb
+Uploaded: #28 - 869794KB - 30707ms - 28325.593512879797KB/s
+Uploading: #33 - 70779ms
+Queued (10): #43 - 3979kb
+Uploaded: #31 - 617153KB - 22823ms - 27040.835998773167KB/s
+Uploading: #34 - 63110ms
+Queued (10): #44 - 800246kb
+Uploaded: #34 - 3236KB - 200ms - 16180.0KB/s
+Uploading: #35 - 63112ms
+Queued (10): #45 - 2649kb
+Uploaded: #35 - 3116KB - 799ms - 3899.874843554443KB/s
+Uploading: #36 - 48866ms
+Queued (10): #46 - 1105622kb
+Uploaded: #36 - 2350KB - 200ms - 11750.0KB/s
+Uploading: #37 - 37358ms
+Queued (10): #47 - 699511kb
+Uploaded: #37 - 2875KB - 1630ms - 1763.803680981595KB/s
+Uploading: #38 - 36086ms
+Queued (10): #48 - 879702kb
+Uploaded: #32 - 855252KB - 21609ms - 39578.50895460224KB/s
+Uploading: #39 - 31116ms
+Queued (10): #49 - 3274kb
+Uploaded: #33 - 957540KB - 20824ms - 45982.52016903573KB/s
+Uploading: #40 - 41116ms
+Queued (10): #50 - 3685kb
+Uploaded: #38 - 1068119KB - 28261ms - 37794.80556243587KB/s
+Uploading: #41 - 53832ms
+Queued (10): #51 - 770238kb
+Uploaded: #41 - 3003KB - 401ms - 7488.7780548628425KB/s
+Uploading: #42 - 45928ms
+Queued (10): #52 - 2273kb
+Uploaded: #42 - 2881KB - 200ms - 14405.0KB/s
+Uploading: #43 - 34297ms
+Queued (10): #53 - 1153320kb
+Uploaded: #43 - 3979KB - 400ms - 9947.5KB/s
+Uploading: #44 - 31994ms
+Queued (10): #54 - 720031kb
+Uploaded: #39 - 814248KB - 35286ms - 23075.667403502805KB/s
+Uploading: #45 - 42062ms
+Queued (10): #55 - 1034193kb
+Uploaded: #45 - 2649KB - 1415ms - 1872.0848056537102KB/s
+Uploading: #46 - 42676ms
+Queued (10): #56 - 2988kb
+Uploaded: #40 - 925257KB - 33312ms - 27775.486311239194KB/s
+Uploading: #47 - 50288ms
+Queued (10): #57 - 3114kb
+Uploaded: #44 - 800246KB - 21610ms - 37031.281813975016KB/s
+Uploading: #48 - 50802ms
+Queued (10): #58 - 2627kb
+Uploaded: #47 - 699511KB - 20373ms - 34335.19854709665KB/s
+Uploading: #49 - 64758ms
+Queued (10): #59 - 760399kb
+Uploaded: #49 - 3274KB - 200ms - 16370.0KB/s
+Uploading: #50 - 53852ms
+Queued (10): #60 - 3801kb
+Uploaded: #50 - 3685KB - 800ms - 4606.25KB/s
+Uploading: #51 - 41734ms
+Queued (10): #61 - 3013kb
+Uploaded: #46 - 1105622KB - 30713ms - 35998.50226288542KB/s
+Uploading: #52 - 42961ms
+Queued (10): #62 - 3434kb
+Uploaded: #52 - 2273KB - 200ms - 11365.0KB/s
+Uploading: #53 - 42961ms
+Queued (10): #63 - 3013kb
+Uploaded: #48 - 879702KB - 30221ms - 29108.963965454484KB/s
+Uploading: #54 - 51798ms
+Queued (10): #64 - 628548kb
+Uploaded: #51 - 770238KB - 19123ms - 40278.09444124876KB/s
+Uploading: #55 - 49549ms
+Queued (10): #65 - 3779kb
+Uploaded: #53 - 1153320KB - 33557ms - 34368.98411657776KB/s
+Uploading: #56 - 64411ms
+Queued (10): #66 - 2553kb
+Uploaded: #56 - 2988KB - 403ms - 7414.392059553349KB/s
+Uploading: #57 - 57104ms
+Queued (10): #67 - 2493kb
+Uploaded: #57 - 3114KB - 200ms - 15570.0KB/s
+Uploading: #58 - 55104ms
+Queued (10): #68 - 3291kb
+Uploaded: #58 - 2627KB - 814ms - 3227.2727272727275KB/s
+Uploading: #59 - 37793ms
+Queued (10): #69 - 638363kb
+Uploaded: #54 - 720031KB - 26739ms - 26928.11997456898KB/s
+Uploading: #60 - 38592ms
+Queued (10): #70 - 2415kb
+Uploaded: #60 - 3801KB - 1000ms - 3801.0KB/s
+Uploading: #61 - 38793ms
+Queued (10): #71 - 897063kb
+Uploaded: #61 - 3013KB - 400ms - 7532.5KB/s
+Uploading: #62 - 37492ms
+Queued (10): #72 - 2848kb
+Uploaded: #62 - 3434KB - 1004ms - 3420.3187250996016KB/s
+Uploading: #63 - 38295ms
+Queued (10): #73 - 2292kb
+Uploaded: #63 - 3013KB - 400ms - 7532.5KB/s
+Uploading: #64 - 29490ms
+Queued (10): #74 - 2234kb
+Uploaded: #55 - 1034193KB - 26913ms - 38427.265633708615KB/s
+Uploading: #65 - 26908ms
+Queued (10): #75 - 1156545kb
+Uploaded: #65 - 3779KB - 1203ms - 3141.313383208645KB/s
+Uploading: #66 - 11799ms
+Queued (10): #76 - 3104kb
+Uploaded: #66 - 2553KB - 200ms - 12765.0KB/s
+Uploading: #67 - 11598ms
+Queued (10): #77 - 1175629kb
+Uploaded: #67 - 2493KB - 200ms - 12465.0KB/s
+Uploading: #68 - 11598ms
+Queued (10): #78 - 1152745kb
+Uploaded: #68 - 3291KB - 818ms - 4023.227383863081KB/s
+Uploading: #69 - 11615ms
+Queued (10): #79 - 809936kb
+Uploaded: #59 - 760399KB - 17886ms - 42513.641954601364KB/s
+Uploading: #70 - 16847ms
+Queued (10): #80 - 1124209kb
+Uploaded: #70 - 2415KB - 800ms - 3018.75KB/s
+Uploading: #71 - 16647ms
+Queued (10): #81 - 1025373kb
+Uploaded: #64 - 628548KB - 18290ms - 34365.66429743029KB/s
+Uploading: #72 - 19655ms
+Queued (10): #82 - 2465kb
+Uploaded: #72 - 2848KB - 601ms - 4738.768718801997KB/s
+Uploading: #73 - 19255ms
+Queued (10): #83 - 987886kb
+Uploaded: #73 - 2292KB - 602ms - 3807.308970099668KB/s
+Uploading: #74 - 19458ms
+Queued (10): #84 - 743633kb
+Uploaded: #74 - 2234KB - 399ms - 5598.997493734336KB/s
+Uploading: #75 - 14453ms
+Queued (10): #85 - 751917kb
+Uploaded: #69 - 638363KB - 18464ms - 34573.38604852687KB/s
+Uploading: #76 - 19672ms
+Queued (10): #86 - 3878kb
+Uploaded: #76 - 3104KB - 799ms - 3884.856070087609KB/s
+Uploading: #77 - 20271ms
+Queued (10): #87 - 614687kb
+Uploaded: #71 - 897063KB - 24875ms - 36062.83417085427KB/s
+Uploading: #78 - 32715ms
+Queued (10): #88 - 1070229kb
+Uploaded: #75 - 1156545KB - 37296ms - 31009.893822393824KB/s
+Uploading: #79 - 49248ms
+Queued (10): #89 - 1053421kb
+Uploaded: #77 - 1175629KB - 34091ms - 34485.02537326567KB/s
+Uploading: #80 - 47058ms
+Queued (10): #90 - 3659kb
+Uploaded: #78 - 1152745KB - 33482ms - 34428.7975628696KB/s
+Uploading: #81 - 58294ms
+Queued (10): #91 - 1143057kb
+Uploaded: #79 - 809936KB - 25887ms - 31287.364314134506KB/s
+Uploading: #82 - 64727ms
+Queued (10): #92 - 1017001kb
+Uploaded: #82 - 2465KB - 401ms - 6147.13216957606KB/s
+Uploading: #83 - 64528ms
+Queued (10): #93 - 607065kb
+Uploaded: #80 - 1124209KB - 32318ms - 34785.84689646637KB/s
+Uploading: #84 - 73971ms
+Queued (10): #94 - 1153228kb
+Uploaded: #81 - 1025373KB - 34148ms - 30027.322244348128KB/s
+Uploading: #85 - 87436ms
+Queued (10): #95 - 1155931kb
+Uploaded: #83 - 987886KB - 31940ms - 30929.43018159048KB/s
+Uploading: #86 - 89064ms
+Queued (10): #96 - 1036529kb
+Uploaded: #86 - 3878KB - 400ms - 9695.0KB/s
+Uploading: #87 - 88664ms
+Uploaded: #84 - 743633KB - 22296ms - 33352.75385719412KB/s
+Uploading: #88 - 76029ms
+Queued (9): #97 - 1006582kb
+Queued (10): #98 - 3687kb
+Uploaded: #85 - 751917KB - 20042ms - 37517.06416525297KB/s
+Uploading: #89 - 70232ms
+Queued (10): #99 - 4094kb
+Uploaded: #87 - 614687KB - 15617ms - 39360.120381635395KB/s
+Uploading: #90 - 70136ms
+Queued (10): #100 - 714699kb
+Uploaded: #90 - 3659KB - 1000ms - 3659.0KB/s
+Uploading: #91 - 59125ms
+Queued (10): #101 - 1023633kb
+Uploaded: #88 - 1070229KB - 33269ms - 32168.956085244525KB/s
+Uploading: #92 - 65966ms
+Queued (10): #102 - 1194849kb
+Uploaded: #89 - 1053421KB - 31092ms - 33880.77318924482KB/s
+Uploading: #93 - 75000ms
+Queued (10): #103 - 729067kb
+Uploaded: #91 - 1143057KB - 33923ms - 33695.6342304631KB/s
+Uploading: #94 - 72830ms
+Queued (10): #104 - 952399kb
+Uploaded: #92 - 1017001KB - 30330ms - 33531.19024068579KB/s
+Uploading: #95 - 71970ms
+Queued (10): #105 - 882373kb
+Uploaded: #93 - 607065KB - 22298ms - 27225.0874517894KB/s
+Uploading: #96 - 65368ms
+Queued (10): #106 - 999384kb
+Uploaded: #94 - 1153228KB - 30692ms - 37574.221295451585KB/s
+Uploading: #97 - 81197ms
+Queued (10): #107 - 2783kb
+Uploaded: #95 - 1155931KB - 31341ms - 36882.390478925365KB/s
+Uploading: #98 - 94905ms
+Queued (10): #108 - 1004239kb
+Uploaded: #98 - 3687KB - 1209ms - 3049.6277915632754KB/s
+Uploading: #99 - 84502ms
+Queued (10): #109 - 1012147kb
+Uploaded: #99 - 4094KB - 199ms - 20572.864321608038KB/s
+Uploading: #100 - 80700ms
+Queued (10): #110 - 707504kb
+Uploaded: #96 - 1036529KB - 34165ms - 30338.914093370407KB/s
+Uploading: #101 - 82517ms
+Queued (10): #111 - 666838kb
+Uploaded: #97 - 1006582KB - 29590ms - 34017.641094964514KB/s
+Uploading: #102 - 77460ms
+Queued (10): #112 - 1045465kb
+Uploaded: #100 - 714699KB - 20890ms - 34212.49401627573KB/s
+Uploading: #103 - 74471ms
+Queued (10): #113 - 1152712kb
+Uploaded: #101 - 1023633KB - 29154ms - 35111.23688001646KB/s
+Uploading: #104 - 77748ms
+Queued (10): #114 - 952552kb
+Uploaded: #103 - 729067KB - 26731ms - 27274.21346002768KB/s
+Uploading: #105 - 80289ms
+Queued (10): #115 - 3304kb
+Uploaded: #102 - 1194849KB - 34953ms - 34184.44768689383KB/s
+Uploading: #106 - 80697ms
+Queued (10): #116 - 1049138kb
+Uploaded: #104 - 952399KB - 29109ms - 32718.368889346937KB/s
+Uploading: #107 - 76136ms
+Queued (10): #117 - 637692kb
+Uploaded: #107 - 2783KB - 200ms - 13915.0KB/s
+Uploading: #108 - 62628ms
+Queued (10): #118 - 866268kb
+Uploaded: #105 - 882373KB - 21871ms - 40344.4286955329KB/s
+Uploading: #109 - 69639ms
+Queued (10): #119 - 1078721kb
+Uploaded: #106 - 999384KB - 32313ms - 30928.233218828333KB/s
+Uploading: #110 - 81689ms
+Queued (10): #120 - 2662kb
+Uploaded: #108 - 1004239KB - 31386ms - 31996.39966864207KB/s
+Uploading: #111 - 89812ms
+Queued (10): #121 - 2523kb
+Uploaded: #109 - 1012147KB - 31397ms - 32237.060865687807KB/s
+Uploading: #112 - 86328ms
+Queued (10): #122 - 3163kb
+Uploaded: #110 - 707504KB - 21558ms - 32818.62881528899KB/s
+Uploading: #113 - 82336ms
+Queued (10): #123 - 3240kb
+Uploaded: #111 - 666838KB - 18698ms - 35663.60038506792KB/s
+Uploading: #114 - 79389ms
+Queued (10): #124 - 925964kb
+Uploaded: #112 - 1045465KB - 27707ms - 37732.88338686974KB/s
+Uploading: #115 - 80905ms
+Queued (10): #125 - 946317kb
+Uploaded: #115 - 3304KB - 199ms - 16603.015075376883KB/s
+Uploading: #116 - 79303ms
+Queued (10): #126 - 1168168kb
+Uploaded: #113 - 1152712KB - 38962ms - 29585.544889892713KB/s
+Uploading: #117 - 81165ms
+Queued (10): #127 - 681139kb
+Uploaded: #114 - 952552KB - 31700ms - 30048.958990536277KB/s
+Uploading: #118 - 81766ms
+Queued (10): #128 - 3723kb
+Uploaded: #116 - 1049138KB - 28291ms - 37083.807571312434KB/s
+Uploading: #119 - 87587ms
+Queued (10): #129 - 2660kb
+Uploaded: #117 - 637692KB - 21429ms - 29758.364832703348KB/s
+Uploading: #120 - 81878ms
+Queued (10): #130 - 620281kb
+Uploaded: #120 - 2662KB - 199ms - 13376.884422110552KB/s
+Uploading: #121 - 71167ms
+Queued (10): #131 - 1189789kb
+Uploaded: #121 - 2523KB - 200ms - 12615.0KB/s
+Uploading: #122 - 63160ms
+Queued (10): #132 - 1063577kb
+Uploaded: #122 - 3163KB - 600ms - 5271.666666666667KB/s
+Uploading: #123 - 61357ms
+Queued (10): #133 - 2128kb
+Uploaded: #123 - 3240KB - 200ms - 16200.0KB/s
+Uploading: #124 - 53448ms
+Queued (10): #134 - 3589kb
+Uploaded: #118 - 866268KB - 24637ms - 35161.26151723018KB/s
+Uploading: #125 - 39041ms
+Queued (10): #135 - 3623kb
+Uploaded: #119 - 1078721KB - 24311ms - 44371.72473365966KB/s
+Uploading: #126 - 52540ms
+Queued (10): #136 - 747466kb
+Uploaded: #124 - 925964KB - 26247ms - 35278.850916295196KB/s
+Uploading: #127 - 48868ms
+Queued (10): #137 - 1039682kb
+Uploaded: #125 - 946317KB - 35913ms - 26350.263135911788KB/s
+Uploading: #128 - 60543ms
+Queued (10): #138 - 993983kb
+Uploaded: #128 - 3723KB - 203ms - 18339.90147783251KB/s
+Uploading: #129 - 46729ms
+Queued (10): #139 - 3870kb
+Uploaded: #129 - 2660KB - 199ms - 13366.83417085427KB/s
+Uploading: #130 - 40325ms
+Queued (10): #140 - 745331kb
+Uploaded: #127 - 681139KB - 22560ms - 30192.33156028369KB/s
+Uploading: #131 - 49807ms
+Queued (10): #141 - 2239kb
+Uploaded: #126 - 1168168KB - 34109ms - 34248.08701515729KB/s
+Uploading: #132 - 51416ms
+Queued (10): #142 - 990154kb
+Uploaded: #130 - 620281KB - 20513ms - 30238.434163701066KB/s
+Uploading: #133 - 59836ms
+Queued (10): #143 - 808296kb
+Uploaded: #133 - 2128KB - 398ms - 5346.733668341708KB/s
+Uploading: #134 - 60036ms
+Queued (10): #144 - 870255kb
+Uploaded: #134 - 3589KB - 602ms - 5961.794019933555KB/s
+Uploading: #135 - 57737ms
+Queued (10): #145 - 3290kb
+Uploaded: #135 - 3623KB - 200ms - 18115.0KB/s
+Uploading: #136 - 44330ms
+Queued (10): #146 - 3436kb
+Uploaded: #131 - 1189789KB - 26103ms - 45580.54629736045KB/s
+Uploading: #137 - 48592ms
+Queued (10): #147 - 797776kb
+Uploaded: #132 - 1063577KB - 36123ms - 29443.20792846663KB/s
+Uploading: #138 - 48015ms
+Queued (10): #148 - 1100436kb
+Uploaded: #136 - 747466KB - 28512ms - 26215.838945005613KB/s
+Uploading: #139 - 50427ms
+Queued (10): #149 - 3825kb
+Uploaded: #139 - 3870KB - 598ms - 6471.571906354516KB/s
+Uploading: #140 - 50826ms
+Queued (10): #150 - 790980kb
+Uploaded: #137 - 1039682KB - 28073ms - 37034.94460869875KB/s
+Uploading: #141 - 54078ms
+Queued (10): #151 - 2229kb
+Uploaded: #141 - 2239KB - 199ms - 11251.256281407035KB/s
+Uploading: #142 - 52475ms
+Queued (10): #152 - 4088kb
+Uploaded: #138 - 993983KB - 27907ms - 35617.69448525459KB/s
+Uploading: #143 - 54932ms
+Queued (10): #153 - 808848kb
+Uploaded: #140 - 745331KB - 28703ms - 25967.006933073197KB/s
+Uploading: #144 - 58538ms
+Queued (10): #154 - 3738kb
+Uploaded: #142 - 990154KB - 27333ms - 36225.58811692826KB/s
+Uploading: #145 - 69799ms
+Queued (10): #155 - 3668kb
+Uploaded: #145 - 3290KB - 394ms - 8350.2538071066KB/s
+Uploading: #146 - 69998ms
+Queued (10): #156 - 718040kb
+Uploaded: #146 - 3436KB - 400ms - 8590.0KB/s
+Uploading: #147 - 56383ms
+Queued (10): #157 - 856146kb
+Uploaded: #143 - 808296KB - 24304ms - 33257.7353522054KB/s
+Uploading: #148 - 52209ms
+Queued (10): #158 - 968168kb
+Uploaded: #144 - 870255KB - 27921ms - 31168.47534114108KB/s
+Uploading: #149 - 57133ms
+Queued (10): #159 - 797608kb
+Uploaded: #149 - 3825KB - 799ms - 4787.234042553191KB/s
+Uploading: #150 - 57322ms
+Queued (10): #160 - 632709kb
+Uploaded: #147 - 797776KB - 22282ms - 35803.60829368998KB/s
+Uploading: #151 - 50529ms
+Queued (10): #161 - 644770kb
+Uploaded: #151 - 2229KB - 200ms - 11145.0KB/s
+Uploading: #152 - 50529ms
+Queued (10): #162 - 1046729kb
+Uploaded: #152 - 4088KB - 1000ms - 4088.0KB/s
+Uploading: #153 - 40116ms
+Queued (10): #163 - 3323kb
+Uploaded: #148 - 1100436KB - 31140ms - 35338.3429672447KB/s
+Uploading: #154 - 51404ms
+Queued (10): #164 - 899192kb
+Uploaded: #154 - 3738KB - 1003ms - 3726.8195413758726KB/s
+Uploading: #155 - 40501ms
+Queued (10): #165 - 996141kb
+Uploaded: #155 - 3668KB - 400ms - 9170.0KB/s
+Uploading: #156 - 40501ms
+Queued (10): #166 - 1185049kb
+Uploaded: #150 - 790980KB - 24520ms - 32258.564437194127KB/s
+Uploading: #157 - 40500ms
+Queued (10): #167 - 618112kb
+Uploaded: #153 - 808848KB - 23352ms - 34637.20452209661KB/s
+Uploading: #158 - 39149ms
+Queued (10): #168 - 845931kb
+Uploaded: #156 - 718040KB - 23147ms - 31020.866634985097KB/s
+Uploading: #159 - 48036ms
+Queued (10): #169 - 3699kb
+Uploaded: #157 - 856146KB - 23952ms - 35744.238476953906KB/s
+Uploading: #160 - 48441ms
+Queued (10): #170 - 4005kb
+Uploaded: #158 - 968168KB - 28216ms - 34312.73036574993KB/s
+Uploading: #161 - 52757ms
+Queued (10): #171 - 1172927kb
+Uploaded: #159 - 797608KB - 22749ms - 35061.23346081147KB/s
+Uploading: #162 - 63583ms
+Queued (10): #172 - 3399kb
+Uploaded: #160 - 632709KB - 22366ms - 28288.875972458194KB/s
+Uploading: #163 - 63405ms
+Queued (10): #173 - 3572kb
+Uploaded: #163 - 3323KB - 199ms - 16698.49246231156KB/s
+Uploading: #164 - 48290ms
+Queued (10): #174 - 637400kb
+Uploaded: #161 - 644770KB - 18291ms - 35250.66972828167KB/s
+Uploading: #165 - 53521ms
+Queued (10): #175 - 2273kb
+Uploaded: #162 - 1046729KB - 25572ms - 40932.62161739403KB/s
+Uploading: #166 - 71428ms
+Queued (10): #176 - 2961kb
+Uploaded: #164 - 899192KB - 30194ms - 29780.486189309137KB/s
+Uploading: #167 - 76671ms
+Queued (10): #177 - 861987kb
+Uploaded: #165 - 996141KB - 31396ms - 31728.277487578034KB/s
+Uploading: #168 - 77814ms
+Queued (10): #178 - 4038kb
+Uploaded: #167 - 618112KB - 24279ms - 25458.709172535935KB/s
+Uploading: #169 - 78235ms
+Queued (10): #179 - 868866kb
+Uploaded: #166 - 1185049KB - 30527ms - 38819.70059291775KB/s
+Uploading: #170 - 77639ms
+Queued (10): #180 - 1069464kb
+Uploaded: #170 - 4005KB - 200ms - 20025.0KB/s
+Uploading: #171 - 67227ms
+Queued (10): #181 - 862395kb
+Uploaded: #169 - 3699KB - 1004ms - 3684.262948207171KB/s
+Uploading: #172 - 56407ms
+Queued (10): #182 - 1135432kb
+Uploaded: #172 - 3399KB - 1202ms - 2827.7870216306155KB/s
+Uploading: #173 - 56793ms
+Queued (10): #183 - 672579kb
+Uploaded: #173 - 3572KB - 200ms - 17860.0KB/s
+Uploading: #174 - 56792ms
+Queued (10): #184 - 3891kb
+Uploaded: #168 - 845931KB - 24478ms - 34558.82833564834KB/s
+Uploading: #175 - 55830ms
+Queued (10): #185 - 2203kb
+Uploaded: #175 - 2273KB - 200ms - 11365.0KB/s
+Uploading: #176 - 37717ms
+Queued (10): #186 - 3794kb
+Uploaded: #176 - 2961KB - 200ms - 14805.0KB/s
+Uploading: #177 - 32312ms
+Queued (10): #187 - 3781kb
+Uploaded: #171 - 1172927KB - 30288ms - 38725.79899630217KB/s
+Uploaded: #174 - 637400KB - 28686ms - 22219.89820818518KB/s
+Uploading: #178 - 47853ms
+Uploading: #179 - 31043ms
+Queued (9): #188 - 670382kb
+Queued (10): #189 - 1060427kb
+Uploaded: #177 - 861987KB - 23446ms - 36764.77864027979KB/s
+Uploaded: #178 - 4038KB - 404ms - 9995.049504950495KB/s
+Uploading: #180 - 30847ms
+Uploading: #181 - 30646ms
+Queued (9): #190 - 2090kb
+Queued (10): #191 - 1103129kb
+Uploaded: #179 - 868866KB - 18094ms - 48019.56449651818KB/s
+Uploading: #182 - 48136ms
+Queued (10): #192 - 751083kb
+Uploaded: #180 - 1069464KB - 29002ms - 36875.52582580512KB/s
+Uploading: #183 - 58249ms
+Queued (10): #193 - 1127586kb
+Uploaded: #181 - 862395KB - 30869ms - 27937.25096375004KB/s
+Uploading: #184 - 59913ms
+Queued (10): #194 - 635376kb
+Uploaded: #184 - 3891KB - 2016ms - 1930.0595238095239KB/s
+Uploading: #185 - 56726ms
+Queued (10): #195 - 1110889kb
+Uploaded: #185 - 2203KB - 400ms - 5507.5KB/s
+Uploading: #186 - 56926ms
+Queued (10): #196 - 1029769kb
+Uploaded: #186 - 3794KB - 1201ms - 3159.0341382181514KB/s
+Uploading: #187 - 57927ms
+Queued (10): #197 - 2100kb
+Uploaded: #187 - 3781KB - 400ms - 9452.5KB/s
+Uploading: #188 - 35209ms
+Queued (10): #198 - 3156kb
+Uploaded: #182 - 1135432KB - 28115ms - 40385.27476436066KB/s
+Uploading: #189 - 46128ms
+Queued (10): #199 - 3076kb
+Uploaded: #183 - 672579KB - 27430ms - 24519.83230040102KB/s
+Uploading: #190 - 56357ms
+Queued (10): #200 - 4060kb
+Uploaded: #190 - 2090KB - 400ms - 5225.0KB/s
+Uploading: #191 - 56757ms
+Uploaded: #188 - 670382KB - 23961ms - 27978.047660782107KB/s
+Uploading: #192 - 41057ms
+Uploaded: #189 - 1060427KB - 26914ms - 39400.57219291075KB/s
+Uploading: #193 - 43624ms
+Uploaded: #191 - 1103129KB - 29136ms - 37861.37424492037KB/s
+Uploading: #194 - 55072ms
+Uploaded: #192 - 751083KB - 27724ms - 27091.437022074737KB/s
+Uploading: #195 - 53671ms
+Uploaded: #193 - 1127586KB - 30530ms - 36933.70455289879KB/s
+Uploading: #196 - 69950ms
+Uploaded: #194 - 635376KB - 19696ms - 32259.1389114541KB/s
+Uploading: #197 - 71167ms
+Uploaded: #197 - 2100KB - 599ms - 3505.8430717863107KB/s
+Uploading: #198 - 71366ms
+Uploaded: #198 - 3156KB - 600ms - 5260.0KB/s
+Uploading: #199 - 61040ms
+Uploaded: #199 - 3076KB - 200ms - 15380.0KB/s
+Uploading: #200 - 50534ms
+Uploaded: #200 - 4060KB - 600ms - 6766.666666666667KB/s
+Uploaded: #195 - 1110889KB - 31012ms - 35821.26273700503KB/s
+Uploaded: #196 - 1029769KB - 25740ms - 40006.56565656566KB/s
+Took: 1114.452s
+Transferred: 110135829KB - 98825.09879294936KB/s
+====================================================
+974757 110 21023
+660839 111 24828
+2581 24939 400
+1076237 111 31252
+672139 21135 21456
+1017380 25339 26703
+1112014 31363 30779
+977727 42590 28783
+1104484 52042 31986
+692897 62164 26715
+1036648 71174 27752
+3735 77907 400
+692352 83827 24542
+4044 83141 615
+2462 77754 599
+3816 67133 801
+2980 58518 200
+2274 48601 419
+2711 39795 199
+915145 88678 28178
+1032746 74498 27824
+2335 28187 200
+1136970 27355 31230
+1195961 28109 37277
+1011269 27987 29597
+842807 33965 23822
+2762 55788 1020
+2507 56608 200
+817335 45071 21629
+869794 47278 30707
+617153 56407 22823
+3236 63110 200
+3116 63112 799
+2350 48866 200
+2875 37358 1630
+855252 64497 21609
+957540 70779 20824
+1068119 36086 28261
+3003 53832 401
+2881 45928 200
+3979 34297 400
+814248 31116 35286
+2649 42062 1415
+925257 41116 33312
+800246 31994 21610
+699511 50288 20373
+3274 64758 200
+3685 53852 800
+1105622 42676 30713
+2273 42961 200
+879702 50802 30221
+770238 41734 19123
+1153320 42961 33557
+2988 64411 403
+3114 57104 200
+2627 55104 814
+720031 51798 26739
+3801 38592 1000
+3013 38793 400
+3434 37492 1004
+3013 38295 400
+1034193 49549 26913
+3779 26908 1203
+2553 11799 200
+2493 11598 200
+3291 11598 818
+760399 37793 17886
+2415 16847 800
+628548 29490 18290
+2848 19655 601
+2292 19255 602
+2234 19458 399
+638363 11615 18464
+3104 19672 799
+897063 16647 24875
+1156545 14453 37296
+1175629 20271 34091
+1152745 32715 33482
+809936 49248 25887
+2465 64727 401
+1124209 47058 32318
+1025373 58294 34148
+987886 64528 31940
+3878 89064 400
+743633 73971 22296
+751917 87436 20042
+614687 88664 15617
+3659 70136 1000
+1070229 76029 33269
+1053421 70232 31092
+1143057 59125 33923
+1017001 65966 30330
+607065 75000 22298
+1153228 72830 30692
+1155931 71970 31341
+3687 94905 1209
+4094 84502 199
+1036529 65368 34165
+1006582 81197 29590
+714699 80700 20890
+1023633 82517 29154
+729067 74471 26731
+1194849 77460 34953
+952399 77748 29109
+2783 76136 200
+882373 80289 21871
+999384 80697 32313
+1004239 62628 31386
+1012147 69639 31397
+707504 81689 21558
+666838 89812 18698
+1045465 86328 27707
+3304 80905 199
+1152712 82336 38962
+952552 79389 31700
+1049138 79303 28291
+637692 81165 21429
+2662 81878 199
+2523 71167 200
+3163 63160 600
+3240 61357 200
+866268 81766 24637
+1078721 87587 24311
+925964 53448 26247
+946317 39041 35913
+3723 60543 203
+2660 46729 199
+681139 48868 22560
+1168168 52540 34109
+620281 40325 20513
+2128 59836 398
+3589 60036 602
+3623 57737 200
+1189789 49807 26103
+1063577 51416 36123
+747466 44330 28512
+3870 50427 598
+1039682 48592 28073
+2239 54078 199
+993983 48015 27907
+745331 50826 28703
+990154 52475 27333
+3290 69799 394
+3436 69998 400
+808296 54932 24304
+870255 58538 27921
+3825 57133 799
+797776 56383 22282
+2229 50529 200
+4088 50529 1000
+1100436 52209 31140
+3738 51404 1003
+3668 40501 400
+790980 57322 24520
+808848 40116 23352
+718040 40501 23147
+856146 40500 23952
+968168 39149 28216
+797608 48036 22749
+632709 48441 22366
+3323 63405 199
+644770 52757 18291
+1046729 63583 25572
+899192 48290 30194
+996141 53521 31396
+618112 76671 24279
+1185049 71428 30527
+4005 77639 200
+3699 78235 1004
+3399 56407 1202
+3572 56793 200
+845931 77814 24478
+2273 55830 200
+2961 37717 200
+1172927 67227 30288
+637400 56792 28686
+861987 32312 23446
+4038 47853 404
+868866 31043 18094
+1069464 30847 29002
+862395 30646 30869
+3891 59913 2016
+2203 56726 400
+3794 56926 1201
+3781 57927 400
+1135432 48136 28115
+672579 58249 27430
+2090 56357 400
+670382 35209 23961
+1060427 46128 26914
+1103129 56757 29136
+751083 41057 27724
+1127586 43624 30530
+635376 55072 19696
+2100 71167 599
+3156 71366 600
+3076 61040 200
+4060 50534 600
+1110889 53671 31012
+1029769 69950 25740
+
+====================================================
+----------HRRN--------------
+Queued (1): #1 - 627817kb
+Queued (2): #2 - 957388kb
+Queued (3): #3 - 2507kb
+Queued (4): #4 - 979270kb
+Queued (5): #5 - 4004kb
+Queued (6): #6 - 2332kb
+Queued (7): #7 - 752691kb
+Queued (8): #8 - 728291kb
+Queued (9): #9 - 1029522kb
+Queued (10): #10 - 896222kb
+Uploading: #6 - 29ms
+Uploading: #3 - 30ms
+Uploading: #5 - 30ms
+Uploaded: #6 - 2332KB - 1ms - 2332000.0KB/s
+Uploaded: #3 - 2507KB - 1ms - 2507000.0KB/s
+Uploaded: #5 - 4004KB - 1ms - 4004000.0KB/s
+Uploading: #1 - 102ms
+Uploading: #8 - 30ms
+Uploading: #7 - 31ms
+Queued (5): #11 - 2708kb
+Queued (6): #12 - 2152kb
+Queued (7): #13 - 683626kb
+Queued (8): #14 - 2687kb
+Queued (9): #15 - 2588kb
+Queued (10): #16 - 1157033kb
+Uploaded: #1 - 627817KB - 15058ms - 41693.25275601009KB/s
+Uploading: #12 - 14987ms
+Queued (10): #17 - 1035629kb
+Uploaded: #12 - 2152KB - 200ms - 10760.0KB/s
+Uploading: #15 - 15187ms
+Queued (10): #18 - 2453kb
+Uploaded: #15 - 2588KB - 608ms - 4256.578947368421KB/s
+Uploading: #14 - 15796ms
+Queued (10): #19 - 911980kb
+Uploaded: #14 - 2687KB - 1199ms - 2241.0341951626356KB/s
+Uploading: #11 - 16996ms
+Queued (10): #20 - 2491kb
+Uploaded: #11 - 2708KB - 200ms - 13540.0KB/s
+Uploading: #18 - 1959ms
+Queued (10): #21 - 2754kb
+Uploaded: #18 - 2453KB - 400ms - 6132.5KB/s
+Uploading: #20 - 556ms
+Queued (10): #22 - 3156kb
+Uploaded: #20 - 2491KB - 200ms - 12455.0KB/s
+Uploading: #21 - 556ms
+Queued (10): #23 - 3515kb
+Uploaded: #21 - 2754KB - 400ms - 6885.0KB/s
+Uploading: #22 - 555ms
+Queued (10): #24 - 1194190kb
+Uploaded: #22 - 3156KB - 801ms - 3940.074906367041KB/s
+Uploading: #23 - 1156ms
+Queued (10): #25 - 2064kb
+Uploaded: #23 - 3515KB - 600ms - 5858.333333333334KB/s
+Uploading: #25 - 554ms
+Queued (10): #26 - 2890kb
+Uploaded: #25 - 2064KB - 414ms - 4985.507246376812KB/s
+Uploading: #26 - 363ms
+Queued (10): #27 - 707672kb
+Uploaded: #26 - 2890KB - 199ms - 14522.613065326632KB/s
+Uploading: #13 - 20210ms
+Queued (10): #28 - 1071404kb
+Uploaded: #8 - 728291KB - 20481ms - 35559.34768810117KB/s
+Uploading: #10 - 20511ms
+Queued (10): #29 - 1038644kb
+Uploaded: #7 - 752691KB - 23281ms - 32330.69885314205KB/s
+Uploading: #2 - 23313ms
+Queued (10): #30 - 687167kb
+Uploaded: #13 - 683626KB - 16013ms - 42691.93780053706KB/s
+Uploading: #4 - 36325ms
+Queued (10): #31 - 3316kb
+Uploaded: #10 - 896222KB - 23639ms - 37912.85587376793KB/s
+Uploading: #31 - 7786ms
+Queued (10): #32 - 3804kb
+Uploaded: #31 - 3316KB - 200ms - 16580.0KB/s
+Uploading: #32 - 183ms
+Queued (10): #33 - 3046kb
+Uploaded: #32 - 3804KB - 405ms - 9392.592592592591KB/s
+Uploading: #33 - 387ms
+Queued (10): #34 - 3281kb
+Uploaded: #33 - 3046KB - 1009ms - 3018.830525272547KB/s
+Uploading: #34 - 997ms
+Queued (10): #35 - 2922kb
+Uploaded: #34 - 3281KB - 200ms - 16405.0KB/s
+Uploading: #35 - 196ms
+Queued (10): #36 - 4053kb
+Uploaded: #35 - 2922KB - 400ms - 7305.0KB/s
+Uploading: #36 - 395ms
+Queued (10): #37 - 3988kb
+Uploaded: #36 - 4053KB - 200ms - 20265.0KB/s
+Uploading: #37 - 195ms
+Queued (10): #38 - 796238kb
+Uploaded: #37 - 3988KB - 400ms - 9970.0KB/s
+Uploading: #9 - 46966ms
+Queued (10): #39 - 3573kb
+Uploaded: #2 - 957388KB - 29074ms - 32929.35268624888KB/s
+Uploading: #39 - 5415ms
+Queued (10): #40 - 3835kb
+Uploaded: #39 - 3573KB - 205ms - 17429.26829268293KB/s
+Uploading: #40 - 110ms
+Queued (10): #41 - 705432kb
+Uploaded: #40 - 3835KB - 1002ms - 3827.3453093812377KB/s
+Uploading: #27 - 33443ms
+Queued (10): #42 - 2584kb
+Uploaded: #4 - 979270KB - 28304ms - 34598.28999434709KB/s
+Uploading: #42 - 10946ms
+Queued (10): #43 - 602055kb
+Uploaded: #42 - 2584KB - 1200ms - 2153.3333333333335KB/s
+Uploading: #30 - 42475ms
+Queued (10): #44 - 1116102kb
+Uploaded: #9 - 1029522KB - 29943ms - 34382.727181645125KB/s
+Uploading: #16 - 76808ms
+Queued (10): #45 - 3188kb
+Uploaded: #27 - 707672KB - 24538ms - 28839.840247778953KB/s
+Uploading: #45 - 1129ms
+Queued (10): #46 - 1136354kb
+Uploaded: #45 - 3188KB - 199ms - 16020.100502512561KB/s
+Uploading: #19 - 62394ms
+Queued (10): #47 - 2157kb
+Uploaded: #30 - 687167KB - 21910ms - 31363.167503423094KB/s
+Uploading: #47 - 9335ms
+Queued (10): #48 - 795844kb
+Uploaded: #47 - 2157KB - 401ms - 5379.052369077306KB/s
+Uploading: #17 - 73004ms
+Queued (10): #49 - 2973kb
+Uploaded: #19 - 911980KB - 26243ms - 34751.36226803338KB/s
+Uploading: #49 - 16362ms
+Queued (10): #50 - 2923kb
+Uploaded: #49 - 2973KB - 200ms - 14865.0KB/s
+Uploading: #50 - 149ms
+Queued (10): #51 - 905560kb
+Uploaded: #50 - 2923KB - 605ms - 4831.404958677686KB/s
+Uploading: #29 - 84828ms
+Queued (10): #52 - 958198kb
+Uploaded: #16 - 1157033KB - 30270ms - 38223.75289065081KB/s
+Uploading: #28 - 86829ms
+Queued (10): #53 - 3871kb
+Uploaded: #17 - 1035629KB - 33104ms - 31284.10463992267KB/s
+Uploading: #53 - 14017ms
+Queued (10): #54 - 2851kb
+Uploaded: #53 - 3871KB - 199ms - 19452.261306532662KB/s
+Uploading: #54 - 99ms
+Queued (10): #55 - 937074kb
+Uploaded: #54 - 2851KB - 1202ms - 2371.8801996672214KB/s
+Uploading: #41 - 69966ms
+Queued (10): #56 - 2242kb
+Uploaded: #29 - 1038644KB - 26910ms - 38596.952805648456KB/s
+Uploading: #56 - 9643ms
+Queued (10): #57 - 662358kb
+Uploaded: #56 - 2242KB - 604ms - 3711.9205298013244KB/s
+Uploading: #43 - 68198ms
+Queued (10): #58 - 764613kb
+Uploaded: #28 - 1071404KB - 33536ms - 31947.876908396946KB/s
+Uploading: #38 - 94145ms
+Queued (10): #59 - 2966kb
+Uploaded: #41 - 705432KB - 25489ms - 27675.93864019773KB/s
+Uploading: #59 - 7377ms
+Queued (10): #60 - 919104kb
+Uploaded: #59 - 2966KB - 200ms - 14830.0KB/s
+Uploading: #24 - 129992ms
+Queued (10): #61 - 2164kb
+Uploaded: #43 - 602055KB - 19076ms - 31560.861815894317KB/s
+Uploading: #61 - 3598ms
+Queued (10): #62 - 1085892kb
+Uploaded: #61 - 2164KB - 200ms - 10820.0KB/s
+Uploading: #48 - 64359ms
+Queued (10): #63 - 2367kb
+Uploaded: #38 - 796238KB - 17681ms - 45033.538826989425KB/s
+Uploading: #63 - 6222ms
+Queued (10): #64 - 1160495kb
+Uploaded: #63 - 2367KB - 1398ms - 1693.1330472103004KB/s
+Uploading: #44 - 93902ms
+Queued (10): #65 - 918602kb
+Uploaded: #24 - 1194190KB - 30941ms - 38595.71442422675KB/s
+Uploading: #46 - 101072ms
+Queued (10): #66 - 2512kb
+Uploaded: #48 - 795844KB - 30108ms - 26432.97462468447KB/s
+Uploading: #66 - 2984ms
+Queued (10): #67 - 704155kb
+Uploaded: #66 - 2512KB - 200ms - 12560.0KB/s
+Uploading: #51 - 77653ms
+Queued (10): #68 - 2330kb
+Uploaded: #44 - 1116102KB - 32322ms - 34530.72210878039KB/s
+Uploading: #68 - 9622ms
+Queued (10): #69 - 1050007kb
+Uploaded: #68 - 2330KB - 200ms - 11650.0KB/s
+Uploading: #52 - 86894ms
+Queued (10): #70 - 3607kb
+Uploaded: #46 - 1136354KB - 31003ms - 36653.033577395734KB/s
+Uploading: #70 - 17873ms
+Queued (10): #71 - 3094kb
+Uploaded: #70 - 3607KB - 200ms - 18035.0KB/s
+Uploading: #71 - 156ms
+Queued (10): #72 - 3228kb
+Uploaded: #71 - 3094KB - 200ms - 15470.0KB/s
+Uploading: #72 - 155ms
+Queued (10): #73 - 1072021kb
+Uploaded: #72 - 3228KB - 200ms - 16140.0KB/s
+Uploading: #57 - 78528ms
+Queued (10): #74 - 641331kb
+Uploaded: #51 - 905560KB - 29403ms - 30798.21786892494KB/s
+Uploading: #58 - 78929ms
+Queued (10): #75 - 3223kb
+Uploaded: #52 - 958198KB - 31603ms - 30319.843052874727KB/s
+Uploading: #75 - 11997ms
+Queued (10): #76 - 771887kb
+Uploaded: #75 - 3223KB - 799ms - 4033.7922403003754KB/s
+Uploading: #55 - 103278ms
+Queued (10): #77 - 808265kb
+Uploaded: #57 - 662358KB - 18051ms - 36693.70117999003KB/s
+Uploading: #60 - 80760ms
+Queued (10): #78 - 3868kb
+Uploaded: #58 - 764613KB - 22451ms - 34056.96850919781KB/s
+Uploading: #78 - 5393ms
+Queued (10): #79 - 3220kb
+Uploaded: #78 - 3868KB - 400ms - 9670.0KB/s
+Uploading: #79 - 391ms
+Queued (10): #80 - 3973kb
+Uploaded: #79 - 3220KB - 200ms - 16100.0KB/s
+Uploading: #80 - 191ms
+Queued (10): #81 - 1199621kb
+Uploaded: #80 - 3973KB - 1005ms - 3953.2338308457715KB/s
+Uploading: #65 - 76057ms
+Queued (10): #82 - 4091kb
+Uploaded: #55 - 937074KB - 24867ms - 37683.435878875614KB/s
+Uploading: #82 - 13647ms
+Queued (10): #83 - 2254kb
+Uploaded: #82 - 4091KB - 400ms - 10227.5KB/s
+Uploading: #83 - 307ms
+Queued (10): #84 - 746920kb
+Uploaded: #83 - 2254KB - 200ms - 11270.0KB/s
+Uploading: #67 - 67893ms
+Queued (10): #85 - 2838kb
+Uploaded: #60 - 919104KB - 28889ms - 31815.01609609194KB/s
+Uploading: #85 - 7537ms
+Queued (10): #86 - 3921kb
+Uploaded: #85 - 2838KB - 400ms - 7095.0KB/s
+Uploading: #86 - 333ms
+Queued (10): #87 - 2549kb
+Uploaded: #86 - 3921KB - 801ms - 4895.131086142322KB/s
+Uploading: #87 - 733ms
+Queued (10): #88 - 3228kb
+Uploaded: #87 - 2549KB - 200ms - 12745.0KB/s
+Uploading: #88 - 131ms
+Queued (10): #89 - 866442kb
+Uploaded: #88 - 3228KB - 200ms - 16140.0KB/s
+Uploading: #62 - 107445ms
+Queued (10): #90 - 713971kb
+Uploaded: #65 - 918602KB - 27748ms - 33105.16073230503KB/s
+Uploading: #64 - 105208ms
+Queued (10): #91 - 3626kb
+Uploaded: #67 - 704155KB - 20368ms - 34571.63197172035KB/s
+Uploading: #91 - 6864ms
+Queued (10): #92 - 2208kb
+Uploaded: #91 - 3626KB - 1412ms - 2567.988668555241KB/s
+Uploading: #92 - 1373ms
+Queued (10): #93 - 720805kb
+Uploaded: #92 - 2208KB - 200ms - 11040.0KB/s
+Uploading: #74 - 61245ms
+Queued (10): #94 - 1108948kb
+Uploaded: #62 - 1085892KB - 30412ms - 35706.03709062212KB/s
+Uploading: #69 - 97629ms
+Queued (10): #95 - 1119074kb
+Uploaded: #74 - 641331KB - 23108ms - 27753.635104725636KB/s
+Uploading: #76 - 71341ms
+Queued (10): #96 - 1061671kb
+Uploaded: #64 - 1160495KB - 37391ms - 31036.746810729855KB/s
+Uploading: #77 - 76343ms
+Queued (10): #97 - 1006896kb
+Uploaded: #69 - 1050007KB - 22312ms - 47060.19182502689KB/s
+Uploading: #73 - 101424ms
+Queued (10): #98 - 3489kb
+Uploaded: #76 - 771887KB - 22508ms - 34293.895503820866KB/s
+Uploading: #98 - 5628ms
+Queued (10): #99 - 3301kb
+Uploaded: #98 - 3489KB - 199ms - 17532.663316582915KB/s
+Uploading: #99 - 106ms
+Queued (10): #100 - 3213kb
+Uploaded: #99 - 3301KB - 200ms - 16505.0KB/s
+Uploading: #100 - 106ms
+Queued (10): #101 - 3409kb
+Uploaded: #100 - 3213KB - 600ms - 5355.0KB/s
+Uploading: #101 - 505ms
+Queued (10): #102 - 2634kb
+Uploaded: #101 - 3409KB - 407ms - 8375.921375921376KB/s
+Uploading: #102 - 311ms
+Queued (10): #103 - 2402kb
+Uploaded: #102 - 2634KB - 600ms - 4390.0KB/s
+Uploading: #103 - 511ms
+Queued (10): #104 - 2163kb
+Uploaded: #103 - 2402KB - 400ms - 6005.0KB/s
+Uploading: #104 - 310ms
+Queued (10): #105 - 1137448kb
+Uploaded: #104 - 2163KB - 601ms - 3599.001663893511KB/s
+Uploading: #84 - 70710ms
+Queued (10): #106 - 3140kb
+Uploaded: #77 - 808265KB - 24741ms - 32669.05137221616KB/s
+Uploading: #106 - 4938ms
+Queued (10): #107 - 2690kb
+Uploaded: #106 - 3140KB - 200ms - 15700.0KB/s
+Uploading: #107 - 135ms
+Queued (10): #108 - 832826kb
+Uploaded: #107 - 2690KB - 200ms - 13450.0KB/s
+Uploading: #90 - 66730ms
+Queued (10): #109 - 1146104kb
+Uploaded: #73 - 1072021KB - 34402ms - 31161.589442474273KB/s
+Uploading: #89 - 87259ms
+Queued (10): #110 - 778667kb
+Uploaded: #90 - 713971KB - 20928ms - 34115.58677370031KB/s
+Uploading: #93 - 75152ms
+Queued (10): #111 - 2683kb
+Uploaded: #84 - 746920KB - 27358ms - 27301.703340887492KB/s
+Uploading: #111 - 952ms
+Queued (10): #112 - 1012955kb
+Uploaded: #111 - 2683KB - 200ms - 13415.0KB/s
+Uploading: #81 - 113409ms
+Queued (10): #113 - 693119kb
+Uploaded: #89 - 866442KB - 19836ms - 43680.27828191168KB/s
+Uploading: #94 - 94188ms
+Queued (10): #114 - 2869kb
+Uploaded: #93 - 720805KB - 24448ms - 29483.188808900522KB/s
+Uploading: #114 - 5175ms
+Queued (10): #115 - 3592kb
+Uploaded: #114 - 2869KB - 201ms - 14273.631840796019KB/s
+Uploading: #115 - 171ms
+Queued (10): #116 - 2187kb
+Uploaded: #115 - 3592KB - 199ms - 18050.251256281404KB/s
+Uploading: #116 - 170ms
+Queued (10): #117 - 2689kb
+Uploaded: #116 - 2187KB - 400ms - 5467.5KB/s
+Uploading: #117 - 369ms
+Queued (10): #118 - 777374kb
+Uploaded: #117 - 2689KB - 200ms - 13445.0KB/s
+Uploading: #95 - 82668ms
+Queued (10): #119 - 2449kb
+Uploaded: #81 - 1199621KB - 35330ms - 33954.741013303144KB/s
+Uploading: #119 - 11051ms
+Queued (10): #120 - 2561kb
+Uploaded: #119 - 2449KB - 200ms - 12245.0KB/s
+Uploading: #120 - 134ms
+Queued (10): #121 - 2365kb
+Uploaded: #120 - 2561KB - 200ms - 12805.0KB/s
+Uploading: #121 - 134ms
+Queued (10): #122 - 900729kb
+Uploaded: #121 - 2365KB - 200ms - 11825.0KB/s
+Uploading: #96 - 88934ms
+Queued (10): #123 - 3003kb
+Uploaded: #94 - 1108948KB - 29253ms - 37908.864048131814KB/s
+Uploading: #123 - 11291ms
+Queued (10): #124 - 1147518kb
+Uploaded: #123 - 3003KB - 199ms - 15090.452261306531KB/s
+Uploading: #97 - 94689ms
+Queued (10): #125 - 745398kb
+Uploaded: #95 - 1119074KB - 32875ms - 34040.273764258556KB/s
+Uploading: #108 - 79388ms
+Queued (10): #126 - 2653kb
+Uploaded: #96 - 1061671KB - 37245ms - 28505.061082024436KB/s
+Uploading: #126 - 16052ms
+Queued (10): #127 - 1187334kb
+Uploaded: #126 - 2653KB - 401ms - 6615.960099750623KB/s
+Uploading: #113 - 73527ms
+Queued (10): #128 - 975652kb
+Uploaded: #97 - 1006896KB - 33117ms - 30404.203279282545KB/s
+Uploading: #110 - 82362ms
+Queued (10): #129 - 3414kb
+Uploaded: #108 - 832826KB - 26103ms - 31905.37486112707KB/s
+Uploading: #129 - 2581ms
+Queued (10): #130 - 793121kb
+Uploaded: #129 - 3414KB - 200ms - 17070.0KB/s
+Uploading: #105 - 111495ms
+Queued (10): #131 - 918910kb
+Uploaded: #113 - 693119KB - 19678ms - 35223.0409594471KB/s
+Uploading: #109 - 115318ms
+Queued (10): #132 - 3813kb
+Uploaded: #110 - 778667KB - 19473ms - 39987.007651620195KB/s
+Uploading: #132 - 6734ms
+Queued (10): #133 - 1115397kb
+Uploaded: #132 - 3813KB - 567ms - 6724.867724867726KB/s
+Uploading: #112 - 100834ms
+Queued (10): #134 - 3413kb
+Uploaded: #105 - 1137448KB - 28715ms - 39611.631551453946KB/s
+Uploading: #134 - 11457ms
+Queued (10): #135 - 2565kb
+Uploaded: #134 - 3413KB - 200ms - 17065.0KB/s
+Uploading: #135 - 152ms
+Queued (10): #136 - 1038319kb
+Uploaded: #135 - 2565KB - 806ms - 3182.382133995037KB/s
+Uploading: #118 - 89069ms
+Queued (10): #137 - 3241kb
+Uploaded: #109 - 1146104KB - 34145ms - 33565.79294186557KB/s
+Queued (10): #138 - 2692kb
+Uploading: #137 - 14208ms
+Uploaded: #137 - 3241KB - 200ms - 16205.0KB/s
+Uploading: #138 - 200ms
+Queued (10): #139 - 788100kb
+Uploaded: #138 - 2692KB - 200ms - 13460.0KB/s
+Uploading: #125 - 80284ms
+Queued (10): #140 - 3112kb
+Uploaded: #112 - 1012955KB - 36560ms - 27706.646608315095KB/s
+Uploading: #140 - 9443ms
+Queued (10): #141 - 1155026kb
+Uploaded: #140 - 3112KB - 200ms - 15560.0KB/s
+Uploading: #122 - 101645ms
+Queued (10): #142 - 964761kb
+Uploaded: #118 - 777374KB - 24695ms - 31479.003846932577KB/s
+Uploading: #124 - 90527ms
+Queued (10): #143 - 1113648kb
+Uploaded: #125 - 745398KB - 20057ms - 37163.98264944907KB/s
+Uploading: #130 - 64610ms
+Queued (10): #144 - 3539kb
+Uploaded: #122 - 900729KB - 25883ms - 34800.023181238656KB/s
+Uploading: #144 - 15392ms
+Queued (10): #145 - 3312kb
+Uploaded: #144 - 3539KB - 999ms - 3542.5425425425424KB/s
+Uploading: #145 - 931ms
+Queued (10): #146 - 1142909kb
+Uploaded: #145 - 3312KB - 200ms - 16560.0KB/s
+Uploading: #128 - 90890ms
+Queued (10): #147 - 739921kb
+Uploaded: #130 - 793121KB - 24085ms - 32930.08096325514KB/s
+Uploading: #131 - 88494ms
+Queued (10): #148 - 714378kb
+Uploaded: #124 - 1147518KB - 36309ms - 31604.230356110056KB/s
+Uploading: #127 - 100917ms
+Queued (10): #149 - 847484kb
+Uploaded: #128 - 975652KB - 27498ms - 35480.83496981599KB/s
+Uploading: #133 - 91839ms
+Queued (10): #150 - 1083284kb
+Uploaded: #131 - 918910KB - 27315ms - 33641.22277137104KB/s
+Uploading: #139 - 71658ms
+Queued (10): #151 - 813886kb
+Uploaded: #127 - 1187334KB - 34173ms - 34744.79852515143KB/s
+Uploading: #136 - 95935ms
+Queued (10): #152 - 3784kb
+Uploaded: #133 - 1115397KB - 31955ms - 34905.241746205604KB/s
+Uploading: #152 - 15652ms
+Queued (10): #153 - 622661kb
+Uploaded: #152 - 3784KB - 600ms - 6306.666666666667KB/s
+Uploading: #142 - 87067ms
+Queued (10): #154 - 4072kb
+Uploaded: #139 - 788100KB - 28123ms - 28023.32610318956KB/s
+Uploading: #154 - 2741ms
+Queued (10): #155 - 1051641kb
+Uploaded: #154 - 4072KB - 600ms - 6786.666666666667KB/s
+Uploading: #147 - 63385ms
+Queued (10): #156 - 4074kb
+Uploaded: #136 - 1038319KB - 32275ms - 32170.999225406664KB/s
+Uploading: #156 - 12560ms
+Queued (10): #157 - 952833kb
+Uploaded: #156 - 4074KB - 1000ms - 4074.0KB/s
+Uploading: #148 - 69603ms
+Queued (10): #158 - 801688kb
+Uploaded: #142 - 964761KB - 22838ms - 42243.672825991765KB/s
+Uploading: #143 - 109505ms
+Queued (10): #159 - 2823kb
+Uploaded: #147 - 739921KB - 24449ms - 30263.855372407867KB/s
+Uploading: #159 - 4974ms
+Queued (10): #160 - 2752kb
+Uploaded: #159 - 2823KB - 200ms - 14115.0KB/s
+Uploading: #160 - 167ms
+Queued (10): #161 - 3832kb
+Uploaded: #160 - 2752KB - 401ms - 6862.84289276808KB/s
+Uploading: #161 - 366ms
+Queued (10): #162 - 2829kb
+Uploaded: #161 - 3832KB - 400ms - 9580.0KB/s
+Uploading: #162 - 366ms
+Queued (10): #163 - 2216kb
+Uploaded: #162 - 2829KB - 1200ms - 2357.5KB/s
+Uploading: #163 - 1165ms
+Queued (10): #164 - 1103159kb
+Uploaded: #163 - 2216KB - 803ms - 2759.651307596513KB/s
+Uploading: #141 - 118123ms
+Queued (10): #165 - 2958kb
+Uploaded: #148 - 714378KB - 19638ms - 36377.3296669722KB/s
+Uploading: #165 - 5771ms
+Queued (10): #166 - 3742kb
+Uploaded: #165 - 2958KB - 200ms - 14790.0KB/s
+Uploading: #166 - 167ms
+Queued (10): #167 - 1142347kb
+Uploaded: #166 - 3742KB - 400ms - 9355.0KB/s
+Uploading: #149 - 87640ms
+Queued (10): #168 - 641348kb
+Uploaded: #143 - 1113648KB - 30662ms - 36320.13567281978KB/s
+Uploading: #146 - 113684ms
+Queued (10): #169 - 3487kb
+Uploaded: #141 - 1155026KB - 33945ms - 34026.39564000589KB/s
+Uploading: #169 - 11294ms
+Queued (10): #170 - 3879kb
+Uploaded: #169 - 3487KB - 401ms - 8695.76059850374KB/s
+Uploading: #170 - 382ms
+Queued (10): #171 - 2682kb
+Uploaded: #149 - 847484KB - 28742ms - 29485.909122538444KB/s
+Uploading: #171 - 783ms
+Queued (10): #172 - 2230kb
+Uploaded: #170 - 3879KB - 1002ms - 3871.25748502994KB/s
+Uploaded: #171 - 2682KB - 200ms - 13410.0KB/s
+Uploading: #172 - 182ms
+Uploading: #151 - 91460ms
+Queued (9): #173 - 724407kb
+Queued (10): #174 - 2381kb
+Uploaded: #172 - 2230KB - 200ms - 11150.0KB/s
+Uploading: #174 - 182ms
+Queued (10): #175 - 2395kb
+Uploaded: #174 - 2381KB - 200ms - 11905.0KB/s
+Uploading: #175 - 182ms
+Queued (10): #176 - 2220kb
+Uploaded: #175 - 2395KB - 399ms - 6002.50626566416KB/s
+Uploading: #176 - 381ms
+Queued (10): #177 - 1023023kb
+Uploaded: #176 - 2220KB - 200ms - 11100.0KB/s
+Uploading: #153 - 67744ms
+Queued (10): #178 - 3015kb
+Uploaded: #146 - 1142909KB - 25169ms - 45409.392506655015KB/s
+Uploading: #178 - 11448ms
+Queued (10): #179 - 674399kb
+Uploaded: #178 - 3015KB - 814ms - 3703.931203931204KB/s
+Uploading: #150 - 111949ms
+Queued (10): #180 - 3552kb
+Uploaded: #151 - 813886KB - 20503ms - 39695.94693459494KB/s
+Uploading: #180 - 7176ms
+Queued (10): #181 - 2463kb
+Uploaded: #180 - 3552KB - 199ms - 17849.24623115578KB/s
+Uploading: #181 - 172ms
+Queued (10): #182 - 3325kb
+Uploaded: #181 - 2463KB - 200ms - 12315.0KB/s
+Uploading: #182 - 171ms
+Queued (10): #183 - 1027835kb
+Uploaded: #182 - 3325KB - 200ms - 16625.0KB/s
+Uploading: #158 - 70234ms
+Queued (10): #184 - 1124669kb
+Uploaded: #153 - 622661KB - 25950ms - 23994.643545279385KB/s
+Uploading: #155 - 90293ms
+Queued (10): #185 - 729613kb
+Uploaded: #150 - 1083284KB - 27522ms - 39360.65692900225KB/s
+Uploading: #168 - 69713ms
+Queued (10): #186 - 810252kb
+Uploaded: #158 - 801688KB - 27317ms - 29347.585752461837KB/s
+Uploading: #157 - 98553ms
+Queued (10): #187 - 743323kb
+Uploaded: #155 - 1051641KB - 32687ms - 32173.06574479151KB/s
+Uploading: #164 - 95753ms
+Queued (10): #188 - 2620kb
+Uploaded: #168 - 641348KB - 23657ms - 27110.284482394218KB/s
+Uploading: #188 - 4795ms
+Queued (10): #189 - 4068kb
+Uploaded: #188 - 2620KB - 618ms - 4239.48220064725KB/s
+Uploading: #189 - 612ms
+Queued (10): #190 - 2888kb
+Uploaded: #189 - 4068KB - 600ms - 6780.0KB/s
+Uploading: #190 - 511ms
+Queued (10): #191 - 3830kb
+Uploaded: #190 - 2888KB - 199ms - 14512.56281407035KB/s
+Uploading: #191 - 110ms
+Queued (10): #192 - 4071kb
+Uploaded: #191 - 3830KB - 1000ms - 3830.0KB/s
+Uploading: #192 - 910ms
+Queued (10): #193 - 1080764kb
+Uploaded: #192 - 4071KB - 600ms - 6785.0KB/s
+Uploading: #173 - 67465ms
+Queued (10): #194 - 3695kb
+Uploaded: #157 - 952833KB - 25464ms - 37418.82657869934KB/s
+Uploading: #194 - 6314ms
+Queued (10): #195 - 2227kb
+Uploaded: #194 - 3695KB - 1199ms - 3081.7347789824853KB/s
+Uploading: #195 - 1111ms
+Queued (10): #196 - 642663kb
+Uploaded: #195 - 2227KB - 200ms - 11135.0KB/s
+Uploading: #179 - 62759ms
+Queued (10): #197 - 1117181kb
+Uploaded: #164 - 1103159KB - 26867ms - 41059.99925559236KB/s
+Uploading: #167 - 115816ms
+Queued (10): #198 - 707230kb
+Uploaded: #173 - 724407KB - 24052ms - 30118.36853484118KB/s
+Uploading: #177 - 90716ms
+Queued (10): #199 - 2471kb
+Uploaded: #179 - 674399KB - 25879ms - 26059.700915800455KB/s
+Uploading: #199 - 9565ms
+Queued (10): #200 - 725318kb
+Uploaded: #199 - 2471KB - 200ms - 12355.0KB/s
+Uploading: #185 - 74329ms
+Uploaded: #167 - 1142347KB - 30708ms - 37200.30610915722KB/s
+Uploading: #183 - 96283ms
+Uploaded: #177 - 1023023KB - 30492ms - 33550.53784599239KB/s
+Uploading: #186 - 81179ms
+Uploaded: #185 - 729613KB - 24879ms - 29326.46006672294KB/s
+Uploading: #184 - 105112ms
+Uploaded: #183 - 1027835KB - 25860ms - 39746.13302397525KB/s
+Uploading: #187 - 94617ms
+Uploaded: #186 - 810252KB - 26665ms - 30386.349146821678KB/s
+Uploading: #196 - 73515ms
+Uploaded: #184 - 1124669KB - 33867ms - 33208.403460595866KB/s
+Uploading: #193 - 93139ms
+Uploaded: #196 - 642663KB - 18048ms - 35608.54388297872KB/s
+Uploading: #197 - 91363ms
+Uploaded: #187 - 743323KB - 25264ms - 29422.221342621913KB/s
+Uploading: #198 - 81756ms
+Uploaded: #193 - 1080764KB - 26481ms - 40812.8091839432KB/s
+Uploading: #200 - 85386ms
+Uploaded: #198 - 707230KB - 28481ms - 24831.64214739651KB/s
+Uploaded: #197 - 1117181KB - 32482ms - 34393.84890092975KB/s
+Uploaded: #200 - 725318KB - 18938ms - 38299.609251240894KB/s
+Took: 844.786s
+Transferred: 83852452KB - 99258.80873972818KB/s
+====================================================
+2332 29 1
+2507 30 1
+4004 30 1
+627817 102 15058
+2152 14987 200
+2588 15187 608
+2687 15796 1199
+2708 16996 200
+2453 1959 400
+2491 556 200
+2754 556 400
+3156 555 801
+3515 1156 600
+2064 554 414
+2890 363 199
+728291 30 20481
+752691 31 23281
+683626 20210 16013
+896222 20511 23639
+3316 7786 200
+3804 183 405
+3046 387 1009
+3281 997 200
+2922 196 400
+4053 395 200
+3988 195 400
+957388 23313 29074
+3573 5415 205
+3835 110 1002
+979270 36325 28304
+2584 10946 1200
+1029522 46966 29943
+707672 33443 24538
+3188 1129 199
+687167 42475 21910
+2157 9335 401
+911980 62394 26243
+2973 16362 200
+2923 149 605
+1157033 76808 30270
+1035629 73004 33104
+3871 14017 199
+2851 99 1202
+1038644 84828 26910
+2242 9643 604
+1071404 86829 33536
+705432 69966 25489
+2966 7377 200
+602055 68198 19076
+2164 3598 200
+796238 94145 17681
+2367 6222 1398
+1194190 129992 30941
+795844 64359 30108
+2512 2984 200
+1116102 93902 32322
+2330 9622 200
+1136354 101072 31003
+3607 17873 200
+3094 156 200
+3228 155 200
+905560 77653 29403
+958198 86894 31603
+3223 11997 799
+662358 78528 18051
+764613 78929 22451
+3868 5393 400
+3220 391 200
+3973 191 1005
+937074 103278 24867
+4091 13647 400
+2254 307 200
+919104 80760 28889
+2838 7537 400
+3921 333 801
+2549 733 200
+3228 131 200
+918602 76057 27748
+704155 67893 20368
+3626 6864 1412
+2208 1373 200
+1085892 107445 30412
+641331 61245 23108
+1160495 105208 37391
+1050007 97629 22312
+771887 71341 22508
+3489 5628 199
+3301 106 200
+3213 106 600
+3409 505 407
+2634 311 600
+2402 511 400
+2163 310 601
+808265 76343 24741
+3140 4938 200
+2690 135 200
+1072021 101424 34402
+713971 66730 20928
+746920 70710 27358
+2683 952 200
+866442 87259 19836
+720805 75152 24448
+2869 5175 201
+3592 171 199
+2187 170 400
+2689 369 200
+1199621 113409 35330
+2449 11051 200
+2561 134 200
+2365 134 200
+1108948 94188 29253
+3003 11291 199
+1119074 82668 32875
+1061671 88934 37245
+2653 16052 401
+1006896 94689 33117
+832826 79388 26103
+3414 2581 200
+693119 73527 19678
+778667 82362 19473
+3813 6734 567
+1137448 111495 28715
+3413 11457 200
+2565 152 806
+1146104 115318 34145
+3241 14208 200
+2692 200 200
+1012955 100834 36560
+3112 9443 200
+777374 89069 24695
+745398 80284 20057
+900729 101645 25883
+3539 15392 999
+3312 931 200
+793121 64610 24085
+1147518 90527 36309
+975652 90890 27498
+918910 88494 27315
+1187334 100917 34173
+1115397 91839 31955
+3784 15652 600
+788100 71658 28123
+4072 2741 600
+1038319 95935 32275
+4074 12560 1000
+964761 87067 22838
+739921 63385 24449
+2823 4974 200
+2752 167 401
+3832 366 400
+2829 366 1200
+2216 1165 803
+714378 69603 19638
+2958 5771 200
+3742 167 400
+1113648 109505 30662
+1155026 118123 33945
+3487 11294 401
+847484 87640 28742
+3879 382 1002
+2682 783 200
+2230 182 200
+2381 182 200
+2395 182 399
+2220 381 200
+1142909 113684 25169
+3015 11448 814
+813886 91460 20503
+3552 7176 199
+2463 172 200
+3325 171 200
+622661 67744 25950
+1083284 111949 27522
+801688 70234 27317
+1051641 90293 32687
+641348 69713 23657
+2620 4795 618
+4068 612 600
+2888 511 199
+3830 110 1000
+4071 910 600
+952833 98553 25464
+3695 6314 1199
+2227 1111 200
+1103159 95753 26867
+724407 67465 24052
+674399 62759 25879
+2471 9565 200
+1142347 115816 30708
+1023023 90716 30492
+729613 74329 24879
+1027835 96283 25860
+810252 81179 26665
+1124669 105112 33867
+642663 73515 18048
+743323 94617 25264
+1080764 93139 26481
+707230 81756 28481
+1117181 91363 32482
+725318 85386 18938
+
+====================================================
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1,963.126 sec
+
+Results :
+
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 33 minutes 15 seconds
+[INFO] Finished at: Sat Mar 28 23:06:52 CET 2009
+[INFO] Final Memory: 32M/77M
+[INFO] ------------------------------------------------------------------------

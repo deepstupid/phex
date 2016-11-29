@@ -1,0 +1,537 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.phex</groupId>
+    <artifactId>Phex</artifactId>
+    <packaging>jar</packaging>
+    <version>3.4.2</version>
+    <name>Phex</name>
+    <url>http://phex.org</url>
+    <properties>
+        <phex.build>156</phex.build>
+        <phex.fullVersion>${project.version}.${phex.build}</phex.fullVersion>
+        <compileSource>1.8</compileSource>
+        <targetSource>1.8</targetSource>
+        <optimize>false</optimize>
+    </properties>
+    <scm>
+        <connection>scm:svn:https://phex.svn.sourceforge.net/svnroot/phex/phex/trunk</connection>
+        <developerConnection>scm:svn:https://phex.svn.sourceforge.net/svnroot/phex/phex/trunk</developerConnection>
+        <url>http://phex.svn.sourceforge.net/viewvc/phex/phex/trunk/</url>
+    </scm>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.groboutils</groupId>
+            <artifactId>groboutils-core</artifactId>
+            <version>5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.python</groupId>
+            <artifactId>jython</artifactId>
+            <version>2.5.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jgoodies</groupId>
+            <artifactId>forms</artifactId>
+            <version>1.2.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.jgoodies</groupId>
+            <artifactId>looks</artifactId>
+            <version>2.2.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.xsocket</groupId>
+            <artifactId>xSocket</artifactId>
+            <version>2.4.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15</artifactId>
+            <version>1.46</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpg-jdk15</artifactId>
+            <version>1.46</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>0.9.14</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>0.9.14</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.5.6</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.5.6</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.0.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.teleal.cling</groupId>
+            <artifactId>cling-core</artifactId>
+            <version>1.0.5</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.teleal.cling</groupId>
+            <artifactId>cling-support</artifactId>
+            <version>1.0.5</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.teleal</groupId>
+            <artifactId>teleal-common</artifactId>
+            <version>1.0.13</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!--
+        <dependency>
+          <groupId>org.jvyaml</groupId>
+          <artifactId>jvyaml</artifactId>
+          <scope>provided</scope>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>net.roydesign</groupId>
+            <artifactId>mrjadapter</artifactId>
+            <version>1.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>1.3.7</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>1.3.7</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${compileSource}</source>
+                    <target>${targetSource}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+            <!-- skip unit test run, tests to be executed during integration-test -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                    <excludes>
+                        <exclude>phex/test/performance/*.*</exclude>
+                        <exclude>**/*PerformanceTest.java</exclude>
+                        <exclude>**/*$*</exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>surefire-it</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <skip>false</skip>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                        <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                    <finalName>phex</finalName>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}</outputDirectory>
+                            <includeScope>runtime</includeScope>
+                            <excludeTransitive>true</excludeTransitive>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- This is currently not working...
+            see http://jira.codehaus.org/browse/MRESOURCES-8?page=com.atlassian.jira.plugin.system.issuetabpanels:all-tabpanel
+            replaced by copy-version antrun
+            -->
+            <!--      <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.3</version>
+                    <executions>
+                      <execution>
+                        <id>generate-resources</id>
+                        <goals>
+                          <goal>resources</goal>
+                        </goals>
+                        <configuration>
+                          <outputDirectory>blub</outputDirectory>
+                          <resources>
+                            <resource>
+                              <directory>${basedir}/build/version.properties</directory>
+                              <filtering>true</filtering>
+                            </resource>
+                          </resources>
+                        </configuration>
+                      </execution>
+                      <execution>
+                        <id>process-resources</id>
+                        <goals>
+                          <goal>resources</goal>
+                        </goals>
+                      </execution>
+                    </executions>
+                  </plugin>
+            -->
+
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>create-installer</id>
+                        <phase>install</phase>
+                        <configuration>
+                            <tasks>
+                                <echo>${phex.build}</echo>
+                                <echo>${project.version}</echo>
+                                <ant antfile="${basedir}/build/build.xml" target="makeRelease">
+                                    <property name="build.dir" value="${project.build.directory}"/>
+                                    <property name="tools.dir" value="${basedir}/thirdparty/"/>
+                                    <property name="phex.version" value="${phex.fullVersion}"/>
+                                </ant>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>copy-version</id>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <tasks>
+                                <copy file="${basedir}/build/PhexVersion.java.tmpl"
+                                      tofile="${project.build.sourceDirectory}/phex/common/PhexVersion.java"
+                                      overwrite="true">
+                                    <filterset begintoken="@@" endtoken="@@">
+                                        <filter token="phex.version" value="${project.version}"/>
+                                        <filter token="phex.build" value="${phex.build}"/>
+                                    </filterset>
+                                </copy>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <!--<execution>-->
+                    <!--<id>deployment</id>-->
+                    <!--<phase>deploy</phase>-->
+                    <!--<goals>-->
+                    <!--<goal>run</goal>-->
+                    <!--</goals>-->
+                    <!--<configuration>-->
+                    <!--<tasks>-->
+                    <!--<ant antfile="${basedir}/build/deployment.xml" target="deploy">-->
+                    <!--<property name="user" value="${sf.user}" />-->
+                    <!--<property name="password" value="${sf.pwd}" />-->
+                    <!--<property name="release.dir" value="${project.build.directory}/release/phex_${phex.fullVersion}" />-->
+                    <!--</ant>-->
+                    <!--</tasks>-->
+                    <!--</configuration>-->
+                    <!--</execution>-->
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>xerces</groupId>
+                        <artifactId>xercesImpl</artifactId>
+                        <version>2.4.0</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.jcraft</groupId>
+                        <artifactId>jsch</artifactId>
+                        <version>0.1.38</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>ant</groupId>
+                        <artifactId>ant-jsch</artifactId>
+                        <version>1.6.5</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <tag>release-${phex.fullVersion}</tag>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <targetJdk>${compileSource}</targetJdk>
+                </configuration>
+            </plugin>
+
+            <!--<plugin>-->
+            <!--<groupId>org.codehaus.mojo</groupId>-->
+            <!--<artifactId>findbugs-maven-plugin</artifactId>-->
+            <!--<version>2.0-SNAPSHOT</version>-->
+            <!--<configuration>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jdepend-maven-plugin</artifactId>
+            </plugin>
+
+            <!--<plugin>-->
+            <!--<groupId>org.codehaus.mojo</groupId>-->
+            <!--<artifactId>javancss-maven-plugin</artifactId>-->
+            <!--</plugin>-->
+            <!---->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <configuration>
+                    <excludes>com/**, org/**</excludes>
+                    <configLocation>${basedir}/build/checkstyle-checker.xml</configLocation>
+                    <headerLocation>${basedir}/build/phex.header</headerLocation>
+                </configuration>
+            </plugin>
+
+            <!-- Currently not working?
+            <plugin>
+              <groupId>net.sourceforge.ckjm</groupId>
+              <artifactId>maven-ckjm-plugin</artifactId>
+            </plugin>
+             -->
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <excludePackageNames>com:org</excludePackageNames>
+
+                    <!-- <doclet>org.umlgraph.doclet.UmlGraphDoc</doclet> -->
+                    <doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>
+                    <docletArtifact>
+                        <groupId>org.umlgraph</groupId>
+                        <artifactId>UmlGraph</artifactId>
+                        <version>4.8</version>
+                    </docletArtifact>
+
+                    <additionalparam>
+                        -outputencoding UTF-8 -qualify -inferrel -inferdep -inferdepvis private
+                        -postfixpackage -nodefontsize 9 -nodefontpackagesize 7
+                        -hide java.lang.* -hide javax.* -hide sun.*
+                        -hide java.util.Date
+                        <!-- java.util.Locale causes some javadoc trouble...
+                             http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6550655
+                             Apperently some other java 1.6 sun.* classes cause trouble too,
+                             not sure why. -->
+                        -hide java.awt.Window
+                        -hide java.util.Locale
+                        <!-- -collpackages java.util.*  generats NPE -->
+                        <!-- -apidocmap thirdparty/umlgraph-apidocmap.properties -->
+                        -link http://java.sun.com/j2se/1.5/docs/api
+                        -linksource
+
+                        <!-- apperently maven ignores these parameter if set in xml
+                             fix version and date string with maven 2.0.10          -->
+                        <![CDATA[
+            -doctitle "${project.name} ${phex.fullVersion} API Documentation"
+            -header "${project.name} ${phex.fullVersion} API <font size=\"-2\">(${TODAY})</font>"
+            -bottom "Generated ${TODAY}"
+             ]]>
+                        -use
+                        -splitindex
+                        -notree
+                    </additionalparam>
+                </configuration>
+            </plugin>
+
+            <!--<plugin>-->
+            <!--<groupId>net.sf.xradar</groupId>-->
+            <!--<artifactId>maven-xradar-plugin</artifactId>-->
+            <!--<configuration>-->
+            <!---->
+            <!--<xradarConfig>${basedir}/build/xradar-config.xml</xradarConfig>-->
+            <!--<xradarProperties>${basedir}/build/xradar.properties</xradarProperties>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
+
+        </plugins>
+    </reporting>
+
+
+    <!--<profiles>-->
+    <!--<profile>-->
+    <!--<id>continuum</id>-->
+    <!--<activation>-->
+    <!--<property>-->
+    <!--<name>continuum.project.id</name>-->
+    <!--</property>-->
+    <!--</activation>-->
+    <!--<properties>-->
+    <!--<phex.build>${continuum.project.nextBuild.number}</phex.build>-->
+    <!--<phex.fullVersion>${continuum.project.version}.${phex.build}</phex.fullVersion>-->
+    <!--</properties>-->
+    <!--</profile>-->
+    <!--</profiles>-->
+
+
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </releases>
+            <id>phex-repository</id>
+            <name>Phex Maven Repository</name>
+            <url>http://phex.sourceforge.net/mavenrepository</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>geotools-repository</id>
+            <name>Geotools Repository</name>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <url>http://download.osgeo.org/webdav/geotools/</url>
+        </repository>
+        <repository>
+            <id>teleal-repo</id>
+            <url>http://teleal.org/m2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>Codehaus Releases</id>
+            <url>http://repository.codehaus.org/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+        <pluginRepository>
+            <id>Codehaus Snapshots</id>
+            <url>http://snapshots.repository.codehaus.org</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
+    <dependencyManagement>
+        <dependencies>
+        </dependencies>
+    </dependencyManagement>
+    <distributionManagement>
+        <repository>
+            <id>phex-repository</id>
+            <name>Phex Maven Repository</name>
+            <url>scp://web.sourceforge.net/home/groups/p/ph/phex/htdocs/mavenrepository</url>
+        </repository>
+    </distributionManagement>
+</project>

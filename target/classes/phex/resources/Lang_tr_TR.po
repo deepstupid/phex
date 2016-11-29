@@ -1,0 +1,4305 @@
+#
+# PHEX - The pure-java Gnutella-servent.
+# Copyright (C) 2001 - 2011 Phex Development Group
+#
+# Turkish translation of Phex.
+# This file is distributed under the same license as the Phex package.
+#
+# Initially created/edited by Popeye version 0.54 (popeye.sourceforge.net)
+# Initial translation by Uğur Çetin.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Phex\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-05-25 19:51+0100\n"
+"PO-Revision-Date: 2012-01-20 19:14+0100\n"
+"Last-Translator: \n"
+"Language-Team: Phex Development Team\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: tr\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Translate Toolkit 1.0.1\n"
+"X-Accelerator-Marker: &\n"
+"X-Poedit-Language: Turkish\n"
+"X-Poedit-Country: TURKEY\n"
+
+#: OK
+msgid "OK"
+msgstr "Tamam"
+
+#: Apply
+msgid "Apply"
+msgstr "Uygula"
+
+#: Cancel
+msgid "Cancel"
+msgstr "İptal"
+
+#: Yes
+msgid "Yes"
+msgstr "Evet"
+
+#: No
+msgid "No"
+msgstr "Hayır"
+
+#: YesToAll
+msgid "YesToAll"
+msgstr "Tümüne evet"
+
+#: NoToAll
+msgid "NoToAll"
+msgstr "Tümüne hayır"
+
+#: New
+msgid "New"
+msgstr "Yeni"
+
+#: Export
+msgid "Export"
+msgstr "Aktar"
+
+#: Remove
+msgid "Remove"
+msgstr "Kaldır"
+
+#: File
+msgid "File"
+msgstr "Dosya"
+
+#: Download
+msgid "Download"
+msgstr "İndir"
+
+#: Error
+msgid "Error"
+msgstr "Hata"
+
+#: Size
+msgid "Size"
+msgstr "Boyut"
+
+#: Add
+msgid "Add"
+msgstr "Ekle"
+
+#: Edit
+msgid "Edit"
+msgstr "Düzenle"
+
+#: Start
+msgid "Start"
+msgstr "Başlat"
+
+#: Stop
+msgid "Stop"
+msgstr "Durdur"
+
+#: Accept
+msgid "Accept"
+msgstr "Kabul Et"
+
+#: Never
+msgid "Never"
+msgstr "Hiçbir Zaman"
+
+#: Session
+msgid "Session"
+msgstr "Oturum"
+
+#: PercentSign
+msgid "PercentSign"
+msgstr "%"
+
+#: ColonSign
+msgid "ColonSign"
+msgstr ":"
+
+#: DontAskAnymore
+msgid "DontAskAnymore"
+msgstr "Bir daha sorma."
+
+#. Used for days when formating time range.
+msgid "TimeFormatDays"
+msgstr "g"
+
+#. Used for hours when formating time range.
+msgid "TimeFormatHours"
+msgstr "s"
+
+#. Used for minutes when formating time range.
+msgid "TimeFormatMinutes"
+msgstr "d"
+
+#. Used for seconds when formating time range.
+msgid "TimeFormatSeconds"
+msgstr "s"
+
+#: SHA1
+msgid "SHA1"
+msgstr "SHA1"
+
+#: Negotiate0_6Handshake
+msgid "Negotiate0_6Handshake"
+msgstr "0.6 handshake anlaşması."
+
+#: TooManyDroppedPackets
+msgid "TooManyDroppedPackets"
+msgstr "Çok fazla paket kaybı."
+
+#: SendQueueTooLong
+msgid "SendQueueTooLong"
+msgstr "Gönderme kuyruğu çok uzun."
+
+#: NoVendorString
+msgid "NoVendorString"
+msgstr "Kaynak kelimesi yok."
+
+#: FreeloaderNotSharing
+msgid "FreeloaderNotSharing"
+msgstr "Beleşçi (yeterli miktarda dosya paylaşmıyor/MB)"
+
+#: NotResponding
+msgid "NotResponding"
+msgstr "Yanıt Vermiyor."
+
+#: FailedToLaunchBrowser
+msgid "FailedToLaunchBrowser"
+msgstr "Tarayıcı başlatılamadı."
+
+#: FailedToLaunchBrowserURLInClipboard
+msgid "FailedToLaunchBrowserURLInClipboard"
+msgstr ""
+"Tarayıcı başlatılamadı.\n"
+"Bağlantıyı hafızaya kopyalayayım mı?"
+
+#: ViewBitziTicket
+msgid "ViewBitziTicket"
+msgstr "Bitzi biletini görüntüle"
+
+#: TTTViewBitziTicket
+msgid "TTTViewBitziTicket"
+msgstr "Seçili dosyanın ağdaki Bitzi biletini gösterir."
+
+#: ChatToHost
+msgid "ChatToHost"
+msgstr "Sahibiyle Sohbet Et"
+
+#: TTTChatToHost
+msgid "TTTChatToHost"
+msgstr "Dosyanın sahibiyle konuşabilmenizi sağlar."
+
+#: WizardDialog_Back
+msgid "WizardDialog_Back"
+msgstr "Geri"
+
+#: WizardDialog_Next
+msgid "WizardDialog_Next"
+msgstr "İleri"
+
+#: WizardDialog_Finish
+msgid "WizardDialog_Finish"
+msgstr "Bitir"
+
+#: WizardDialog_Cancel
+msgid "WizardDialog_Cancel"
+msgstr "İptal"
+
+# Global Actions and Menu
+#: Network
+msgid "Network"
+msgstr "Ağ"
+
+#: NetworkMnemonic
+msgid "NetworkMnemonic"
+msgstr "A"
+
+#: View
+msgid "View"
+msgstr "Görünüm"
+
+#: ViewMnemonic
+msgid "ViewMnemonic"
+msgstr "G"
+
+#: Settings
+msgid "Settings"
+msgstr "Ayarlar"
+
+#: SettingsMnemonic
+msgid "SettingsMnemonic"
+msgstr "y"
+
+#: Help
+msgid "Help"
+msgstr "Yardım"
+
+#: HelpMnemonic
+msgid "HelpMnemonic"
+msgstr "r"
+
+#: Close
+msgid "Close"
+msgstr "Kapat"
+
+#: Exit
+msgid "Exit"
+msgstr "Çıkış"
+
+#: TTTExitPhex
+msgid "TTTExitPhex"
+msgstr "Phex'ten Çık"
+
+#: ExitMnemonic
+msgid "ExitMnemonic"
+msgstr "k"
+
+#: ExitAccelerator
+msgid "ExitAccelerator"
+msgstr "alt F4"
+
+#: Disconnect
+msgid "Disconnect"
+msgstr "Bağlantıyı Kes"
+
+#: TTTDisconnect
+msgid "TTTDisconnect"
+msgstr "Ağdan çık."
+
+#: DisconnectMnemonic
+msgid "DisconnectMnemonic"
+msgstr "K"
+
+#: DisconnectAccelerator
+msgid "DisconnectAccelerator"
+msgstr "control D"
+
+#: Connect
+msgid "Connect"
+msgstr "Bağlan"
+
+#: TTTConnect
+msgid "TTTConnect"
+msgstr "Ağa bağlan."
+
+#: ConnectMnemonic
+msgid "ConnectMnemonic"
+msgstr "B"
+
+#: ConnectAccelerator
+msgid "ConnectAccelerator"
+msgstr "control B"
+
+#: SelectNetwork
+msgid "SelectNetwork"
+msgstr "Ağı Seç"
+
+#: TTTSelectNetwork
+msgid "TTTSelectNetwork"
+msgstr "Gnutella ağını seçer."
+
+#: SelectNetworkMnemonic
+msgid "SelectNetworkMnemonic"
+msgstr "S"
+
+#: SelectNetworkAccelerator
+msgid "SelectNetworkAccelerator"
+msgstr "control W"
+
+#: ToggleTabAction
+msgid "ToggleTabAction"
+msgstr "{0}"
+
+#: TTTToggleTabActionHide
+msgid "TTTToggleTabActionHide"
+msgstr "{0} sekmesini gizle."
+
+#: TTTToggleTabActionShow
+msgid "TTTToggleTabActionShow"
+msgstr "{0} sekmesini göster."
+
+#: ToggleToolbarAction
+msgid "ToggleToolbarAction"
+msgstr "Araç Çubuğu"
+
+#: TTTToggleToolbarActionHide
+msgid "TTTToggleToolbarActionHide"
+msgstr "Araç çubuğunu gizle"
+
+#: TTTToggleToolbarActionShow
+msgid "TTTToggleToolbarActionShow"
+msgstr "Araç çubuğunu göster"
+
+#: ToggleStatusbarAction
+msgid "ToggleStatusbarAction"
+msgstr "Durum Çubuğu"
+
+#: TTTToggleStatusbarActionHide
+msgid "TTTToggleStatusbarActionHide"
+msgstr "Durum çubuğunu gizle"
+
+#: TTTToggleStatusbarActionShow
+msgid "TTTToggleStatusbarActionShow"
+msgstr "Durum çubuğunu göster"
+
+#: PhexHomepage
+msgid "PhexHomepage"
+msgstr "Phex Ana Sayfası"
+
+#: TTTPhexHomepage
+msgid "TTTPhexHomepage"
+msgstr "Phex'in ana sayfasına git."
+
+#: PhexHomepageMnemonic
+msgid "PhexHomepageMnemonic"
+msgstr "P"
+
+#: PhexForum
+msgid "PhexForum"
+msgstr "Phex Forumu"
+
+#: TTTPhexForum
+msgid "TTTPhexForum"
+msgstr "Phex forumuna git."
+
+#: PhexForumMnemonic
+msgid "PhexForumMnemonic"
+msgstr "F"
+
+#: Options
+msgid "Options"
+msgstr "Seçenekler"
+
+#: OptionsMnemonic
+msgid "OptionsMnemonic"
+msgstr "S"
+
+#: TTTOptions
+msgid "TTTOptions"
+msgstr "Phex'i Yapılandır"
+
+#: OptionsAccelerator
+msgid "OptionsAccelerator"
+msgstr "control O"
+
+#: FilteredPorts
+msgid "FilteredPorts"
+msgstr "Filtrelenen Portlar"
+
+#: TTTFilteredPorts
+msgid "TTTFilteredPorts"
+msgstr "Sunucu önbelleğindeki portları filtreler"
+
+#: FilteredPortsMnemonic
+msgid "FilteredPortsMnemonic"
+msgstr "F"
+
+#: RescanSharedFiles
+msgid "RescanSharedFiles"
+msgstr "Paylaşılan Dosyaları Yeniden Tara"
+
+#: TTTRescanSharedFiles
+msgid "TTTRescanSharedFiles"
+msgstr "Dizini tekrar tarayıp paylaşılan dosya listesini oluştur."
+
+#: RescanSharedFilesMnemonic
+msgid "RescanSharedFilesMnemonic"
+msgstr "T"
+
+#: AddToFavorites
+msgid "AddToFavorites"
+msgstr "Yerimlerine Ekle"
+
+#: TTTAddToFavorites
+msgid "TTTAddToFavorites"
+msgstr "Seçimi yerimlerine ekler."
+
+#: GlobalAction_NewDownload
+msgid "GlobalAction_NewDownload"
+msgstr "Yeni İndirmeler"
+
+#: GlobalAction_TTTNewDownload
+msgid "GlobalAction_TTTNewDownload"
+msgstr "Magnet-Link, Magma-Liste veya RSS beslemesi kullanarak yeni indirme oluştur."
+
+#: GlobalAction_NewDownloadMnemonic
+msgid "GlobalAction_NewDownloadMnemonic"
+msgstr "Y"
+
+#: GlobalAction_NewDownloadAccelerator
+msgid "GlobalAction_NewDownloadAccelerator"
+msgstr "control N"
+
+# Generic ban host action strings
+#: BanHostAction_BanHost
+msgid "BanHostAction_BanHost"
+msgstr "Yasakla"
+
+#: BanHostAction_TTTBanHost7Days
+msgid "BanHostAction_TTTBanHost7Days"
+msgstr "Seçili kişiyi 7 günlüğüne yasaklar."
+
+#: BanHostAction_1Day
+msgid "BanHostAction_1Day"
+msgstr "1 Günlük"
+
+#: BanHostAction_7Days
+msgid "BanHostAction_7Days"
+msgstr "7 Günlük"
+
+#: BanHostAction_Unlimited
+msgid "BanHostAction_Unlimited"
+msgstr "Süresiz"
+
+#: BanHostAction_Custom
+msgid "BanHostAction_Custom"
+msgstr "Özel..."
+
+#: FilteredPorts_Title
+msgid "FilteredPorts_Title"
+msgstr "Filtrelenecek bilgisayar portları listesi"
+
+#: FilteredPorts_FilterPort
+msgid "FilteredPorts_FilterPort"
+msgstr "Bu portu filtrele:"
+
+#: FilteredPorts_FilteredPorts
+msgid "FilteredPorts_FilteredPorts"
+msgstr "Filtrelenen portlar:"
+
+# Chat
+#: ChattingWith
+msgid "ChattingWith"
+msgstr "{0} ile sohbet"
+
+#: ChatConnectionClosed
+msgid "ChatConnectionClosed"
+msgstr "{0} ile sohbet kapatıldı."
+
+#: You
+msgid "You"
+msgstr "Sen"
+
+#: NotConnected
+msgid "NotConnected"
+msgstr "Bağlantı kesildi."
+
+# SysTray
+#: OpenPhex
+msgid "OpenPhex"
+msgstr "Phex'i aç"
+
+#: ExitPhex
+msgid "ExitPhex"
+msgstr "Phex'ten çık"
+
+# About
+#: AboutPhex_DialogTitle
+msgid "AboutPhex_DialogTitle"
+msgstr "Phex Hakkında"
+
+#: AboutPhex_VersionInfo
+msgid "AboutPhex_VersionInfo"
+msgstr "Sürüm: {0} (Derleme: {1})"
+
+#: AboutPhex_About
+msgid "AboutPhex_About"
+msgstr "Hakkında"
+
+#: AboutPhex_Environment
+msgid "AboutPhex_Environment"
+msgstr "Ortam"
+
+#: AboutPhex_AboutText
+msgid "AboutPhex_AboutText"
+msgstr "<b>Phex</b> - Açık Kaynaklı Eşler Arası Dosya Paylaşım Programı<br>GNU GPL ile lisanslanmıştır<br><br>(c) Telif hakkı Phex katkıcıları ve diğerleri 2001-2011. Tüm hakları saklıdır.<br>Ziyaret: {0}<br><br>Bu ürün Apache Software Foundation http://www.apache.org tarafından<br>geliştirilen Apache Lisanslı http://www.apache.org/licenses yazılım içermektedir.<br><br>Phex, William W. Wong tarafından yazılan Furi 0.6.8 ( 08/02/2000 ) taban alınarak yapılmıştır.<br><br>"
+
+#: AboutPhex_AboutPhex
+msgid "AboutPhex_AboutPhex"
+msgstr "Phex Hakkında..."
+
+#: AboutPhex_TTTAboutPhex
+msgid "AboutPhex_TTTAboutPhex"
+msgstr "Bu program hakkında."
+
+#: AboutPhex_AboutPhexMnemonic
+msgid "AboutPhex_AboutPhexMnemonic"
+msgstr "H"
+
+# StatusBar
+#: StatusBar_Connections
+msgid "StatusBar_Connections"
+msgstr "Bağlantılar: {0}"
+
+#: StatusBar_TTTConnections
+msgid "StatusBar_TTTConnections"
+msgstr "Bağlanılan sunucu sayısı."
+
+#: StatusBar_Downloads
+msgid "StatusBar_Downloads"
+msgstr "{0}/{1}/{2}"
+
+#: StatusBar_TTTDownloads
+msgid "StatusBar_TTTDownloads"
+msgstr "indirilen dosyalar / toplam indirme dosyaları / bitmiş indirmeler."
+
+#: StatusBar_Uploads
+msgid "StatusBar_Uploads"
+msgstr "{0}/{1}/{2}"
+
+#: StatusBar_TTTUploads
+msgid "StatusBar_TTTUploads"
+msgstr "gönderilen dosyalar / gönderilenler kuyruğu / gönderilmesi bitenler."
+
+# New Download Dialog
+#: NewDownload_DialogTitle
+msgid "NewDownload_DialogTitle"
+msgstr "Yeni İndirmeler"
+
+#: NewDownload_BannerHeader
+msgid "NewDownload_BannerHeader"
+msgstr "Yeni İndirmeler"
+
+#: NewDownload_BannerSubHeader
+msgid "NewDownload_BannerSubHeader"
+msgstr "Magnet URI, URL veya Magma Dosyasından yeni indirme ekle"
+
+#: NewDownload_ByUrl
+msgid "NewDownload_ByUrl"
+msgstr "URL'ye göre"
+
+#: NewDownload_UrlToDownload
+msgid "NewDownload_UrlToDownload"
+msgstr "İndirilecek URL:"
+
+#: NewDownload_Examples
+msgid "NewDownload_Examples"
+msgstr "Örnekler"
+
+#: NewDownload_ByMagmaFile
+msgid "NewDownload_ByMagmaFile"
+msgstr "Magma dosyasına göre"
+
+#: NewDownload_ByRSSFile
+msgid "NewDownload_ByRSSFile"
+msgstr "RSS dosyasına göre"
+
+#: NewDownload_MagmaFile
+msgid "NewDownload_MagmaFile"
+msgstr "Magma dosyası:"
+
+#: NewDownload_RSSFile
+msgid "NewDownload_RSSFile"
+msgstr "RSS dosyası:"
+
+#: NewDownload_Browse
+msgid "NewDownload_Browse"
+msgstr "Gözat..."
+
+#: NewDownload_SelectMagmaFile
+msgid "NewDownload_SelectMagmaFile"
+msgstr "Magma dosyası seç"
+
+#: NewDownload_SelectRSSFile
+msgid "NewDownload_SelectRSSFile"
+msgstr "RSS dosyası seç"
+
+#: NewDownload_SelectFile
+msgid "NewDownload_SelectFile"
+msgstr "Dosya Seç"
+
+#: NewDownload_CreatingMagma
+msgid "NewDownload_CreatingMagma"
+msgstr "Magma dosyası oluşturuluşu"
+
+#: NewDownload_CreatingRSS
+msgid "NewDownload_CreatingRSS"
+msgstr "RSS beslemesi oluşturuluşu"
+
+#: NewDownload_MagmaHowTo
+msgid "NewDownload_MagmaHowTo"
+msgstr "<html>Bir Magma dosyası oluşturmak için, kütüphane panelindeki dışa aktar düğmesini kullanın ve çıkış biçimi olarak 'Magma listesi (YAML)' seçeneğini seçin.</html>"
+
+#: NewDownload_RSSHowTo
+msgid "NewDownload_RSSHowTo"
+msgstr "<html>Bir RSS beslemesi oluşturmak için, kütüphane panelindeki dışa aktar düğmesini kullanın ve çıkış biçimi olarak 'RSS-beslemesi (XML)' seçeneğini seçin.</html>"
+
+#: NewDownload_AlreadyDownloadingMessage
+msgid "NewDownload_AlreadyDownloadingMessage"
+msgstr "Bu dosyayı zaten indiriyorsunuz."
+
+#: NewDownload_AlreadyDownloadingTitle
+msgid "NewDownload_AlreadyDownloadingTitle"
+msgstr "Zaten indiriliyor hatası"
+
+#: NewDownload_AlreadySharedMessage
+msgid "NewDownload_AlreadySharedMessage"
+msgstr "Bu dosyayı zaten paylaşmaktasınız."
+
+#: NewDownload_AlreadySharedTitle
+msgid "NewDownload_AlreadySharedTitle"
+msgstr "Hata: Halihazırda paylaşılan dosya"
+
+#: NewDownload_FailedToParseMagmaMessage
+msgid "NewDownload_FailedToParseMagmaMessage"
+msgstr "Magma dosyası işlenemedi."
+
+#: NewDownload_FailedToParseMagmaTitle
+msgid "NewDownload_FailedToParseMagmaTitle"
+msgstr "Magma işleme hatası"
+
+#: NewDownload_FailedToCreateDownloadMessage
+msgid "NewDownload_FailedToCreateDownloadMessage"
+msgstr "İndirme oluşturulamadı."
+
+#: NewDownload_FailedToCreateDownloadTitle
+msgid "NewDownload_FailedToCreateDownloadTitle"
+msgstr "Yeni indirme hatası"
+
+# Export Dialog
+#: ExportDialog_DialogTitle
+msgid "ExportDialog_DialogTitle"
+msgstr "Aktar"
+
+#: ExportDialog_BannerHeader
+msgid "ExportDialog_BannerHeader"
+msgstr "Aktar"
+
+#: ExportDialog_BannerSubHeader
+msgid "ExportDialog_BannerSubHeader"
+msgstr "Paylaşılan dosyaları bir dosyaya aktar."
+
+#: ExportDialog_ExportFormat
+msgid "ExportDialog_ExportFormat"
+msgstr "Aktarma Biçimi"
+
+#: ExportDialog_StandardExportFormat
+msgid "ExportDialog_StandardExportFormat"
+msgstr "Standart Biçim:"
+
+#: ExportDialog_DefaultHTMLExport
+msgid "ExportDialog_DefaultHTMLExport"
+msgstr "Phex varsayılanı (HTML)."
+
+#: TTTExportDialog_DefaultHTMLExport
+msgid "TTTExportDialog_DefaultHTMLExport"
+msgstr "Dosya listesini magnet bağlantıları içeren standart bir HTML dosyası şeklinde dışa aktar."
+
+#: ExportDialog_MagmaYAMLExport
+msgid "ExportDialog_MagmaYAMLExport"
+msgstr "Magma listesi (YAML)."
+
+#: TTTExportDialog_MagmaYAMLExport
+msgid "TTTExportDialog_MagmaYAMLExport"
+msgstr "Dosya listesini okunuşu ve düzenlenmesi kolay olan YAML formatında bir Magma dosyası olarak dışa aktar."
+
+#: ExportDialog_RSSXMLExport
+msgid "ExportDialog_RSSXMLExport"
+msgstr "RSS Beslemesi (XML)."
+
+#: TTTExportDialog_RSSXMLExport
+msgid "TTTExportDialog_RSSXMLExport"
+msgstr "Dosya listesini RSS istemcilerinin okuyabileceği bir RSS beslemesi olarak dışa aktar. Magnet bağlantıları standart olmayan magnet etiketi ile eklenecektir "
+
+#: ExportDialog_MetalinkXMLExport
+msgid "ExportDialog_MetalinkXMLExport"
+msgstr "Metalink (XML)."
+
+#: TTTExportDialog_MetalinkXMLExport
+msgid "TTTExportDialog_MetalinkXMLExport"
+msgstr "Dosya listesini xml biçimine dayalı bir indirme formatı olan metalink olarak dışa aktar."
+
+#: ExportDialog_CustomExportFormat
+msgid "ExportDialog_CustomExportFormat"
+msgstr "Özel:"
+
+#: ExportDialog_TTTCustomExportFormat
+msgid "ExportDialog_TTTCustomExportFormat"
+msgstr "Dışa aktarmak için kendi xsl dosyanızı seçiniz."
+
+#: ExportDialog_Browse
+msgid "ExportDialog_Browse"
+msgstr "Gözat..."
+
+#: ExportDialog_ExportSource
+msgid "ExportDialog_ExportSource"
+msgstr "Kaynağı Dışa Aktar"
+
+#: ExportDialog_ExportAllFiles
+msgid "ExportDialog_ExportAllFiles"
+msgstr "Paylaşılan tüm dosyaları dışa aktar"
+
+#: ExportDialog_ExportSelectedFiles
+msgid "ExportDialog_ExportSelectedFiles"
+msgstr "Dışa aktar {0,choice,0#no selected files|1#one selected file|1<{0,number,integer} selected files}"
+
+#: ExportDialog_Output
+msgid "ExportDialog_Output"
+msgstr "Çıkış"
+
+#: ExportDialog_FileName
+msgid "ExportDialog_FileName"
+msgstr "Dosya adı:"
+
+#: ExportDialog_SelectCustomStyleFile
+msgid "ExportDialog_SelectCustomStyleFile"
+msgstr "Özel dışa aktarma biçimi dosyasını seçin"
+
+#: ExportDialog_SelectOutputFile
+msgid "ExportDialog_SelectOutputFile"
+msgstr "Çıkış dosyasını seçin"
+
+#: ExportDialog_Options
+msgid "ExportDialog_Options"
+msgstr "Seçenekler"
+
+#: ExportDialog_MagnetIncludeXS
+msgid "ExportDialog_MagnetIncludeXS"
+msgstr "Magnetlere kendi adresinizi ekleyin."
+
+#: ExportDialog_TTTMagnetIncludeXS
+msgid "ExportDialog_TTTMagnetIncludeXS"
+msgstr ""
+"Bu seçenek, xs parametresini kullanarak Magnet URL'deki İP'nizle birlikte bir indirme bağlantısı oluşturur. \n"
+" Böylece erişilebilirlik artar fakat Listede sizin kimliğiniz bulunur."
+
+#: ExportDialog_MagnetIncludeFreebase
+msgid "ExportDialog_MagnetIncludeFreebase"
+msgstr "Her dosya için freebase İP ara belleğini ekle."
+
+#: ExportDialog_TTTMagnetIncludeFreebase
+msgid "ExportDialog_TTTMagnetIncludeFreebase"
+msgstr ""
+"Bu seçenek freebase.be ara belleğine bir bağlantı ekler ki bu dosyalarınızın bulunmasını \n"
+" onlara erişen 10 İP adresini kısa bir süre için ara belleğe alarak kolaylaştırır."
+
+# SlideInWindow
+#: SlideInWindow_Hide
+msgid "SlideInWindow_Hide"
+msgstr "Gizle"
+
+#: SlideInWindow_HideSec
+msgid "SlideInWindow_HideSec"
+msgstr "Gizle: ({0})"
+
+# NetworkTab
+#: GnutellaNet
+msgid "GnutellaNet"
+msgstr "Gnutella Ağı"
+
+#: TTTGnutellaNet
+msgid "TTTGnutellaNet"
+msgstr "Ağ bağlantılarınızı gösterir."
+
+#: GnutellaNetMnemonic
+msgid "GnutellaNetMnemonic"
+msgstr "N"
+
+#: GnutellaNetAccelerator
+msgid "GnutellaNetAccelerator"
+msgstr "control 1"
+
+#: ConnectionInfo
+msgid "ConnectionInfo"
+msgstr "Bağlantı Bilgisi"
+
+#: Connections
+msgid "Connections"
+msgstr "Bağlantılar"
+
+#: ConnectTo
+msgid "ConnectTo"
+msgstr "Çabuk  Bağlan"
+
+#: AutoCleanup
+msgid "AutoCleanup"
+msgstr "Otomatik Temizleme"
+
+#: Reset
+msgid "Reset"
+msgstr "Baştan Başlat"
+
+#: Statistics
+msgid "Statistics"
+msgstr "İstatistikler"
+
+#: HostType_Outgoing
+msgid "HostType_Outgoing"
+msgstr "Dışarı"
+
+#: HostType_Incoming
+msgid "HostType_Incoming"
+msgstr "İçeri"
+
+#: NetworkTab_MyAddress
+msgid "NetworkTab_MyAddress"
+msgstr "Adresim:"
+
+#: NetworkTab_Favorites
+msgid "NetworkTab_Favorites"
+msgstr "Yerimleri"
+
+#: NetworkTab_ConnectionInfo
+msgid "NetworkTab_ConnectionInfo"
+msgstr "Bağlantı Bilgisi"
+
+#: NetworkTab_HostCacheContains
+msgid "NetworkTab_HostCacheContains"
+msgstr "Önbellekteki İP'ler:"
+
+#: NetworkTab_Hosts
+msgid "NetworkTab_Hosts"
+msgstr "İP."
+
+#: NetworkTab_GWebCacheContains
+msgid "NetworkTab_GWebCacheContains"
+msgstr "Ağ önbelleği:"
+
+#: NetworkTab_Caches
+msgid "NetworkTab_Caches"
+msgstr "İP."
+
+#: QueryGWebCache
+msgid "QueryGWebCache"
+msgstr "AğÖnbelleğini Sorgula"
+
+#: TTTQueryGWebCache
+msgid "TTTQueryGWebCache"
+msgstr "İnternet'ten bağlanılacak yeni İP'lerin listesine bakar."
+
+#: AutoConnectHosts
+msgid "AutoConnectHosts"
+msgstr "Otomatik Bağlan"
+
+#: RemoteHost
+msgid "RemoteHost"
+msgstr "Karşıdaki Bilgisayar"
+
+#: Type
+msgid "Type"
+msgstr "Tip"
+
+#: Mode
+msgid "Mode"
+msgstr "Mod"
+
+#: Peer
+msgid "Peer"
+msgstr "Eş"
+
+#: NetworkTable_RxDropQuality
+msgid "NetworkTable_RxDropQuality"
+msgstr "Rx (düşen) Kalite"
+
+#: NetworkTable_TxQueuedDropQuality
+msgid "NetworkTable_TxQueuedDropQuality"
+msgstr "Tx (Sıra/Düşen) Kalite"
+
+#: QRT
+msgid "QRT"
+msgstr "QRT"
+
+#: Shared
+msgid "Shared"
+msgstr "Paylaştığı"
+
+#: Uptime
+msgid "Uptime"
+msgstr "Süre"
+
+#: Timeout
+msgid "Timeout"
+msgstr "Zaman aşımı"
+
+#: Outgoing
+msgid "Outgoing"
+msgstr "Giden"
+
+#: Incoming
+msgid "Incoming"
+msgstr "Gelen"
+
+#: Ultrapeer
+msgid "Ultrapeer"
+msgstr "Ana Sunucu"
+
+#: Leaf
+msgid "Leaf"
+msgstr "Yaprak"
+
+#: DisconnectHost
+msgid "DisconnectHost"
+msgstr "Bağlantıyı kes"
+
+#: TTTDisconnectHost
+msgid "TTTDisconnectHost"
+msgstr "Bu bilgisayarla bağlantıyı keser."
+
+#: BrowseHost
+msgid "BrowseHost"
+msgstr "Bilgisayara gözat"
+
+#: TTTBrowseHost
+msgid "TTTBrowseHost"
+msgstr "Bu bilgisayardaki paylaşılan dosyaları görüntülemeye çalışır."
+
+#: HostNotResponding
+msgid "HostNotResponding"
+msgstr "Karşıdaki bilgisayar cevap vermiyor."
+
+#: Copy
+msgid "Copy"
+msgstr "Kopyala"
+
+#: TTTCopyMyIP
+msgid "TTTCopyMyIP"
+msgstr "İP adresimi kopyala."
+
+# Host Status
+#: NetHostStatus_NotConnected
+msgid "NetHostStatus_NotConnected"
+msgstr "(Bağlı değil)"
+
+#: NetHostStatus_Error
+msgid "NetHostStatus_Error"
+msgstr "Hata. {0}"
+
+#: NetHostStatus_Connecting
+msgid "NetHostStatus_Connecting"
+msgstr "Bağlanıyor... {0}"
+
+#: NetHostStatus_Accepting
+msgid "NetHostStatus_Accepting"
+msgstr "Kabul ediyor... {0}"
+
+#: NetHostStatus_Connected
+msgid "NetHostStatus_Connected"
+msgstr "Bağlandı {0,choice,0#|1#(congestion)}"
+
+#: NetHostStatus_Disconnected
+msgid "NetHostStatus_Disconnected"
+msgstr "Bağlantı Kesildi"
+
+#: NetHostStatus_Unknown
+msgid "NetHostStatus_Unknown"
+msgstr "Bilinmiyor"
+
+# NewSearchTab
+#: EditSearch
+msgid "EditSearch"
+msgstr "Aramayı Düzenle"
+
+#: Filtered
+msgid "Filtered"
+msgstr "Filtreli"
+
+#: Results
+msgid "Results"
+msgstr "Sonuçlar"
+
+#: Progress
+msgid "Progress"
+msgstr "İlerleme"
+
+#: CloseSearch
+msgid "CloseSearch"
+msgstr "Aramayı Kapat"
+
+#: TTTCloseSearch
+msgid "TTTCloseSearch"
+msgstr "Aramayı durdurur ve kapatır."
+
+#: ClearSearchResults
+msgid "ClearSearchResults"
+msgstr "Arama sonuçlarını temizle"
+
+#: TTTClearSearchResults
+msgid "TTTClearSearchResults"
+msgstr "Şu anki aramada bulunan tüm sonuçları siler."
+
+#: CreateNewSearch
+msgid "CreateNewSearch"
+msgstr "Yeni Arama"
+
+#: TTTCreateNewSearch
+msgid "TTTCreateNewSearch"
+msgstr "Yeni bir arama başlatır."
+
+#: FilterResults
+msgid "FilterResults"
+msgstr "Sonuçları Filtrele"
+
+#: TTTFilterResults
+msgid "TTTFilterResults"
+msgstr "Bulunan sonuçları çeşitli sorgulardan geçirerek filtreleyebilmenizi sağlar."
+
+#: RemoveSearchFilter
+msgid "RemoveSearchFilter"
+msgstr "Arama Filtresini Kaldır"
+
+#: TTTRemoveSearchFilter
+msgid "TTTRemoveSearchFilter"
+msgstr "Filtreyi kaldırır ve tüm sonuçları bir arada gösterir."
+
+#: NumberOfHosts
+msgid "NumberOfHosts"
+msgstr "{0} kişi"
+
+#: HostSpeed_Modem
+msgid "HostSpeed_Modem"
+msgstr "Modem"
+
+#: HostSpeed_DSLCable
+msgid "HostSpeed_DSLCable"
+msgstr "DSL/Kablo"
+
+#: HostSpeed_T1
+msgid "HostSpeed_T1"
+msgstr "T1"
+
+#: HostSpeed_T3
+msgid "HostSpeed_T3"
+msgstr "T3"
+
+#: HostSpeed_KPerSec_Postfix
+msgid "HostSpeed_KPerSec_Postfix"
+msgstr "K/s"
+
+# SearchTab
+#: Search
+msgid "Search"
+msgstr "Ara"
+
+#: TTTSearchTab
+msgid "TTTSearchTab"
+msgstr "Ağda dosya ara."
+
+#: SearchMnemonic
+msgid "SearchMnemonic"
+msgstr "A"
+
+#: SearchAccelerator
+msgid "SearchAccelerator"
+msgstr "control 2"
+
+#: Information
+msgid "Information"
+msgstr "Bilgi"
+
+#: Filter
+msgid "Filter"
+msgstr "Filtre"
+
+#: SearchResults
+msgid "SearchResults"
+msgstr "Arama Sonuçları"
+
+#: Score
+msgid "Score"
+msgstr "Puan"
+
+#: HostSpeed
+msgid "HostSpeed"
+msgstr "Hız"
+
+#: Rating
+msgid "Rating"
+msgstr "Reyting"
+
+#: QuickDownload
+msgid "QuickDownload"
+msgstr "Hızlı İndir"
+
+#: TTTQuickDownload
+msgid "TTTQuickDownload"
+msgstr "Seçili dosyalara aday göster veya indirmeyi başlat."
+
+#: TTTDownload
+msgid "TTTDownload"
+msgstr "İndirmeyi ön ayarla başlatır."
+
+#: TTTRemoveSearch
+msgid "TTTRemoveSearch"
+msgstr "Seçili aramayı kaldırır."
+
+#: SearchTerm
+msgid "SearchTerm"
+msgstr "Arama Terimi"
+
+#: Find
+msgid "Find"
+msgstr "Bul"
+
+#: TTTSearch
+msgid "TTTSearch"
+msgstr "Aramaya Başla."
+
+#: MinSpeed
+msgid "MinSpeed"
+msgstr "Min. Hız (Kbits/s)"
+
+#: Searches
+msgid "Searches"
+msgstr "Aramalar"
+
+#: AnyMediaType
+msgid "AnyMediaType"
+msgstr "Her Tür"
+
+#: AudioMediaType
+msgid "AudioMediaType"
+msgstr "Ses Dosyaları"
+
+#: VideoMediaType
+msgid "VideoMediaType"
+msgstr "Film Dosyaları"
+
+#: ProgramMediaType
+msgid "ProgramMediaType"
+msgstr "Programlar"
+
+#: ImagesMediaType
+msgid "ImagesMediaType"
+msgstr "Resimler"
+
+#: DocumentsMediaType
+msgid "DocumentsMediaType"
+msgstr "Belgeler"
+
+#: RomsMediaType
+msgid "RomsMediaType"
+msgstr "Romlar"
+
+#: OpenFormatsType
+msgid "OpenFormatsType"
+msgstr "Açık Biçimler"
+
+#: MetaMediaType
+msgid "MetaMediaType"
+msgstr "Meta"
+
+#: BytesToken
+msgid "BytesToken"
+msgstr "bayt"
+
+#: KBToken
+msgid "KBToken"
+msgstr "KB"
+
+#: MBToken
+msgid "MBToken"
+msgstr "MB"
+
+#: GBToken
+msgid "GBToken"
+msgstr "GB"
+
+#: TBToken
+msgid "TBToken"
+msgstr "TB"
+
+#: BrowsingHost
+msgid "BrowsingHost"
+msgstr "{0} içeriği görüntüleniyor."
+
+#: FilterHost
+msgid "FilterHost"
+msgstr "Filtrele"
+
+#: Searching
+msgid "Searching"
+msgstr "Arama"
+
+#: Search_Stopped
+msgid "Search_Stopped"
+msgstr "Tamamlandı"
+
+#: SearchTab_SearchActivity
+msgid "SearchTab_SearchActivity"
+msgstr "Arama Durumu"
+
+#: SearchTab_NewSearch
+msgid "SearchTab_NewSearch"
+msgstr "Yeni Arama"
+
+#: SearchTab_TTTNewSearch
+msgid "SearchTab_TTTNewSearch"
+msgstr "Yeni bir arama başlat"
+
+#: SearchTab_CloseSearch
+msgid "SearchTab_CloseSearch"
+msgstr "Aramayı Kapat"
+
+#: SearchTab_TTTCloseSearch
+msgid "SearchTab_TTTCloseSearch"
+msgstr "Aramayı durdur ve sonuçları sil."
+
+#: SearchTab_KeywordSearch
+msgid "SearchTab_KeywordSearch"
+msgstr "Anahtar Kelime"
+
+#: SearchTab_TTTKeywordSearch
+msgid "SearchTab_TTTKeywordSearch"
+msgstr "Anahtar kelimeye göre dosya ara."
+
+#: SearchTab_WhatsNew
+msgid "SearchTab_WhatsNew"
+msgstr "Yeni Olanlar"
+
+#: SearchTab_TTTWhatsNew
+msgid "SearchTab_TTTWhatsNew"
+msgstr "Ağdaki yeni dosyaları ara."
+
+#: SearchTab_BrowseHost
+msgid "SearchTab_BrowseHost"
+msgstr "Kişiye Gözat"
+
+#: SearchTab_TTTBrowseHost
+msgid "SearchTab_TTTBrowseHost"
+msgstr "Birinin paylaştığı tüm dosyaları görüntüle."
+
+#: SearchTab_StartBrowseHost
+msgid "SearchTab_StartBrowseHost"
+msgstr "Kişiye Gözat"
+
+#: SearchTab_TTTStartBrowseHost
+msgid "SearchTab_TTTStartBrowseHost"
+msgstr "Kişiye gözatmaya başla."
+
+#: SearchTab_TypeHostAddress
+msgid "SearchTab_TypeHostAddress"
+msgstr "Kişinin adresini yazın:"
+
+#: SearchTab_TypeYourSearch
+msgid "SearchTab_TypeYourSearch"
+msgstr "Anahtar kelimelerinizi yazın:"
+
+#: SearchTab_StopSearch
+msgid "SearchTab_StopSearch"
+msgstr "Dur"
+
+#: SearchTab_TTTStopSearch
+msgid "SearchTab_TTTStopSearch"
+msgstr "Aramayı durdurur."
+
+#: SearchTab_StartSearch
+msgid "SearchTab_StartSearch"
+msgstr "Aramaya Başla"
+
+#: SearchTab_TTTStartSearch
+msgid "SearchTab_TTTStartSearch"
+msgstr "Aramayı başlatır."
+
+#: SearchTab_Searching
+msgid "SearchTab_Searching"
+msgstr "Arıyor..."
+
+#: SearchTab_TTTSearching
+msgid "SearchTab_TTTSearching"
+msgstr "Arama yapılıyor."
+
+#: SearchTab_WhatsNewSearch
+msgid "SearchTab_WhatsNewSearch"
+msgstr "Yeni olanları ara"
+
+#: SearchTab_BrowsingHost
+msgid "SearchTab_BrowsingHost"
+msgstr "{0} kişisine gözatılıyor."
+
+#: SearchTab_QuickFilter
+msgid "SearchTab_QuickFilter"
+msgstr "Hızlı Filtre"
+
+#: SearchTab_WithTerms
+msgid "SearchTab_WithTerms"
+msgstr "Terimler:"
+
+#: SearchTab_TTTWithTerms
+msgid "SearchTab_TTTWithTerms"
+msgstr "Sadece verilen sözcükleri içeren sonuçlar gösterilir."
+
+#: SearchTab_WithoutTerms
+msgid "SearchTab_WithoutTerms"
+msgstr "Bunlar hariç:"
+
+#: SearchTab_TTTWithoutTerms
+msgid "SearchTab_TTTWithoutTerms"
+msgstr "Sadece verilen sözcükleri içermeyen sonuçlar gösterilir."
+
+#: SearchTab_FileType
+msgid "SearchTab_FileType"
+msgstr "Dosya Türü:"
+
+#: SearchTab_TTTFileType
+msgid "SearchTab_TTTFileType"
+msgstr "Sadece seçili dosya türünde olan dosyaları göster."
+
+#: SearchTab_MinFileSize
+msgid "SearchTab_MinFileSize"
+msgstr "Min. dosya boyutu:"
+
+#: SearchTab_TTTMinFileSize
+msgid "SearchTab_TTTMinFileSize"
+msgstr "Gösterilen sonuçlar minimum dosya boyutundan büyük veya ona eşit olurlar."
+
+#: SearchTab_MaxFileSize
+msgid "SearchTab_MaxFileSize"
+msgstr "Mak. dosya boyutu:"
+
+#: SearchTab_TTTMaxFileSize
+msgid "SearchTab_TTTMaxFileSize"
+msgstr "Gösterilen sonuçlar maksimum dosya boyutundan küçük veya ona eşit olurlar."
+
+#: SearchTab_Information
+msgid "SearchTab_Information"
+msgstr "Bilgi"
+
+#: SearchTab_Status
+msgid "SearchTab_Status"
+msgstr "Durum:"
+
+#: SearchTab_TTTStatus
+msgid "SearchTab_TTTStatus"
+msgstr "Aramanın şu anki durumu."
+
+#: SearchTab_TTTProgress
+msgid "SearchTab_TTTProgress"
+msgstr "Arama durumu."
+
+#: SearchTab_TotalResults
+msgid "SearchTab_TotalResults"
+msgstr "Sonuçlar:"
+
+#: SearchTab_TTTTotalResults
+msgid "SearchTab_TTTTotalResults"
+msgstr "Bulunan sonuçların sayısı."
+
+#: SearchTab_DisplayedResults
+msgid "SearchTab_DisplayedResults"
+msgstr "Görüntülenen:"
+
+#: SearchTab_TTTDisplayedResults
+msgid "SearchTab_TTTDisplayedResults"
+msgstr "Görüntülenen sonuçların sayısı."
+
+#: SearchTab_FilteredResults
+msgid "SearchTab_FilteredResults"
+msgstr "Filtrelenen:"
+
+#: SearchTab_TTTFilteredResults
+msgid "SearchTab_TTTFilteredResults"
+msgstr "Filtrelenen sonuçların sayısı."
+
+#: SearchTab_SearchFilterOptions
+msgid "SearchTab_SearchFilterOptions"
+msgstr "Arama Filtresi Seçenekleri"
+
+#: SearchTab_FilterRules
+msgid "SearchTab_FilterRules"
+msgstr "Filtreleme Kuralları"
+
+#: SearchTab_SelectRulesToActivate
+msgid "SearchTab_SelectRulesToActivate"
+msgstr "Etkinleştirilecek kuralları seçin"
+
+#: SearchTab_EditFilterRules
+msgid "SearchTab_EditFilterRules"
+msgstr "Kuralları düzenle..."
+
+#: SearchTab_TTTEditFilterRules
+msgid "SearchTab_TTTEditFilterRules"
+msgstr "Filtre kurallarını değiştirme penceresini açar."
+
+#: SearchTab_ToggleSearchBarAction
+msgid "SearchTab_ToggleSearchBarAction"
+msgstr "Arama Çubuğu"
+
+#: SearchTab_TTTToggleSearchBarActionHide
+msgid "SearchTab_TTTToggleSearchBarActionHide"
+msgstr "Arama çubuğunu gizle."
+
+#: SearchTab_TTTToggleSearchBarActionShow
+msgid "SearchTab_TTTToggleSearchBarActionShow"
+msgstr "Arama çubuğunu göster."
+
+#: SearchTab_ToggleSearchListAction
+msgid "SearchTab_ToggleSearchListAction"
+msgstr "Arama Listesi"
+
+#: SearchTab_TTTToggleSearchListActionHide
+msgid "SearchTab_TTTToggleSearchListActionHide"
+msgstr "Arama listesini sakla."
+
+#: SearchTab_TTTToggleSearchListActionShow
+msgid "SearchTab_TTTToggleSearchListActionShow"
+msgstr "Arama listesini göster."
+
+#: SearchTab_ToggleSearchFilterAction
+msgid "SearchTab_ToggleSearchFilterAction"
+msgstr "Arama Filtresi"
+
+#: SearchTab_TTTToggleSearchFilterActionHide
+msgid "SearchTab_TTTToggleSearchFilterActionHide"
+msgstr "Arama filtresini gizle."
+
+#: SearchTab_TTTToggleSearchFilterActionShow
+msgid "SearchTab_TTTToggleSearchFilterActionShow"
+msgstr "Arama filtresini gizle."
+
+#: SearchTab_HostRating_FirewalledTrue
+msgid "SearchTab_HostRating_FirewalledTrue"
+msgstr "Bilgisayar güvenlik duvarı arkasında: doğru"
+
+#: SearchTab_HostRating_FirewalledFalse
+msgid "SearchTab_HostRating_FirewalledFalse"
+msgstr "Bilgisayar güvenlik duvarı arkasında: yanlış"
+
+#: SearchTab_HostRating_FirewalledUnknown
+msgid "SearchTab_HostRating_FirewalledUnknown"
+msgstr "Bilgisayar güvenlik duvarı arkasında: bilinmiyor"
+
+#: SearchTab_HostRating_ServerBusyTrue
+msgid "SearchTab_HostRating_ServerBusyTrue"
+msgstr "Bilgisayar göndermelerle meşgul: doğru"
+
+#: SearchTab_HostRating_ServerBusyFalse
+msgid "SearchTab_HostRating_ServerBusyFalse"
+msgstr "Bilgisayar göndermelerle meşgul: yanlış"
+
+#: SearchTab_HostRating_ServerBusyUnknown
+msgid "SearchTab_HostRating_ServerBusyUnknown"
+msgstr "Bilgisayar göndermelerle meşgul: bilinmiyor"
+
+#: SearchTab_HostRating_HasUploadedTrue
+msgid "SearchTab_HostRating_HasUploadedTrue"
+msgstr "Bilgisayar göndermede bulundu: doğru"
+
+#: SearchTab_HostRating_HasUploadedFalse
+msgid "SearchTab_HostRating_HasUploadedFalse"
+msgstr "Bilgisayar göndermede bulundu: yanlış"
+
+#: SearchTab_HostRating_HasUploadedUnknown
+msgid "SearchTab_HostRating_HasUploadedUnknown"
+msgstr "Bilgisayar göndermede bulundu: bilinmiyor"
+
+#: SearchTab_HostRating_SupportsBrowseHost
+msgid "SearchTab_HostRating_SupportsBrowseHost"
+msgstr "Bilgisayar gözatmayı destekliyor."
+
+#: SearchTab_HostRating_SupportsChat
+msgid "SearchTab_HostRating_SupportsChat"
+msgstr "Bilgisayar sohbeti destekliyor."
+
+#: SearchTab_HostRating_ReceivedViaUdp
+msgid "SearchTab_HostRating_ReceivedViaUdp"
+msgstr "Mesaj UDP vasıtasıyla alınmış "
+
+#: BrowseHost_Initializing
+msgid "BrowseHost_Initializing"
+msgstr "Başlatılıyor"
+
+#: BrowseHost_Connecting
+msgid "BrowseHost_Connecting"
+msgstr "Bağlanıyor"
+
+#: BrowseHost_Fetching
+msgid "BrowseHost_Fetching"
+msgstr "Alıyor"
+
+#: BrowseHost_Finished
+msgid "BrowseHost_Finished"
+msgstr "Bitti"
+
+#: BrowseHost_ConnectionError
+msgid "BrowseHost_ConnectionError"
+msgstr "Bağlantı hatası"
+
+#: BrowseHost_BrowseHostError
+msgid "BrowseHost_BrowseHostError"
+msgstr "Gözatma hatası"
+
+# DownloadTab
+#: TTTDownloadTab
+msgid "TTTDownloadTab"
+msgstr "Çalışan indirmelerin özeti."
+
+#: DownloadMnemonic
+msgid "DownloadMnemonic"
+msgstr "İ"
+
+#: DownloadAccelerator
+msgid "DownloadAccelerator"
+msgstr "control 3"
+
+#: Configure
+msgid "Configure"
+msgstr "Ayarla"
+
+#: StopSearch
+msgid "StopSearch"
+msgstr "Aramayı Durdur"
+
+#: Bytes
+msgid "Bytes"
+msgstr "bayt"
+
+#: DownloadInProgress
+msgid "DownloadInProgress"
+msgstr "İndirme çalışıyor"
+
+#: NoConfigDownloadInProgress
+msgid "NoConfigDownloadInProgress"
+msgstr ""
+"Çalışan bir indirme ayarlanamaz.\n"
+"Önce indirmeyi durdurmanız gerekiyor."
+
+# SWDownloadTab
+#: DownloadTab_Overview
+msgid "DownloadTab_Overview"
+msgstr "Özet"
+
+#: DownloadTab_NoLimit
+msgid "DownloadTab_NoLimit"
+msgstr "Sınır yok"
+
+#: DownloadTab_DownloadSpeed
+msgid "DownloadTab_DownloadSpeed"
+msgstr "İndirme Hızı"
+
+#: DownloadTab_DownloadOverview
+msgid "DownloadTab_DownloadOverview"
+msgstr "İndirme Özeti"
+
+#: DownloadTab_DownloadTransfers
+msgid "DownloadTab_DownloadTransfers"
+msgstr "İndirmeler"
+
+#: DownloadTab_Transfers
+msgid "DownloadTab_Transfers"
+msgstr "Aktarmalar"
+
+#: SharingHost
+msgid "SharingHost"
+msgstr "Paylaşan Kişi"
+
+#: DownloadFiles
+msgid "DownloadFiles"
+msgstr "İndirilen Dosyalar"
+
+#: Status
+msgid "Status"
+msgstr "Durum"
+
+#: Vendor
+msgid "Vendor"
+msgstr "Program"
+
+#: Rate
+msgid "Rate"
+msgstr "Hız"
+
+#: DownloadTable_DownloadTotal
+msgid "DownloadTable_DownloadTotal"
+msgstr "Toplam İndirme"
+
+#: DownloadTable_Available
+msgid "DownloadTable_Available"
+msgstr "Kullanılabilir"
+
+#: DownloadTable_ETA
+msgid "DownloadTable_ETA"
+msgstr "Tahmini"
+
+#: From
+msgid "From"
+msgstr "kişisinden"
+
+#: NumberOfCandidates
+msgid "NumberOfCandidates"
+msgstr "# Adaylar"
+
+#: DownloadCandidates
+msgid "DownloadCandidates"
+msgstr "İndirme Adayları"
+
+#: CandidatesSearchingExt
+msgid "CandidatesSearchingExt"
+msgstr "- arıyor... ({0} isabet - {1}%)"
+
+#: DownloadSegments
+msgid "DownloadSegments"
+msgstr "İndirilen Parçalar"
+
+#: Candidates
+msgid "Candidates"
+msgstr "Adaylar"
+
+#: Segments
+msgid "Segments"
+msgstr "Parçalar"
+
+#: Priority
+msgid "Priority"
+msgstr "Öncelik"
+
+#: Ordering
+msgid "Ordering"
+msgstr "Sıralama"
+
+#: Created
+msgid "Created"
+msgstr "Oluşturuldu"
+
+#: Downloaded
+msgid "Downloaded"
+msgstr "İndirildi"
+
+#: RemoveDownloadTitle
+msgid "RemoveDownloadTitle"
+msgstr "İndirmeyi Kaldır - {0}/{1}"
+
+#: RemoveDownloadWarning
+msgid "RemoveDownloadWarning"
+msgstr ""
+"\"{0}\" adlı dosya indirme listenizden silinecek,\n"
+"{1} / {2} kadarını indirdiğiniz bu dosyayı silmek istediğinizden emin misiniz?"
+
+#: StartDownload
+msgid "StartDownload"
+msgstr "Başlat"
+
+#: TTTStartDownload
+msgid "TTTStartDownload"
+msgstr "Durdurulmuş bir indirmeyi başlatır."
+
+#: StopDownload
+msgid "StopDownload"
+msgstr "Dur"
+
+#: TTTStopDownload
+msgid "TTTStopDownload"
+msgstr "Çalışan bir indirmeyi durdurur."
+
+#: ConfigureDownload
+msgid "ConfigureDownload"
+msgstr "Ayarla"
+
+#: TTTConfigureDownload
+msgid "TTTConfigureDownload"
+msgstr "Bir indirmeyi ayarlar."
+
+#: TTTSearchCandidates
+msgid "TTTSearchCandidates"
+msgstr "Yeni adaylar arar."
+
+#: RemoveDownload
+msgid "RemoveDownload"
+msgstr "Kaldır"
+
+#: TTTRemoveDownload
+msgid "TTTRemoveDownload"
+msgstr "Bir indirmeyi kaldırır."
+
+#: RemoveCandidate
+msgid "RemoveCandidate"
+msgstr "Adayı kaldır"
+
+#: TTTRemoveCandidate
+msgid "TTTRemoveCandidate"
+msgstr "Bir aday'ı kaldırır."
+
+#: RetryCandidate
+msgid "RetryCandidate"
+msgstr "Adayı yeniden dene"
+
+#: TTTRetryCandidate
+msgid "TTTRetryCandidate"
+msgstr "Adaydan tekrar indirmeye çalışacak şekilde ayarlanır."
+
+#: MoveToTop
+msgid "MoveToTop"
+msgstr "En üste taşı"
+
+#: TTTMoveToTop
+msgid "TTTMoveToTop"
+msgstr "Seçili indirmeyi en üst önceliğe taşır."
+
+#: MoveUp
+msgid "MoveUp"
+msgstr "Yukarı taşı"
+
+#: TTTMoveUp
+msgid "TTTMoveUp"
+msgstr "Seçili indirmenin önceliğini bir üste taşır."
+
+#: MoveDown
+msgid "MoveDown"
+msgstr "Aşağı taşı"
+
+#: TTTMoveDown
+msgid "TTTMoveDown"
+msgstr "Seçili indirmenin önceliğini bir alta taşır."
+
+#: MoveToBottom
+msgid "MoveToBottom"
+msgstr "En alta taşı"
+
+#: TTTMoveToBottom
+msgid "TTTMoveToBottom"
+msgstr "Seçili indirmenin önceliğini en alta taşır."
+
+#: Resort
+msgid "Resort"
+msgstr "Yeniden sırala"
+
+#: TTTResort
+msgid "TTTResort"
+msgstr "Öncelikleri şu anki tablo yapısına göre yeniden sırala"
+
+#: ExecutePreview
+msgid "ExecutePreview"
+msgstr "Önizleme"
+
+#: TTTExecutePreview
+msgid "TTTExecutePreview"
+msgstr "Bu dosyayla ilgili programı kullanarak açar."
+
+#: DownloadTab_PreviewDownload
+msgid "DownloadTab_PreviewDownload"
+msgstr "Önizleme"
+
+#: DownloadTab_TTTPreviewDownload
+msgid "DownloadTab_TTTPreviewDownload"
+msgstr "Bitmeyenler dizininde bu indirmenin bir önizlemesini oluşturur."
+
+#: DownloadTab_Strategy
+msgid "DownloadTab_Strategy"
+msgstr "İndirme Stratejisi"
+
+#: DownloadTab_StrategyAvailability
+msgid "DownloadTab_StrategyAvailability"
+msgstr "Önce Az Bulunan Parçalar"
+
+#: DownloadTab_StrategyBeginning
+msgid "DownloadTab_StrategyBeginning"
+msgstr "Önce Dosya Başı"
+
+#: DownloadTab_StrategyBeginningEnd
+msgid "DownloadTab_StrategyBeginningEnd"
+msgstr "Önce Dosya Başı ve Sonu"
+
+#: DownloadTab_StrategyRandom
+msgid "DownloadTab_StrategyRandom"
+msgstr "Parçaları Rastgele İndir"
+
+#: DownloadTab_ViewLog
+msgid "DownloadTab_ViewLog"
+msgstr "Kayıtları görüntüle"
+
+#: DownloadTab_TTTViewLog
+msgid "DownloadTab_TTTViewLog"
+msgstr "İndirme adayına özel kayıtları görüntüle."
+
+#: DownloadOverview_Progress
+msgid "DownloadOverview_Progress"
+msgstr "İlerleme:"
+
+#: DownloadOverview_Transfer
+msgid "DownloadOverview_Transfer"
+msgstr "Aktarım"
+
+#: DownloadOverview_Downloaded
+msgid "DownloadOverview_Downloaded"
+msgstr "İndirilen:"
+
+#: DownloadOverview_Remaining
+msgid "DownloadOverview_Remaining"
+msgstr "Kalan İndirme:"
+
+#: DownloadOverview_DownloadRate
+msgid "DownloadOverview_DownloadRate"
+msgstr "İndirme Hızı:"
+
+#: DownloadOverview_MaximalRate
+msgid "DownloadOverview_MaximalRate"
+msgstr "En Yüksek Hız:"
+
+#: DownloadOverview_FileSize
+msgid "DownloadOverview_FileSize"
+msgstr "Dosya Boyutu:"
+
+#: DownloadOverview_EstimatedTime
+msgid "DownloadOverview_EstimatedTime"
+msgstr "Tahmini Kalan Süre:"
+
+#: DownloadOverview_Created
+msgid "DownloadOverview_Created"
+msgstr "Oluşturma:"
+
+#: DownloadOverview_LastDownloaded
+msgid "DownloadOverview_LastDownloaded"
+msgstr "Son İndirilme:"
+
+#: DownloadOverview_Candidates
+msgid "DownloadOverview_Candidates"
+msgstr "Adaylar:"
+
+#: DownloadOverview_DownloadingCandidates
+msgid "DownloadOverview_DownloadingCandidates"
+msgstr "İndiriliyor:"
+
+#: DownloadOverview_QueuedCandidates
+msgid "DownloadOverview_QueuedCandidates"
+msgstr "Kuyrukta:"
+
+#: DownloadOverview_ConnectingCandidates
+msgid "DownloadOverview_ConnectingCandidates"
+msgstr "Bağlanıyor:"
+
+#: DownloadOverview_GoodCandidates
+msgid "DownloadOverview_GoodCandidates"
+msgstr "İyi:"
+
+#: DownloadOverview_BadCandidates
+msgid "DownloadOverview_BadCandidates"
+msgstr "Kötü:"
+
+#: DownloadOverview_TotalCandidates
+msgid "DownloadOverview_TotalCandidates"
+msgstr "Toplam:"
+
+#: DownloadOverview_Information
+msgid "DownloadOverview_Information"
+msgstr "Bilgi"
+
+#: DownloadOverview_FileName
+msgid "DownloadOverview_FileName"
+msgstr "Dosya Adı:"
+
+#: DownloadOverview_IncompleteFile
+msgid "DownloadOverview_IncompleteFile"
+msgstr "Bitmemiş Dosya:"
+
+#: DownloadOverview_Explore
+msgid "DownloadOverview_Explore"
+msgstr "Dizini incele"
+
+#: DownloadTransfer_Host
+msgid "DownloadTransfer_Host"
+msgstr "Karşıdaki"
+
+#: DownloadTransfer_Vendor
+msgid "DownloadTransfer_Vendor"
+msgstr "Program"
+
+#: DownloadTransfer_From
+msgid "DownloadTransfer_From"
+msgstr "Kimden"
+
+#: DownloadTransfer_To
+msgid "DownloadTransfer_To"
+msgstr "Kime"
+
+#: DownloadTransfer_Size
+msgid "DownloadTransfer_Size"
+msgstr "Boyut"
+
+#: DownloadTransfer_Completed
+msgid "DownloadTransfer_Completed"
+msgstr "Bitti"
+
+#: DownloadTransfer_Progress
+msgid "DownloadTransfer_Progress"
+msgstr "Uğraşıyor"
+
+#: DownloadTransfer_Rate
+msgid "DownloadTransfer_Rate"
+msgstr "Hız"
+
+#: DownloadTransfer_ETA
+msgid "DownloadTransfer_ETA"
+msgstr "Süre"
+
+#: DownloadTransfer_Status
+msgid "DownloadTransfer_Status"
+msgstr "Durum"
+
+#: LogBufferDialog_DialogTitle
+msgid "LogBufferDialog_DialogTitle"
+msgstr "Kayıtları Göster"
+
+#: LogBufferDialog_Log
+msgid "LogBufferDialog_Log"
+msgstr "Kayıtlar"
+
+#: LogBufferDialog_DisplayLog
+msgid "LogBufferDialog_DisplayLog"
+msgstr "Kayıtları Göster"
+
+#: CandidateStatusReason_ConnectionFailed
+msgid "CandidateStatusReason_ConnectionFailed"
+msgstr "kurulamayan bağlantılar"
+
+#: CandidateStatusReason_PushRequired
+msgid "CandidateStatusReason_PushRequired"
+msgstr "zorlanması gerekiyor"
+
+#: CandidateStatusReason_PushRouteFailed
+msgid "CandidateStatusReason_PushRouteFailed"
+msgstr "zorlama başarısız"
+
+#: CandidateStatusReason_Unusable
+msgid "CandidateStatusReason_Unusable"
+msgstr "kullanılamaz"
+
+#: CandidateStatusReason_HTTPError
+msgid "CandidateStatusReason_HTTPError"
+msgstr "HTTP hatası"
+
+#: CandidateStatusReason_ByUser
+msgid "CandidateStatusReason_ByUser"
+msgstr "kullanıcı tarafından"
+
+#: CandidateStatusReason_FileNotFound
+msgid "CandidateStatusReason_FileNotFound"
+msgstr "dosya bulunamadı"
+
+# UploadTab
+#: Upload
+msgid "Upload"
+msgstr "Gönderme"
+
+#: TTTUpload
+msgid "TTTUpload"
+msgstr "Göndermelerin özeti."
+
+#: UploadMnemonic
+msgid "UploadMnemonic"
+msgstr "Ö"
+
+#: UploadAccelerator
+msgid "UploadAccelerator"
+msgstr "control 4"
+
+#: Uploads
+msgid "Uploads"
+msgstr "Göndermeler"
+
+#: Host
+msgid "Host"
+msgstr "Karşıdaki"
+
+#: AbortUpload
+msgid "AbortUpload"
+msgstr "Gönderimi İptal Et"
+
+#: TTTAbortUpload
+msgid "TTTAbortUpload"
+msgstr "Seçili göndermeleri iptal eder."
+
+#: ClearCompleted
+msgid "ClearCompleted"
+msgstr "Bitenleri Temizle"
+
+#: TTTClearCompleted
+msgid "TTTClearCompleted"
+msgstr "Biten göndermeleri temizler."
+
+#: RemoveUpload
+msgid "RemoveUpload"
+msgstr "Göndermeyi Kaldır"
+
+#: TTTRemoveUpload
+msgid "TTTRemoveUpload"
+msgstr "Seçili göndermeleri kaldırır ve iptal eder."
+
+#: UploadTab_ViewLog
+msgid "UploadTab_ViewLog"
+msgstr "Kayıtları Görüntüle"
+
+#: UploadTab_TTTViewLog
+msgid "UploadTab_TTTViewLog"
+msgstr "Göndermeye özel kayıtları göster."
+
+#: UploadTable_ETA
+msgid "UploadTable_ETA"
+msgstr "Süre"
+
+#: UploadStatus_AcceptingRequest
+msgid "UploadStatus_AcceptingRequest"
+msgstr "Başlatılıyor"
+
+#: UploadStatus_Handshake
+msgid "UploadStatus_Handshake"
+msgstr "Merhabalaşma"
+
+#: UploadStatus_Queued
+msgid "UploadStatus_Queued"
+msgstr "Bilgisayar Sıraya Konuldu"
+
+#: UploadStatus_UploadingThex
+msgid "UploadStatus_UploadingThex"
+msgstr "Thex Değeri Gönderiliyor"
+
+#: UploadStatus_UploadingData
+msgid "UploadStatus_UploadingData"
+msgstr "Gönderme Sürüyor"
+
+#: UploadStatus_Completed
+msgid "UploadStatus_Completed"
+msgstr "Tamamlandı"
+
+#: UploadStatus_Aborted
+msgid "UploadStatus_Aborted"
+msgstr "Kesildi"
+
+# Library Tab
+#: Library
+msgid "Library"
+msgstr "Kütüphane"
+
+#: TTTLibrary
+msgid "TTTLibrary"
+msgstr "Paylaşılan kütüphane özeti."
+
+#: LibraryMnemonic
+msgid "LibraryMnemonic"
+msgstr "K"
+
+#: LibraryAccelerator
+msgid "LibraryAccelerator"
+msgstr "control 5"
+
+#: LibraryTab_Rescan
+msgid "LibraryTab_Rescan"
+msgstr "Yeniden Tara"
+
+#: LibraryTab_TTTRescan
+msgid "LibraryTab_TTTRescan"
+msgstr "Paylaşılan dosya listesini güncellemek için dizinleri yeniden tara."
+
+#: LibraryTab_Export
+msgid "LibraryTab_Export"
+msgstr "Dışa Aktar"
+
+#: LibraryTab_TTTExport
+msgid "LibraryTab_TTTExport"
+msgstr "Dosya listesini HTML, Magma, RSS olarak veya kendi tanımladığınız bir biçimde aktarır."
+
+#: LibraryTab_OpenFile
+msgid "LibraryTab_OpenFile"
+msgstr "Dosyayı Aç"
+
+#: LibraryTab_TTTOpenFile
+msgid "LibraryTab_TTTOpenFile"
+msgstr "Seçili dosyayı varsayılan programıyla açar."
+
+#: LibraryTab_Filter
+msgid "LibraryTab_Filter"
+msgstr "Filtrele"
+
+#: LibraryTab_TTTFilter
+msgid "LibraryTab_TTTFilter"
+msgstr "Paylaşılan dosyaları filtrele"
+
+#: LibraryTab_SharedFiles
+msgid "LibraryTab_SharedFiles"
+msgstr "Paylaşılan Dosyalar"
+
+#: LibraryTab_Share
+msgid "LibraryTab_Share"
+msgstr "Dizin Ekle"
+
+#: LibraryTab_TTTShare
+msgid "LibraryTab_TTTShare"
+msgstr "Paylaşacak yeni bir dizin ekle."
+
+#: LibraryTab_StopShare
+msgid "LibraryTab_StopShare"
+msgstr "Dizini gizle"
+
+#: LibraryTab_TTTStopShare
+msgid "LibraryTab_TTTStopShare"
+msgstr "Seçili dizini gizle ve paylaşımını durdur."
+
+#: LibraryTab_SelectDirectoryToShare
+msgid "LibraryTab_SelectDirectoryToShare"
+msgstr "Paylaşılacak dizini seçin"
+
+#: LibraryTab_Select
+msgid "LibraryTab_Select"
+msgstr "Seç"
+
+#: LibraryTab_SelectMnemonic
+msgid "LibraryTab_SelectMnemonic"
+msgstr "S"
+
+#: LibraryTab_Explore
+msgid "LibraryTab_Explore"
+msgstr "Gözat"
+
+#: LibraryTab_TTTExplore
+msgid "LibraryTab_TTTExplore"
+msgstr "Seçili dizini sistemin gezginiyle aç."
+
+#: LibraryTab_CopyrightWarnTitle
+msgid "LibraryTab_CopyrightWarnTitle"
+msgstr "Telif haklarına karşı saygılı olun!"
+
+#: LibraryTab_CopyrightWarnMessage
+msgid "LibraryTab_CopyrightWarnMessage"
+msgstr "Phex sadece yasaların izin verdiği dosyaların paylaşımı için kullanılmalıdır. Lütfen telif hakkıyla korunan dosyaları paylaşmayınız."
+
+#: LibraryTab_StatsHeader
+msgid "LibraryTab_StatsHeader"
+msgstr "(Dosyalar: {0}/{1} - QRT: {2}%/{3}K)"
+
+#: SharedFilesTable_TigerTree
+msgid "SharedFilesTable_TigerTree"
+msgstr "Tiger Ağacı"
+
+#: SharedFilesTable_AltLocCount
+msgid "SharedFilesTable_AltLocCount"
+msgstr "AtlLoc Sayısı"
+
+# Security Tab
+#: Security
+msgid "Security"
+msgstr "Güvenlik"
+
+#: TTTSecurity
+msgid "TTTSecurity"
+msgstr "Zararlı bağlantıları engellemek için güvenlik kurallarını belirle"
+
+#: SecurityMnemonic
+msgid "SecurityMnemonic"
+msgstr "Ü"
+
+#: SecurityAccelerator
+msgid "SecurityAccelerator"
+msgstr "control 6"
+
+#: Address
+msgid "Address"
+msgstr "Adres"
+
+#: Expires
+msgid "Expires"
+msgstr "Bitiş"
+
+#: TriggerCount
+msgid "TriggerCount"
+msgstr "Olay Sayısı"
+
+#: Description
+msgid "Description"
+msgstr "Tanım"
+
+#: NewSecurityRule
+msgid "NewSecurityRule"
+msgstr "Yeni Kural"
+
+#: TTTNewSecurityRule
+msgid "TTTNewSecurityRule"
+msgstr "Yeni bir güvenlik kuralı oluştur."
+
+#: EditSecurityRule
+msgid "EditSecurityRule"
+msgstr "Kuralı Düzenle"
+
+#: TTTEditSecurityRule
+msgid "TTTEditSecurityRule"
+msgstr "Seçili güvenlik kuralını düzenle."
+
+#: RemoveSecurityRule
+msgid "RemoveSecurityRule"
+msgstr "Kuralı Kaldır"
+
+#: TTTRemoveSecurityRule
+msgid "TTTRemoveSecurityRule"
+msgstr "Seçilen güvenlik kuralını kaldırır."
+
+#: Deny
+msgid "Deny"
+msgstr "Reddet"
+
+#: UserBanned
+msgid "UserBanned"
+msgstr "Kullanıcı tarafından yasaklandı."
+
+# StatisticsTab
+#: TTTStatistics
+msgid "TTTStatistics"
+msgstr "İstatistikleri gösterir."
+
+#: StatisticsMnemonic
+msgid "StatisticsMnemonic"
+msgstr "t"
+
+#: StatisticsAccelerator
+msgid "StatisticsAccelerator"
+msgstr "control 7"
+
+#: Name
+msgid "Name"
+msgstr "İsim"
+
+#: Value
+msgid "Value"
+msgstr "Değer"
+
+#: Avg.
+msgid "Avg."
+msgstr "Ort."
+
+#: Max.
+msgid "Max."
+msgstr "Mak."
+
+#: TotalBandwidthProvider
+msgid "TotalBandwidthProvider"
+msgstr "Toplam Bant Genişliği"
+
+#: NetworkBandwidthProvider
+msgid "NetworkBandwidthProvider"
+msgstr "Bant Genişliği"
+
+#: DownloadBandwidthProvider
+msgid "DownloadBandwidthProvider"
+msgstr "İndirme Hızı"
+
+#: UploadBandwidthProvider
+msgid "UploadBandwidthProvider"
+msgstr "Gönderme Hızı"
+
+#: TotalMsgInProvider
+msgid "TotalMsgInProvider"
+msgstr "Alınan Toplam Mesaj"
+
+#: PingMsgInProvider
+msgid "PingMsgInProvider"
+msgstr "Alınan Pingler"
+
+#: PongMsgInProvider
+msgid "PongMsgInProvider"
+msgstr "Alınan Ponglar"
+
+#: QueryMsgInProvider
+msgid "QueryMsgInProvider"
+msgstr "Alınan Sorgular"
+
+#: QueryHitMsgInProvider
+msgid "QueryHitMsgInProvider"
+msgstr "Alınan Sorgu Sonuçları"
+
+#: PushMsgInProvider
+msgid "PushMsgInProvider"
+msgstr "Alınan Zorlama İstekleri"
+
+#: TotalMsgOutProvider
+msgid "TotalMsgOutProvider"
+msgstr "Gönderilen Toplam Mesaj"
+
+#: PingMsgOutProvider
+msgid "PingMsgOutProvider"
+msgstr "Gönderilen Pingler"
+
+#: PongMsgOutProvider
+msgid "PongMsgOutProvider"
+msgstr "Gönderilen Ponglar"
+
+#: QueryMsgOutProvider
+msgid "QueryMsgOutProvider"
+msgstr "Gönderilen Sorgular"
+
+#: QueryHitMsgOutProvider
+msgid "QueryHitMsgOutProvider"
+msgstr "Gönderilen Sorgu Sonuçları"
+
+#: PushMsgOutProvider
+msgid "PushMsgOutProvider"
+msgstr "Gönderilen Zorlama İstekleri"
+
+#: DropedMsgTotalProvider
+msgid "DropedMsgTotalProvider"
+msgstr "Atılan Mesajlar"
+
+#: DropedMsgInProvider
+msgid "DropedMsgInProvider"
+msgstr "Atılan Gelen Mesaj"
+
+#: DropedMsgOutProvider
+msgid "DropedMsgOutProvider"
+msgstr "Atılan Giden Mesaj"
+
+#: PushDownloadAttemptsProvider
+msgid "PushDownloadAttemptsProvider"
+msgstr "Zorla İndirme Denemesi"
+
+#: PushDownloadSucessProvider
+msgid "PushDownloadSucessProvider"
+msgstr "Başarılı Yeniden Denemeler"
+
+#: PushDownloadFailureProvider
+msgid "PushDownloadFailureProvider"
+msgstr "Başarısız Yeniden Denemeler"
+
+#: PushDldPushProxyAttemptsProvider
+msgid "PushDldPushProxyAttemptsProvider"
+msgstr "Vekil Zorlama Denemesi"
+
+#: PushDldPushProxySuccessProvider
+msgid "PushDldPushProxySuccessProvider"
+msgstr "Başarılı Vekil Zorlama"
+
+#: PushUploadAttemptsProvider
+msgid "PushUploadAttemptsProvider"
+msgstr "Zorla Gönderme Denemesi"
+
+#: PushUploadSucessProvider
+msgid "PushUploadSucessProvider"
+msgstr "Başarılı Zorla Gönderme"
+
+#: PushUploadFailureProvider
+msgid "PushUploadFailureProvider"
+msgstr "Başarısız Zorla Gönderme"
+
+#: HorizonHostCountProvider
+msgid "HorizonHostCountProvider"
+msgstr "Ufuğa Dek Bilgisayar Sayısı"
+
+#: HorizonFileCountProvider
+msgid "HorizonFileCountProvider"
+msgstr "Ufuğa Dek Dosya Sayısı"
+
+#: HorizonFileSizeProvider
+msgid "HorizonFileSizeProvider"
+msgstr "Ufuğa Dek Dosya Boyutu"
+
+#: UptimeProvider
+msgid "UptimeProvider"
+msgstr "Açık Kalma Süresi"
+
+#: DailyUptimeProvider
+msgid "DailyUptimeProvider"
+msgstr "Günlük Açık Kalma Süresi"
+
+# SearchMonitorTab
+#: SearchMonitorTab_SearchMonitor
+msgid "SearchMonitorTab_SearchMonitor"
+msgstr "Arama İzleyicisi"
+
+#: SearchMonitorTab_TTTSearchMonitor
+msgid "SearchMonitorTab_TTTSearchMonitor"
+msgstr "Buradan geçen aramaları izle."
+
+#: SearchMonitorTab_Mnemonic
+msgid "SearchMonitorTab_Mnemonic"
+msgstr "S"
+
+#: SearchMonitorTab_Accelerator
+msgid "SearchMonitorTab_Accelerator"
+msgstr "control 8"
+
+#: SearchMonitorTab_enable
+msgid "SearchMonitorTab_enable"
+msgstr "etkinleştir"
+
+#: SearchMonitorTab_Show
+msgid "SearchMonitorTab_Show"
+msgstr "Göster"
+
+#: SearchMonitorTab_Rows
+msgid "SearchMonitorTab_Rows"
+msgstr "satır."
+
+#: SearchMonitorTab_RoutedFrom
+msgid "SearchMonitorTab_RoutedFrom"
+msgstr "Gönderen"
+
+#: SearchMonitorTab_SearchText
+msgid "SearchMonitorTab_SearchText"
+msgstr "Arama Yazısı"
+
+#: SearchMonitorTab_HopsTtl
+msgid "SearchMonitorTab_HopsTtl"
+msgstr "Hop / TTL"
+
+# ResultMonitorTab
+#: ResultMonitorTab_ResultMonitor
+msgid "ResultMonitorTab_ResultMonitor"
+msgstr "Sonuç İzleyicisi"
+
+#: ResultMonitorTab_TTTResultMonitor
+msgid "ResultMonitorTab_TTTResultMonitor"
+msgstr "Bu bilgisayardan geçen arama sonuçlarını izle."
+
+#: ResultMonitorTab_Mnemonic
+msgid "ResultMonitorTab_Mnemonic"
+msgstr "R"
+
+#: ResultMonitorTab_Accelerator
+msgid "ResultMonitorTab_Accelerator"
+msgstr "control 9"
+
+#: ResultMonitorTab_ResultFilter
+msgid "ResultMonitorTab_ResultFilter"
+msgstr "Sonuç Filtresi"
+
+#: ResultMonitorTab_TTTPassiveSearch
+msgid "ResultMonitorTab_TTTPassiveSearch"
+msgstr "Aranacak sözcükleri boşlukla ayırarak girin."
+
+#: ResultMonitorTab_StartPassiveSearch
+msgid "ResultMonitorTab_StartPassiveSearch"
+msgstr "Pasif Aramayı Başlat"
+
+#: ResultMonitorTab_TTTStartPassiveSearch
+msgid "ResultMonitorTab_TTTStartPassiveSearch"
+msgstr "Pasif arama buradan yönlendirilen arama sonuçlarını izler. Bu işlem biraz zaman alabilir."
+
+#: ResultMonitorTab_StopPassiveSearch
+msgid "ResultMonitorTab_StopPassiveSearch"
+msgstr "Pasif Aramayı Durdur"
+
+#: ConfigWizard_DialogTitle
+msgid "ConfigWizard_DialogTitle"
+msgstr "Yapılandırma Sihirbazı"
+
+#: ConfigWizard_BannerHeader
+msgid "ConfigWizard_BannerHeader"
+msgstr "Yapılandırma Sihirbazı"
+
+#: ConfigWizard_BannerSubHeader
+msgid "ConfigWizard_BannerSubHeader"
+msgstr "Phex'in temel ayarlarını yapılandırmanıza yardımcı olur."
+
+#: ConfigWizard_WelcomeToPhexHeader
+msgid "ConfigWizard_WelcomeToPhexHeader"
+msgstr "Phex'e Hoş Geldiniz"
+
+#: ConfigWizard_WelcomeToPhexText
+msgid "ConfigWizard_WelcomeToPhexText"
+msgstr "Bu yapılandırma sihirbazı Phex'in gerektiği gibi çalışması için en temel ayarları yapmanıza yardım eder.  Phex'i kullanmaya devam etmeden önce bu sihirbazı tamamlamanız önerilir.<p>Bu sihirbaz sadece Phex'in ilk başlatılmasında ve önemli güncellemelerden sonra görünür.<p>Tüm ayarlar seçenekler diyaloğundan da değiştirilebilir."
+
+#: ConfigWizard_BandwidthHeader
+msgid "ConfigWizard_BandwidthHeader"
+msgstr "Bant Genişliği Ayarları"
+
+#: ConfigWizard_BandwidthText
+msgid "ConfigWizard_BandwidthText"
+msgstr "Bağlantınızın hızını ve tipini seçin."
+
+#: ConfigWizard_ConnectionTypeSpeed
+msgid "ConfigWizard_ConnectionTypeSpeed"
+msgstr "Bağlantı tipi ve hızı:"
+
+#: ConfigWizard_BandwidthText2
+msgid "ConfigWizard_BandwidthText2"
+msgstr "Bant genişliğini ve dağıtımını daha detaylı bir şekilde ayarlamak için seçenekler diyaloğunu kullanabilirsiniz. Bant genişliğini şebeke, indirmeler ve göndermeler arasında paylaştırabilir ve Phex'ın kullanabileceği toplam bant genişliğini ayarlayabilirsiniz."
+
+#: ConfigWizard_DirectoryHeader
+msgid "ConfigWizard_DirectoryHeader"
+msgstr "İndirme dosyaları"
+
+#: ConfigWizard_DirectoryText
+msgid "ConfigWizard_DirectoryText"
+msgstr "Phex'in bitmemiş ve tamamlanan indirmeleri saklayacağı dizinleri seçiniz.<br>Phex bitmemişler dosyasını bir indirme sırasında yollanan parçaları saklamak için kullanır. Tüm parçalar elde edilince dosya hedef dizine taşınır."
+
+#: ConfigWizard_Incomplete
+msgid "ConfigWizard_Incomplete"
+msgstr "Bitmemiş:"
+
+#: ConfigWizard_Destination
+msgid "ConfigWizard_Destination"
+msgstr "Hedef:"
+
+#: ConfigWizard_DirectoryText2
+msgid "ConfigWizard_DirectoryText2"
+msgstr "Belli bir indirmenin hedef dizinini indirme yapılandırılması diyaloğunu kullanarak ayarlayabilirsiniz. Daha sonra varsayılan dizini değiştirmek için seçenekler diyaloğunu kullanabilirsiniz."
+
+#: ConfigWizard_SetFolder
+msgid "ConfigWizard_SetFolder"
+msgstr "Dizin belirt"
+
+#: ConfigWizard_SharingHeader
+msgid "ConfigWizard_SharingHeader"
+msgstr "Paylaşılan Dosyalar"
+
+#: ConfigWizard_SharingText
+msgid "ConfigWizard_SharingText"
+msgstr "Paylaşmak istediğiniz dizinleri seçiniz."
+
+#: ConfigWizard_ContentCommunityHeader
+msgid "ConfigWizard_ContentCommunityHeader"
+msgstr "İçerik Topluluklarına Abonelikler"
+
+#: ConfigWizard_ContentCommunityText
+msgid "ConfigWizard_ContentCommunityText"
+msgstr "Gnutella ağında yasal ve özgür içeriklerin yayılmasına yardım etmek istiyorsanız seçilen dosyaları otomatik olarak indirmek için bir içerik topluluğuna abone olabilirsiniz. <br><br>Bir topluluğa üye olursanız dosyaların yayılması için lütfen indirmeler dizininizi paylaşınız."
+
+#: ConfigWizard_JoinPolarSkulk
+msgid "ConfigWizard_JoinPolarSkulk"
+msgstr "Polar Skulk'tan dosyalara abone olun ( http://polar-skulk.phex.org )."
+
+#: ConfigWizard_GoodbyeText
+msgid "ConfigWizard_GoodbyeText"
+msgstr "Phex şimdi kullanıma hazırdır.<br>Paylaştığınız dosyaların analizi nedeniyle belli bir süre disk etkinliği olması muhtemeldir."
+
+#: ConfigWizard_OpenOptions
+msgid "ConfigWizard_OpenOptions"
+msgstr "Ek ayarları görmek ve değiştirmek için seçenekler diyaloğunu aç."
+
+# Advanced Search Rules Dialog
+#: AdvSearchRules_DialogTitle
+msgid "AdvSearchRules_DialogTitle"
+msgstr "Gelişmiş Arama Kuralları"
+
+#: AdvSearchRules_BannerHeader
+msgid "AdvSearchRules_BannerHeader"
+msgstr "Arama Kuralları"
+
+#: AdvSearchRules_BannerSubHeader
+msgid "AdvSearchRules_BannerSubHeader"
+msgstr "Arama kuralları oluştur veya değiştir."
+
+#: AdvSearchRules_NewRule
+msgid "AdvSearchRules_NewRule"
+msgstr "Yeni Kural"
+
+#: AdvSearchRules_TTTNewRule
+msgid "AdvSearchRules_TTTNewRule"
+msgstr "Yeni bir arama kuralı oluştur."
+
+#: AdvSearchRules_CopyRule
+msgid "AdvSearchRules_CopyRule"
+msgstr "Kopyala"
+
+#: AdvSearchRules_TTTCopyRule
+msgid "AdvSearchRules_TTTCopyRule"
+msgstr "Seçili arama kuralını kopyala."
+
+#: AdvSearchRules_ChangeRule
+msgid "AdvSearchRules_ChangeRule"
+msgstr "Değiştir"
+
+#: AdvSearchRules_TTTChangeRule
+msgid "AdvSearchRules_TTTChangeRule"
+msgstr "Seçili ara kuralını sihirbaz kullanarak değiştir."
+
+#: AdvSearchRules_DeleteRule
+msgid "AdvSearchRules_DeleteRule"
+msgstr "Sil"
+
+#: AdvSearchRules_TTTDeleteRule
+msgid "AdvSearchRules_TTTDeleteRule"
+msgstr "Seçili kuralı sil."
+
+#: AdvSearchRules_RuleListDescription
+msgid "AdvSearchRules_RuleListDescription"
+msgstr "Kurallar (gösterilen sırada işlenir)"
+
+#: AdvSearchRules_TTTMoveUp
+msgid "AdvSearchRules_TTTMoveUp"
+msgstr "Kuralı yukarı taşır."
+
+#: AdvSearchRules_TTTMoveDown
+msgid "AdvSearchRules_TTTMoveDown"
+msgstr "Kuralı aşağı taşır."
+
+# Rule Wizard Dialog
+#: RuleWizard_DialogTitle
+msgid "RuleWizard_DialogTitle"
+msgstr "Kural Sihirbazı"
+
+#: RuleWizard_RuleDescription
+msgid "RuleWizard_RuleDescription"
+msgstr "Kural tanımı (değiştirmek için altı çizili değere tıklayın)"
+
+#: RuleWizard_SelectRuleCondition
+msgid "RuleWizard_SelectRuleCondition"
+msgstr "Aranacak şartları seç"
+
+#: RuleWizard_SelectRuleConsequence
+msgid "RuleWizard_SelectRuleConsequence"
+msgstr "Yapılacak şeyi seç"
+
+#: RuleWizard_SelectRuleException
+msgid "RuleWizard_SelectRuleException"
+msgstr "İstisnaları seç"
+
+#: RuleWizard_FinalizeRule
+msgid "RuleWizard_FinalizeRule"
+msgstr "Kuralı tamamla."
+
+#: RuleWizard_RuleName
+msgid "RuleWizard_RuleName"
+msgstr "Kural adı giriniz"
+
+#: RuleWizard_TTTRuleName
+msgid "RuleWizard_TTTRuleName"
+msgstr "Bu kural için bir ad giriniz."
+
+#: RuleWizard_RuleOptions
+msgid "RuleWizard_RuleOptions"
+msgstr "Kural seçeneklerini tanımla"
+
+#: RuleWizard_PermanentlyEnableRule
+msgid "RuleWizard_PermanentlyEnableRule"
+msgstr "Kuralı sürekli etkin kıl"
+
+#: RuleWizard_TTTPermanentlyEnableRule
+msgid "RuleWizard_TTTPermanentlyEnableRule"
+msgstr "Bu tür bir kural her aramada uygulanır"
+
+#: RuleWizard_MissingRuleInputTitle
+msgid "RuleWizard_MissingRuleInputTitle"
+msgstr "Eksik Girdi"
+
+#: RuleWizard_MissingRuleInputText
+msgid "RuleWizard_MissingRuleInputText"
+msgstr ""
+"Kural tanımında bir kural eksik.\n"
+"Kural tanımlamak için altı çizili yazıları tıklayın."
+
+# Rule based filters
+#: RuleVisualization_And
+msgid "RuleVisualization_And"
+msgstr "ve"
+
+#: RuleVisualization_Or
+msgid "RuleVisualization_Or"
+msgstr "veya"
+
+#: RuleVisualization_Prefix
+msgid "RuleVisualization_Prefix"
+msgstr "Arama sonuçlarını alırken"
+
+#: RuleVisualization_FilenameCond
+msgid "RuleVisualization_FilenameCond"
+msgstr "dosya adında  --__belli kelimeler__-- içeren"
+
+#: RuleVisualization_FilenameCond_Not
+msgid "RuleVisualization_FilenameCond_Not"
+msgstr "dosya adında --__belli kelimeler__-- içermeyen"
+
+#: RuleVisualization_MediaTypeCond
+msgid "RuleVisualization_MediaTypeCond"
+msgstr "--__dosya türü__-- olanlar"
+
+#: RuleVisualization_MediaTypeCond_Not
+msgid "RuleVisualization_MediaTypeCond_Not"
+msgstr "--__dosya türü__-- olmayanlar"
+
+#: RuleVisualization_FileSizeCond
+msgid "RuleVisualization_FileSizeCond"
+msgstr "boyutu şu aralıkta olan --__belli bir aralıkta__--"
+
+#: RuleVisualization_FileSizeCond_Not
+msgid "RuleVisualization_FileSizeCond_Not"
+msgstr "boyutu bunlar arasında olmayan --__belli bir aralıkta__--"
+
+#: RuleVisualization_FileSizeCond_Min
+msgid "RuleVisualization_FileSizeCond_Min"
+msgstr "en az"
+
+#: RuleVisualization_FileSizeCond_Max
+msgid "RuleVisualization_FileSizeCond_Max"
+msgstr "en çok"
+
+#: RuleVisualization_FileUrnCond
+msgid "RuleVisualization_FileUrnCond"
+msgstr "dosya urn'i olarak --__urn:sha1:<nss>__-- ile"
+
+#: RuleVisualization_FileUrnCond_Not
+msgid "RuleVisualization_FileUrnCond_Not"
+msgstr "dosya urn'i olarak --__urn:sha1:<nss>__-- dışında"
+
+#: RuleVisualization_HideFromSearchConseq
+msgid "RuleVisualization_HideFromSearchConseq"
+msgstr "gizle"
+
+#: RuleVisualization_RemoveFromSearchConseq
+msgid "RuleVisualization_RemoveFromSearchConseq"
+msgstr "sil"
+
+#: RuleVisualization_DownloadFileConseq
+msgid "RuleVisualization_DownloadFileConseq"
+msgstr "onları indir"
+
+#: RuleVisualization_BanHostConseq
+msgid "RuleVisualization_BanHostConseq"
+msgstr "kaynağı yasakla (7 gün boyunca)"
+
+#: RuleVisualization_CopyOf
+msgid "RuleVisualization_CopyOf"
+msgstr "Kopyası"
+
+# Rule File Size Condition Editor
+#: FileSizeCondEditor_DialogTitle
+msgid "FileSizeCondEditor_DialogTitle"
+msgstr "Sayfa Boyutu"
+
+#: FileSizeCondEditor_ConditionToAdd
+msgid "FileSizeCondEditor_ConditionToAdd"
+msgstr "Eklenecek dosya boyutu sınırları:"
+
+#: FileSizeCondEditor_Minimum
+msgid "FileSizeCondEditor_Minimum"
+msgstr "En küçük"
+
+#: FileSizeCondEditor_TTTMinimum
+msgid "FileSizeCondEditor_TTTMinimum"
+msgstr "En küçük dosya boyutu"
+
+#: FileSizeCondEditor_Maximum
+msgid "FileSizeCondEditor_Maximum"
+msgstr "En büyük"
+
+#: FileSizeCondEditor_TTTMaximum
+msgid "FileSizeCondEditor_TTTMaximum"
+msgstr "En büyük dosya boyutu"
+
+#: FileSizeCondEditor_Add
+msgid "FileSizeCondEditor_Add"
+msgstr "Ekle"
+
+#: FileSizeCondEditor_TTTAdd
+msgid "FileSizeCondEditor_TTTAdd"
+msgstr "Bu aralığı şartlara ekle."
+
+#: FileSizeCondEditor_FileSizeConditions
+msgid "FileSizeCondEditor_FileSizeConditions"
+msgstr "Atanmış şartlar:"
+
+#: FileSizeCondEditor_Remove
+msgid "FileSizeCondEditor_Remove"
+msgstr "Kaldır"
+
+#: FileSizeCondEditor_TTTRemove
+msgid "FileSizeCondEditor_TTTRemove"
+msgstr "Seçili aralıkları şartlardan kaldır."
+
+# Rule File Name Condition Editor
+#: FileNameCondEditor_DialogTitle
+msgid "FileNameCondEditor_DialogTitle"
+msgstr "Dosya Adı"
+
+#: FileNameCondEditor_ConditionToAdd
+msgid "FileNameCondEditor_ConditionToAdd"
+msgstr "Eklenecek dosya adı sözcükleri:"
+
+#: FileNameCondEditor_Term
+msgid "FileNameCondEditor_Term"
+msgstr "Sözcükler"
+
+#: FileNameCondEditor_TTTTerm
+msgid "FileNameCondEditor_TTTTerm"
+msgstr "Dosya adının içermesi gereken sözcükler."
+
+#: FileNameCondEditor_Add
+msgid "FileNameCondEditor_Add"
+msgstr "Ekle"
+
+#: FileNameCondEditor_TTTAdd
+msgid "FileNameCondEditor_TTTAdd"
+msgstr "Bu sözcüğü şartlara ekle."
+
+#: FileNameCondEditor_FileNameConditions
+msgid "FileNameCondEditor_FileNameConditions"
+msgstr "Atanmış şartlar:"
+
+#: FileNameCondEditor_Remove
+msgid "FileNameCondEditor_Remove"
+msgstr "Kaldır"
+
+#: FileNameCondEditor_TTTRemove
+msgid "FileNameCondEditor_TTTRemove"
+msgstr "Seçili sözcüleri şartlardan sil."
+
+#: FileUrnCondEditor_DialogTitle
+msgid "FileUrnCondEditor_DialogTitle"
+msgstr "Dosyanın URN değeri"
+
+#: FileUrnCondEditor_ConditionToAdd
+msgid "FileUrnCondEditor_ConditionToAdd"
+msgstr "Eklenecek urn:"
+
+#: FileUrnCondEditor_Urn
+msgid "FileUrnCondEditor_Urn"
+msgstr "Urn:"
+
+#: FileUrnCondEditor_TTTUrn
+msgid "FileUrnCondEditor_TTTUrn"
+msgstr "Bir dosyanın urn değeri, urn:sha1:<nss> biçiminde"
+
+#: FileUrnCondEditor_Add
+msgid "FileUrnCondEditor_Add"
+msgstr "Ekle"
+
+#: FileUrnCondEditor_TTTAdd
+msgid "FileUrnCondEditor_TTTAdd"
+msgstr "Bu urn değerini koşullara ekler."
+
+#: FileUrnCondEditor_UrnConditions
+msgid "FileUrnCondEditor_UrnConditions"
+msgstr "Atanan urn değerleri:"
+
+#: FileUrnCondEditor_Remove
+msgid "FileUrnCondEditor_Remove"
+msgstr "Kaldır"
+
+#: FileUrnCondEditor_TTTRemove
+msgid "FileUrnCondEditor_TTTRemove"
+msgstr "Seçilen urn değerlerini koşullardan kaldırır."
+
+# Rule Media Type Condition Editor
+#: MediaTypeCondEditor_DialogTitle
+msgid "MediaTypeCondEditor_DialogTitle"
+msgstr "Ortam Türü"
+
+#: MediaTypeCondEditor_ConditionToAdd
+msgid "MediaTypeCondEditor_ConditionToAdd"
+msgstr "Eklenecek ortam türlerini seçin"
+
+# Integrated default rule text strings.
+#: AdultFilterRule_Name
+msgid "AdultFilterRule_Name"
+msgstr "Varsayılan Yetişkin Filtresi"
+
+#: ScamFileFilterRule_Name
+msgid "ScamFileFilterRule_Name"
+msgstr "Varsayılan Yanıltıcı Dosya Filtresi"
+
+#: SpamFileFilterRule_Name
+msgid "SpamFileFilterRule_Name"
+msgstr "Varsayılan Filtre: Bilinen Spam'i Durdurur"
+
+#: NastyFileFilterRule_Name
+msgid "NastyFileFilterRule_Name"
+msgstr "Varsayılan Dosya: Gerçekten çirkin dosyaları saklar"
+
+#: SecurityRuleDialog_DialogTitle
+msgid "SecurityRuleDialog_DialogTitle"
+msgstr "Güvenlik Kuralı"
+
+#: SecurityRuleDialog_BannerHeader_New
+msgid "SecurityRuleDialog_BannerHeader_New"
+msgstr "Yeni Güvenlik Kuralı"
+
+#: SecurityRuleDialog_BannerHeader_Edit
+msgid "SecurityRuleDialog_BannerHeader_Edit"
+msgstr "Güvenlik Kuralını Düzenle"
+
+#: SecurityRuleDialog_BannerSubHeader
+msgid "SecurityRuleDialog_BannerSubHeader"
+msgstr "Bir güvenlik kuralı yarat ve düzenle"
+
+#: SecurityRuleDialog_SecurityRule
+msgid "SecurityRuleDialog_SecurityRule"
+msgstr "Güvenlik Kuralı"
+
+#: SecurityRuleDialog_Description
+msgid "SecurityRuleDialog_Description"
+msgstr "Açıklama:"
+
+#: SecurityRuleDialog_DisableRule
+msgid "SecurityRuleDialog_DisableRule"
+msgstr "Bu güvenlik kuralını devre dışı bırak"
+
+#: SecurityRuleDialog_NetworkAddress
+msgid "SecurityRuleDialog_NetworkAddress"
+msgstr "Şebeke Adresi"
+
+#: SecurityRuleDialog_IP_CIDR
+msgid "SecurityRuleDialog_IP_CIDR"
+msgstr "İP/CIDR:"
+
+#: SecurityRuleDialog_IP_CIDR_Separator
+msgid "SecurityRuleDialog_IP_CIDR_Separator"
+msgstr "/"
+
+#: SecurityRuleDialog_Options
+msgid "SecurityRuleDialog_Options"
+msgstr "Seçenekler"
+
+#: SecurityRuleDialog_ActionType
+msgid "SecurityRuleDialog_ActionType"
+msgstr "Eylem türü"
+
+#: SecurityRuleDialog_Expires
+msgid "SecurityRuleDialog_Expires"
+msgstr "Sona erme"
+
+#: SecurityRuleDialog_Never
+msgid "SecurityRuleDialog_Never"
+msgstr "Asla"
+
+#: SecurityRuleDialog_EndOfSession
+msgid "SecurityRuleDialog_EndOfSession"
+msgstr "Oturumun sonunda"
+
+#: SecurityRuleDialog_After
+msgid "SecurityRuleDialog_After"
+msgstr "Bu süreden sonra:"
+
+#: SecurityRuleDialog_Days
+msgid "SecurityRuleDialog_Days"
+msgstr "gün"
+
+#: SecurityRuleDialog_Hours
+msgid "SecurityRuleDialog_Hours"
+msgstr "saat"
+
+#: SecurityRuleDialog_Minutes
+msgid "SecurityRuleDialog_Minutes"
+msgstr "dakika"
+
+#: SecurityRuleDialog_DeleteRuleAfterExpiry
+msgid "SecurityRuleDialog_DeleteRuleAfterExpiry"
+msgstr "Bitiminden sonra kuralı sil"
+
+#: SecurityRuleDialog_TTTDeleteRuleAfterExpiry
+msgid "SecurityRuleDialog_TTTDeleteRuleAfterExpiry"
+msgstr "Etkinleştirilirse kural bitiminden sonra silinir, yoksa sadece devre dışı bırakılır."
+
+#: SecurityRuleDialog_OK
+msgid "SecurityRuleDialog_OK"
+msgstr "Tamam"
+
+#: SecurityRuleDialog_Cancel
+msgid "SecurityRuleDialog_Cancel"
+msgstr "İptal"
+
+#: FilterLibraryDialog_DialogTitle
+msgid "FilterLibraryDialog_DialogTitle"
+msgstr "Kütüphane Filtresi"
+
+#: FilterLibraryDialog_BannerHeader
+msgid "FilterLibraryDialog_BannerHeader"
+msgstr "Kütüphane Filtresi"
+
+#: FilterLibraryDialog_BannerSubHeader
+msgid "FilterLibraryDialog_BannerSubHeader"
+msgstr "Paylaşılan dosyaları deyimle filtrele."
+
+#: FilterLibraryDialog_Add
+msgid "FilterLibraryDialog_Add"
+msgstr "Ekle"
+
+#: FilterLibraryDialog_Edit
+msgid "FilterLibraryDialog_Edit"
+msgstr "Düzenle"
+
+#: FilterLibraryDialog_Remove
+msgid "FilterLibraryDialog_Remove"
+msgstr "Kaldır"
+
+#: FilterLibraryDialog_Examples
+msgid "FilterLibraryDialog_Examples"
+msgstr "Örnekler"
+
+#: FilterLibraryDialog_Example1
+msgid "FilterLibraryDialog_Example1"
+msgstr "içinde 'ses' sözcüğü geçen dosyaları filtrelemek için '.*ses.*' yazın."
+
+#: FilterLibraryDialog_Example2
+msgid "FilterLibraryDialog_Example2"
+msgstr "'.doc' ile biten dosyaları filtrelemek için '.*\\.doc$' yazın."
+
+#: FilterLibraryDialog_Example3
+msgid "FilterLibraryDialog_Example3"
+msgstr "'.zip' ile bitmeyen dosyaları filtrelemek için '(?!.*\\zip$).*' yazın."
+
+#: FilterLibraryDialogAdd_DialogTitle
+msgid "FilterLibraryDialogAdd_DialogTitle"
+msgstr "Yeni Dosya Filtresi"
+
+#: FilterLibraryDialogAdd_BannerHeader
+msgid "FilterLibraryDialogAdd_BannerHeader"
+msgstr "Yeni bir Dosya Filtresi Tanımla"
+
+#: FilterLibraryDialogAdd_BannerSubHeader
+msgid "FilterLibraryDialogAdd_BannerSubHeader"
+msgstr "Eklenecek dosya filtresini girin: (ör: '.*\\.vsb$' or 'speech\\.mp3')"
+
+#: FilterLibraryDialogAdd_Filter
+msgid "FilterLibraryDialogAdd_Filter"
+msgstr "Eklenecek dosya:"
+
+#: FilterLibraryDialogAdd_InvalidRegExp
+msgid "FilterLibraryDialogAdd_InvalidRegExp"
+msgstr "Geçersiz deyim."
+
+#: UserMsg_SegmentCreateIncompleteFileFailed_Title
+msgid "UserMsg_SegmentCreateIncompleteFileFailed_Title"
+msgstr "Dosya Oluşturulamadı"
+
+#: UserMsg_SegmentCreateIncompleteFileFailed_ShortMessage
+msgid "UserMsg_SegmentCreateIncompleteFileFailed_ShortMessage"
+msgstr ""
+"Dosya oluşturulamadı:\n"
+"{0}\n"
+"\n"
+"Sebep:\n"
+"{1}"
+
+#: UserMsg_SegmentCreateIncompleteFileFailed_AutoCloseDelay
+msgid "UserMsg_SegmentCreateIncompleteFileFailed_AutoCloseDelay"
+msgstr "0"
+
+#: UserMsg_GuiSettingsSaveFailed_Title
+msgid "UserMsg_GuiSettingsSaveFailed_Title"
+msgstr "Ayarlar Kaydedilemedi"
+
+#: UserMsg_GuiSettingsSaveFailed_ShortMessage
+msgid "UserMsg_GuiSettingsSaveFailed_ShortMessage"
+msgstr ""
+"Arayüz ayarları kaydedilemedi.\n"
+"\n"
+"Sebep:\n"
+"{0}"
+
+#: UserMsg_GuiSettingsSaveFailed_AutoCloseDelay
+msgid "UserMsg_GuiSettingsSaveFailed_AutoCloseDelay"
+msgstr "30000"
+
+#: UserMsg_DownloadSettingsSaveFailed_Title
+msgid "UserMsg_DownloadSettingsSaveFailed_Title"
+msgstr "Ayarlar Kaydedilemedi"
+
+#: UserMsg_DownloadSettingsSaveFailed_ShortMessage
+msgid "UserMsg_DownloadSettingsSaveFailed_ShortMessage"
+msgstr ""
+"İndirme ayarları kaydedilemedi.\n"
+"\n"
+"Sebep:\n"
+"{0}"
+
+#: UserMsg_DownloadSettingsSaveFailed_AutoCloseDelay
+msgid "UserMsg_DownloadSettingsSaveFailed_AutoCloseDelay"
+msgstr "30000"
+
+#: UserMsg_FavoritesSettingsSaveFailed_Title
+msgid "UserMsg_FavoritesSettingsSaveFailed_Title"
+msgstr "Ayarlar Kaydedilemedi"
+
+#: UserMsg_FavoritesSettingsSaveFailed_ShortMessage
+msgid "UserMsg_FavoritesSettingsSaveFailed_ShortMessage"
+msgstr ""
+"Yerimleri ayarları kaydedilemedi.\n"
+"\n"
+"Sebep:\n"
+"{0}"
+
+#: UserMsg_FavoritesSettingsSaveFailed_AutoCloseDelay
+msgid "UserMsg_FavoritesSettingsSaveFailed_AutoCloseDelay"
+msgstr "30000"
+
+#: UserMsg_SharedFilesSaveFailed_Title
+msgid "UserMsg_SharedFilesSaveFailed_Title"
+msgstr "Ayarlar Kaydedilemedi"
+
+#: UserMsg_SharedFilesSaveFailed_ShortMessage
+msgid "UserMsg_SharedFilesSaveFailed_ShortMessage"
+msgstr ""
+"Paylaşılan dosya ayarları kaydedilemedi.\n"
+"\n"
+"Sebep:\n"
+"{0}"
+
+#: UserMsg_SharedFilesSaveFailed_AutoCloseDelay
+msgid "UserMsg_SharedFilesSaveFailed_AutoCloseDelay"
+msgstr "30000"
+
+#: UserMsg_GuiSettingsLoadFailed_Title
+msgid "UserMsg_GuiSettingsLoadFailed_Title"
+msgstr "Ayarlar Yüklenemedi"
+
+#: UserMsg_GuiSettingsLoadFailed_ShortMessage
+msgid "UserMsg_GuiSettingsLoadFailed_ShortMessage"
+msgstr ""
+"Arayüz ayarları yüklenemedi.\n"
+"\n"
+"Sebep:\n"
+"{0}"
+
+#: UserMsg_GuiSettingsLoadFailed_AutoCloseDelay
+msgid "UserMsg_GuiSettingsLoadFailed_AutoCloseDelay"
+msgstr "30000"
+
+#: UserMsg_DownloadSettingsLoadFailed_Title
+msgid "UserMsg_DownloadSettingsLoadFailed_Title"
+msgstr "Ayarlar Yüklenemedi"
+
+#: UserMsg_DownloadSettingsLoadFailed_ShortMessage
+msgid "UserMsg_DownloadSettingsLoadFailed_ShortMessage"
+msgstr ""
+"İndirme ayarları yüklenemedi.\n"
+"\n"
+"Sebep:\n"
+"{0}"
+
+#: UserMsg_DownloadSettingsLoadFailed_AutoCloseDelay
+msgid "UserMsg_DownloadSettingsLoadFailed_AutoCloseDelay"
+msgstr "30000"
+
+#: UserMsg_FavoritesSettingsLoadFailed_Title
+msgid "UserMsg_FavoritesSettingsLoadFailed_Title"
+msgstr "Ayarlar Yüklenemedi"
+
+#: UserMsg_FavoritesSettingsLoadFailed_ShortMessage
+msgid "UserMsg_FavoritesSettingsLoadFailed_ShortMessage"
+msgstr ""
+"Yerimleri ayarları yüklenemedi.\n"
+"\n"
+"Sebep:\n"
+"{0}"
+
+#: UserMsg_FavoritesSettingsLoadFailed_AutoCloseDelay
+msgid "UserMsg_FavoritesSettingsLoadFailed_AutoCloseDelay"
+msgstr "30000"
+
+#: UserMsg_SharedFilesLoadFailed_Title
+msgid "UserMsg_SharedFilesLoadFailed_Title"
+msgstr "Ayarları Yükleme Başarısız"
+
+#: UserMsg_SharedFilesLoadFailed_ShortMessage
+msgid "UserMsg_SharedFilesLoadFailed_ShortMessage"
+msgstr ""
+"Paylaşılan dosyalar yüklenemedi.\n"
+"\n"
+"Sebep:\n"
+"[0}"
+
+#: UserMsg_SharedFilesLoadFailed_AutoCloseDelay
+msgid "UserMsg_SharedFilesLoadFailed_AutoCloseDelay"
+msgstr "30000"
+
+# Library Filter Dialog
+# Share Table Model
+#: Directory
+msgid "Directory"
+msgstr "Dizin"
+
+#: SearchCount
+msgid "SearchCount"
+msgstr "Arama Sayısı"
+
+#: UploadCount
+msgid "UploadCount"
+msgstr "Gönderme Sayısı"
+
+# UpdateNotificationDialog
+#: UpdateNotification_DialogTitle
+msgid "UpdateNotification_DialogTitle"
+msgstr "Phex Güncellemesi Çıktı"
+
+#: UpdateNotification_BannerHeader
+msgid "UpdateNotification_BannerHeader"
+msgstr "Phex Güncellemesi"
+
+#: UpdateNotification_BannerSubHeader
+msgid "UpdateNotification_BannerSubHeader"
+msgstr "Phex'in yeni bir sürümü bulundu."
+
+#: UpdateNotification_YourVersion
+msgid "UpdateNotification_YourVersion"
+msgstr "Sizdeki Phex sürümü:"
+
+#: UpdateNotification_AvailableStableVersion
+msgid "UpdateNotification_AvailableStableVersion"
+msgstr "En son Phex sürümü:"
+
+#: UpdateNotification_AvailableBetaVersion
+msgid "UpdateNotification_AvailableBetaVersion"
+msgstr "En son Phex BETA sürümü:"
+
+# CloseOptionsDialog
+#: CloseOptions
+msgid "CloseOptions"
+msgstr "Kapama Seçenekleri"
+
+#: CloseOptionsText
+msgid "CloseOptionsText"
+msgstr "Phex'i kapatırsanız bütün indirmeleriniz ve paylaşımlarınız duracak. Phex'i arka planda çalıştırmanız ve bağlantınızı kesmemeniz önerilir."
+
+#: Shutdown
+msgid "Shutdown"
+msgstr "Phex'i kapat."
+
+#: MinimizeToBackground
+msgid "MinimizeToBackground"
+msgstr "Phex'i arka planda çalıştır."
+
+#: MinimizeToSysTray
+msgid "MinimizeToSysTray"
+msgstr "Phex'i sistem çekmecesine küçült."
+
+#: ConfigDownload_DialogTitleNew
+msgid "ConfigDownload_DialogTitleNew"
+msgstr "Yeni indirme yapılandır"
+
+#: ConfigDownload_DialogTitleConfig
+msgid "ConfigDownload_DialogTitleConfig"
+msgstr "İndirme yapılandır"
+
+#: ConfigDownload_BannerHeader
+msgid "ConfigDownload_BannerHeader"
+msgstr "İndirme yapılandır"
+
+#: ConfigDownload_BannerSubHeader
+msgid "ConfigDownload_BannerSubHeader"
+msgstr "Bir indirmenin ayarlarını düzenleyip yapılandırın"
+
+#: ConfigDownload_File
+msgid "ConfigDownload_File"
+msgstr "Dosya"
+
+#: ConfigDownload_FileName
+msgid "ConfigDownload_FileName"
+msgstr "Dosya ismi:"
+
+#: ConfigDownload_DestinationDirectory
+msgid "ConfigDownload_DestinationDirectory"
+msgstr "Hedef dizin:"
+
+#: ConfigDownload_Browse
+msgid "ConfigDownload_Browse"
+msgstr "Gözat"
+
+#: ConfigDownload_ReSearchTerm
+msgid "ConfigDownload_ReSearchTerm"
+msgstr "Arama terimi:"
+
+#: ConfigDownload_Options
+msgid "ConfigDownload_Options"
+msgstr "Seçenekler"
+
+#: ConfigDownload_DownloadStrategy
+msgid "ConfigDownload_DownloadStrategy"
+msgstr "İndirme stratejisi:"
+
+#: ConfigDownload_Priority
+msgid "ConfigDownload_Priority"
+msgstr "Öncelik:"
+
+#: ConfigDownload_AddToTop
+msgid "ConfigDownload_AddToTop"
+msgstr "En üste ekle"
+
+#: ConfigDownload_AddToBottom
+msgid "ConfigDownload_AddToBottom"
+msgstr "En aşağıya ekle"
+
+#: ConfigDownload_SwitchToDownloadTab
+msgid "ConfigDownload_SwitchToDownloadTab"
+msgstr "İndirme sekmesine geç"
+
+#: ConfigDownload_SelectDestinationDirectory
+msgid "ConfigDownload_SelectDestinationDirectory"
+msgstr "Hedef dizin seçimi"
+
+#: ConfigDownload_Select
+msgid "ConfigDownload_Select"
+msgstr "Seç"
+
+#: ConfigDownload_SelectMnemonic
+msgid "ConfigDownload_SelectMnemonic"
+msgstr "S"
+
+#: ConfigDownload_ErrorNoFileName
+msgid "ConfigDownload_ErrorNoFileName"
+msgstr "Dosya ismi belirtilmedi."
+
+#: ConfigDownload_ErrorNoDestDir
+msgid "ConfigDownload_ErrorNoDestDir"
+msgstr "Hedef dizin belirtilmedi."
+
+#: ConfigDownload_ErrorInvalidDestDir
+msgid "ConfigDownload_ErrorInvalidDestDir"
+msgstr "Geçersiz hedef dizin."
+
+#: ConfigDownload_ErrorCreateDestDir
+msgid "ConfigDownload_ErrorCreateDestDir"
+msgstr "Hedef dizin yaratılamadı."
+
+#: ConfigDownload_ErrorMinSearchTerm
+msgid "ConfigDownload_ErrorMinSearchTerm"
+msgstr "Arama sözcüğü en az {0} harften oluşmalıdır."
+
+# Options Dialog
+#: PhexOptions
+msgid "PhexOptions"
+msgstr "Phex Seçenekleri"
+
+#: GeneralSettings
+msgid "GeneralSettings"
+msgstr "Genel Ayarlar"
+
+#: Bandwidth
+msgid "Bandwidth"
+msgstr "Hız"
+
+#: Filters
+msgid "Filters"
+msgstr "Filtreler"
+
+#: DownloadSharingSettings
+msgid "DownloadSharingSettings"
+msgstr "İndirme/Paylaşım Ayarları"
+
+#: Sharing
+msgid "Sharing"
+msgstr "Paylaşım"
+
+#: Directories
+msgid "Directories"
+msgstr "Dizinler"
+
+#: UserInterface
+msgid "UserInterface"
+msgstr "Arayüz"
+
+#: General
+msgid "General"
+msgstr "Genel"
+
+#: WelcomePhexOptions
+msgid "WelcomePhexOptions"
+msgstr "Phex Ayar Sistemine Hoş Geldiniz!"
+
+#: OptionWelcomeText
+msgid "OptionWelcomeText"
+msgstr "<html>Bu pencere Phex'in çalışma stilini değiştirmenizi sağlar. Soldaki listede ayarlar gruplara ayrılmış şekildedir. Bir bölümün ayarlarını değiştirmek için soldaki menüden üzerini tıklamanız yeterlidir.</html>"
+
+#: GeneralSettingsText
+msgid "GeneralSettingsText"
+msgstr "<html>Seçenekler sisteminin bu bölümü Phex'in genel işleyişiyle ilgili ayarları değiştirmenizi sağlar. <table border=\"0\"><tr><td valign=\"top\">*</td><td>'Ağ' bölümünde Phex'in Gnutella ağına bağlanmasıyla ilgili ayarlar bulunur.</td></tr><tr><td valign=\"top\">*</td><td>'Güvenlik Duvarı/Vekil' bölümünde güvenlik duvarı ve vekil sunucu ile ilgili ayarlar bulunur.</td></tr><tr><td valign=\"top\">*</td><td>'Hız' bölümünde indirme ve gönderme hızını belirleyebilirsiniz.</td></tr><tr><td valign=\"top\">*</td></tr></table></html>"
+
+#: DownloadSharingSettingsText
+msgid "DownloadSharingSettingsText"
+msgstr "<html>Seçenekler sisteminin bu bölümünde Phex'in indirme ve gönderme işlemleriyle ilgili ayarlar bulunur.<table border=\"0\"><tr><td valign=\"top\">*</td><td>'İndirme' indirme bölümünde Phex'in aynı anda kaç indirme yapabileceği gibi ayarları yapabilirsiniz.</td></tr><tr><td valign=\"top\">*</td><td>'Paylaşım' bölümünde Phex'in aynı anda gönderebileceği dosya sayısı ve diğer paylaşım ayarlarını bulabilirsiniz.</td></tr><tr><td valign=\"top\">*</td><td>'Dizinler' Bölümünde indirme ve paylaşım dizinlerinizi belirleyebilirsiniz.</td></tr></table></html>"
+
+#: UserInterfaceText
+msgid "UserInterfaceText"
+msgstr "<html>Seçenekler sisteminin bu bölümünde Phex'in görünümüyle ilgili ayarları değiştirebilirsiniz.<table border=\"0\"><tr><td valign=\"top\">*</td><td>'Genel' bölümünde arayüz ve font ayarları bulunur.</td></tr><tr><td valign=\"top\">*</td><td>'Dil' bölümünde arayüz dilini değiştirebilirsiniz. <tr><td valign=\"top\">*</td><td>'Uyarılar' bölümünde görmek istediğiniz uyarıları seçebilirsiniz.</td></tr></table></html>"
+
+#: WrongNumberFormat
+msgid "WrongNumberFormat"
+msgstr "Girilen numaranın biçimi yanlış."
+
+#: FormatError
+msgid "FormatError"
+msgstr "Biçim Hatası"
+
+#: NetworkSettings
+msgid "NetworkSettings"
+msgstr "Ağ Ayarları"
+
+#: UltrapeerSettings
+msgid "UltrapeerSettings"
+msgstr "Ana Sunucu Ayarları"
+
+#: LeafSettings
+msgid "LeafSettings"
+msgstr "Yaprak Ayarları"
+
+#: ListeningPort
+msgid "ListeningPort"
+msgstr "Dinleme Portu"
+
+#: AutoConnectOnStartup
+msgid "AutoConnectOnStartup"
+msgstr "Açılışta otomatik bağlan."
+
+#: ErrorDisplayTime
+msgid "ErrorDisplayTime"
+msgstr "Hata Gösterim Süresi (sn)"
+
+#: ConnectionTimeout
+msgid "ConnectionTimeout"
+msgstr "Bağlantı Zaman Aşımı (sn)"
+
+#: ConnectedToLAN
+msgid "ConnectedToLAN"
+msgstr "Başka bir Phex çalışıyor mu?"
+
+#: TTTConnectedToLAN
+msgid "TTTConnectedToLAN"
+msgstr "İşaretliyse özel İP adresine doğrudan erişim denenir."
+
+#: ListenerError
+msgid "ListenerError"
+msgstr "Dinleyici Hatası"
+
+#: FailedToListenOnNewPort
+msgid "FailedToListenOnNewPort"
+msgstr "Port değiştirildikten sonra dinleyici başlatılamadı."
+
+#: AllowToBecomeUltrapeer
+msgid "AllowToBecomeUltrapeer"
+msgstr "Ana bilgisayar olmaya izin ver."
+
+#: TTTAllowToBecomeUltrapeer
+msgid "TTTAllowToBecomeUltrapeer"
+msgstr "İşaretliyse bu bilgisayar Ana bilgisayar durumuna geçebilir."
+
+#: ForceToBeUltrapeer
+msgid "ForceToBeUltrapeer"
+msgstr "Ana bilgisayar olmaya zorla."
+
+#: TTTForceToBeUltrapeer
+msgid "TTTForceToBeUltrapeer"
+msgstr "İşaretliyse bu bilgisayar hep ana bilgisayar modunda çalışır."
+
+#: AllowToBecomeLeaf
+msgid "AllowToBecomeLeaf"
+msgstr "Ana yaprak olmaya izin ver."
+
+#: TTTAllowToBecomeLeaf
+msgid "TTTAllowToBecomeLeaf"
+msgstr "İşaretliyse bu bilgisayar bir ana bilgisayara yaprak modunda bağlanabilir."
+
+#: AcceptOnlyUltrapeers
+msgid "AcceptOnlyUltrapeers"
+msgstr "Sadece ana bilgisayarları kabul et."
+
+#: TTTAcceptOnlyUltrapeers
+msgid "TTTAcceptOnlyUltrapeers"
+msgstr "Seçiliyse bu bilgisayar hep yaprak modunda olacaktır ve sadece ana bilgisayarlara bağlanabilecektir."
+
+#: ConnectionsToUltrapeers
+msgid "ConnectionsToUltrapeers"
+msgstr "Ana Bilgisayarlara Olan Bağlantılar"
+
+#: TTTToUltrapeers
+msgid "TTTToUltrapeers"
+msgstr "Ana makinelere olan bağlantıların sayısını belirler."
+
+#: ConnectionsToLeafs
+msgid "ConnectionsToLeafs"
+msgstr "Yapraklara Olan Bağlantılar"
+
+#: TTTToLeafs
+msgid "TTTToLeafs"
+msgstr "Yapraklara olan bağlantıların sayısını belirler."
+
+#: ConnectionsToPeers
+msgid "ConnectionsToPeers"
+msgstr "Bilgisayarlara Olan Bağlantılar"
+
+#: TTTToPeers
+msgid "TTTToPeers"
+msgstr "Kullanıcılara olan bağlantıların sayısını belirler."
+
+#: NetworkSettings_MaxConcurrentConnectAttempts
+msgid "NetworkSettings_MaxConcurrentConnectAttempts"
+msgstr "Aynı andaki mak. bağlantı"
+
+#: NetworkSettings_TTTMaxConcurrentConnectAttempts
+msgid "NetworkSettings_TTTMaxConcurrentConnectAttempts"
+msgstr "<html>En fazla aynı anda bağlantı deneme sayısı.<br>Windows XP SP2'de en fazla 10 olabilir. Ayrıntılı bilgi için Phex'in ana sayfasındaki Sık Sorulan Sorulara bakınız.</html>"
+
+#: NetworkSettings_LimitExceeded
+msgid "NetworkSettings_LimitExceeded"
+msgstr "Sınır Geçildi"
+
+#: NetworkSettings_ListeningPortLimitExceeded
+msgid "NetworkSettings_ListeningPortLimitExceeded"
+msgstr "Dinleme portu için sınırı geçtiniz (Önerilen: 4000-65500 arası)."
+
+#: NetworkSettings_Leaf2UpLimitExceeded
+msgid "NetworkSettings_Leaf2UpLimitExceeded"
+msgstr "Bir yaprak olarak {0} ana bilgisayara bağlanma sınırını geçtiniz."
+
+#: FirewallProxy
+msgid "FirewallProxy"
+msgstr "Güvenlik Duvarı/Vekil"
+
+#: FirewallSettings
+msgid "FirewallSettings"
+msgstr "Güvenlik Duvarı Ayarları"
+
+#: SOCKSSettings
+msgid "SOCKSSettings"
+msgstr "SOCKS 5 Ayarları"
+
+#: BehindFirewall
+msgid "BehindFirewall"
+msgstr "Bilgisayar güvenlik duvarı arkasında."
+
+#: ExportIPAs
+msgid "ExportIPAs"
+msgstr "Bilgisayarın İP numarasını farklı göster"
+
+#: UseSocks5Proxy
+msgid "UseSocks5Proxy"
+msgstr "Socks5 Vekil kullan"
+
+#: ProxyHostIP
+msgid "ProxyHostIP"
+msgstr "Bilgisayar/İP"
+
+#: Port
+msgid "Port"
+msgstr "Port"
+
+#: Authentication
+msgid "Authentication"
+msgstr "Kimlik doğrulama"
+
+#: Username
+msgid "Username"
+msgstr "Kullanıcı adı"
+
+#: Password
+msgid "Password"
+msgstr "Şifre"
+
+#: HttpProxyInfoText
+msgid "HttpProxyInfoText"
+msgstr "HTTP vekili sadece Gnutella İnternet Önbelleğine erişim ve yeni sürümlerin kontrolü için kullanılır. HTTP vekili üzerinden gnutella veri akışı yapılamaz. Gnutella trafiğini tünellemek için SOCKS 5 vekili kullanın."
+
+#: HTTPProxySettings
+msgid "HTTPProxySettings"
+msgstr "HTTP Vekil Ayarları"
+
+#: UseHTTPProxy
+msgid "UseHTTPProxy"
+msgstr "HTTP Vekili Kullan"
+
+#: IPFormatError
+msgid "IPFormatError"
+msgstr "İP Biçimi Hatası"
+
+#: WrongExportIPFormat
+msgid "WrongExportIPFormat"
+msgstr "Yanlış İP aktarma biçimi."
+
+#: NetworkSpeedSettings
+msgid "NetworkSpeedSettings"
+msgstr "Ağ Hızı Ayarları"
+
+#: ConnectionTypeSpeed
+msgid "ConnectionTypeSpeed"
+msgstr "Bağlantı türü ve hızı"
+
+#: TotalBandwidth
+msgid "TotalBandwidth"
+msgstr "İzin verilen toplam bant genişliği"
+
+#: PhexBandwidthSettings
+msgid "PhexBandwidthSettings"
+msgstr "Phex Bant Genişliği Ayarları"
+
+#: MaxNetworkBandwidth
+msgid "MaxNetworkBandwidth"
+msgstr "Mak. ağ hızı"
+
+#: MaxDownloadBandwidth
+msgid "MaxDownloadBandwidth"
+msgstr "Mak. indirme hızı"
+
+#: MaxUploadBandwidth
+msgid "MaxUploadBandwidth"
+msgstr "Mak gönderme hızı"
+
+#: Unlimited
+msgid "Unlimited"
+msgstr "Sınırsız"
+
+#: Modem
+msgid "Modem"
+msgstr "56K Modem"
+
+#: ISDN
+msgid "ISDN"
+msgstr "64K ISDN"
+
+#: DualISDN
+msgid "DualISDN"
+msgstr "128K Dual ISDN"
+
+#: DSLCable1
+msgid "DSLCable1"
+msgstr "1024Kbps DSL / Kablo"
+
+#: T1
+msgid "T1"
+msgstr "1.5Mbps T1 / DSL / Kablo"
+
+#: DSLCable2
+msgid "DSLCable2"
+msgstr "2048Kbps DSL / Kablo"
+
+#: DSLCable3
+msgid "DSLCable3"
+msgstr "6Mbps DSL / Kablo"
+
+#: 10LAN
+msgid "10LAN"
+msgstr "10Mbps LAN"
+
+#: DSLCable4
+msgid "DSLCable4"
+msgstr "16Mbps DSL / Kablo"
+
+#: T3
+msgid "T3"
+msgstr "44 Mbps T3"
+
+#: 100LAN
+msgid "100LAN"
+msgstr "100Mbps LAN"
+
+#: 1000LAN
+msgid "1000LAN"
+msgstr "1Gbps LAN"
+
+#: PerSec
+msgid "PerSec"
+msgstr "/s"
+
+#: BandwidthSettings_UseLogarithmicSliders
+msgid "BandwidthSettings_UseLogarithmicSliders"
+msgstr "Logaritmik ayar çubuğu"
+
+#: BandwidthSettings_TTTUseLogarithmicSliders
+msgid "BandwidthSettings_TTTUseLogarithmicSliders"
+msgstr "Etkin yapıldığında bant genişliği ayarları logaritmik ölçek kullanır."
+
+#: GeneralUserInterfaceSettings
+msgid "GeneralUserInterfaceSettings"
+msgstr "Genel Arayüz Ayarları"
+
+#: LookAndFeel
+msgid "LookAndFeel"
+msgstr "Görünüm:"
+
+#: TTTLookAndFeel
+msgid "TTTLookAndFeel"
+msgstr "Phex kullanıcı arayüzünü oluşturan görünüm."
+
+#: ColorTheme
+msgid "ColorTheme"
+msgstr "Renk Teması"
+
+#: TTTColorTheme
+msgid "TTTColorTheme"
+msgstr "Phex kullanıcı arayüzünde kullanılan renk teması."
+
+#: SystemLAFExtension
+msgid "SystemLAFExtension"
+msgstr "(Sistem Görünümü)"
+
+#: DisplayTooltipText
+msgid "DisplayTooltipText"
+msgstr "Yardımcı ipuçlarını göster."
+
+#: TTTDisplayTooltipText
+msgid "TTTDisplayTooltipText"
+msgstr "İşaretliyse düğmelerin üzerinde beklendiğinde yardım mesajı gösterilir."
+
+#: ShowTableHorizontalLines
+msgid "ShowTableHorizontalLines"
+msgstr "Yatay tablo çizgilerini göster."
+
+#: TTTShowTableHorizontalLines
+msgid "TTTShowTableHorizontalLines"
+msgstr "İşaretliyse tablolarda yatay çizgiler görünür."
+
+#: ShowTableVerticalLines
+msgid "ShowTableVerticalLines"
+msgstr "Dikey tablo çizgilerini göster."
+
+#: TTTShowTableVerticalLines
+msgid "TTTShowTableVerticalLines"
+msgstr "İşaretliyse tablolarda dikey çizgiler görünür."
+
+#: WhenClosingMinToSysTray
+msgid "WhenClosingMinToSysTray"
+msgstr "Kapanırken sistem çekmecesine küçül."
+
+#: WhenClosingMinToBackground
+msgid "WhenClosingMinToBackground"
+msgstr "Kapanırken arka plana git."
+
+#: LAFError
+msgid "LAFError"
+msgstr "Görünüm Hatası"
+
+#: LAFInstantiationError
+msgid "LAFInstantiationError"
+msgstr "İstenen görünüm sınıfı çoklanamadı."
+
+#: LAFAccessError
+msgid "LAFAccessError"
+msgstr "İstenilen Görünüm sınıfına erişilemiyor."
+
+#: LAFNotFound
+msgid "LAFNotFound"
+msgstr "İstenen Görünüm sınıfı bulunamadı."
+
+#: LAFNotSupported
+msgid "LAFNotSupported"
+msgstr "Kullandığınız ortamda bu Görünüm teması desteklenmiyor."
+
+#: ThemeInstantiationError
+msgid "ThemeInstantiationError"
+msgstr "İstenilen görünüm teması çoklanamıyor."
+
+#: ThemeAccessError
+msgid "ThemeAccessError"
+msgstr "İstenilen görünüm temasına erişilemiyor."
+
+#: ThemeNotFound
+msgid "ThemeNotFound"
+msgstr "İstenilen görünüm teması bulunamadı."
+
+#: RestartToSwitchLF
+msgid "RestartToSwitchLF"
+msgstr "Görünüm değiştirmek için baştan başlatın"
+
+#: UISettings_ClearSearchHistory
+msgid "UISettings_ClearSearchHistory"
+msgstr "Arama Geçmişini Temizle"
+
+#: LAF_ErrorLoadingSwitchToDefault
+msgid "LAF_ErrorLoadingSwitchToDefault"
+msgstr ""
+"Görünüm temanız yüklenirken bir hata oluştu.\n"
+"Phex, varsayılan görünüm ayarlarıyla çalışacaktır."
+
+#: UISettings_IconPack
+msgid "UISettings_IconPack"
+msgstr "İkon Paketi:"
+
+#: UISettings_TTTIconPack
+msgid "UISettings_TTTIconPack"
+msgstr "Phex'in kullanıcı arayüzünde kullanılan ikon paketi. İkon paketini değiştirmek için programı tekrar başlatmanız gerekir."
+
+#: LanguageSettings_Language
+msgid "LanguageSettings_Language"
+msgstr "Dil"
+
+#: LanguageSettings_LanguageSettings
+msgid "LanguageSettings_LanguageSettings"
+msgstr "Dil Ayarları"
+
+#: LanguageSettings_SelectYourLanguage
+msgid "LanguageSettings_SelectYourLanguage"
+msgstr "Phex'i kullanmak istediğiniz dili seçin:"
+
+#: LanguageSettings_RestartNote
+msgid "LanguageSettings_RestartNote"
+msgstr "Not: Bunun işe yaraması için Phex'i yeniden başlatmanız gerekir."
+
+# Prompt Settings
+#: PromptSettings_Prompts
+msgid "PromptSettings_Prompts"
+msgstr "Uyarılar"
+
+#: PromptSettings_PromptSettings
+msgid "PromptSettings_PromptSettings"
+msgstr "Uyarı Ayarları"
+
+#: PromptSettings_ClosePhexOptions
+msgid "PromptSettings_ClosePhexOptions"
+msgstr "Phex'i kapatma seçenekleri."
+
+#: PromptSettings_TTTClosePhexOptions
+msgid "PromptSettings_TTTClosePhexOptions"
+msgstr "Seçiliyse, Phex'i kapatırken arka plana atma sorusu sorulacaktır."
+
+#: PromptSettings_NotifyOnNewBeta
+msgid "PromptSettings_NotifyOnNewBeta"
+msgstr "Yeni sürümleri kontrol et."
+
+#: PromptSettings_TTTNotifyOnNewBeta
+msgid "PromptSettings_TTTNotifyOnNewBeta"
+msgstr "Seçiliyse, yeni bir sürüm bulunduğunda uyarı verilir."
+
+#: PromptSettings_RespectCopyrightNotice
+msgid "PromptSettings_RespectCopyrightNotice"
+msgstr "Kopyalama haklarına saygı bildirisi."
+
+#: PromptSettings_TTTRespectCopyrightNotice
+msgid "PromptSettings_TTTRespectCopyrightNotice"
+msgstr "Seçiliyse, açılışta kopyalama hakları yazısı görüntülenir."
+
+# Debug Settings
+#: DebugSettings_Debug
+msgid "DebugSettings_Debug"
+msgstr "Hata Giderme"
+
+#: DebugSettings_DebugSettings
+msgid "DebugSettings_DebugSettings"
+msgstr "Hata Giderme Ayarları"
+
+#: DebugSettings_LogLevel
+msgid "DebugSettings_LogLevel"
+msgstr "Kayıt Seviyesi"
+
+#: DebugSettings_TTTDownloadType
+msgid "DebugSettings_TTTDownloadType"
+msgstr "İndirme kayıtlarını tut."
+
+#: DebugSettings_TTTUploadType
+msgid "DebugSettings_TTTUploadType"
+msgstr "Gönderme kayıtlarını tut."
+
+#: DebugSettings_TTTSearchType
+msgid "DebugSettings_TTTSearchType"
+msgstr "Arama kayıtlarını tut."
+
+#: DebugSettings_TTTNetworkType
+msgid "DebugSettings_TTTNetworkType"
+msgstr "Bağlantı kayıtlarını tut."
+
+#: GUI
+msgid "GUI"
+msgstr "Arayüz"
+
+#: DebugSettings_TTTGuiType
+msgid "DebugSettings_TTTGuiType"
+msgstr "Arayüz kayıtlarını tut."
+
+#: Performance
+msgid "Performance"
+msgstr "Performans"
+
+#: DebugSettings_TTTPerformanceType
+msgid "DebugSettings_TTTPerformanceType"
+msgstr "Performans kayıtlarını tut."
+
+#: DebugSettings_TTTLogLevel
+msgid "DebugSettings_TTTLogLevel"
+msgstr "Kayıt tutma seviyesi."
+
+#: DownloadNet
+msgid "DownloadNet"
+msgstr "İndirme Ağı"
+
+#: DebugSettings_TTTDownloadNetType
+msgid "DebugSettings_TTTDownloadNetType"
+msgstr "İndirme kayıtlarını etkinleştir."
+
+# Download Settings
+#: GeneralDownloadSettings
+msgid "GeneralDownloadSettings"
+msgstr "Genel İndirme Ayarları"
+
+#: DownloadSettings_TotalParallelDownloads
+msgid "DownloadSettings_TotalParallelDownloads"
+msgstr "Max. küresel indirme bağlantıları"
+
+#: DownloadSettings_TTTTotalParallelDownloads
+msgid "DownloadSettings_TTTTotalParallelDownloads"
+msgstr "İndirilen bütün dosyalar için yapılan bağlantıların toplamı."
+
+#: DownloadSettings_ParallelDownloadsPerFile
+msgid "DownloadSettings_ParallelDownloadsPerFile"
+msgstr "Her dosya için max indirme bağlantıları"
+
+#: DownloadSettings_TTTParallelDownloadsPerFile
+msgid "DownloadSettings_TTTParallelDownloadsPerFile"
+msgstr "Bir dosyanın indirilmesi için yapılacak en fazla bağlantı sayısı."
+
+#: DownloadSettings_InitialSegmentSizeKb
+msgid "DownloadSettings_InitialSegmentSizeKb"
+msgstr "İlk indirilen parçanın boyutu (Kb)"
+
+#: DownloadSettings_TTTInitialSegmentSizeKb
+msgid "DownloadSettings_TTTInitialSegmentSizeKb"
+msgstr "<html>Her bağlantı için istenen ilk parça boyutu. Bu boyut<br> aktarım hızına ve \"Her parça için hedeflenen süre\"ye bağlı olarak değişebilir.</html>"
+
+#: DownloadSettings_SegmentTransferTimeSec
+msgid "DownloadSettings_SegmentTransferTimeSec"
+msgstr "Her parça için hedeflenen süre (saniye)"
+
+#: DownloadSettings_TTTSegmentTransferTimeSec
+msgid "DownloadSettings_TTTSegmentTransferTimeSec"
+msgstr "<html>Hedef zamana uyacak parçanın boyutunu dinamik olarak hesaplamak için<br>\"İndirilen ilk parçanın boyutu\" ile birlikte işleme konur.</html>"
+
+#: DownloadSettings_ReadoutDownloadedMagmas
+msgid "DownloadSettings_ReadoutDownloadedMagmas"
+msgstr "İndirilen magma dosyalarını otomatik oku."
+
+#: DownloadSettings_TTTReadoutDownloadedMagmas
+msgid "DownloadSettings_TTTReadoutDownloadedMagmas"
+msgstr "<html>Aktifse indirilen magma dosyaları işlenir ve içerilen magnet<br>bağlantıları indirme için eklenir.</html>"
+
+#: DownloadSettings_ReadoutDownloadedMetalink
+msgid "DownloadSettings_ReadoutDownloadedMetalink"
+msgstr "İndirilen metalink dosyalarını otomatik oku."
+
+#: DownloadSettings_TTTReadoutDownloadedMetalink
+msgid "DownloadSettings_TTTReadoutDownloadedMetalink"
+msgstr "<html>Etkin olduğu zaman, indirilen metalink dosyaları otomatik olarak incelenecek ve içerdikleri magnet <br>bağlantıları indirmelere eklenecektir.</html>"
+
+#: DownloadSettings_ReadoutDownloadedRSS
+msgid "DownloadSettings_ReadoutDownloadedRSS"
+msgstr "İndirilen RSS dosyalarını otomatik oku."
+
+#: DownloadSettings_TTTReadoutDownloadedRSS
+msgid "DownloadSettings_TTTReadoutDownloadedRSS"
+msgstr "<html>Etkin olduğu zaman indirilen RSS dosyaları  (\".rss.xml\" ile biten) incelenecek ve içerdikleri magnet<br>bağlantıları indirmelere eklenecektir.</html>"
+
+#: DownloadSettings_AutoRemoveCompletedDownloads
+msgid "DownloadSettings_AutoRemoveCompletedDownloads"
+msgstr "Biten indirmeleri otomatik olarak sil."
+
+#: DownloadSettings_TTTAutoRemoveCompletedDownloads
+msgid "DownloadSettings_TTTAutoRemoveCompletedDownloads"
+msgstr "Biten indirmeler listeden silinir."
+
+#: DownloadSettings_DownloadSubscriptionsSilently
+msgid "DownloadSettings_DownloadSubscriptionsSilently"
+msgstr "Abone olduğunuz içerikleri hiçbir mesaj göstermeden indir."
+
+#: DownloadSettings_TTTDownloadSubscriptionsSilently
+msgid "DownloadSettings_TTTDownloadSubscriptionsSilently"
+msgstr "<html>Etkin olduğu zaman Phex abone olduğunuz içeriği indirme sorusunu sormayacaktır, <br>bunun yerine onu arka planda otomatik olarak indirecektir.</html>"
+
+#: DownloadSettings_EnableHitSnooping
+msgid "DownloadSettings_EnableHitSnooping"
+msgstr "İndirirken Arama Etkin"
+
+#: DownloadSettings_TTTEnableHitSnooping
+msgid "DownloadSettings_TTTEnableHitSnooping"
+msgstr "<html>Etkinse Phex daha çok indirme kaynağı bulmak için bütün arama<br>trafiğini izler.</html>"
+
+#: PushTimeout
+msgid "PushTimeout"
+msgstr "Uğraşma zaman aşımı"
+
+# Sharing Settings
+#: AutoCleanFinishedUploads
+msgid "AutoCleanFinishedUploads"
+msgstr "Biten göndermeleri sil."
+
+#: MaxParallelUploads
+msgid "MaxParallelUploads"
+msgstr "Aynı anda yapılabilecek göndermeler"
+
+#: MaxUploadsPerHost
+msgid "MaxUploadsPerHost"
+msgstr "Bir kişiye yapılabilecek göndermeler"
+
+#: GeneralUploadSettings
+msgid "GeneralUploadSettings"
+msgstr "Genel Gönderme Ayarları"
+
+#: MaxReturnedSearchHits
+msgid "MaxReturnedSearchHits"
+msgstr "Mak. arama sonucu"
+
+#: ExceedSearchHitLimit
+msgid "ExceedSearchHitLimit"
+msgstr "Geri dönen sonuç sayısı en fazla 255 olabilir."
+
+#: AllowBrowsingDirectories
+msgid "AllowBrowsingDirectories"
+msgstr "Dizinlerime bakılmasına izin ver."
+
+#: SharePartialFiles
+msgid "SharePartialFiles"
+msgstr "Tamamlanmamış dosyaları da paylaş"
+
+#: AllowUploadQueuing
+msgid "AllowUploadQueuing"
+msgstr "Gönderme kuyruğu"
+
+#: MaxQueueLength
+msgid "MaxQueueLength"
+msgstr "Kuyruk uzunluğu"
+
+#: MinPollTime
+msgid "MinPollTime"
+msgstr "Min. Yoklama Süresi"
+
+#: MaxPollTime
+msgid "MaxPollTime"
+msgstr "Mak. Yoklama Süresi"
+
+#: UploadQueuing
+msgid "UploadQueuing"
+msgstr "Gönderme kuyruğu"
+
+# Directory Settings
+#: DirSettings_DownloadFolders
+msgid "DirSettings_DownloadFolders"
+msgstr "İndirme Dizinleri"
+
+#: DirSettings_Incomplete
+msgid "DirSettings_Incomplete"
+msgstr "Yarım İndirmeler"
+
+#: DirSettings_Completed
+msgid "DirSettings_Completed"
+msgstr "Tamamlanan İndirmeler"
+
+#: DirSettings_SetFolder
+msgid "DirSettings_SetFolder"
+msgstr "Dizin Seç"
+
+#: DownloadDirectory
+msgid "DownloadDirectory"
+msgstr "İndirme Dizini"
+
+#: DirectoryOnlyFileFilter
+msgid "DirectoryOnlyFileFilter"
+msgstr "Sadece Dizinler"
+
+#: Select
+msgid "Select"
+msgstr "Seç"
+
+#: SelectMnemonic
+msgid "SelectMnemonic"
+msgstr "S"
+
+#: SelectDownloadDirectory
+msgid "SelectDownloadDirectory"
+msgstr "İndirme Dizini Seç"
+
+#: SelectIncompleteDirectory
+msgid "SelectIncompleteDirectory"
+msgstr "Bitmeyenlerin Dizinini seç"
+
+#: AddUploadDirectories
+msgid "AddUploadDirectories"
+msgstr "Paylaşılan Dizinleri Seç"
+
+#: AddDirectoryMnemonic
+msgid "AddDirectoryMnemonic"
+msgstr "P"
+
+#: DirectoryError
+msgid "DirectoryError"
+msgstr "Dizin Hatası"
+
+#: NoDirectoryShared
+msgid "NoDirectoryShared"
+msgstr "Paylaşılan dizin yok. En az bir dizini paylaşmalısınız."
+
+#: IncompleteDirShared
+msgid "IncompleteDirShared"
+msgstr "Bitmeyenlerin olduğu dizin paylaşılamaz"
+
+#: CantCreateDownloadDir
+msgid "CantCreateDownloadDir"
+msgstr ""
+"İndirme dizini oluşturulamadı:\n"
+"\"{0}\"."
+
+#: CantCreateIncompleteDir
+msgid "CantCreateIncompleteDir"
+msgstr ""
+"Bitmeyenler dizini oluşturulamadı:\n"
+"\"{0}\"."
+
+# sw download status
+#: UnrecognizedStatus
+msgid "UnrecognizedStatus"
+msgstr "Bilinmiyor ({0})."
+
+#: CandidateIgnored
+msgid "CandidateIgnored"
+msgstr "Yoksayılan aday"
+
+#: CandidateOffline
+msgid "CandidateOffline"
+msgstr "Aday uygun değil.{0,choice,0#|0< Bekliyor {1}.}"
+
+#: WaitingForDownload
+msgid "WaitingForDownload"
+msgstr "Bekliyor"
+
+#: HostBusy
+msgid "HostBusy"
+msgstr "Meşgul.{0,choice,0#|0< Bekliyor {1}.}"
+
+#: RangeUnavailable
+msgid "RangeUnavailable"
+msgstr "Ulaşılamıyor. Bekliyor {0}."
+
+#: RemotlyQueued
+msgid "RemotlyQueued"
+msgstr "{0}. sırada kuyrukta. Bekliyor {1}."
+
+#: ConnectionFailed
+msgid "ConnectionFailed"
+msgstr "Bağlantı başarısız ({0}).{1,choice,0#|0< Bekliyor {2}.}"
+
+#: Connecting
+msgid "Connecting"
+msgstr "Bağlanıyor..."
+
+#: Requesting
+msgid "Requesting"
+msgstr "İsteniyor..."
+
+#: Downloading
+msgid "Downloading"
+msgstr "İndiriliyor..."
+
+#: Completed
+msgid "Completed"
+msgstr "Tamamlandı!"
+
+#: PushRequest
+msgid "PushRequest"
+msgstr "Zorlanıyor... Bekleme {0} san."
+
+#: Stopped
+msgid "Stopped"
+msgstr "Durduruldu"
+
+#: FileQueued
+msgid "FileQueued"
+msgstr "Kuyrukta..."
+
+# # Select Network Dialog
+#: SelectNet_SelectNetwork
+msgid "SelectNet_SelectNetwork"
+msgstr "Ağ Seç"
+
+#: SelectNet_SelectNetworkToJoin
+msgid "SelectNet_SelectNetworkToJoin"
+msgstr "Katılacak ağı seç"
+
+#: SelectNet_NetworkSelectionText
+msgid "SelectNet_NetworkSelectionText"
+msgstr ""
+"Phex ile halka açık olan Gnutella ağından başka özel ağlar oluşturabilir ve bunlara katılabilirsiniz. Belirlediğiniz ağ adı, özel ağlara erişmek için bir 'şifre' gibi kullanılır.\n"
+"Genel Gnutella ağına bağlanmak için '<General Gnutella Network>'nı seçin."
+
+#: SelectNet_NetworkName
+msgid "SelectNet_NetworkName"
+msgstr "Ağ adı:"
+
+#: SelectNet_AutoJoinNetwork
+msgid "SelectNet_AutoJoinNetwork"
+msgstr "Açılışta ağa bağlan."
+
+#: SelectNet_AutoConnectNetwork
+msgid "SelectNet_AutoConnectNetwork"
+msgstr "Açılışta otomatik bağlan."
+
+#: RespectCopyrightDialog_DialogTitle
+msgid "RespectCopyrightDialog_DialogTitle"
+msgstr "Kopyalama Haklarına Saygı Duyun"
+
+#: RespectCopyrightDialog_Text
+msgid "RespectCopyrightDialog_Text"
+msgstr "<html><center><b>Lütfen dikkat</b><br><br>Phex Gnutella ağını izleyemez ve kontrol edemez.<br><br>Lütfen dosya indirirken ve paylaşırken bulunduğunuz bölgenin kanunlarını göz önünde bulundurun.</center>"
+
+#: RespectCopyrightDialog_DontShowAgain
+msgid "RespectCopyrightDialog_DontShowAgain"
+msgstr "Bunu bir daha gösterme."
+
+# # sys tray
+#: TTTSysTray
+msgid "TTTSysTray"
+msgstr "Phex"
+
+msgid "StatusBar_TTTLeaf"
+msgstr "Bilgisayar durumu: Yaprak"
+
+msgid "RuleWizard_TTTRuleNotes"
+msgstr "Bu kural için not tut"
+
+msgid "StatusBar_TTTLibrary"
+msgstr "Paylaşılan dosya sayısı / Dosyaların toplam boyutu"
+
+msgid "NetworkTab_LeafMode"
+msgstr "Yaprak modu"
+
+msgid "NetworkTab_NodeStatus"
+msgstr "Bilgisayarın durumu:"
+
+msgid "StatusBar_Library"
+msgstr "{0}/{1}"
+
+msgid "AllocatingSegment"
+msgstr "Parçalar bekleniyor..."
+
+msgid "RuleWizard_RuleNotes"
+msgstr "Notlar"
+
+msgid "StatusBar_TTTUltrapeer"
+msgstr "Bilgisayar durumu: Ana sunucu"
+
+msgid "NetworkTab_UltraPeer"
+msgstr "Ana bilgisayar"
+
+#. Privacy Dialog
+#. phex.gui.dialogs.options.DisplayPrivacyPan
+msgid "PrivacySettings_ConnectToHistory"
+msgstr "Bağlanma Tarihçesi"
+
+#. Privacy Dialog
+#. phex.gui.dialogs.options.DisplayPrivacyPan
+msgid "PrivacySettings_LibrarySearchCount"
+msgstr "Kütüphane Arama Sayısı"
+
+#. Privacy Dialog
+#. phex.gui.dialogs.options.DisplayPrivacyPan
+msgid "PrivacySetting_Privacy"
+msgstr "Gizlilik"
+
+#. Privacy Dialog
+#. phex.gui.dialogs.options.DisplayPrivacyPan
+msgid "PrivacySettings_KeywordSearchHistroy"
+msgstr "Kullanılan Anahtar Kelimeler Tarihçesi"
+
+#. Privacy Dialog
+#. phex.gui.dialogs.options.DisplayPrivacyPan
+msgid "PrivacySettings_SecurityRuleTriggerCount"
+msgstr "Güvenlik Kurallarının Tetiklenme Sayısı"
+
+#. Privacy Dialog
+#. phex.gui.dialogs.options.DisplayPrivacyPan
+msgid "PrivacySettings_LibraryUploadCount"
+msgstr "Kütüphane Gönderme Sayısı"
+
+#. Privacy Dialog
+#. phex.gui.dialogs.options.DisplayPrivacyPan
+msgid "PrivacySettings_PrivacySettings"
+msgstr "Gizlilik Seçenekleri"
+
+#. Privacy Dialog
+#. phex.gui.dialogs.options.DisplayPrivacyPan
+msgid "PrivacySettings_ClearOptionChecklist"
+msgstr "Aşağıdaki verileri çıkışta sil"
+
+#. Privacy Dialog
+#. phex.gui.dialogs.options.DisplayPrivacyPan
+msgid "PrivacySettings_BrowseHostHistory"
+msgstr "Bilgisayara Gözatma Tarihçesi"
+
+#~ msgid "SendQueueExceeds"
+#~ msgstr "Kuyruk taşmalarını gönder"
+
+#~ msgid "MinSharedMB"
+#~ msgstr "Paylaşılan MB Barajı"
+
+#~ msgid "MinSharedFiles"
+#~ msgstr "Paylaşılan Dosya Barajı"
+
+#~ msgid "DropPacketExceeds"
+#~ msgstr "Kaybedilen paket aşımı (%)"
+
+#~ msgid "DisconnectPolicy"
+#~ msgstr "Bağlantıyı Kesme İlkesi"
+
+#~ msgid "DisconnectNoVendorNodes"
+#~ msgstr "Programın adını vermeden bağlantıyı kes."
+
+#~ msgid "DisconnectNodesAccordingRules"
+#~ msgstr "Bu kurallara uygun olarak bağlantıyı kes"

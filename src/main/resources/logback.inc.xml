@@ -1,0 +1,45 @@
+<included>
+  <conversionRule conversionWord="phexVer" converterClass="phex.common.log.PhexVersionConverter" />
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="DefaultFileAppender">
+    <file>${phex.log.path}/phex.log</file>
+    <append>true</append>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>all</level>
+    </filter>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <fileNamePattern>${phex.log.path}/phex.log.%i</fileNamePattern>
+      <maxIndex>1</maxIndex>
+    </rollingPolicy>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <maxFileSize>512000</maxFileSize>
+    </triggeringPolicy>
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <pattern>%d{yyMMdd HH:mm:ss.SSS}\(T%r\)\(%phexVer\) %-5p/%c [%t]:: %m%n</pattern>
+    </layout>
+  </appender>
+  <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="ErrorFileAppender">
+    <file>${phex.log.path}/phex.error.log</file>
+    <append>true</append>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>error</level>
+    </filter>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <fileNamePattern>${phex.log.path}/phex.error.log.%i</fileNamePattern>
+      <maxIndex>1</maxIndex>
+    </rollingPolicy>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <maxFileSize>512000</maxFileSize>
+    </triggeringPolicy>
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <pattern>%d{yyMMdd HH:mm:ss.SSS}\(T%r\)\(%phexVer\) %-5p/%c [%t]:: %m%n</pattern>
+    </layout>
+  </appender>
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="ConsoleAppender">
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>all</level>
+    </filter>
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <pattern>%d{yyMMdd HH:mm:ss.SSS}\(T%r\)\(%phexVer\) %-5p/%c [%t]:: %m%n</pattern>
+    </layout>
+  </appender>
+</included>

@@ -1,0 +1,14 @@
+#MAGMAv0.2 magnet:?mt=.&as=http://dateien.draketo.de/phex_win.magma&dn=phex_win.magma
+
+#This list contains the update URLs for Phex. 
+
+list:
+  
+ - "magnet:?xt=urn:sha1:YCLWAYC3VATZLOR5FCVYMH2CHHWPEHLL
+   &dn=phex_3.4.0.110.exe&xs=http://edrikor.dyndns.org:9846/uri-res/N2R?urn:sha1:YCLWAYC3VATZLOR5FCVYMH2CHHWPEHLL&as=http://www.freebase.be/g2/dlcount.php?sha1=YCLWAYC3VATZLOR5FCVYMH2CHHWPEHLL&as=http://heanet.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://internap.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://mesh.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://puzzle.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://easynews.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://osdn.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://keihanna.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://optusnet.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://switch.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://ovh.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://kent.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://osdn.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://jaist.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://ufpr.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://umn.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://nchc.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe&as=http://jaist.dl.sourceforge.net/sourceforge/phex/phex_3.4.0.110.exe"
+  file-name: phex_3.4.0.110.exe
+
+# Phex: Copyright 2006 The Phex Team - GPL-2 or later.
+# Link: http://phex.org
+# Developer-link: http://sf.net/projects/phex
+

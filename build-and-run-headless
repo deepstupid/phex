@@ -1,0 +1,4 @@
+#!/bin/sh
+rm -r target/classes
+mvn package
+java -Xmx384m -Djava.awt.headless=true -jar target/phex.jar $@
