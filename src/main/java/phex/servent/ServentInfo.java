@@ -2,7 +2,6 @@ package phex.servent;
 
 import phex.common.GnutellaNetwork;
 import phex.common.address.DestAddress;
-import phex.event.PhexEventService;
 import phex.msg.GUID;
 
 public interface ServentInfo

@@ -24,12 +24,12 @@ package phex.common.collections;
 //Modified version (1.4 2007-06-11 15:37:09) of /java/org/limewire/collection/StringTrie.java
 //Copyright by Limewire
 
+import org.apache.commons.collections.iterators.EmptyIterator;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.NoSuchElementException;
-
-import org.apache.commons.collections.iterators.EmptyIterator;
 
 /**
  * An information reTRIEval tree, a.k.a., a prefix tree. A Trie is similar to a

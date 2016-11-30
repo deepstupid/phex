@@ -21,37 +21,10 @@
  */
 package phex.gui.tabs.download;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.swing.BorderFactory;
-import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
-import javax.swing.JToolBar;
-import javax.swing.KeyStroke;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.looks.Options;
 import phex.common.Environment;
 import phex.common.URN;
 import phex.common.address.DestAddress;
@@ -59,12 +32,7 @@ import phex.common.format.NumberFormatUtils;
 import phex.common.log.LogBuffer;
 import phex.common.log.LogRecord;
 import phex.common.log.NLogger;
-import phex.download.strategy.AvailBeginRandSelectionStrategy;
-import phex.download.strategy.BeginAvailRandSelectionStrategy;
-import phex.download.strategy.BeginEndAvailRandSelectionStrategy;
-import phex.download.strategy.RandomScopeSelectionStrategy;
-import phex.download.strategy.ScopeSelectionStrategy;
-import phex.download.strategy.ScopeSelectionStrategyProvider;
+import phex.download.strategy.*;
 import phex.download.swarming.SWDownloadCandidate;
 import phex.download.swarming.SWDownloadFile;
 import phex.download.swarming.SwarmingManager;
@@ -72,14 +40,7 @@ import phex.gui.actions.BanHostActionUtils;
 import phex.gui.actions.FWAction;
 import phex.gui.actions.FWToggleAction;
 import phex.gui.actions.GUIActionPerformer;
-import phex.gui.common.BrowserLauncher;
-import phex.gui.common.FWElegantPanel;
-import phex.gui.common.FWMenu;
-import phex.gui.common.FWToolBar;
-import phex.gui.common.GUIRegistry;
-import phex.gui.common.GUIUtils;
-import phex.gui.common.IconPack;
-import phex.gui.common.MainFrame;
+import phex.gui.common.*;
 import phex.gui.common.table.FWSortedTableModel;
 import phex.gui.common.table.FWTable;
 import phex.gui.dialogs.DownloadConfigDialog;
@@ -94,10 +55,17 @@ import phex.utils.URLUtil;
 import phex.xml.sax.gui.DGuiSettings;
 import phex.xml.sax.gui.DTable;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.looks.Options;
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class SWDownloadTab extends FWTab
 {

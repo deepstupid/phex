@@ -21,13 +21,13 @@
  */
 package phex.host;
 
+import phex.common.address.DestAddress;
+import phex.prefs.core.NetworkPrefs;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeSet;
-
-import phex.common.address.DestAddress;
-import phex.prefs.core.NetworkPrefs;
 
 /**
  * The CatchedHostCache provides a container with a limited size.
@@ -64,18 +64,12 @@ public class CatchedHostCache
      */
     public synchronized void add( CaughtHost host )
     {
-        if ( addressHostMapping.containsKey( host.getHostAddress() ) )
-        {
+        if (addressHostMapping.putIfAbsent( host.getHostAddress(), host )!=null) {
             return;
         }
-        
-        if ( sortedHosts.size() < NetworkPrefs.MaxHostInHostCache.get().intValue() )
-        {
-            addressHostMapping.put( host.getHostAddress(), host );
-            sortedHosts.add( host );
-        }
-        else
-        {
+        sortedHosts.add(host);
+
+        if ( sortedHosts.size() >= NetworkPrefs.MaxHostInHostCache.get().intValue() ) {
             addressHostMapping.put( host.getHostAddress(), host );
             sortedHosts.add( host );
             if ( sortedHosts.size() >= NetworkPrefs.MaxHostInHostCache.get().intValue() )

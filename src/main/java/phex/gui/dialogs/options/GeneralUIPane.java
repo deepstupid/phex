@@ -21,24 +21,26 @@
  */
 package phex.gui.dialogs.options;
 
-import java.awt.BorderLayout;
-import java.awt.event.*;
-import java.util.HashMap;
-
-import javax.swing.*;
-import javax.swing.UIManager.LookAndFeelInfo;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import phex.common.log.NLogger;
 import phex.gui.common.*;
 import phex.gui.prefs.InterfacePrefs;
 import phex.gui.renderer.LAFListCellRenderer;
 import phex.gui.renderer.LAFThemeListCellRenderer;
 import phex.gui.tabs.search.SearchTab;
-import phex.utils.*;
+import phex.utils.Localizer;
+import phex.utils.StringUtils;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import javax.swing.UIManager.LookAndFeelInfo;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.HashMap;
 
 public class GeneralUIPane extends OptionsSettingsPane
 {

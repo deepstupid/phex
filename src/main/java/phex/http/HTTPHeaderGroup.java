@@ -21,16 +21,10 @@
  */
 package phex.http;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
-
 import org.apache.commons.collections.map.LinkedMap;
-
-import phex.common.Environment;
 import phex.common.Phex;
+
+import java.util.*;
 
 public class HTTPHeaderGroup
 {

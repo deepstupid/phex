@@ -22,7 +22,6 @@
 package phex.msg;
 
 import junit.framework.TestCase;
-import phex.msg.QueryMsg;
 import phex.utils.AccessUtils;
 
 public class QueryMsgTest extends TestCase

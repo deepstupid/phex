@@ -1,9 +1,9 @@
 package org.bushe.swing.event.annotation;
 
+import org.bushe.swing.event.EventService;
+
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
-
-import org.bushe.swing.event.EventService;
 
 /**
  * A Proxy Subscriber for Annotations that use topic patterns

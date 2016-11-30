@@ -21,9 +21,23 @@
  */
 package phex.gui.dialogs.options;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.factories.ButtonBarFactory;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import phex.common.bandwidth.BandwidthManager;
+import phex.common.log.NLogger;
+import phex.gui.actions.GUIActionPerformer;
+import phex.gui.common.GUIRegistry;
+import phex.gui.prefs.PhexGuiPrefs;
+import phex.prefs.core.PhexCorePrefs;
+import phex.utils.Localizer;
+
+import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -32,34 +46,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JTree;
-import javax.swing.SwingUtilities;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
-
-import phex.common.bandwidth.BandwidthManager;
-import phex.common.log.NLogger;
-import phex.gui.actions.GUIActionPerformer;
-import phex.gui.common.GUIRegistry;
-import phex.gui.prefs.PhexGuiPrefs;
-import phex.prefs.core.PhexCorePrefs;
-import phex.servent.Servent;
-import phex.utils.Localizer;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.factories.ButtonBarFactory;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 public class OptionsDialog extends JDialog
 {

@@ -22,24 +22,9 @@
 package phex.gui.tabs.search.filterpanel;
 
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
-
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.Timer;
-import javax.swing.text.Keymap;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import phex.common.MediaType;
 import phex.gui.common.FWSizeDefComboBox;
 import phex.gui.common.GUIUtils;
@@ -47,19 +32,18 @@ import phex.gui.common.IntegerTextField;
 import phex.gui.renderer.MediaTypeListRenderer;
 import phex.gui.tabs.search.SearchResultsDataModel;
 import phex.rules.Rule;
-import phex.rules.condition.Condition;
-import phex.rules.condition.FileSizeCondition;
-import phex.rules.condition.FilenameCondition;
-import phex.rules.condition.MediaTypeCondition;
-import phex.rules.condition.NotCondition;
-import phex.rules.condition.OrConcatCondition;
+import phex.rules.condition.*;
 import phex.rules.condition.FileSizeCondition.Range;
 import phex.rules.consequence.FilterFromSearchConsequence;
 import phex.utils.Localizer;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import javax.swing.text.Keymap;
+import java.awt.event.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 public class QuickFilterPanel extends JPanel
 {

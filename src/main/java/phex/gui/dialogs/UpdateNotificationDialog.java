@@ -18,28 +18,24 @@
  */
 package phex.gui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Font;
-import java.awt.event.*;
-
-import javax.swing.*;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.factories.ButtonBarFactory;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import org.apache.commons.httpclient.URIException;
-
-import phex.common.Environment;
 import phex.common.PhexVersion;
 import phex.gui.common.DialogBanner;
 import phex.gui.common.GUIRegistry;
 import phex.update.UpdateCheckRunner;
 import phex.update.UpdateDownloader;
 import phex.utils.Localizer;
-import phex.utils.VersionUtils;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.factories.ButtonBarFactory;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class UpdateNotificationDialog extends JDialog
 {

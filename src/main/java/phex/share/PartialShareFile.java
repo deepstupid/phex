@@ -21,9 +21,6 @@
  */
 package phex.share;
 
-import java.io.File;
-import java.util.Iterator;
-
 import phex.common.AltLocContainer;
 import phex.common.FileHandlingException;
 import phex.common.URN;
@@ -34,6 +31,9 @@ import phex.http.HTTPRangeSet;
 import phex.http.Range;
 import phex.http.Range.RangeAvailability;
 import phex.xml.sax.share.DSharedFile;
+
+import java.io.File;
+import java.util.Iterator;
  
 public class PartialShareFile extends ShareFile
 {

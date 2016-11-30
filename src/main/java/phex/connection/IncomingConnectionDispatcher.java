@@ -21,11 +21,8 @@
  */
 package phex.connection;
 
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Phex;
 import phex.common.address.DestAddress;
 import phex.common.bandwidth.BandwidthController;
@@ -48,6 +45,8 @@ import phex.share.HttpRequestDispatcher;
 import phex.utils.GnutellaInputStream;
 import phex.utils.IOUtil;
 import phex.utils.URLCodecUtils;
+
+import java.io.IOException;
 
 /**
  * If during negotiation it is clear that the remote

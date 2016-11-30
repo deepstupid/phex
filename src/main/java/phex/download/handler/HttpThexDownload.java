@@ -21,36 +21,22 @@
  */
 package phex.download.handler;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.net.MalformedURLException;
-import java.util.List;
-import java.util.Locale;
-
+import com.bitzi.util.Base32;
+import com.onionnetworks.dime.DimeParser;
+import com.onionnetworks.dime.DimeRecord;
 import org.apache.commons.httpclient.ChunkedInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.download.DownloadEngine;
 import phex.download.HostBusyException;
 import phex.download.RemotelyQueuedException;
 import phex.download.ThexVerificationData;
 import phex.download.swarming.SWDownloadCandidate;
+import phex.download.swarming.SWDownloadCandidate.ThexStatus;
 import phex.download.swarming.SWDownloadFile;
 import phex.download.swarming.SWDownloadSet;
-import phex.download.swarming.SWDownloadCandidate.ThexStatus;
 import phex.host.UnusableHostException;
-import phex.http.GnutellaHeaderNames;
-import phex.http.HTTPHeader;
-import phex.http.HTTPHeaderNames;
-import phex.http.HTTPMessageException;
-import phex.http.HTTPProcessor;
-import phex.http.HTTPRequest;
-import phex.http.HTTPResponse;
-import phex.http.HTTPRetryAfter;
-import phex.http.XQueueParameters;
+import phex.http.*;
 import phex.net.connection.Connection;
 import phex.prefs.core.DownloadPrefs;
 import phex.thex.TTHashCalcUtils;
@@ -59,9 +45,13 @@ import phex.utils.LengthLimitedInputStream;
 import phex.xml.thex.ThexHashTree;
 import phex.xml.thex.ThexHashTreeCodec;
 
-import com.bitzi.util.Base32;
-import com.onionnetworks.dime.DimeParser;
-import com.onionnetworks.dime.DimeRecord;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.net.MalformedURLException;
+import java.util.List;
+import java.util.Locale;
 
 public class HttpThexDownload extends AbstractHttpDownload
 {

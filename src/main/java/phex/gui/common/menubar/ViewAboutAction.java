@@ -22,13 +22,13 @@
 package phex.gui.common.menubar;
 
 
-import java.awt.event.ActionEvent;
-
 import phex.common.log.NLogger;
 import phex.gui.actions.FWAction;
 import phex.gui.common.GUIRegistry;
 import phex.gui.dialogs.AboutDialog;
 import phex.utils.Localizer;
+
+import java.awt.event.ActionEvent;
 
 
 /**

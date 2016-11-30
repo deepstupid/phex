@@ -21,14 +21,14 @@
  */
 package phex.security;
 
-import java.util.Stack;
-
 import phex.common.ExpiryDate;
 import phex.common.RunnerQueueWorker;
 import phex.common.ThreadTracking;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
 import phex.utils.Localizer;
+
+import java.util.Stack;
 
 /**
  * The ban host batch is responsible to ban larger amount of addresses in the

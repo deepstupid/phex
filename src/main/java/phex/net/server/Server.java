@@ -21,15 +21,9 @@
  */
 package phex.net.server;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.util.TimerTask;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Environment;
 import phex.common.Phex;
 import phex.common.address.AddressUtils;
@@ -46,6 +40,11 @@ import phex.prefs.core.ConnectionPrefs;
 import phex.prefs.core.NetworkPrefs;
 import phex.prefs.core.ProxyPrefs;
 import phex.servent.Servent;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.util.TimerTask;
 
 /**
  *
@@ -118,7 +117,11 @@ public abstract class Server implements Runnable
         
         bind( NetworkPrefs.ListeningPort.get().intValue() );
         
-        upnpMapper.initialize();
+        try {
+            upnpMapper.initialize();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         
         Environment.getInstance().executeOnThreadPool(this,
             "IncommingListener-" + Integer.toHexString(hashCode()));

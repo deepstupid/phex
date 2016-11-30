@@ -22,9 +22,8 @@
  */
 package phex.gui.tabs.library;
 
+import javax.swing.*;
 import java.io.File;
-
-import javax.swing.Icon;
 
 public interface LibraryNode
 {

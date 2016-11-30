@@ -21,46 +21,12 @@
  */
 package phex.gui.tabs.network;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.FontMetrics;
-import java.awt.Toolkit;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
-
-import javax.swing.AbstractAction;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.ListCellRenderer;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableColumn;
-import javax.swing.text.Keymap;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Phex;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
@@ -71,22 +37,13 @@ import phex.event.PhexEventTopics;
 import phex.gui.actions.BanHostActionUtils;
 import phex.gui.actions.FWAction;
 import phex.gui.actions.GUIActionPerformer;
-import phex.gui.common.FWElegantPanel;
-import phex.gui.common.FWPopupMenu;
-import phex.gui.common.GUIRegistry;
-import phex.gui.common.GUIUtils;
-import phex.gui.common.IconPack;
-import phex.gui.common.MainFrame;
+import phex.gui.common.*;
 import phex.gui.common.table.FWSortedTableModel;
 import phex.gui.common.table.FWTable;
 import phex.gui.prefs.NetworkTabPrefs;
 import phex.gui.prefs.PhexGuiPrefs;
 import phex.gui.tabs.FWTab;
-import phex.host.CaughtHostsContainer;
-import phex.host.Host;
-import phex.host.HostManager;
-import phex.host.HostStatus;
-import phex.host.NetworkHostsContainer;
+import phex.host.*;
 import phex.net.repres.PresentationManager;
 import phex.prefs.core.NetworkPrefs;
 import phex.servent.Servent;
@@ -94,9 +51,18 @@ import phex.utils.Localizer;
 import phex.xml.sax.gui.DGuiSettings;
 import phex.xml.sax.gui.DTable;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableColumn;
+import javax.swing.text.Keymap;
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * The NetworkTab Panel.

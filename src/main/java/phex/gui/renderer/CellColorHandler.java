@@ -18,10 +18,10 @@
  */
 package phex.gui.renderer;
 
-import java.awt.Color;
-import javax.swing.JComponent;
-
 import phex.common.TransferDataProvider;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class CellColorHandler
 {

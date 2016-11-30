@@ -22,13 +22,16 @@
  */
 package phex.msg;
 
-import java.io.*;
+import phex.common.URN;
+import phex.common.log.NLogger;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PushbackInputStream;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
-import phex.common.URN;
-import phex.common.log.NLogger;
 
 // TODO extend this class to also support writing of huge blocks.
 public class HUGEBlock

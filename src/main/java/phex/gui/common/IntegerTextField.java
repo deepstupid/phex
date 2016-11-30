@@ -18,13 +18,12 @@
  */
 package phex.gui.common;
 
-import java.awt.Toolkit;
-
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
+import java.awt.*;
 
 /**
  * This text field allows only digits as characters they can be limited to a

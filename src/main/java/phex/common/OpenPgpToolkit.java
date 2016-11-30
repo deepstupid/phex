@@ -1,14 +1,5 @@
 package phex.common;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.Security;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.bouncycastle.bcpg.ArmoredInputStream;
@@ -17,7 +8,6 @@ import org.bouncycastle.openpgp.PGPPublicKey;
 import org.bouncycastle.openpgp.PGPPublicKeyRing;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.http.HTTPHeaderNames;
 import phex.http.HttpClientFactory;
 import phex.prefs.core.ProxyPrefs;
@@ -25,6 +15,14 @@ import phex.utils.HexConverter;
 import phex.utils.IOUtil;
 import phex.utils.RandomUtils;
 import phex.utils.StringUtils;
+
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.Security;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class OpenPgpToolkit
 {

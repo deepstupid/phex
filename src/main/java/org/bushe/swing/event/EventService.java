@@ -15,11 +15,9 @@
  */
 package org.bushe.swing.event;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.lang.reflect.Type;
-
-import org.bushe.swing.event.generics.TypeReference;
 
 
 /**

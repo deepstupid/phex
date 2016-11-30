@@ -22,11 +22,11 @@
  */
 package phex.test;
 
-import java.io.*;
-import java.util.List;
-
 import junit.framework.TestCase;
 import phex.utils.MagmaParser;
+
+import java.io.InputStream;
+import java.util.List;
 
 /**
  *

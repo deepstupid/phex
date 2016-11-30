@@ -21,25 +21,21 @@
  */
 package phex.gui.dialogs.options;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JTextField;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import phex.gui.common.GUIUtils;
 import phex.prefs.core.DownloadPrefs;
 import phex.utils.DirectoryOnlyFileFilter;
 import phex.utils.FileUtils;
 import phex.utils.Localizer;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 
 public class DirectoriesPane extends OptionsSettingsPane
 {

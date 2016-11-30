@@ -1,23 +1,17 @@
 package phex.metalink;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import org.apache.commons.httpclient.URI;
+import org.xml.sax.SAXException;
+import phex.common.log.NLogger;
+import phex.utils.StringUtils;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
-import org.apache.commons.httpclient.URI;
-import org.xml.sax.SAXException;
-
-import phex.common.log.NLogger;
-import phex.utils.StringUtils;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class MetalinkParser
 {

@@ -21,31 +21,21 @@
  */
 package phex.gui.dialogs.options;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.HashMap;
-
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
-
-import phex.common.address.AddressUtils;
-import phex.common.address.IpAddress;
-import phex.common.address.LocalServentAddress;
-import phex.gui.common.GUIRegistry;
-import phex.gui.common.GUIUtils;
-import phex.gui.common.IPTextField;
-import phex.gui.common.IntegerTextField;
-import phex.gui.common.PlainMultiLinePanel;
-import phex.prefs.core.ProxyPrefs;
-import phex.servent.Servent;
-import phex.utils.Localizer;
-import phex.utils.SystemProperties;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import phex.common.address.AddressUtils;
+import phex.common.address.IpAddress;
+import phex.common.address.LocalServentAddress;
+import phex.gui.common.*;
+import phex.prefs.core.ProxyPrefs;
+import phex.utils.Localizer;
+import phex.utils.SystemProperties;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 public class ProxyPane extends OptionsSettingsPane
 {

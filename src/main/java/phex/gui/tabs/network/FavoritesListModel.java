@@ -21,18 +21,16 @@
  */
 package phex.gui.tabs.network;
 
-import java.awt.EventQueue;
-
-import javax.swing.AbstractListModel;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.event.ContainerEvent;
-import phex.event.PhexEventTopics;
 import phex.event.ContainerEvent.Type;
+import phex.event.PhexEventTopics;
 import phex.host.FavoriteHost;
 import phex.host.FavoritesContainer;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class FavoritesListModel extends AbstractListModel
 {

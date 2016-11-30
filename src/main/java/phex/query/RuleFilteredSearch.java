@@ -21,15 +21,14 @@
  */
 package phex.query;
 
-import java.util.ArrayList;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.download.RemoteFile;
 import phex.event.PhexEventService;
 import phex.event.PhexEventTopics;
 import phex.rules.Rule;
 import phex.servent.Servent;
+
+import java.util.ArrayList;
 
 public class RuleFilteredSearch
 {

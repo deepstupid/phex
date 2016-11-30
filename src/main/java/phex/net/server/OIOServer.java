@@ -21,13 +21,6 @@
  */
 package phex.net.server;
 
-import java.io.IOException;
-import java.net.BindException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.SocketException;
-
 import phex.common.Environment;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
@@ -42,6 +35,9 @@ import phex.prefs.core.NetworkPrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityException;
 import phex.servent.Servent;
+
+import java.io.IOException;
+import java.net.*;
 
 public class OIOServer extends Server
 {

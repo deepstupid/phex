@@ -21,16 +21,16 @@
  */
 package phex.connection;
 
+import phex.common.log.NLogger;
+import phex.prefs.core.NetworkPrefs;
+import phex.utils.GnutellaInputStream;
+import phex.utils.IOUtil;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-
-import phex.common.log.NLogger;
-import phex.prefs.core.NetworkPrefs;
-import phex.utils.GnutellaInputStream;
-import phex.utils.IOUtil;
 
 
 /**

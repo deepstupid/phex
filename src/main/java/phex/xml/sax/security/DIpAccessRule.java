@@ -23,7 +23,6 @@
 package phex.xml.sax.security;
 
 import org.xml.sax.SAXException;
-
 import phex.xml.sax.PhexXmlSaxWriter;
 
 public class DIpAccessRule extends DSecurityRule

@@ -21,7 +21,7 @@
 
 package org.jdesktop.swingx.decorator;
 
-import javax.swing.JComponent;
+import javax.swing.*;
 
 /**
  * Abstract base class for all component data adapter classes.

@@ -21,8 +21,6 @@
  */
 package phex.query;
 
-import javax.annotation.CheckForNull;
-
 import phex.common.address.DestAddress;
 import phex.common.format.HostSpeedFormatUtils;
 import phex.msg.GUID;
@@ -30,6 +28,8 @@ import phex.msg.InvalidMessageException;
 import phex.msg.QueryResponseMsg;
 import phex.servent.Servent;
 import phex.utils.VendorCodes;
+
+import javax.annotation.CheckForNull;
 
 /**
  * This class holds the available informations of a QueryHit for a host.

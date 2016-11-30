@@ -21,19 +21,18 @@
  */
 package phex.test;
 
-import java.io.File;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import phex.common.AltLocContainerTest;
 import phex.common.ThreadTracking;
 import phex.prefs.core.PhexCorePrefs;
-import phex.upload.HrrnQueuePerformanceTest;
 import phex.utils.IOUtilTest;
 import phex.utils.Localizer;
 import phex.utils.SystemProperties;
 import phex.xml.thex.TestThexHashTreeSaxHandler;
 import phex.xml.thex.ThexHashTreeCodecTest;
+
+import java.io.File;
 
 
 public class PhexTestSuite extends TestSuite

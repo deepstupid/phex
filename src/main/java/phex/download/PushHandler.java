@@ -21,9 +21,6 @@
  */
 package phex.download;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
 import phex.download.swarming.SWDownloadCandidate;
@@ -32,6 +29,9 @@ import phex.net.repres.SocketFacade;
 import phex.servent.Servent;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticsManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PushHandler
 {

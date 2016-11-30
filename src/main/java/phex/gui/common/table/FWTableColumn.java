@@ -24,16 +24,15 @@ package phex.gui.common.table;
 //This class contains source from the SwingLabs class
 //org.jdesktop.swingx.table.TableColumnExt
 
-import java.awt.Component;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import phex.xml.sax.gui.DTableColumn;
 
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
-
-import phex.xml.sax.gui.DTableColumn;
+import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 
 /**

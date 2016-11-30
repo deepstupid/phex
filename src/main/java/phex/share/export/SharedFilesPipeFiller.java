@@ -21,16 +21,6 @@
  */
 package phex.share.export;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import phex.common.URN;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
@@ -39,6 +29,12 @@ import phex.utils.IOUtil;
 import phex.utils.URLCodecUtils;
 import phex.utils.URLUtil;
 import phex.xml.XMLUtils;
+
+import java.io.*;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <shared-file-export>

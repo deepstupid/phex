@@ -1,8 +1,8 @@
 package phex.download;
 
-import java.util.List;
-
 import phex.thex.TTHashCalcUtils;
+
+import java.util.List;
 
 public class ThexVerificationData
 {

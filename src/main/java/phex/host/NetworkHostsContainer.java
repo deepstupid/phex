@@ -21,12 +21,7 @@
  */
 package phex.host;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.AbstractLifeCycle;
 import phex.common.Phex;
 import phex.common.address.DestAddress;
@@ -39,6 +34,10 @@ import phex.prefs.core.ConnectionPrefs;
 import phex.servent.OnlineStatus;
 import phex.servent.Servent;
 import phex.utils.Localizer;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * Responsible for holding all hosts of the current network neighbor hood.

@@ -22,18 +22,15 @@
  */
 package phex.gui.dialogs.configwizard;
 
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-
-import phex.gui.common.HTMLMultiLinePanel;
-import phex.utils.Localizer;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-
+import phex.gui.common.HTMLMultiLinePanel;
 import phex.prefs.core.DownloadPrefs;
 import phex.prefs.core.SubscriptionPrefs;
+import phex.utils.Localizer;
+
+import javax.swing.*;
 
 public class ContentCommunityPanel extends JPanel
 {

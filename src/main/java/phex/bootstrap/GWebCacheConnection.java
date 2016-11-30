@@ -21,23 +21,11 @@
  */
 package phex.bootstrap;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.ConnectException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.PhexVersion;
 import phex.common.address.DestAddress;
 import phex.common.address.MalformedDestAddressException;
@@ -48,11 +36,18 @@ import phex.net.repres.PresentationManager;
 import phex.prefs.core.ProxyPrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
-import phex.utils.IOUtil;
-import phex.utils.LengthLimitedInputStream;
-import phex.utils.NormalizableURL;
-import phex.utils.StringUtils;
-import phex.utils.URLCodecUtils;
+import phex.utils.*;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.ConnectException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class implements the basic functionality of the Gnutella Web Cache (GWebCache)

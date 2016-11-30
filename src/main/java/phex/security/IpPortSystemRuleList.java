@@ -20,9 +20,7 @@
   */
 package phex.security;
 
-import phex.common.address.AddressUtils;
-
-import java.util.*;
+import java.util.HashMap;
 
 public class IpPortSystemRuleList extends IpSystemRuleList
 {

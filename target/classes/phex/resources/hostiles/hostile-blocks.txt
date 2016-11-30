@@ -1,9 +1,0 @@
-# Hostile blocks discovered to be spamming. 
-# Same format as the gtkg hostiles.  
-
-174.136.237.0/24
-208.93.7.0/24
-
-# Some wild host browsing clients from Japan
-211.18.159.0/24
-125.30.110.232

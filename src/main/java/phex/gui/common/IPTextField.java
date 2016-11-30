@@ -21,27 +21,16 @@
  */
 package phex.gui.common;
 
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Insets;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
-import javax.swing.border.Border;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.PlainDocument;
-import javax.swing.text.SimpleAttributeSet;
-
-import phex.common.address.AddressUtils;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.FormLayout;
+import phex.common.address.AddressUtils;
+
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.text.*;
+import java.awt.*;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class IPTextField extends JPanel
 {

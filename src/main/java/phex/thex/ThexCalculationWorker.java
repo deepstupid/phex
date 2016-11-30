@@ -22,10 +22,10 @@
  */
 package phex.thex;
 
-import java.io.IOException;
-
 import phex.common.log.NLogger;
 import phex.share.ShareFile;
+
+import java.io.IOException;
 
 
 public class ThexCalculationWorker implements Runnable

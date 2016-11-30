@@ -21,13 +21,8 @@
  */
 package phex.upload;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TimerTask;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.AddressCounter;
 import phex.common.Environment;
 import phex.common.Phex;
@@ -41,6 +36,10 @@ import phex.http.HTTPRequest;
 import phex.net.connection.Connection;
 import phex.prefs.core.UploadPrefs;
 import phex.servent.Servent;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TimerTask;
 
 public class UploadManager
 {

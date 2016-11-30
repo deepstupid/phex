@@ -22,11 +22,6 @@
  */
 package phex.gui.macosx;
 
-import java.awt.FileDialog;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-
 import net.roydesign.event.ApplicationEvent;
 import net.roydesign.mac.MRJAdapter;
 import net.roydesign.ui.FolderDialog;
@@ -38,6 +33,11 @@ import phex.gui.actions.ExitPhexAction;
 import phex.gui.common.GUIRegistry;
 import phex.gui.dialogs.AboutDialog;
 import phex.gui.dialogs.options.OptionsDialog;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 public class MacOsxGUIUtils
 {

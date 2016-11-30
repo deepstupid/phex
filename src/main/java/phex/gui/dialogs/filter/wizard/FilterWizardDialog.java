@@ -22,23 +22,10 @@
  */
 package phex.gui.dialogs.filter.wizard;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Iterator;
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-
-import phex.common.log.NLogger;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.factories.ButtonBarFactory;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import phex.gui.dialogs.filter.RuleDescOwnerDialog;
 import phex.gui.dialogs.filter.RuleDescriptionPanel;
 import phex.gui.dialogs.filter.wizard.condition.ConditionPanel;
@@ -50,10 +37,13 @@ import phex.rules.condition.NotCondition;
 import phex.utils.Localizer;
 import phex.utils.StringUtils;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.factories.ButtonBarFactory;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.List;
 
 public class FilterWizardDialog extends JDialog implements RuleDescOwnerDialog
 {

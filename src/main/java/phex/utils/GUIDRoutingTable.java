@@ -22,12 +22,12 @@
 package phex.utils;
 
 
+import phex.host.Host;
+import phex.msg.GUID;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-
-import phex.host.Host;
-import phex.msg.GUID;
 
 /**
  * This GUIDRoutingTable is used to route replies coming from the GNet

@@ -22,10 +22,6 @@
  */
 package phex.prefs.core;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
-
-
 public interface PrivateNetworkConstants
 {
     /** 

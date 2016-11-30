@@ -12,7 +12,6 @@
         <phex.fullVersion>${project.version}.${phex.build}</phex.fullVersion>
         <compileSource>1.8</compileSource>
         <targetSource>1.8</targetSource>
-        <optimize>false</optimize>
     </properties>
     <scm>
         <connection>scm:svn:https://phex.svn.sourceforge.net/svnroot/phex/phex/trunk</connection>

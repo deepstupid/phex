@@ -18,8 +18,8 @@
  */
 package phex.gui.renderer;
 
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * This class supports a workaround for the SkinLookAndFeel SkinComboBox UI

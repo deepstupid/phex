@@ -21,11 +21,6 @@
  */
 package phex.share;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
 import phex.common.URN;
 import phex.common.collections.IntSet;
 import phex.common.collections.IntSet.IntSetIterator;
@@ -35,6 +30,11 @@ import phex.prefs.core.LibraryPrefs;
 import phex.security.PhexSecurityManager;
 import phex.servent.Servent;
 import phex.utils.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class QueryResultSearchEngine
 {

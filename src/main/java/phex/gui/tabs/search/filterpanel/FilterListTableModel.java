@@ -21,12 +21,12 @@
  */
 package phex.gui.tabs.search.filterpanel;
 
-import javax.swing.table.AbstractTableModel;
-
 import phex.gui.tabs.search.SearchResultsDataModel;
 import phex.rules.Rule;
 import phex.rules.SearchFilterRules;
 import phex.utils.Localizer;
+
+import javax.swing.table.AbstractTableModel;
 
 /**
  * Table model that displays search filter rules.

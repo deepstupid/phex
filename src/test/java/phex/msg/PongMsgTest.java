@@ -22,7 +22,6 @@
 package phex.msg;
 
 import junit.framework.TestCase;
-import phex.msg.PongMsg;
 import phex.utils.AccessUtils;
 
 /**

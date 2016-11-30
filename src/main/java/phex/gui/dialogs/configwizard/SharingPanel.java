@@ -22,15 +22,14 @@
  */
 package phex.gui.dialogs.configwizard;
 
-import javax.swing.JPanel;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import phex.gui.common.HTMLMultiLinePanel;
 import phex.gui.tabs.library.LibraryTreePane;
 import phex.utils.Localizer;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
 
 public class SharingPanel extends JPanel
 {

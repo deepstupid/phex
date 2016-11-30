@@ -39,7 +39,9 @@ Win2k Notepad save formats:
   'UTF-8'    = UTF-8 with BOM mark
 ***/
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PushbackInputStream;
 
 /**
 * This inputstream will recognize unicode BOM marks

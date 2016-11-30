@@ -21,8 +21,6 @@
  */
 package phex.common;
 
-import java.util.Set;
-
 import junit.framework.TestCase;
 import phex.common.address.AddressUtils;
 import phex.common.address.DefaultDestAddress;
@@ -33,6 +31,8 @@ import phex.prefs.core.PhexCorePrefs;
 import phex.security.PhexSecurityManager;
 import phex.servent.Servent;
 import phex.utils.Localizer;
+
+import java.util.Set;
 
 public class AltLocContainerTest extends TestCase
 {

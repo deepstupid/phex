@@ -21,21 +21,14 @@
  */
 package phex.common;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
-
 import org.apache.commons.collections.map.LinkedMap;
-
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
 import phex.http.HTTPHeader;
 import phex.security.PhexSecurityManager;
 import phex.xml.sax.share.DAlternateLocation;
+
+import java.util.*;
 
 /**
  * A AlternateLocationContainer that helps holder to add, sort and access

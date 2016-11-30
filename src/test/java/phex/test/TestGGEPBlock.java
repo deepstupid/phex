@@ -21,10 +21,11 @@
  */
 package phex.test;
 
-import java.io.*;
-
 import junit.framework.TestCase;
 import phex.msg.GGEPBlock;
+
+import java.io.ByteArrayInputStream;
+import java.io.PushbackInputStream;
 
 /**
  * 

@@ -22,18 +22,16 @@
  */
 package phex.xml.thex;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import phex.common.log.NLogger;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import phex.common.log.NLogger;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 
 /**
  * 

@@ -1,17 +1,11 @@
 package phex.prefs.api;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
-
 import phex.common.log.NLogger;
 import phex.utils.ClassUtils;
 import phex.utils.StringUtils;
+
+import java.io.Serializable;
+import java.util.*;
 
 public class PreferencesCodec
 {

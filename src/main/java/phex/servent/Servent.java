@@ -21,20 +21,10 @@
  */
 package phex.servent;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.chat.ChatService;
-import phex.common.AbstractLifeCycle;
-import phex.common.GnutellaNetwork;
-import phex.common.LifeCycle;
-import phex.common.MultipleException;
-import phex.common.Phex;
+import phex.common.*;
 import phex.common.address.DestAddress;
 import phex.common.bandwidth.BandwidthManager;
 import phex.common.log.NLogger;
@@ -59,6 +49,11 @@ import phex.share.SharedFilesService;
 import phex.statistic.StatisticsManager;
 import phex.upload.UploadManager;
 import phex.utils.StringUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 public class Servent extends AbstractLifeCycle implements ServentInfo
 {

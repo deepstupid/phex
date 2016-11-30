@@ -21,10 +21,10 @@
  */
 package phex.common.log;
 
-import java.util.Collection;
-
 import org.apache.commons.collections.buffer.UnboundedFifoBuffer;
 import org.apache.commons.collections.map.MultiValueMap;
+
+import java.util.Collection;
 
 /**
  *

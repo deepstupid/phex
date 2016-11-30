@@ -18,12 +18,11 @@
  */
 package phex.gui.renderer;
 
-import java.awt.Component;
-
-import javax.swing.JTable;
-
 import phex.common.TransferDataProvider;
 import phex.common.format.NumberFormatUtils;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class TransferSizeCellRenderer extends FWTableCellRenderer
 {

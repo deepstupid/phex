@@ -21,10 +21,6 @@
  */
 package phex.upload.handler;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import phex.common.AltLocContainer;
 import phex.common.AlternateLocation;
 import phex.common.URN;
@@ -34,11 +30,7 @@ import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
 import phex.download.swarming.SWDownloadFile;
 import phex.download.swarming.SwarmingManager;
-import phex.http.GnutellaHeaderNames;
-import phex.http.GnutellaRequest;
-import phex.http.HTTPHeader;
-import phex.http.HTTPHeaderNames;
-import phex.http.HTTPRequest;
+import phex.http.*;
 import phex.prefs.core.UploadPrefs;
 import phex.security.PhexSecurityManager;
 import phex.servent.Servent;
@@ -50,6 +42,10 @@ import phex.upload.UploadManager;
 import phex.upload.UploadState;
 import phex.upload.UploadStatus;
 import phex.upload.response.UploadResponse;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractUploadHandler implements UploadHandler
 {

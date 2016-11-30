@@ -21,27 +21,15 @@
  */
 package phex.connection;
 
-import java.io.IOException;
-import java.util.StringTokenizer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import phex.common.address.AddressUtils;
-import phex.common.address.DefaultDestAddress;
-import phex.common.address.DestAddress;
-import phex.common.address.IpAddress;
-import phex.common.address.MalformedDestAddressException;
+import phex.common.address.*;
 import phex.connection.handshake.HandshakeHandler;
 import phex.connection.handshake.HandshakeStatus;
 import phex.host.CaughtHostsContainer;
 import phex.host.Host;
 import phex.host.HostStatus;
-import phex.http.GnutellaHeaderNames;
-import phex.http.HTTPHeader;
-import phex.http.HTTPHeaderGroup;
-import phex.http.HTTPHeaderNames;
-import phex.http.HTTPProcessor;
+import phex.http.*;
 import phex.io.buffer.ByteBuffer;
 import phex.msg.InvalidMessageException;
 import phex.msg.Message;
@@ -59,6 +47,9 @@ import phex.security.PhexSecurityManager;
 import phex.servent.Servent;
 import phex.utils.HexConverter;
 import phex.utils.Localizer;
+
+import java.io.IOException;
+import java.util.StringTokenizer;
 
 /**
  * <p>A worker that handles the communication between this and another gnutella

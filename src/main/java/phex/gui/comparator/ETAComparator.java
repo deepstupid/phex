@@ -22,10 +22,10 @@
  */
 package phex.gui.comparator;
 
-import java.util.Comparator;
-
 import phex.common.TransferDataProvider;
 import phex.common.log.NLogger;
+
+import java.util.Comparator;
 
 public class ETAComparator implements Comparator<TransferDataProvider>
 {

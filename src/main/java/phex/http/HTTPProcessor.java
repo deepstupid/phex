@@ -18,12 +18,12 @@
  */
 package phex.http;
 
+import phex.net.connection.Connection;
+
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-
-import phex.net.connection.Connection;
 
 
 public class HTTPProcessor

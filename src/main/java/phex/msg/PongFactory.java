@@ -21,14 +21,8 @@
  */
 package phex.msg;
 
-import java.util.Collection;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.bootstrap.UdpHostCacheContainer;
 import phex.common.PhexVersion;
 import phex.common.address.DefaultDestAddress;
@@ -40,6 +34,10 @@ import phex.host.Host;
 import phex.host.NetworkHostsContainer;
 import phex.security.PhexSecurityManager;
 import phex.utils.IOUtil;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collection;
 
 public class PongFactory
 {

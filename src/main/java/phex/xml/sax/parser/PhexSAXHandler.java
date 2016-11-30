@@ -22,15 +22,10 @@
  */
 package phex.xml.sax.parser;
 
-import java.io.CharArrayWriter;
-
-import javax.xml.parsers.SAXParser;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
 import phex.xml.sax.DPhex;
 import phex.xml.sax.DSubElementList;
 import phex.xml.sax.DUpdateResponse;
@@ -46,6 +41,9 @@ import phex.xml.sax.parser.share.SharedLibraryHandler;
 import phex.xml.sax.rules.DSearchRule;
 import phex.xml.sax.security.DSecurity;
 import phex.xml.sax.share.DSharedLibrary;
+
+import javax.xml.parsers.SAXParser;
+import java.io.CharArrayWriter;
 
 /**
  * 

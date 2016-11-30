@@ -21,10 +21,11 @@
  */
 package phex.test;
 
-import java.io.*;
-
 import junit.framework.TestCase;
 import phex.utils.FileUtils;
+
+import java.io.File;
+import java.io.RandomAccessFile;
 
 public class TestFileUtils
     extends TestCase

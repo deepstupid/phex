@@ -21,12 +21,11 @@
  */
 package phex.common.bandwidth;
 
-import java.io.IOException;
-
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+import java.io.IOException;
 
 /**
  * A class that units a clamping bandwidth throttle with memory and a simple

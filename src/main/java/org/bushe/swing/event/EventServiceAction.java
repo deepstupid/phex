@@ -15,10 +15,8 @@
  */
 package org.bushe.swing.event;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ImageIcon;
 
 /**
  * Abstract class that publishes a Swing ActionEvent (or another object) to an {@link EventService}.

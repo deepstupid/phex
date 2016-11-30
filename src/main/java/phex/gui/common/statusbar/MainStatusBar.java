@@ -21,17 +21,17 @@
  */
 package phex.gui.common.statusbar;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseAdapter;
-
 import phex.common.bandwidth.BandwidthManager;
 import phex.download.swarming.SwarmingManager;
 import phex.gui.common.GUIRegistry;
-import phex.servent.Servent;
-import phex.gui.dialogs.options.OptionsDialog;
 import phex.gui.common.MainFrame;
+import phex.gui.dialogs.options.OptionsDialog;
+import phex.servent.Servent;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class MainStatusBar extends StatusBar
 {   

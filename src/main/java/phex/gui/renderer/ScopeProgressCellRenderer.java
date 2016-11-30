@@ -18,20 +18,17 @@
  */
 package phex.gui.renderer;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Rectangle;
+import phex.download.swarming.SWDownloadCandidate;
+import phex.gui.common.progressbar.CandidateScopeProvider;
+import phex.gui.common.progressbar.MultiScopeProgressBar;
 
 import javax.accessibility.AccessibleContext;
-import javax.swing.JTable;
+import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
-
-import phex.download.swarming.SWDownloadCandidate;
-import phex.gui.common.progressbar.CandidateScopeProvider;
-import phex.gui.common.progressbar.MultiScopeProgressBar;
+import java.awt.*;
 
 /**
  * Supports progress bar in table cells.

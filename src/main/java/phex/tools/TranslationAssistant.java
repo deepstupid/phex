@@ -21,6 +21,9 @@
  */
 package phex.tools;
 
+import phex.utils.IOUtil;
+import phex.utils.Localizer;
+
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -29,9 +32,6 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import phex.utils.IOUtil;
-import phex.utils.Localizer;
 
 /**
  *

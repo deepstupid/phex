@@ -18,11 +18,12 @@
  */
 package phex.gui.renderer;
 
-import java.awt.*;
+import javax.accessibility.AccessibleContext;
 import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.TableCellRenderer;
-import javax.accessibility.*;
+import java.awt.*;
 
 /**
  * Supports progress bar in table cells.

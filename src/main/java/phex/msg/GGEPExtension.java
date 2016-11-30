@@ -22,20 +22,18 @@
 package phex.msg;
 
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.annotation.CheckForNull;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
 import phex.utils.HexConverter;
 import phex.utils.IOUtil;
+
+import javax.annotation.CheckForNull;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Used for parsing GGEP extension data.

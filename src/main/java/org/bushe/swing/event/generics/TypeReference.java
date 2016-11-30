@@ -1,9 +1,9 @@
 package org.bushe.swing.event.generics;
 
-import java.lang.reflect.Type;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /**
  * Courtesy of Neil Gafter's blog.

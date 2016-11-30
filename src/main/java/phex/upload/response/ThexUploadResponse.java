@@ -21,9 +21,8 @@
  */
 package phex.upload.response;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
+import com.onionnetworks.dime.DimeGenerator;
+import com.onionnetworks.dime.DimeRecord;
 import phex.http.HTTPResponse;
 import phex.io.buffer.ByteBuffer;
 import phex.share.ShareFile;
@@ -33,8 +32,8 @@ import phex.utils.StringUtils;
 import phex.xml.thex.ThexHashTree;
 import phex.xml.thex.ThexHashTreeCodec;
 
-import com.onionnetworks.dime.DimeGenerator;
-import com.onionnetworks.dime.DimeRecord;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class ThexUploadResponse extends UploadResponse
 {

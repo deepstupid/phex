@@ -21,16 +21,14 @@
  */
 package phex.gui.tabs.search;
 
-import java.awt.Component;
-
-import javax.swing.JLabel;
-import javax.swing.JTable;
-
 import phex.download.RemoteFile;
 import phex.gui.renderer.FWTableCellRenderer;
 import phex.query.QHDFlag;
 import phex.query.QueryHitHost;
 import phex.utils.Localizer;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * 

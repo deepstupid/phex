@@ -22,15 +22,14 @@
  */
 package phex.rules.condition;
 
-import java.util.*;
-
 import org.apache.commons.collections.set.ListOrderedSet;
-
 import phex.common.URN;
 import phex.download.RemoteFile;
 import phex.query.Search;
 import phex.xml.sax.rules.DCondition;
 import phex.xml.sax.rules.DFileUrnCondition;
+
+import java.util.*;
 
 /**
  * Filters all files matching the expression.

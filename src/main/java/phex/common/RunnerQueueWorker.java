@@ -21,9 +21,9 @@
  */
 package phex.common;
 
-import java.util.Vector;
-
 import phex.common.log.NLogger;
+
+import java.util.Vector;
 
 /**
  * This class represents a queue of Runnable that will

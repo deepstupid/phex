@@ -21,17 +21,15 @@
  */
 package phex.gui.tabs.search;
 
-import java.awt.Color;
-import java.awt.Component;
-
-import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
-
 import phex.common.URN;
 import phex.download.RemoteFile;
 import phex.download.swarming.SwarmingManager;
 import phex.gui.common.treetable.JTreeTable;
 import phex.share.SharedFilesService;
+
+import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 
 /**
  * 

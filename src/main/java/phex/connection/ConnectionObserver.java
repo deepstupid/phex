@@ -22,9 +22,6 @@
 package phex.connection;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import phex.common.ThreadTracking;
 import phex.common.log.NLogger;
 import phex.host.Host;
@@ -32,6 +29,9 @@ import phex.host.HostStatus;
 import phex.host.NetworkHostsContainer;
 import phex.msghandling.MessageService;
 import phex.utils.Localizer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -41,8 +41,8 @@ import phex.utils.Localizer;
  */
 public class ConnectionObserver implements Runnable
 {
-    private long SLEEP_TIME = 30000;
-    private long PING_WAIT_TIME = 20000;
+    private long SLEEP_TIME = 1000;
+    private long PING_WAIT_TIME = 2000;
 
     private List<ConnectionSnapshoot> snapshootList;
     private List<Host> quiteList;
@@ -119,7 +119,7 @@ public class ConnectionObserver implements Runnable
                     Host host = quiteList.get( i );
                     // Disconnect connection if it was still quite in the meantime
                     ConnectionSnapshoot shoot = findSnapshoot( host );
-                    if ( shoot.hasBeenQuite( ) )
+                    if ( shoot.hasBeenQuiet( ) )
                     {
                         host.setStatus( HostStatus.ERROR,
                             Localizer.getString( "HostNotResponding" ) );
@@ -142,7 +142,7 @@ public class ConnectionObserver implements Runnable
                 continue;
             }
 
-            if ( shoot.hasBeenQuite( ) )
+            if ( shoot.hasBeenQuiet( ) )
             {
                 quiteList.add( hosts[i] );
             }
@@ -191,7 +191,7 @@ public class ConnectionObserver implements Runnable
          * no new data, or all sent packages have been dropped.
          * @return true if the host has been quite, false others.
          */
-        public boolean hasBeenQuite( )
+        public boolean hasBeenQuiet( )
         {
             int receivedDiff = host.getReceivedCount() - receivedCount;
             int sentDiff = host.getSentCount() - sentCount;

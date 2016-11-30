@@ -22,13 +22,12 @@
  */
 package phex.xml.sax.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.xml.sax.SAXException;
-
 import phex.xml.sax.DElement;
 import phex.xml.sax.PhexXmlSaxWriter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DGuiSettings implements DElement
 {

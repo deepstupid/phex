@@ -22,12 +22,12 @@
  */
 package phex.net.repres;
 
+import phex.common.address.DestAddress;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.SocketException;
 import java.nio.channels.ByteChannel;
-
-import phex.common.address.DestAddress;
 
 public interface SocketFacade extends Closeable
 {

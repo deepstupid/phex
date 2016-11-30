@@ -18,7 +18,7 @@
  */
 package phex.download;
 
-import phex.host.*;
+import phex.host.UnusableHostException;
 
 public class WrongHTTPHeaderException extends UnusableHostException
 {

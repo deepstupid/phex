@@ -22,14 +22,16 @@
  */
 package phex.rules;
 
-import java.util.*;
-
 import phex.download.RemoteFile;
 import phex.query.Search;
 import phex.rules.condition.AndConcatCondition;
 import phex.rules.condition.Condition;
 import phex.rules.consequence.Consequence;
 import phex.servent.Servent;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Rule implements Cloneable
 {

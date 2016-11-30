@@ -21,20 +21,16 @@
  */
 package phex.gui.actions;
 
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.io.IOException;
-
-import javax.swing.Icon;
-import javax.swing.JOptionPane;
-import javax.swing.KeyStroke;
-
 import phex.common.log.NLogger;
 import phex.gui.common.BrowserLauncher;
 import phex.gui.common.GUIRegistry;
 import phex.utils.Localizer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 public class OpenURLAction extends FWAction
 {

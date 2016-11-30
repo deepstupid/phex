@@ -18,8 +18,6 @@
  */
 package phex.upload;
 
-import java.io.IOException;
-
 import phex.common.Environment;
 import phex.common.bandwidth.BandwidthController;
 import phex.common.log.NLogger;
@@ -39,6 +37,8 @@ import phex.statistic.StatisticProviderConstants;
 import phex.statistic.StatisticsManager;
 import phex.utils.StringUtils;
 import phex.utils.URLCodecUtils;
+
+import java.io.IOException;
 
 public class PushWorker implements Runnable
 {

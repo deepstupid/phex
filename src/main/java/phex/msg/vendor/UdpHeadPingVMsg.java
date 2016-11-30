@@ -26,7 +26,6 @@ import phex.msg.GGEPBlock;
 import phex.msg.GUID;
 import phex.msg.InvalidMessageException;
 import phex.msg.MsgHeader;
-import phex.utils.IOUtil;
 
 public class UdpHeadPingVMsg extends VendorMsg
 {

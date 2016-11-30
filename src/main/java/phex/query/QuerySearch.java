@@ -21,11 +21,8 @@
  */
 package phex.query;
 
-import java.util.HashMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.address.DestAddress;
 import phex.msg.InvalidMessageException;
 import phex.msg.QueryResponseMsg;
@@ -33,6 +30,8 @@ import phex.msg.vendor.OOBReplyCountVMsg;
 import phex.servent.Servent;
 import phex.utils.IOUtil;
 import phex.utils.RandomUtils;
+
+import java.util.HashMap;
 
 public abstract class QuerySearch extends Search
 {

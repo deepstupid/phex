@@ -21,10 +21,6 @@
  */
 package phex.upload;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-
 import phex.common.AlternateLocation;
 import phex.common.TransferDataProvider;
 import phex.common.URN;
@@ -33,6 +29,9 @@ import phex.common.bandwidth.TransferAverage;
 import phex.common.log.LogRecord;
 import phex.common.log.NLogger;
 import phex.prefs.core.UploadPrefs;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class UploadState implements TransferDataProvider

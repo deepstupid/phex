@@ -22,9 +22,15 @@
  */
 package phex.gui.tabs.search.cp;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import phex.gui.common.BoxPanel;
+import phex.gui.common.GUIRegistry;
+import phex.gui.common.GUIUtils;
+import phex.gui.common.PhexColors;
+import phex.gui.tabs.search.SearchTab;
+import phex.utils.Localizer;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -32,14 +38,9 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.ButtonUI;
 import javax.swing.plaf.basic.BasicButtonUI;
-
-import phex.gui.common.*;
-import phex.gui.tabs.search.SearchTab;
-import phex.utils.Localizer;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class SearchActivityBox extends BoxPanel
 {

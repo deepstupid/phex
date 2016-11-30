@@ -21,8 +21,6 @@
  */
 package phex.msghandling;
 
-import java.net.Socket;
-
 import junit.framework.TestCase;
 import phex.common.address.DefaultDestAddress;
 import phex.common.bandwidth.BandwidthController;
@@ -36,6 +34,8 @@ import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
 import phex.utils.Localizer;
 import phex.utils.QueryGUIDRoutingPair;
+
+import java.net.Socket;
 
 
 public class MessageRoutingTest extends TestCase

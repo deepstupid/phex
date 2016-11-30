@@ -18,8 +18,9 @@
  */
 package phex.download;
 
+import phex.http.XQueueParameters;
+
 import java.io.IOException;
-import phex.http.*;
 
 public class RemotelyQueuedException extends IOException
 {

@@ -21,18 +21,16 @@
  */
 package phex.common;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import phex.common.address.DestAddress;
+import phex.host.Host;
+import phex.msg.PongMsg;
+import phex.msghandling.MessageSubscriber;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TimerTask;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import phex.common.address.DestAddress;
-import phex.host.Host;
-import phex.msg.InvalidMessageException;
-import phex.msg.PongMsg;
-import phex.msghandling.MessageSubscriber;
 
 /**
  * The class tracks the estimated size of the horizon in host count,

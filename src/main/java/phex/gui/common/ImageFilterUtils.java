@@ -22,18 +22,14 @@
  */
 package phex.gui.common;
 
-import java.awt.Image;
-import java.awt.Toolkit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageProducer;
 import java.util.Arrays;
-
-import javax.swing.GrayFilter;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class ImageFilterUtils
 {

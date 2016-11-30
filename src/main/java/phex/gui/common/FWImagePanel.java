@@ -21,10 +21,8 @@
  */
 package phex.gui.common;
 
-import java.awt.Graphics;
-
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 public class FWImagePanel extends JPanel
 {

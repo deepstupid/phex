@@ -24,7 +24,6 @@ package phex.utils;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.net.URLCodec;
-
 import phex.common.log.NLogger;
 
 /**

@@ -22,24 +22,7 @@
  */
 package phex.gui.tabs.library;
 
-import java.awt.EventQueue;
-import java.io.File;
-import java.io.FileFilter;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-
-import javax.swing.Icon;
-import javax.swing.event.EventListenerList;
-import javax.swing.event.TreeModelEvent;
-import javax.swing.event.TreeModelListener;
-import javax.swing.filechooser.FileSystemView;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.event.PhexEventTopics;
 import phex.gui.actions.GUIActionPerformer;
@@ -49,6 +32,21 @@ import phex.share.SharedDirectory;
 import phex.share.SharedFilesService;
 import phex.utils.DirectoryOnlyFileFilter;
 import phex.utils.Localizer;
+
+import javax.swing.*;
+import javax.swing.event.EventListenerList;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.filechooser.FileSystemView;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 
 public class SharingTreeModel implements TreeModel
 {    

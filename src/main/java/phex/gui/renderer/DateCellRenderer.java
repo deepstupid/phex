@@ -18,11 +18,11 @@
  */
 package phex.gui.renderer;
 
-import java.text.DateFormat;
-import java.util.Date;
-
 import phex.common.ExpiryDate;
 import phex.utils.Localizer;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 
 public class DateCellRenderer extends FWTableCellRenderer

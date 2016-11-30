@@ -21,30 +21,16 @@
  */
 package phex.prefs.api;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.collections.SortedProperties;
 import phex.event.PhexEventService;
 import phex.event.PhexEventTopics;
 import phex.utils.FileUtils;
 import phex.utils.IOUtil;
+
+import java.io.*;
+import java.util.*;
 
 public class Preferences
 {

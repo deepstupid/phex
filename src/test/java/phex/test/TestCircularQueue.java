@@ -21,11 +21,12 @@
  */
 package phex.test;
 
-import java.util.*;
-
+import junit.framework.TestCase;
 import phex.utils.AccessUtils;
 import phex.utils.CircularQueue;
-import junit.framework.TestCase;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 

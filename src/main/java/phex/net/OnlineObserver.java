@@ -21,14 +21,10 @@
  */
 package phex.net;
 
-import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicInteger;
-
 import org.apache.commons.lang.time.DateUtils;
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Environment;
 import phex.common.Phex;
 import phex.connection.ConnectionStatusEvent;
@@ -36,11 +32,14 @@ import phex.connection.ConnectionStatusEvent.Status;
 import phex.event.ChangeEvent;
 import phex.event.PhexEventTopics;
 import phex.host.HostFetchingStrategy;
-import phex.host.NetworkHostsContainer;
 import phex.host.HostFetchingStrategy.FetchingReason;
+import phex.host.NetworkHostsContainer;
 import phex.prefs.core.ConnectionPrefs;
 import phex.servent.OnlineStatus;
 import phex.servent.Servent;
+
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * This class tries to observers the online status of a connection.

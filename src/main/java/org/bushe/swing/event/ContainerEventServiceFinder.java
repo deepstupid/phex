@@ -15,10 +15,8 @@
  */
 package org.bushe.swing.event;
 
-import java.awt.Component;
-import javax.swing.JComponent;
-import javax.swing.JPopupMenu;
-import javax.swing.RootPaneContainer;
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * This class finds a component's container event service, and creates one if necessary and possible.

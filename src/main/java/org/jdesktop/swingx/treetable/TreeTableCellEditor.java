@@ -21,13 +21,11 @@
 
 package org.jdesktop.swingx.treetable;
 
-import java.awt.Component;
-import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-import java.util.EventObject;
-
 import javax.swing.*;
 import javax.swing.tree.TreeCellRenderer;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.util.EventObject;
 
 /**
  * An editor that can be used to edit the tree column. This extends

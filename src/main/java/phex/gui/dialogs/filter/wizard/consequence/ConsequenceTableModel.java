@@ -22,9 +22,9 @@
  */
 package phex.gui.dialogs.filter.wizard.consequence;
 
-import javax.swing.table.AbstractTableModel;
-
 import phex.rules.consequence.*;
+
+import javax.swing.table.AbstractTableModel;
 
 public class ConsequenceTableModel extends AbstractTableModel
 {

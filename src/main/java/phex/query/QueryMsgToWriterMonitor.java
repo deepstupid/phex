@@ -21,17 +21,15 @@
  */
 package phex.query;
 
-import java.io.IOException;
-import java.io.Writer;
-
-import org.apache.commons.lang.SystemUtils;
-
 import edu.umd.cs.findbugs.annotations.NonNull;
-
+import org.apache.commons.lang.SystemUtils;
 import phex.common.log.NLogger;
 import phex.host.Host;
 import phex.msg.QueryMsg;
 import phex.msghandling.MessageSubscriber;
+
+import java.io.IOException;
+import java.io.Writer;
 
 /**
  * Query history monitor class that writes the QueryMsg search string into a

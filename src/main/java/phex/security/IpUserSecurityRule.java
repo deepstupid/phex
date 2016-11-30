@@ -21,12 +21,12 @@
  */
 package phex.security;
 
-import java.lang.ref.SoftReference;
-
 import phex.common.ExpiryDate;
 import phex.common.address.AddressUtils;
 import phex.xml.sax.security.DIpAccessRule;
 import phex.xml.sax.security.DSecurityRule;
+
+import java.lang.ref.SoftReference;
 
 // http://www.telusplanet.net/public/sparkman/netcalc.htm
 public class IpUserSecurityRule extends AbstractSecurityRule implements IpSecurityRule

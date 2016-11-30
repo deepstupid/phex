@@ -21,14 +21,11 @@
  */
 package phex.gui.common;
 
-import java.awt.Color;
-import java.awt.Font;
-
-import javax.swing.JTextPane;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import javax.swing.text.html.StyleSheet;
+import java.awt.*;
 
 /**
  * This Panel provides the ability to show a multiline HTML label

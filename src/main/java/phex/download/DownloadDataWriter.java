@@ -21,16 +21,15 @@
  */
 package phex.download;
 
-import java.util.List;
-import java.util.ListIterator;
-
 import org.apache.commons.lang.time.DateUtils;
-
 import phex.common.ThreadTracking;
 import phex.common.log.NLogger;
 import phex.download.swarming.SWDownloadFile;
 import phex.download.swarming.SwarmingManager;
 import phex.prefs.core.DownloadPrefs;
+
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Extra thread that is responsible to write buffered download data to

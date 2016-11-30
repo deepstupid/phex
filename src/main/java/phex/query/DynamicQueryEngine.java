@@ -21,17 +21,16 @@
  */
 package phex.query;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.QueryRoutingTable;
 import phex.host.Host;
 import phex.host.NetworkHostsContainer;
 import phex.msg.QueryMsg;
 import phex.msghandling.MessageService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The DynamicQueryEngine is responsible for submitting the query 

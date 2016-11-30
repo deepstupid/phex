@@ -22,20 +22,17 @@
  */
 package phex.gui.common.menubar;
 
-import java.util.Iterator;
-import java.util.List;
-
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
-
 import phex.gui.actions.*;
 import phex.gui.common.*;
 import phex.gui.tabs.FWTab;
 import phex.utils.Localizer;
 import phex.xml.sax.gui.DGuiSettings;
+
+import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
+import java.util.Iterator;
+import java.util.List;
 
 public class MainMenuBar extends JMenuBar
 {

@@ -21,21 +21,15 @@
  */
 package phex.gui.common;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Font;
-import java.awt.Graphics;
+import phex.gui.actions.FWAction;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
-import javax.swing.Action;
-import javax.swing.JLabel;
-import javax.swing.UIManager;
-
-import phex.gui.actions.FWAction;
 
 /**
  * A simple Label that offers rollover effect and a action that is triggered when 

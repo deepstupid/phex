@@ -21,9 +21,6 @@
  */
 package phex.share;
 
-import java.io.File;
-import java.util.List;
-
 import phex.common.AltLocContainer;
 import phex.common.AlternateLocation;
 import phex.common.URN;
@@ -37,6 +34,9 @@ import phex.thex.FileHashCalculationHandler;
 import phex.thex.ShareFileThexData;
 import phex.xml.sax.share.DAlternateLocation;
 import phex.xml.sax.share.DSharedFile;
+
+import java.io.File;
+import java.util.List;
 
 public class ShareFile extends SharedResource
 {

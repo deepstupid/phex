@@ -22,15 +22,14 @@
  */
 package phex.xml.sax.rules;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.xml.sax.SAXException;
-
 import phex.rules.condition.Condition;
 import phex.rules.condition.FilenameCondition;
 import phex.xml.sax.PhexXmlSaxWriter;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Filters all files matching the expression.

@@ -21,33 +21,22 @@
  */
 package phex.connection;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.commons.httpclient.ChunkedInputStream;
-
 import phex.common.address.DestAddress;
-import phex.common.bandwidth.BandwidthManager;
 import phex.common.log.NLogger;
 import phex.download.PushHandler;
-import phex.http.HTTPHeader;
-import phex.http.HTTPHeaderNames;
-import phex.http.HTTPMessageException;
-import phex.http.HTTPProcessor;
-import phex.http.HTTPRequest;
-import phex.http.HTTPResponse;
+import phex.http.*;
 import phex.io.buffer.ByteBuffer;
-import phex.msg.GUID;
-import phex.msg.InvalidMessageException;
-import phex.msg.MessageProcessor;
-import phex.msg.MsgHeader;
-import phex.msg.QueryResponseMsg;
+import phex.msg.*;
 import phex.net.connection.Connection;
 import phex.net.connection.SocketFactory;
 import phex.net.repres.SocketFacade;
 import phex.prefs.core.MessagePrefs;
 import phex.query.BrowseHostResults;
 import phex.servent.Servent;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * This class implements the basic functionality of the new Browse Host protocol.

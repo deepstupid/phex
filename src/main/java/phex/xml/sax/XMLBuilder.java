@@ -22,21 +22,13 @@
  */
 package phex.xml.sax;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InterruptedIOException;
-
 import phex.common.Phex;
-import phex.common.file.FileManager;
-import phex.common.file.ManagedFile;
-import phex.common.file.ManagedFileException;
-import phex.common.file.ManagedFileInputStream;
-import phex.common.file.ManagedFileOutputStream;
+import phex.common.file.*;
 import phex.common.log.NLogger;
 import phex.utils.IOUtil;
 import phex.xml.sax.parser.UnicodeInputStream;
+
+import java.io.*;
 
 /**
  * Helper class to create, generate and parse a xml Document from various

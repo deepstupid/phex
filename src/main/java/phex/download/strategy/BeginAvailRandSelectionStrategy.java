@@ -22,11 +22,11 @@
  */
 package phex.download.strategy;
 
-import java.util.Random;
-
 import phex.download.DownloadScope;
 import phex.download.DownloadScopeList;
 import phex.download.swarming.SWDownloadFile;
+
+import java.util.Random;
 
 public class BeginAvailRandSelectionStrategy implements ScopeSelectionStrategy
 {

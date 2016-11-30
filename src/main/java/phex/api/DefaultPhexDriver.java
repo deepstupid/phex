@@ -21,16 +21,7 @@
  */
 package phex.api;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Environment;
 import phex.common.Phex;
 import phex.common.URN;
@@ -41,14 +32,14 @@ import phex.download.swarming.SwarmingManager;
 import phex.event.PhexEventTopics;
 import phex.prefs.api.Setting;
 import phex.prefs.core.LibraryPrefs;
-import phex.query.DefaultSearchProgress;
-import phex.query.QueryManager;
-import phex.query.Search;
-import phex.query.SearchContainer;
-import phex.query.SearchDataEvent;
+import phex.query.*;
 import phex.servent.OnlineStatus;
 import phex.servent.Servent;
 import phex.utils.StringUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 
 public class DefaultPhexDriver implements IPhexDriver

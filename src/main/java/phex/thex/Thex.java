@@ -22,9 +22,9 @@
  */
 package phex.thex;
 
-import java.util.Vector;
-
 import phex.download.swarming.SWDownloadSegment;
+
+import java.util.Vector;
 
 /**
  * @author Laura Requena

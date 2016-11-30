@@ -21,10 +21,10 @@
  */
 package phex.gui.comparator;
 
-import java.util.Comparator;
-
 import phex.common.address.DestAddress;
 import phex.common.address.IpAddress;
+
+import java.util.Comparator;
 
 /**
  * 

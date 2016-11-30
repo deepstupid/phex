@@ -21,12 +21,12 @@
  */
 package phex.gui.renderer;
 
-import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
-
 import phex.gui.tabs.library.FileSystemTableCellRenderer;
 import phex.gui.tabs.search.BitziRatingCellRenderer;
 import phex.gui.tabs.search.HostRatingCellRenderer;
+
+import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
 
 /**
  * Static class which contains a mapping for all specially defined Phex renderers.

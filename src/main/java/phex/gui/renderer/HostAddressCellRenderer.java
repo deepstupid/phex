@@ -21,13 +21,12 @@
  */
 package phex.gui.renderer;
 
-import java.util.Locale;
-
-import javax.swing.Icon;
-
 import phex.common.address.DestAddress;
-import phex.gui.common.*;
+import phex.gui.common.GUIRegistry;
+import phex.gui.common.IconPack;
 import phex.utils.Localizer;
+
+import javax.swing.*;
 
 /**
  * 

@@ -21,8 +21,6 @@
  */
 package phex.upload.response;
 
-import java.io.IOException;
-
 import phex.common.Phex;
 import phex.common.file.ManagedFileException;
 import phex.common.file.ReadOnlyManagedFile;
@@ -31,6 +29,8 @@ import phex.http.HTTPResponse;
 import phex.io.buffer.ByteBuffer;
 import phex.share.ShareFile;
 import phex.utils.IOUtil;
+
+import java.io.IOException;
 
 public class ShareFileUploadResponse extends UploadResponse
 {

@@ -18,8 +18,7 @@
  */
 package phex.gui.actions;
 
-import javax.swing.Icon;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 public abstract class FWToggleAction extends FWAction
 {

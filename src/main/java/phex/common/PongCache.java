@@ -21,14 +21,14 @@
  */
 package phex.common;
 
+import phex.common.collections.PriorityQueue;
+import phex.msg.PongMsg;
+import phex.servent.Servent;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import phex.common.collections.PriorityQueue;
-import phex.msg.PongMsg;
-import phex.servent.Servent;
 
 /**
  * A simple cache of pongs to reduce network bandwidth.

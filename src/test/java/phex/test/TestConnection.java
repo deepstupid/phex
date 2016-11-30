@@ -1,14 +1,14 @@
 package phex.test;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Arrays;
-
 import junit.framework.TestCase;
 import phex.common.bandwidth.BandwidthController;
 import phex.io.buffer.ByteBuffer;
 import phex.net.connection.Connection;
 import phex.utils.DummySocketFacade;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.Arrays;
 
 public class TestConnection extends TestCase
 {

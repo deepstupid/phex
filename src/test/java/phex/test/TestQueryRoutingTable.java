@@ -21,28 +21,23 @@
  */
 package phex.test;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Iterator;
-import java.util.List;
-
 import junit.framework.TestCase;
 import phex.common.Phex;
 import phex.common.QueryRoutingTable;
 import phex.gui.prefs.InterfacePrefs;
 import phex.gui.prefs.PhexGuiPrefs;
-import phex.msg.GUID;
-import phex.msg.InvalidMessageException;
-import phex.msg.QRPatchTableMsg;
-import phex.msg.QRResetTableMsg;
-import phex.msg.QueryMsg;
-import phex.msg.RouteTableUpdateMsg;
+import phex.msg.*;
 import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
 import phex.share.ShareFile;
 import phex.utils.AccessUtils;
 import phex.utils.Localizer;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Iterator;
+import java.util.List;
 
 
 public class TestQueryRoutingTable extends TestCase

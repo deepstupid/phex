@@ -1,14 +1,10 @@
 //Dime 1.0.3 2003-03-05 http://www.onionnetworks/developers
 package com.onionnetworks.dime;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.HashSet;
-
 import phex.utils.IOUtil;
+
+import java.io.*;
+import java.util.HashSet;
 
 /**
  * Creates a DIME Message on the fly and sends it down a provided Stream.  This

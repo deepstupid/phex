@@ -24,7 +24,6 @@ package phex.update;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.lang.SystemUtils;
-
 import phex.prefs.core.UpdatePrefs;
 import phex.servent.Servent;
 

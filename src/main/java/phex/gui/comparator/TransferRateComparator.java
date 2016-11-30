@@ -18,8 +18,9 @@
  */
 package phex.gui.comparator;
 
-import java.util.*;
-import phex.common.*;
+import phex.common.TransferDataProvider;
+
+import java.util.Comparator;
 
 public class TransferRateComparator implements Comparator<TransferDataProvider>
 {

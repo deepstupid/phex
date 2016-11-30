@@ -21,8 +21,6 @@
  */
 package phex.upload.handler;
 
-import java.io.IOException;
-
 import phex.common.URN;
 import phex.http.GnutellaHeaderNames;
 import phex.http.HTTPHeader;
@@ -33,6 +31,8 @@ import phex.share.SharedFilesService;
 import phex.upload.UploadState;
 import phex.upload.response.ThexUploadResponse;
 import phex.upload.response.UploadResponse;
+
+import java.io.IOException;
 
 public class ThexUploadHandler extends AbstractUploadHandler
 {

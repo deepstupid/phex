@@ -21,13 +21,17 @@
  */
 package phex.msg;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-
 import phex.common.address.IpAddress;
-import phex.utils.*;
+import phex.utils.HexConverter;
+import phex.utils.IOUtil;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.net.InetAddress;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Random;
 
 
 /**

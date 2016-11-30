@@ -22,13 +22,13 @@
  */
 package phex.net.repres.def;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-
 import phex.common.address.*;
 import phex.net.repres.PresentationManager;
 import phex.net.repres.SocketFacade;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 
 public class DefaultPresentationManager extends PresentationManager
 {

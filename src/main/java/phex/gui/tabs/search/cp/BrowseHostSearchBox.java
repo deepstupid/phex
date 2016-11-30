@@ -21,17 +21,10 @@
  */
 package phex.gui.tabs.search.cp;
 
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.FontMetrics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-
-import javax.swing.*;
-import javax.swing.text.Keymap;
-
+import com.jgoodies.forms.builder.ButtonBarBuilder;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import phex.common.address.DestAddress;
 import phex.gui.common.BoxPanel;
 import phex.gui.common.GUIRegistry;
@@ -41,10 +34,13 @@ import phex.gui.prefs.SearchTabPrefs;
 import phex.query.BrowseHostResults;
 import phex.utils.Localizer;
 
-import com.jgoodies.forms.builder.ButtonBarBuilder;
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import javax.swing.text.Keymap;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class BrowseHostSearchBox extends BoxPanel
 {

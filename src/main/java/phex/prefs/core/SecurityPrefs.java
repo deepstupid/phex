@@ -22,10 +22,10 @@
  */
 package phex.prefs.core;
 
-import java.util.List;
-
 import phex.prefs.api.PreferencesFactory;
 import phex.prefs.api.Setting;
+
+import java.util.List;
 
 public class SecurityPrefs extends PhexCorePrefs
 {

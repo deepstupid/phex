@@ -21,13 +21,7 @@
  */
 package phex.gui.tabs.security;
 
-import java.awt.EventQueue;
-import java.util.Comparator;
-
-import javax.swing.event.TableModelEvent;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.event.ContainerEvent;
 import phex.event.PhexEventTopics;
@@ -39,6 +33,10 @@ import phex.security.IpSecurityRuleComparator;
 import phex.security.PhexSecurityManager;
 import phex.servent.Servent;
 import phex.utils.Localizer;
+
+import javax.swing.event.TableModelEvent;
+import java.awt.*;
+import java.util.Comparator;
 
 public class SecurityTableModel extends FWSortableTableModel
 {

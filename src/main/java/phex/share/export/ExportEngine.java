@@ -22,25 +22,20 @@
  */
 package phex.share.export;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.util.List;
-import java.util.Map;
+import phex.common.Environment;
+import phex.common.address.DestAddress;
+import phex.common.log.NLogger;
+import phex.share.ShareFile;
+import phex.utils.IOUtil;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-
-import phex.common.Environment;
-import phex.common.address.DestAddress;
-import phex.common.log.NLogger;
-import phex.share.ShareFile;
-import phex.utils.IOUtil;
+import java.io.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  *

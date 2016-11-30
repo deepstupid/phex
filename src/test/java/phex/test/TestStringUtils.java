@@ -21,8 +21,8 @@
  */
 package phex.test;
 
-import phex.utils.StringUtils;
 import junit.framework.TestCase;
+import phex.utils.StringUtils;
 
 public class TestStringUtils extends TestCase
 {

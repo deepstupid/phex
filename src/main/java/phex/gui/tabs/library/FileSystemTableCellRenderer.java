@@ -21,21 +21,17 @@
  */
 package phex.gui.tabs.library;
 
-import java.io.File;
-import java.util.Map;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.filechooser.FileSystemView;
-
 import org.apache.commons.collections.map.LRUMap;
-
 import phex.common.log.NLogger;
 import phex.gui.common.GUIRegistry;
 import phex.gui.common.ImageFilterUtils;
 import phex.gui.renderer.FWTableCellRenderer;
 import phex.share.ShareFile;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
+import java.io.File;
+import java.util.Map;
 
 /**
  *

@@ -21,16 +21,8 @@
  */
 package phex.rules;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.TimerTask;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Environment;
 import phex.common.PhexVersion;
 import phex.event.UserMessageListener;
@@ -41,11 +33,14 @@ import phex.xml.sax.DPhex;
 import phex.xml.sax.DSubElementList;
 import phex.xml.sax.XMLBuilder;
 import phex.xml.sax.parser.rules.SearchRuleListHandler;
-import phex.xml.sax.rules.DAndConcatCondition;
-import phex.xml.sax.rules.DCondition;
-import phex.xml.sax.rules.DConsequence;
-import phex.xml.sax.rules.DConsequencesList;
-import phex.xml.sax.rules.DSearchRule;
+import phex.xml.sax.rules.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.TimerTask;
 
 public class SearchFilterRules
 {

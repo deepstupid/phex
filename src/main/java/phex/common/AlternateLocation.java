@@ -21,10 +21,6 @@
  */
 package phex.common;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.StringTokenizer;
-
 import phex.common.address.AddressUtils;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
@@ -32,6 +28,10 @@ import phex.common.address.MalformedDestAddressException;
 import phex.common.log.NLogger;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.StringTokenizer;
 
 
 public class AlternateLocation

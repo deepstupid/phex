@@ -21,12 +21,11 @@
  */
 package phex.gui.dialogs.options;
 
-import phex.gui.common.HTMLMultiLinePanel;
-import phex.utils.Localizer;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import phex.gui.common.HTMLMultiLinePanel;
+import phex.utils.Localizer;
 
 public class GeneralTextPane extends OptionsSettingsPane
 {

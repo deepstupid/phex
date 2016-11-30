@@ -21,50 +21,24 @@
  */
 package phex.gui.common;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Insets;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.Window;
+import phex.gui.common.table.FWTable;
+import phex.gui.common.table.FWTableColumn;
+import phex.utils.Localizer;
+import phex.xml.sax.gui.*;
+
+import javax.swing.*;
+import javax.swing.border.AbstractBorder;
+import javax.swing.border.Border;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.text.Keymap;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.swing.AbstractButton;
-import javax.swing.ButtonModel;
-import javax.swing.ComboBoxEditor;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.UIDefaults;
-import javax.swing.UIManager;
-import javax.swing.border.AbstractBorder;
-import javax.swing.border.Border;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
-import javax.swing.text.Keymap;
-
-import phex.gui.common.table.FWTable;
-import phex.gui.common.table.FWTableColumn;
-import phex.utils.Localizer;
-import phex.xml.sax.gui.DGuiSettings;
-import phex.xml.sax.gui.DTab;
-import phex.xml.sax.gui.DTable;
-import phex.xml.sax.gui.DTableColumn;
-import phex.xml.sax.gui.DTableColumnList;
 
 public final class GUIUtils
 {

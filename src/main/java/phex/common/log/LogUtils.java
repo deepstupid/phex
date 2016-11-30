@@ -1,11 +1,10 @@
 package phex.common.log;
 
-import java.io.File;
-
 import org.slf4j.LoggerFactory;
-
 import phex.utils.StringUtils;
 import phex.utils.SystemProperties;
+
+import java.io.File;
 
 public class LogUtils
 {

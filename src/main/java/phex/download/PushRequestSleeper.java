@@ -21,16 +21,10 @@
  */
 package phex.download;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-
-import javax.annotation.CheckForNull;
-
 import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
-
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
 import phex.http.GnutellaHeaderNames;
@@ -44,6 +38,10 @@ import phex.prefs.core.DownloadPrefs;
 import phex.servent.Servent;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticsManager;
+
+import javax.annotation.CheckForNull;
+import java.io.IOException;
+import java.net.HttpURLConnection;
 
 public class PushRequestSleeper
 {

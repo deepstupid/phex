@@ -22,16 +22,13 @@
  */
 package phex.gui.tabs.network;
 
-import java.awt.Component;
-
-import javax.swing.DefaultListCellRenderer;
-import javax.swing.Icon;
-import javax.swing.JList;
-
 import phex.common.address.DestAddress;
 import phex.gui.common.GUIRegistry;
 import phex.gui.common.IconPack;
 import phex.host.FavoriteHost;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * 

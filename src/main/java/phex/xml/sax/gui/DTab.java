@@ -24,7 +24,6 @@ package phex.xml.sax.gui;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
 import phex.xml.sax.DElement;
 import phex.xml.sax.PhexXmlSaxWriter;
 

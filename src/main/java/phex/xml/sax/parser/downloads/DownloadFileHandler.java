@@ -22,17 +22,17 @@
  */
 package phex.xml.sax.parser.downloads;
 
-import java.io.CharArrayWriter;
-
-import javax.xml.parsers.SAXParser;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
 import phex.common.log.NLogger;
-import phex.xml.sax.downloads.*;
+import phex.xml.sax.downloads.DDownloadCandidate;
+import phex.xml.sax.downloads.DDownloadFile;
+import phex.xml.sax.downloads.DDownloadScope;
+
+import javax.xml.parsers.SAXParser;
+import java.io.CharArrayWriter;
 
 /**
  * 

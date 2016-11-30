@@ -21,16 +21,8 @@
  */
 package phex.msg;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.URN;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
@@ -40,6 +32,13 @@ import phex.prefs.core.MessagePrefs;
 import phex.servent.Servent;
 import phex.utils.IOUtil;
 import phex.utils.StringUtils;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * <p>Encapsulation of a Gnutella query message.</p>

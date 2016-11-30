@@ -21,8 +21,6 @@
  */
 package phex.connection;
 
-import java.io.IOException;
-
 import phex.host.Host;
 import phex.msg.Message;
 import phex.msg.MsgHeader;
@@ -30,6 +28,8 @@ import phex.servent.Servent;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticProviderConstants;
 import phex.statistic.StatisticsManager;
+
+import java.io.IOException;
 
 /**
  * This queue handles the flow control algorithm described in the

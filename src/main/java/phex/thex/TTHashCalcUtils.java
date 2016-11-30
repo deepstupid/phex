@@ -22,17 +22,8 @@
  */
 package phex.thex;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
+import com.bitzi.util.Tiger;
+import com.bitzi.util.TigerTree;
 import phex.common.file.ManagedFile;
 import phex.common.file.ManagedFileInputStream;
 import phex.common.format.NumberFormatUtils;
@@ -42,8 +33,12 @@ import phex.prefs.core.LibraryPrefs;
 import phex.share.ShareFile;
 import phex.utils.IOUtil;
 
-import com.bitzi.util.Tiger;
-import com.bitzi.util.TigerTree;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.MessageDigest;
+import java.util.*;
 
 /**
  *

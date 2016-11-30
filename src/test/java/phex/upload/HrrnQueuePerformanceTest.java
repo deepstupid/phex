@@ -1,17 +1,9 @@
 package phex.upload;
 
-import java.io.CharArrayWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Random;
-
 import junit.framework.TestCase;
+import phex.common.Phex;
 import phex.common.address.DefaultDestAddress;
 import phex.common.bandwidth.BandwidthController;
-import phex.common.Phex;
 import phex.gui.prefs.InterfacePrefs;
 import phex.gui.prefs.PhexGuiPrefs;
 import phex.prefs.core.BandwidthPrefs;
@@ -19,6 +11,10 @@ import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
 import phex.share.ShareFile;
 import phex.utils.Localizer;
+
+import java.io.CharArrayWriter;
+import java.io.IOException;
+import java.util.*;
 
 public class HrrnQueuePerformanceTest extends TestCase
 {

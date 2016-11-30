@@ -22,46 +22,27 @@
  */
 package phex.gui.dialogs.filter;
 
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.util.List;
-
-import javax.swing.JDialog;
-import javax.swing.JEditorPane;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-import javax.swing.plaf.TextUI;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Element;
-import javax.swing.text.Position;
-import javax.swing.text.StyledDocument;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import phex.common.log.NLogger;
 import phex.gui.dialogs.filter.editors.FileNameCondEditor;
 import phex.gui.dialogs.filter.editors.FileSizeCondEditor;
 import phex.gui.dialogs.filter.editors.FileUrnCondEditor;
 import phex.gui.dialogs.filter.editors.MediaTypeCondEditor;
 import phex.rules.Rule;
-import phex.rules.condition.Condition;
-import phex.rules.condition.FileSizeCondition;
-import phex.rules.condition.FileUrnCondition;
-import phex.rules.condition.FilenameCondition;
-import phex.rules.condition.MediaTypeCondition;
-import phex.rules.condition.NotCondition;
+import phex.rules.condition.*;
 import phex.rules.consequence.Consequence;
 import phex.utils.Localizer;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import javax.swing.plaf.TextUI;
+import javax.swing.text.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
+import java.util.List;
 
 public class RuleDescriptionPanel extends JPanel
 {

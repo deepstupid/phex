@@ -21,33 +21,11 @@
  */
 package phex.gui.common;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Frame;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import javax.swing.BorderFactory;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JMenuBar;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JToolBar;
-import javax.swing.event.ChangeListener;
-
+import com.jgoodies.looks.HeaderStyle;
+import com.jgoodies.looks.Options;
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import phex.common.Environment;
 import phex.common.Phex;
 import phex.event.ChangeEvent;
 import phex.event.PhexEventTopics;
@@ -76,8 +54,12 @@ import phex.servent.Servent;
 import phex.xml.sax.gui.DGuiSettings;
 import phex.xml.sax.gui.DTab;
 
-import com.jgoodies.looks.HeaderStyle;
-import com.jgoodies.looks.Options;
+import javax.swing.*;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class MainFrame extends JFrame
 {

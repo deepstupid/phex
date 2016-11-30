@@ -21,8 +21,6 @@
  */
 package phex.query;
 
-import java.util.ArrayList;
-
 import phex.common.URN;
 import phex.common.address.DestAddress;
 import phex.download.RemoteFile;
@@ -30,9 +28,9 @@ import phex.msg.InvalidMessageException;
 import phex.msg.QueryFactory;
 import phex.msg.QueryResponseMsg;
 import phex.msg.QueryResponseRecord;
-import phex.msg.vendor.OOBReplyCountVMsg;
 import phex.servent.Servent;
-import phex.utils.RandomUtils;
+
+import java.util.ArrayList;
 
 
 public class WhatsNewSearch extends QuerySearch

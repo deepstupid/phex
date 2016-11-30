@@ -21,14 +21,6 @@
  */
 package phex.gui.renderer;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
-
-import javax.swing.Icon;
-import javax.swing.JTree;
-import javax.swing.tree.DefaultTreeCellRenderer;
-
 import phex.common.URN;
 import phex.download.RemoteFile;
 import phex.download.swarming.SwarmingManager;
@@ -36,8 +28,11 @@ import phex.gui.common.GUIRegistry;
 import phex.gui.common.IconPack;
 import phex.gui.common.LabeledIcon;
 import phex.gui.tabs.search.SearchResultElement;
-import phex.servent.Servent;
 import phex.share.SharedFilesService;
+
+import javax.swing.*;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import java.awt.*;
 
 /**
  * 

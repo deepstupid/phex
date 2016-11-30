@@ -23,7 +23,6 @@
 package phex.xml.sax.rules;
 
 import org.xml.sax.SAXException;
-
 import phex.rules.consequence.Consequence;
 import phex.rules.consequence.RemoveFromSearchConsequence;
 import phex.xml.sax.PhexXmlSaxWriter;

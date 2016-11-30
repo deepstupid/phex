@@ -21,23 +21,14 @@
  */
 package phex.gui.common;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.awt.Window;
+import org.apache.commons.lang.SystemUtils;
+
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
-
-import org.apache.commons.lang.SystemUtils;
 
 public class SplashScreen extends Frame
 {

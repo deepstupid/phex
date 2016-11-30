@@ -19,12 +19,12 @@
 package phex.gui.common.menubar;
 
 
-import java.awt.event.ActionEvent;
-
 import phex.gui.actions.FWAction;
 import phex.gui.actions.GUIActionPerformer;
 import phex.gui.common.GUIRegistry;
 import phex.utils.Localizer;
+
+import java.awt.event.ActionEvent;
 
 public class RescanSharedFilesAction extends FWAction
 {

@@ -22,13 +22,12 @@
  */
 package phex.xml.sax.security;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.xml.sax.SAXException;
-
 import phex.xml.sax.DElement;
 import phex.xml.sax.PhexXmlSaxWriter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DSecurity implements DElement
 {

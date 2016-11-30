@@ -1,9 +1,9 @@
 package phex.download.handler;
 
-import java.io.IOException;
-
 import phex.host.UnusableHostException;
 import phex.http.HTTPMessageException;
+
+import java.io.IOException;
 
 public interface DownloadHandler
 {

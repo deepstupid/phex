@@ -21,37 +21,13 @@
  */
 package phex.update;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.RandomAccessFile;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.SocketException;
-import java.net.URL;
-import java.net.UnknownHostException;
-import java.security.GeneralSecurityException;
-import java.util.List;
-
 import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.bouncycastle.bcpg.ArmoredInputStream;
-import org.bouncycastle.openpgp.PGPException;
-import org.bouncycastle.openpgp.PGPObjectFactory;
-import org.bouncycastle.openpgp.PGPPublicKey;
-import org.bouncycastle.openpgp.PGPSignature;
-import org.bouncycastle.openpgp.PGPSignatureList;
+import org.bouncycastle.openpgp.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import phex.common.Environment;
-import phex.common.LongObj;
-import phex.common.OpenPgpToolkit;
-import phex.common.Phex;
-import phex.common.PhexVersion;
+import phex.common.*;
 import phex.event.UpdateNotificationListener;
 import phex.gui.common.GUIRegistry;
 import phex.prefs.core.ConnectionPrefs;
@@ -69,8 +45,13 @@ import phex.utils.VersionUtils;
 import phex.xml.sax.DPhex;
 import phex.xml.sax.DUpdateRequest;
 import phex.xml.sax.DUpdateResponse;
-import phex.xml.sax.XMLBuilder;
 import phex.xml.sax.DUpdateResponse.VersionType;
+import phex.xml.sax.XMLBuilder;
+
+import java.io.*;
+import java.net.*;
+import java.security.GeneralSecurityException;
+import java.util.List;
 
 /**
  * The UpdateCheckRunner handles regular update check against the phex website.

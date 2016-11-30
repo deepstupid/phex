@@ -21,10 +21,10 @@
  */
 package phex.common.collections;
 
+import phex.utils.CircularQueue;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
-import phex.utils.CircularQueue;
 
 /**
  * This class is able to manage a priority based queue. Once the capacity of a

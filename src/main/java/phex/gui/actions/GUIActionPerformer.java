@@ -33,7 +33,6 @@ import phex.query.BrowseHostResults;
 import phex.query.QueryManager;
 import phex.query.SearchContainer;
 import phex.rules.SearchFilterRules;
-import phex.servent.Servent;
 import phex.share.FileRescanRunner;
 
 /**

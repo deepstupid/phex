@@ -21,24 +21,9 @@
  */
 package phex.bootstrap;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Environment;
 import phex.common.Phex;
 import phex.common.address.DefaultDestAddress;
@@ -49,6 +34,10 @@ import phex.event.PhexEventTopics;
 import phex.msg.PongMsg;
 import phex.net.repres.PresentationManager;
 import phex.servent.Servent;
+
+import java.io.*;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Container of collected udp host caches.

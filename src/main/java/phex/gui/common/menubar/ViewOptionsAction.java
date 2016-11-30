@@ -19,14 +19,13 @@
  */
 package phex.gui.common.menubar;
 
-import java.awt.event.*;
-import javax.swing.*;
-
-
 import phex.gui.actions.FWAction;
 import phex.gui.common.GUIRegistry;
-import phex.gui.dialogs.options.*;
-import phex.utils.*;
+import phex.gui.dialogs.options.OptionsDialog;
+import phex.utils.Localizer;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 public class ViewOptionsAction extends FWAction
 {

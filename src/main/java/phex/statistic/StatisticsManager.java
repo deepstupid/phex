@@ -21,8 +21,6 @@
  */
 package phex.statistic;
 
-import java.util.HashMap;
-
 import phex.common.AbstractLifeCycle;
 import phex.common.HorizonTracker;
 import phex.common.LongObj;
@@ -31,6 +29,8 @@ import phex.msg.PongMsg;
 import phex.prefs.core.StatisticPrefs;
 import phex.servent.Servent;
 import phex.statistic.HorizonStatisticProvider.Type;
+
+import java.util.HashMap;
 
 public class StatisticsManager extends AbstractLifeCycle implements StatisticProviderConstants
 {

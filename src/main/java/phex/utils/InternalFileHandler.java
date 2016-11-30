@@ -21,22 +21,15 @@
  */
 package phex.utils;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.commons.httpclient.URI;
-
 import phex.common.log.NLogger;
 import phex.metalink.MetalinkParser;
 import phex.servent.Servent;
 import phex.share.FileRescanRunner;
+
+import java.io.*;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Offers internal handling for files like magma-lists, rss-feeds, podcasts and similar. 

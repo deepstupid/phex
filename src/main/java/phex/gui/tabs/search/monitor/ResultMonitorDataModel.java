@@ -21,14 +21,7 @@
  */
 package phex.gui.tabs.search.monitor;
 
-import java.awt.EventQueue;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.download.RemoteFile;
 import phex.event.PhexEventTopics;
@@ -38,6 +31,12 @@ import phex.gui.tabs.search.SearchResultElementComparator;
 import phex.gui.tabs.search.SearchTreeTableModel;
 import phex.query.SearchDataEvent;
 import phex.query.SearchFilter;
+
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * 

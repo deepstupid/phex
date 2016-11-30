@@ -22,11 +22,11 @@
  */
 package phex.net.connection;
 
-import java.io.IOException;
-
 import phex.common.address.DestAddress;
 import phex.common.bandwidth.BandwidthController;
 import phex.net.repres.SocketFacade;
+
+import java.io.IOException;
 
 /**
  *

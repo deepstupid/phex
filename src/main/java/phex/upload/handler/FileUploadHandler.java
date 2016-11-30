@@ -21,19 +21,10 @@
  */
 package phex.upload.handler;
 
-import java.io.IOException;
-
 import phex.common.URN;
 import phex.common.address.DestAddress;
 import phex.common.file.ManagedFileException;
-import phex.http.GnutellaHeaderNames;
-import phex.http.HTTPCodes;
-import phex.http.HTTPHeader;
-import phex.http.HTTPHeaderNames;
-import phex.http.HTTPRangeSet;
-import phex.http.HTTPRequest;
-import phex.http.HTTPResponse;
-import phex.http.Range;
+import phex.http.*;
 import phex.http.Range.RangeAvailability;
 import phex.servent.Servent;
 import phex.share.PartialShareFile;
@@ -44,6 +35,8 @@ import phex.upload.UploadState;
 import phex.upload.response.ShareFileUploadResponse;
 import phex.upload.response.UploadResponse;
 import phex.utils.URLUtil;
+
+import java.io.IOException;
 
 public class FileUploadHandler extends AbstractUploadHandler
 {   

@@ -21,7 +21,10 @@
  */
 package phex.common.collections;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * With the compound iterator it is possible to easily concat different interators

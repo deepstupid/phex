@@ -1,13 +1,13 @@
 package phex.io.channels;
 
+import phex.utils.IOUtil;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
-
-import phex.utils.IOUtil;
 
 public class StreamingByteChannel implements ByteChannel
 {

@@ -21,13 +21,9 @@
  */
 package phex.query;
 
-import java.io.File;
-import java.util.TimerTask;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.AbstractLifeCycle;
 import phex.common.Environment;
 import phex.common.Phex;
@@ -40,6 +36,9 @@ import phex.msg.vendor.OOBReplyCountVMsg;
 import phex.msghandling.MessageService;
 import phex.rules.SearchFilterRules;
 import phex.servent.Servent;
+
+import java.io.File;
+import java.util.TimerTask;
 
 public class QueryManager extends AbstractLifeCycle
 {

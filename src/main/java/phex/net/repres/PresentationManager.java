@@ -22,10 +22,10 @@
  */
 package phex.net.repres;
 
-import java.io.IOException;
-
-import phex.common.address.DestAddressFactory;
 import phex.common.address.DestAddress;
+import phex.common.address.DestAddressFactory;
+
+import java.io.IOException;
 
 
 /**

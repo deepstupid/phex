@@ -23,7 +23,6 @@
 package phex.xml.sax.downloads;
 
 import org.xml.sax.SAXException;
-
 import phex.xml.sax.DElement;
 import phex.xml.sax.DSubElementList;
 import phex.xml.sax.PhexXmlSaxWriter;

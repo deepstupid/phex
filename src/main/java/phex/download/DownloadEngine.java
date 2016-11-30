@@ -21,27 +21,26 @@
  */
 package phex.download;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.SocketException;
-import java.net.SocketTimeoutException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.download.ThexVerificationData.ThexData;
 import phex.download.handler.DownloadHandler;
 import phex.download.handler.DownloadHandlerException;
 import phex.download.handler.HttpFileDownload;
 import phex.download.handler.HttpThexDownload;
 import phex.download.swarming.SWDownloadCandidate;
+import phex.download.swarming.SWDownloadCandidate.CandidateStatus;
 import phex.download.swarming.SWDownloadConstants;
 import phex.download.swarming.SWDownloadFile;
 import phex.download.swarming.SWDownloadSet;
-import phex.download.swarming.SWDownloadCandidate.CandidateStatus;
 import phex.host.UnusableHostException;
 import phex.http.HTTPMessageException;
 import phex.net.connection.Connection;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 
 /**
  * This class is responsible to download a file using a HTTP connection.

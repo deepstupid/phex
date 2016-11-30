@@ -21,18 +21,16 @@
  */
 package phex.gui.tabs.network;
 
-import java.awt.Color;
-import java.awt.Component;
-
-import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
-
 import phex.gui.common.GUIUtils;
 import phex.gui.common.PhexColors;
 import phex.gui.common.table.FWTable;
 import phex.host.Host;
 import phex.host.HostStatus;
 import phex.host.NetworkHostsContainer;
+
+import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 
 /**
  * 

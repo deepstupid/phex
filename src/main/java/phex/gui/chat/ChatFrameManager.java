@@ -21,16 +21,15 @@
  */
 package phex.gui.chat;
 
-import java.awt.EventQueue;
-import java.util.HashMap;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.chat.ChatEngine;
 import phex.chat.ChatEvent;
 import phex.common.Phex;
 import phex.event.PhexEventTopics;
 import phex.utils.Localizer;
+
+import java.awt.*;
+import java.util.HashMap;
 
 public class ChatFrameManager
 {

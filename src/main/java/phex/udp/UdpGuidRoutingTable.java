@@ -22,11 +22,11 @@
  */
 package phex.udp;
 
-import java.util.Map;
-import java.util.TreeMap;
-
 import phex.common.address.DestAddress;
 import phex.msg.GUID;
+
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author Madhu

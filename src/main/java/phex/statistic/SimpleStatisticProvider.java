@@ -21,7 +21,7 @@
  */
 package phex.statistic;
 
-import phex.common.*;
+import phex.common.LongObj;
 
 public class SimpleStatisticProvider implements StatisticProvider
 {

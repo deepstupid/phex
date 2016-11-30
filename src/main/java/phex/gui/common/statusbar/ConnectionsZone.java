@@ -21,20 +21,17 @@
  */
 package phex.gui.common.statusbar;
 
-import javax.swing.Icon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SpringLayout;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseAdapter;
-
 import phex.gui.common.GUIRegistry;
 import phex.gui.common.IconPack;
+import phex.gui.dialogs.options.OptionsDialog;
 import phex.host.HostManager;
 import phex.host.NetworkHostsContainer;
 import phex.servent.Servent;
 import phex.utils.Localizer;
-import phex.gui.dialogs.options.OptionsDialog;
+
+import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class ConnectionsZone extends JPanel
 {

@@ -22,9 +22,8 @@
  */
 package phex.gui.models;
 
+import javax.swing.*;
 import java.util.*;
-
-import javax.swing.AbstractListModel;
 
 /**
  *

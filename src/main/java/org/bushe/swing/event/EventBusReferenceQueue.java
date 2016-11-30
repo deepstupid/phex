@@ -1,7 +1,7 @@
 package org.bushe.swing.event;
 
-import java.lang.ref.ReferenceQueue;
 import java.lang.ref.Reference;
+import java.lang.ref.ReferenceQueue;
 
 /**
  * Created by IntelliJ IDEA. User: Michael Bushe Date: Sep 3, 2007 Time: 10:07:42 PM To change this template use File |

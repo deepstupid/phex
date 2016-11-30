@@ -21,18 +21,16 @@
  */
 package phex.gui.common.statusbar;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SpringLayout;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseAdapter;
-
 import phex.common.format.NumberFormatUtils;
 import phex.gui.common.GUIRegistry;
 import phex.gui.common.IconPack;
+import phex.gui.common.MainFrame;
 import phex.share.SharedFilesService;
 import phex.utils.Localizer;
-import phex.gui.common.MainFrame;
+
+import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Contains library information displayed on the status bar.

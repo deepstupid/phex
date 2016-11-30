@@ -1,8 +1,8 @@
 package phex.gui.common.progressbar;
 
-import java.awt.Color;
-
 import phex.download.DownloadScopeList;
+
+import java.awt.*;
 
 public interface MultiScopeProvider
 {

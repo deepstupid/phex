@@ -18,16 +18,18 @@
  */
 package phex.gui.chat;
 
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
-import javax.swing.text.*;
-
 import phex.chat.ChatEngine;
 import phex.common.log.NLogger;
-import phex.gui.common.*;
-import phex.utils.*;
+import phex.gui.common.GUIRegistry;
+import phex.gui.common.GUIUtils;
+import phex.gui.common.MainFrame;
+import phex.utils.Localizer;
+
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import java.awt.*;
+import java.awt.event.*;
 
 public class ChatFrame extends JFrame
 {

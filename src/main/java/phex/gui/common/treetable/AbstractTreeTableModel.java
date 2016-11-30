@@ -21,12 +21,11 @@
  */
 package phex.gui.common.treetable;
 
-import java.util.Comparator;
-
 import javax.swing.event.EventListenerList;
-import javax.swing.event.TreeModelListener;
 import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreePath;
+import java.util.Comparator;
 
 
 /** An abstract implementation of the TreeTableModel interface, handling the list 

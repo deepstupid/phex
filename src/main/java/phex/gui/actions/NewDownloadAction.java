@@ -21,13 +21,12 @@
  */
 package phex.gui.actions;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.KeyStroke;
-
 import phex.gui.common.GUIRegistry;
 import phex.gui.dialogs.NewDownloadDialog;
 import phex.utils.Localizer;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 /**
  *

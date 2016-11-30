@@ -1,10 +1,8 @@
 // Embedding a jython interpreter.
 
-package phex.utils; 
+package phex.utils;
 
 import org.python.util.InteractiveConsole;
-import java.util.Properties;
-import java.io.*;
 
 public class JythonInterpreter {
     protected InteractiveConsole interp;

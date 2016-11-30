@@ -21,15 +21,8 @@
  */
 package phex.prefs;
 
-import static org.junit.Assert.assertEquals;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.junit.Test;
-
 import phex.event.PhexEventService;
 import phex.event.PhexEventServiceImpl;
 import phex.event.PhexEventTopics;
@@ -37,6 +30,12 @@ import phex.prefs.api.Preferences;
 import phex.prefs.api.PreferencesFactory;
 import phex.prefs.api.Setting;
 import phex.prefs.api.SettingChangedEvent;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
 
 public class SettingTest
 {

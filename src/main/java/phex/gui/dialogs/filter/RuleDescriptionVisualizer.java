@@ -22,12 +22,14 @@
  */
 package phex.gui.dialogs.filter;
 
+import phex.utils.Localizer;
+
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.text.*;
-
-import phex.utils.Localizer;
 
 public class RuleDescriptionVisualizer
 {

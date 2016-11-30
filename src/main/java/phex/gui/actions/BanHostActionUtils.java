@@ -22,13 +22,7 @@
  */
 package phex.gui.actions;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.Icon;
-import javax.swing.JMenu;
-
 import org.apache.commons.lang.time.DateUtils;
-
 import phex.common.Environment;
 import phex.common.ExpiryDate;
 import phex.common.address.DestAddress;
@@ -40,6 +34,9 @@ import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
 import phex.servent.Servent;
 import phex.utils.Localizer;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 public abstract class BanHostActionUtils extends FWAction
 {

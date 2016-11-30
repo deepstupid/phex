@@ -21,9 +21,21 @@
  */
 package phex.gui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Toolkit;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.factories.ButtonBarFactory;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import org.apache.commons.lang.SystemUtils;
+import phex.common.PhexVersion;
+import phex.gui.common.DialogBanner;
+import phex.gui.common.GUIRegistry;
+import phex.gui.common.GUIRegistryConstants;
+import phex.gui.common.HTMLMultiLinePanel;
+import phex.prefs.core.PrivateNetworkConstants;
+import phex.utils.Localizer;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,30 +45,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Properties;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-
-import org.apache.commons.lang.SystemUtils;
-
-import phex.common.Environment;
-import phex.common.PhexVersion;
-import phex.gui.common.DialogBanner;
-import phex.gui.common.GUIRegistry;
-import phex.gui.common.GUIRegistryConstants;
-import phex.gui.common.HTMLMultiLinePanel;
-import phex.prefs.core.PrivateNetworkConstants;
-import phex.utils.Localizer;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.factories.ButtonBarFactory;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 
 /**
  *

@@ -15,13 +15,13 @@
  */
 package org.bushe.swing.event;
 
+import javax.swing.*;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import java.awt.event.ContainerEvent;
 import java.awt.event.ContainerListener;
 import java.awt.event.HierarchyEvent;
 import java.awt.event.HierarchyListener;
-import javax.swing.JComponent;
-import javax.swing.event.AncestorEvent;
-import javax.swing.event.AncestorListener;
 
 /**
  * Registers a component with it's Container's EventService while keeping track of the component's container.

@@ -21,20 +21,10 @@
  */
 package phex.download.handler;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.StringTokenizer;
-
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.httpclient.ChunkedInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.AltLocContainer;
 import phex.common.AlternateLocation;
 import phex.common.URN;
@@ -42,36 +32,11 @@ import phex.common.address.AddressUtils;
 import phex.common.address.DestAddress;
 import phex.common.address.IpAddress;
 import phex.common.address.MalformedDestAddressException;
-import phex.common.log.NLogger;
-import phex.download.DataDownloadScope;
-import phex.download.DownloadEngine;
-import phex.download.FileNotAvailableException;
-import phex.download.HostBusyException;
-import phex.download.MemoryFile;
-import phex.download.RangeUnavailableException;
-import phex.download.ReconnectException;
-import phex.download.RemotelyQueuedException;
-import phex.download.ThexVerificationData;
-import phex.download.WrongHTTPHeaderException;
-import phex.download.swarming.SWDownloadCandidate;
-import phex.download.swarming.SWDownloadConstants;
-import phex.download.swarming.SWDownloadFile;
-import phex.download.swarming.SWDownloadSegment;
-import phex.download.swarming.SWDownloadSet;
+import phex.download.*;
+import phex.download.swarming.*;
 import phex.download.swarming.SWDownloadCandidate.CandidateStatus;
 import phex.host.UnusableHostException;
-import phex.http.GnutellaHeaderNames;
-import phex.http.GnutellaRequest;
-import phex.http.HTTPCodes;
-import phex.http.HTTPHeader;
-import phex.http.HTTPHeaderNames;
-import phex.http.HTTPMessageException;
-import phex.http.HTTPProcessor;
-import phex.http.HTTPRangeSet;
-import phex.http.HTTPRequest;
-import phex.http.HTTPResponse;
-import phex.http.HTTPRetryAfter;
-import phex.http.XQueueParameters;
+import phex.http.*;
 import phex.io.buffer.ByteBuffer;
 import phex.net.connection.Connection;
 import phex.net.repres.PresentationManager;
@@ -82,6 +47,11 @@ import phex.security.PhexSecurityManager;
 import phex.servent.Servent;
 import phex.utils.IOUtil;
 import phex.utils.LengthLimitedInputStream;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.util.*;
 
 public class HttpFileDownload extends AbstractHttpDownload
 {

@@ -21,22 +21,21 @@
  */
 package phex.net;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.SocketAddress;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xsocket.datagram.Endpoint;
 import org.xsocket.datagram.IDatagramHandler;
 import org.xsocket.datagram.IEndpoint;
 import org.xsocket.datagram.UserDatagram;
-
 import phex.common.Environment;
 import phex.common.address.AddressUtils;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
 import phex.utils.IOUtil;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.SocketAddress;
 
 public class UdpService implements IDatagramHandler
 {

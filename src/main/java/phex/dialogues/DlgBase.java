@@ -21,15 +21,14 @@
  */
 package phex.dialogues;
 
-import java.awt.BorderLayout;
+import phex.gui.common.GUIUtils;
+import phex.gui.common.MainFrame;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Enumeration;
 import java.util.Iterator;
-
-import javax.swing.*;
-
-import phex.gui.common.GUIUtils;
-import phex.gui.common.MainFrame;
 
 public class DlgBase extends JDialog
 {

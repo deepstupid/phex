@@ -22,11 +22,11 @@
  */
 package phex.gui.dialogs.filter;
 
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-
 import phex.rules.consequence.*;
 import phex.utils.Localizer;
+
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
 public class ConsequenceVisualizer
 {    

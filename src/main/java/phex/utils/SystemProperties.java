@@ -21,15 +21,14 @@
  */
 package phex.utils;
 
-import java.io.File;
-import java.io.IOException;
-import java.security.Security;
-
 import org.apache.commons.lang.SystemUtils;
-
 import phex.common.Phex;
 import phex.common.log.NLogger;
 import phex.prefs.core.ProxyPrefs;
+
+import java.io.File;
+import java.io.IOException;
+import java.security.Security;
 
 public class SystemProperties
 {

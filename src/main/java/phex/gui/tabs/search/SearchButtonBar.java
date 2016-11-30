@@ -21,20 +21,7 @@
  */
 package phex.gui.tabs.search;
 
-import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.Iterator;
-
-import javax.swing.AbstractButton;
-import javax.swing.ButtonGroup;
-import javax.swing.JToggleButton;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.common.log.NLogger;
 import phex.event.ContainerEvent;
@@ -44,6 +31,15 @@ import phex.gui.common.GUIRegistry;
 import phex.gui.tabs.search.cp.SearchInfoBox;
 import phex.query.Search;
 import phex.query.SearchContainer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.Iterator;
 
 public class SearchButtonBar extends FWButtonBar
 {

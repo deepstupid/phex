@@ -18,14 +18,11 @@
  */
 package phex.gui.dialogs.options;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.util.HashMap;
-
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-
 import phex.utils.Localizer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
 
 public class FiltersPane extends OptionsSettingsPane
 {

@@ -21,11 +21,11 @@
  */
 package phex.api;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import phex.download.RemoteFile;
 import phex.query.Search;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SearchItem
 {

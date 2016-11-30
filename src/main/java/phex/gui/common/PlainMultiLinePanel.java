@@ -21,8 +21,7 @@
  */
 package phex.gui.common;
 
-import javax.swing.JTextArea;
-import javax.swing.UIManager;
+import javax.swing.*;
 
 public class PlainMultiLinePanel extends JTextArea
 {

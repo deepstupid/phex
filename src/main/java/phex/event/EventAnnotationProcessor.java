@@ -1,17 +1,10 @@
 package phex.event;
 
+import org.bushe.swing.event.EventService;
+import org.bushe.swing.event.annotation.*;
+
 import java.lang.reflect.Method;
 import java.util.regex.Pattern;
-
-import org.bushe.swing.event.EventService;
-import org.bushe.swing.event.annotation.BaseProxySubscriber;
-import org.bushe.swing.event.annotation.EventSubscriber;
-import org.bushe.swing.event.annotation.EventTopicPatternSubscriber;
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
-import org.bushe.swing.event.annotation.ProxyTopicPatternSubscriber;
-import org.bushe.swing.event.annotation.ProxyTopicSubscriber;
-import org.bushe.swing.event.annotation.ReferenceStrength;
-import org.bushe.swing.event.annotation.UseTheClassOfTheAnnotatedMethodsParameter;
 
 
 /**

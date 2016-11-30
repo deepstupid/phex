@@ -22,13 +22,11 @@
  */
 package phex.gui.common;
 
+import phex.common.log.NLogger;
+
+import javax.swing.*;
 import java.net.URL;
 import java.util.Hashtable;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-
-import phex.common.log.NLogger;
 
 public class CountryFlagIconPack extends IconPack
 {

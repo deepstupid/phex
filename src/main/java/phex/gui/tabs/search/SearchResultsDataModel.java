@@ -21,17 +21,7 @@
  */
 package phex.gui.tabs.search;
 
-import java.awt.EventQueue;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.common.address.AddressUtils;
 import phex.common.address.DestAddress;
@@ -40,16 +30,16 @@ import phex.download.RemoteFile;
 import phex.event.ContainerEvent;
 import phex.event.PhexEventTopics;
 import phex.gui.common.GUIRegistry;
-import phex.query.DefaultSearchProgress;
-import phex.query.KeywordSearch;
-import phex.query.QuerySearch;
-import phex.query.Search;
-import phex.query.SearchDataEvent;
+import phex.query.*;
 import phex.rules.Rule;
 import phex.rules.SearchFilterRules;
 import phex.security.HittingIpCidrPair;
 import phex.security.IpUserSecurityRule;
 import phex.security.SecurityRule;
+
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 /**
  * This data model is doing the transition between the search result coming

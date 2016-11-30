@@ -22,13 +22,9 @@
  */
 package phex.gui.dialogs.filter.wizard.consequence;
 
-import java.util.Iterator;
-import java.util.List;
-
-import javax.swing.*;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumn;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import phex.common.log.NLogger;
 import phex.gui.common.table.FWTable;
 import phex.gui.dialogs.filter.wizard.FilterWizardDialog;
@@ -36,9 +32,11 @@ import phex.rules.Rule;
 import phex.rules.consequence.Consequence;
 import phex.utils.Localizer;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import java.util.Iterator;
+import java.util.List;
 
 public class ConsequencePanel extends JPanel
 {

@@ -18,30 +18,19 @@
  */
 package phex.gui.common;
 
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
+import phex.common.log.NLogger;
+import phex.utils.IOUtil;
+import phex.utils.Localizer;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.Collections;
-import java.util.Hashtable;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
-import java.util.Set;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-
-import phex.common.log.NLogger;
-import phex.utils.IOUtil;
-import phex.utils.Localizer;
+import java.util.*;
 
 /**
  * This class defines an icon pack. It could be a used installed pack or a system

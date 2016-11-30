@@ -21,10 +21,10 @@
  */
 package phex.common.address;
 
-import java.util.Arrays;
-
 import phex.common.Ip2CountryDB;
 import phex.utils.IOUtil;
+
+import java.util.Arrays;
 
 public class IpAddress
 {

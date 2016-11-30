@@ -21,35 +21,9 @@
  */
 package phex.gui.tabs.search.monitor;
 
-import java.awt.Component;
-import java.awt.Toolkit;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JToolBar;
-import javax.swing.KeyStroke;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumn;
-import javax.swing.tree.TreePath;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import phex.common.Environment;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
@@ -59,12 +33,7 @@ import phex.download.swarming.SwarmingManager;
 import phex.gui.actions.BanHostActionUtils;
 import phex.gui.actions.FWAction;
 import phex.gui.actions.GUIActionPerformer;
-import phex.gui.common.BrowserLauncher;
-import phex.gui.common.FWElegantPanel;
-import phex.gui.common.FWToolBar;
-import phex.gui.common.GUIRegistry;
-import phex.gui.common.GUIUtils;
-import phex.gui.common.MainFrame;
+import phex.gui.common.*;
 import phex.gui.common.table.FWTable;
 import phex.gui.common.table.FWTableColumn;
 import phex.gui.common.table.SortedTableHeaderRenderer;
@@ -87,9 +56,20 @@ import phex.utils.URLUtil;
 import phex.xml.sax.gui.DGuiSettings;
 import phex.xml.sax.gui.DTable;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.*;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 // TODO2 add action to delete all passive collected resutls.
 

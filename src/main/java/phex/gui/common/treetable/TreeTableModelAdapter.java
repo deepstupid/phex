@@ -21,17 +21,18 @@
  */
 package phex.gui.common.treetable;
 
+import phex.gui.common.table.FWTableModel;
+import phex.gui.models.ISortableModel;
+
+import javax.swing.*;
+import javax.swing.event.TreeExpansionEvent;
+import javax.swing.event.TreeExpansionListener;
+import javax.swing.event.TreeModelEvent;
+import javax.swing.event.TreeModelListener;
+import javax.swing.tree.TreePath;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Comparator;
-
-import javax.swing.JTree;
-import javax.swing.SwingUtilities;
-import javax.swing.event.*;
-import javax.swing.tree.TreePath;
-
-import phex.gui.common.table.FWTableModel;
-import phex.gui.models.ISortableModel;
 
 /**
  * This is a wrapper class takes a TreeTableModel and implements 

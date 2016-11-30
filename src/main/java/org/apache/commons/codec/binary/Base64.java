@@ -20,7 +20,6 @@ package org.apache.commons.codec.binary;
 
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.EncoderException;
-
 import phex.utils.IOUtil;
 
 /**

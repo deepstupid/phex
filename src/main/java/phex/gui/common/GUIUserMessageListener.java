@@ -22,10 +22,10 @@
  */
 package phex.gui.common;
 
-import java.awt.EventQueue;
-
 import phex.event.UserMessageListener;
 import phex.utils.Localizer;
+
+import java.awt.*;
 
 /**
  *

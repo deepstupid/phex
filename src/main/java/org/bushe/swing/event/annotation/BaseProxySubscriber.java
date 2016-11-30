@@ -1,9 +1,9 @@
 package org.bushe.swing.event.annotation;
 
+import org.bushe.swing.event.EventService;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-
-import org.bushe.swing.event.EventService;
 
 /** A class is subscribed to an EventService on behalf of another object. */
 public class BaseProxySubscriber extends AbstractProxySubscriber implements org.bushe.swing.event.EventSubscriber {

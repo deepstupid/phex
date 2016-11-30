@@ -21,7 +21,6 @@ package phex.utils;
 
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
-
 import phex.common.URN;
 import phex.common.address.DestAddress;
 import phex.download.RemoteFile;

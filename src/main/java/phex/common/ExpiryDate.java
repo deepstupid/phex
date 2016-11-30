@@ -21,7 +21,7 @@
  */
 package phex.common;
 
-import java.util.*;
+import java.util.Date;
 
 /**
  * A expiry date is used to hold a timestamp of an expiry or the indication that

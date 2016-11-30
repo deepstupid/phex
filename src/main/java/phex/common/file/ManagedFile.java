@@ -21,16 +21,16 @@
  */
 package phex.common.file;
 
+import phex.common.Phex;
+import phex.common.log.NLogger;
+import phex.io.buffer.ByteBuffer;
+import phex.utils.FileUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.util.concurrent.locks.ReentrantLock;
-
-import phex.common.Phex;
-import phex.common.log.NLogger;
-import phex.io.buffer.ByteBuffer;
-import phex.utils.FileUtils;
 
 /**
  * Represents a file on the file system with managemend functionality to ensure

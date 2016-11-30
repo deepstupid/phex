@@ -22,13 +22,13 @@
  */
 package phex.query;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import phex.common.URN;
 import phex.common.address.DestAddress;
 import phex.download.RemoteFile;
 import phex.msg.GUID;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Holds search results of a Search.

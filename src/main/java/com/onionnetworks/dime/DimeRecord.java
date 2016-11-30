@@ -4,11 +4,11 @@
 
 package com.onionnetworks.dime;
 
+import phex.utils.IOUtil;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import phex.utils.IOUtil;
 
 /**
  * Represents a version 1 chunked or non-chunked DIME record.  The DIME

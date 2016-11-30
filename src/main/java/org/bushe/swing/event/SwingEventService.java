@@ -15,9 +15,9 @@
  */
 package org.bushe.swing.event;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.logging.Level;
-import javax.swing.SwingUtilities;
 
 
 /**

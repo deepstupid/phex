@@ -21,9 +21,9 @@
  */
 package phex.common;
 
-import java.util.HashMap;
-
 import phex.common.address.DestAddress;
+
+import java.util.HashMap;
 
 
 /**

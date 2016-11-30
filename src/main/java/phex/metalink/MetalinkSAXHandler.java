@@ -50,10 +50,11 @@ package phex.metalink;
 /*
 
  */
-import java.io.CharArrayWriter;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
+
+import java.io.CharArrayWriter;
 
 /**
  * 

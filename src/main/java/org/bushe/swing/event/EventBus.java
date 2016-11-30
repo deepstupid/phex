@@ -15,9 +15,9 @@
  */
 package org.bushe.swing.event;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.lang.reflect.Type;
 
 /**
  * The EventBus provides Swing event publication and subscription services.  It is a simple static wrapper around a

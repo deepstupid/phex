@@ -21,9 +21,6 @@
  */
 package phex.msg;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import phex.bootstrap.UdpHostCache;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
@@ -35,6 +32,9 @@ import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
 import phex.utils.HexConverter;
 import phex.utils.IOUtil;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * <p>A pong response.</p>

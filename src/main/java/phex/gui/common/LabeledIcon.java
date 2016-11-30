@@ -22,15 +22,9 @@
  */
 package phex.gui.common;
 
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
-
-import javax.swing.Icon;
 
 public class LabeledIcon implements Icon
 {

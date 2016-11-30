@@ -21,13 +21,13 @@
  */
 package phex.msghandling;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import phex.host.Host;
 import phex.msg.InvalidMessageException;
 import phex.msg.Message;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MessageSubscriberList<E extends Message> implements MessageSubscriber<E>
 {

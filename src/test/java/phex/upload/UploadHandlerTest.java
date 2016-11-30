@@ -1,8 +1,5 @@
 package phex.upload;
 
-import java.io.File;
-import java.io.IOException;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import phex.common.Phex;
@@ -21,6 +18,9 @@ import phex.upload.handler.AbstractUploadHandler;
 import phex.upload.handler.UploadHandler;
 import phex.upload.response.UploadResponse;
 import phex.utils.Localizer;
+
+import java.io.File;
+import java.io.IOException;
 
 public class UploadHandlerTest extends TestCase
 {

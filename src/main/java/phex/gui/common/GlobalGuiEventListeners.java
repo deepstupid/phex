@@ -21,13 +21,12 @@
  */
 package phex.gui.common;
 
-import java.awt.EventQueue;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.event.PhexEventService;
 import phex.event.PhexEventTopics;
 import phex.gui.dialogs.NewDownloadDialog;
+
+import java.awt.*;
 
 public class GlobalGuiEventListeners
 {

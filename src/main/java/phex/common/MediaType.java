@@ -18,7 +18,10 @@
  */
 package phex.common;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class MediaType
 {

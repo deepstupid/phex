@@ -19,12 +19,6 @@
 package phex.net.connection;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.SocketException;
-import java.nio.channels.Channels;
-
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
 import phex.net.repres.PresentationManager;
@@ -32,6 +26,12 @@ import phex.net.repres.SocketFacade;
 import phex.prefs.core.NetworkPrefs;
 import phex.prefs.core.ProxyPrefs;
 import phex.utils.IOUtil;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.SocketException;
+import java.nio.channels.Channels;
 
 
 public final class SocketFactory

@@ -24,7 +24,8 @@ package phex.rules.condition;
 
 import phex.download.RemoteFile;
 import phex.query.Search;
-import phex.xml.sax.rules.*;
+import phex.xml.sax.rules.DCondition;
+import phex.xml.sax.rules.DNotCondition;
 
 /**
  * Applies a NOT condition to the given search filter. That means that the 

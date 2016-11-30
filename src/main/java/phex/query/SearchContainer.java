@@ -21,29 +21,24 @@
  */
 package phex.query;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.common.address.DestAddress;
 import phex.event.ChangeEvent;
 import phex.event.ContainerEvent;
-import phex.event.PhexEventTopics;
 import phex.event.ContainerEvent.Type;
+import phex.event.PhexEventTopics;
 import phex.host.Host;
-import phex.msg.GUID;
-import phex.msg.InvalidMessageException;
-import phex.msg.Message;
-import phex.msg.QueryFactory;
-import phex.msg.QueryResponseMsg;
+import phex.msg.*;
 import phex.msg.vendor.OOBReplyCountVMsg;
 import phex.msghandling.MessageSubscriber;
 import phex.msghandling.UdpMessageSubscriber;
 import phex.servent.OnlineStatus;
 import phex.servent.Servent;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class SearchContainer implements MessageSubscriber<QueryResponseMsg>,
     UdpMessageSubscriber<Message>

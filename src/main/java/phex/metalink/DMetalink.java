@@ -48,15 +48,14 @@
 
 package phex.metalink;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.Map.Entry;
-
+import com.bitzi.util.Base32;
 import phex.utils.StringUtils;
 import phex.utils.URLCodecUtils;
 
-import com.bitzi.util.Base32;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.Set;
 
 
 

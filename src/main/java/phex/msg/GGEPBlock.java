@@ -21,14 +21,21 @@
  */
 package phex.msg;
 
-import java.io.*;
-import java.util.*;
-import java.util.zip.DataFormatException;
-
 import phex.common.address.DestAddress;
 import phex.common.address.IpAddress;
 import phex.common.log.NLogger;
-import phex.utils.*;
+import phex.utils.HexConverter;
+import phex.utils.IOUtil;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PushbackInputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.zip.DataFormatException;
 
 /**
  * Implementation for GGEP

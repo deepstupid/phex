@@ -21,11 +21,11 @@
  */
 package phex.prefs.core;
 
-import java.io.File;
-
 import phex.prefs.api.PreferencesFactory;
 import phex.prefs.api.Setting;
 import phex.utils.SystemProperties;
+
+import java.io.File;
 
 public class DownloadPrefs extends PhexCorePrefs
 {   

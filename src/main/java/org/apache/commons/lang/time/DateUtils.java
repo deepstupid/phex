@@ -22,11 +22,7 @@ package org.apache.commons.lang.time;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.TimeZone;
+import java.util.*;
 
 /**
  * <p>A suite of utilities surrounding the use of the

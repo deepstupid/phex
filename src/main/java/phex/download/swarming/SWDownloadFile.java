@@ -22,23 +22,6 @@
 
 package phex.download.swarming;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-
 import org.apache.commons.collections.map.LinkedMap;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
@@ -46,36 +29,17 @@ import org.apache.commons.lang.time.DateUtils;
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import phex.common.AddressCounter;
-import phex.common.AltLocContainer;
-import phex.common.AlternateLocation;
-import phex.common.Environment;
-import phex.common.FileHandlingException;
-import phex.common.MediaType;
-import phex.common.Phex;
-import phex.common.TransferDataProvider;
-import phex.common.URN;
+import phex.common.*;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
 import phex.common.address.MalformedDestAddressException;
 import phex.common.bandwidth.BandwidthController;
 import phex.common.file.ManagedFile;
 import phex.common.file.ManagedFileException;
-import phex.download.DownloadScope;
-import phex.download.DownloadScopeList;
-import phex.download.MagnetData;
-import phex.download.MemoryFile;
-import phex.download.RatedDownloadScopeList;
-import phex.download.RemoteFile;
-import phex.download.ThexVerificationData;
+import phex.download.*;
 import phex.download.swarming.SWDownloadCandidate.CandidateStatus;
-import phex.event.ChangeEvent;
-import phex.event.ContainerEvent;
+import phex.event.*;
 import phex.event.ContainerEvent.Type;
-import phex.event.PhexEventService;
-import phex.event.PhexEventTopics;
-import phex.event.UserMessageListener;
 import phex.http.HTTPRangeSet;
 import phex.prefs.core.DownloadPrefs;
 import phex.query.ResearchSetting;
@@ -87,6 +51,12 @@ import phex.utils.StringUtils;
 import phex.utils.URLUtil;
 import phex.xml.sax.downloads.DDownloadCandidate;
 import phex.xml.sax.downloads.DDownloadFile;
+
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * 

@@ -21,11 +21,11 @@
  */
 package phex.http;
 
+import phex.common.log.NLogger;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import phex.common.log.NLogger;
 
 
 public class HTTPRangeSet

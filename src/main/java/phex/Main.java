@@ -21,17 +21,6 @@
  */
 package phex;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.util.Arrays;
-import java.util.Iterator;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
-import org.apache.commons.lang.SystemUtils;
-
 import phex.common.Phex;
 import phex.common.ThreadTracking;
 import phex.common.log.LogUtils;
@@ -46,198 +35,165 @@ import phex.gui.prefs.InterfacePrefs;
 import phex.gui.prefs.PhexGuiPrefs;
 import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
+import phex.utils.JythonInterpreter;
 import phex.utils.Localizer;
 import phex.utils.SystemProperties;
 
-import phex.utils.JythonInterpreter;
+import java.util.Arrays;
+import java.util.Iterator;
 
 
-public class Main
-{
+public class Main {
     private static SplashScreen splashScreen;
-    
+
     /**
      * Don't use NLogger before arguments have been read ( -c )
+     *
      * @param args
      */
-    public static void main( String args[] )
-    {
+    public static void main(String args[]) {
         long start = System.currentTimeMillis();
         long end;
-        
+
         // if there are no args to evaluate, show splash asap.
-        if ( args == null || args.length == 0 )
-        {
-            showSplash();
+        if (args == null || args.length == 0) {
+            //showSplash();
             //end = System.currentTimeMillis();
             //System.out.println("Splash time: " + (end-start));
         }
-        
-        validateJavaVersion();
+
+        //validateJavaVersion();
 
         // parse args...
-        Iterator<String> iterator = Arrays.asList( args ).iterator();
-        
+        Iterator<String> iterator = Arrays.asList(args).iterator();
+
         String loopbackUri = null;
         String magmaFile = null;
-        String rssFile = null; 
+        String rssFile = null;
         String argument;
-	Boolean startConsole = false; 
-         
-        while ( (argument = readArgument( iterator ) ) != null ) 
-        {
-            if ( argument.equalsIgnoreCase("-c") )
-            {
+        Boolean startConsole = false;
+
+        while ((argument = readArgument(iterator)) != null) {
+            if (argument.equalsIgnoreCase("-c")) {
                 String path = readArgument(iterator);
-                if (path != null)
-                {
-                    System.setProperty( SystemProperties.PHEX_CONFIG_PATH_SYSPROP, 
-                        path );
+                if (path != null) {
+                    System.setProperty(SystemProperties.PHEX_CONFIG_PATH_SYSPROP,
+                            path);
                 }
-            }
-            else if ( argument.equalsIgnoreCase("-uri") )
-            {
+            } else if (argument.equalsIgnoreCase("-uri")) {
                 loopbackUri = readArgument(iterator);
-            }
-            else if ( argument.equalsIgnoreCase("-magma") )
-            {
+            } else if (argument.equalsIgnoreCase("-magma")) {
                 magmaFile = readArgument(iterator);
-            }
-            else if ( argument.equalsIgnoreCase("-rss") )
-            {
+            } else if (argument.equalsIgnoreCase("-rss")) {
                 rssFile = readArgument(iterator);
+            } else if (argument.equalsIgnoreCase("--console")) {
+                startConsole = true;
             }
-	    else if (argument.equalsIgnoreCase("--console"))
-	    {
-		startConsole = true; 
-	    }
         }
-        
+
         LogUtils.initializeLogging();
 
         PhexCorePrefs.init();
-        
-        if ( loopbackUri != null && LoopbackDispatcher.dispatchUri( loopbackUri ) )
-        {// correctly dispatched uri
-            System.exit( 0 );
+
+        if (loopbackUri != null && LoopbackDispatcher.dispatchUri(loopbackUri)) {// correctly dispatched uri
+            System.exit(0);
         }
-        if ( magmaFile != null && LoopbackDispatcher.dispatchMagmaFile( magmaFile ) )
-        {// correctly dispatched uri
-            System.exit( 0 );
+        if (magmaFile != null && LoopbackDispatcher.dispatchMagmaFile(magmaFile)) {// correctly dispatched uri
+            System.exit(0);
         }
-        if ( rssFile != null && LoopbackDispatcher.dispatchRSSFile( rssFile ) )
-        {// correctly dispatched uri
-            System.exit( 0 );
+        if (rssFile != null && LoopbackDispatcher.dispatchRSSFile(rssFile)) {// correctly dispatched uri
+            System.exit(0);
         }
-        
-        try
-        {
+
+        try {
             // might be the case when arguments are used to start Phex,
             // but there is no Phex running yet.
-            if ( splashScreen == null )
-            {
+            if (splashScreen == null) {
                 showSplash();
                 //end = System.currentTimeMillis();
                 //System.out.println("Splash time: " + (end-start));
             }
-            
+
             // initialize settings
             SystemProperties.migratePhexConfigRoot();
 
             PhexGuiPrefs.init();
-            
-            Localizer.initialize( InterfacePrefs.LocaleName.get() );
+
+            Localizer.initialize(InterfacePrefs.LocaleName.get());
             ThreadTracking.initialize();
-            
+
             Phex.initialize();
             Servent.getInstance();
             Servent.getInstance().start();
 
             end = System.currentTimeMillis();
-            NLogger.debug( Main.class, "Pre GUI startup time: " + (end-start) );
+            NLogger.debug(Main.class, "Pre GUI startup time: " + (end - start));
 
-            try 
-            {
-                GUIRegistry.getInstance().initialize( Servent.getInstance() );
-            }
-            catch ( ExceptionInInitializerError ex )
-            {
+            try {
+                GUIRegistry.getInstance().initialize(Servent.getInstance());
+            } catch (ExceptionInInitializerError ex) {
                 // running in headless mode so of course this
                 // doesn't work
             }
-            if ( splashScreen != null )
-            {
+            if (splashScreen != null) {
                 splashScreen.closeSplash();
                 splashScreen = null;
             }
-            
+
             MainFrame mainFrame = null;
             mainFrame = GUIRegistry.getInstance().getMainFrame();
-            if ( mainFrame != null )
+            if (mainFrame != null)
                 mainFrame.setVisible(true);
-            
+
             end = System.currentTimeMillis();
-            NLogger.debug( Main.class, "Full startup time: " + (end-start) );
-            
+            NLogger.debug(Main.class, "Full startup time: " + (end - start));
+
             PhexEventService eventService = Phex.getEventService();
-            if ( loopbackUri != null )
-            {// correctly dispatched uri
-                eventService.publish( PhexEventTopics.Incoming_Uri, loopbackUri );
+            if (loopbackUri != null) {// correctly dispatched uri
+                eventService.publish(PhexEventTopics.Incoming_Uri, loopbackUri);
             }
-            if ( magmaFile != null )
-            {// correctly dispatched uri
-                eventService.publish( PhexEventTopics.Incoming_Magma, magmaFile );
+            if (magmaFile != null) {// correctly dispatched uri
+                eventService.publish(PhexEventTopics.Incoming_Magma, magmaFile);
             }
-            if ( rssFile != null )
-            {// correctly dispatched uri
-                eventService.publish( PhexEventTopics.Incoming_Rss, rssFile );
+            if (rssFile != null) {// correctly dispatched uri
+                eventService.publish(PhexEventTopics.Incoming_Rss, rssFile);
             }
-        }
-        catch ( Throwable th )
-        {
+        } catch (Throwable th) {
             th.printStackTrace();
-            NLogger.error( Main.class, th, th );
+            NLogger.error(Main.class, th, th);
             // unhandled application exception... exit
-            System.exit( 1 );
+            System.exit(1);
         }
 
         /**
          * Trying to use a jython interpreter as powerful command line interface. 
          * This blocks, so it has to be at the end.
          */
-	if (startConsole)
-	{
-	    JythonInterpreter jython;
-	    jython = new JythonInterpreter();
-	    jython.startConsole();
-	}
-        
+        if (startConsole) {
+            JythonInterpreter jython;
+            jython = new JythonInterpreter();
+            jython.startConsole();
+        }
+
     }
 
-    private static void showSplash( )
-    {
-        try 
-        {
+    private static void showSplash() {
+        try {
             splashScreen = new SplashScreen();
             splashScreen.showSplash();
-        }
-        catch ( java.awt.HeadlessException ex )
-        {
+        } catch (java.awt.HeadlessException ex) {
             // running in headless mode so of course the splash
             // doesn't work
         }
     }
-    
-    
+
 
     /**
      * @param iterator
      * @return
      */
-    private static String readArgument(Iterator<String> iterator)
-    {
-        if ( !iterator.hasNext() )
-        {
+    private static String readArgument(Iterator<String> iterator) {
+        if (!iterator.hasNext()) {
             return null;
         }
         String value = iterator.next();
@@ -261,32 +217,32 @@ public class Main
 //        }
         return value;
     }
-    
-    /**
-     * 
-     */
-    private static void validateJavaVersion()
-    {
-        if ( SystemUtils.isJavaVersionAtLeast( 1.5f ) )
-        {
-            return;
-        }
-        
-        JFrame frame = new JFrame( "Wrong Java Version" );
-        frame.setSize( new Dimension( 0, 0 ) );
-        frame.setVisible(true);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension winSize = frame.getSize();
-        Rectangle rect = new Rectangle(
-            (screenSize.width - winSize.width) / 2,
-            (screenSize.height - winSize.height) / 2,
-            winSize.width, winSize.height );
-        frame.setBounds(rect);
-        JOptionPane.showMessageDialog( frame,
-            "Please use a newer Java VM.\n" +
-            "Phex requires at least Java 1.5.0. You are using Java " + SystemUtils.JAVA_VERSION + "\n" +
-            "To get the latest Java release go to http://java.com.",
-            "Wrong Java Version", JOptionPane.WARNING_MESSAGE );
-        System.exit( 1 );
-    }
+
+//    /**
+//     *
+//     */
+//    private static void validateJavaVersion()
+//    {
+//        if ( SystemUtils.isJavaVersionAtLeast( 1.5f ) )
+//        {
+//            return;
+//        }
+//
+//        JFrame frame = new JFrame( "Wrong Java Version" );
+//        frame.setSize( new Dimension( 0, 0 ) );
+//        frame.setVisible(true);
+//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//        Dimension winSize = frame.getSize();
+//        Rectangle rect = new Rectangle(
+//            (screenSize.width - winSize.width) / 2,
+//            (screenSize.height - winSize.height) / 2,
+//            winSize.width, winSize.height );
+//        frame.setBounds(rect);
+//        JOptionPane.showMessageDialog( frame,
+//            "Please use a newer Java VM.\n" +
+//            "Phex requires at least Java 1.5.0. You are using Java " + SystemUtils.JAVA_VERSION + "\n" +
+//            "To get the latest Java release go to http://java.com.",
+//            "Wrong Java Version", JOptionPane.WARNING_MESSAGE );
+//        System.exit( 1 );
+//    }
 }

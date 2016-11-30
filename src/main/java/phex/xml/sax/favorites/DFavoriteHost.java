@@ -1,7 +1,6 @@
 package phex.xml.sax.favorites;
 
 import org.xml.sax.SAXException;
-
 import phex.xml.sax.DElement;
 import phex.xml.sax.PhexXmlSaxWriter;
 

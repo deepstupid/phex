@@ -21,9 +21,9 @@
  */
 package phex.gui.common;
 
-import javax.swing.JComboBox;
-
 import phex.utils.Localizer;
+
+import javax.swing.*;
 
 public class BandwidthComboBox extends JComboBox
 {

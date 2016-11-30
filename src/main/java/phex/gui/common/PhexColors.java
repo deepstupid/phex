@@ -21,11 +21,10 @@
  */
 package phex.gui.common;
 
-import java.awt.Color;
-
-import javax.swing.UIManager;
-
 import org.apache.commons.lang.SystemUtils;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  * 

@@ -21,8 +21,8 @@
  */
 package phex.test;
 
-import phex.common.URN;
 import junit.framework.TestCase;
+import phex.common.URN;
 
 /**
  * 

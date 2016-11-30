@@ -21,11 +21,8 @@
  */
 package phex.host;
 
-import java.util.TimerTask;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.bootstrap.UdpHostCacheContainer;
 import phex.common.AbstractLifeCycle;
 import phex.common.Environment;
@@ -35,6 +32,8 @@ import phex.msg.PongMsg;
 import phex.prefs.core.ConnectionPrefs;
 import phex.prefs.core.NetworkPrefs;
 import phex.servent.Servent;
+
+import java.util.TimerTask;
 
 /**
  * Responsible for managing caught host and the network neighborhood.

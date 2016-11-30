@@ -22,14 +22,13 @@
  */
 package phex.xml.sax.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
 import phex.xml.sax.DElement;
 import phex.xml.sax.PhexXmlSaxWriter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class DTableList implements DElement
 {

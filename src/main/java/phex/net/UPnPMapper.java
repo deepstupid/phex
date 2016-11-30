@@ -1,9 +1,5 @@
 package phex.net;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.teleal.cling.UpnpService;
@@ -23,8 +19,11 @@ import org.teleal.cling.registry.RegistryListener;
 import org.teleal.cling.support.igd.callback.PortMappingAdd;
 import org.teleal.cling.support.igd.callback.PortMappingDelete;
 import org.teleal.cling.support.model.PortMapping;
-
 import phex.servent.Servent;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class UPnPMapper
 {
@@ -36,8 +35,16 @@ public class UPnPMapper
     public void initialize()
     {
         activePortMappings.clear();
-        upnpService = new UpnpServiceImpl( new PhexRegistryListener() );
-        upnpService.getControlPoint().search();
+
+        UpnpService upnpService;
+        try {
+            upnpService = new UpnpServiceImpl(new PhexRegistryListener());
+            upnpService.getControlPoint().search();
+        } catch  (Throwable e) {
+            e.printStackTrace();
+            upnpService = null;
+        }
+        this.upnpService = upnpService;
     }
     
     public void shutdown()

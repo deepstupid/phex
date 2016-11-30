@@ -21,21 +21,10 @@
  */
 package phex.utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TimerTask;
-
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Environment;
 import phex.common.Phex;
 import phex.event.PhexEventService;
@@ -43,6 +32,12 @@ import phex.event.PhexEventTopics;
 import phex.prefs.core.SubscriptionPrefs;
 import phex.servent.Servent;
 import phex.share.FileRescanRunner;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.*;
 
 public class SubscriptionDownloader extends TimerTask
 {

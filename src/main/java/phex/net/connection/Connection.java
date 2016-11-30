@@ -21,11 +21,6 @@
  */
 package phex.net.connection;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.channels.Channels;
-
 import phex.common.bandwidth.BandwidthController;
 import phex.common.log.NLogger;
 import phex.connection.ConnectionClosedException;
@@ -35,6 +30,11 @@ import phex.net.repres.SocketFacade;
 import phex.utils.GnutellaInputStream;
 import phex.utils.GnutellaOutputStream;
 import phex.utils.IOUtil;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.channels.Channels;
 
 /**
  * 

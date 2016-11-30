@@ -18,24 +18,17 @@
  */
 package phex.gui.actions;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.JFrame;
-import javax.swing.KeyStroke;
-
 import phex.common.log.NLogger;
 import phex.gui.common.DesktopIndicator;
 import phex.gui.common.GUIRegistry;
 import phex.gui.common.MainFrame;
 import phex.gui.dialogs.CloseOptionsDialog;
-import phex.gui.prefs.InterfacePrefs;
-import phex.gui.prefs.PhexGuiPrefs;
+import phex.gui.prefs.*;
 import phex.prefs.core.PhexCorePrefs;
-import phex.servent.Servent;
 import phex.utils.Localizer;
-import phex.gui.prefs.PrivacyPrefs;
-import phex.gui.prefs.SearchTabPrefs;
-import phex.gui.prefs.NetworkTabPrefs;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 public class ExitPhexAction extends FWAction
 {

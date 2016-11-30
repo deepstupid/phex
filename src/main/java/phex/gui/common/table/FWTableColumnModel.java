@@ -45,21 +45,13 @@ package phex.gui.common.table;
  * 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import javax.swing.event.EventListenerList;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * A default implementation of <code>FWTableColumnModel</code>.

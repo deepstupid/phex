@@ -21,12 +21,7 @@
  */
 package phex.gui.actions;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.KeyStroke;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.event.ChangeEvent;
 import phex.event.PhexEventTopics;
@@ -34,6 +29,9 @@ import phex.gui.common.GUIRegistry;
 import phex.servent.OnlineStatus;
 import phex.servent.Servent;
 import phex.utils.Localizer;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 public class ConnectNetworkAction extends FWAction
 {

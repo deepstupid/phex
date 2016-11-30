@@ -22,19 +22,15 @@
 package phex.gui.tabs;
 
 
-
-import java.util.List;
-
-import javax.swing.Icon;
-import javax.swing.JPanel;
-import javax.swing.KeyStroke;
-
 import phex.gui.actions.FWAction;
 import phex.gui.actions.FWActionGroup;
 import phex.gui.actions.FWToggleAction;
 import phex.gui.actions.ToggleTabViewAction;
 import phex.xml.sax.gui.DGuiSettings;
 import phex.xml.sax.gui.DTab;
+
+import javax.swing.*;
+import java.util.List;
 
 
 

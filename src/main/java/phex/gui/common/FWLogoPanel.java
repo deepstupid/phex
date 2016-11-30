@@ -21,11 +21,8 @@
  */
 package phex.gui.common;
 
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Image;
-
-import javax.swing.JPanel;
+import javax.swing.*;
+import java.awt.*;
 
 public class FWLogoPanel extends JPanel
 {

@@ -21,19 +21,16 @@
  */
 package phex.gui.tabs.library;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.io.File;
-
-import javax.swing.Icon;
-import javax.swing.JTree;
-import javax.swing.filechooser.FileSystemView;
-import javax.swing.tree.DefaultTreeCellRenderer;
-
 import phex.gui.common.GUIRegistry;
 import phex.gui.common.IconPack;
 import phex.gui.common.ImageFilterUtils;
 import phex.share.SharedDirectory;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileSystemView;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import java.awt.*;
+import java.io.File;
 
 /**
  * @author gregor

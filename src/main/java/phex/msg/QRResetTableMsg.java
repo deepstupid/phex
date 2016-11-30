@@ -22,7 +22,7 @@
 package phex.msg;
 
 import phex.io.buffer.ByteBuffer;
-import phex.utils.*;
+import phex.utils.IOUtil;
 
 
 public class QRResetTableMsg extends RouteTableUpdateMsg

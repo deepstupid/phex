@@ -21,8 +21,6 @@
  */
 package phex.chat;
 
-import java.io.IOException;
-
 import phex.common.AddressCounter;
 import phex.common.Phex;
 import phex.common.address.DestAddress;
@@ -32,6 +30,8 @@ import phex.event.PhexEventTopics;
 import phex.net.connection.Connection;
 import phex.prefs.core.NetworkPrefs;
 import phex.servent.Servent;
+
+import java.io.IOException;
 
 public class ChatService
 {

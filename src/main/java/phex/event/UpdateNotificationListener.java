@@ -18,9 +18,9 @@
  */
 package phex.event;
 
-import java.util.EventListener;
-
 import phex.update.UpdateCheckRunner;
+
+import java.util.EventListener;
 
 public interface UpdateNotificationListener
     extends EventListener

@@ -21,14 +21,14 @@
  */
 package phex.msg.vendor;
 
-import java.util.Arrays;
-
 import phex.io.buffer.ByteBuffer;
 import phex.msg.InvalidMessageException;
 import phex.msg.Message;
 import phex.msg.MsgHeader;
 import phex.utils.HexConverter;
 import phex.utils.IOUtil;
+
+import java.util.Arrays;
 
 /**
  * 

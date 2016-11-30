@@ -21,11 +21,11 @@
  */
 package phex.test;
 
-import java.io.IOException;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import phex.common.bandwidth.BandwidthController;
+
+import java.io.IOException;
 
 public class TestThrottleController extends TestCase
 {

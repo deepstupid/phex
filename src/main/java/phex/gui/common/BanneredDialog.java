@@ -21,20 +21,14 @@
  */
 package phex.gui.common;
 
-import java.awt.Container;
-import java.awt.Dialog;
-import java.awt.Frame;
-import java.awt.HeadlessException;
-
-import javax.swing.JDialog;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.RowSpec;
+
+import javax.swing.*;
+import java.awt.*;
 
 public abstract class BanneredDialog extends JDialog
 {

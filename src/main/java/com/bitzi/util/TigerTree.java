@@ -6,19 +6,13 @@
  */
 package com.bitzi.util;
 
-import java.security.DigestException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.Provider;
-import java.security.Security;
+import org.apache.commons.lang.SystemUtils;
+import phex.common.log.NLogger;
+
+import java.security.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.apache.commons.lang.SystemUtils;
-
-import phex.common.log.NLogger;
 
 /**
  * Implementation of THEX tree hash algorithm, with Tiger as the internal

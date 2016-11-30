@@ -22,11 +22,11 @@
  */
 package phex.gui.dialogs.filter.wizard.exception;
 
-import javax.swing.JLabel;
-import javax.swing.table.DefaultTableCellRenderer;
-
 import phex.gui.dialogs.filter.ConditionVisualizer;
 import phex.rules.condition.Condition;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class ExceptionCellRenderer extends DefaultTableCellRenderer
 {

@@ -4,15 +4,14 @@
  */
 package phex.test.performance;
 
-import java.io.*;
-import java.security.MessageDigest;
-
-import junit.framework.TestCase;
-
-import org.apache.commons.lang.SystemUtils;
-
 import com.bitzi.util.Base32;
 import com.bitzi.util.SHA1;
+import junit.framework.TestCase;
+import org.apache.commons.lang.SystemUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.security.MessageDigest;
 
 /**
  * Performance test for SHA1. Compare standard Java SHA1 calc performance

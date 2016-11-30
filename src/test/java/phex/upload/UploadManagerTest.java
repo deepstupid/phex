@@ -1,8 +1,5 @@
 package phex.upload;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import net.sourceforge.groboutils.junit.v1.MultiThreadedTestRunner;
@@ -18,6 +15,9 @@ import phex.prefs.core.UploadPrefs;
 import phex.servent.Servent;
 import phex.utils.Localizer;
 import phex.utils.RandomUtils;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class UploadManagerTest extends TestCase
 {

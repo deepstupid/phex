@@ -21,9 +21,6 @@
  */
 package phex.query;
 
-import java.util.ArrayList;
-import java.util.StringTokenizer;
-
 import phex.common.URN;
 import phex.common.address.DestAddress;
 import phex.download.RemoteFile;
@@ -33,6 +30,9 @@ import phex.msg.QueryResponseMsg;
 import phex.msg.QueryResponseRecord;
 import phex.servent.Servent;
 import phex.utils.SearchEngine;
+
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 public class KeywordSearch extends QuerySearch
 {    

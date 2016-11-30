@@ -21,25 +21,12 @@
  */
 package phex.gui.tabs.download;
 
-import java.awt.EventQueue;
-import java.util.Comparator;
-
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TableModelEvent;
-
 import org.apache.commons.collections.comparators.ComparableComparator;
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.common.format.NumberFormatUtils;
 import phex.download.DownloadScopeList;
-import phex.download.swarming.SWDownloadCandidate;
-import phex.download.swarming.SWDownloadFile;
-import phex.download.swarming.SWDownloadInfo;
-import phex.download.swarming.SWDownloadSegment;
-import phex.download.swarming.SwarmingManager;
+import phex.download.swarming.*;
 import phex.download.swarming.SWDownloadCandidate.CandidateStatus;
 import phex.event.ContainerEvent;
 import phex.event.PhexEventTopics;
@@ -49,6 +36,13 @@ import phex.gui.comparator.DestAddressComparator;
 import phex.gui.renderer.HostAddressCellRenderer;
 import phex.gui.renderer.ScopeProgressCellRenderer;
 import phex.utils.Localizer;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import java.awt.*;
+import java.util.Comparator;
 
 public class SWCandidateTableModel extends FWSortableTableModel
 {

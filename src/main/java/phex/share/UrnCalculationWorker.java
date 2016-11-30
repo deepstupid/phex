@@ -22,10 +22,8 @@
  */
 package phex.share;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.security.MessageDigest;
-
+import com.bitzi.util.Base32;
+import com.bitzi.util.SHA1;
 import phex.common.AltLocContainer;
 import phex.common.URN;
 import phex.common.log.NLogger;
@@ -35,8 +33,9 @@ import phex.prefs.core.LibraryPrefs;
 import phex.servent.Servent;
 import phex.utils.IOUtil;
 
-import com.bitzi.util.Base32;
-import com.bitzi.util.SHA1;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.security.MessageDigest;
 
 class UrnCalculationWorker implements Runnable
 {

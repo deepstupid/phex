@@ -21,9 +21,8 @@
  */
 package phex.gui.common.treetable;
 
-import java.util.Comparator;
-
 import javax.swing.tree.TreeModel;
+import java.util.Comparator;
 
 /*
  * TreeTableModel.java

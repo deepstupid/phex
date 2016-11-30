@@ -22,23 +22,27 @@
  */
 package phex.gui.dialogs.filter.editors;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.event.*;
-import java.util.Set;
-
-import javax.swing.*;
-import javax.swing.table.*;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.factories.ButtonBarFactory;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import phex.common.MediaType;
 import phex.common.log.NLogger;
 import phex.gui.dialogs.filter.RuleDescriptionPanel;
 import phex.rules.condition.MediaTypeCondition;
 import phex.utils.Localizer;
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.factories.ButtonBarFactory;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.Set;
 
 public class MediaTypeCondEditor extends JDialog
 {

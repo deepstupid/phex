@@ -21,9 +21,9 @@
  */
 package phex.gui.renderer;
 
-import javax.swing.JLabel;
-
 import phex.common.format.NumberFormatUtils;
+
+import javax.swing.*;
 
 /**
  * 

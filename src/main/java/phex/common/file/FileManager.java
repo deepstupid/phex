@@ -22,13 +22,12 @@
  */
 package phex.common.file;
 
+import org.apache.commons.collections.map.ReferenceMap;
+import phex.prefs.core.FilePrefs;
+
 import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-
-import org.apache.commons.collections.map.ReferenceMap;
-
-import phex.prefs.core.FilePrefs;
 
 /**
  * FileManager should be acquired through Phex.getFileManager()

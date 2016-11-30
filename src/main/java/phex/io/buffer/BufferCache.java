@@ -1,7 +1,8 @@
 package phex.io.buffer;
 
-import java.nio.ByteBuffer;
 import phex.utils.StringUtils;
+
+import java.nio.ByteBuffer;
 
 public class BufferCache
 {

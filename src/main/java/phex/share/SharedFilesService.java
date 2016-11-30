@@ -21,33 +21,9 @@
  */
 package phex.share;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InterruptedIOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TimerTask;
-import java.util.TreeMap;
-import java.util.Map.Entry;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import phex.common.AbstractLifeCycle;
-import phex.common.Environment;
-import phex.common.EnvironmentConstants;
-import phex.common.Phex;
-import phex.common.PhexVersion;
-import phex.common.QueryRoutingTable;
-import phex.common.RunnerQueueWorker;
-import phex.common.ThreadTracking;
-import phex.common.URN;
+import phex.common.*;
 import phex.common.collections.IntSet;
 import phex.common.collections.StringTrie;
 import phex.common.file.FileManager;
@@ -68,6 +44,12 @@ import phex.xml.sax.DPhex;
 import phex.xml.sax.XMLBuilder;
 import phex.xml.sax.share.DSharedFile;
 import phex.xml.sax.share.DSharedLibrary;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InterruptedIOException;
+import java.util.*;
+import java.util.Map.Entry;
 
 /**
  *

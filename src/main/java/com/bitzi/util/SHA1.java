@@ -14,7 +14,9 @@
  * put("MessageDigest.SHA-1", "org.rodage.pub.java.security.SHA1");
  */
 package com.bitzi.util;
-import java.security.*;
+
+import java.security.DigestException;
+import java.security.MessageDigest;
 //--+---+1--+---+--2+---+---+3--+---+--4+---+---+5--+---+--6+---+---+7--+---+--
 //34567890123456789012345678901234567890123456789012345678901234567890123456789
 

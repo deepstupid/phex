@@ -18,9 +18,9 @@
  */
 package phex.utils;
 
-import java.util.HashMap;
-
 import phex.common.log.NLogger;
+
+import java.util.HashMap;
 
 /**
  * The ReadWriteLock is a helper class for synchronized execution of

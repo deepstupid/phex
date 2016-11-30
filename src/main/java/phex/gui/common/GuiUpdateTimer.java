@@ -21,16 +21,14 @@
  */
 package phex.gui.common;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JTable;
-import javax.swing.Timer;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
-
 import phex.common.log.NLogger;
 import phex.prefs.api.Setting;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Components that should be updated (redrawn) at a global configured UI update 

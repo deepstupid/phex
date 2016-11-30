@@ -21,14 +21,9 @@
  */
 package phex.gui.dialogs.options;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Font;
-import java.util.HashMap;
-import java.util.Locale;
-
-import javax.swing.*;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import phex.gui.common.GUIRegistry;
 import phex.gui.common.HTMLMultiLinePanel;
 import phex.gui.common.IconPack;
@@ -36,9 +31,10 @@ import phex.gui.prefs.InterfacePrefs;
 import phex.gui.renderer.FWListCellRenderer;
 import phex.utils.Localizer;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * 

@@ -22,9 +22,9 @@
  */
 package phex.gui.dialogs.filter.wizard.condition;
 
-import javax.swing.table.AbstractTableModel;
-
 import phex.rules.condition.*;
+
+import javax.swing.table.AbstractTableModel;
 
 public class ConditionTableModel extends AbstractTableModel
 {

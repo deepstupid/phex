@@ -21,10 +21,6 @@
  */
 package phex.download.swarming;
 
-import java.io.IOException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-
 import phex.common.Environment;
 import phex.common.address.IpAddress;
 import phex.common.log.NLogger;
@@ -35,6 +31,10 @@ import phex.download.PushHandler;
 import phex.download.swarming.SWDownloadCandidate.CandidateStatus;
 import phex.net.repres.SocketFacade;
 import phex.prefs.core.NetworkPrefs;
+
+import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 
 public class SWDownloadWorker implements Runnable
 {

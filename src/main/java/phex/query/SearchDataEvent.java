@@ -21,9 +21,9 @@
  */
 package phex.query;
 
-import java.util.EventObject;
-
 import phex.download.RemoteFile;
+
+import java.util.EventObject;
 
 public class SearchDataEvent extends EventObject
 {

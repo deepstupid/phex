@@ -1,8 +1,8 @@
 package phex.upload;
 
-import java.util.Comparator;
-
 import phex.prefs.core.BandwidthPrefs;
+
+import java.util.Comparator;
 
 /**
  * Implements a HRRN Queue Comparator

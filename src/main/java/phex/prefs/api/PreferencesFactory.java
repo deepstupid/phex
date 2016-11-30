@@ -21,11 +21,11 @@
  */
 package phex.prefs.api;
 
+import phex.utils.StringUtils;
+
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
-import phex.utils.StringUtils;
 
 
 public final class PreferencesFactory

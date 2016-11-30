@@ -22,17 +22,11 @@
  */
 package phex.test.performance;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import junit.framework.TestCase;
+
+import java.io.*;
 
 //import org.apache.commons.io.FileUtils;
-
-import junit.framework.TestCase;
 
 /**
  * @author gregor

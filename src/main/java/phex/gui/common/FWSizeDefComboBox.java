@@ -22,10 +22,10 @@
  */
 package phex.gui.common;
 
-import javax.swing.JComboBox;
-
 import phex.common.format.NumberFormatUtils;
 import phex.utils.Localizer;
+
+import javax.swing.*;
 
 public class FWSizeDefComboBox extends JComboBox
 {

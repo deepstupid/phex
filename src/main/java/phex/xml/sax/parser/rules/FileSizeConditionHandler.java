@@ -22,18 +22,16 @@
  */
 package phex.xml.sax.parser.rules;
 
-import java.io.CharArrayWriter;
-
-import javax.xml.parsers.SAXParser;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
 import phex.common.log.NLogger;
 import phex.rules.condition.FileSizeCondition;
 import phex.xml.sax.rules.DFileSizeCondition;
+
+import javax.xml.parsers.SAXParser;
+import java.io.CharArrayWriter;
 
 public class FileSizeConditionHandler extends DefaultHandler
 {

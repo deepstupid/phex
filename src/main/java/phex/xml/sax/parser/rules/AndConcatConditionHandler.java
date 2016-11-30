@@ -22,12 +22,11 @@
  */
 package phex.xml.sax.parser.rules;
 
-import javax.xml.parsers.SAXParser;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
-
 import phex.xml.sax.rules.DAndConcatCondition;
+
+import javax.xml.parsers.SAXParser;
 
 /**
  * 

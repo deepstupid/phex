@@ -21,15 +21,13 @@
  */
 package phex.test;
 
+import junit.framework.Assert;
+import org.junit.Test;
+import phex.utils.ReadWriteLock;
+
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.ArrayList;
 import java.util.List;
-
-import junit.framework.Assert;
-
-import org.junit.Test;
-
-import phex.utils.ReadWriteLock;
 
 public class TestReadWriteLock implements UncaughtExceptionHandler
 {

@@ -22,7 +22,9 @@
  */
 package phex.rules.condition;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * This is a AND concatenation search filter. All filters in this filter

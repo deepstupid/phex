@@ -21,23 +21,10 @@
  */
 package phex.gui.tabs.download;
 
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.text.DateFormat;
-
-import javax.swing.Icon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.Timer;
-import javax.swing.UIManager;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import org.apache.commons.lang.SystemUtils;
-
 import phex.common.FileHandlingException;
 import phex.common.file.ManagedFileException;
 import phex.common.format.NumberFormatUtils;
@@ -52,9 +39,13 @@ import phex.utils.Localizer;
 import phex.utils.SystemShellExecute;
 import phex.xml.sax.gui.DGuiSettings;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
 
 public class DownloadOverviewPanel extends JPanel
 {

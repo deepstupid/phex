@@ -22,9 +22,6 @@
  */
 package phex.download;
 
-import java.io.IOException;
-import java.net.SocketException;
-
 import phex.common.address.DestAddress;
 import phex.common.bandwidth.BandwidthController;
 import phex.common.log.NLogger;
@@ -34,6 +31,9 @@ import phex.download.swarming.SWDownloadCandidate.CandidateStatus;
 import phex.net.connection.Connection;
 import phex.net.connection.SocketFactory;
 import phex.net.repres.SocketFacade;
+
+import java.io.IOException;
+import java.net.SocketException;
 
 public class DownloadConnection extends Connection
 {

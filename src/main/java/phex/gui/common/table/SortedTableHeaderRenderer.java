@@ -21,12 +21,12 @@
  */
 package phex.gui.common.table;
 
-import java.awt.*;
+import phex.gui.models.ISortableModel;
 
 import javax.swing.*;
-import javax.swing.table.*;
-
-import phex.gui.models.ISortableModel;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import java.awt.*;
 
 
 public class SortedTableHeaderRenderer extends DefaultTableCellRenderer

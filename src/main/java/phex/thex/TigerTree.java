@@ -24,14 +24,15 @@ package phex.thex;
 /* TigerTree calculation. Based on the Bitzi Corporation
  * TigerTree.java v 1.1 
  */
+
+import com.bitzi.util.Base32;
+import com.bitzi.util.Tiger;
+
 import java.security.DigestException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Enumeration;
 import java.util.Vector;
-
-import com.bitzi.util.Base32;
-import com.bitzi.util.Tiger;
 
 /**
  * Implementation of THEX tree hash algorithm, with Tiger

@@ -22,12 +22,12 @@
  */
 package phex.rules.condition;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import phex.download.RemoteFile;
 import phex.query.Search;
 import phex.xml.sax.rules.DCondition;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Filters all files matching the expression.

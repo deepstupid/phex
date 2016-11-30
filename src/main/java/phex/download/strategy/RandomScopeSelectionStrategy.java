@@ -22,11 +22,11 @@
  */
 package phex.download.strategy;
 
-import java.util.Random;
-
 import phex.download.DownloadScope;
 import phex.download.DownloadScopeList;
 import phex.download.swarming.SWDownloadFile;
+
+import java.util.Random;
 
 /**
  * This scope selection strategy tries to preferre a scope that has the lowest

@@ -22,7 +22,6 @@
 package phex.query;
 
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.URN;
 import phex.common.address.DestAddress;
 import phex.event.PhexEventTopics;

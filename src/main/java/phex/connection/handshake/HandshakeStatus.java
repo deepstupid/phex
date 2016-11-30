@@ -21,8 +21,6 @@
  */
 package phex.connection.handshake;
 
-import java.io.IOException;
-
 import phex.common.log.NLogger;
 import phex.connection.ConnectionConstants;
 import phex.connection.ProtocolNotSupportedException;
@@ -31,6 +29,8 @@ import phex.http.HTTPHeaderNames;
 import phex.http.HTTPProcessor;
 import phex.net.connection.Connection;
 import phex.prefs.core.ConnectionPrefs;
+
+import java.io.IOException;
 
 public class HandshakeStatus implements ConnectionConstants
 {

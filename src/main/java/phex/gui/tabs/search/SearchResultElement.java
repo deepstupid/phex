@@ -21,12 +21,12 @@
  */
 package phex.gui.tabs.search;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import phex.common.format.HostSpeedFormatUtils;
 import phex.download.RemoteFile;
 import phex.utils.Localizer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This is a element that is part of the search result data model.

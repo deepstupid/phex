@@ -21,11 +21,10 @@
  */
 package phex.gui.renderer;
 
-import java.awt.Component;
-
-import javax.swing.JList;
-
 import phex.gui.common.LookAndFeelUtils;
+
+import javax.swing.*;
+import java.awt.*;
 
 
 public class LAFThemeListCellRenderer extends FWListCellRenderer

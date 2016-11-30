@@ -21,11 +21,11 @@
  */
 package phex.common.file;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import phex.io.buffer.BufferSize;
 import phex.io.buffer.ByteBuffer;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 public class ManagedFileInputStream extends InputStream
 {

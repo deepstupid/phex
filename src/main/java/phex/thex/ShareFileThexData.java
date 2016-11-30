@@ -22,18 +22,16 @@
  */
 package phex.thex;
 
+import com.bitzi.util.Base32;
+import org.apache.commons.codec.binary.Base64;
+import phex.common.log.NLogger;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-
-import org.apache.commons.codec.binary.Base64;
-
-import phex.common.log.NLogger;
-
-import com.bitzi.util.Base32;
 
 /**
  *

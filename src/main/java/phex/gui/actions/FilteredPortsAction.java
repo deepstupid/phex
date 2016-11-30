@@ -19,14 +19,14 @@
 
 package phex.gui.actions;
 
-import java.awt.event.ActionEvent;
-import java.util.Enumeration;
-
 import phex.dialogues.DlgPortFilter;
 import phex.gui.common.GUIRegistry;
 import phex.prefs.core.PhexCorePrefs;
 import phex.prefs.core.SecurityPrefs;
 import phex.utils.Localizer;
+
+import java.awt.event.ActionEvent;
+import java.util.Enumeration;
 
 public class FilteredPortsAction extends FWAction
 {

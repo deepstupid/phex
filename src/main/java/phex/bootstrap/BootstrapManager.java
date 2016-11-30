@@ -21,17 +21,15 @@
  */
 package phex.bootstrap;
 
-import java.util.TimerTask;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Environment;
 import phex.common.address.DestAddress;
 import phex.common.address.IpAddress;
-import phex.host.HostManager;
 import phex.host.NetworkHostsContainer;
 import phex.servent.Servent;
+
+import java.util.TimerTask;
 
 /**
  * 

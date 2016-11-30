@@ -22,8 +22,9 @@
  */
 package phex.xml.sax;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.AttributesImpl;
+import phex.common.log.NLogger;
 
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -31,11 +32,8 @@ import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
-
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.AttributesImpl;
-
-import phex.common.log.NLogger;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * 

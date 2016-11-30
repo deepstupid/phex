@@ -2,7 +2,6 @@ package phex.xml.sax;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
-
 import phex.xml.sax.downloads.DDownloadFile;
 import phex.xml.sax.favorites.DFavoriteHost;
 import phex.xml.sax.gui.DGuiSettings;

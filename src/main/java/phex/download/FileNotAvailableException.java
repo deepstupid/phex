@@ -18,7 +18,7 @@
  */
 package phex.download;
 
-import phex.host.*;
+import phex.host.UnusableHostException;
 
 public class FileNotAvailableException extends UnusableHostException
 {

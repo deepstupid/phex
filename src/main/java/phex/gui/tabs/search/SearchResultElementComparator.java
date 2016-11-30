@@ -21,9 +21,9 @@
  */
 package phex.gui.tabs.search;
 
-import java.util.Comparator;
-
 import phex.gui.comparator.DestAddressComparator;
+
+import java.util.Comparator;
 
 /**
  * 

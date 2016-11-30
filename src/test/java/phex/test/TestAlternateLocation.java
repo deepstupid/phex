@@ -21,13 +21,17 @@
  */
 package phex.test;
 
-import java.util.*;
-
 import junit.framework.TestCase;
-import phex.common.*;
+import phex.common.AltLocContainer;
+import phex.common.AlternateLocation;
+import phex.common.URN;
 import phex.common.address.DefaultDestAddress;
-import phex.http.*;
+import phex.http.GnutellaHeaderNames;
+import phex.http.HTTPHeader;
 import phex.security.PhexSecurityManager;
+
+import java.util.HashSet;
+import java.util.Set;
 
 
 

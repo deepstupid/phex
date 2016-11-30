@@ -21,17 +21,16 @@
  */
 package phex.msg.vendor;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.msg.GGEPBlock;
 import phex.msg.GUID;
 import phex.msg.InvalidMessageException;
 import phex.msg.MsgHeader;
 import phex.utils.IOUtil;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class MessageAcknowledgementVMsg extends VendorMsg
 {

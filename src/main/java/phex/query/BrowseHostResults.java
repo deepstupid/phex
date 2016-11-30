@@ -21,12 +21,8 @@
  */
 package phex.query;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Environment;
 import phex.common.URN;
 import phex.common.address.DestAddress;
@@ -38,6 +34,9 @@ import phex.msg.InvalidMessageException;
 import phex.msg.QueryResponseMsg;
 import phex.msg.QueryResponseRecord;
 import phex.servent.Servent;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 
 public class BrowseHostResults extends Search

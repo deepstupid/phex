@@ -21,14 +21,12 @@
  */
 package phex.gui.tabs.search;
 
-import java.awt.Component;
+import phex.gui.renderer.FWTableCellRenderer;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
-import javax.swing.JLabel;
-import javax.swing.JTable;
-
-import phex.gui.renderer.FWTableCellRenderer;
 
 /**
  * 

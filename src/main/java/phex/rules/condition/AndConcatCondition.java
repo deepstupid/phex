@@ -22,12 +22,12 @@
  */
 package phex.rules.condition;
 
-import java.util.List;
-
 import phex.download.RemoteFile;
 import phex.query.Search;
 import phex.xml.sax.rules.DAndConcatCondition;
 import phex.xml.sax.rules.DCondition;
+
+import java.util.List;
 
 /**
  * This is a AND concatenation search filter. All filters in this filter

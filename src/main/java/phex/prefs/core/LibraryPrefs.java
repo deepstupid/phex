@@ -22,10 +22,11 @@
  */
 package phex.prefs.core;
 
-import java.util.*;
-
 import phex.prefs.api.PreferencesFactory;
 import phex.prefs.api.Setting;
+
+import java.util.List;
+import java.util.Set;
 
 // TODO changes to List or Set Settings do not cause a set call and a "saveRequiredNotify"
 public class LibraryPrefs extends PhexCorePrefs

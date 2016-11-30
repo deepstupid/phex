@@ -21,11 +21,11 @@
  */
 package phex.gui.common;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import phex.gui.actions.ExitPhexAction;
 import phex.utils.Localizer;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
 * A JNI wrapper for desktop indicators (also called tray icons and taskbar icons).

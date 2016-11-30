@@ -21,9 +21,9 @@
  */
 package phex.http;
 
-import java.util.StringTokenizer;
-
 import phex.common.log.NLogger;
+
+import java.util.StringTokenizer;
 
 
 public class XQueueParameters

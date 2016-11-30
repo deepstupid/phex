@@ -23,13 +23,10 @@
 /* Created on 12.12.2004 */
 package phex.gui.tabs.library;
 
-import java.awt.Component;
-import java.awt.Dimension;
-
-import javax.swing.Icon;
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultTreeCellRenderer;
+import java.awt.*;
 
 /**
  * @author gregor

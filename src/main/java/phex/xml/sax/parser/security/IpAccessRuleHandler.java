@@ -22,19 +22,17 @@
  */
 package phex.xml.sax.parser.security;
 
-import java.io.CharArrayWriter;
-
-import javax.xml.parsers.SAXParser;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
 import phex.common.log.NLogger;
 import phex.xml.sax.parser.ParserUtils;
 import phex.xml.sax.parser.downloads.DownloadFileHandler;
 import phex.xml.sax.security.DIpAccessRule;
+
+import javax.xml.parsers.SAXParser;
+import java.io.CharArrayWriter;
 
 public class IpAccessRuleHandler extends DefaultHandler
 {

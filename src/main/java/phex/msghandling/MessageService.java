@@ -21,44 +21,25 @@
  */
 package phex.msghandling;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.TimerTask;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.bootstrap.UdpHostCacheContainer;
-import phex.common.AbstractLifeCycle;
-import phex.common.Environment;
-import phex.common.Phex;
-import phex.common.PongCache;
-import phex.common.QueryRoutingTable;
+import phex.common.*;
 import phex.common.address.DestAddress;
 import phex.event.PhexEventTopics;
 import phex.host.CaughtHostsContainer;
 import phex.host.Host;
 import phex.host.NetworkHostsContainer;
-import phex.msg.GUID;
-import phex.msg.InvalidMessageException;
-import phex.msg.Message;
-import phex.msg.MsgHeader;
-import phex.msg.PingMsg;
-import phex.msg.PongFactory;
-import phex.msg.PongMsg;
-import phex.msg.PushRequestMsg;
-import phex.msg.QueryMsg;
-import phex.msg.QueryResponseMsg;
-import phex.msg.RouteTableUpdateMsg;
-import phex.msg.vendor.HopsFlowVMsg;
-import phex.msg.vendor.MessageAcknowledgementVMsg;
-import phex.msg.vendor.PushProxyRequestVMsg;
-import phex.msg.vendor.TCPConnectBackVMsg;
-import phex.msg.vendor.VendorMsg;
+import phex.msg.*;
+import phex.msg.vendor.*;
 import phex.security.PhexSecurityManager;
 import phex.servent.Servent;
 import phex.share.SharedFilesService;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.TimerTask;
 
 public class MessageService extends AbstractLifeCycle
 {

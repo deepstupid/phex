@@ -21,15 +21,9 @@
  */
 package phex.gui.tabs.download;
 
-import java.awt.EventQueue;
-import java.util.Comparator;
-
-import javax.swing.event.TableModelEvent;
-
 import org.apache.commons.collections.comparators.ComparableComparator;
 import org.apache.commons.collections.comparators.ReverseComparator;
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.common.format.NumberFormatUtils;
 import phex.download.swarming.SWDownloadFile;
@@ -46,6 +40,10 @@ import phex.gui.renderer.ETACellRenderer;
 import phex.gui.renderer.ProgressCellRenderer;
 import phex.gui.renderer.TransferSizeCellRenderer;
 import phex.utils.Localizer;
+
+import javax.swing.event.TableModelEvent;
+import java.awt.*;
+import java.util.Comparator;
 
 public class SWDownloadTableModel extends FWSortableTableModel
 {   

@@ -21,8 +21,6 @@
  */
 package phex.upload;
 
-import java.io.IOException;
-
 import phex.common.address.DestAddress;
 import phex.common.bandwidth.BandwidthController;
 import phex.common.log.NLogger;
@@ -45,6 +43,8 @@ import phex.upload.handler.UploadHandler;
 import phex.upload.response.UploadResponse;
 import phex.utils.StringUtils;
 import phex.utils.VendorCodes;
+
+import java.io.IOException;
 
 /**
  * The UploadEngine is handling the process of uploading a file. This includes

@@ -22,17 +22,16 @@
  */
 package phex.gui.dialogs.filter;
 
-import java.util.Iterator;
-import java.util.Set;
-
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-
 import phex.common.MediaType;
 import phex.common.URN;
 import phex.common.format.NumberFormatUtils;
 import phex.rules.condition.*;
 import phex.utils.Localizer;
+
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import java.util.Iterator;
+import java.util.Set;
 
 public class ConditionVisualizer
 {   

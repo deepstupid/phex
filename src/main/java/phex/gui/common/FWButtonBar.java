@@ -22,15 +22,11 @@
  */
 package phex.gui.common;
 
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.swing.AbstractButton;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JComponent;
 
 public class FWButtonBar extends JComponent
 {

@@ -45,12 +45,10 @@ package phex.gui.common.table;
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-import java.awt.Component;
-import java.awt.Dimension;
-
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
+import java.awt.*;
 
 /**
  * Creates and configures <code>FWTableColumn</code>s.

@@ -21,10 +21,11 @@
  */
 package phex.test;
 
-import java.util.Iterator;
-
 import junit.framework.TestCase;
-import phex.download.*;
+import phex.download.DownloadScope;
+import phex.download.DownloadScopeList;
+
+import java.util.Iterator;
 
 /**
  * 

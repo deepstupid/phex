@@ -22,23 +22,17 @@
  */
 package phex.gui.common;
 
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.FileDialog;
-import java.awt.Point;
-import java.io.File;
-import java.io.FilenameFilter;
+import org.apache.commons.lang.SystemUtils;
+import phex.gui.macosx.MacOsxGUIUtils;
+import phex.utils.DirectoryOnlyFileFilter;
 
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
+import javax.swing.*;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.filechooser.FileFilter;
-
-import org.apache.commons.lang.SystemUtils;
-
-import phex.gui.macosx.MacOsxGUIUtils;
-import phex.utils.DirectoryOnlyFileFilter;
+import java.awt.*;
+import java.io.File;
+import java.io.FilenameFilter;
 
 public class FileDialogHandler
 {

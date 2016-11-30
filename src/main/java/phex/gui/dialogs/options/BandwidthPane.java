@@ -21,27 +21,28 @@
  */
 package phex.gui.dialogs.options;
 
-import java.awt.BorderLayout;
-import java.awt.event.*;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Hashtable;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import phex.common.bandwidth.BandwidthManager;
+import phex.common.format.NumberFormatUtils;
+import phex.gui.common.BandwidthComboBox;
+import phex.gui.common.BandwidthComboBox.SpeedDefinition;
+import phex.gui.common.GUIRegistry;
+import phex.prefs.core.BandwidthPrefs;
+import phex.utils.Localizer;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import phex.common.bandwidth.BandwidthManager;
-import phex.common.format.NumberFormatUtils;
-import phex.gui.common.BandwidthComboBox;
-import phex.gui.common.GUIRegistry;
-import phex.gui.common.BandwidthComboBox.SpeedDefinition;
-import phex.prefs.core.BandwidthPrefs;
-import phex.utils.Localizer;
-
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
 
 public class BandwidthPane extends OptionsSettingsPane
 {

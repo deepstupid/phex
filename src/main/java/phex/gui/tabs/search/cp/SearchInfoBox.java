@@ -22,12 +22,9 @@
  */
 package phex.gui.tabs.search.cp;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JLabel;
-import javax.swing.JProgressBar;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import phex.common.log.NLogger;
 import phex.gui.common.BoxPanel;
 import phex.gui.common.GUIRegistry;
@@ -36,9 +33,9 @@ import phex.gui.tabs.search.SearchVisualizer;
 import phex.query.Search;
 import phex.utils.Localizer;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class SearchInfoBox extends BoxPanel
 {

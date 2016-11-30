@@ -21,18 +21,13 @@
  */
 package phex.gui.common.statusbar;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.SpringLayout;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseAdapter;
-
 import phex.common.bandwidth.BandwidthController;
 import phex.common.bandwidth.BandwidthManager;
 import phex.common.format.NumberFormatUtils;
 import phex.common.log.NLogger;
 import phex.gui.common.GUIRegistry;
 import phex.gui.common.IconPack;
+import phex.gui.dialogs.options.OptionsDialog;
 import phex.prefs.core.BandwidthPrefs;
 import phex.servent.Servent;
 import phex.statistic.StatisticProvider;
@@ -40,7 +35,10 @@ import phex.statistic.StatisticProviderConstants;
 import phex.statistic.StatisticsManager;
 import phex.upload.UploadManager;
 import phex.utils.Localizer;
-import phex.gui.dialogs.options.OptionsDialog;
+
+import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class UploadZone extends JPanel
 {

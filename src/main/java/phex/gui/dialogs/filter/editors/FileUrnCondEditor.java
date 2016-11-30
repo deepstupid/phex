@@ -22,23 +22,23 @@
  */
 package phex.gui.dialogs.filter.editors;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Container;
-import java.awt.event.*;
-
-import javax.swing.*;
-
-import phex.common.URN;
-import phex.common.log.NLogger;
-import phex.gui.dialogs.filter.RuleDescriptionPanel;
-import phex.rules.condition.FileUrnCondition;
-import phex.utils.*;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.factories.ButtonBarFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import phex.common.URN;
+import phex.common.log.NLogger;
+import phex.gui.dialogs.filter.RuleDescriptionPanel;
+import phex.rules.condition.FileUrnCondition;
+import phex.utils.Localizer;
+import phex.utils.StringUtils;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class FileUrnCondEditor extends JDialog
 {

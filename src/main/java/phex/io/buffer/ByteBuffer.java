@@ -21,16 +21,12 @@
  */
 package phex.io.buffer;
 
-import java.nio.BufferOverflowException;
-import java.nio.BufferUnderflowException;
-import java.nio.CharBuffer;
-import java.nio.ReadOnlyBufferException;
-import java.nio.ShortBuffer;
+import phex.utils.HexConverter;
+
+import java.nio.*;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
-
-import phex.utils.HexConverter;
 
 /**
  * We use our own ByteBuffer implementations to be able to 

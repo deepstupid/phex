@@ -1,11 +1,11 @@
 package phex.gui.common.progressbar;
 
-import java.awt.Color;
-import java.util.NoSuchElementException;
-
 import phex.download.DownloadScopeList;
 import phex.download.swarming.SWDownloadCandidate;
 import phex.gui.common.PhexColors;
+
+import java.awt.*;
+import java.util.NoSuchElementException;
 
 public class CandidateScopeProvider implements MultiScopeProvider
 {

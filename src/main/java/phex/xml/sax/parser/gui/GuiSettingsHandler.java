@@ -22,20 +22,18 @@
  */
 package phex.xml.sax.parser.gui;
 
-import java.io.CharArrayWriter;
-
-import javax.xml.parsers.SAXParser;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
 import phex.common.log.NLogger;
 import phex.xml.sax.gui.DGuiSettings;
 import phex.xml.sax.gui.DTab;
 import phex.xml.sax.gui.DTableList;
 import phex.xml.sax.parser.share.SharedFileHandler;
+
+import javax.xml.parsers.SAXParser;
+import java.io.CharArrayWriter;
 
 /**
  * 

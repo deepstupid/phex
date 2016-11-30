@@ -25,20 +25,10 @@ package phex.common.collections;
 // Copyright by Limewire
 
 
-import java.io.Serializable;
-import java.util.AbstractCollection;
-import java.util.AbstractMap;
-import java.util.AbstractSet;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.SortedMap;
-
 import org.apache.commons.collections.iterators.EmptyIterator;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * A PATRICIA Trie. 

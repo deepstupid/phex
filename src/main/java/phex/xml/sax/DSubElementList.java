@@ -1,10 +1,10 @@
 package phex.xml.sax;
 
+import org.xml.sax.SAXException;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import org.xml.sax.SAXException;
 
 public class DSubElementList<E extends DElement> implements DElement
 {

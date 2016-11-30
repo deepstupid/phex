@@ -21,18 +21,14 @@
  */
 package phex.upload.response;
 
-import java.io.IOException;
-
 import phex.common.AltLocContainer;
 import phex.common.address.DestAddress;
-import phex.http.GnutellaHeaderNames;
-import phex.http.HTTPCodes;
-import phex.http.HTTPHeader;
-import phex.http.HTTPResponse;
-import phex.http.XQueueParameters;
+import phex.http.*;
 import phex.io.buffer.ByteBuffer;
 import phex.share.ShareFile;
 import phex.upload.UploadState;
+
+import java.io.IOException;
 
 public class UploadResponse
 {

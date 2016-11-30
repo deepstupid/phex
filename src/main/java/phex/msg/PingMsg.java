@@ -22,7 +22,6 @@
 package phex.msg;
 
 import phex.common.log.NLogger;
-import phex.host.Host;
 import phex.io.buffer.ByteBuffer;
 import phex.utils.HexConverter;
 import phex.utils.IOUtil;

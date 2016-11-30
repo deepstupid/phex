@@ -22,18 +22,17 @@
  */
 package phex.utils;
 
+import org.apache.commons.lang.SystemUtils;
+import phex.common.MediaType;
+import phex.common.log.NLogger;
+import phex.prefs.core.SystemToolsPrefs;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.apache.commons.lang.SystemUtils;
-
-import phex.common.MediaType;
-import phex.common.log.NLogger;
-import phex.prefs.core.SystemToolsPrefs;
 
 public class SystemShellExecute
 {

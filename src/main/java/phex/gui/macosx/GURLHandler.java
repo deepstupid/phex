@@ -21,16 +21,13 @@
  */
 package phex.gui.macosx;
 
-import java.awt.EventQueue;
-
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 import phex.download.swarming.SwarmingManager;
 import phex.gui.common.GUIRegistry;
-import phex.servent.Servent;
+
+import java.awt.*;
 
 /**
  * JNI based GetURL AppleEvent handler for Mac OS X

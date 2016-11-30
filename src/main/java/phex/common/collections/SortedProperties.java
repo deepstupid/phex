@@ -18,9 +18,9 @@
  */
 package phex.common.collections;
 
-import java.util.*;
-
 import org.apache.commons.collections.iterators.IteratorEnumeration;
+
+import java.util.*;
 
 /*
  * Make the properties get written out in order

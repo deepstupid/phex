@@ -22,18 +22,17 @@
  */
 package phex.gui.dialogs.configwizard;
 
-import javax.swing.JPanel;
-
-import phex.common.bandwidth.BandwidthManager;
-import phex.gui.common.BandwidthComboBox;
-import phex.gui.common.HTMLMultiLinePanel;
-import phex.gui.common.BandwidthComboBox.SpeedDefinition;
-import phex.prefs.core.BandwidthPrefs;
-import phex.utils.Localizer;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import phex.common.bandwidth.BandwidthManager;
+import phex.gui.common.BandwidthComboBox;
+import phex.gui.common.BandwidthComboBox.SpeedDefinition;
+import phex.gui.common.HTMLMultiLinePanel;
+import phex.prefs.core.BandwidthPrefs;
+import phex.utils.Localizer;
+
+import javax.swing.*;
 
 public class BandwidthPanel extends JPanel
 {

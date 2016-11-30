@@ -21,36 +21,10 @@
  */
 package phex.gui.tabs.library;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.EventQueue;
-import java.awt.Toolkit;
-import java.awt.datatransfer.StringSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.KeyStroke;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Environment;
 import phex.common.Phex;
 import phex.common.QueryRoutingTable;
@@ -60,13 +34,7 @@ import phex.common.log.NLogger;
 import phex.event.PhexEventTopics;
 import phex.gui.actions.FWAction;
 import phex.gui.actions.GUIActionPerformer;
-import phex.gui.common.BrowserLauncher;
-import phex.gui.common.FWElegantPanel;
-import phex.gui.common.FWPopupMenu;
-import phex.gui.common.FWToolBar;
-import phex.gui.common.GUIRegistry;
-import phex.gui.common.GUIUtils;
-import phex.gui.common.MainFrame;
+import phex.gui.common.*;
 import phex.gui.common.table.FWSortedTableModel;
 import phex.gui.common.table.FWTable;
 import phex.gui.dialogs.ExportDialog;
@@ -80,9 +48,22 @@ import phex.utils.URLUtil;
 import phex.xml.sax.gui.DGuiSettings;
 import phex.xml.sax.gui.DTable;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class LibraryTab extends FWTab
 {

@@ -21,11 +21,11 @@
  */
 package phex.gui.actions;
 
-import java.awt.event.ActionEvent;
-
 import phex.gui.common.GUIRegistry;
 import phex.gui.tabs.FWTab;
 import phex.utils.Localizer;
+
+import java.awt.event.ActionEvent;
 
 
 public class ToggleTabViewAction extends FWToggleAction

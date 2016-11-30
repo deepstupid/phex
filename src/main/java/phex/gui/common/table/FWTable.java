@@ -24,20 +24,24 @@ package phex.gui.common.table;
 //This class contains source from the SwingLabs class
 //org.jdesktop.swingx.JXTable
 
-import java.awt.*;
-import java.awt.event.*;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import phex.common.log.NLogger;
+import phex.gui.common.GUIRegistry;
+import phex.gui.renderer.DefaultPhexCellRenderers;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import javax.swing.event.TableModelEvent;
-import javax.swing.table.*;
-
-import phex.common.log.NLogger;
-import phex.gui.common.GUIRegistry;
-import phex.gui.renderer.DefaultPhexCellRenderers;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 public class FWTable extends JTable
 {

@@ -22,11 +22,11 @@
  */
 package phex.xml.sax.rules;
 
-import java.util.Iterator;
-
 import phex.rules.condition.AndConcatCondition;
 import phex.rules.condition.Condition;
 import phex.xml.sax.DSubElementList;
+
+import java.util.Iterator;
 
 public class DAndConcatCondition extends DSubElementList<DCondition> implements DCondition
 {

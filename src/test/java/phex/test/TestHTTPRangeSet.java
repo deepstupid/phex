@@ -22,7 +22,6 @@
 package phex.test;
 
 import junit.framework.TestCase;
-import phex.download.DownloadScope;
 import phex.http.HTTPRangeSet;
 
 public class TestHTTPRangeSet extends TestCase

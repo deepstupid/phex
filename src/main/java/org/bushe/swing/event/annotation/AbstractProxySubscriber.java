@@ -1,10 +1,10 @@
 package org.bushe.swing.event.annotation;
 
-import java.lang.ref.WeakReference;
-import java.lang.reflect.Method;
-
 import org.bushe.swing.event.EventService;
 import org.bushe.swing.event.ProxySubscriber;
+
+import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
 
 /** Common base class for EventService Proxies */
 public abstract class AbstractProxySubscriber implements ProxySubscriber {

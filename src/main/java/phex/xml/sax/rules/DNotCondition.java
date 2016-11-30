@@ -23,7 +23,6 @@
 package phex.xml.sax.rules;
 
 import org.xml.sax.SAXException;
-
 import phex.rules.condition.Condition;
 import phex.rules.condition.NotCondition;
 import phex.xml.sax.PhexXmlSaxWriter;

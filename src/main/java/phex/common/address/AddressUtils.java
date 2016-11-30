@@ -21,6 +21,13 @@
  */
 package phex.common.address;
 
+import phex.common.log.NLogger;
+import phex.net.repres.PresentationManager;
+import phex.security.AccessType;
+import phex.security.IpCidrPair;
+import phex.security.PhexSecurityManager;
+import phex.utils.IOUtil;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -28,13 +35,6 @@ import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
-
-import phex.common.log.NLogger;
-import phex.net.repres.PresentationManager;
-import phex.security.AccessType;
-import phex.security.IpCidrPair;
-import phex.security.PhexSecurityManager;
-import phex.utils.IOUtil;
 
 public class AddressUtils
 {

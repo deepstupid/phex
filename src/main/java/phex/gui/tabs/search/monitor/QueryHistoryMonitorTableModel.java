@@ -21,12 +21,7 @@
  */
 package phex.gui.tabs.search.monitor;
 
-import java.awt.EventQueue;
-
-import javax.swing.table.AbstractTableModel;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.event.PhexEventTopics;
 import phex.host.Host;
@@ -34,6 +29,9 @@ import phex.msg.MsgHeader;
 import phex.query.QueryHistoryMonitor;
 import phex.query.QueryHistoryMonitor.HistoryEntry;
 import phex.utils.Localizer;
+
+import javax.swing.table.AbstractTableModel;
+import java.awt.*;
 
 public class QueryHistoryMonitorTableModel extends AbstractTableModel
 {

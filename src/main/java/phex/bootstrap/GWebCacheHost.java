@@ -21,11 +21,11 @@
  */
 package phex.bootstrap;
 
-import java.io.IOException;
-import java.net.URL;
-
 import phex.common.address.AddressUtils;
 import phex.connection.ProtocolNotSupportedException;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class GWebCacheHost extends BootstrapHost
 {

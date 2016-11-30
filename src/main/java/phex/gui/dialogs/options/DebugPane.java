@@ -21,18 +21,14 @@
  */
 package phex.gui.dialogs.options;
 
-import java.awt.BorderLayout;
-import java.util.HashMap;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-
-import phex.utils.Localizer;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import phex.utils.Localizer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
 
 /**
  * @deprecated

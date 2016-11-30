@@ -21,22 +21,18 @@
  */
 package phex.connection;
 
-import java.io.IOException;
-
 import phex.common.Environment;
 import phex.common.Phex;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
 import phex.connection.ConnectionStatusEvent.Status;
 import phex.event.PhexEventTopics;
-import phex.host.CaughtHostsContainer;
-import phex.host.Host;
-import phex.host.HostManager;
-import phex.host.HostStatus;
-import phex.host.NetworkHostsContainer;
+import phex.host.*;
 import phex.net.connection.Connection;
 import phex.net.connection.ConnectionFactory;
 import phex.servent.Servent;
+
+import java.io.IOException;
 
 /**
  * This class is responsible to dispatch an outgoing Gnutella network 

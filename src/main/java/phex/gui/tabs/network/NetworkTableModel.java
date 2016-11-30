@@ -21,13 +21,7 @@
  */
 package phex.gui.tabs.network;
 
-import java.awt.EventQueue;
-import java.util.Comparator;
-
-import javax.swing.event.TableModelEvent;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.common.QueryRoutingTable;
 import phex.common.format.NumberFormatUtils;
@@ -41,6 +35,10 @@ import phex.host.Host;
 import phex.host.HostInfo;
 import phex.host.NetworkHostsContainer;
 import phex.utils.Localizer;
+
+import javax.swing.event.TableModelEvent;
+import java.awt.*;
+import java.util.Comparator;
 
 public class NetworkTableModel extends FWSortableTableModel
 {

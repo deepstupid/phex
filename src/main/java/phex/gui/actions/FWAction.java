@@ -18,10 +18,7 @@
  */
 package phex.gui.actions;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.KeyStroke;
+import javax.swing.*;
 
 /**
  * Super class to implement actions for Phex.

@@ -21,12 +21,12 @@
  */
 package phex.upload.handler;
 
-import java.io.IOException;
-
 import phex.http.HTTPRequest;
 import phex.upload.UploadManager;
 import phex.upload.UploadState;
 import phex.upload.response.UploadResponse;
+
+import java.io.IOException;
 
 public interface UploadHandler
 {

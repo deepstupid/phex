@@ -19,7 +19,7 @@
 
 package phex.share;
 
-import java.util.*;
+import java.util.HashMap;
 
 /**
  * Currently MIME types are only used when a upload from a web browser is done.

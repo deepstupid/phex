@@ -21,22 +21,17 @@
  */
 package phex.msg;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PushbackInputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.Set;
-import java.util.StringTokenizer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.URN;
 import phex.common.address.DestAddress;
 import phex.security.PhexSecurityManager;
 import phex.share.ShareFile;
 import phex.utils.IOUtil;
+
+import java.io.*;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 /**
  * A single response record in a QueryResponse message.

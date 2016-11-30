@@ -21,10 +21,10 @@
  */
 package phex.common;
 
-import java.io.File;
-
 import phex.connection.ConnectionConstants;
 import phex.utils.FileUtils;
+
+import java.io.File;
 
 /**
  * The representation of a custom named Gnutella network.

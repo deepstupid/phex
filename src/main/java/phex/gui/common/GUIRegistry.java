@@ -21,21 +21,10 @@
  */
 package phex.gui.common;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.TimerTask;
-
-import javax.swing.JOptionPane;
-import javax.swing.LookAndFeel;
-import javax.swing.ToolTipManager;
-import javax.swing.UIManager;
-
 import org.apache.commons.lang.SystemUtils;
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Environment;
 import phex.common.EnvironmentConstants;
 import phex.common.Phex;
@@ -44,12 +33,7 @@ import phex.common.file.FileManager;
 import phex.common.file.ManagedFile;
 import phex.common.file.ManagedFileException;
 import phex.event.UserMessageListener;
-import phex.gui.actions.ConnectNetworkAction;
-import phex.gui.actions.DisconnectNetworkAction;
-import phex.gui.actions.ExitPhexAction;
-import phex.gui.actions.FWAction;
-import phex.gui.actions.NewDownloadAction;
-import phex.gui.actions.SwitchNetworkAction;
+import phex.gui.actions.*;
 import phex.gui.chat.ChatFrameManager;
 import phex.gui.macosx.MacOsxGUIUtils;
 import phex.gui.prefs.InterfacePrefs;
@@ -62,6 +46,12 @@ import phex.xml.sax.DPhex;
 import phex.xml.sax.XMLBuilder;
 import phex.xml.sax.gui.DGuiSettings;
 import phex.xml.sax.gui.DTableList;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.TimerTask;
 
 public final class GUIRegistry implements GUIRegistryConstants
 {

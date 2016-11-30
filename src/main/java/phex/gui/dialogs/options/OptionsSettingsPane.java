@@ -18,14 +18,11 @@
  */
 package phex.gui.dialogs.options;
 
-import java.awt.Component;
-import java.util.HashMap;
-
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-
 import phex.utils.Localizer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.HashMap;
 
 /**
  * The base class of all settings panes that represent the right side of the

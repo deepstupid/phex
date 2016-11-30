@@ -21,43 +21,19 @@
  */
 package phex.download.swarming;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.TimerTask;
-
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
-import phex.common.AbstractLifeCycle;
-import phex.common.AddressCounter;
-import phex.common.Environment;
-import phex.common.EnvironmentConstants;
-import phex.common.Phex;
-import phex.common.PhexVersion;
-import phex.common.RunnerQueueWorker;
-import phex.common.ThreadTracking;
-import phex.common.URN;
+import phex.common.*;
 import phex.common.bandwidth.BandwidthController;
 import phex.common.file.FileManager;
 import phex.common.file.ManagedFile;
 import phex.common.file.ManagedFileException;
 import phex.common.log.LogBuffer;
 import phex.common.log.NLogger;
-import phex.download.BufferVolumeTracker;
-import phex.download.DownloadDataWriter;
-import phex.download.MagnetData;
-import phex.download.MemoryFile;
-import phex.download.RemoteFile;
+import phex.download.*;
 import phex.download.swarming.SWDownloadCandidate.CandidateStatus;
-import phex.event.ChangeEvent;
-import phex.event.ContainerEvent;
-import phex.event.PhexEventService;
-import phex.event.PhexEventTopics;
-import phex.event.UserMessageListener;
+import phex.event.*;
 import phex.event.ContainerEvent.Type;
 import phex.msg.QueryResponseMsg;
 import phex.prefs.core.DownloadPrefs;
@@ -72,6 +48,13 @@ import phex.xml.sax.DSubElementList;
 import phex.xml.sax.XMLBuilder;
 import phex.xml.sax.downloads.DDownloadFile;
 import phex.xml.sax.parser.downloads.DownloadListHandler;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.TimerTask;
 
 
 public class SwarmingManager extends AbstractLifeCycle

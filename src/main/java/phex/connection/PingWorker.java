@@ -53,14 +53,7 @@ public class PingWorker implements Runnable
         
         while( true )
         {
-            // Sleep some time...
-            try
-            {
-                Thread.sleep( SLEEP_TIME );
-            }
-            catch (InterruptedException e)
-            {
-            }
+
             
             if( servent.isUltrapeer() )
             {
@@ -68,6 +61,15 @@ public class PingWorker implements Runnable
                 // TODO only forward to a selected amount (75%) of node if there are more
                 // then 4-5 node.
                 servent.getMessageService().pingHosts( (byte)3, hosts );
+            }
+
+            // Sleep some time...
+            try
+            {
+                Thread.sleep( SLEEP_TIME );
+            }
+            catch (InterruptedException e)
+            {
             }
         }
     }

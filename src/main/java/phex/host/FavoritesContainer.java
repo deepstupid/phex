@@ -21,16 +21,9 @@
  */
 package phex.host;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TimerTask;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Environment;
 import phex.common.Phex;
 import phex.common.PhexVersion;
@@ -50,6 +43,12 @@ import phex.xml.sax.DSubElementList;
 import phex.xml.sax.XMLBuilder;
 import phex.xml.sax.favorites.DFavoriteHost;
 import phex.xml.sax.parser.favorites.FavoritesListHandler;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TimerTask;
 
 /**
  * Holds user favorite hosts.

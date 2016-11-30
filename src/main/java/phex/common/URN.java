@@ -21,9 +21,9 @@
  */
 package phex.common;
 
-import java.util.Locale;
-
 import phex.utils.URLCodecUtils;
+
+import java.util.Locale;
 
 /**
  * Represents a URN according to RFC 2141

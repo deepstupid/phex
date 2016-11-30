@@ -21,15 +21,9 @@
  */
 package phex.download;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.locks.ReentrantLock;
-
+import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.FileHandlingException;
 import phex.common.RunnerQueueWorker;
 import phex.common.file.ManagedFile;
@@ -45,7 +39,12 @@ import phex.prefs.core.DownloadPrefs;
 import phex.thex.TTHashCalcUtils;
 import phex.xml.sax.downloads.DDownloadFile;
 import phex.xml.sax.downloads.DDownloadScope;
-import edu.umd.cs.findbugs.annotations.NonNull;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * A memory representation of the file data that is downloaded. It keeps track

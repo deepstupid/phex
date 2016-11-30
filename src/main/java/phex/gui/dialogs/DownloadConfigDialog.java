@@ -21,15 +21,10 @@
  */
 package phex.gui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.HeadlessException;
-import java.awt.event.*;
-import java.io.File;
-import java.io.IOException;
-
-import javax.swing.*;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.factories.ButtonBarFactory;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import phex.common.log.NLogger;
 import phex.download.RemoteFile;
 import phex.download.strategy.*;
@@ -38,13 +33,18 @@ import phex.download.swarming.SwarmingManager;
 import phex.gui.common.*;
 import phex.prefs.core.DownloadPrefs;
 import phex.query.DynamicQueryConstants;
-import phex.servent.Servent;
-import phex.utils.*;
+import phex.utils.FileUtils;
+import phex.utils.Localizer;
+import phex.utils.StringUtils;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.factories.ButtonBarFactory;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 
 public class DownloadConfigDialog extends JDialog
 {

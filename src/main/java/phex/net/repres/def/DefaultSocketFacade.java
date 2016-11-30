@@ -22,17 +22,15 @@
  */
 package phex.net.repres.def;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
-import java.net.SocketException;
-import java.nio.channels.ByteChannel;
-
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
 import phex.io.channels.StreamingByteChannel;
 import phex.net.repres.SocketFacade;
+
+import java.io.IOException;
+import java.net.Socket;
+import java.net.SocketException;
+import java.nio.channels.ByteChannel;
 
 public class DefaultSocketFacade implements SocketFacade
 {

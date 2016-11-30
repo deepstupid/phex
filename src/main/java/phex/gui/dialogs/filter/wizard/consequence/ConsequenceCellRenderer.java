@@ -22,11 +22,11 @@
  */
 package phex.gui.dialogs.filter.wizard.consequence;
 
-import javax.swing.JLabel;
-import javax.swing.table.DefaultTableCellRenderer;
-
 import phex.gui.dialogs.filter.ConsequenceVisualizer;
 import phex.rules.consequence.Consequence;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class ConsequenceCellRenderer extends DefaultTableCellRenderer
 {

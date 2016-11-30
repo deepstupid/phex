@@ -21,32 +21,7 @@
  */
 package phex.gui.tabs.search;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Insets;
-import java.awt.Paint;
-import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
-
-import javax.swing.AbstractButton;
-import javax.swing.ButtonModel;
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import javax.swing.JToggleButton;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.plaf.basic.BasicButtonListener;
-import javax.swing.plaf.basic.BasicButtonUI;
-import javax.swing.plaf.basic.BasicHTML;
-import javax.swing.text.View;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.common.address.DestAddress;
 import phex.event.PhexEventTopics;
@@ -54,12 +29,16 @@ import phex.gui.common.GUIRegistry;
 import phex.gui.common.GUIUtils;
 import phex.gui.common.IconPack;
 import phex.gui.common.PhexColors;
-import phex.query.BrowseHostResults;
-import phex.query.KeywordSearch;
-import phex.query.Search;
-import phex.query.SearchDataEvent;
-import phex.query.WhatsNewSearch;
+import phex.query.*;
 import phex.utils.Localizer;
+
+import javax.swing.*;
+import javax.swing.plaf.basic.BasicButtonListener;
+import javax.swing.plaf.basic.BasicButtonUI;
+import javax.swing.plaf.basic.BasicHTML;
+import javax.swing.text.View;
+import java.awt.*;
+import java.awt.event.MouseEvent;
 
 public class SearchButton extends JToggleButton
 {

@@ -18,10 +18,11 @@
  */
 package phex.gui.renderer;
 
-import java.awt.*;
+import phex.common.MediaType;
+import phex.utils.Localizer;
+
 import javax.swing.*;
-import phex.common.*;
-import phex.utils.*;
+import java.awt.*;
 
 public class MediaTypeListRenderer extends FWListCellRenderer
 {

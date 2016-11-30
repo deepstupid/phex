@@ -18,13 +18,12 @@
  */
 package phex.gui.dialogs.options;
 
-import java.awt.Component;
+import phex.utils.Localizer;
 
-import javax.swing.JTree;
+import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
-
-import phex.utils.Localizer;
+import java.awt.*;
 
 public class OptionsTreeCellRenderer extends DefaultTreeCellRenderer
 {

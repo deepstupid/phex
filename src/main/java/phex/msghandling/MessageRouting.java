@@ -22,11 +22,7 @@
 package phex.msghandling;
 
 import phex.host.Host;
-import phex.msg.GUID;
-import phex.msg.InvalidMessageException;
-import phex.msg.MsgHeader;
-import phex.msg.PongMsg;
-import phex.msg.QueryResponseMsg;
+import phex.msg.*;
 import phex.utils.GUIDRoutingTable;
 import phex.utils.QueryGUIDRoutingPair;
 import phex.utils.QueryGUIDRoutingTable;

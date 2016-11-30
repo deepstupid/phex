@@ -21,7 +21,9 @@
  */
 package phex.utils;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * This class provides functionality to access class methods and fields with

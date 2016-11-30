@@ -19,14 +19,15 @@
 
 package org.apache.commons.codec.net;
 
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.EncoderException;
+
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.BitSet;
 
 //import org.apache.commons.codec.BinaryDecoder;
 //import org.apache.commons.codec.BinaryEncoder;
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.EncoderException;
 //import org.apache.commons.codec.StringDecoder;
 //import org.apache.commons.codec.StringEncoder;
 

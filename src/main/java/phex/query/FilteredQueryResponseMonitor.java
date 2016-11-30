@@ -21,8 +21,6 @@
  */
 package phex.query;
 
-import java.util.ArrayList;
-
 import phex.common.Phex;
 import phex.common.URN;
 import phex.common.address.DestAddress;
@@ -37,6 +35,8 @@ import phex.msg.QueryResponseRecord;
 import phex.msghandling.MessageSubscriber;
 import phex.security.AccessType;
 import phex.servent.Servent;
+
+import java.util.ArrayList;
 
 /**
  * This class monitors query results going through the node.

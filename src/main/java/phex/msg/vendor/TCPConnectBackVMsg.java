@@ -22,7 +22,8 @@
 package phex.msg.vendor;
 
 import phex.common.address.AddressUtils;
-import phex.msg.*;
+import phex.msg.InvalidMessageException;
+import phex.msg.MsgHeader;
 import phex.utils.IOUtil;
 
 /**

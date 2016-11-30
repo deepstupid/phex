@@ -18,9 +18,10 @@
  */
 package phex.gui.renderer;
 
-import java.awt.*;
-import javax.swing.*;
 import phex.utils.Localizer;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class LAFListCellRenderer extends FWListCellRenderer
 {

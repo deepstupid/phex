@@ -1,17 +1,11 @@
 package phex.update;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
-
 import org.bouncycastle.openpgp.PGPPublicKey;
+import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.OpenPgpToolkit;
 import phex.common.Phex;
 import phex.gui.prefs.InterfacePrefs;
@@ -20,6 +14,12 @@ import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
 import phex.utils.Localizer;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Ignore
 public class UpdateCheckRunnerTest extends TestCase
 {
     private static final Logger logger = LoggerFactory.getLogger( UpdateCheckRunnerTest.class );

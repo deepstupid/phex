@@ -21,10 +21,10 @@
  */
 package phex.utils;
 
+import phex.common.bandwidth.BandwidthController;
+
 import java.io.IOException;
 import java.io.InputStream;
-
-import phex.common.bandwidth.BandwidthController;
 
 /**
  *

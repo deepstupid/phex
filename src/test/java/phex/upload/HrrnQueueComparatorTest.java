@@ -21,10 +21,6 @@
  */
 package phex.upload;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import junit.framework.TestCase;
 import phex.common.address.DefaultDestAddress;
 import phex.gui.prefs.InterfacePrefs;
@@ -33,6 +29,10 @@ import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
 import phex.share.ShareFile;
 import phex.utils.Localizer;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class HrrnQueueComparatorTest extends TestCase
 {

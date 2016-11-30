@@ -21,13 +21,13 @@
  */
 package phex.query;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import phex.common.ThreadTracking;
 import phex.common.log.NLogger;
 import phex.host.Host;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * The dynamic query worker contains a list of all active dynamic query engines

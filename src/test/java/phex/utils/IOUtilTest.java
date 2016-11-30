@@ -21,13 +21,15 @@
  */
 package phex.utils;
 
-import java.io.*;
-import java.util.*;
-import java.util.zip.*;
-import java.util.zip.InflaterInputStream;
-
 import junit.framework.TestCase;
-import phex.utils.IOUtil;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.zip.DataFormatException;
+import java.util.zip.InflaterInputStream;
 
 public class IOUtilTest extends TestCase
 {

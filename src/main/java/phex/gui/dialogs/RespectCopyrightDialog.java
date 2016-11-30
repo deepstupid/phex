@@ -22,20 +22,20 @@
  */
 package phex.gui.dialogs;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.event.*;
-
-import javax.swing.*;
-
-import phex.gui.common.GUIRegistry;
-import phex.gui.common.HTMLMultiLinePanel;
-import phex.utils.Localizer;
-
 import com.jgoodies.forms.builder.ButtonBarBuilder;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import phex.gui.common.GUIRegistry;
+import phex.gui.common.HTMLMultiLinePanel;
+import phex.utils.Localizer;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  *

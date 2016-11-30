@@ -21,17 +21,7 @@
  */
 package phex.api;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.awt.Toolkit;
-import java.util.Arrays;
-import java.util.Iterator;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 import org.apache.commons.lang.SystemUtils;
-
 import phex.Main;
 import phex.common.Phex;
 import phex.common.ThreadTracking;
@@ -50,6 +40,11 @@ import phex.servent.Servent;
 import phex.utils.JythonInterpreter;
 import phex.utils.Localizer;
 import phex.utils.SystemProperties;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.Arrays;
+import java.util.Iterator;
 
 /**
  * A class to run Phex from the Phex API.

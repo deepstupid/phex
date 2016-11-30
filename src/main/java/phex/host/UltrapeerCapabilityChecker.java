@@ -21,12 +21,9 @@
  */
 package phex.host;
 
-import java.util.TimerTask;
-
 import org.apache.commons.lang.time.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Environment;
 import phex.common.LongObj;
 import phex.common.bandwidth.BandwidthController;
@@ -36,6 +33,8 @@ import phex.servent.Servent;
 import phex.statistic.StatisticProviderConstants;
 import phex.statistic.StatisticsManager;
 import phex.statistic.UptimeStatisticProvider;
+
+import java.util.TimerTask;
 
 // TODO could be LifeCycle..
 public class UltrapeerCapabilityChecker extends TimerTask

@@ -21,25 +21,18 @@
  */
 package phex.utils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.StringWriter;
-import java.io.Writer;
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+import phex.common.file.ManagedFile;
+import phex.common.file.ManagedFileException;
+import phex.common.file.ReadOnlyManagedFile;
+import phex.common.log.NLogger;
+
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.zip.DataFormatException;
 import java.util.zip.DeflaterOutputStream;
 import java.util.zip.Inflater;
-
-import phex.common.file.ManagedFile;
-import phex.common.file.ManagedFileException;
-import phex.common.file.ReadOnlyManagedFile;
-import phex.common.log.NLogger;
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 
 public class IOUtil

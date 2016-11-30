@@ -21,15 +21,15 @@
  */
 package phex.utils;
 
+import phex.common.address.DestAddress;
+import phex.io.channels.StreamingByteChannel;
+import phex.net.repres.SocketFacade;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.SocketException;
 import java.nio.channels.ByteChannel;
-
-import phex.common.address.DestAddress;
-import phex.io.channels.StreamingByteChannel;
-import phex.net.repres.SocketFacade;
 
 public class DummySocketFacade implements SocketFacade
 {

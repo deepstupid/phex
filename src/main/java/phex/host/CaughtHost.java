@@ -21,10 +21,10 @@
  */
 package phex.host;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import phex.common.address.DestAddress;
 import phex.utils.StringUtils;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 

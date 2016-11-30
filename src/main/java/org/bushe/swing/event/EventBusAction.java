@@ -15,8 +15,8 @@
  */
 package org.bushe.swing.event;
 
+import javax.swing.*;
 import java.awt.event.ActionEvent;
-import javax.swing.ImageIcon;
 
 /**
  * When fired, this action publishes events on the EventBus.

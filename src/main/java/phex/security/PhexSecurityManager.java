@@ -21,25 +21,7 @@
  */
 package phex.security;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import phex.common.AbstractLifeCycle;
-import phex.common.Environment;
-import phex.common.EnvironmentConstants;
-import phex.common.ExpiryDate;
-import phex.common.Phex;
-import phex.common.PhexVersion;
-import phex.common.URN;
+import phex.common.*;
 import phex.common.address.AddressUtils;
 import phex.common.address.DestAddress;
 import phex.common.address.IpAddress;
@@ -51,7 +33,6 @@ import phex.event.ContainerEvent;
 import phex.event.PhexEventTopics;
 import phex.event.UserMessageListener;
 import phex.prefs.core.SecurityPrefs;
-import phex.servent.Servent;
 import phex.share.SharedResource;
 import phex.utils.StringUtils;
 import phex.xml.sax.DPhex;
@@ -59,6 +40,9 @@ import phex.xml.sax.XMLBuilder;
 import phex.xml.sax.security.DIpAccessRule;
 import phex.xml.sax.security.DSecurity;
 import phex.xml.sax.security.DSecurityRule;
+
+import java.io.*;
+import java.util.*;
 
 public class PhexSecurityManager extends AbstractLifeCycle
 {

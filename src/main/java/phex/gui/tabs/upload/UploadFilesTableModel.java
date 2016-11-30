@@ -21,14 +21,8 @@
  */
 package phex.gui.tabs.upload;
 
-import java.awt.EventQueue;
-import java.util.Comparator;
-
-import javax.swing.event.TableModelEvent;
-
 import org.apache.commons.collections.comparators.ComparableComparator;
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.common.format.NumberFormatUtils;
 import phex.event.ContainerEvent;
@@ -43,6 +37,10 @@ import phex.gui.renderer.TransferSizeCellRenderer;
 import phex.upload.UploadManager;
 import phex.upload.UploadState;
 import phex.utils.Localizer;
+
+import javax.swing.event.TableModelEvent;
+import java.awt.*;
+import java.util.Comparator;
 
 public class UploadFilesTableModel extends FWSortableTableModel
 {

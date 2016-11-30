@@ -18,13 +18,12 @@
  */
 package phex.gui.renderer;
 
-import java.awt.Component;
-
-import javax.swing.JTable;
-
 import phex.common.TransferDataProvider;
 import phex.common.format.TimeFormatUtils;
 import phex.utils.Localizer;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class ETACellRenderer extends FWTableCellRenderer
 {

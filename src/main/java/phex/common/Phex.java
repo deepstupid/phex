@@ -21,13 +21,13 @@
  */
 package phex.common;
 
-import java.io.File;
-
 import phex.common.file.FileManager;
 import phex.event.PhexEventService;
 import phex.event.PhexEventServiceImpl;
 import phex.prefs.core.PrivateNetworkConstants;
 import phex.utils.SystemProperties;
+
+import java.io.File;
 
 /**
  *

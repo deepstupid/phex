@@ -21,8 +21,9 @@
  */
 package phex.security;
 
-import phex.utils.*;
-import java.util.*;
+import phex.utils.IOUtil;
+
+import java.util.Comparator;
 
 public class IpSecurityRuleComparator implements Comparator<IpSecurityRule>
 {

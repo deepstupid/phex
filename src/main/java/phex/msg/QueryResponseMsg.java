@@ -21,12 +21,6 @@
  */
 package phex.msg;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.HashSet;
-import java.util.Set;
-
 import phex.common.URN;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
@@ -39,6 +33,12 @@ import phex.security.PhexSecurityManager;
 import phex.utils.HexConverter;
 import phex.utils.IOUtil;
 import phex.xml.XMLUtils;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * <p>A response to a query message.</p>

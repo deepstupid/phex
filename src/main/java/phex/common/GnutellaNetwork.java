@@ -21,9 +21,9 @@
  */
 package phex.common;
 
-import java.io.File;
-
 import phex.prefs.core.NetworkPrefs;
+
+import java.io.File;
 
 /**
  * This class represents an abstract Gnutella network representation.

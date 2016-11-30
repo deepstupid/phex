@@ -22,15 +22,14 @@
  */
 package phex.xml.sax.parser.downloads;
 
-import javax.xml.parsers.SAXParser;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
 import phex.xml.sax.DSubElementList;
 import phex.xml.sax.downloads.DDownloadFile;
+
+import javax.xml.parsers.SAXParser;
 
 /**
  * 

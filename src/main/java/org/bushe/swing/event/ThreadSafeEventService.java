@@ -15,27 +15,17 @@
  */
 package org.bushe.swing.event;
 
+import org.bushe.swing.event.annotation.ReferenceStrength;
+import org.bushe.swing.exception.SwingException;
+
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Type;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.lang.reflect.WildcardType;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-
-import org.bushe.swing.event.annotation.ReferenceStrength;
-import org.bushe.swing.exception.SwingException;
 
 /**
  * A thread-safe EventService implementation.

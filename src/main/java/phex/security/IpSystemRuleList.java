@@ -24,15 +24,15 @@ package phex.security;
 // this class uses source based on the IPList implementation of Limewire
 // (1.16 - 2007-01-25)
 
+import phex.common.collections.PatriciaTrie;
+import phex.common.collections.PatriciaTrie.KeyAnalyzer;
+import phex.common.collections.Trie;
+import phex.common.collections.Trie.Cursor;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import phex.common.collections.PatriciaTrie;
-import phex.common.collections.Trie;
-import phex.common.collections.PatriciaTrie.KeyAnalyzer;
-import phex.common.collections.Trie.Cursor;
 
 public class IpSystemRuleList
 {

@@ -75,14 +75,14 @@ package org.bushe.swing.event.annotation;
  * Brief, clear, and easy.
  */
 
+import org.bushe.swing.event.EventService;
+import org.bushe.swing.event.EventServiceLocator;
+import org.bushe.swing.event.ThreadSafeEventService;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
-import org.bushe.swing.event.EventService;
-import org.bushe.swing.event.EventServiceLocator;
-import org.bushe.swing.event.ThreadSafeEventService;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

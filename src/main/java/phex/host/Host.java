@@ -21,12 +21,8 @@
  */
 package phex.host;
 
-import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Environment;
 import phex.common.Phex;
 import phex.common.QueryRoutingTable;
@@ -47,6 +43,9 @@ import phex.query.DynamicQueryConstants;
 import phex.utils.GnutellaInputStream;
 import phex.utils.GnutellaOutputStream;
 import phex.utils.Localizer;
+
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * <p>A Gnutella host, or servent together with operating statistics and IO.</p>

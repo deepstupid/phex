@@ -1,11 +1,11 @@
 package org.bushe.swing.event.annotation;
 
-import java.lang.reflect.Method;
-import java.util.regex.Pattern;
-
 import org.bushe.swing.event.EventService;
 import org.bushe.swing.event.EventServiceExistsException;
 import org.bushe.swing.event.EventServiceLocator;
+
+import java.lang.reflect.Method;
+import java.util.regex.Pattern;
 
 /**
  * Enhances classes that use EventService Annotations.

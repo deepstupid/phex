@@ -21,19 +21,10 @@
  */
 package phex.gui.tabs.search.cp;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.GridBagLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.UIManager;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
@@ -44,17 +35,11 @@ import phex.gui.common.table.FWTable;
 import phex.gui.tabs.search.SearchResultsDataModel;
 import phex.gui.tabs.search.SearchTab;
 import phex.net.repres.PresentationManager;
-import phex.query.BrowseHostResults;
-import phex.query.KeywordSearch;
-import phex.query.Search;
-import phex.query.SearchContainer;
-import phex.query.SearchDataEvent;
-import phex.query.WhatsNewSearch;
+import phex.query.*;
 import phex.rules.SearchFilterRules;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
+import java.awt.*;
 
 public class SearchControlPanel extends JPanel
 {

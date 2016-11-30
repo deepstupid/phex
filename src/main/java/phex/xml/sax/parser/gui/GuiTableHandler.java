@@ -22,17 +22,15 @@
  */
 package phex.xml.sax.parser.gui;
 
-import java.io.CharArrayWriter;
-
-import javax.xml.parsers.SAXParser;
-
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
 import phex.xml.sax.gui.DTable;
 import phex.xml.sax.gui.DTableColumnList;
+
+import javax.xml.parsers.SAXParser;
+import java.io.CharArrayWriter;
 
 /**
  * 

@@ -18,10 +18,13 @@
  */
 package phex.query;
 
-import java.util.*;
-
 import phex.common.MediaType;
 import phex.download.RemoteFile;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.StringTokenizer;
 
 public class SearchFilter
 {

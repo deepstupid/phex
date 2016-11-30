@@ -21,25 +21,19 @@
  */
 package phex.gui.tabs.search;
 
-import java.awt.EventQueue;
-import java.util.Comparator;
-
-import javax.swing.event.TableModelEvent;
-
 import org.apache.commons.collections.comparators.ComparableComparator;
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.event.ContainerEvent;
 import phex.event.PhexEventTopics;
 import phex.gui.common.table.FWSortableTableModel;
 import phex.gui.renderer.ProgressCellRenderer;
-import phex.query.BrowseHostResults;
-import phex.query.KeywordSearch;
-import phex.query.Search;
-import phex.query.SearchContainer;
-import phex.query.WhatsNewSearch;
+import phex.query.*;
 import phex.utils.Localizer;
+
+import javax.swing.event.TableModelEvent;
+import java.awt.*;
+import java.util.Comparator;
 
 public class SearchListTableModel extends FWSortableTableModel
 {

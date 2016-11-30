@@ -21,17 +21,15 @@
  */
 package phex.gui.tabs.security;
 
-import java.awt.Color;
-import java.awt.Component;
-
-import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
-
 import phex.gui.common.GUIRegistry;
 import phex.gui.common.table.FWTable;
 import phex.security.PhexSecurityManager;
 import phex.security.SecurityRule;
 import phex.servent.Servent;
+
+import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 
 public class SecurityRuleRowRenderer implements TableCellRenderer
 {

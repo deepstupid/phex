@@ -21,11 +21,9 @@
  */
 package phex.gui.tabs.download;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import phex.download.swarming.SWDownloadFile;
 import phex.gui.common.GUIRegistry;
 import phex.gui.common.GUIUtils;
@@ -34,9 +32,7 @@ import phex.gui.common.table.FWTable;
 import phex.xml.sax.gui.DGuiSettings;
 import phex.xml.sax.gui.DTable;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
+import javax.swing.*;
 
 public class DownloadTransfersPanel extends JPanel
 {

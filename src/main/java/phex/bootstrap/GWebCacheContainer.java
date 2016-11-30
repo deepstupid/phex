@@ -21,30 +21,9 @@
  */
 package phex.bootstrap;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.TreeSet;
-
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Environment;
 import phex.common.GeneralGnutellaNetwork;
 import phex.common.Phex;
@@ -59,6 +38,10 @@ import phex.utils.IOUtil;
 import phex.utils.NormalizableURL;
 import phex.utils.StringUtils;
 
+import java.io.*;
+import java.net.URL;
+import java.util.*;
+
 public class GWebCacheContainer
 {
     private static final Logger logger = LoggerFactory.getLogger( 
@@ -67,23 +50,28 @@ public class GWebCacheContainer
     private static int MIN_G_WEB_CACHES_SIZE = 5;
     private static int MAX_G_WEB_CACHES_SIZE = 1000;
     private static List<String> BLOCKED_WEB_CACHES;
-    private static List<String> PHEX_WEB_CACHES;
+    private static List<String> SEED_WEB_CACHES;
+
+
     static
     {
-        // This is a list of Phex only GWebCaches. Requests from other hosts are
-        // ignored and return with ERROR.
         String[] arr =
         {
             /*"http://gc-phex02.rakjar.de/gcache.php", "http://gc-fust01.rakjar.de/gcache.php",*/
-            "http://phexgwc.kouk.de/gcache.php"
+            //"http://phexgwc.kouk.de/gcache.php"
+
+            //from: http://gwebcaches.pongwar.com/
+                "http://dkac.trillinux.org/dkac/dkac.php",
+                "http://gwc.dyndns.info:28960/gwc.php",
+                "http://cache.ce3c.be/"
         };
-        PHEX_WEB_CACHES = Collections.unmodifiableList( Arrays.asList( arr ) );
+        SEED_WEB_CACHES = Collections.unmodifiableList( Arrays.asList( arr ) );
         
         String[] blockedArr =
         {
             "gavinroy.com"
         };
-        BLOCKED_WEB_CACHES = Collections.unmodifiableList( Arrays.asList(blockedArr) );
+        BLOCKED_WEB_CACHES = Collections.unmodifiableList( (Arrays.asList(blockedArr)) );
     }
 
     /**
@@ -148,7 +136,7 @@ public class GWebCacheContainer
         functionalGWebCaches.clear();
         uniqueGWebCacheURLs.clear();
         sortedGWebCaches.clear();
-        insertPhexGWebCaches();
+        seedWebCaches();
         
         loadFromConfigInBackgrd();
     }
@@ -633,19 +621,19 @@ public class GWebCacheContainer
         {// emergency case which should never happen since the gwebcache.cfg
          // should contain enough caches.
             //insertGWebCache( "http://gwebcache.bearshare.net/gcache.php" );
-            insertPhexGWebCaches();
+            seedWebCaches();
             saveGWebCacheToFile();
         }
     }
     
-    private void insertPhexGWebCaches()
+    private void seedWebCaches()
     {
         if ( !( servent.getGnutellaNetwork() instanceof GeneralGnutellaNetwork ) )
         {// not on general gnutella network... can't use default list
             return;
         }
         URL url;
-        for ( String phexCachesURL : PHEX_WEB_CACHES )
+        for ( String phexCachesURL : SEED_WEB_CACHES)
         {
             try
             {
@@ -682,7 +670,8 @@ public class GWebCacheContainer
         {
             return false;
         }
-        
+
+
         // check access by host name
         for ( String blocked : BLOCKED_WEB_CACHES )
         {
@@ -699,7 +688,7 @@ public class GWebCacheContainer
     
     public boolean isPhexGWebCache( String url )
     {
-        return PHEX_WEB_CACHES.indexOf(url) != -1;
+        return SEED_WEB_CACHES.indexOf(url) != -1;
     }
 
     private void loadFromConfigInBackgrd( )

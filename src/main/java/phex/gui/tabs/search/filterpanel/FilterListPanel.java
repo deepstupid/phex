@@ -21,24 +21,9 @@
  */
 package phex.gui.tabs.search.filterpanel;
 
-import java.awt.Component;
-import java.awt.event.ActionEvent;
-
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-
 import phex.gui.actions.FWAction;
 import phex.gui.common.table.FWTable;
 import phex.gui.dialogs.filter.AdvSearchRulesDialog;
@@ -46,6 +31,14 @@ import phex.gui.tabs.search.SearchResultsDataModel;
 import phex.rules.Rule;
 import phex.rules.SearchFilterRules;
 import phex.utils.Localizer;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
 
 /**

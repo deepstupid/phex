@@ -21,8 +21,10 @@
  */
 package phex.gui.models;
 
-import phex.gui.common.table.*;
-import phex.statistic.*;
+import phex.gui.common.table.FWSortableTableModel;
+import phex.statistic.StatisticProvider;
+import phex.statistic.StatisticProviderConstants;
+import phex.statistic.StatisticsManager;
 import phex.utils.Localizer;
 
 public class StatisticsTableModel extends FWSortableTableModel

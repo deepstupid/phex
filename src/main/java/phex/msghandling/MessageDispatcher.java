@@ -21,14 +21,8 @@
  */
 package phex.msghandling;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Environment;
 import phex.common.QueryRoutingTable;
 import phex.common.address.DefaultDestAddress;
@@ -38,26 +32,8 @@ import phex.common.format.NumberFormatUtils;
 import phex.host.Host;
 import phex.host.HostManager;
 import phex.io.buffer.ByteBuffer;
-import phex.msg.GUID;
-import phex.msg.InvalidMessageException;
-import phex.msg.Message;
-import phex.msg.MsgHeader;
-import phex.msg.PingMsg;
-import phex.msg.PongFactory;
-import phex.msg.PongMsg;
-import phex.msg.PushRequestMsg;
-import phex.msg.QueryMsg;
-import phex.msg.QueryResponseMsg;
-import phex.msg.QueryResponseRecord;
-import phex.msg.RouteTableUpdateMsg;
-import phex.msg.vendor.CapabilitiesVMsg;
-import phex.msg.vendor.HopsFlowVMsg;
-import phex.msg.vendor.MessagesSupportedVMsg;
-import phex.msg.vendor.PushProxyAcknowledgementVMsg;
-import phex.msg.vendor.PushProxyRequestVMsg;
-import phex.msg.vendor.TCPConnectBackRedirectVMsg;
-import phex.msg.vendor.TCPConnectBackVMsg;
-import phex.msg.vendor.VendorMsg;
+import phex.msg.*;
+import phex.msg.vendor.*;
 import phex.net.connection.Connection;
 import phex.net.connection.ConnectionFactory;
 import phex.prefs.core.BandwidthPrefs;
@@ -74,6 +50,11 @@ import phex.statistic.StatisticsManager;
 import phex.upload.PushWorker;
 import phex.utils.HexConverter;
 import phex.utils.StringUtils;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 class MessageDispatcher
 {

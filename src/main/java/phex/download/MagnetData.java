@@ -22,13 +22,14 @@
 
 package phex.download;
 
-import java.util.*;
-
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
-
 import phex.common.URN;
 import phex.utils.URLCodecUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 /**
  * 

@@ -21,14 +21,14 @@
  */
 package phex.test.performance;
 
-import java.io.File;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import phex.common.ThreadTracking;
 import phex.prefs.core.PhexCorePrefs;
 import phex.utils.Localizer;
 import phex.utils.SystemProperties;
+
+import java.io.File;
 
 
 public class PhexPerformanceSuite extends TestSuite

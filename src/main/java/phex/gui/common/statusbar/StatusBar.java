@@ -41,13 +41,11 @@
  */
 package phex.gui.common.statusbar;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
-import java.util.Hashtable;
+import com.l2fprod.common.swing.PercentLayout;
 
 import javax.swing.*;
-
-import com.l2fprod.common.swing.PercentLayout;
+import java.awt.*;
+import java.util.Hashtable;
 
 /**
  * StatusBar. <BR>A status bar is made of multiple zones. A zone can be any

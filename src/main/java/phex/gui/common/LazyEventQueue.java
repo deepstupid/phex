@@ -21,19 +21,16 @@
  */
 package phex.gui.common;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.EventListener;
-
-import javax.swing.AbstractListModel;
-import javax.swing.ListModel;
-import javax.swing.Timer;
+import javax.swing.*;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.EventListener;
 
 /**
  * The job of this class is to collect events, narrow them and fire them in

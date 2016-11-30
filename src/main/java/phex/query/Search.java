@@ -23,7 +23,6 @@ package phex.query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import phex.common.Phex;
 import phex.common.URN;
 import phex.download.RemoteFile;

@@ -21,16 +21,11 @@
  */
 package phex.utils;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
-
 import phex.common.FileHandlingException;
 import phex.common.log.NLogger;
+
+import java.io.*;
+import java.nio.channels.FileChannel;
 
 /**
  * Offers static utility methods for file handling, like creating file path...

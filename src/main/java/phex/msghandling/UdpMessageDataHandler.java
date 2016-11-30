@@ -21,24 +21,12 @@
  */
 package phex.msghandling;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xsocket.IDataSource;
-
 import phex.common.address.DestAddress;
 import phex.host.HostManager;
-import phex.msg.GUID;
-import phex.msg.InvalidMessageException;
-import phex.msg.Message;
-import phex.msg.MessageProcessor;
-import phex.msg.MsgHeader;
-import phex.msg.PingMsg;
-import phex.msg.PongFactory;
-import phex.msg.PongMsg;
-import phex.msg.QueryResponseMsg;
+import phex.msg.*;
 import phex.msg.vendor.MessageAcknowledgementVMsg;
 import phex.msg.vendor.OOBReplyCountVMsg;
 import phex.msg.vendor.UdpHeadPingVMsg;
@@ -53,7 +41,9 @@ import phex.share.SharedFilesService;
 import phex.statistic.StatisticProvider;
 import phex.statistic.StatisticsManager;
 import phex.udp.UdpGuidRoutingTable;
-import phex.utils.HexConverter;
+
+import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public class UdpMessageDataHandler implements UdpDataHandler
 {

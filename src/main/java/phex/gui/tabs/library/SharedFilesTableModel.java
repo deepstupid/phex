@@ -21,14 +21,8 @@
  */
 package phex.gui.tabs.library;
 
-import java.awt.EventQueue;
-import java.io.File;
-import java.io.FileFilter;
-import java.util.Comparator;
-
 import org.apache.commons.collections.comparators.ComparableComparator;
 import org.bushe.swing.event.annotation.EventTopicSubscriber;
-
 import phex.common.Phex;
 import phex.event.PhexEventTopics;
 import phex.gui.common.GUIRegistry;
@@ -40,6 +34,11 @@ import phex.share.SharedFilesService;
 import phex.thex.ShareFileThexData;
 import phex.utils.FilesOnlyFileFilter;
 import phex.utils.Localizer;
+
+import java.awt.*;
+import java.io.File;
+import java.io.FileFilter;
+import java.util.Comparator;
 
 public class SharedFilesTableModel extends FWSortableTableModel
 {

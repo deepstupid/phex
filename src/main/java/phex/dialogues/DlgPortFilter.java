@@ -21,10 +21,10 @@
  */
 package phex.dialogues;
 
-import java.util.Iterator;
-
 import phex.gui.common.MainFrame;
 import phex.utils.Localizer;
+
+import java.util.Iterator;
 
 public class DlgPortFilter extends DlgBase
 {

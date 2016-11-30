@@ -21,18 +21,14 @@
  */
 package phex.common;
 
+import org.apache.commons.lang.SystemUtils;
+import phex.event.UserMessageListener;
+import phex.utils.SystemProperties;
+
 import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executor;
-
-import org.apache.commons.lang.SystemUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import phex.event.UserMessageListener;
-import phex.prefs.core.PrivateNetworkConstants;
-import phex.utils.SystemProperties;
 
 /**
  * This class can not be implemented as a manager since manager initialization
