@@ -879,6 +879,7 @@ class MessageDispatcher
     
     public void dropMessage( MsgHeader header, byte[] body, String reason, Host sourceHost )
     {
+
         logger.info( "Dropping message: {} from: {}", reason, sourceHost );
         if ( logger.isDebugEnabled( ) )
         {

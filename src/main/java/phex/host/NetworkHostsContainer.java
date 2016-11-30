@@ -341,6 +341,8 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
                 else if ( host.isNoVendorDisconnectApplying() )
                 {
                     policyInfraction = Localizer.getString( "NoVendorString" );
+                } else if (host.isProducingTooMuchBadMessages(0.1f ) ) {
+                    policyInfraction = "Bad Messages";
                 }
                 // freeloaders are no real problem
                 // else if ( host.isFreeloader( currentTime ) )

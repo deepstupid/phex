@@ -190,8 +190,8 @@ public class KeywordSearch extends QuerySearch
      */
     public static short calculateSearchScore( String searchStr, String resultStr )
     {
-        double tokenCount = 0;
-        double hitCount = 0;
+        int tokenCount = 0;
+        int hitCount = 0;
         StringTokenizer tokens = new StringTokenizer( searchStr );
         SearchEngine searchEngine = new SearchEngine();
         searchEngine.setText(resultStr, false);
@@ -205,7 +205,7 @@ public class KeywordSearch extends QuerySearch
                 hitCount ++;
             }
         }
-        double perc = hitCount / tokenCount * 100;
+        double perc = hitCount / (tokenCount * 100.0);
         return (short) perc;
     }
     

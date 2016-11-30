@@ -276,9 +276,9 @@ public class QueryResponseMsg extends Message
         bodyStream.write( ipAddress );
         IOUtil.serializeIntLE( speed, bodyStream );
 
-        for (int i = 0; i < recordCount; i++)
-        {
-            records[ i ].write( bodyStream );
+        QueryResponseRecord[] r = this.records;
+        for (int i = 0; i < recordCount; i++) {
+            r[ i ].write( bodyStream );
         }
 
         if ( INCLUDE_QHD )
@@ -325,14 +325,11 @@ public class QueryResponseMsg extends Message
 
             // private QHD area
             // mark for chat able.
-            if ( NetworkPrefs.AllowChatConnection.get().booleanValue() )
-            {
-                bodyStream.write( (byte) 0x01 );
-            }
-            else
-            {
-                bodyStream.write( (byte) 0x00 );
-            }
+            bodyStream.write(
+                    NetworkPrefs.AllowChatConnection.get().booleanValue() ?
+                        (byte) 0x01 :
+                        (byte) 0x00
+            );
 
             //GGEP block
             byte[] ggepBytes = GGEPBlock.getQueryReplyGGEPBlock( 
@@ -376,10 +373,11 @@ public class QueryResponseMsg extends Message
     {
         byte[] ip = new byte[4];
         // the ip starts at byte 3
-        ip[0] = body[3];
-        ip[1] = body[4];
-        ip[2] = body[5];
-        ip[3] = body[6];
+        byte[] b = this.body;
+        ip[0] = b[3];
+        ip[1] = b[4];
+        ip[2] = b[5];
+        ip[3] = b[6];
         return ip;
     }
 

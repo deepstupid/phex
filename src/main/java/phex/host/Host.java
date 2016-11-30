@@ -45,6 +45,8 @@ import phex.utils.GnutellaOutputStream;
 import phex.utils.Localizer;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -57,7 +59,12 @@ public class Host
     private static final double SENT_QUALITY_THRESHOLD = 0.7;
 
     private static final Logger logger = LoggerFactory.getLogger( Host.class );
-    
+
+    public static final Set<String> BANNED_VENDORS = new HashSet<String>() {{
+        add("FOXY"); //https://en.wikipedia.org/wiki/Foxy_(P2P)
+    }};
+
+
     public enum Type
     {
         OUTGOING,
@@ -384,10 +391,16 @@ public class Host
         getOutputStream().activateOutputDeflation();
     }
 
-    public void setVendor(String aVendor)
+    public boolean setVendor(String aVendor)
     {
+        if (BANNED_VENDORS.contains(aVendor)) {
+            disconnect();
+            return false;
+        }
+
         vendor = aVendor;
         isPhexVendor = Phex.isPhexVendor( vendor );
+        return true;
     }
 
     public String getVendor()
@@ -775,6 +788,11 @@ public class Host
         {
             return messageQueue.getQueuedMessageCount();
         }
+    }
+
+    public boolean isProducingTooMuchBadMessages(float threshold) {
+        return ((double)receivedDropMsgCount)/(receivedMsgCount) > threshold;
+
     }
 
     public boolean isSendQueueTooLong()

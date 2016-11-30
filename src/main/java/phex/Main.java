@@ -21,6 +21,7 @@
  */
 package phex;
 
+import org.slf4j.LoggerFactory;
 import phex.common.Phex;
 import phex.common.ThreadTracking;
 import phex.common.log.LogUtils;
@@ -45,6 +46,7 @@ import java.util.Iterator;
 
 public class Main {
     private static SplashScreen splashScreen;
+
 
     /**
      * Don't use NLogger before arguments have been read ( -c )
@@ -121,6 +123,7 @@ public class Main {
 
             Localizer.initialize(InterfacePrefs.LocaleName.get());
             ThreadTracking.initialize();
+
 
             Phex.initialize();
             Servent.getInstance();

@@ -66,14 +66,13 @@ public class GUID implements Serializable {
         seed = seed + ipValue;
         randomizer = new Random(seed);
 
-        EMPTY_GUID = new GUID(
-                new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
+        EMPTY_GUID = new GUID( new byte[DATA_LENGTH] /* zeros */);
     }
 
     // Atributes
     private byte[] bytes;
-    private String stringRepresentation = null;
-    int hash;
+    transient private String stringRepresentation = null;
+    //transient int hash;
 
     /**
      * Create a GUID for this server.
@@ -86,7 +85,7 @@ public class GUID implements Serializable {
         // see http://groups.yahoo.com/group/the_gdf/message/1397
         bytes[8] = (byte) 0xFF;
         bytes[15] = 0;
-        updateHash();
+        //updateHash();
     }
 
     /**
@@ -110,20 +109,21 @@ public class GUID implements Serializable {
      * @throws IllegalArgumentException if guidBytes is not 16 long
      */
     public GUID(byte[] guidBytes) {
-        if (!(guidBytes.length == 16)) {
+
+        setBytes(guidBytes);
+    }
+
+    private void setBytes(byte[] guidBytes) {
+        if (guidBytes.length != DATA_LENGTH) {
             throw new IllegalArgumentException(
                     "Attempted to construct a GUID from an array of bytes " +
                             "not 16 long: " + guidBytes.length
             );
         }
 
-        setBytes(guidBytes);
-    }
-
-    private void setBytes(byte[] guidBytes) {
         stringRepresentation = null;
         bytes = guidBytes;
-        updateHash();
+        //updateHash();
     }
 
     /**
@@ -162,16 +162,16 @@ public class GUID implements Serializable {
         return false;
     }
 
-    /**
-     * <p>Appears to be identical to setGuid().</p>
-     *
-     * @param guidBytes the byte array to copy from
-     */
-    public void copy(byte[] guidBytes) {
-        stringRepresentation = null;
-        System.arraycopy(guidBytes, 0, bytes, 0, DATA_LENGTH);
-        updateHash();
-    }
+//    /**
+//     * <p>Appears to be identical to setGuid().</p>
+//     *
+//     * @param guidBytes the byte array to copy from
+//     */
+//    public void copy(byte[] guidBytes) {
+//        stringRepresentation = null;
+//        System.arraycopy(guidBytes, 0, bytes, 0, DATA_LENGTH);
+//        updateHash();
+//    }
 
     /**
      * <p>Copy the byte image of this GUID into outbuf, starting at byte offset
@@ -213,7 +213,7 @@ public class GUID implements Serializable {
         // Copy input buffer to my content.
         stringRepresentation = null;
         System.arraycopy(inbuf, offset, bytes, 0, DATA_LENGTH);
-        updateHash();
+        //updateHash();
 
         // return new offset
         return offset + DATA_LENGTH;
@@ -230,15 +230,16 @@ public class GUID implements Serializable {
 
     private String generateString() {
         StringBuffer buffer = new StringBuffer(20);
-        buffer.append(HexConverter.toHexString(bytes, 0, 4));
+        byte[] b = this.bytes;
+        buffer.append(HexConverter.toHexString(b, 0, 4));
         buffer.append('-');
-        buffer.append(HexConverter.toHexString(bytes, 4, 2));
+        buffer.append(HexConverter.toHexString(b, 4, 2));
         buffer.append('-');
-        buffer.append(HexConverter.toHexString(bytes, 6, 2));
+        buffer.append(HexConverter.toHexString(b, 6, 2));
         buffer.append('-');
-        buffer.append(HexConverter.toHexString(bytes, 8, 2));
+        buffer.append(HexConverter.toHexString(b, 8, 2));
         buffer.append('-');
-        buffer.append(HexConverter.toHexString(bytes, 10, 6));
+        buffer.append(HexConverter.toHexString(b, 10, 6));
         return buffer.toString();
     }
 
@@ -265,10 +266,10 @@ public class GUID implements Serializable {
 
     @Override
     public int hashCode() {
-        return hash;
-    }
-
-    private void updateHash() {
+//        return hash;
+//    }
+//
+//    private void updateHash() {
         int v1, v2, v3, v4;
 
         byte[] b = this.bytes;
@@ -281,7 +282,7 @@ public class GUID implements Serializable {
         v4 = (0xFF & b[12]) | (0xFF00 & b[13] << 8)
                 | (0xFF0000 & b[14] << 16) | (b[15] << 24);
 
-        this.hash = v1 ^ v2 ^ v3 ^ v4;
+        return v1 ^ v2 ^ v3 ^ v4;
     }
 
 
@@ -291,7 +292,7 @@ public class GUID implements Serializable {
         byte[] b = guid.bytes;
         for (int i = 0; i < 4; i++)
             b[i] = ipBytes[i];
-        guid.updateHash();
+        //guid.updateHash();
         IOUtil.serializeShortLE((short) port, guid.bytes, 13);
     }
 

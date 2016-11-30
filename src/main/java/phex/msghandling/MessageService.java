@@ -209,6 +209,7 @@ public class MessageService extends AbstractLifeCycle
     
     public void dropMessage( MsgHeader header, byte[] body, String reason, Host sourceHost )
     {
+
         messageDispatcher.dropMessage( header, body, reason, sourceHost );
     }
     

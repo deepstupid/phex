@@ -215,7 +215,7 @@ final public class HostManager extends AbstractLifeCycle
     private class HostCheckTimer extends TimerTask
     {
 
-        public static final long TIMER_PERIOD = 2000;
+        public static final long TIMER_PERIOD = 200;
 
         /**
          * @see java.util.TimerTask#run()

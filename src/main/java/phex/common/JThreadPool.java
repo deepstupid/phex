@@ -35,7 +35,8 @@ public class JThreadPool
     public JThreadPool()
     {
         pool = new ThreadPoolExecutor( 1, Integer.MAX_VALUE, 30, TimeUnit.SECONDS,
-                new SynchronousQueue<>(), new DefaultThreadFactory() );
+                new SynchronousQueue<Runnable>(), new DefaultThreadFactory() );
+        //pool = new ForkJoinPool(4);
     }
     
     public Executor getThreadPool()
@@ -50,19 +51,20 @@ public class JThreadPool
     
     public void shutdown()
     {
+
         pool.shutdown();
     }
     
     /**
      * The default thread factory
      */
-    private class DefaultThreadFactory implements ThreadFactory 
+    private class DefaultThreadFactory implements ThreadFactory
     {
         final ThreadGroup group;
         final AtomicInteger threadNumber = new AtomicInteger(1);
         final String namePrefix;
 
-        DefaultThreadFactory() 
+        DefaultThreadFactory()
         {
             SecurityManager s = System.getSecurityManager();
             group = (s != null)? s.getThreadGroup() :
@@ -70,10 +72,10 @@ public class JThreadPool
             namePrefix = "PhexPool-thread-";
         }
 
-        public Thread newThread(Runnable r) 
+        public Thread newThread(Runnable r)
         {
             logger.debug( "Creating new thread for pool: {} {}", pool.getPoolSize(), pool.getActiveCount() );
-            Thread t = new Thread(group, r, 
+            Thread t = new Thread(group, r,
                 namePrefix + threadNumber.getAndIncrement(), 0);
             if (t.isDaemon())
                 t.setDaemon(false);

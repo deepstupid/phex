@@ -101,10 +101,32 @@ public class ConnectionEngine implements ConnectionConstants
             while ( true )
             {
                 MsgHeader header = readHeader();
+
+                if (header.getPayload() == 2) {
+                    // http://rfc-gnutella.sourceforge.net/developer/stable/index.html#t3-2-1
+                    /*
+                    3.2.7. Bye (0x02) Extension Descriptor Payload
+
+                    Fields	Optional Bye Data
+                    Byte offset	0...L-1
+                    Optional Bye Data
+                    This is an optional field consisting in bytes of variable length, it is reserved for extensions of the current version of the protocol, to specify filters about expected Pong replies. Its maximum length is bounded by the Payload Length field of the header.
+                    When used, this field SHOULD be small and agreed upon with other Gnutella servent implementors, as this field MAY be specified in a further specification of the protocol.
+                    This descriptor was not specified in the original 0.4 protocol. Implementing it in servents is optional. Servents MAY safely ignore this descriptor, as it is completely compatible with all non Bye-aware 0.4 servents.
+
+                    However a Bye-aware servent MUST set TTL=1 and Hops=0 when sending this descriptor, then it SHOULD NOT send or forward any other descriptor on the same connection path; instead it MAY wait for about 30 seconds that the connection closes (if timeout elapses, it SHOULD close the connection). During that period, the servent MAY ignore all other incoming descriptors coming from the same connection path (with the exception of another incoming Bye Descriptor which MAY be interpreted). The semantic of an sending a Bye descriptor with Hops<>0 is unknown and not defined in this document.
+
+                    On reception, a Bye-aware servent MUST NOT forward this message; it MAY interpret the Payload to take further actions, but it SHOULD disconnect immediately from the servent which sent this descriptor. The content of the Payload is not specified in this version of the protocol (it will typically contain a NUL terminated status line that gives the reason why a servent will be disconnected, and other Optional Bye Data extensions).
+                     */
+                    continue;
+                }
+
                 byte[] body = MessageProcessor.readMessageBody( connection,
                     header.getDataLength() );
 
                 connectedHost.incReceivedCount();
+
+
 
                 int ttl = header.getTTL();
                 int hops = header.getHopsTaken();
@@ -116,16 +138,17 @@ public class ConnectionEngine implements ConnectionConstants
                     continue;
                 }
                 // if message traveled too far already... drop it.
-                if ( hops > MessagePrefs.MaxNetworkTTL.get().intValue() )
+                int MAX_TTL = MessagePrefs.MaxNetworkTTL.get().intValue();
+                if ( hops > MAX_TTL)
                 {
                     messageService.dropMessage( header, body, 
                         "Hops larger then maxNetworkTTL", connectedHost );
                     continue;
                 }
                 // limit TTL if too high!
-                if ( ttl >= MessagePrefs.MaxNetworkTTL.get().intValue() )
+                if ( ttl >= MAX_TTL)
                 {
-                    header.setTTL( (byte)(MessagePrefs.MaxNetworkTTL.get().intValue() - hops) );
+                    header.setTTL( (byte)(MAX_TTL - hops) );
                 }
 
                 Message message;
@@ -135,7 +158,7 @@ public class ConnectionEngine implements ConnectionConstants
                         header, body, securityService );
                     if ( message == null )
                     { // unknown message type...
-                        messageService.dropMessage( header, body, 
+                        messageService.dropMessage( header, body,
                             "Unknown message type", connectedHost );
                         continue;
                     }
@@ -502,7 +525,9 @@ public class ConnectionEngine implements ConnectionConstants
         HTTPHeader header = headers.getHeader( HTTPHeaderNames.USER_AGENT );
         if ( header != null )
         {
-            connectedHost.setVendor( header.getValue() );
+            if (!connectedHost.setVendor( header.getValue() )) {
+                return;
+            }
         }
 
         if ( connectedHost.isIncomming() )
