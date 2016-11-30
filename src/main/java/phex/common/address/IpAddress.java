@@ -76,24 +76,15 @@ public class IpAddress
         return ipValue;
     }
 
-    public boolean equals( IpAddress address )
-    {
-        if ( address == null )
-        {
+    public boolean equals( Object address )     {
+        if (this == address) return true;
+        if ( address == null ) {
             return false;
         }
-        return Arrays.equals( hostIP, address.hostIP );
+
+        return Arrays.equals( hostIP, ((IpAddress)address).hostIP );
     }
 
-    @Override
-    public boolean equals( Object obj )
-    {
-        if ( obj instanceof IpAddress )
-        {
-            return equals( (IpAddress) obj );
-        }
-        return false;
-    }
 
     @Override
     public int hashCode()

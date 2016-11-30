@@ -42,7 +42,7 @@ public class TestThrottleController extends TestCase
         c.activateLongTransferAvg( 1000, 10 );
         c.activateShortTransferAvg( 1000, 5 );
         
-        Pump pump = new Pump( 1000000, c );
+        Pump pump = new Pump( 500000, c );
         Thread t = new Thread( pump );
         t.start();
         t.join();
@@ -75,20 +75,21 @@ public class TestThrottleController extends TestCase
 
     public void testThroughput2() throws Exception
     {
+        int rate = 1000;
         BandwidthController controller =
-            new BandwidthController( "Test2", 1000 );
+            new BandwidthController( "Test2", rate);
 
         long start = System.currentTimeMillis();
-        long totalData = 10000;
+        long totalData = rate*4;
         while( totalData > 0 )
         {
-            int toUse = controller.getAvailableByteCount( 1000, true, false );
+            int toUse = controller.getAvailableByteCount(rate, true, false );
             totalData -= toUse;
             controller.markBytesUsed(toUse);
             System.out.println( toUse + " - " + totalData + " - " + controller.toDebugString() );
         }
         long end = System.currentTimeMillis();
-        System.out.println( "Throughput: " + (end-start)/1000 + "  " + (10000 / (end-start)/1000));
+        System.out.println( "Throughput: " + (end-start)/ rate + "  " + (totalData / (end-start)/ rate));
         System.out.println( controller.toDebugString() );
     }
     

@@ -24,48 +24,48 @@ package phex.test.performance;
 
 import junit.framework.TestCase;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 //import org.apache.commons.io.FileUtils;
 
 /**
  * @author gregor
- */ 
-public class TestFileCopy extends TestCase
-{
+ */
+public class TestFileCopy extends TestCase {
     private File tempFile1;
     private RandomAccessFile raFile1;
-    
+
     protected void setUp()
-        throws Exception
-    {
+            throws Exception {
         super.setUp();
-        tempFile1 = File.createTempFile( "TestFileUtils1", "tmp" );
-        raFile1 = new RandomAccessFile( tempFile1, "rw");
-        raFile1.setLength( 30 * 1024 * 1024  ); // 30MB
+        tempFile1 = File.createTempFile("TestFileUtils1", "tmp");
+        raFile1 = new RandomAccessFile(tempFile1, "rw");
+        raFile1.setLength(30 * 1024 * 1024); // 30MB
         raFile1.close();
     }
-    
+
     protected void tearDown()
-        throws Exception
-    {
+            throws Exception {
         super.tearDown();
         tempFile1.delete();
     }
-    
+
     public void testCopy()
-        throws Exception
-    {
-        File destinationFile = File.createTempFile( "TestFileUtils2", "tmp" );
+            throws Exception {
+        File destinationFile = File.createTempFile("TestFileUtils2", "tmp");
         long start = System.currentTimeMillis();
-        for ( int i = 0; i < 5; i++ )
-        {
-            copyFile( tempFile1, destinationFile );
+        for (int i = 0; i < 5; i++) {
+            copyFile(tempFile1, destinationFile);
         }
         destinationFile.delete();
         long end = System.currentTimeMillis();
-        System.out.println( "standard: " + (end-start) );
-        
+        System.out.println("standard: " + (end - start));
+
     }
     
     /*
@@ -84,37 +84,40 @@ public class TestFileCopy extends TestCase
         
     }
     */
-    
+
     private static final int BUFFER_LENGTH = 256 * 1024;
+
     /**
      * Copys the source file to the destination file. Old contents of the
      * destination file will be overwritten.
+     *
      * @deprecated use org.apache.commons.io.FileUtils.copyFile( source, destination );
      */
-    public static void copyFile( File source, File destination )
-        throws IOException
-    {   
-        // open files
-        BufferedInputStream inStream = new BufferedInputStream(
-            new FileInputStream( source ) );
-        BufferedOutputStream outStream = new BufferedOutputStream(
-            new FileOutputStream( destination ) );
+    public static void copyFile(File source, File destination)
+            throws IOException {
+        Files.copy(Paths.get(source.toURI()), Paths.get(destination.toURI()), StandardCopyOption.REPLACE_EXISTING);
 
-        byte[] buffer = new byte[ (int)Math.min( BUFFER_LENGTH, source.length() + 1) ];
-        int length;
-        while ( true )
-        {
-            // read the min value of the buffer length or the value left to read
-            length = inStream.read( buffer, 0, buffer.length );
-            // end of stream
-            if ( length == -1 )
-            {
-                break;
-            }
-
-            outStream.write( buffer, 0, length );
-        }
-        outStream.close();
-        inStream.close();
+//        // open files
+//        BufferedInputStream inStream = new BufferedInputStream(
+//            new FileInputStream( source ) );
+//        BufferedOutputStream outStream = new BufferedOutputStream(
+//            new FileOutputStream( destination ) );
+//
+//        byte[] buffer = new byte[ (int)Math.min( BUFFER_LENGTH, source.length() + 1) ];
+//        int length;
+//        while ( true )
+//        {
+//            // read the min value of the buffer length or the value left to read
+//            length = inStream.read( buffer, 0, buffer.length );
+//            // end of stream
+//            if ( length == -1 )
+//            {
+//                break;
+//            }
+//
+//            outStream.write( buffer, 0, length );
+//        }
+//        outStream.close();
+//        inStream.close();
     }
 }

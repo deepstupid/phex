@@ -696,22 +696,23 @@ public class GGEPBlock
                 // - 3-0: ID Len ( 1-15 )
 
                 // validate extension byte
-                if ( body.length > offset && (body[offset] & 0x10) != 0)
+                byte b = 0;
+                if ( body.length > offset && ((b = body[offset]) & 0x10) != 0)
                 {
                     throw new InvalidGGEPBlockException();
                 }
                 // last bit in header
-                isLastExtension = (body[offset] & 0x80) != 0;
-                boolean isEncoded = (body[offset] & 0x40) != 0;
-                boolean isCompressed = (body[offset] & 0x20) != 0;
-                boolean isReserved = (body[offset] & 0x10) != 0;
+                isLastExtension = (b & 0x80) != 0;
+                boolean isEncoded = (b & 0x40) != 0;
+                boolean isCompressed = (b & 0x20) != 0;
+                boolean isReserved = (b & 0x10) != 0;
                 if( isReserved )
                 {
                     throw new InvalidGGEPBlockException( "Reserved bit set to 1" );
                 }
 
                 // first 4 bit
-                short headerLength = (short) (body[offset] & 0x0F);
+                short headerLength = (short) (b & 0x0F);
                 if ( headerLength == 0 )
                 {// 0 not allowed...
                     throw new InvalidGGEPBlockException();

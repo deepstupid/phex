@@ -25,9 +25,8 @@ package phex.utils;
 import phex.host.Host;
 import phex.msg.GUID;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * This GUIDRoutingTable is used to route replies coming from the GNet
@@ -94,10 +93,10 @@ public class GUIDRoutingTable
     {
         this.lifetime = lifetime;
         nextId = 0;
-        currentMap = new TreeMap<GUID, Entry>( new GUID.GUIDComparator() );
-        lastMap = new TreeMap<GUID, Entry>( new GUID.GUIDComparator() );
-        idToHostMap = new HashMap<Integer, Host>();
-        hostToIdMap = new HashMap<Host, Integer>();
+        currentMap = new ConcurrentHashMap<GUID, Entry>(  );// new TreeMap<GUID, Entry>( new GUID.GUIDComparator() );
+        lastMap = new ConcurrentHashMap<GUID, Entry>(  );
+        idToHostMap = new ConcurrentHashMap<Integer, Host>();
+        hostToIdMap = new ConcurrentHashMap<Host, Integer>();
     }
 
     /**
@@ -105,9 +104,10 @@ public class GUIDRoutingTable
      * @param guid the GUID to route for
      * @param host the route destination.
      */
-    public synchronized void addRouting( GUID guid, Host host )
+    public void addRouting( GUID guid, Host host )
     {
         checkForSwitch();
+
 
         // check if still connected.
         if ( !host.isConnected() )
@@ -115,7 +115,9 @@ public class GUIDRoutingTable
             return;
         }
 
-        Integer id = getIdForHost( host );
+
+
+        int id = getIdForHost( host );
         
         // try to find and remove existing entry obj in currentMap and lastMap
 		Entry entry = currentMap.remove( guid );
@@ -147,26 +149,34 @@ public class GUIDRoutingTable
      * already available, to indicate the message was already
      * routed. If the routing is not available it is added and true is returned.
      */
-    public synchronized boolean checkAndAddRouting( GUID guid, Host host )
+    public boolean checkAndAddRouting( GUID guid, Host host )
     {
-        checkForSwitch();
         // check if still connected.
-        if ( !host.isConnected() )
-        {
+        if ( !host.isConnected() ) {
             return false;
         }
-        if ( !currentMap.containsKey( guid ) && !lastMap.containsKey( guid ) )
-        {
-            Integer id = getIdForHost( host );
-			Entry entry = createNewEntry();
-			entry.hostId = id;
+
+        checkForSwitch();
+
+
+        if (  !lastMap.containsKey( guid ) )         {
             // update or add guid routing to new host in currentMap
-            currentMap.put( guid, entry );
-            
-            return true;
+            final boolean[] added = {false};
+            currentMap.compute(guid, (g,v) -> {
+
+                if (v!=null)
+                    return v;
+
+                int id = getIdForHost( host );
+                Entry entry = createNewEntry();
+                entry.hostId = id;
+                added[0] = true;
+                return entry;
+            });
+            return added[0];
+
         }
-        else
-        {
+        else {
             return false;
         }
     }
@@ -175,13 +185,11 @@ public class GUIDRoutingTable
      * Removes the host from the id mapping.
      * @param host the host to remove.
      */
-    public synchronized void removeHost( Host host )
+    public void removeHost( Host host )
     {
-        Integer id = hostToIdMap.get( host );
-        if ( id != null )
-        {
+        Integer id;
+        if ((id = hostToIdMap.remove( host))!=null)  {
             idToHostMap.remove( id );
-            hostToIdMap.remove( host );
         }
     }
 
@@ -190,7 +198,7 @@ public class GUIDRoutingTable
      * @param guid the GUID for the reply route to find.
      * @return the Host to route the reply for.
      */
-    public synchronized Host findRouting( GUID guid )
+    public Host findRouting( GUID guid )
     {
 		Entry entry = currentMap.get( guid );
         if ( entry == null )
@@ -225,7 +233,6 @@ public class GUIDRoutingTable
         lastMap = currentMap;
         currentMap = temp;
         nextReplaceTime = currentTime + lifetime;
-        return;
     }
 
 
@@ -235,18 +242,18 @@ public class GUIDRoutingTable
      * @param host the host to get the id for.
      * @return the id of the host.
      */
-    protected Integer getIdForHost( Host host )
+    protected int getIdForHost( Host host )
     {
+
         Integer id = hostToIdMap.get( host );
-        if ( id != null )
-        {
+        if ( id != null ) {
             return id;
         }
-        // find free id
-        id = Integer.valueOf( nextId++ );
-        while ( idToHostMap.get( id ) != null )
-        {
-            id = Integer.valueOf( nextId++ );
+        synchronized(this) {
+            // find free id
+            do {
+                id = nextId++;
+            } while (idToHostMap.get(id) != null);
         }
         idToHostMap.put( id, host );
         hostToIdMap.put( host, id );

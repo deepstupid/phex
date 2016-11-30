@@ -122,7 +122,7 @@ public class BrowseHostConnection
         HTTPHeader typeHeader = response.getHeader( HTTPHeaderNames.CONTENT_TYPE );
         if ( typeHeader == null )
         {
-            throw new BrowseHostException( "Unknwon content-type." );
+            throw new BrowseHostException( "Unknown content-type." );
         }
         
         InputStream inStream = connection.getInputStream();

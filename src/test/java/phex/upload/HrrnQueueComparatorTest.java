@@ -51,13 +51,13 @@ public class HrrnQueueComparatorTest extends TestCase
     {
         List<UploadQueueState> testList = new ArrayList<UploadQueueState>();
         
-        for ( int i = 100; i > 0; i-- )
+        for ( int i = 20; i > 0; i-- )
         {
             UploadQueueState uqs = createUploadQueueState( (i + 1) * 1000000L );
             testList.add( uqs );
-            Thread.sleep( 100 );
+            Thread.sleep( 10 );
         }
-        Thread.sleep( 10000 );
+        Thread.sleep( 50000 );
         long sortTime = System.currentTimeMillis();
         Collections.sort( testList, new HrrnQueueComparator( sortTime ) );
         

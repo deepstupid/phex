@@ -326,8 +326,7 @@ public class MsgHeader
     
     public ByteBuffer createHeaderBuffer()
     {
-        ByteBuffer buffer = ByteBuffer.wrap( getBytes() );
-        return buffer;
+        return ByteBuffer.wrap( getBytes() );
     }
 
     /**
@@ -336,11 +335,9 @@ public class MsgHeader
      * byte array containing the header
      * @author Madhu
      */
-    public byte[] getBytes()
-    {
+    public byte[] getBytes() {
         byte[] tmpArray = new byte[DATA_LENGTH];
-        byte[] guid = msgID.getGuid();
-        System.arraycopy(guid, 0, tmpArray, 0, GUID.DATA_LENGTH);
+        System.arraycopy(msgID.getGuid(), 0, tmpArray, 0, GUID.DATA_LENGTH);
         tmpArray[16] = payload;
         tmpArray[17] = ttl;
         tmpArray[18] = hopsTaken;

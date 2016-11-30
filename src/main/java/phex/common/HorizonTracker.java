@@ -21,6 +21,7 @@
  */
 package phex.common;
 
+import org.python.core.util.ConcurrentHashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.address.DestAddress;
@@ -28,7 +29,6 @@ import phex.host.Host;
 import phex.msg.PongMsg;
 import phex.msghandling.MessageSubscriber;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TimerTask;
 
@@ -78,7 +78,7 @@ public class HorizonTracker implements MessageSubscriber<PongMsg>
                 TrackerRefreshTimer.TIMER_PERIOD );
         
         useLastCountValues = false;
-        trackedAddresses = new HashSet<>();
+        trackedAddresses = new ConcurrentHashSet<>();
     }
     
     /**
@@ -105,7 +105,7 @@ public class HorizonTracker implements MessageSubscriber<PongMsg>
         return useLastCountValues ? lastHostCount : currentHostCount;
     }
     
-    public synchronized void onMessage(PongMsg message, Host sourceHost)
+    public void onMessage(PongMsg message, Host sourceHost)
     {
         if ( trackedAddresses.size() >= MAX_PONG_COUNT )
         {

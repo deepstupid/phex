@@ -248,8 +248,6 @@ class MessageDispatcher
                 + pingMsg.getHeader().toString());
         }
 
-        // count ping statistic
-        pingMsgInCounter.increment( 1 );
 
         MsgHeader header = pingMsg.getHeader();
 
@@ -263,9 +261,13 @@ class MessageDispatcher
         {
             dropMessage( pingMsg, "Dropping already seen ping", sourceHost );
             return;
+        } else {
+
+            // count ping statistic
+            pingMsgInCounter.increment( 1 );
+            respondToPing( pingMsg, sourceHost );
         }
         
-        respondToPing( pingMsg, sourceHost );
     }
     
     /**

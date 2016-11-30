@@ -28,15 +28,15 @@ public class HrrnQueuePerformanceTest extends TestCase
     private static final int SMALL_FILE_ADD = 2048;
     
     // 600000 - 1200000 KB -> 600MB-1.2GB
-    private static final int LARGE_FILE_MIN = 600000;
-    private static final int LARGE_FILE_ADD = 600000;
+    private static final int LARGE_FILE_MIN = 100000;
+    private static final int LARGE_FILE_ADD = 100000;
     
     // 1024KB -> 2GB
     private static final int FULL_RANDOM_MIN = 1024;
     private static final int FULL_RANDOM_ADD = 2000000;
     
     // 100000 KB/s -> 100MB/s
-    private static final int SPEED = 100000;
+    private static final int SPEED = 500000;
     private static final int MAX_SPEED_PER_FILE = SPEED / MAX_UPLOAD_SLOTS / 2;
     
     private static final Random rand = new Random();

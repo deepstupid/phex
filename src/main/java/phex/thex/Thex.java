@@ -24,8 +24,6 @@ package phex.thex;
 
 import phex.download.swarming.SWDownloadSegment;
 
-import java.util.Vector;
-
 /**
  * @author Laura Requena
  *
@@ -43,7 +41,7 @@ public class Thex
 
     private int hashSize;
 
-    private final Vector leavesHashes;
+    //private final Vector leavesHashes;
 
     private int nodes10serSegment;
 
@@ -55,7 +53,7 @@ public class Thex
 
     public Thex()
     {
-        leavesHashes = new Vector();
+        //leavesHashes = new Vector();
     }
 
     public String getRoot()
@@ -103,15 +101,15 @@ public class Thex
         firstBlock = firstB;
     }
 
-    public Vector getLeavesHashes()
-    {
-        return leavesHashes;
-    }
+//    public Vector getLeavesHashes()
+//    {
+//        return leavesHashes;
+//    }
 
-    public void addLeafHash(byte[] hash)
-    {
-        leavesHashes.add(hash);
-    }
+//    public void addLeafHash(byte[] hash)
+//    {
+//        leavesHashes.add(hash);
+//    }
 
     public String getSerialization()
     {

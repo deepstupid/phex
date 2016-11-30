@@ -37,7 +37,7 @@ public class UploadManagerTest extends TestCase
     public void testMultiConcurrency() throws Throwable
     {
         UploadPrefs.MaxUploadsPerIP.set( Integer.valueOf( 1 ) );
-        int runnerCount = 250;
+        int runnerCount = 25;
         TestRunnable[] runners = new TestRunnable[runnerCount];
         for ( int i=0; i<runnerCount; i++ )
         {

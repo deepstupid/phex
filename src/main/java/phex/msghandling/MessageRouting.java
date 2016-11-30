@@ -63,11 +63,10 @@ class MessageRouting
      * @param clientID  the GUID to route.
      * @param sender  the Host sending information
      */
-    public synchronized boolean checkAndAddToPingRoutingTable( GUID pingGUID,
+    public boolean checkAndAddToPingRoutingTable( GUID pingGUID,
         Host sender )
     {
-        boolean state = pingRoutingTable.checkAndAddRouting( pingGUID, sender );
-        return state;
+        return pingRoutingTable.checkAndAddRouting( pingGUID, sender );
     }
 
     /**
@@ -77,11 +76,10 @@ class MessageRouting
      * @param clientID  the GUID to route.
      * @param sender  the Host sending information
      */
-    public synchronized boolean checkAndAddToQueryRoutingTable( GUID queryGUID,
+    public boolean checkAndAddToQueryRoutingTable( GUID queryGUID,
         Host sender )
     {
-        boolean state = queryRoutingTable.checkAndAddRouting( queryGUID, sender );
-        return state;
+        return queryRoutingTable.checkAndAddRouting( queryGUID, sender );
     }
 
     /**
@@ -90,7 +88,7 @@ class MessageRouting
      * @param clientID  the GUID of a servent publishing a file
      * @param sender  the Host sending information
      */
-    public synchronized void addToPushRoutingTable( GUID clientID, Host sender )
+    public void addToPushRoutingTable( GUID clientID, Host sender )
     {
         pushRoutingTable.addRouting( clientID, sender );
     }
@@ -100,7 +98,7 @@ class MessageRouting
      * if no push routing is available or the host is not anymore
      * connected.
      */
-    protected synchronized Host getPushRouting( GUID clientID )
+    protected Host getPushRouting( GUID clientID )
     {
         return pushRoutingTable.findRouting( clientID );
     }
@@ -110,7 +108,7 @@ class MessageRouting
      * if no push routing is available or the host is not anymore
      * connected.
      */
-    protected synchronized Host getPingRouting( GUID pingGUID )
+    protected Host getPingRouting( GUID pingGUID )
     {
         return pingRoutingTable.findRouting( pingGUID );
     }
@@ -140,7 +138,7 @@ class MessageRouting
      * @return the QueryGUIDRoutingPair that contains the host and routed result count to 
      *      route the reply or null.
      */
-    protected synchronized QueryGUIDRoutingPair getQueryRouting( GUID queryGUID, int resultCount )
+    protected QueryGUIDRoutingPair getQueryRouting( GUID queryGUID, int resultCount )
     {
         return queryRoutingTable.findRoutingForQuerys( queryGUID, resultCount );
     }
@@ -176,7 +174,7 @@ class MessageRouting
         return true;
     }
     
-    public synchronized void removeRoutings( Host host )
+    public void removeRoutings( Host host )
     {
         pingRoutingTable.removeHost( host );
         queryRoutingTable.removeHost( host );

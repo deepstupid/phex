@@ -326,11 +326,13 @@ public class Host
 
     public void setConnection(Connection connection)
     {
-        this.connection = connection;
-        receivedMsgCount = 0;
-        sentMsgCount = 0;
-        sentDropMsgCount = 0;
-        receivedDropMsgCount = 0;
+        synchronized (this) {
+            this.connection = connection;
+            receivedMsgCount = 0;
+            sentMsgCount = 0;
+            sentDropMsgCount = 0;
+            receivedDropMsgCount = 0;
+        }
     }
 
     /**
@@ -347,10 +349,15 @@ public class Host
     @Deprecated
     public GnutellaInputStream getInputStream() throws IOException
     {
-        if ( connection == null ) { throw new ConnectionClosedException(
-            "Connection already closed"); }
-        return connection.getInputStream();
+        synchronized (this) {
+            if (connection == null) {
+                throw new ConnectionClosedException(
+                        "Connection already closed");
+            }
+            return connection.getInputStream();
+        }
     }
+
 
     /**
      * @deprecated
@@ -358,9 +365,13 @@ public class Host
     @Deprecated
     public GnutellaOutputStream getOutputStream() throws IOException
     {
-        if ( connection == null ) { throw new ConnectionClosedException(
-            "Connection already closed"); }
-        return connection.getOutputStream();
+        synchronized (this) {
+            if (connection == null) {
+                throw new ConnectionClosedException(
+                        "Connection already closed");
+            }
+            return connection.getOutputStream();
+        }
     }
 
     public void activateInputInflation() throws IOException
@@ -742,14 +753,14 @@ public class Host
 
     public void disconnect()
     {
-        if ( connection != null )
-        {
-            if ( status != HostStatus.ERROR )
-            {
-                setStatus( HostStatus.DISCONNECTED );
+        synchronized(this) {
+            if (connection != null) {
+                if (status != HostStatus.ERROR) {
+                    setStatus(HostStatus.DISCONNECTED);
+                }
+                connection.disconnect();
+                connection = null;
             }
-            connection.disconnect();
-            connection = null;
         }
         Phex.getEventService().publish( PhexEventTopics.Host_Disconnect, this );
     }
@@ -894,39 +905,38 @@ public class Host
      */
     public void sendMessage( Message message ) throws IOException
     {
-        if ( logger.isDebugEnabled( ) )
-        {
-            logger.debug( "Sending message: " + message + " - " 
-                + message.getHeader().toString());
-        }
-        ByteBuffer headerBuf = message.createHeaderBuffer();
-        ByteBuffer messageBuf = message.createMessageBuffer();
-        if ( !isConnected() )
-        {
-            throw new ConnectionClosedException(
-                "Connection is already closed");
-        }
-        connection.write( headerBuf );
-        if ( !isConnected() )
-        {
-            throw new ConnectionClosedException(
-                "Connection is already closed");
-        }
-        connection.write( messageBuf );
-        incSentCount();
-        if ( logger.isDebugEnabled( ) )
-        {
-            logger.debug( "Message send: " + message + " - " + message.getHeader().toString());
+        synchronized (this) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Sending message: " + message + " - "
+                        + message.getHeader().toString());
+            }
+            ByteBuffer headerBuf = message.createHeaderBuffer();
+            ByteBuffer messageBuf = message.createMessageBuffer();
+            if (!isConnected()) {
+                throw new ConnectionClosedException(
+                        "Connection is already closed");
+            }
+            connection.write(headerBuf);
+            if (!isConnected()) {
+                throw new ConnectionClosedException(
+                        "Connection is already closed");
+            }
+            connection.write(messageBuf);
+            incSentCount();
+            if (logger.isDebugEnabled()) {
+                logger.debug("Message send: " + message + " - " + message.getHeader().toString());
+            }
         }
     }
 
     public void flushOutputStream() throws IOException
     {
-        if ( isConnected() )
-        {
-            connection.flush();
-            //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
-            //    "Messages flushed" );
+        synchronized (this) {
+            if (isConnected()) {
+                connection.flush();
+                //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
+                //    "Messages flushed" );
+            }
         }
     }
 

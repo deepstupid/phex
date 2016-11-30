@@ -27,8 +27,8 @@ import phex.common.address.DestAddress;
 import phex.download.RemoteFile;
 import phex.msg.GUID;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Holds search results of a Search.
@@ -43,7 +43,7 @@ public class SearchResultHolder
     
     protected SearchResultHolder()
     {
-        queryHitList = new ArrayList<RemoteFile>();
+        queryHitList = new CopyOnWriteArrayList<>();
     }
     
     public void addQueryHit( RemoteFile remoteFile )
