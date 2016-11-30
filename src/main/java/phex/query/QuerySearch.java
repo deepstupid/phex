@@ -198,9 +198,9 @@ public abstract class QuerySearch extends Search
 
     private static class OOBQueryToken
     {
-        private DestAddress expectedAddress;
+        private final DestAddress expectedAddress;
 
-        private int expectedResults;
+        private final int expectedResults;
 
         private int receivedResults;
         

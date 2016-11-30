@@ -40,8 +40,8 @@ import java.util.EventListener;
 public class LazyEventQueue
 {
     public static final int MAX_EVENT_COUNT = 20;
-    public ArrayList tableModelEventList;
-    public ArrayList listDataEventList;
+    public final ArrayList tableModelEventList;
+    public final ArrayList listDataEventList;
 
     public LazyEventQueue()
     {

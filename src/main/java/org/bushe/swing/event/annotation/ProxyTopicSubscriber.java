@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 
 /** A class that subscribes to an EventService on behalf of another object. */
 public class ProxyTopicSubscriber extends AbstractProxySubscriber implements org.bushe.swing.event.EventTopicSubscriber {
-   private String topic;
+   private final String topic;
 
    /**
     * Creates a proxy.  This does not subscribe it.

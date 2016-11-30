@@ -34,8 +34,8 @@ public class MetalinkParser
         }
     }
     
-    private List<URI> magnets;
-    private InputStream inStream;
+    private final List<URI> magnets;
+    private final InputStream inStream;
     
     public MetalinkParser( InputStream inStream )
     {

@@ -327,7 +327,7 @@ public class EqualsBuilder {
      * @since 2.0
      */
     public EqualsBuilder appendSuper(boolean superEquals) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         isEquals = superEquals;
@@ -345,7 +345,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(Object lhs, Object rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         if (lhs == rhs) {
@@ -400,7 +400,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(long lhs, long rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         isEquals = (lhs == rhs);
@@ -415,7 +415,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(int lhs, int rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         isEquals = (lhs == rhs);
@@ -430,7 +430,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(short lhs, short rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         isEquals = (lhs == rhs);
@@ -445,7 +445,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(char lhs, char rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         isEquals = (lhs == rhs);
@@ -460,7 +460,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(byte lhs, byte rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         isEquals = (lhs == rhs);
@@ -481,7 +481,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(double lhs, double rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         return append(Double.doubleToLongBits(lhs), Double.doubleToLongBits(rhs));
@@ -501,7 +501,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(float lhs, float rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         return append(Float.floatToIntBits(lhs), Float.floatToIntBits(rhs));
@@ -515,7 +515,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
       */
     public EqualsBuilder append(boolean lhs, boolean rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         isEquals = (lhs == rhs);
@@ -533,7 +533,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(Object[] lhs, Object[] rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         if (lhs == rhs) {
@@ -564,7 +564,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(long[] lhs, long[] rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         if (lhs == rhs) {
@@ -595,7 +595,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(int[] lhs, int[] rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         if (lhs == rhs) {
@@ -626,7 +626,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(short[] lhs, short[] rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         if (lhs == rhs) {
@@ -657,7 +657,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(char[] lhs, char[] rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         if (lhs == rhs) {
@@ -688,7 +688,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(byte[] lhs, byte[] rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         if (lhs == rhs) {
@@ -719,7 +719,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(double[] lhs, double[] rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         if (lhs == rhs) {
@@ -750,7 +750,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(float[] lhs, float[] rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         if (lhs == rhs) {
@@ -781,7 +781,7 @@ public class EqualsBuilder {
      * @return EqualsBuilder - used to chain calls.
      */
     public EqualsBuilder append(boolean[] lhs, boolean[] rhs) {
-        if (isEquals == false) {
+        if (!isEquals) {
             return this;
         }
         if (lhs == rhs) {

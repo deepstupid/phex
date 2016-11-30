@@ -18,7 +18,7 @@ import java.util.*;
 
 public class HrrnQueuePerformanceTest extends TestCase
 {
-    private static final int TOTAL_FILES = 200;
+    private static final int TOTAL_FILES = 20;
     
     private static final int MAX_QUEUE_LENGTH = 10;
     private static final int MAX_UPLOAD_SLOTS = 3;
@@ -39,7 +39,7 @@ public class HrrnQueuePerformanceTest extends TestCase
     private static final int SPEED = 100000;
     private static final int MAX_SPEED_PER_FILE = SPEED / MAX_UPLOAD_SLOTS / 2;
     
-    private static Random rand = new Random();
+    private static final Random rand = new Random();
     private UploadManager uploadManager;
     
     
@@ -126,7 +126,7 @@ public class HrrnQueuePerformanceTest extends TestCase
         
         try
         {
-            Thread.sleep( 100 );
+            Thread.sleep( 50 );
             cons.start();
             cons.join();
         }
@@ -141,9 +141,9 @@ public class HrrnQueuePerformanceTest extends TestCase
     {
         private int fileIndex = 1;
         private int maxUploads;
-        private boolean isFifo;
+        private final boolean isFifo;
         private boolean isFullRandom;
-        private List<UploadQueueState> list;
+        private final List<UploadQueueState> list;
         
         public Provider( boolean isFifo, boolean isFullRandom, int maxUploads )
         {
@@ -164,7 +164,7 @@ public class HrrnQueuePerformanceTest extends TestCase
                 }
                 try
                 {
-                    Thread.sleep( 100 );
+                    Thread.sleep( 10 );
                 }
                 catch ( InterruptedException exp )
                 {}
@@ -221,10 +221,10 @@ public class HrrnQueuePerformanceTest extends TestCase
     
     public class Consumer extends Thread
     {
-        private CharArrayWriter writter;
-        private List<UploadQueueState> uploads = new ArrayList<UploadQueueState>();
-        private Provider provider;
-        private BandwidthController bdw = new BandwidthController( "up", 
+        private final CharArrayWriter writter;
+        private final List<UploadQueueState> uploads = new ArrayList<UploadQueueState>();
+        private final Provider provider;
+        private final BandwidthController bdw = new BandwidthController( "up",
             BandwidthPrefs.MaxUploadBandwidth.get().intValue() );
         
         public Consumer( Provider provider )

@@ -30,7 +30,7 @@ import java.io.IOException;
 
 public class ThexCalculationWorker implements Runnable
 {
-    private ShareFile shareFile;
+    private final ShareFile shareFile;
 
     public ThexCalculationWorker(ShareFile shareFile)
     {

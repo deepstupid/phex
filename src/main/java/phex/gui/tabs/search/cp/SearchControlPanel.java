@@ -47,7 +47,7 @@ public class SearchControlPanel extends JPanel
     private final SearchFilterRules filterRules;
     
     private SearchResultsDataModel displayedDataModel;
-    private SearchTab searchTab;
+    private final SearchTab searchTab;
     private int prefWidth;
 
     private SearchActivityBox activityBox;

@@ -197,11 +197,11 @@ public class MessagesSupportedVMsg extends VendorMsg
 
     private static class SupportedMessage
     {
-        private byte[] vendorId;
+        private final byte[] vendorId;
 
-        private int subSelector;
+        private final int subSelector;
 
-        private int version;
+        private final int version;
 
         /**
          * @param itemBytes

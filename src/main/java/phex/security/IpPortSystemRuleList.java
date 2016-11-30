@@ -24,7 +24,7 @@ import java.util.HashMap;
 
 public class IpPortSystemRuleList extends IpSystemRuleList
 {
-    private HashMap<IpPortAddress, IpSystemSecurityRule> IpPortMap;
+    private final HashMap<IpPortAddress, IpSystemSecurityRule> IpPortMap;
 
     public IpPortSystemRuleList()
     {

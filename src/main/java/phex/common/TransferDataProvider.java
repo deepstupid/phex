@@ -32,12 +32,12 @@ public interface TransferDataProvider
     /**
      * 365 days in seconds...
      */
-    static final int INFINITY_ETA_INT = 365 * 24 * 60 * 60;
+    int INFINITY_ETA_INT = 365 * 24 * 60 * 60;
     
-    static final short TRANSFER_RUNNING = 10;
-    static final short TRANSFER_NOT_RUNNING = 11;
-    static final short TRANSFER_COMPLETED = 12;
-    static final short TRANSFER_ERROR = 13;
+    short TRANSFER_RUNNING = 10;
+    short TRANSFER_NOT_RUNNING = 11;
+    short TRANSFER_COMPLETED = 12;
+    short TRANSFER_ERROR = 13;
 
     /**
      * Returns the size of the data that already has been transfered.

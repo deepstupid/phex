@@ -38,10 +38,10 @@ public class UpdateResponseInfoHandler extends DefaultHandler
 {   
     private static final String THIS_TAG_NAME = "info";
     
-    private CharArrayWriter text = new CharArrayWriter();
-    private SAXParser parser;
-    private DUpdateResponse.InfoType dInfo;
-    private DefaultHandler parent;
+    private final CharArrayWriter text = new CharArrayWriter();
+    private final SAXParser parser;
+    private final DUpdateResponse.InfoType dInfo;
+    private final DefaultHandler parent;
     
     public UpdateResponseInfoHandler( DUpdateResponse.InfoType info, 
         Attributes attributes, DefaultHandler parent, SAXParser parser )

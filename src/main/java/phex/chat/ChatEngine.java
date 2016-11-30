@@ -301,7 +301,7 @@ public final class ChatEngine
      */
     private class ChatReadWorker implements Runnable
     {
-        private PhexEventService eventService;
+        private final PhexEventService eventService;
         
         ChatReadWorker( PhexEventService eventService )
         {

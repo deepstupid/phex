@@ -47,10 +47,10 @@ public class GWebCacheContainer
     private static final Logger logger = LoggerFactory.getLogger( 
         GWebCacheContainer.class );
     
-    private static int MIN_G_WEB_CACHES_SIZE = 5;
-    private static int MAX_G_WEB_CACHES_SIZE = 1000;
-    private static List<String> BLOCKED_WEB_CACHES;
-    private static List<String> SEED_WEB_CACHES;
+    private static final int MIN_G_WEB_CACHES_SIZE = 5;
+    private static final int MAX_G_WEB_CACHES_SIZE = 1000;
+    private static final List<String> BLOCKED_WEB_CACHES;
+    private static final List<String> SEED_WEB_CACHES;
 
 
     static

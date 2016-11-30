@@ -30,7 +30,7 @@ import java.util.*;
  */
 public class DownloadScopeList implements Iterable<DownloadScope>, Cloneable
 {
-    private static DownloadScopeComparator DOWNLOAD_SCOPE_COMPARATOR = 
+    private static final DownloadScopeComparator DOWNLOAD_SCOPE_COMPARATOR =
         new DownloadScopeComparator();
     
     /**
@@ -44,7 +44,7 @@ public class DownloadScopeList implements Iterable<DownloadScope>, Cloneable
     /**
      * The list of download scopes, orderd by scope start position.
      */
-    private List<DownloadScope> scopeList;
+    private final List<DownloadScope> scopeList;
     
     /**
      * Cached value of aggregated lengths. It is recalculated if modification

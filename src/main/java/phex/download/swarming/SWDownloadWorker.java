@@ -70,7 +70,7 @@ public class SWDownloadWorker implements Runnable
      * The thread in which the worker is running.
      */
     private volatile Thread workerThread;
-    private Object workerThreadLock = new Object();
+    private final Object workerThreadLock = new Object();
     
     private final SwarmingManager downloadService;
 

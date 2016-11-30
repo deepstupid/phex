@@ -43,7 +43,7 @@ public class NetworkRowRenderer implements TableCellRenderer
     //private static final Color CONNECTED_COLOR = new Color( 0x00, 0x7F, 0x00 );
     //private static final Color CONNECTED_COLOR_SELECTED = new Color( 0x7f, 0xFF, 0x7f );
     
-    private NetworkHostsContainer hostsContainer;
+    private final NetworkHostsContainer hostsContainer;
     
     private Color connectingColor;
     private Color selectionConnectingColor;

@@ -104,7 +104,7 @@ public class StringTrie<V>
      * Indicates whenever search keys are case-sensitive or not. If true, keys
      * will be canonicalized to lowercase.
      */
-    private boolean ignoreCase;
+    private final boolean ignoreCase;
 
     /**
      * Constructs a new, empty tree.
@@ -122,7 +122,7 @@ public class StringTrie<V>
      */
     public void clear()
     {
-        this.root = new TrieNode<V>();
+        this.root = new TrieNode<>();
     }
 
     /**
@@ -173,7 +173,7 @@ public class StringTrie<V>
      * 
      * @requires 0 &lt;= startOffset &lt;= stopOffset &lt;= a.length()
      */
-    private final int match(String a, int startOffset, int stopOffset, String b)
+    private static int match(String a, int startOffset, int stopOffset, String b)
     {
         // j is an index into b
         // i is a parallel index into a
@@ -210,7 +210,7 @@ public class StringTrie<V>
             if (edge == null)
             {
                 // 1) Additive insert.
-                TrieNode<V> newNode = new TrieNode<V>(value);
+                TrieNode<V> newNode = new TrieNode<>(value);
                 node.put(key.substring(i), newNode);
                 return null;
             }
@@ -232,7 +232,7 @@ public class StringTrie<V>
                 // ...unless c = "", in which case you just do a "splice
                 // insert" by omitting newNew and setting intermediate's value.
                 TrieNode<V> child = edge.getChild();
-                TrieNode<V> intermediate = new TrieNode<V>();
+                TrieNode<V> intermediate = new TrieNode<>();
                 String a = label.substring(0, j);
                 // Assert.that(canonicalCase(a).equals(a), "Bad edge a");
                 String b = label.substring(j);
@@ -241,7 +241,7 @@ public class StringTrie<V>
                 if (c.length() > 0)
                 {
                     // Split.
-                    TrieNode<V> newNode = new TrieNode<V>(value);
+                    TrieNode<V> newNode = new TrieNode<>(value);
                     node.remove(label.charAt(0));
                     node.put(a, intermediate);
                     intermediate.put(b, child);
@@ -430,7 +430,7 @@ public class StringTrie<V>
      */
     private class ValueIterator implements Iterator<V>
     {
-        private NodeIterator delegate;
+        private final NodeIterator delegate;
 
         ValueIterator(TrieNode<V> start)
         {
@@ -502,19 +502,19 @@ public class StringTrie<V>
          *                the argument is of right type but violates some other
          *                precondition.
          */
-        public V apply(K argument) throws ClassCastException,
+        V apply(K argument) throws ClassCastException,
             IllegalArgumentException;
     }
 
     public class NodeIterator implements Iterator<TrieNode<V>>
     {
         /** Stack for DFS. Push and pop from back. */
-        private ArrayList<Iterator<TrieNode<V>>> stack = new ArrayList<Iterator<TrieNode<V>>>();
+        private final ArrayList<Iterator<TrieNode<V>>> stack = new ArrayList<>();
 
         /** The next node to return. */
         private TrieNode<V> nextNode;
 
-        private boolean withNulls;
+        private final boolean withNulls;
 
         /**
          * Creates a new iterator that yields all the nodes of start and its
@@ -612,7 +612,7 @@ public class StringTrie<V>
      * to <code>buf</code>. The printing starts with the given indent level.
      * (internal)
      */
-    private void toStringHelper(TrieNode start, StringBuilder buf, int indent)
+    private static void toStringHelper(TrieNode start, StringBuilder buf, int indent)
     {
         // Print value of node.
         if (start.getValue() != null)
@@ -620,13 +620,13 @@ public class StringTrie<V>
             buf.append(" -> ");
             buf.append(start.getValue().toString());
         }
-        buf.append("\n");
+        buf.append('\n');
         // For each child...
         for (Iterator iter = start.labelsForward(); iter.hasNext();)
         {
             // Indent child appropriately.
             for (int i = 0; i < indent; i++)
-                buf.append(" ");
+                buf.append(' ');
             // Print edge.
             String label = (String) iter.next();
             buf.append(label);
@@ -666,7 +666,7 @@ final class TrieNode<E>
      * i.e., for all i &lt; j,<br>
      * children[i].edge.charAt(0) &lt; children[j].edge.charAt(0)
      */
-    private ArrayList<TrieEdge<E>> children = new ArrayList<TrieEdge<E>>(0);
+    private final ArrayList<TrieEdge<E>> children = new ArrayList<>(0);
 
     /**
      * Creates a trie with no children and no value.
@@ -800,7 +800,7 @@ final class TrieNode<E>
         {
             assert get(i).getLabelStart() != labelStart : "Precondition of TrieNode.put violated.";
         }
-        children.add(i + 1, new TrieEdge<E>(label, child));
+        children.add(i + 1, new TrieEdge<>(label, child));
     }
 
     /**
@@ -962,9 +962,9 @@ final class TrieNode<E>
  */
 final class TrieEdge<E>
 {
-    private String label;
+    private final String label;
 
-    private TrieNode<E> child;
+    private final TrieNode<E> child;
 
     /**
      * @requires label.size() > 0

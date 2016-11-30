@@ -46,10 +46,10 @@ import java.util.Set;
 
 public class MediaTypeCondEditor extends JDialog
 {
-    private RuleDescriptionPanel ruleDescPanel;
+    private final RuleDescriptionPanel ruleDescPanel;
     
-    private MediaTypeCondition orgCondition;
-    private MediaTypeCondition condition;
+    private final MediaTypeCondition orgCondition;
+    private final MediaTypeCondition condition;
 
     private JTable mediaTypeTable;
 
@@ -166,7 +166,7 @@ public class MediaTypeCondEditor extends JDialog
     
     private final class MediaTypeModel extends AbstractTableModel
     {
-        protected Object[][] conditionTypes;
+        protected final Object[][] conditionTypes;
 
         public MediaTypeModel()
         {

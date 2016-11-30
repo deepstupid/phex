@@ -34,7 +34,7 @@ import java.io.IOException;
 
 public class OpenURLAction extends FWAction
 {
-    private String url;
+    private final String url;
 
     public OpenURLAction( String name, String url, Icon smallIcon,
         String toolTipText, Integer mnemonic, KeyStroke keyStroke )

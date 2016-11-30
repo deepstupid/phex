@@ -41,7 +41,7 @@ import java.util.List;
 
 public class ConditionPanel extends JPanel
 {
-    private FilterWizardDialog parent;
+    private final FilterWizardDialog parent;
     private ConditionTableModel conditionTableModel;
     private FWTable conditionsTable;
     private JLabel selectConditionLabel;

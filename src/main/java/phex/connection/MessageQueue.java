@@ -76,12 +76,12 @@ public class MessageQueue
     /**
      * The host this queue belongs to.
      */
-    private Host host;
+    private final Host host;
 
     /**
      * The array of FlowControlQueues.
      */
-    private FlowControlQueue flowControlQueue[];
+    private final FlowControlQueue[] flowControlQueue;
     private int queuedCount;
 
 

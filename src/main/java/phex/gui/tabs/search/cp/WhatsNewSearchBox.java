@@ -38,10 +38,10 @@ import java.awt.event.ActionListener;
 
 public class WhatsNewSearchBox extends BoxPanel
 {
-    private SearchControlPanel controlPanel;
+    private final SearchControlPanel controlPanel;
     
-    private JButton whatsNewButton;
-    private JButton whatsNewStopButton;
+    private final JButton whatsNewButton;
+    private final JButton whatsNewStopButton;
     
     public WhatsNewSearchBox( SearchControlPanel cp )
     {

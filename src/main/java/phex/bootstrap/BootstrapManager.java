@@ -115,7 +115,7 @@ public class BootstrapManager
     ////////////////////////////////////////////////////////////////////////////
     private final class QueryGWebCachesRunner implements Runnable
     {
-        private boolean preferPhex;
+        private final boolean preferPhex;
 
         /**
          * @param preferPhex
@@ -141,7 +141,7 @@ public class BootstrapManager
     private final class UpdateGWebCacheRunner implements Runnable
     {
         private final DestAddress myHostAddress;
-        private boolean preferPhex;
+        private final boolean preferPhex;
         
         /**
          * @param preferPhex
@@ -160,7 +160,7 @@ public class BootstrapManager
     
     private final class QueryHostsRunner implements Runnable
     {
-        private boolean preferPhex;
+        private final boolean preferPhex;
         
         /**
          * @param preferPhex

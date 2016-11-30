@@ -30,7 +30,7 @@ import java.io.OutputStream;
 public class ManagedFileOutputStream extends OutputStream
 {   
     private ByteBuffer buffer;
-    private ManagedFile managedFile;
+    private final ManagedFile managedFile;
     private long outputPosition;
     
     public ManagedFileOutputStream( ManagedFile managedFile, long outputPosition )
@@ -87,8 +87,7 @@ public class ManagedFileOutputStream extends OutputStream
         catch ( ManagedFileException exp )
         {
             IOException ioExp = new IOException( "ManagedFileException: " 
-                + exp.getMessage());
-            ioExp.initCause(exp);
+                + exp.getMessage(), exp);
             throw ioExp;
         }
         outputPosition += buffer.limit();

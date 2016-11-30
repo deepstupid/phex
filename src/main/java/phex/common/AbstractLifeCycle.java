@@ -57,17 +57,11 @@ public abstract class AbstractLifeCycle implements LifeCycle
             NLogger.debug( getClass(), "lifecycle started" );
             status = Status.STARTED;
         }
-        catch ( Exception exp )
+        catch ( Exception | Error exp )
         {
             NLogger.error( getClass(), exp );
             status = Status.FAILED;
             throw exp;
-        }
-        catch ( Error err )
-        {
-            NLogger.error( getClass(), err );
-            status = Status.FAILED;
-            throw err;
         }
     }
 
@@ -82,17 +76,11 @@ public abstract class AbstractLifeCycle implements LifeCycle
             NLogger.debug( getClass(), "lifecycle stopped" );
             status = Status.STOPPED;
         }
-        catch ( Exception exp )
+        catch ( Exception | Error exp )
         {
             NLogger.error( getClass(), exp );
             status = Status.FAILED;
             throw exp;
-        }
-        catch ( Error err )
-        {
-            NLogger.error( getClass(), err );
-            status = Status.FAILED;
-            throw err;
         }
     }
 

@@ -39,7 +39,7 @@ public class SearchResultHolder
      * The list of query hits returned by the query. Contains the RemoteFile
      * objects.
      */
-    private List<RemoteFile> queryHitList;
+    private final List<RemoteFile> queryHitList;
     
     protected SearchResultHolder()
     {

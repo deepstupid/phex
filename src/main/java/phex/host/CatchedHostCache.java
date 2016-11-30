@@ -37,8 +37,8 @@ import java.util.TreeSet;
  */
 public class CatchedHostCache
 {
-    private TreeSet<CaughtHost> sortedHosts;
-    private Map<DestAddress, CaughtHost> addressHostMapping;
+    private final TreeSet<CaughtHost> sortedHosts;
+    private final Map<DestAddress, CaughtHost> addressHostMapping;
     
     public CatchedHostCache( )
     {

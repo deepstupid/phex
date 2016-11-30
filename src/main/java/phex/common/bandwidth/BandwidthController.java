@@ -96,7 +96,7 @@ public class BandwidthController
      */
     public BandwidthController(String controllerName, long throttlingRate, BandwidthController parent )
     {
-        this.controllerName = controllerName + " " 
+        this.controllerName = controllerName + ' '
             + Integer.toHexString( hashCode() );
         
         setThrottlingRate( throttlingRate );
@@ -106,12 +106,12 @@ public class BandwidthController
         bytesRemaining = bytesPerWindow;
     }
     
-    public synchronized void activateShortTransferAvg( int refreshRate, int period )
+    public void activateShortTransferAvg( int refreshRate, int period )
     {
         shortTransferAvg = new TransferAverage( refreshRate, period );
     }
     
-    public synchronized void activateLongTransferAvg( int refreshRate, int period )
+    public void activateLongTransferAvg( int refreshRate, int period )
     {
         longTransferAvg = new TransferAverage( refreshRate, period );
     }
@@ -144,7 +144,7 @@ public class BandwidthController
         
         if ( logger.isDebugEnabled() )
         {
-            logger.debug( "["+controllerName + "] Set throttling rate to " 
+            logger.debug('[' +controllerName + "] Set throttling rate to "
                 + bytesPerSecond + "bps (" + bytesPerWindow + " per window)");
         }
         
@@ -190,14 +190,14 @@ public class BandwidthController
         if ( bytesRemaining < 0 && logger.isErrorEnabled() )
         {
             logger.error(
-                "["+controllerName + "] Available byte count " + bytesAllowed 
-                + "bps - Remaining: " + bytesRemaining + ".");
+                    '[' +controllerName + "] Available byte count " + bytesAllowed
+                + "bps - Remaining: " + bytesRemaining + '.');
         }
         else if ( logger.isDebugEnabled() )
         {
             logger.debug(
-                "["+controllerName + "] Available byte count " + bytesAllowed 
-                + "bps - Remaining: " + bytesRemaining + ".");
+                    '[' +controllerName + "] Available byte count " + bytesAllowed
+                + "bps - Remaining: " + bytesRemaining + '.');
         }
         
         return bytesAllowed;
@@ -225,14 +225,14 @@ public class BandwidthController
         if ( bytesRemaining < 0 && logger.isErrorEnabled() )
         {
             logger.error(
-                "["+controllerName + "] !Mark bytes used " + byteCount 
-                + " - remaining: " + bytesRemaining + ".");
+                    '[' +controllerName + "] !Mark bytes used " + byteCount
+                + " - remaining: " + bytesRemaining + '.');
         }
         else if ( logger.isDebugEnabled() )
         {
             logger.debug(
-                "["+controllerName + "] !Mark bytes used " + byteCount 
-                + " - remaining: " + bytesRemaining + ".");
+                    '[' +controllerName + "] !Mark bytes used " + byteCount
+                + " - remaining: " + bytesRemaining + '.');
         }
         
         if ( shortTransferAvg != null )
@@ -274,9 +274,9 @@ public class BandwidthController
                 lastWindowTime = now;
                 if ( logger.isDebugEnabled( ) )
                 {
-                    logger.debug(  
-                        "["+controllerName + "] Update new Window " + bytesPerWindow 
-                        + " - Remaining: " + bytesRemaining + ".");
+                    logger.debug(
+                            '[' +controllerName + "] Update new Window " + bytesPerWindow
+                        + " - Remaining: " + bytesRemaining + '.');
                 }
             }
             if ( !blockTillAvailable || bytesRemaining > 0 )

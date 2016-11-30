@@ -5,7 +5,7 @@ package phex.utils;
 import org.python.util.InteractiveConsole;
 
 public class JythonInterpreter {
-    protected InteractiveConsole interp;
+    protected final InteractiveConsole interp;
 
     public JythonInterpreter() {
         if (System.getProperty("python.home") == null) {

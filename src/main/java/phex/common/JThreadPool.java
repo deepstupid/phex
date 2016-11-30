@@ -35,7 +35,7 @@ public class JThreadPool
     public JThreadPool()
     {
         pool = new ThreadPoolExecutor( 1, Integer.MAX_VALUE, 30, TimeUnit.SECONDS,
-            new SynchronousQueue<Runnable>(), new DefaultThreadFactory() );
+                new SynchronousQueue<>(), new DefaultThreadFactory() );
     }
     
     public Executor getThreadPool()
@@ -99,7 +99,7 @@ public class JThreadPool
         {
             Thread currentThread = Thread.currentThread();
             String oldName = currentThread.getName();
-            currentThread.setName( name + "-" + oldName );
+            currentThread.setName( name + '-' + oldName );
             try
             {
                 runnable.run();

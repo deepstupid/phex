@@ -35,7 +35,7 @@ import java.awt.*;
  */
 public class FavoritesListRenderer extends DefaultListCellRenderer
 {
-    private IconPack iconFactory;
+    private final IconPack iconFactory;
     
     public FavoritesListRenderer()
     {

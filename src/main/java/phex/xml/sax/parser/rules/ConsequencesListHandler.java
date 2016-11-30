@@ -38,11 +38,11 @@ public class ConsequencesListHandler extends DefaultHandler
 {
     public static final String ELEMENT_NAME = DConsequencesList.ELEMENT_NAME;
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DSubElementList<DConsequence> consequencesListHolder;
+    private final DSubElementList<DConsequence> consequencesListHolder;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public ConsequencesListHandler( DSubElementList<DConsequence> conditionListHolder, 
         DefaultHandler parent, SAXParser parser )

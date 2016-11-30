@@ -40,7 +40,7 @@ import java.util.List;
 
 public class ConsequencePanel extends JPanel
 {
-    private FilterWizardDialog parent;
+    private final FilterWizardDialog parent;
     private ConsequenceTableModel consequenceTableModel;
     private FWTable consequenceTable;
     private JLabel selectConsequenceLbl;

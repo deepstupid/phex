@@ -97,8 +97,8 @@ public class SWDownloadTableModel extends FWSortableTableModel
         SHA1_COLUMN_ID
     };
 
-    private static String[] tableColumns;
-    private static Class<?>[] tableClasses;
+    private static final String[] tableColumns;
+    private static final Class<?>[] tableClasses;
 
     /**
      * Initialize super tableColumns field

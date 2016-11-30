@@ -39,13 +39,13 @@ public class SharedFileHandler extends DefaultHandler
 {
     public static final String THIS_TAG_NAME = DSharedFile.ELEMENT_NAME;
 
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DSharedFile dFile;
+    private final DSharedFile dFile;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public SharedFileHandler( DSharedFile dFile, DefaultHandler parent,
         SAXParser parser )

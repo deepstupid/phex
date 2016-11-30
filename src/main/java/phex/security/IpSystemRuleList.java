@@ -39,7 +39,7 @@ public class IpSystemRuleList
     /**
      * IP trie for system rules.
      */
-    private PatriciaTrie<IpCidrPair, IpCidrPair> ipTrie;
+    private final PatriciaTrie<IpCidrPair, IpCidrPair> ipTrie;
 
     public IpSystemRuleList()
     {

@@ -39,7 +39,7 @@ public class FileManager
      * Both references are weak to let them be cleaned by garbage collector when
      * unused anywhere.
      */
-    private ReferenceMap fileManagedFileMap;
+    private final ReferenceMap fileManagedFileMap;
     
     /**
      * A set to maintain and count all open files.
@@ -117,7 +117,7 @@ public class FileManager
     private void initOpenFileTracking()
     {
         // no open file limit set.
-        if ( FilePrefs.OpenFilesLimit.get().intValue() == 0 )
+        if (FilePrefs.OpenFilesLimit.get() == 0 )
         {
             openFileMap = null;
             return;
@@ -127,8 +127,8 @@ public class FileManager
         {
             if ( openFileMap == null )
             {
-                openFileMap = new LinkedHashMap<ManagedFile, ManagedFile>( 
-                    FilePrefs.OpenFilesLimit.get().intValue(), 0.75f, true );
+                openFileMap = new LinkedHashMap<>(
+                        FilePrefs.OpenFilesLimit.get(), 0.75f, true);
             }
         }
     }
@@ -144,7 +144,7 @@ public class FileManager
         ManagedFile oldestEntry = null;
         synchronized( openFileMap )
         {
-            if ( openFileMap.size() >= FilePrefs.OpenFilesLimit.get().intValue() )
+            if ( openFileMap.size() >= FilePrefs.OpenFilesLimit.get())
             {
                 Iterator<ManagedFile> iterator = openFileMap.keySet().iterator();
                 oldestEntry = iterator.next();

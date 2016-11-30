@@ -27,7 +27,7 @@ import java.util.Date;
 
 public class DateCellRenderer extends FWTableCellRenderer
 {
-    private DateFormat format;
+    private final DateFormat format;
 
     public DateCellRenderer()
     {

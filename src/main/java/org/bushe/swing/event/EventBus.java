@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
  */
 public class EventBus {
 
-   private static EventService globalEventService = EventServiceLocator.getSwingEventService();
+   private static final EventService globalEventService = EventServiceLocator.getSwingEventService();
 
    /**
     * The EventBus uses a global static EventService.  This method is not necessary in usual usage, use the other static

@@ -39,7 +39,7 @@ import java.nio.charset.CoderResult;
  */
 public class ByteBuffer implements Comparable<ByteBuffer>
 {
-    private java.nio.ByteBuffer buf;
+    private final java.nio.ByteBuffer buf;
     
     
     protected ByteBuffer( java.nio.ByteBuffer buf )

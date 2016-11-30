@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  */
 public class EventAnnotationProcessor
 {
-    private EventService subscribeToService;
+    private final EventService subscribeToService;
     
     public EventAnnotationProcessor( EventService subscribeToService )
     {

@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 
 public class DownloadFileScopeProvider implements MultiScopeProvider
 {
-    private SWDownloadFile file;
+    private final SWDownloadFile file;
     
     public DownloadFileScopeProvider( SWDownloadFile file )
     {

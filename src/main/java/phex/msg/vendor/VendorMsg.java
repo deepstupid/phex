@@ -37,8 +37,8 @@ public abstract class VendorMsg extends Message implements VendorMessageConstant
 {
     private static final int VM_PREFIX_LENGTH = 8;
     
-    private byte[] vendorId;
-    private int subSelector;
+    private final byte[] vendorId;
+    private final int subSelector;
     private int version;
     private byte[] data;
     

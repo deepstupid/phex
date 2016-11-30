@@ -49,7 +49,7 @@ import java.text.DateFormat;
 
 public class DownloadOverviewPanel extends JPanel
 {
-    private DateFormat dateFormat;
+    private final DateFormat dateFormat;
     
     private SWDownloadFile lastDownloadFile;
     private long lastFinBufScopeLength;

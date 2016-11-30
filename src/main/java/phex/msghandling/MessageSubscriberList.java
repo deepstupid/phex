@@ -31,7 +31,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MessageSubscriberList<E extends Message> implements MessageSubscriber<E>
 {
-    private List<MessageSubscriber<E>> subscriberList;
+    private final List<MessageSubscriber<E>> subscriberList;
     
     MessageSubscriberList()
     {

@@ -30,7 +30,7 @@ public class FWActionGroup
     /**
      * Contains the actions of this group together with a retrieval key.
      */
-    private HashMap actionMap;
+    private final HashMap actionMap;
     
     public FWActionGroup()
     {

@@ -44,7 +44,7 @@ public class ResearchServiceConfig
     private long researchTimeout;
     private int candidatesIntervalThreshold;
     private long researchTimePenalty;
-    private boolean isResearchEnabled;
+    private final boolean isResearchEnabled;
 
     public ResearchServiceConfig()
     {

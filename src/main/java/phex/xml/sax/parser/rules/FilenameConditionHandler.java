@@ -35,13 +35,13 @@ public class FilenameConditionHandler extends DefaultHandler
 {
     public static final String ELEMENT_NAME = DFilenameCondition.ELEMENT_NAME;
 
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DFilenameCondition condition;
+    private final DFilenameCondition condition;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public FilenameConditionHandler( DFilenameCondition condition, Attributes attributes,
         DefaultHandler parent, SAXParser parser )

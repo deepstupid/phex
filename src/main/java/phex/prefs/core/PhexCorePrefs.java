@@ -37,7 +37,7 @@ public class PhexCorePrefs extends Preferences
 
     protected PhexCorePrefs( )
     {
-        super( Environment.getInstance().getPhexConfigFile(
+        super( Environment.getPhexConfigFile(
             EnvironmentConstants.CORE_PREFERENCES_FILE_NAME ) );
     }
     

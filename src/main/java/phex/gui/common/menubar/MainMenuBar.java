@@ -36,11 +36,11 @@ import java.util.List;
 
 public class MainMenuBar extends JMenuBar
 {
-    private FWMenu viewMenu;
-    private ToggleToolbarAction toggleToolbarAction;
-    private ToggleStatusbarAction toggleStatusbarAction;
-    private JMenuItem phexHomeLink;
-    private JMenuItem phexForumLink;
+    private final FWMenu viewMenu;
+    private final ToggleToolbarAction toggleToolbarAction;
+    private final ToggleStatusbarAction toggleStatusbarAction;
+    private final JMenuItem phexHomeLink;
+    private final JMenuItem phexForumLink;
 
     public MainMenuBar( MainFrame mainFrame, DGuiSettings dSettings )
     {

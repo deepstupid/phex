@@ -307,7 +307,7 @@ public class DefaultDestAddress implements DestAddress
     public boolean isValidAddress()
     {
         boolean validPort = AddressUtils.isPortInRange( port );
-        boolean validAddress = getIpAddress() != null ? getIpAddress().isValidIP() : true;
+        boolean validAddress = getIpAddress() == null || getIpAddress().isValidIP();
         return validPort && validAddress;
     }
 

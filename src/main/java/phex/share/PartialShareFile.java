@@ -37,8 +37,8 @@ import java.util.Iterator;
  
 public class PartialShareFile extends ShareFile
 {
-    private SWDownloadFile swDownloadFile;
-    private HTTPRangeSet availableRangeSet;
+    private final SWDownloadFile swDownloadFile;
+    private final HTTPRangeSet availableRangeSet;
     private File partialFile;
     private long fileStartOffset;
 

@@ -47,13 +47,13 @@ public class ResultMonitorDataModel implements ISearchDataModel
      * A list of all search results in form of RemoteFile. The list must be
      * locked before being modified.
      */
-    private ArrayList<RemoteFile> allRemoteFiles;
+    private final ArrayList<RemoteFile> allRemoteFiles;
     
     /**
      * A set to identify all search results.
      * The list allSearchResultSHA1Set must be locked before modifying this.
      */
-    private HashSet<String> allSearchResultSHA1Set;
+    private final HashSet<String> allSearchResultSHA1Set;
     
     /**
      * The number of SearchResult elements identified. To identify the count
@@ -67,7 +67,7 @@ public class ResultMonitorDataModel implements ISearchDataModel
      * the list maintains to be sorted and filtered. The list must be locked before
      * being modified.
      */
-    private ArrayList<SearchResultElement> displayedSearchResults;
+    private final ArrayList<SearchResultElement> displayedSearchResults;
     
     /**
      * A map to ensure performant grouping of search results. The key of the 
@@ -75,7 +75,7 @@ public class ResultMonitorDataModel implements ISearchDataModel
      * that is the group of this SHA1.
      * The SHA1 value is used for grouping the RemoteFiles
      */
-    private HashMap<String, SearchResultElement> displayedSearchResultSHA1Map;
+    private final HashMap<String, SearchResultElement> displayedSearchResultSHA1Map;
     
     /**
      * The visualization model that needs to be updated on data model
@@ -83,7 +83,7 @@ public class ResultMonitorDataModel implements ISearchDataModel
      */
     private SearchTreeTableModel visualizationModel;
     
-    private SearchResultElementComparator comparator;
+    private final SearchResultElementComparator comparator;
     
     /**
      * The search filter used for local filtering.

@@ -39,7 +39,7 @@ public class LinkLabel extends JLabel implements MouseListener
 {
     private boolean isFontBold;
     private boolean isRollover;
-    private Action action;
+    private final Action action;
     
     /**
      * Create a new link label.

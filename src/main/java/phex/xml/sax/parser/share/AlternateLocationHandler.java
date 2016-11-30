@@ -38,13 +38,13 @@ public class AlternateLocationHandler extends DefaultHandler
 {
     public static final String THIS_TAG_NAME = DAlternateLocation.ELEMENT_NAME;
 
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DAlternateLocation dAltLoc;
+    private final DAlternateLocation dAltLoc;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public AlternateLocationHandler( DAlternateLocation dAltLoc,
         DefaultHandler parent, SAXParser parser )

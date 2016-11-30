@@ -81,10 +81,10 @@ public class UpdateCheckRunner implements Runnable
     public static final String PUBLIC_KEY_ID = "0x0EE3F089E5CC3925";
     
     private Throwable updateCheckError;
-    private UpdateNotificationListener listener;
+    private final UpdateNotificationListener listener;
     private String releaseVersion;
     private String betaVersion;
-    private boolean isBetaInfoShown;
+    private final boolean isBetaInfoShown;
     
     public UpdateCheckRunner( UpdateNotificationListener updateListener, boolean showBetaInfo )
     {
@@ -306,11 +306,11 @@ public class UpdateCheckRunner implements Runnable
         }
     }
     
-    private void verifySignature( UpdateResponseParts parts ) throws IOException
+    private static void verifySignature(UpdateResponseParts parts) throws IOException
     {
         OpenPgpToolkit pgpKit = new OpenPgpToolkit();
-        String keyServer = pgpKit.getRandomKeyserver();
-        PGPPublicKey pubKey = pgpKit.lookupKeyById( keyServer, PUBLIC_KEY_ID );
+        String keyServer = OpenPgpToolkit.getRandomKeyserver();
+        PGPPublicKey pubKey = OpenPgpToolkit.lookupKeyById( keyServer, PUBLIC_KEY_ID );
         if ( pubKey.isRevoked() )
         {
             throw new IOException( "Public key revoked" );
@@ -447,11 +447,11 @@ public class UpdateCheckRunner implements Runnable
         }
     }
     
-    private String getErrorLogFileTail()
+    private static String getErrorLogFileTail()
     {
         try
         {
-            File logFile = Environment.getInstance().getPhexConfigFile( "phex.error.log" );
+            File logFile = Environment.getPhexConfigFile( "phex.error.log" );
             if ( !logFile.exists() )
             {
                 return null;

@@ -28,7 +28,7 @@ import javax.swing.table.AbstractTableModel;
 
 public class ConsequenceTableModel extends AbstractTableModel
 {
-    protected Object[][] consequences = new Object[][]
+    protected final Object[][] consequences = new Object[][]
     {
         { Boolean.FALSE, new FilterFromSearchConsequence() },
         { Boolean.FALSE, new RemoveFromSearchConsequence() },
@@ -36,7 +36,7 @@ public class ConsequenceTableModel extends AbstractTableModel
         { Boolean.FALSE, new BanHostConsequence() }
     };
     
-    private ConsequencePanel consequencePanel;
+    private final ConsequencePanel consequencePanel;
     
     public ConsequenceTableModel( ConsequencePanel panel )
     {

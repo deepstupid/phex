@@ -36,11 +36,11 @@ public class MediaTypeConditionHandler extends DefaultHandler
 {
     public static final String ELEMENT_NAME = DMediaTypeCondition.ELEMENT_NAME;
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DMediaTypeCondition condition;
+    private final DMediaTypeCondition condition;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public MediaTypeConditionHandler( DMediaTypeCondition condition, Attributes attributes,
         DefaultHandler parent, SAXParser parser )

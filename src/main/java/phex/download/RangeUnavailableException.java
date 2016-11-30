@@ -22,7 +22,7 @@ import java.io.IOException;
 
 public class RangeUnavailableException extends IOException
 {
-    private int waitTimeInSeconds;
+    private final int waitTimeInSeconds;
 
     public RangeUnavailableException()
     {

@@ -42,7 +42,7 @@ public class SearchEngine
     private final static int SKIP_TABLE_SIZE = 128;
     private char[] text;
     private char[] pattern;
-    private int skipTable[];
+    private final int[] skipTable;
     private int patternLength;
     private int textLength;
 

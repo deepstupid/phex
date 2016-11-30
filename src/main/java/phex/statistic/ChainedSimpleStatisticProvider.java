@@ -26,7 +26,7 @@ package phex.statistic;
  */
 public class ChainedSimpleStatisticProvider extends SimpleStatisticProvider
 {
-    private SimpleStatisticProvider parent;
+    private final SimpleStatisticProvider parent;
     
     public ChainedSimpleStatisticProvider( SimpleStatisticProvider parent )
     {

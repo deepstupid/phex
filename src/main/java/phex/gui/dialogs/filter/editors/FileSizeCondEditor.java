@@ -44,10 +44,10 @@ import java.awt.event.WindowEvent;
 
 public class FileSizeCondEditor extends JDialog
 {
-    private RuleDescriptionPanel ruleDescPanel;
+    private final RuleDescriptionPanel ruleDescPanel;
     
-    private FileSizeCondition orgCondition;
-    private FileSizeCondition condition;
+    private final FileSizeCondition orgCondition;
+    private final FileSizeCondition condition;
     
     private JTextField minFileSizeTF;
     private FWSizeDefComboBox minFileSizeUnitComboBox;

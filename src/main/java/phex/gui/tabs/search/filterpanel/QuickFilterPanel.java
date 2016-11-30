@@ -60,7 +60,7 @@ public class QuickFilterPanel extends JPanel
     private JTextField maxFileSizeTF;
     private FWSizeDefComboBox maxFileSizeUnitComboBox;
     
-    private Timer activateQuickFilterTimer;
+    private final Timer activateQuickFilterTimer;
     
     public QuickFilterPanel()
     {

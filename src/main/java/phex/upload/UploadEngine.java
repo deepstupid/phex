@@ -69,7 +69,7 @@ public class UploadEngine
     /**
      * The upload info object of the current upload.
      */
-    private UploadState uploadState;
+    private final UploadState uploadState;
 
     /**
      * Flag indicating if the upload is counted inside this upload engine.

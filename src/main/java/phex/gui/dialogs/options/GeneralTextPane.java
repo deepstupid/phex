@@ -29,8 +29,8 @@ import phex.utils.Localizer;
 
 public class GeneralTextPane extends OptionsSettingsPane
 {
-    private String headerText;
-    private String contentText;
+    private final String headerText;
+    private final String contentText;
 
     public GeneralTextPane( String aHeaderText, String aContentText,
         String treeRepresentation )

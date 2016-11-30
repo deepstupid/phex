@@ -156,11 +156,7 @@ public class IpAddress
             return true;
         }
         //192.168.*.*
-        if ( hostIP[0] == (byte)192 && hostIP[1] == (byte)168 )
-        {
-            return true;
-        }
-        return false;
+        return hostIP[0] == (byte) 192 && hostIP[1] == (byte) 168;
     }
     
     public boolean isValidIP()

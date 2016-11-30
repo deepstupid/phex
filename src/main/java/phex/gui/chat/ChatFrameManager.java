@@ -34,7 +34,7 @@ import java.util.HashMap;
 public class ChatFrameManager
 {
     private static final int MAX_CHAT_WINDOWS = 30;
-    private HashMap<ChatEngine, ChatFrame> openChatsMap;
+    private final HashMap<ChatEngine, ChatFrame> openChatsMap;
 
     public ChatFrameManager()
     {

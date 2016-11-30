@@ -37,19 +37,19 @@ import java.io.File;
  */
 public class FileSystemTreeRenderer extends DefaultTreeCellRenderer
 {
-    private Icon sharedOpenIcon;
+    private final Icon sharedOpenIcon;
 
-    private Icon sharedClosedIcon;
+    private final Icon sharedClosedIcon;
 
-    private Icon unsharedOpenIcon;
+    private final Icon unsharedOpenIcon;
 
-    private Icon unsharedClosedIcon;
+    private final Icon unsharedClosedIcon;
 
-    private Icon partlySharedOpenIcon;
+    private final Icon partlySharedOpenIcon;
 
-    private Icon partlySharedClosedIcon;
+    private final Icon partlySharedClosedIcon;
     
-    private FileSystemView fsv;
+    private final FileSystemView fsv;
 
     /**
      * 

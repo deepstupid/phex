@@ -108,11 +108,11 @@ public class Main {
         try {
             // might be the case when arguments are used to start Phex,
             // but there is no Phex running yet.
-            if (splashScreen == null) {
-                showSplash();
-                //end = System.currentTimeMillis();
-                //System.out.println("Splash time: " + (end-start));
-            }
+//            if (splashScreen == null) {
+//                showSplash();
+//                //end = System.currentTimeMillis();
+//                //System.out.println("Splash time: " + (end-start));
+//            }
 
             // initialize settings
             SystemProperties.migratePhexConfigRoot();
@@ -135,10 +135,10 @@ public class Main {
                 // running in headless mode so of course this
                 // doesn't work
             }
-            if (splashScreen != null) {
-                splashScreen.closeSplash();
-                splashScreen = null;
-            }
+//            if (splashScreen != null) {
+//                splashScreen.closeSplash();
+//                splashScreen = null;
+//            }
 
             MainFrame mainFrame = null;
             mainFrame = GUIRegistry.getInstance().getMainFrame();

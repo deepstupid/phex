@@ -38,14 +38,14 @@ public class PushHandler
     /**
      * This is a stand alone global class responsible for push handling.
      */
-    private static PushHandler singleton = new PushHandler();
+    private static final PushHandler singleton = new PushHandler();
 
     /**
      * A list is used instead of a map since this will never contain many
      * entries. And it's hard to create a useful key since the file index might
      * change.
      */
-    private ArrayList<PushRequestSleeper> pushSleeperList;
+    private final ArrayList<PushRequestSleeper> pushSleeperList;
 
     private PushHandler()
     {

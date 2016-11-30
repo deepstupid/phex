@@ -8,7 +8,7 @@ import java.util.List;
 
 public class DSubElementList<E extends DElement> implements DElement
 {
-    private String elementName;
+    private final String elementName;
     private List<E> subElementList;
     
     /**

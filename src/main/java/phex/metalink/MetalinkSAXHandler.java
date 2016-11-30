@@ -62,8 +62,8 @@ import java.io.CharArrayWriter;
 
 public class MetalinkSAXHandler extends DefaultHandler
 {
-    private CharArrayWriter text = new CharArrayWriter();
-    private DMetalink dMetalink;
+    private final CharArrayWriter text = new CharArrayWriter();
+    private final DMetalink dMetalink;
     private Attributes atr;
     private boolean inFiles = false;
 

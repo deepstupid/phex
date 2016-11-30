@@ -31,7 +31,7 @@ public abstract class Message
 {
     private boolean isUdpMsg;
     private long creationTime;
-    private MsgHeader header;
+    private final MsgHeader header;
 
     protected Message( MsgHeader header )
     {

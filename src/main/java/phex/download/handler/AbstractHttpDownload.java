@@ -8,7 +8,7 @@ import phex.http.HTTPResponse;
 
 public abstract class AbstractHttpDownload implements DownloadHandler
 {
-    protected DownloadEngine downloadEngine;
+    protected final DownloadEngine downloadEngine;
     
     protected boolean isKeepAliveSupported;
     

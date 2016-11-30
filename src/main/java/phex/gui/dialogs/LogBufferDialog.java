@@ -49,8 +49,8 @@ import java.util.Iterator;
  */
 public class LogBufferDialog extends JDialog
 {
-    private Collection logEntries;
-    private DateFormat dateFormat;
+    private final Collection logEntries;
+    private final DateFormat dateFormat;
     
     public LogBufferDialog( Collection logEntries )
     {

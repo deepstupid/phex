@@ -62,30 +62,32 @@ public class TransferAverage
         
         // we have 2 extra elements one for the next value to fill and the other
         // is the currently filled value.
-        int elementCount = (period * 1000) / refreshRate + 2;
+        int elementCount = (int)Math.ceil((period * 1000f) / refreshRate + 2);
         values = new long[elementCount];
     }
 
     /**
      * Updates and cleans the buffer of values.
      */
-    private synchronized void update( long currentTimeFactor )
-    {
-        if ( updateTimeFactor < currentTimeFactor - values.length )
-        {
-            // last update is old.. skip to only erase buffer once.
-            updateTimeFactor = currentTimeFactor - values.length - 1;
-        }
+    private synchronized void update( long currentTimeFactor )    {
+
+        long[] values = this.values;
+        int len = values.length;
+
+        // in case last update is old.. skip to only erase buffer once.
+        long updateTimeFactor = this.updateTimeFactor = ( this.updateTimeFactor < currentTimeFactor - len) ?
+                currentTimeFactor - len - 1 :
+                this.updateTimeFactor;
 
         // clear all values between last updateTimeFactor and current.
         for ( long i = updateTimeFactor + 1; i <= currentTimeFactor; i++ )
         {
-            values[(int) (i % values.length)] = 0;
+            values[(int) (i % len)] = 0;
         }
         // clear next
-        values[(int) ((currentTimeFactor + 1) % values.length)] = 0;
+        values[(int) ((currentTimeFactor + 1) % len)] = 0;
                 
-        updateTimeFactor = currentTimeFactor;
+        this.updateTimeFactor = currentTimeFactor;
     }
 
     /**

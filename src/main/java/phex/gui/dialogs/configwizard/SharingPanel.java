@@ -33,7 +33,7 @@ import javax.swing.*;
 
 public class SharingPanel extends JPanel
 {
-    private ConfigurationWizardDialog parent;
+    private final ConfigurationWizardDialog parent;
     
     public SharingPanel( ConfigurationWizardDialog parent )
     {

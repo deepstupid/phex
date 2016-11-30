@@ -24,7 +24,7 @@ public class DimeGenerator {
     private boolean first; // true if the first has been sent
     private boolean last; // true if the last has been sent
 
-    private HashSet ids;
+    private final HashSet ids;
 
     /** 
      * Create s single use generator that will send a valid DIME message
@@ -77,14 +77,13 @@ public class DimeGenerator {
         // insure no duplicate IDs
         if (dr.getId() != null) {
             synchronized (ids) {
-                if (ids.contains(dr.getId())) {
+                if (!ids.add(dr.getId())) {
                     throw new IllegalStateException
                         ("Two records can't have the same id");
                 }
-                ids.add(dr.getId());
             }
         }
-        dr.produce(out, autoChunkSize, first?false:(first=true), l);
+        dr.produce(out, autoChunkSize, !first && (first = true), l);
     }
 
     /** 

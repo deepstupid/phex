@@ -44,18 +44,18 @@ import java.awt.event.ActionListener;
 
 public class SearchActivityBox extends BoxPanel
 {
-    private static Border ROLLOVER_BUTTON_BORDER = new CompoundBorder( 
+    private static final Border ROLLOVER_BUTTON_BORDER = new CompoundBorder(
         GUIUtils.ROLLOVER_BUTTON_BORDER, new EmptyBorder( 2, 2, 2, 2) );
-    private static ButtonUI ACTIVITY_BUTTON_UI = new ActivityButtonUI();
+    private static final ButtonUI ACTIVITY_BUTTON_UI = new ActivityButtonUI();
     
-    private JPanel newSearchActivityP;
-    private JToggleButton keywordSearchBtn;
-    private JToggleButton whatsNewBtn;
-    private JToggleButton browseHostBtn;
+    private final JPanel newSearchActivityP;
+    private final JToggleButton keywordSearchBtn;
+    private final JToggleButton whatsNewBtn;
+    private final JToggleButton browseHostBtn;
     
-    private JPanel runningSearchActivityP;
-    private JButton newSearchBtn;
-    private JButton closeSearchBtn;
+    private final JPanel runningSearchActivityP;
+    private final JButton newSearchBtn;
+    private final JButton closeSearchBtn;
     
     public SearchActivityBox( SearchTab searchTab, final SearchControlPanel cp )
     {
@@ -206,8 +206,8 @@ public class SearchActivityBox extends BoxPanel
     
     private static class ActivityButtonUI extends BasicButtonUI
     {
-        private Color fromColor = PhexColors.getBoxPanelBackground().darker();
-        private Color toColor = PhexColors.getBoxPanelBackground().brighter();
+        private final Color fromColor = PhexColors.getBoxPanelBackground().darker();
+        private final Color toColor = PhexColors.getBoxPanelBackground().brighter();
 
         public void update( Graphics g, JComponent c )
         {

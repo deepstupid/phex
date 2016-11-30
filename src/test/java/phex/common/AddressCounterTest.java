@@ -44,7 +44,7 @@ public class AddressCounterTest extends TestCase
     
     private class Worker extends TestRunnable
     {
-        private AddressCounter ac;
+        private final AddressCounter ac;
         
         Worker( AddressCounter ac )
         {
@@ -71,7 +71,7 @@ public class AddressCounterTest extends TestCase
                 good ++;
                 try
                 {
-                    Thread.sleep( 10+RandomUtils.getInt( 100 ) );
+                    Thread.sleep( 1+RandomUtils.getInt( 1 ) );
                 }
                 catch ( InterruptedException exp )
                 {

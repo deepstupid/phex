@@ -37,15 +37,15 @@ import java.io.CharArrayWriter;
  */
 public abstract class ConditionListHolderHandler extends DefaultHandler
 {
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DSubElementList<DCondition> conditionListHolder;
+    private final DSubElementList<DCondition> conditionListHolder;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
     
-    private String elementName;
+    private final String elementName;
 
     public ConditionListHolderHandler( String elementName, 
         DSubElementList<DCondition> conditionListHolder, DefaultHandler parent, 

@@ -53,10 +53,10 @@ public class StatisticsTableModel extends FWSortableTableModel
         NAME_COLUMN_ID, VALUE_COLUMN_ID, AVG_COLUMN_ID, MAX_COLUMN_ID,
     };
 
-    private static String[] tableColumns;
-    private static Class[] tableClasses;
+    private static final String[] tableColumns;
+    private static final Class[] tableClasses;
 
-    private static String[] rowKeys;
+    private static final String[] rowKeys;
 
     /**
      * Initialize super tableColumns field

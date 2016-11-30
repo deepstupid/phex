@@ -42,10 +42,10 @@ import java.awt.event.WindowEvent;
 
 public class FileUrnCondEditor extends JDialog
 {
-    private RuleDescriptionPanel ruleDescPanel;
+    private final RuleDescriptionPanel ruleDescPanel;
     
-    private FileUrnCondition orgCondition;
-    private FileUrnCondition condition;
+    private final FileUrnCondition orgCondition;
+    private final FileUrnCondition condition;
     
     private JTextField urnTF;
 

@@ -48,7 +48,7 @@ public interface Trie<K, V> extends SortedMap<K, V> {
      * @param key
      * @return
      */
-    public SortedMap<K, V> getPrefixedBy(K key);
+    SortedMap<K, V> getPrefixedBy(K key);
     
     /**
      * Returns a view of this Trie of all elements that are
@@ -66,7 +66,7 @@ public interface Trie<K, V> extends SortedMap<K, V> {
      * @param length
      * @return
      */
-    public SortedMap<K, V> getPrefixedBy(K key, int length);
+    SortedMap<K, V> getPrefixedBy(K key, int length);
     
     /**
      * Returns a view of this Trie of all elements that are prefixed
@@ -85,7 +85,7 @@ public interface Trie<K, V> extends SortedMap<K, V> {
      * @param length
      * @return
      */
-    public SortedMap<K, V> getPrefixedBy(K key, int offset, int length);
+    SortedMap<K, V> getPrefixedBy(K key, int offset, int length);
     
     /**
      * Returns a view of this Trie of all elements that are prefixed
@@ -101,7 +101,7 @@ public interface Trie<K, V> extends SortedMap<K, V> {
      * @param length
      * @return
      */
-    public SortedMap<K, V> getPrefixedByBits(K key, int bitLength);
+    SortedMap<K, V> getPrefixedByBits(K key, int bitLength);
     
     /**
      * Returns the value for the entry whose key is closest in a bitwise
@@ -116,7 +116,7 @@ public interface Trie<K, V> extends SortedMap<K, V> {
      * @param key
      * @return
      */
-    public V select(K key);
+    V select(K key);
     
     /**
      * Iterates through the trie, starting with the entry whose bitwise
@@ -135,7 +135,7 @@ public interface Trie<K, V> extends SortedMap<K, V> {
      * @return The entry the cursor returned EXIT on, or null if it continued
      *         till the end.
      */
-    public Map.Entry<K,V> select(K key, Cursor<? super K, ? super V> cursor);
+    Map.Entry<K,V> select(K key, Cursor<? super K, ? super V> cursor);
     
     /**
      * Traverses the trie in lexographic order.  Cursor.select will be called
@@ -150,7 +150,7 @@ public interface Trie<K, V> extends SortedMap<K, V> {
      * @return The entry the cursor returned EXIT on, or null if it continued
      *         till the end.
      */
-    public Map.Entry<K,V> traverse(Cursor<? super K, ? super V> cursor);
+    Map.Entry<K,V> traverse(Cursor<? super K, ? super V> cursor);
     
     /**
      * Allows operations to be performed given entries of the Trie as
@@ -159,7 +159,7 @@ public interface Trie<K, V> extends SortedMap<K, V> {
      * @param <K>
      * @param <V>
      */
-    public static interface Cursor<K, V> {
+    interface Cursor<K, V> {
         
         /**
          * Notification that the trie is currently looking at the given entry.
@@ -171,10 +171,10 @@ public interface Trie<K, V> extends SortedMap<K, V> {
          * @param entry
          * @return
          */
-        public SelectStatus select(Map.Entry<? extends K, ? extends V> entry);
+        SelectStatus select(Map.Entry<? extends K, ? extends V> entry);
      
-        public static enum SelectStatus {
-            EXIT, CONTINUE, REMOVE, REMOVE_AND_EXIT;
+        enum SelectStatus {
+            EXIT, CONTINUE, REMOVE, REMOVE_AND_EXIT
         }
     }
 }

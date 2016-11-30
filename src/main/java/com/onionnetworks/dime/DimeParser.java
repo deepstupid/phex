@@ -19,7 +19,7 @@ import java.util.NoSuchElementException;
 public class DimeParser implements Iterator {
 
     private Object nextStoplight = new Object();
-    private InputStream in;
+    private final InputStream in;
     private DimeRecord prev = null;
     
     /** Creates a DimeParser that will turn the provided InputStream into
@@ -114,7 +114,7 @@ public class DimeParser implements Iterator {
     public static List<DimeRecord> getAllRecords(DimeParser parser)
             throws IOException
     {
-        List<DimeRecord> records = new LinkedList<DimeRecord>();
+        List<DimeRecord> records = new LinkedList<>();
 
         while (parser.hasNext())
         {
@@ -143,9 +143,7 @@ public class DimeParser implements Iterator {
             System.out.println("First:" + dr.isFirst());
             System.out.println("Last:" + dr.isLast());
 
-            if (fos == null) {
-                fos = new FileOutputStream(new File("part-" + ++nextPart));
-            }
+            fos = new FileOutputStream(new File("part-" + ++nextPart));
             byte[] data = dr.getData();
             fos.write( data, 0, data.length);
             fos.flush();

@@ -186,7 +186,7 @@ public class IconPack
      */
     class TKIcon extends ImageIcon
     {
-        private String key;
+        private final String key;
         private boolean loaded;
 
         TKIcon( String aKey )

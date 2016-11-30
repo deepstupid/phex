@@ -33,7 +33,7 @@ import java.awt.*;
  */
 public class SharingTreeRenderer extends DefaultTreeCellRenderer
 {
-    private FileSystemView fsv;
+    private final FileSystemView fsv;
 
     /**
      * 

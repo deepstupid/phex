@@ -42,13 +42,13 @@ public class GuiSettingsHandler extends DefaultHandler
 {
     public static final String THIS_TAG_NAME = DGuiSettings.ELEMENT_NAME;
 
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DGuiSettings dGui;
+    private final DGuiSettings dGui;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public GuiSettingsHandler( DGuiSettings dGui, DefaultHandler parent, 
         SAXParser parser )

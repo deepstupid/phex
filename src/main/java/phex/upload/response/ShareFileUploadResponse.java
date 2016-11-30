@@ -34,7 +34,7 @@ import java.io.IOException;
 
 public class ShareFileUploadResponse extends UploadResponse
 {
-    private ShareFile shareFile;
+    private final ShareFile shareFile;
     private ReadOnlyManagedFile uploadFile;
 
     private long startOffset;

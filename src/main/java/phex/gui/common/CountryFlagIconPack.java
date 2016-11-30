@@ -30,7 +30,7 @@ import java.util.Hashtable;
 
 public class CountryFlagIconPack extends IconPack
 {
-    private Hashtable iconCache;
+    private final Hashtable iconCache;
     
     public CountryFlagIconPack()
     {

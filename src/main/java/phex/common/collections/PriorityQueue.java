@@ -36,7 +36,7 @@ public class PriorityQueue
     /**
      * The priority queues.
      */
-    private CircularQueue[] queues;
+    private final CircularQueue[] queues;
 
     /**
      * Size of the queue, maintained to save performence without iterating over
@@ -126,7 +126,7 @@ public class PriorityQueue
             
             Object[] elementAndPriotity = new Object[2];
             elementAndPriotity[0] = queues[i].removeFromHead();
-            elementAndPriotity[1] = Integer.valueOf(i);
+            elementAndPriotity[1] = i;
             return elementAndPriotity;
         }
         throw new NoSuchElementException( "PriorityQueue is empty" );

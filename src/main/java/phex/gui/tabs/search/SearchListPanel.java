@@ -49,8 +49,8 @@ public class SearchListPanel extends JPanel
 {
     private static final String SEARCHLIST_TABLE_IDENTIFIER = "SearchListTable";
     
-    private SearchContainer searchContainer;
-    private SearchTab searchTab;
+    private final SearchContainer searchContainer;
+    private final SearchTab searchTab;
     
     private FWTable searchListTable;
     private JScrollPane searchListTableScrollPane;

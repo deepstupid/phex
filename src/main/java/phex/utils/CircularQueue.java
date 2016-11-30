@@ -388,12 +388,12 @@ public class CircularQueue
         /**
          * Store originalHead to check for concurent modifications.
          */
-        int originalHead;
+        final int originalHead;
 
         /**
          * Store originalTail to check for concurent modifications.
          */
-        int originalTail;
+        final int originalTail;
 
         /**
          * Next element index.

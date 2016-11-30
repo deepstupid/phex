@@ -33,7 +33,7 @@ import javax.swing.*;
  */
 public class HostAddressCellRenderer extends FWTableCellRenderer
 {
-    private IconPack iconPack;
+    private final IconPack iconPack;
     
     public HostAddressCellRenderer()
     {

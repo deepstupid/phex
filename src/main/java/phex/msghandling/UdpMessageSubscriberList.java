@@ -31,7 +31,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UdpMessageSubscriberList<E extends Message> implements UdpMessageSubscriber<E>
 {
-    private List<UdpMessageSubscriber<E>> subscriberList;
+    private final List<UdpMessageSubscriber<E>> subscriberList;
     
     UdpMessageSubscriberList()
     {

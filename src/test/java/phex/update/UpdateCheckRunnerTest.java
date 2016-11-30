@@ -35,14 +35,14 @@ public class UpdateCheckRunnerTest extends TestCase
     public void testPublicKeyAvailability()
     {
         OpenPgpToolkit pgpKit = new OpenPgpToolkit();
-        List<String> keyServerList = pgpKit.getKeyserverList();
+        List<String> keyServerList = OpenPgpToolkit.getKeyserverList();
         Map<String, IOException> failedServers = new HashMap<String, IOException>();
         for ( String keyserver : keyServerList )
         {
             logger.debug( "Testing: " + keyserver );
             try
             {
-                PGPPublicKey key = pgpKit.lookupKeyById( keyserver, 
+                PGPPublicKey key = OpenPgpToolkit.lookupKeyById( keyserver,
                     UpdateCheckRunner.PUBLIC_KEY_ID );
                 Assert.assertFalse( key.isRevoked() );
                 logger.debug( "Good: " + keyserver );

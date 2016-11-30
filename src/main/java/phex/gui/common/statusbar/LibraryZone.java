@@ -37,7 +37,7 @@ import java.awt.event.MouseEvent;
  */
 public class LibraryZone extends JPanel 
 {
-    private JLabel sharedFilesLabel;
+    private final JLabel sharedFilesLabel;
 
     public LibraryZone() 
     {

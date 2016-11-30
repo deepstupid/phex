@@ -32,42 +32,42 @@ public interface LifeCycle
      * 
      * @throws Exception if the component fails to start
      */
-    public void start() throws Exception;
+    void start() throws Exception;
 
     /**
      * Stops the component.
      * 
      * @exception Exception If the component fails to stop
      */
-    public void stop() throws Exception;
+    void stop() throws Exception;
 
     /**
      * @return true if the component is starting or has been started.
      */
-    public boolean isRunning();
+    boolean isRunning();
 
     /**
      * @return true if the component has been started.
      */
-    public boolean isStarted();
+    boolean isStarted();
 
     /**
      * @return true if the component is starting.
      */
-    public boolean isStarting();
+    boolean isStarting();
 
     /**
      * @return true if the component is stopping.
      */
-    public boolean isStopping();
+    boolean isStopping();
 
     /**
      * @return true if the component has been stopped.
      */
-    public boolean isStopped();
+    boolean isStopped();
 
     /**
      * @return true if the component has failed to start or has failed to stop.
      */
-    public boolean isFailed();
+    boolean isFailed();
 }

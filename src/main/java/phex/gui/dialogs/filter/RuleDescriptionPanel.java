@@ -46,7 +46,7 @@ import java.util.List;
 
 public class RuleDescriptionPanel extends JPanel
 {
-    private RuleDescOwnerDialog parent;
+    private final RuleDescOwnerDialog parent;
     private JTextPane ruleDescArea;
     private DescPaneMouseListener mouseListener;
 
@@ -184,7 +184,7 @@ public class RuleDescriptionPanel extends JPanel
          * This is used by viewToModel to avoid allocing a new array each
          * time.
          */
-        private Position.Bias[] bias = new Position.Bias[1];
+        private final Position.Bias[] bias = new Position.Bias[1];
 
         private Element curElem = null;
 

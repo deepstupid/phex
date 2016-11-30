@@ -30,8 +30,8 @@ import java.awt.*;
  */
 public class GradientPanel extends JPanel 
 {
-    protected Color fromColor;
-    protected Color toColor;
+    protected final Color fromColor;
+    protected final Color toColor;
     /**
      * 
      */
@@ -47,7 +47,7 @@ public class GradientPanel extends JPanel
      * allocating them in each paint call substantially reduced the time
      * it took paint to run.  Obviously, this method can't be re-entered.
      */
-    private static Rectangle viewRect = new Rectangle();
+    private static final Rectangle viewRect = new Rectangle();
     private static Rectangle textRect = new Rectangle();
     private static Rectangle iconRect = new Rectangle();
     

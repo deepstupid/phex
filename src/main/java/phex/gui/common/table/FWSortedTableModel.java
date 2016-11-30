@@ -97,7 +97,7 @@ public class FWSortedTableModel extends AbstractTableModel
     public static final int DESCENDING = -1;
     public static final int NOT_SORTED = 0;
     public static final int ASCENDING = 1;
-    private static Directive EMPTY_DIRECTIVE = new Directive(-1, NOT_SORTED);
+    private static final Directive EMPTY_DIRECTIVE = new Directive(-1, NOT_SORTED);
     
     /**
      * The model that will be sorted.
@@ -108,10 +108,10 @@ public class FWSortedTableModel extends AbstractTableModel
     private int[] modelToView;
 
     private JTableHeader tableHeader;
-    private MouseListener mouseListener;
-    private TableModelListener tableModelListener;
-    private Map columnComparators = new HashMap();
-    private List sortingColumns = new ArrayList();
+    private final MouseListener mouseListener;
+    private final TableModelListener tableModelListener;
+    private final Map columnComparators = new HashMap();
+    private final List sortingColumns = new ArrayList();
     
     private FWTable table;
 
@@ -398,7 +398,7 @@ public class FWSortedTableModel extends AbstractTableModel
     
     private class Row implements Comparable
     {
-        private int modelIndex;
+        private final int modelIndex;
 
         public Row(int index)
         {
@@ -656,9 +656,9 @@ public class FWSortedTableModel extends AbstractTableModel
 
     private static class Arrow implements Icon
     {
-        private boolean descending;
-        private int size;
-        private int priority;
+        private final boolean descending;
+        private final int size;
+        private final int priority;
 
         public Arrow(boolean descending, int size, int priority) {
             this.descending = descending;
@@ -716,7 +716,7 @@ public class FWSortedTableModel extends AbstractTableModel
 
     private class SortableHeaderRenderer implements TableCellRenderer
     {
-        private TableCellRenderer tableCellRenderer;
+        private final TableCellRenderer tableCellRenderer;
 
         public SortableHeaderRenderer(TableCellRenderer tableCellRenderer)
         {
@@ -741,8 +741,8 @@ public class FWSortedTableModel extends AbstractTableModel
 
     private static class Directive
     {
-        private int column;
-        private int direction;
+        private final int column;
+        private final int direction;
 
         public Directive(int column, int direction)
         {

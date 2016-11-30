@@ -37,7 +37,7 @@ public class PhexGuiPrefs extends Preferences
 
     protected PhexGuiPrefs( )
     {
-        super( Environment.getInstance().getPhexConfigFile(
+        super( Environment.getPhexConfigFile(
             EnvironmentConstants.GUI_PREFERENCES_FILE_NAME ) );
     }
     

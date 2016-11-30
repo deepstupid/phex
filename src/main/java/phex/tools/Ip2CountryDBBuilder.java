@@ -183,9 +183,9 @@ public class Ip2CountryDBBuilder
     
     private static class IpCountryRange implements Comparable<IpCountryRange>
     {
-        int from;
+        final int from;
         int to;
-        String countryCode;
+        final String countryCode;
         
         public IpCountryRange( int from, int to, String cc )
         {

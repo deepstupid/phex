@@ -64,14 +64,14 @@ public class GUIDRoutingTable
     protected Map<GUID, Entry> currentMap;
     protected Map<GUID, Entry> lastMap;
 
-    protected Map<Integer, Host> idToHostMap;
-    protected Map<Host, Integer> hostToIdMap;
+    protected final Map<Integer, Host> idToHostMap;
+    protected final Map<Host, Integer> hostToIdMap;
 
     /**
      * The lifetime of a map. After this number of millis passed the lastMap will be
      * replaced by the currentMap.
      */
-    private long lifetime;
+    private final long lifetime;
 
     /**
      * The time when the next replace is done and the lastMap will be

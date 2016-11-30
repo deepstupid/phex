@@ -41,8 +41,8 @@ import java.awt.event.ActionListener;
 public class SlideInWindow extends JWindow
 {
     private boolean closeAfterAnimation = false;
-    private long autoCloseDelay;
-    private String title;
+    private final long autoCloseDelay;
+    private final String title;
     private boolean isHTML;
     private String shortMessage;
     private boolean isHideBtnShown;
@@ -223,11 +223,11 @@ public class SlideInWindow extends JWindow
     
     private class AnimatorThread extends Thread
     {
-        private Component comp;
-        private long stepDelay;
-        private int animationSteps;
-        private Point startPoint;
-        private Point stopPoint;
+        private final Component comp;
+        private final long stepDelay;
+        private final int animationSteps;
+        private final Point startPoint;
+        private final Point stopPoint;
         
         public AnimatorThread( Component component, Point startPoint, 
             Point stopPoint, int steps, long stepDelay )

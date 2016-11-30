@@ -28,14 +28,14 @@ public interface DestAddress
      * never return null.
      * @return a host name.
      */
-    public String getHostName();
+    String getHostName();
     
     /**
      * Returns the full host name representation. Including possible port. It
      * should never return null.
      * @return the full host name.
      */
-    public String getFullHostName();
+    String getFullHostName();
 
     /**
      * Returns whether the host name returned by getHostName() is the string
@@ -44,13 +44,13 @@ public interface DestAddress
      * @return Returns true if the host name is the string representation of 
      * the IP, false otherwise.
      */
-    public boolean isIpHostName();
+    boolean isIpHostName();
 
     /**
      * Returns the port of this destination address.
      * @return the port
      */
-    public int getPort();
+    int getPort();
 
     /**
      * Returns the IP address of this destination address. In case the IP address
@@ -58,12 +58,12 @@ public interface DestAddress
      * of destination address null can be returned.
      * @return the IpAddress or null.
      */
-    public IpAddress getIpAddress();
+    IpAddress getIpAddress();
 
-    public boolean equals( DestAddress address );
-    public boolean equals( byte[] ipAddress, int port );
+    boolean equals(DestAddress address);
+    boolean equals(byte[] ipAddress, int port);
 
-    public int hashCode();
+    int hashCode();
 
     /**
      * Returns the country code of this destination address. In case the 
@@ -71,7 +71,7 @@ public interface DestAddress
      * code could be found "" can be returned.
      * @return the country code, empty string or null.
      */
-    public String getCountryCode();
+    String getCountryCode();
 
     /**
      * Checks if the DestAddress is a loopback address or the external address
@@ -81,7 +81,7 @@ public interface DestAddress
      * @return a <code>boolean</code> indicating if the DestAddress represents 
      *         localhost.
      */
-    public boolean isLocalHost( DestAddress localAddress );
+    boolean isLocalHost(DestAddress localAddress);
     
     /**
      * Checks if the DestAddress is a site local address. Meaning a address in 
@@ -90,7 +90,7 @@ public interface DestAddress
      * @return a <code>boolean</code> indicating if the DestAddress is 
      * a site local address; or false if address is not a site local address.
      */
-    public boolean isSiteLocalAddress();
+    boolean isSiteLocalAddress();
     
     /**
      * Checks if the DestAddress is completely valid. Each DestAddress must
@@ -98,5 +98,5 @@ public interface DestAddress
      * @return a <code>boolean</code> indicating if the DestAddress is 
      * valid; or false otherwise.
      */
-    public boolean isValidAddress();
+    boolean isValidAddress();
 }

@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class CaughtHost
 {
-    private static AtomicInteger UNIQUE_ID_PROVIDER = new AtomicInteger(0);
+    private static final AtomicInteger UNIQUE_ID_PROVIDER = new AtomicInteger(0);
     
     /**
      * A unique id of a host, it's main use is to provide 

@@ -27,7 +27,7 @@ import phex.utils.Localizer;
 
 public class TransferAverageStatisticProvider implements StatisticProvider
 {
-    private BandwidthController bwController;
+    private final BandwidthController bwController;
     
     public TransferAverageStatisticProvider( BandwidthController bwController )
     {

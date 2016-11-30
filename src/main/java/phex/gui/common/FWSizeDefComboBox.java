@@ -49,8 +49,8 @@ public class FWSizeDefComboBox extends JComboBox
     
     public static class SizeDefinition
     {
-        private String representation;
-        private long multiplier;
+        private final String representation;
+        private final long multiplier;
 
         public SizeDefinition( String aRepresentation, long aMultiplier )
         {

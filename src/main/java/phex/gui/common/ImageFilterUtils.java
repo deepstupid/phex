@@ -33,7 +33,7 @@ import java.util.Arrays;
 
 public class ImageFilterUtils
 {
-    private static Logger logger = LoggerFactory.getLogger( ImageFilterUtils.class );
+    private static final Logger logger = LoggerFactory.getLogger( ImageFilterUtils.class );
     
     public static Icon createGrayIcon(Icon icon)
     {

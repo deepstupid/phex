@@ -48,9 +48,9 @@ public class DefaultSearchProgress implements SearchProgress
     
     private long startTime;
     
-    private long lifetime;
+    private final long lifetime;
     
-    private int desiredResultsCount;
+    private final int desiredResultsCount;
     
     protected volatile int receivedResultsCount;
         

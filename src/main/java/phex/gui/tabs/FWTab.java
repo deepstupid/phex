@@ -39,12 +39,12 @@ import java.util.List;
  */
 public class FWTab extends JPanel
 {
-    private FWActionGroup actionGroup;
+    private final FWActionGroup actionGroup;
     
     /**
      * The name of the tab in the tabbed pane.
      */
-    private String name;
+    private final String name;
 
     /**
      * The icon of the tab in the tabbed pane.
@@ -54,27 +54,27 @@ public class FWTab extends JPanel
     /**
      * The tool tip text of the tab in the tabbed pane.
      */
-    private String toolTip;
+    private final String toolTip;
 
     /**
      * The mnemonic of the tab.
      */
-    private char mnemonic;
+    private final char mnemonic;
 
     /**
      * The accelerator of the tab.
      */
-    private KeyStroke accelerator;
+    private final KeyStroke accelerator;
 
     /**
      * The position of the tab in the tabbed pane.
      */
-    private int index;
+    private final int index;
 
     /**
      * The unique id of the tab.
      */
-    private int tabID;
+    private final int tabID;
 
     private ToggleTabViewAction toggleTabViewAction;
 

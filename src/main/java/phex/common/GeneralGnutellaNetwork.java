@@ -43,7 +43,7 @@ public class GeneralGnutellaNetwork extends GnutellaNetwork
     @Override
     public File getHostsFile()
     {
-        return Environment.getInstance().getPhexConfigFile(
+        return Environment.getPhexConfigFile(
             EnvironmentConstants.HOSTS_FILE_NAME );
     }
     
@@ -53,7 +53,7 @@ public class GeneralGnutellaNetwork extends GnutellaNetwork
     @Override
     public File getFavoritesFile()
     {
-        return Environment.getInstance().getPhexConfigFile(
+        return Environment.getPhexConfigFile(
             EnvironmentConstants.XML_FAVORITES_FILE_NAME );
     }
     
@@ -63,7 +63,7 @@ public class GeneralGnutellaNetwork extends GnutellaNetwork
     @Override
     public File getSearchFilterFile()
     {
-        return Environment.getInstance().getPhexConfigFile(
+        return Environment.getPhexConfigFile(
             EnvironmentConstants.XML_SEARCH_FILTER_FILE_NAME );
     }
 
@@ -73,7 +73,7 @@ public class GeneralGnutellaNetwork extends GnutellaNetwork
     @Override
     public File getGWebCacheFile()
     {
-        return Environment.getInstance().getPhexConfigFile(
+        return Environment.getPhexConfigFile(
             EnvironmentConstants.G_WEB_CACHE_FILE_NAME );
     }
     
@@ -83,7 +83,7 @@ public class GeneralGnutellaNetwork extends GnutellaNetwork
     @Override
     public File getUdpHostCacheFile()
     {
-        return Environment.getInstance().getPhexConfigFile(
+        return Environment.getPhexConfigFile(
             EnvironmentConstants.UDP_HOST_CACHE_FILE_NAME );
     }
     

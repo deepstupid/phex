@@ -40,13 +40,13 @@ public class FavoriteHostHandler extends DefaultHandler
 {
     public static final String THIS_TAG_NAME = "favorite-host";
 
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DFavoriteHost dHost;
+    private final DFavoriteHost dHost;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public FavoriteHostHandler( DFavoriteHost dHost, Attributes attributes,
         DefaultHandler parent, SAXParser parser )

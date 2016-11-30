@@ -52,9 +52,9 @@ public class PhexSAXHandler extends DefaultHandler
 {
     private static final String PHEX_ELEMENT = "phex";
     
-    private CharArrayWriter text = new CharArrayWriter();
-    private SAXParser parser;
-    private DPhex dPhex;
+    private final CharArrayWriter text = new CharArrayWriter();
+    private final SAXParser parser;
+    private final DPhex dPhex;
     
     public PhexSAXHandler( DPhex dPhex, SAXParser parser )
     {

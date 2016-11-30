@@ -40,7 +40,7 @@ public final class TimeFormatUtils
         if ( days > 0 ) // Display days and hours
         {
             int hours = (int)((seconds / 3600) % 24); // hours
-            return String.valueOf(days) + Localizer.getString("TimeFormatDays") + " "
+            return String.valueOf(days) + Localizer.getString("TimeFormatDays") + ' '
                  + String.valueOf(hours) + Localizer.getString("TimeFormatHours");
         }
     
@@ -48,14 +48,14 @@ public final class TimeFormatUtils
         if( hours > 0 ) // Display hours and minutes
         {
             int minutes = (int)((seconds / 60) % 60); // minutes
-            return String.valueOf(hours) + Localizer.getString("TimeFormatHours") + " "
+            return String.valueOf(hours) + Localizer.getString("TimeFormatHours") + ' '
                  + String.valueOf(minutes) + Localizer.getString("TimeFormatMinutes");
         }
     
         final int minutes =  (int)((seconds / 60) % 60);
         if( minutes > 0 ) // Display minutes and seconds
         {
-            return String.valueOf(minutes) + Localizer.getString("TimeFormatMinutes") + " "
+            return String.valueOf(minutes) + Localizer.getString("TimeFormatMinutes") + ' '
                  + String.valueOf(seconds%60) + Localizer.getString("TimeFormatSeconds");
         }
     
@@ -80,27 +80,27 @@ public final class TimeFormatUtils
         if ( days > 0 ) // Display days and hours
         {
             buffer.append( Integer.toString( days ) );
-            buffer.append( ":" );
+            buffer.append(':');
             if ( hours < 10 )
             {
-                buffer.append( "0" );
+                buffer.append('0');
             }
         }
         if ( days > 0 || hours > 0 )
         {
             buffer.append( Integer.toString( hours ) );
-            buffer.append( ":" );
+            buffer.append(':');
             if ( minutes < 10 )
             {
-                buffer.append( "0" );
+                buffer.append('0');
             }
         }
         
         buffer.append( Integer.toString( minutes ) );
-        buffer.append( ":" );
+        buffer.append(':');
         if ( secs < 10 )
         {
-            buffer.append( "0" );
+            buffer.append('0');
         }
         buffer.append( Integer.toString( secs ) );
         return buffer.toString();

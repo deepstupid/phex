@@ -42,8 +42,8 @@ import java.awt.event.MouseEvent;
 
 public class SearchButton extends JToggleButton
 {
-    private Search search;
-    private SearchTab searchTab;
+    private final Search search;
+    private final SearchTab searchTab;
     
     public SearchButton( Search search, SearchTab searchTab )
     {
@@ -119,8 +119,8 @@ public class SearchButton extends JToggleButton
 //            ImageFilterUtils.createGrayIcon( 
 //                GUIRegistry.getInstance().getIconFactory().getIcon("Close"),
 //                true, 99 );
-        private Color fromColor = PhexColors.getBoxPanelBackground().darker();
-        private Color toColor = PhexColors.getBoxPanelBackground().brighter();
+        private final Color fromColor = PhexColors.getBoxPanelBackground().darker();
+        private final Color toColor = PhexColors.getBoxPanelBackground().brighter();
         
         @Override
         public Dimension getMinimumSize( JComponent c )
@@ -166,10 +166,10 @@ public class SearchButton extends JToggleButton
          * allocating them in each paint call substantially reduced the time
          * it took paint to run.  Obviously, this method can't be re-entered.
          */
-        private static Rectangle viewRect = new Rectangle();
-        private static Rectangle displayRect = new Rectangle();
-        private static Rectangle textRect = new Rectangle();
-        private static Rectangle iconRect = new Rectangle();
+        private static final Rectangle viewRect = new Rectangle();
+        private static final Rectangle displayRect = new Rectangle();
+        private static final Rectangle textRect = new Rectangle();
+        private static final Rectangle iconRect = new Rectangle();
         
         @Override
         public void paint( Graphics g, JComponent c )
@@ -272,7 +272,7 @@ public class SearchButton extends JToggleButton
         
         public static class CloseButtonListener extends BasicButtonListener
         {
-            private SearchButton btn;
+            private final SearchButton btn;
             
             public CloseButtonListener( AbstractButton b )
             {

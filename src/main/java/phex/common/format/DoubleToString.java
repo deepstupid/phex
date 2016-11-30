@@ -130,9 +130,9 @@ public class DoubleToString
     };
 
 
-    public void appendFormatted(StringBuffer s, double d, int numFractDigits,
-        char decimalPoint, char thousandsSeparator, int numDigitsSeparated, 
-        char negativePrefix, char negativeSuffix)
+    public static void appendFormatted(StringBuffer s, double d, int numFractDigits,
+                                       char decimalPoint, char thousandsSeparator, int numDigitsSeparated,
+                                       char negativePrefix, char negativeSuffix)
     {
         //First check for the special cases, +/-infinity, Not-a-number and -0.0
         if (d == Double.NEGATIVE_INFINITY)
@@ -243,9 +243,9 @@ public class DoubleToString
         }
       }
 
-    public void appendAsDouble(StringBuffer s, long l, long l_mag, int d_magnitude,
-        int numFractDigits, char decimalPoint, char thousandsSeparator,
-        int numDigitsSeparated, char negativePrefix, char negativeSuffix)
+    public static void appendAsDouble(StringBuffer s, long l, long l_mag, int d_magnitude,
+                                      int numFractDigits, char decimalPoint, char thousandsSeparator,
+                                      int numDigitsSeparated, char negativePrefix, char negativeSuffix)
     {
         //If the magnitude is negative, we have a 0.xxx number
         if (d_magnitude < 0)
@@ -327,8 +327,8 @@ public class DoubleToString
     }
 
 
-  private void appendNearlyZeroNumber(StringBuffer s, double d, int d_magnitude, 
-                               int numFractDigits, char decimalPoint)
+  private static void appendNearlyZeroNumber(StringBuffer s, double d, int d_magnitude,
+                                             int numFractDigits, char decimalPoint)
   {
     if (d_magnitude + numFractDigits == -1)
     {
@@ -414,7 +414,7 @@ public class DoubleToString
     }
   }
 
-  static long[] l_tenthPowers = {
+  static final long[] l_tenthPowers = {
     1,
     10L,
     100L,

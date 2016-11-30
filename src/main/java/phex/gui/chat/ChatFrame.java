@@ -35,7 +35,7 @@ public class ChatFrame extends JFrame
 {
     // 100 KB chat text length.
     private static final int MAX_CHAT_LENGTH = 50 * 1024;
-    private ChatEngine chatEngine;
+    private final ChatEngine chatEngine;
 
     private JTextArea chatTextArea;
     private JTextField sendTextField;

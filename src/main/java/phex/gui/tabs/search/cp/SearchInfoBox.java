@@ -40,14 +40,14 @@ import java.awt.event.ActionListener;
 public class SearchInfoBox extends BoxPanel
 {
     private final UpdateDisplayActionListener updateDisplayListener;
-    private SearchControlPanel controlPanel;
+    private final SearchControlPanel controlPanel;
     private SearchResultsDataModel displayedDataModel;
     
-    private JLabel searchStatusLbl;
-    private JProgressBar progressBar;
-    private JLabel totalResultsLbl;
-    private JLabel displayedResultsLbl;
-    private JLabel filteredResultsLbl;
+    private final JLabel searchStatusLbl;
+    private final JProgressBar progressBar;
+    private final JLabel totalResultsLbl;
+    private final JLabel displayedResultsLbl;
+    private final JLabel filteredResultsLbl;
     
         
     public SearchInfoBox( SearchControlPanel cp )

@@ -35,13 +35,13 @@ public class FileUrnConditionHandler extends DefaultHandler
 {
     public static final String ELEMENT_NAME = DFileUrnCondition.ELEMENT_NAME;
 
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DFileUrnCondition condition;
+    private final DFileUrnCondition condition;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public FileUrnConditionHandler( DFileUrnCondition condition, Attributes attributes,
         DefaultHandler parent, SAXParser parser )

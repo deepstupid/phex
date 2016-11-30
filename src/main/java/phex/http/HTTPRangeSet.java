@@ -33,7 +33,7 @@ public class HTTPRangeSet
     private static final String BYTES = "bytes";
     public static final int NOT_SET = -1;
 
-    private List<Range> rangeList;
+    private final List<Range> rangeList;
 
     public HTTPRangeSet()
     {

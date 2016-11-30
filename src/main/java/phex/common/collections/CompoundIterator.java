@@ -36,7 +36,7 @@ public class CompoundIterator implements Iterator
     /**
      * The list of iterators.
      */
-    private List<Iterator> iteratorList;
+    private final List<Iterator> iteratorList;
 
     /**
      * The position of the current iterator in the list.
@@ -45,7 +45,7 @@ public class CompoundIterator implements Iterator
 
     public CompoundIterator( int numberOfIterators )
     {
-        iteratorList = new ArrayList<Iterator>( numberOfIterators );
+        iteratorList = new ArrayList<>(numberOfIterators);
         counter = 0;
     }
 

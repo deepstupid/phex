@@ -30,8 +30,8 @@ import java.awt.event.MouseListener;
 
 public class BoxPanel extends JPanel
 {
-    private BoxHeader boxHeader;
-    private JPanel contentPanel;
+    private final BoxHeader boxHeader;
+    private final JPanel contentPanel;
     private boolean isContentShown;
     
     /**
@@ -157,7 +157,7 @@ public class BoxPanel extends JPanel
     {
         private String headerText;
         private boolean isRollover;
-        private BoxPanel boxPanel;
+        private final BoxPanel boxPanel;
         
         public BoxHeader( String headerText, BoxPanel boxPanel )
         {
@@ -221,9 +221,9 @@ public class BoxPanel extends JPanel
          * allocating them in each paint call substantially reduced the time
          * it took paint to run.  Obviously, this method can't be re-entered.
          */
-        private static Rectangle viewRect = new Rectangle();
-        private static Rectangle textRect = new Rectangle();
-        private static Rectangle iconRect = new Rectangle();
+        private static final Rectangle viewRect = new Rectangle();
+        private static final Rectangle textRect = new Rectangle();
+        private static final Rectangle iconRect = new Rectangle();
 
         @Override
         protected void paintComponent(Graphics g)

@@ -48,7 +48,7 @@ public class ShareFile extends SharedResource
     /**
      * The file size ( file.length() ). Buffered because of performance reasons.
      */
-    private long fileSize;
+    private final long fileSize;
 
     /**
      * The urn of the file.

@@ -38,7 +38,7 @@ public class SearchResultElement
     /**
      * The single search result element.
      */
-    private RemoteFile remoteFile;
+    private final RemoteFile remoteFile;
     
     /**
      * The list of search results that this can hold.

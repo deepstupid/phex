@@ -10,8 +10,8 @@ import java.lang.reflect.Method;
 public abstract class AbstractProxySubscriber implements ProxySubscriber {
    private Object proxiedSubscriber;
    private Method subscriptionMethod;
-   private ReferenceStrength referenceStrength;
-   private EventService eventService;
+   private final ReferenceStrength referenceStrength;
+   private final EventService eventService;
 
    protected AbstractProxySubscriber(Object proxiedSubscriber, Method subscriptionMethod,
            ReferenceStrength referenceStrength, EventService es) {

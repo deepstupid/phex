@@ -75,7 +75,10 @@ class UrnCalculationWorker implements Runnable
         try
         {
             inStream = new FileInputStream( shareFile.getSystemFile() );
-            MessageDigest messageDigest = new SHA1();
+            MessageDigest messageDigest =
+                    //new SHA1();
+                    SHA1.get();
+
             byte[] buffer = new byte[64 * 1024];
             int length;
             long start = System.currentTimeMillis();

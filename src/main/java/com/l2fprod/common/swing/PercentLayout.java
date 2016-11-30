@@ -22,7 +22,6 @@ package com.l2fprod.common.swing;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
 
 /**
  * PercentLayout. <BR>Constraint based layout which allow the space to be
@@ -58,7 +57,7 @@ public class PercentLayout implements LayoutManager2 {
   public final static int VERTICAL = 1;
 
   static class Constraint {
-    protected Object value;
+    protected final Object value;
     private Constraint(Object value) {
       this.value = value;
     }
@@ -72,16 +71,16 @@ public class PercentLayout implements LayoutManager2 {
       super(d);
     }
     public int intValue() {
-      return ((Integer)value).intValue();
+      return (Integer) value;
     }
   }
 
   static class PercentConstraint extends Constraint {
     public PercentConstraint(float d) {
-      super(Float.valueOf(d));
+      super(d);
     }
     public float floatValue() {
-      return ((Float)value).floatValue();
+      return (Float) value;
     }
   }
 
@@ -92,7 +91,7 @@ public class PercentLayout implements LayoutManager2 {
   private int orientation;
   private int gap;
 
-  private Hashtable m_ComponentToConstraint;
+  private final Hashtable m_ComponentToConstraint;
 
   /**
    * Creates a new HORIZONTAL PercentLayout with a gap of 0.
@@ -155,8 +154,7 @@ public class PercentLayout implements LayoutManager2 {
     } else if (constraints instanceof String) {
       String s = (String)constraints;
       if (s.endsWith("%")) {
-        float value = Float.valueOf(s.substring(0, s.length() - 1))
-          .floatValue() / 100;
+        float value = Float.valueOf(s.substring(0, s.length() - 1)) / 100;
         if (value > 1 || value < 0)
           throw new IllegalArgumentException("percent value must be >= 0 and <= 100");
         setConstraint(component, new PercentConstraint(value));
@@ -249,9 +247,9 @@ public class PercentLayout implements LayoutManager2 {
     int height = 0;
     Dimension componentPreferredSize;
     boolean firstVisibleComponent = true;
-    for (int i = 0, c = components.length; i < c; i++) {
-      if (components[i].isVisible()) {
-        componentPreferredSize = components[i].getPreferredSize();
+    for (Component component : components) {
+      if (component.isVisible()) {
+        componentPreferredSize = component.getPreferredSize();
         if (orientation == HORIZONTAL) {
           height = Math.max(height, componentPreferredSize.height);
           width += componentPreferredSize.width;
@@ -338,7 +336,7 @@ public class PercentLayout implements LayoutManager2 {
         Constraint constraint =
           (Constraint)m_ComponentToConstraint.get(components[i]);
         if (constraint == REMAINING_SPACE) {
-          remaining.add(Integer.valueOf(i));
+          remaining.add(i);
           sizes[i] = 0;
         }
       }
@@ -346,8 +344,8 @@ public class PercentLayout implements LayoutManager2 {
 
     if (remaining.size() > 0) {
       int rest = availableSize / remaining.size();
-      for (Iterator iter = remaining.iterator(); iter.hasNext();) {
-        sizes[((Integer)iter.next()).intValue()] = rest;
+      for (Object aRemaining : remaining) {
+        sizes[(Integer) aRemaining] = rest;
       }
     }
 

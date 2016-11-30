@@ -68,12 +68,12 @@ public class BandwidthComboBox extends JComboBox
     
     public static class SpeedDefinition
     {
-        private String representation;
+        private final String representation;
 
         /**
          * The speed of the connection in kilo bits per second.
          */
-        private int speedInKbps;
+        private final int speedInKbps;
 
         /**
          * @param aRepresentation the not localized string representation

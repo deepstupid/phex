@@ -34,7 +34,7 @@ public class DTableList implements DElement
 {
     public static final String ELEMENT_NAME = "table-list";
     
-    private List<DTable> tableList;
+    private final List<DTable> tableList;
     
     private boolean isSetShowHorizontalLines;
     private boolean showHorizontalLines;

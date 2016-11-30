@@ -33,11 +33,11 @@ import java.awt.*;
  */
 public class DialogBanner extends JPanel
 {
-    private String headerText;
-    private String subHeaderText;
+    private final String headerText;
+    private final String subHeaderText;
     private Icon image;
     
-    private JLabel titleLabel;
+    private final JLabel titleLabel;
     
     public DialogBanner( String aHeaderText, String aSubHeaderText )
     {
@@ -96,7 +96,7 @@ public class DialogBanner extends JPanel
      * allocating them in each paint call substantially reduced the time
      * it took paint to run.  Obviously, this method can't be re-entered.
      */
-    private static Rectangle viewRect = new Rectangle();
+    private static final Rectangle viewRect = new Rectangle();
     
     protected void paintComponent(Graphics g)
     {

@@ -31,10 +31,10 @@ import java.util.Collection;
  */
 public class LogBuffer
 {
-    private UnboundedFifoBuffer buffer;
-    private MultiValueMap ownerMap;
+    private final UnboundedFifoBuffer buffer;
+    private final MultiValueMap ownerMap;
     private int totalSize;
-    private int maxSize;
+    private final int maxSize;
     
     
     public LogBuffer( int maxSize )

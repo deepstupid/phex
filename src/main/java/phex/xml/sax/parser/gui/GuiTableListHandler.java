@@ -39,13 +39,13 @@ public class GuiTableListHandler extends DefaultHandler
 {
     public static final String THIS_TAG_NAME = DTableList.ELEMENT_NAME;
 
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DTableList dList;
+    private final DTableList dList;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public GuiTableListHandler( DTableList dList, Attributes attributes,
         DefaultHandler parent, SAXParser parser )

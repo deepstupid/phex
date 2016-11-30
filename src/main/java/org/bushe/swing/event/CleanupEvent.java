@@ -32,9 +32,9 @@ public class CleanupEvent {
       FINISHED_CLEANING;
    }
    
-   private Status status;
-   private int totalWeakRefsAndProxies;
-   private Integer numStaleSubscribersCleaned;
+   private final Status status;
+   private final int totalWeakRefsAndProxies;
+   private final Integer numStaleSubscribersCleaned;
    
    public CleanupEvent(Status status, int totalWeakRefsAndProxies, Integer numStaleSubscribersCleaned) {
       this.status = status;

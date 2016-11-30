@@ -31,10 +31,10 @@ import phex.utils.URLUtil;
 import phex.xml.XMLUtils;
 
 import java.io.*;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * <shared-file-export>
@@ -154,7 +154,7 @@ public class SharedFilesPipeFiller implements Runnable
                 
                 if( file.getAltLocCount() > 0 )
                 {
-                    Set<DestAddress> locs = file.getAltLocContainer().getAltLocsForExport( 
+                    Collection<DestAddress> locs = file.getAltLocContainer().getAltLocsForExport(
                         serventAddress );
                     for ( DestAddress add : locs )
                     {

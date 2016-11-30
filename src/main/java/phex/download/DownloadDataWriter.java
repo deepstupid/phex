@@ -41,7 +41,7 @@ public class DownloadDataWriter implements Runnable
     private boolean isShutingDown;
     private long lastCompleteWrite;
     private boolean isWriteCycleRequested;
-    private SwarmingManager swarmingMgr;
+    private final SwarmingManager swarmingMgr;
     
     public DownloadDataWriter( SwarmingManager downloadService )
     {

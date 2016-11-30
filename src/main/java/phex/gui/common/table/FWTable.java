@@ -836,7 +836,7 @@ public class FWTable extends JTable
 
     private class ColumnCheckBoxMenuItem extends JCheckBoxMenuItem
     {
-        private FWTableColumn column;
+        private final FWTableColumn column;
 
         public ColumnCheckBoxMenuItem( FWTableColumn tableColumn )
         {

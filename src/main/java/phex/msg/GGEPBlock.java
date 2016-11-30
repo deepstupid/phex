@@ -71,9 +71,9 @@ public class GGEPBlock
     public static final String SECURE_OOB_ID = "SO";
     public static final String LARGE_FILE_HEADER_ID = "LF";
 
-    private HashMap<String, byte[]> headerToDataMap;
+    private final HashMap<String, byte[]> headerToDataMap;
     
-    private boolean needsCobsFor0x00Byte;
+    private final boolean needsCobsFor0x00Byte;
 
     public GGEPBlock( boolean needsCobsFor0x00 )
     {
@@ -496,7 +496,7 @@ public class GGEPBlock
     private static class GGEPParser
     {
         private int offset;
-        private List<GGEPBlock> ggepList;
+        private final List<GGEPBlock> ggepList;
 
         public GGEPParser( )
         {

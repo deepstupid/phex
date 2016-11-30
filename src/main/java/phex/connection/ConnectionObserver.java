@@ -41,8 +41,8 @@ import java.util.List;
  */
 public class ConnectionObserver implements Runnable
 {
-    private long SLEEP_TIME = 1000;
-    private long PING_WAIT_TIME = 2000;
+    private final long SLEEP_TIME = 1000;
+    private final long PING_WAIT_TIME = 2000;
 
     private List<ConnectionSnapshoot> snapshootList;
     private List<Host> quiteList;
@@ -173,10 +173,10 @@ public class ConnectionObserver implements Runnable
 
     private static class ConnectionSnapshoot
     {
-        Host host;
-        int receivedCount;
-        int sentCount;
-        int sendDropCount;
+        final Host host;
+        final int receivedCount;
+        final int sentCount;
+        final int sendDropCount;
 
         ConnectionSnapshoot( Host host )
         {

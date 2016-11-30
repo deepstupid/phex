@@ -291,8 +291,8 @@ public class QueryRoutingTable
             byte msgSequenceSize = patchMessage.getSequenceSize();
             byte msgSequenceNumber = patchMessage.getSequenceNumber();
             NLogger.debug( QueryRoutingTable.class,
-				"Patching QRT from: " + sourceHost + " " + 
-				msgSequenceNumber + "/" + msgSequenceSize );
+				"Patching QRT from: " + sourceHost + ' ' +
+				msgSequenceNumber + '/' + msgSequenceSize );
 
             if ( sequenceSize == 0 && sequenceNumber == 0 )
             {// initializing case...
@@ -305,8 +305,8 @@ public class QueryRoutingTable
             {
                 throw new InvalidMessageException(
                     "QRTPatchMsg sequence size or number not valid.\n" +
-                    "Size: (" + msgSequenceSize + "/" + sequenceSize + ").\n" +
-                    "Number: (" + msgSequenceNumber + "/" + sequenceNumber + ").");
+                    "Size: (" + msgSequenceSize + '/' + sequenceSize + ").\n" +
+                    "Number: (" + msgSequenceNumber + '/' + sequenceNumber + ").");
             }
             sequenceNumber = msgSequenceNumber;
 
@@ -491,7 +491,7 @@ public class QueryRoutingTable
     {
         StringTokenizer tokenizer = new StringTokenizer( queryString,
             StringUtils.FILE_DELIMITERS );
-        ArrayList<String> list = new ArrayList<String>( 10 );
+        ArrayList<String> list = new ArrayList<>(10);
         while( tokenizer.hasMoreTokens() )
         {
             String word = tokenizer.nextToken();
@@ -510,7 +510,7 @@ public class QueryRoutingTable
     {
         StringTokenizer tokenizer = new StringTokenizer( filePath,
             StringUtils.FILE_DELIMITERS );
-        ArrayList<String> list = new ArrayList<String>( 20 );
+        ArrayList<String> list = new ArrayList<>(20);
         while( tokenizer.hasMoreTokens() )
         {
             String word = tokenizer.nextToken();
@@ -535,7 +535,7 @@ public class QueryRoutingTable
     public static QueryRoutingTable createLocalQueryRoutingTable( List<ShareFile> sharedFiles )
     {
         long start = System.currentTimeMillis();
-        HashSet<String> wordSet = new HashSet<String>();
+        HashSet<String> wordSet = new HashSet<>();
         for ( ShareFile file : sharedFiles )
         {
             // add urn:sha1:xxx
@@ -547,10 +547,7 @@ public class QueryRoutingTable
 
             // add splitted words.
             String[] words = splitFilePath( file.getSystemFile().getAbsolutePath() );
-            for ( int j = 0; j < words.length; j++ )
-            {
-                wordSet.add( words[ j ] );
-            }
+            Collections.addAll(wordSet, words);
         }
         
         QueryRoutingTable qrTable = new QueryRoutingTable( MIN_TABLE_SIZE );
@@ -620,7 +617,7 @@ public class QueryRoutingTable
     public static Iterator<RouteTableUpdateMsg> buildRouteTableUpdateMsgIterator( QueryRoutingTable currentTable,
         QueryRoutingTable oldTable )
     {
-        ArrayList<RouteTableUpdateMsg> msgList = new ArrayList<RouteTableUpdateMsg>();
+        ArrayList<RouteTableUpdateMsg> msgList = new ArrayList<>();
 
         if ( oldTable == null )
         {

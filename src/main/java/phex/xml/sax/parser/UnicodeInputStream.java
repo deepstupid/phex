@@ -59,9 +59,9 @@ import java.io.PushbackInputStream;
     else in = new InputStreamReader(uin, enc);
 */
 public class UnicodeInputStream extends InputStream {
-   PushbackInputStream internalIn;
+   final PushbackInputStream internalIn;
    boolean             isInited = false;
-   String              defaultEnc;
+   final String              defaultEnc;
     String              encoding;
     boolean             skipBOM = true;
 

@@ -38,10 +38,10 @@ public class UpdateResponseVersionHandler extends DefaultHandler
 {   
     private static final String THIS_TAG_NAME = "version";
     
-    private CharArrayWriter text = new CharArrayWriter();
-    private SAXParser parser;
-    private DUpdateResponse.VersionType dVersion;
-    private DefaultHandler parent;
+    private final CharArrayWriter text = new CharArrayWriter();
+    private final SAXParser parser;
+    private final DUpdateResponse.VersionType dVersion;
+    private final DefaultHandler parent;
     
     public UpdateResponseVersionHandler( DUpdateResponse.VersionType version,
         Attributes attributes, DefaultHandler parent, SAXParser parser )

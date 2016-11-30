@@ -42,9 +42,9 @@ public class AlternateLocation
      *
      * hasUploaded == QHD_UNKNOWN_FLAG -> Raiting + 1
      */
-    public static final Short DEFAULT_HOST_RATING = Short.valueOf( (short)6 );
-    private DestAddress hostAddress;
-    private URN urn;
+    public static final Short DEFAULT_HOST_RATING = (short) 6;
+    private final DestAddress hostAddress;
+    private final URN urn;
 
     public AlternateLocation( DestAddress hostAddress, URN urn )
     {

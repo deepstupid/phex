@@ -38,9 +38,9 @@ public class DownloadListHandler extends DefaultHandler
 {   
     public static final String THIS_TAG_NAME = "swDownloadList";
     
-    private SAXParser parser;
-    private DSubElementList<DDownloadFile> dDownloadList;
-    private DefaultHandler parent;
+    private final SAXParser parser;
+    private final DSubElementList<DDownloadFile> dDownloadList;
+    private final DefaultHandler parent;
     
     public DownloadListHandler( DSubElementList<DDownloadFile> dDownloadList, 
         DefaultHandler parent, SAXParser parser )

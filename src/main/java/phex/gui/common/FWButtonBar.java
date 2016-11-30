@@ -31,8 +31,8 @@ import java.util.List;
 public class FWButtonBar extends JComponent
 {
     private static final Dimension rigidDim = new Dimension( 2, 0 );
-    private BoxLayout boxLayout;
-    protected List<AbstractButton> buttons;
+    private final BoxLayout boxLayout;
+    protected final List<AbstractButton> buttons;
 
     public FWButtonBar()
     {

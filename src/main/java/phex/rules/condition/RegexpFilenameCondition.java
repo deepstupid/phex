@@ -39,12 +39,12 @@ public class RegexpFilenameCondition implements Condition
     /**
      * The expression to trigger the filter on
      */
-    private String expression;
+    private final String expression;
     
     /**
      * If not null indicates that a regular expression is used to filter.
      */
-    private Pattern filterPattern;
+    private final Pattern filterPattern;
         
     /**
      * @param expression

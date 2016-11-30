@@ -55,7 +55,7 @@ public class GuiUpdateTimer extends Timer
     
     class TableUpdateAction implements ActionListener
     {
-        private JTable table;
+        private final JTable table;
         
         public TableUpdateAction(JTable table)
         {

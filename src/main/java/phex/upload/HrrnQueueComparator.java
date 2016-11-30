@@ -10,7 +10,7 @@ import java.util.Comparator;
  */
 public class HrrnQueueComparator implements Comparator<UploadQueueState>
 {
-    private long baseTime;
+    private final long baseTime;
     
     public HrrnQueueComparator( long baseTime )
     {

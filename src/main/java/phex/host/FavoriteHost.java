@@ -29,7 +29,7 @@ import phex.common.address.DestAddress;
  */
 public class FavoriteHost
 {
-    private DestAddress address;
+    private final DestAddress address;
     
     public FavoriteHost( DestAddress address )
     {

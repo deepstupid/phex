@@ -49,15 +49,15 @@ public class SearchFilterPanel extends JPanel
             UIManager.getDefaults().getColor("window")), 
             new EmptyBorder( 5, 7, 5, 11) );
     
-    private SearchTab searchTab;
-    private JPanel topLayoutPanel;
-    private JPanel leftLayoutPanel;
-    private JPanel filterContentPanel;
+    private final SearchTab searchTab;
+    private final JPanel topLayoutPanel;
+    private final JPanel leftLayoutPanel;
+    private final JPanel filterContentPanel;
     
-    private JToggleButton quickFilterBtn;
-    private JToggleButton filterListBtn;
-    private QuickFilterPanel quickFilterPanel;
-    private FilterListPanel filterListPanel;
+    private final JToggleButton quickFilterBtn;
+    private final JToggleButton filterListBtn;
+    private final QuickFilterPanel quickFilterPanel;
+    private final FilterListPanel filterListPanel;
     
     public SearchFilterPanel(  SearchTab tab, SearchFilterRules filterRules )
     {
@@ -188,8 +188,8 @@ public class SearchFilterPanel extends JPanel
     }
     
     // buffered to prevent recreation
-    private Rectangle insideBorderBounds = new Rectangle();
-    private Rectangle clipBounds = new Rectangle();
+    private final Rectangle insideBorderBounds = new Rectangle();
+    private final Rectangle clipBounds = new Rectangle();
 
     @Override
     public void paintComponent( Graphics g )
@@ -238,7 +238,7 @@ public class SearchFilterPanel extends JPanel
     
     private static class LeftButtonUI extends BasicButtonUI
     {
-        private Color rolloverColor = PhexColors.getBoxPanelBackground().darker();
+        private final Color rolloverColor = PhexColors.getBoxPanelBackground().darker();
 
         @Override
         public void update( Graphics g, JComponent c )

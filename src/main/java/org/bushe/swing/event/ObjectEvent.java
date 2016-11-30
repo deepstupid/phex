@@ -23,7 +23,7 @@ package org.bushe.swing.event;
  * @author Michael Bushe michael@bushe.com
  */
 public class ObjectEvent extends AbstractEventServiceEvent {
-   private Object eventObject;
+   private final Object eventObject;
 
    /**
     * Constructor

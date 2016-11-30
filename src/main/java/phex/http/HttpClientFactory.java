@@ -32,7 +32,7 @@ import phex.common.Phex;
 
 public class HttpClientFactory
 {
-    private static HttpConnectionManager connectionManager;
+    private static final HttpConnectionManager connectionManager;
     
     static
     {

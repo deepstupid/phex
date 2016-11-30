@@ -40,7 +40,7 @@ import java.io.OutputStream;
  */
 public class PhexXmlSaxWriter
 {
-    private AttributesImpl attributes = new AttributesImpl();
+    private final AttributesImpl attributes = new AttributesImpl();
     private TransformerHandler transHandler;
     
     public static void serializePhexXml( OutputStream outStream, DPhex dPhex )

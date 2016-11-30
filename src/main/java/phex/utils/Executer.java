@@ -33,9 +33,9 @@ import java.util.regex.Pattern;
 
 public class Executer implements Runnable
 {
-    File file;
-    URL url;
-    String command;
+    final File file;
+    final URL url;
+    final String command;
 
     /*
      * Prepare to execute the given command on the given file
@@ -314,8 +314,8 @@ public class Executer implements Runnable
 
         public class StreamReaderThread extends Thread
         {
-            StringBuffer mOut;
-            InputStreamReader mIn;
+            final StringBuffer mOut;
+            final InputStreamReader mIn;
             
             public StreamReaderThread(InputStream in, StringBuffer out)
             {

@@ -38,12 +38,12 @@ public abstract class AbstractTreeTableModel implements TreeTableModel
      */
     public static final Class hierarchicalColumnClass = TreeTableModel.class;
     
-    protected String[] tableColumns;
-    protected Class[] tableClasses;
-    protected Object[] columnIds;
+    protected final String[] tableColumns;
+    protected final Class[] tableClasses;
+    protected final Object[] columnIds;
 
     protected Object root;
-    protected EventListenerList listenerList = new EventListenerList();
+    protected final EventListenerList listenerList = new EventListenerList();
 
     protected AbstractTreeTableModel( Object root,
         Object[] theColumnIds, String[] theTableColumns, Class[] theTableClasses)

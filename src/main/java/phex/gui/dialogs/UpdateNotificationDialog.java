@@ -40,7 +40,7 @@ import java.awt.event.WindowEvent;
 public class UpdateNotificationDialog extends JDialog
 {
 	
-    private UpdateCheckRunner updateChecker;
+    private final UpdateCheckRunner updateChecker;
     private JCheckBox dontDisplayAgainChkBox;
 
     public UpdateNotificationDialog( UpdateCheckRunner aChecker )

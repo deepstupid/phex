@@ -39,10 +39,10 @@ public class SearchRuleListHandler extends DefaultHandler
 {   
     public static final String THIS_TAG_NAME = "search-rule-list";
     
-    private CharArrayWriter text = new CharArrayWriter();
-    private SAXParser parser;
-    private DSubElementList<DSearchRule> dRulesList;
-    private DefaultHandler parent;
+    private final CharArrayWriter text = new CharArrayWriter();
+    private final SAXParser parser;
+    private final DSubElementList<DSearchRule> dRulesList;
+    private final DefaultHandler parent;
     
     public SearchRuleListHandler( DSubElementList<DSearchRule> dRulesList, 
         DefaultHandler parent, SAXParser parser )

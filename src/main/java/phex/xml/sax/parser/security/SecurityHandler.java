@@ -36,10 +36,10 @@ public class SecurityHandler extends DefaultHandler
 {
     public static final String THIS_TAG_NAME = DSecurity.ELEMENT_NAME;
     
-    private CharArrayWriter text = new CharArrayWriter();
-    private SAXParser parser;
-    private DSecurity dSecurity;
-    private DefaultHandler parent;
+    private final CharArrayWriter text = new CharArrayWriter();
+    private final SAXParser parser;
+    private final DSecurity dSecurity;
+    private final DefaultHandler parent;
     
     public SecurityHandler( DSecurity dSecurity, 
         DefaultHandler parent, SAXParser parser )

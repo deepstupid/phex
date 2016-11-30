@@ -43,7 +43,7 @@ public class Thex
 
     private int hashSize;
 
-    private Vector leavesHashes;
+    private final Vector leavesHashes;
 
     private int nodes10serSegment;
 

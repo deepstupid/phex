@@ -59,7 +59,7 @@ public class UploadTab extends FWTab
     
     private static final UploadState[] EMPTY_UPLOADSTATE_ARRAY = new UploadState[0];
 
-    private UploadManager uploadManager;
+    private final UploadManager uploadManager;
 
     private FWTable uploadTable;
     private JScrollPane uploadTableScrollPane;

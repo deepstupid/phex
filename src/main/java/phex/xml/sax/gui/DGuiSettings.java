@@ -69,7 +69,7 @@ public class DGuiSettings implements DElement
     private boolean isSetWindowHeight;
     private int windowHeight;
     
-    private List<DTab> tabList;
+    private final List<DTab> tabList;
     private DTableList tableList;
     
 

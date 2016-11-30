@@ -81,8 +81,8 @@ public final class GUIUtils
      */
     private static class ComboBoxUIChangeListener implements PropertyChangeListener
     {
-        private Keymap keymap;
-        private JComboBox comboBox;
+        private final Keymap keymap;
+        private final JComboBox comboBox;
         
         public ComboBoxUIChangeListener( Keymap keymap, JComboBox comboBox )
         {
@@ -142,8 +142,8 @@ public final class GUIUtils
      */
     private static class TextFieldUIChangeListener implements PropertyChangeListener
     {
-        private Keymap keymap;
-        private JTextField textField;
+        private final Keymap keymap;
+        private final JTextField textField;
         
         public TextFieldUIChangeListener( Keymap keymap, JTextField textField )
         {
@@ -327,7 +327,7 @@ public final class GUIUtils
     
     private static class VisibleTableColumnComparator implements Comparator<TableColumn>
     {
-        private TableColumnModel model;
+        private final TableColumnModel model;
         
         public VisibleTableColumnComparator( TableColumnModel model )
         {
@@ -606,11 +606,11 @@ public final class GUIUtils
     {
         private static final Insets INSETS_3 = new Insets( 3, 3, 3, 3 );
         
-        private Color controlShadow;
-        private Color controlDkShadow;
-        private Color controlHighlight;
-        private Color control;
-        private boolean isShownWhenSelected;
+        private final Color controlShadow;
+        private final Color controlDkShadow;
+        private final Color controlHighlight;
+        private final Color control;
+        private final boolean isShownWhenSelected;
         
         public RolloverButtonBorder()
         {

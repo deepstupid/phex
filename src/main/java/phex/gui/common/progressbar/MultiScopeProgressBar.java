@@ -57,7 +57,7 @@ public class MultiScopeProgressBar extends JPanel
      * allocating them in each paint call substantially reduced the time
      * it took paint to run.  Obviously, this method can't be re-entered.
      */
-    private static Rectangle viewRect = new Rectangle();
+    private static final Rectangle viewRect = new Rectangle();
     
     protected void paintComponent( Graphics g )
     {

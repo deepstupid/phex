@@ -34,10 +34,9 @@ public class RunnerQueueWorker
 {
     private boolean isInterrupted;
     private boolean isPaused;
-    private Vector<Runnable> queue;
+    private final Vector<Runnable> queue;
     private Thread runnerThread;
-    private int threadPriority;
-    
+
     /**
      * Creates a RunnerQueueWorker with NORM_PRIORITY.
      */
@@ -51,8 +50,8 @@ public class RunnerQueueWorker
      */
     public RunnerQueueWorker( int threadPriority )
     {
-        this.threadPriority = threadPriority;
-        queue = new Vector<Runnable>();
+
+        queue = new Vector<>();
         isInterrupted = false;
         isPaused = false;
     }

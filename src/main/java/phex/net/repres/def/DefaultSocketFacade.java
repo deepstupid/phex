@@ -35,7 +35,7 @@ import java.nio.channels.ByteChannel;
 public class DefaultSocketFacade implements SocketFacade
 {
     private DestAddress remoteAddress;
-    private Socket socket;
+    private final Socket socket;
     private StreamingByteChannel channel;
     
     public DefaultSocketFacade( Socket aSocket )

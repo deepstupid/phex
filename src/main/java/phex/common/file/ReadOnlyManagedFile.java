@@ -26,9 +26,9 @@ import phex.io.buffer.ByteBuffer;
 
 public interface ReadOnlyManagedFile
 {
-    public int read( ByteBuffer buffer, long pos )
+    int read(ByteBuffer buffer, long pos)
         throws ManagedFileException;
-    public void closeFile( )
+    void closeFile()
         throws ManagedFileException;
-    public long getLength();
+    long getLength();
 }

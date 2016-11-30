@@ -39,11 +39,11 @@ import java.awt.event.MouseEvent;
 
 public class DownloadZone extends JPanel
 {
-    private SwarmingManager swarmingMgr;
-    private BandwidthManager bwMgr;
+    private final SwarmingManager swarmingMgr;
+    private final BandwidthManager bwMgr;
     
-    private JLabel downloadLabel;
-    private JLabel bwLabel;
+    private final JLabel downloadLabel;
+    private final JLabel bwLabel;
     
     //private OptionsPaneIndex DOWNLOAD,BANDWIDTH;
 

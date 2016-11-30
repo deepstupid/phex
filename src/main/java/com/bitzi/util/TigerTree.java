@@ -53,27 +53,7 @@ public class TigerTree extends MessageDigest
                 Object o = clazz.newInstance();
                 Security.addProvider((Provider) o);
             }
-            catch (ClassNotFoundException e)
-            {
-                NLogger.error( TigerTree.class, e, e );
-            }
-            catch (IllegalAccessException e)
-            {
-                NLogger.error( TigerTree.class, e, e );
-            }
-            catch (InstantiationException e)
-            {
-                NLogger.error( TigerTree.class, e, e );
-            }
-            catch (ExceptionInInitializerError e)
-            {
-                NLogger.error( TigerTree.class, e, e );
-            }
-            catch (SecurityException e)
-            {
-                NLogger.error( TigerTree.class, e, e );
-            }
-            catch (ClassCastException e)
+            catch (ClassNotFoundException | ClassCastException | SecurityException | ExceptionInInitializerError | InstantiationException | IllegalAccessException e)
             {
                 NLogger.error( TigerTree.class, e, e );
             }
@@ -111,11 +91,7 @@ public class TigerTree extends MessageDigest
             {
                 tiger = MessageDigest.getInstance("Tiger", "CryptixCrypto");
             }
-            catch (NoSuchAlgorithmException nsae)
-            {
-                tiger = new Tiger();
-            }
-            catch (NoSuchProviderException nspe)
+            catch (NoSuchAlgorithmException | NoSuchProviderException nsae)
             {
                 tiger = new Tiger();
             }

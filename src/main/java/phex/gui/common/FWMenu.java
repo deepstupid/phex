@@ -90,7 +90,7 @@ public class FWMenu extends JMenu
 
     private class ActionChangedListener implements PropertyChangeListener
     {
-        JMenuItem menuItem;
+        final JMenuItem menuItem;
 
         ActionChangedListener( JMenuItem mi )
         {

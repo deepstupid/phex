@@ -40,13 +40,13 @@ public class SearchRuleHandler extends DefaultHandler
 {
     public static final String ELEMENT_NAME = DSearchRule.ELEMENT_NAME;
 
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DSearchRule searchRule;
+    private final DSearchRule searchRule;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public SearchRuleHandler( DSearchRule searchRule, Attributes attributes,
         DefaultHandler parent, SAXParser parser )

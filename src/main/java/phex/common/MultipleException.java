@@ -43,7 +43,7 @@ public class MultipleException extends Exception
     {
         if ( list == null )
         {
-            list = new ArrayList<Throwable>();
+            list = new ArrayList<>();
         }
         list.add( th );
     }

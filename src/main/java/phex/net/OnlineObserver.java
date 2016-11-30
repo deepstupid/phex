@@ -54,7 +54,7 @@ public class OnlineObserver
     /**
      * The number of failed connections in a row.
      */
-    private AtomicInteger failedConnections;
+    private final AtomicInteger failedConnections;
     private final Servent servent;
     private final HostFetchingStrategy fetchingStrategy;
     private AutoReconnectTimer autoReconnectTimer;

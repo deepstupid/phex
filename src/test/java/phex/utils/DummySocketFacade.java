@@ -33,8 +33,8 @@ import java.nio.channels.ByteChannel;
 
 public class DummySocketFacade implements SocketFacade
 {
-    private ByteArrayInputStream inStream;
-    private ByteArrayOutputStream outStream;
+    private final ByteArrayInputStream inStream;
+    private final ByteArrayOutputStream outStream;
     private StreamingByteChannel channel;
     
     public DummySocketFacade( byte[] inStreamContent )

@@ -75,8 +75,8 @@ public class NetworkTab extends FWTab
 
     private static final Host[] EMPTY_HOST_ARRAY = new Host[0];
 
-    private HostManager hostMgr;
-    private NetworkHostsContainer hostsContainer;
+    private final HostManager hostMgr;
+    private final NetworkHostsContainer hostsContainer;
 
     private FWTable networkTable;
     private NetworkRowRenderer networkRowRenderer;

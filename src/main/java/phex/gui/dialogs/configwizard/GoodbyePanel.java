@@ -32,7 +32,7 @@ import javax.swing.*;
 
 public class GoodbyePanel extends JPanel
 {
-    private ConfigurationWizardDialog parent;
+    private final ConfigurationWizardDialog parent;
     private JCheckBox openOptions;
     
     public GoodbyePanel( ConfigurationWizardDialog parent )

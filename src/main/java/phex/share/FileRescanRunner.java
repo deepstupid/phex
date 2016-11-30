@@ -52,19 +52,19 @@ public class FileRescanRunner implements Runnable
      */
     private static final Object threadLock = new Object();
     
-    private SharedFilesService sharedFilesService;
+    private final SharedFilesService sharedFilesService;
     
     private Set<File> sharedDirectoryFiles;
         
-    private List<Pattern> exclusionPatterns;
+    private final List<Pattern> exclusionPatterns;
     
     /**
      * In between storage for shared directories.
      */
-    private HashMap<File, SharedDirectory> sharedDirectoryMap;
-    private HashSet<SharedDirectory> sharedDirectoryList;
+    private final HashMap<File, SharedDirectory> sharedDirectoryMap;
+    private final HashSet<SharedDirectory> sharedDirectoryList;
     
-    private boolean isInitialRescan;
+    private final boolean isInitialRescan;
     private HashMap<String, DSharedFile> sharedFilesCache;
 
     private FileRescanRunner( SharedFilesService sharedFilesSerivce, 

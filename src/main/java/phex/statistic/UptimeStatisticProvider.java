@@ -28,9 +28,9 @@ import phex.prefs.core.StatisticPrefs;
 public class UptimeStatisticProvider implements StatisticProvider
 {
     private long startTime;
-    private LongObj valueObj;
-    private LongObj avgObj;
-    private LongObj maxObj;
+    private final LongObj valueObj;
+    private final LongObj avgObj;
+    private final LongObj maxObj;
 
 
     public UptimeStatisticProvider()

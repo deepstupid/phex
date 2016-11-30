@@ -37,7 +37,7 @@ public class NodeStatusZone extends JPanel
     
     private Icon ultrapeerIcon;
     private Icon leafModeIcon;
-    private JLabel nodeStatusLabel;
+    private final JLabel nodeStatusLabel;
 
     public NodeStatusZone()
     {

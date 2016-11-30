@@ -43,7 +43,7 @@ public class DynamicQueryWorker implements Runnable
     /**
 	 * The list of all dynamic query engines.
 	 */
-	private List<DynamicQueryEngine> queryList;
+	private final List<DynamicQueryEngine> queryList;
 	
     /**
      * Creates a new dynamic query worker.

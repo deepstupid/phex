@@ -39,10 +39,10 @@ public class FavoritesListHandler extends DefaultHandler
 {   
     public static final String THIS_TAG_NAME = "favorites-list";
     
-    private CharArrayWriter text = new CharArrayWriter();
-    private SAXParser parser;
-    private DSubElementList<DFavoriteHost> dFavoritesList;
-    private DefaultHandler parent;
+    private final CharArrayWriter text = new CharArrayWriter();
+    private final SAXParser parser;
+    private final DSubElementList<DFavoriteHost> dFavoritesList;
+    private final DefaultHandler parent;
     
     public FavoritesListHandler( DSubElementList<DFavoriteHost> dFavoritesList, 
         DefaultHandler parent, SAXParser parser )

@@ -103,13 +103,13 @@ public class DynamicQueryEngine implements DynamicQueryConstants
     /**
      * A list of hosts that we send a standard query too.
      */
-    private List<Host> queriedHosts;
+    private final List<Host> queriedHosts;
     
     /**
      * The base query of this DynamicQueryEngine. Form it
      * new queries are build.
      */
-    private QueryMsg query;
+    private final QueryMsg query;
     
     private final Host sourceHost;
     

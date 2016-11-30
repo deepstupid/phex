@@ -34,7 +34,7 @@ import javax.swing.*;
 
 public class ContentCommunityPanel extends JPanel
 {
-    private ConfigurationWizardDialog parent;
+    private final ConfigurationWizardDialog parent;
     private JCheckBox joinPolarSkulk;
     
     public ContentCommunityPanel( ConfigurationWizardDialog parent )

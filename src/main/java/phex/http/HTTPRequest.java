@@ -35,17 +35,17 @@ public class HTTPRequest
     /**
      * The request method of the http request.
      */
-    private String requestMethod;
+    private final String requestMethod;
 
     /**
      * The request uri of the http request.
      */
-    private String requestURI;
+    private final String requestURI;
 
     /**
      * The http version information.
      */
-    private String httpVersion;
+    private final String httpVersion;
 
     /**
      * The GnutellaRequest object if it was parsed out of the request URI. If
@@ -67,7 +67,7 @@ public class HTTPRequest
     /**
      * The http headers of the request.
      */
-    private HTTPHeaderGroup httpHeaders;
+    private final HTTPHeaderGroup httpHeaders;
 
     public HTTPRequest( String aRequestMethod, String aRequestURI,
         boolean isOutgoing )

@@ -49,15 +49,9 @@ public class Ip2CountryDB
     private Ip2CountryDB()
     {
         isLoaded = false;
-        ipCountryRangeList = new ArrayList<IpCountryRange>();
+        ipCountryRangeList = new ArrayList<>();
         
-        Runnable runnable = new Runnable()
-        {
-            public void run()
-            {
-                loadIp2CountryDB();
-            }
-        };
+        Runnable runnable = () -> loadIp2CountryDB();
         
         // TODO block job from execution until Phex initialization is finished.
         Environment.getInstance().executeOnThreadPool( runnable, "IP2CountryLoader" );
@@ -110,7 +104,7 @@ public class Ip2CountryDB
         }
         BufferedReader reader = new BufferedReader( new InputStreamReader( inStream ) );
         
-        ArrayList<IpCountryRange> initialList = new ArrayList<IpCountryRange>( 5000 );
+        ArrayList<IpCountryRange> initialList = new ArrayList<>(5000);
         IpCountryRange range;
         String line;
         try

@@ -51,17 +51,17 @@ public class DimeRecord
 
     private static final int RESERVED_MASK = 0x0f;
 
-    private TypeNameFormat tnf;
+    private final TypeNameFormat tnf;
 
-    private byte[] id;
+    private final byte[] id;
 
-    private byte[] type;
+    private final byte[] type;
 
     private boolean first; // true if this is the first record in a message
 
     private boolean last; // true if this is the last record in a message
     
-    private byte[] data;
+    private final byte[] data;
 
     /**
      * Convert data from a byte array into a DimeRecord.  
@@ -430,7 +430,7 @@ public class DimeRecord
 
         public static final TypeNameFormat NONE = new TypeNameFormat( 4 );
 
-        private int val;
+        private final int val;
 
         private TypeNameFormat( int i )
         {

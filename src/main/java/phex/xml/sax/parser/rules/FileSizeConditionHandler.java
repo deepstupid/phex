@@ -37,13 +37,13 @@ public class FileSizeConditionHandler extends DefaultHandler
 {
     public static final String ELEMENT_NAME = DFileSizeCondition.ELEMENT_NAME;
 
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DFileSizeCondition condition;
+    private final DFileSizeCondition condition;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public FileSizeConditionHandler( DFileSizeCondition condition, Attributes attributes,
         DefaultHandler parent, SAXParser parser )

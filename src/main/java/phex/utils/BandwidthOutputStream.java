@@ -32,7 +32,7 @@ import java.io.OutputStream;
  */
 public class BandwidthOutputStream extends OutputStream
 {
-    private OutputStream outStream;
+    private final OutputStream outStream;
 
     private BandwidthController bandwidthController;
 

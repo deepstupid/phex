@@ -32,7 +32,7 @@ import javax.swing.*;
 
 public class WelcomePanel extends JPanel
 {
-    private ConfigurationWizardDialog parent;
+    private final ConfigurationWizardDialog parent;
     
     public WelcomePanel( ConfigurationWizardDialog parent )
     {

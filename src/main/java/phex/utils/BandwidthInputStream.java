@@ -31,7 +31,7 @@ import java.io.InputStream;
  */
 public class BandwidthInputStream extends InputStream
 {
-    private InputStream inStream;
+    private final InputStream inStream;
 
     private BandwidthController bandwidthController;
 

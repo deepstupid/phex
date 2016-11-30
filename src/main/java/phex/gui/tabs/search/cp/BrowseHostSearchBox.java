@@ -44,12 +44,12 @@ import java.util.ArrayList;
 
 public class BrowseHostSearchBox extends BoxPanel
 {
-    private SearchControlPanel controlPanel;
+    private final SearchControlPanel controlPanel;
     
-    private DefaultComboBoxModel hostNameComboModel;
-    private JComboBox hostNameComboBox;
-    private JButton browseButton;
-    private JButton stopButton;
+    private final DefaultComboBoxModel hostNameComboModel;
+    private final JComboBox hostNameComboBox;
+    private final JButton browseButton;
+    private final JButton stopButton;
     
     public BrowseHostSearchBox( SearchControlPanel cp )
     {

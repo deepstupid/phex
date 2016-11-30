@@ -31,7 +31,7 @@ import java.awt.*;
  */
 public class IntegerTextField extends JTextField
 {
-   private int maxChar;
+   private final int maxChar;
 
    public IntegerTextField(int charLimit)
    {

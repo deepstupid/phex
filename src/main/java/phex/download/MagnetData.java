@@ -43,7 +43,7 @@ public class MagnetData
      * typically a URI of some sort, perhaps an URN/hash, perhaps an HTTP URL.
      * Also: xt
      */
-    private List<String> exactTopicList;
+    private final List<String> exactTopicList;
 
     /**
      * Meaning another URI that is asserted to be a perfect 
@@ -56,14 +56,14 @@ public class MagnetData
      * Also: xs
      */
 
-    private List<String> exactSubstituteList;
+    private final List<String> exactSubstituteList;
 
     /**
      * Meaning another URI that can provide a resource essentially as good as the
      * 'xt', but identicality is not implied.
      * Also: as
      */
-    private List<String> acceptableSubstituteList;
+    private final List<String> acceptableSubstituteList;
 
     /**
      * A convenient human-readable label for the "exact topic" -- 

@@ -106,8 +106,8 @@ public abstract class BanHostActionUtils extends FWAction
     
     private static class BanHostAction extends FWAction
     {
-        private BanHostActionProvider addressProvider;
-        private ExpiryDate expiryDate;
+        private final BanHostActionProvider addressProvider;
+        private final ExpiryDate expiryDate;
 
         private BanHostAction( String name,
             BanHostActionProvider addressProvider, ExpiryDate expiryDate )

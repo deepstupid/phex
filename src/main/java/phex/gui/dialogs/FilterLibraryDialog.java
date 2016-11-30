@@ -259,7 +259,7 @@ public class FilterLibraryDialog extends JDialog
     {
         private JTextField filterField;
         private JLabel errorLabel;
-        private String editFilter;
+        private final String editFilter;
         
         /**
          * @throws java.awt.HeadlessException

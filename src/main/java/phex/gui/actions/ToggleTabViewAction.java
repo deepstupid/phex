@@ -30,7 +30,7 @@ import java.awt.event.ActionEvent;
 
 public class ToggleTabViewAction extends FWToggleAction
 {
-    private FWTab tab;
+    private final FWTab tab;
 
     public ToggleTabViewAction( FWTab aTab )
     {

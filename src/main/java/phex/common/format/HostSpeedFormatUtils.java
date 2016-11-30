@@ -70,7 +70,7 @@ public class HostSpeedFormatUtils
         {
             buf.append( SPEED_STRING_T3 );
         }
-        buf.append( ")" );
+        buf.append(')');
         return buf.toString();
     }
 }

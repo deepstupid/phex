@@ -50,7 +50,7 @@ public class FilteredQueryResponseMonitor implements MessageSubscriber<QueryResp
      * The list of query hits returned by the query. Contains the RemoteFile
      * objects.
      */
-    private ArrayList<RemoteFile> queryHitList;
+    private final ArrayList<RemoteFile> queryHitList;
     
     /**
      * The passive search filter to look for.

@@ -57,7 +57,7 @@ public class GeneralUIPane extends OptionsSettingsPane
     private static final String THEME_INSTANTIATION_ERROR = "ThemeInstantiationError";
 
     
-    private GUIRegistry guiRegistry;
+    private final GUIRegistry guiRegistry;
 
     private JComboBox lafBox;
     private DefaultComboBoxModel themeModel;

@@ -37,8 +37,8 @@ public class Preferences
     private static final Logger logger = LoggerFactory.getLogger( Preferences.class );
     
     private PhexEventService eventService;
-    private Map<String, Setting<?>> settingMap;
-    private File prefFile;
+    private final Map<String, Setting<?>> settingMap;
+    private final File prefFile;
     private Properties valueProperties;
     private boolean isSaveRequired;
     

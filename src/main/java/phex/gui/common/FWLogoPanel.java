@@ -26,7 +26,7 @@ import java.awt.*;
 
 public class FWLogoPanel extends JPanel
 {
-    private Image logo;
+    private final Image logo;
 
     public FWLogoPanel( Image aLogo )
     {

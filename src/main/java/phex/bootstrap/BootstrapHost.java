@@ -13,7 +13,7 @@ public abstract class BootstrapHost
     /**
      * Maintains the no of times this host has consecutively failed.   
      */
-    private AtomicInteger failedInRowCount;
+    private final AtomicInteger failedInRowCount;
     
     public BootstrapHost( boolean isPhexCache )
     {

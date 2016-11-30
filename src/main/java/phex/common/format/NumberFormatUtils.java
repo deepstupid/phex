@@ -89,7 +89,7 @@ public final class NumberFormatUtils
      */
     public static String formatFullByteSize( long size )
     {
-        return formatNumber( size ) + " " + Localizer.getString( "BytesToken" );
+        return formatNumber( size ) + ' ' + Localizer.getString( "BytesToken" );
     }
 
     /**
@@ -132,7 +132,7 @@ public final class NumberFormatUtils
         }
         double d = size / divider;
         String valStr = formatDecimal(d, precision);
-        return valStr + " " + text;
+        return valStr + ' ' + text;
     }
 
     public static String formatSignificantByteSize( Number number )

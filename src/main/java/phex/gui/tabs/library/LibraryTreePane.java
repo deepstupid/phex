@@ -55,7 +55,7 @@ import java.io.IOException;
 
 public class LibraryTreePane extends JPanel
 {
-    private Component parent;
+    private final Component parent;
     private SharingTreeModel sharingTreeModel;
     private JTree mainTree;
     private FWPopupMenu fileTreePopup;

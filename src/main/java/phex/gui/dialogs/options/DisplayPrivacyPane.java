@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class DisplayPrivacyPane extends OptionsSettingsPane
 {
-    private GUIRegistry guiRegistry;
+    private final GUIRegistry guiRegistry;
     private JCheckBox showKeywordSearchHistoryChkbx;
     private JCheckBox showBrowseHostHistoryChkbx;
     private JCheckBox showConnectToHistoryChkbx;

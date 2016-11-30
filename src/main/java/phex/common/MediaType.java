@@ -76,8 +76,8 @@ public class MediaType
         "magma", "xml", "collection", "torrent", "col"
     };
 
-    private static MediaType[] allMediaTypes;
-    private static MediaType streamableMediaTypes;
+    private static final MediaType[] allMediaTypes;
+    private static final MediaType streamableMediaTypes;
 
     static
     {
@@ -96,7 +96,7 @@ public class MediaType
         // media types not in allMediaTypes array to hide it from UI
         
         // we assume all audio and video media types are streamable...
-        Set<String> concatSet = new TreeSet<String>();
+        Set<String> concatSet = new TreeSet<>();
         concatSet.addAll( Arrays.asList( AUDIO_FILE_EXT ) );
         concatSet.addAll( Arrays.asList( VIDEO_FILE_EXT ) );
         streamableMediaTypes = new MediaType( "", concatSet );
@@ -109,7 +109,7 @@ public class MediaType
     private MediaType( String aName, String[] fileExtArray )
     {
         name = aName;
-        fileExtSet = new TreeSet<String>( Arrays.asList( fileExtArray ) );
+        fileExtSet = new TreeSet<>(Arrays.asList(fileExtArray));
     }
     
     private MediaType( String aName, Set<String> fileExtSet )
@@ -184,7 +184,7 @@ public class MediaType
             return true;
         }
 
-        int index = filename.lastIndexOf(".");
+        int index = filename.lastIndexOf('.');
         // if no '.' or index is last char of the file name return false
         if (index == -1 || index == filename.length() )
         {
@@ -259,15 +259,27 @@ public class MediaType
     
     public static MediaType getTypeForName( String name )
     {
-        if ( name.equals( MEDIA_TYPE_ANY ) ) return getMediaTypeAny();
-        else if ( name.equals( MEDIA_TYPE_AUDIO ) ) return getAudioMediaType();
-        else if ( name.equals( MEDIA_TYPE_VIDEO ) ) return getVideoMediaType();
-        else if ( name.equals( MEDIA_TYPE_PROGRAM ) ) return getProgramMediaType();
-        else if ( name.equals( MEDIA_TYPE_IMAGES ) ) return getImageMediaType();
-        else if ( name.equals( MEDIA_TYPE_DOCUMENTS ) ) return getDocumentsMediaType();
-        else if ( name.equals( MEDIA_TYPE_ROMS ) ) return getRomsMediaType();
-        else if ( name.equals( MEDIA_TYPE_OPEN_FORMATS ) ) return getOpenFormatsMediaType();
-        else if ( name.equals( MEDIA_TYPE_META ) ) return getMetaMediaType();
-        else return null;
+        switch (name) {
+            case MEDIA_TYPE_ANY:
+                return getMediaTypeAny();
+            case MEDIA_TYPE_AUDIO:
+                return getAudioMediaType();
+            case MEDIA_TYPE_VIDEO:
+                return getVideoMediaType();
+            case MEDIA_TYPE_PROGRAM:
+                return getProgramMediaType();
+            case MEDIA_TYPE_IMAGES:
+                return getImageMediaType();
+            case MEDIA_TYPE_DOCUMENTS:
+                return getDocumentsMediaType();
+            case MEDIA_TYPE_ROMS:
+                return getRomsMediaType();
+            case MEDIA_TYPE_OPEN_FORMATS:
+                return getOpenFormatsMediaType();
+            case MEDIA_TYPE_META:
+                return getMetaMediaType();
+            default:
+                return null;
+        }
     }
 }

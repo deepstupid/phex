@@ -136,7 +136,7 @@ public class LanguagePane extends OptionsSettingsPane
      */
     public class LanguageListCellRenderer extends FWListCellRenderer
     {
-        private IconPack iconFactory;
+        private final IconPack iconFactory;
         
         public LanguageListCellRenderer()
         {

@@ -34,7 +34,7 @@ public class UdpHostCache extends BootstrapHost
      */
     public static final int MAX_FAIL_COUNT = 3;
 
-    private DestAddress address;
+    private final DestAddress address;
 
     public UdpHostCache( DestAddress addr )
     {

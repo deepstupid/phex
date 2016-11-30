@@ -56,7 +56,7 @@ public class PongCache
     {
         synchronized( pongQueue )
         { 
-            List<PongMsg> pongList = new LinkedList<PongMsg>();
+            List<PongMsg> pongList = new LinkedList<>();
             List<PongMsg> removeList = null;
             
             long now = System.currentTimeMillis();
@@ -68,7 +68,7 @@ public class PongCache
                 {
                     if(removeList == null) 
                     {
-                        removeList = new LinkedList<PongMsg>();
+                        removeList = new LinkedList<>();
                     }
                     removeList.add( pong );
                 }

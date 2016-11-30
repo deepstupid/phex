@@ -58,7 +58,7 @@ public class HorizonTracker implements MessageSubscriber<PongMsg>
     /**
      * A set to keep track of the already counted addresses. 
      */
-    private Set<DestAddress> trackedAddresses;
+    private final Set<DestAddress> trackedAddresses;
     
     private int currentHostCount;
     private long currentFileCount;
@@ -78,7 +78,7 @@ public class HorizonTracker implements MessageSubscriber<PongMsg>
                 TrackerRefreshTimer.TIMER_PERIOD );
         
         useLastCountValues = false;
-        trackedAddresses = new HashSet<DestAddress>();
+        trackedAddresses = new HashSet<>();
     }
     
     /**

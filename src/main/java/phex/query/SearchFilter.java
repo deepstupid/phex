@@ -31,12 +31,12 @@ public class SearchFilter
     /**
      * The name of the search filter.
      */
-    private String name;
+    private final String name;
 
     /**
      * The filtered tokens of the refine search text.
      */
-    private List<String> filterTokens;
+    private final List<String> filterTokens;
 
     /**
      * The filter string that is tokenized into the filterTokens

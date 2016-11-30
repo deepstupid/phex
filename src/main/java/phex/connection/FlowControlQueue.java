@@ -37,7 +37,7 @@ public class FlowControlQueue
     /**
      * The number of messages send by each message burst.
      */
-    private int burstSize;
+    private final int burstSize;
 
     /**
      * The number of messages send in the curretn message burst.
@@ -47,18 +47,18 @@ public class FlowControlQueue
     /**
      * The lifetime of a message.
      */
-    private int msgTimeout;
+    private final int msgTimeout;
 
     /**
      * Indicates whether the queue is a lifo of fifo queue. This is necessary to
      * handle the different message types.
      */
-    private boolean isLIFO;
+    private final boolean isLIFO;
 
     /**
      * The message queue containing all the queued messages.
      */
-    private CircularQueue msgQueue;
+    private final CircularQueue msgQueue;
 
 
     public FlowControlQueue( int burstSize, int msgTimeout, int maxSize,

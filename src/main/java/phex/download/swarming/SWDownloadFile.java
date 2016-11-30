@@ -65,7 +65,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
 {
     private static final Logger logger = LoggerFactory.getLogger( SWDownloadFile.class );
     
-    private static Random random = new Random();
+    private static final Random random = new Random();
     
     private final SwarmingManager downloadService;
     private final PhexEventService eventService;
@@ -89,7 +89,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
     /**
      * A lock object used to lock access to good and bad download candidate lists.
      */
-    private Object candidatesLock = new Object();
+    private final Object candidatesLock = new Object();
     
     /**
      * A list of all download candidates. On access candidatesLock should be locked. 

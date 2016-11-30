@@ -24,8 +24,8 @@ public class FileHandlingException extends Exception
     public static final int FILE_ALREADY_EXISTS = 1;
     public static final int CREATE_FILE_FAILED = 2;
 
-    private int type;
-    private String fileName;
+    private final int type;
+    private final String fileName;
 
     public FileHandlingException( int aType )
     {

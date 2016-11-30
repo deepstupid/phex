@@ -26,12 +26,12 @@ public class HTTPHeader
     /**
      * The http header name.
      */
-    private String name;
+    private final String name;
 
     /**
      * The http header value.
      */
-    private String value;
+    private final String value;
 
     /**
      * Creates a new http header with name and value

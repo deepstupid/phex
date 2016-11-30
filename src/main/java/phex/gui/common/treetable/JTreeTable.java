@@ -65,7 +65,7 @@ public class JTreeTable extends FWTable
      * Editor used to edit cells within the
      *  {@link #isHierarchical(int) hierarchical} column.
      */
-    private TreeTableCellEditor hierarchicalEditor;
+    private final TreeTableCellEditor hierarchicalEditor;
 
     private TreeTableHacker treeTableHacker;
     private boolean consumedOnPress;

@@ -17,6 +17,7 @@ package com.bitzi.util;
 
 import java.security.DigestException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 //--+---+1--+---+--2+---+---+3--+---+--4+---+---+5--+---+--6+---+---+7--+---+--
 //34567890123456789012345678901234567890123456789012345678901234567890123456789
 
@@ -717,5 +718,16 @@ public final class SHA1 extends MessageDigest implements Cloneable {
         hE = e + hE;
         hD = d + hD;
         hC = (/* c = */ (c << 30) | (c >>> 2)) + hC;
+    }
+
+    public static MessageDigest get() {
+
+
+        try {
+            return MessageDigest.getInstance( "SHA" );
+        } catch (NoSuchAlgorithmException e) {
+            return new SHA1();
+        }
+
     }
 }

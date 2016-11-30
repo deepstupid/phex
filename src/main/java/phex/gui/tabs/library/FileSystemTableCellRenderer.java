@@ -38,12 +38,12 @@ import java.util.Map;
  */
 public class FileSystemTableCellRenderer extends FWTableCellRenderer
 {
-    private Icon defaultIcon;
-    private Icon defaultGrayIcon;
+    private final Icon defaultIcon;
+    private final Icon defaultGrayIcon;
     
-    private FileSystemView fsv;
-    private Map<ShareFile, Icon> shareFileIconMap;
-    private Map grayMap;
+    private final FileSystemView fsv;
+    private final Map<ShareFile, Icon> shareFileIconMap;
+    private final Map grayMap;
     
     public FileSystemTableCellRenderer()
     {

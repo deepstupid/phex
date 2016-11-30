@@ -118,7 +118,7 @@ public class SwarmingManager extends AbstractLifeCycle
     /**
      * Lock object to lock saving of download lists.
      */
-    private static Object saveDownloadListLock = new Object();
+    private static final Object saveDownloadListLock = new Object();
 
     /**
      * Object that holds the save job instance while a save job is running. The
@@ -685,7 +685,9 @@ public class SwarmingManager extends AbstractLifeCycle
     
     public List<SWDownloadFile> getDownloadFileListCopy()
     {
-        return new ArrayList<SWDownloadFile>( downloadList );
+        synchronized( downloadList ) {
+            return new ArrayList<SWDownloadFile>(downloadList);
+        }
     }
 
     /**
@@ -1261,7 +1263,7 @@ public class SwarmingManager extends AbstractLifeCycle
             NLogger.debug( SwarmingManager.class,
                 "Loading download list..." );
     
-            File downloadFile = Environment.getInstance().getPhexConfigFile(
+            File downloadFile = Environment.getPhexConfigFile(
                 EnvironmentConstants.XML_DOWNLOAD_FILE_NAME );
             File downloadFileBak = new File(downloadFile.getAbsolutePath() + ".bak");
     
@@ -1422,7 +1424,7 @@ public class SwarmingManager extends AbstractLifeCycle
                     DSubElementList<DDownloadFile> dList = createDDownloadList();
                     dPhex.setDownloadList( dList );
 
-                    File downloadFile = Environment.getInstance().getPhexConfigFile(
+                    File downloadFile = Environment.getPhexConfigFile(
                         EnvironmentConstants.XML_DOWNLOAD_FILE_NAME );
                     File downloadFileBak = new File(downloadFile.getAbsolutePath() + ".bak");
                     

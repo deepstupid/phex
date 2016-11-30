@@ -72,7 +72,7 @@ public class BufferVolumeTracker
     
     class Sync extends AbstractQueuedSynchronizer 
     {
-        private int currentMax;
+        private final int currentMax;
         
         Sync( int max )
         {

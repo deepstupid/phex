@@ -36,10 +36,10 @@ import java.io.CharArrayWriter;
  */
 public class UpdateResponseHandler extends DefaultHandler
 {   
-    private CharArrayWriter text = new CharArrayWriter();
-    private SAXParser parser;
-    private DUpdateResponse dResponse;
-    private DefaultHandler parent;
+    private final CharArrayWriter text = new CharArrayWriter();
+    private final SAXParser parser;
+    private final DUpdateResponse dResponse;
+    private final DefaultHandler parent;
     
     public UpdateResponseHandler( DUpdateResponse dResponse, 
         Attributes attributes, DefaultHandler parent, SAXParser parser )

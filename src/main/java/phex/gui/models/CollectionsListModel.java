@@ -30,7 +30,7 @@ import java.util.*;
  */
 public class CollectionsListModel extends AbstractListModel implements List
 {
-    private List delegate;
+    private final List delegate;
     
     public CollectionsListModel()
     {

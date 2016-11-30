@@ -34,7 +34,7 @@ import java.util.HashMap;
 
 public class DisplayPromptsPane extends OptionsSettingsPane
 {
-    private GUIRegistry guiRegistry;
+    private final GUIRegistry guiRegistry;
     private JCheckBox showCloseOptionsChkbx;
     private JCheckBox showBetaUpdateNotificationChkbx;
     private JCheckBox showCopyrightLawsWarningChkbx;

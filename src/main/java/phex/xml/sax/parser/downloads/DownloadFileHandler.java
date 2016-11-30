@@ -39,13 +39,13 @@ import java.io.CharArrayWriter;
  */
 public class DownloadFileHandler extends DefaultHandler
 {
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DDownloadFile downloadFile;
+    private final DDownloadFile downloadFile;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public DownloadFileHandler( DDownloadFile downloadFile, DefaultHandler parent, SAXParser parser )
     {

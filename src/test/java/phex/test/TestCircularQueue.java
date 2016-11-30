@@ -79,7 +79,7 @@ public class TestCircularQueue extends TestCase
     
     class TestObj
     {
-        String id;
+        final String id;
         TestObj(int cnt) { this.id = "id:" + cnt;}
         public String toString() { return id;}
     }

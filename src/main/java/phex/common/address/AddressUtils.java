@@ -70,8 +70,8 @@ public class AddressUtils
         assert ip.length == 4;
         
         return (ip[0] & 0xff) + "." 
-            + (ip[1] & 0xff) + "." 
-            + (ip[2] & 0xff) + "." 
+            + (ip[1] & 0xff) + '.'
+            + (ip[2] & 0xff) + '.'
             + (ip[3] & 0xff);
     }
     
@@ -81,8 +81,8 @@ public class AddressUtils
     public static String ip2string( int ip )
     {
         return ((ip >> 24) & 0xFF) + "." +
-               ((ip >> 16) & 0xFF) + "." + 
-               ((ip >>  8) & 0xFF) + "." + 
+               ((ip >> 16) & 0xFF) + '.' +
+               ((ip >>  8) & 0xFF) + '.' +
                ( ip        & 0xFF);
     }
 
@@ -122,11 +122,7 @@ public class AddressUtils
             }
             hitDots++;
         }
-        if(hitDots != 4 || hostName.endsWith("."))
-        {
-            return false;
-        }
-        return true;
+        return !(hitDots != 4 || hostName.endsWith("."));
     }
 
     /**
@@ -500,7 +496,7 @@ public class AddressUtils
 
     public static List<IpCidrPair> range2cidr(long start, long end)
     {
-        ArrayList<IpCidrPair> pairs = new ArrayList<IpCidrPair>();
+        ArrayList<IpCidrPair> pairs = new ArrayList<>();
         while ( end >= start )
         {
             byte maxsize = 32;

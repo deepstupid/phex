@@ -90,7 +90,7 @@ public class QueryHitHost
     /**
      * The host address of the query hit host.
      */
-    private DestAddress hostAddress;
+    private final DestAddress hostAddress;
     
     @CheckForNull
     private DestAddress[] pushProxyAddresses;

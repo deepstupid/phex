@@ -38,31 +38,29 @@ public class OpenPgpToolkit
      */
     // http://www.rossde.com/PGP/pgp_keyserv.html
     // http://sks-keyservers.net/status/
-    private static final List<String> KEYSERVER_LIST = Arrays.asList( new String[] {
-        "gpg-keyserver.de", 
-        "pgp.webtru.st",
-        "minsky.surfnet.nl",
-        "keyserver.linux.it",
+    private static final List<String> KEYSERVER_LIST = Arrays.asList("gpg-keyserver.de",
+            "pgp.webtru.st",
+            "minsky.surfnet.nl",
+            "keyserver.linux.it",
         /*"pgpkeys.pca.dfn.de",*/
-        "keyserver.ubuntu.com",
-        "keyserver.fr",
-        "wwwkeys.stinkfoot.us.pgp.net",
-        "gpg.planetcyborg.de",
-        "keys.indymedia.org"
-    } );
+            "keyserver.ubuntu.com",
+            "keyserver.fr",
+            "wwwkeys.stinkfoot.us.pgp.net",
+            "gpg.planetcyborg.de",
+            "keys.indymedia.org");
     
     @Nonnull
-    public PGPPublicKey lookupKeyById( String keyserver, String keyId ) 
+    public static PGPPublicKey lookupKeyById(String keyserver, String keyId)
         throws IOException
     {
         String url = "http://"+keyserver+"/pks/lookup?op=get&search="+keyId;
         
         HttpClient client = HttpClientFactory.createHttpClient();
-        if ( ProxyPrefs.UseHttp.get().booleanValue()  
+        if (ProxyPrefs.UseHttp.get()
             && !StringUtils.isEmpty( ProxyPrefs.HttpHost.get() ) )
         {
-            client.getHostConfiguration().setProxy( ProxyPrefs.HttpHost.get(), 
-                ProxyPrefs.HttpPort.get().intValue() );
+            client.getHostConfiguration().setProxy( ProxyPrefs.HttpHost.get(),
+                    ProxyPrefs.HttpPort.get());
         }
         GetMethod method = new GetMethod( url );
         method.addRequestHeader("Cache-Control", "no-cache");
@@ -90,13 +88,13 @@ public class OpenPgpToolkit
         return key;
     }
  
-    public String getRandomKeyserver()
+    public static String getRandomKeyserver()
     {
         int pos = RandomUtils.getInt( KEYSERVER_LIST.size() );
         return KEYSERVER_LIST.get( pos );
     }
     
-    public List<String> getKeyserverList()
+    public static List<String> getKeyserverList()
     {
         return Collections.unmodifiableList( KEYSERVER_LIST );
     }

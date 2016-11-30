@@ -36,7 +36,7 @@ import java.util.Stack;
  */
 public class BanHostBatch extends RunnerQueueWorker
 {
-    private static Object lock = new Object();
+    private static final Object lock = new Object();
 
     private static BanHostBatch instance;
 
@@ -44,7 +44,7 @@ public class BanHostBatch extends RunnerQueueWorker
     
     private Thread runnerThread;
 
-    private Stack<BanHostHolder> rules;
+    private final Stack<BanHostHolder> rules;
     
     
 
@@ -151,9 +151,9 @@ public class BanHostBatch extends RunnerQueueWorker
 
     private static class BanHostHolder
     {
-        private DestAddress address;
+        private final DestAddress address;
 
-        private ExpiryDate expDate;
+        private final ExpiryDate expDate;
 
         public BanHostHolder(DestAddress address, ExpiryDate expDate)
         {

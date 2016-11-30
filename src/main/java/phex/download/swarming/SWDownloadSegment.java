@@ -39,9 +39,9 @@ public class SWDownloadSegment
      * The start offset of the download scope, inclusive.
      * Expected: start <= end
      */
-    private long start;
+    private final long start;
     
-    private long length;
+    private final long length;
     
     /**
      * Defines the bytes already downloaded.
@@ -56,7 +56,7 @@ public class SWDownloadSegment
     /**
      * The download file that this segment belongs to.
      */
-    private SWDownloadFile downloadFile;
+    private final SWDownloadFile downloadFile;
 
     /**
      * Transfer start time
@@ -68,7 +68,7 @@ public class SWDownloadSegment
      */
     private long transferStopTime;
     
-    private TransferAverage transferAverage;
+    private final TransferAverage transferAverage;
         
     /**
      * 

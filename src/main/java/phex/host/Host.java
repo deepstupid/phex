@@ -951,7 +951,7 @@ public class Host
     
     private class SendEngine implements Runnable
     {
-        private AtomicBoolean isRunning = new AtomicBoolean(false);
+        private final AtomicBoolean isRunning = new AtomicBoolean(false);
         
         public void dispatch( )
         {

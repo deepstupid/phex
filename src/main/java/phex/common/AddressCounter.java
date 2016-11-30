@@ -42,7 +42,7 @@ public class AddressCounter
      */
     private int maxCount;
     
-    private boolean isFullAddressUsed;
+    private final boolean isFullAddressUsed;
 
     /**
      * Creates an AddressCounter instance allowing the specified number of
@@ -54,7 +54,7 @@ public class AddressCounter
      */
     public AddressCounter( int maxCount, boolean isFullAddressUsed )
     {
-        addressCountMap = new HashMap<Object, Integer>();
+        addressCountMap = new HashMap<>();
         this.maxCount = maxCount;
         this.isFullAddressUsed = isFullAddressUsed;
     }
@@ -80,15 +80,15 @@ public class AddressCounter
         Integer count = addressCountMap.get( significantPart );
         if ( count != null )
         {
-            if ( count.intValue() == maxCount )
+            if (count == maxCount )
             {
                 return false;
             }
-            addressCountMap.put( significantPart, Integer.valueOf( count.intValue() + 1 ) );
+            addressCountMap.put( significantPart, count.intValue() + 1);
         }
         else
         {
-            addressCountMap.put( significantPart, Integer.valueOf( 1 ) );
+            addressCountMap.put( significantPart, 1);
         }
         return true;
     }
@@ -99,12 +99,12 @@ public class AddressCounter
         Integer count = addressCountMap.get( significantPart );
         if ( count != null )
         {
-            if ( count.intValue() == 1 )
+            if (count == 1 )
             {
                 addressCountMap.remove( significantPart );
                 return;
             }
-            addressCountMap.put( significantPart, Integer.valueOf( count.intValue() - 1 ) );
+            addressCountMap.put( significantPart, count.intValue() - 1);
         }
     }
     

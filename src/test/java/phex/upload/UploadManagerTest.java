@@ -51,7 +51,7 @@ public class UploadManagerTest extends TestCase
 
     private class Monitor extends TestMonitorRunnable
     {
-        private int maxParallelUploads = UploadPrefs.MaxParallelUploads.get().intValue();
+        private final int maxParallelUploads = UploadPrefs.MaxParallelUploads.get().intValue();
         private int maxQueueSize = UploadPrefs.MaxQueueSize.get().intValue();
         
         //private String lastOut;

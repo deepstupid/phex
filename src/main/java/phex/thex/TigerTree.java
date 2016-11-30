@@ -70,7 +70,7 @@ public class TigerTree extends MessageDigest
     private long byteCount;
 
     /** Internal Tiger MD instance */
-    private MessageDigest tiger;
+    private final MessageDigest tiger;
 
     /** Interim tree node hash values */
     private Vector nodes;

@@ -38,10 +38,10 @@ public class IpAccessRuleHandler extends DefaultHandler
 {
     public static final String THIS_TAG_NAME = DIpAccessRule.ELEMENT_NAME;
     
-    private CharArrayWriter text = new CharArrayWriter();
-    private SAXParser parser;
-    private DIpAccessRule dIpAccessRule;
-    private DefaultHandler parent;
+    private final CharArrayWriter text = new CharArrayWriter();
+    private final SAXParser parser;
+    private final DIpAccessRule dIpAccessRule;
+    private final DefaultHandler parent;
     
     public IpAccessRuleHandler( DIpAccessRule dIpAccessRule, 
         DefaultHandler parent, SAXParser parser )

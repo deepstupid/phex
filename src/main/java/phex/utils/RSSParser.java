@@ -88,9 +88,9 @@ public class RSSParser
     { '<','/','r','s','s','>', };
 
 
-    private PushbackReader reader;
+    private final PushbackReader reader;
 
-    private List<String> magnets;
+    private final List<String> magnets;
 
     public RSSParser(Reader reader)
     {

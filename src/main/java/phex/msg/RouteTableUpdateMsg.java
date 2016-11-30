@@ -27,7 +27,7 @@ public abstract class RouteTableUpdateMsg extends Message
     public static final byte RESET_TABLE_VARIANT = 0x00;
     public static final byte PATCH_TABLE_VARIANT = 0x01;
 
-    protected byte variant;
+    protected final byte variant;
 
     public RouteTableUpdateMsg( byte aVariant, int length )
     {

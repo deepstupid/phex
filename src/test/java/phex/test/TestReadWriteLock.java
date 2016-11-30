@@ -135,20 +135,20 @@ public class TestReadWriteLock implements UncaughtExceptionHandler
                         if ( d < 0.33 )
                         {
                             lock.readLock();
-                            Thread.sleep( 50 );
+                            Thread.sleep( 5 );
                             lock.readUnlock();
                         }
                         else if ( d < 0.66 )
                         {
                             lock.writeLock();
-                            Thread.sleep( 50 );
+                            Thread.sleep( 5 );
                             lock.writeUnlock();
                         }
                         else
                         {
                             lock.writeLock();
                             lock.readLock();
-                            Thread.sleep( 50 );
+                            Thread.sleep( 5 );
                             lock.readUnlock();
                             lock.writeUnlock();
                         }

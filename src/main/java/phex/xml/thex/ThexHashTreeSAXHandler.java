@@ -40,7 +40,7 @@ public class ThexHashTreeSAXHandler extends DefaultHandler
     private static final String DIGEST_ELEMENT = "digest";
     private static final String SERIALIZEDTREE_ELEMENT = "serializedtree";
     
-    private ThexHashTree hashtree;
+    private final ThexHashTree hashtree;
     
     public ThexHashTreeSAXHandler( ThexHashTree hashtree )
     {

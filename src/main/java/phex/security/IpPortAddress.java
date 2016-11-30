@@ -30,8 +30,8 @@ public class IpPortAddress {
     /** Cache the hash code for the address */
     private int hash = 0;
 
-    private byte[] ipAddress;
-    private byte[] port;
+    private final byte[] ipAddress;
+    private final byte[] port;
 
     public IpPortAddress(byte[] hostIp)
     {

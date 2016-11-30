@@ -38,7 +38,7 @@ import java.awt.event.FocusListener;
 
 public class RulePropertiesPanel extends JPanel
 {
-    private FilterWizardDialog parent;
+    private final FilterWizardDialog parent;
     private JTextField nameTF;
     private JCheckBox permanentActiveRule;
     

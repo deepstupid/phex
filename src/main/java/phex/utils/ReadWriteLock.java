@@ -55,7 +55,7 @@ public class ReadWriteLock
     private static final long MAX_WAIT_TIME = 2 * 60 * 1000;
 
     private Thread writeLockOwner;
-    private HashMap readLockOwners;
+    private final HashMap readLockOwners;
 
     public ReadWriteLock()
     {

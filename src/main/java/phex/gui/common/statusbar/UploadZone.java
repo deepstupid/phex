@@ -42,12 +42,12 @@ import java.awt.event.MouseEvent;
 
 public class UploadZone extends JPanel
 {
-    private UploadManager uploadMgr;
-    private StatisticsManager statsMgr;
-    private BandwidthManager bwMgr;
-    private JLabel uploadLabel;
+    private final UploadManager uploadMgr;
+    private final StatisticsManager statsMgr;
+    private final BandwidthManager bwMgr;
+    private final JLabel uploadLabel;
 
-    private JLabel bwLabel;
+    private final JLabel bwLabel;
 
     public UploadZone( BandwidthManager bandwidthMgr )
     {

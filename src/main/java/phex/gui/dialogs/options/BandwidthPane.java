@@ -46,9 +46,9 @@ import java.util.Hashtable;
 
 public class BandwidthPane extends OptionsSettingsPane
 {
-    private int UNLIMITED_VALUE = 101;
+    private final int UNLIMITED_VALUE = 101;
 
-    private Dictionary<Integer,JLabel> linearSliderLabels;
+    private final Dictionary<Integer,JLabel> linearSliderLabels;
 
     private BandwidthComboBox connectionSpeedCbx;
     private JLabel totalBandwidthLabel;

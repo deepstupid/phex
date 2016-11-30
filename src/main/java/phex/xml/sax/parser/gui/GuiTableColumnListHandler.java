@@ -39,13 +39,13 @@ public class GuiTableColumnListHandler extends DefaultHandler
 {
     public static final String THIS_TAG_NAME = DTableColumnList.ELEMENT_NAME;
 
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DTableColumnList dColumnList;
+    private final DTableColumnList dColumnList;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public GuiTableColumnListHandler( DTableColumnList dColumnList,
         DefaultHandler parent, SAXParser parser )

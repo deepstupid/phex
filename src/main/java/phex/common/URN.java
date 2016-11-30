@@ -216,11 +216,7 @@ public class URN
             return false;
         }
         String nss = urn.substring( colonIdx + 1, urn.length() );
-        if ( !isValidNamespaceSpecificString( nss ) )
-        {
-            return false;
-        }
-        return true;
+        return isValidNamespaceSpecificString(nss);
     }
 
     /**
@@ -234,14 +230,9 @@ public class URN
     {
         int length = nss.length();
              // [32-character-SHA1]
-        if ( length == 32 ||
-             // [32-character-SHA1].[39-character-TigerTree]
-             length == 72
-             )
-        {
-            return true;
-        }
-        return false;
+        return length == 32 ||
+                // [32-character-SHA1].[39-character-TigerTree]
+                length == 72;
     }
 
     /**

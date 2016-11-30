@@ -81,8 +81,8 @@ public class SharedFilesTableModel extends FWSortableTableModel
     };
         
 
-    private static String[] tableColumns;
-    private static Class[] tableClasses;
+    private static final String[] tableColumns;
+    private static final Class[] tableClasses;
 
     static
     {
@@ -111,7 +111,7 @@ public class SharedFilesTableModel extends FWSortableTableModel
         };
     }
     
-    private FileFilter fileFilter = new FilesOnlyFileFilter();
+    private final FileFilter fileFilter = new FilesOnlyFileFilter();
     private File displayDirectory;
     /**
      * Caching buffer of the files in display directory for performance and memory

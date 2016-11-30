@@ -54,17 +54,10 @@ public class ThreadTracking
     
     private static void prepareUncaughtExceptionHandler()
     {
-    	Thread.UncaughtExceptionHandler ucExpHandler = 
-    		new Thread.UncaughtExceptionHandler()
-    	{
-			public void uncaughtException(Thread thread, Throwable throwable)
-			{
-                NLogger.error( ThreadTracking.class, 
-                    "Uncaught exception: " + throwable.getMessage() + " in Thread: " 
+    	Thread.UncaughtExceptionHandler ucExpHandler =
+                (thread, throwable) -> NLogger.error( ThreadTracking.class,
+                    "Uncaught exception: " + throwable.getMessage() + " in Thread: "
                     + thread.getName(), throwable );
-			}
-    		
-    	};
     	Thread.setDefaultUncaughtExceptionHandler( ucExpHandler );
     }
 

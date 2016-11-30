@@ -79,14 +79,14 @@ public class UploadState implements TransferDataProvider
      */
     private long previousSegmentsSize;
     
-    private TransferAverage transferAverage;
+    private final TransferAverage transferAverage;
     
     /**
      * This is a List holding all AltLocs already send to this connection during
      * this session. It is used to make sure the same AltLocs are not send twice
      * to the same connection.
      */
-    private Set<AlternateLocation> sendAltLocSet;
+    private final Set<AlternateLocation> sendAltLocSet;
 
     /**
      * This is used to create a upload state object that is used for displaying

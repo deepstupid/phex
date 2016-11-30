@@ -29,7 +29,7 @@ import java.awt.*;
 public class FWElegantPanel extends JPanel
 {
     private JLabel titleLabel;
-    private JPanel headerPanel;
+    private final JPanel headerPanel;
 
     public FWElegantPanel( String title )
     {
@@ -92,7 +92,7 @@ public class FWElegantPanel extends JPanel
             setLayout(new BorderLayout());
         }
         
-        private static Rectangle viewRect = new Rectangle();
+        private static final Rectangle viewRect = new Rectangle();
         
         protected void paintComponent( Graphics g )
         {

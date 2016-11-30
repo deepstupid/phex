@@ -37,13 +37,13 @@ import java.io.CharArrayWriter;
  */
 public class DownloadCandidateHandler extends DefaultHandler
 {
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DDownloadCandidate downloadCandidate;
+    private final DDownloadCandidate downloadCandidate;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public DownloadCandidateHandler( DDownloadCandidate downloadCandidate, 
         DefaultHandler parent, SAXParser parser )

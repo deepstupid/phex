@@ -32,7 +32,7 @@ import phex.security.PhexSecurityManager;
 import phex.servent.Servent;
 import phex.utils.Localizer;
 
-import java.util.Set;
+import java.util.Collection;
 
 public class AltLocContainerTest extends TestCase
 {
@@ -79,8 +79,8 @@ public class AltLocContainerTest extends TestCase
         destContainer.addContainer( testContainer );
         assertEquals( 10, destContainer.getSize() );
         
-        Set<DestAddress> testAltLocs = testContainer.getAltLocsForExport( localAddress );
-        Set<DestAddress> destAltLocs = destContainer.getAltLocsForExport( localAddress );
+        Collection<DestAddress> testAltLocs = testContainer.getAltLocsForExport( localAddress );
+        Collection<DestAddress> destAltLocs = destContainer.getAltLocsForExport( localAddress );
         
         assertTrue( testAltLocs.containsAll( destAltLocs ) );
         assertTrue( destAltLocs.containsAll( testAltLocs ) );
@@ -132,7 +132,7 @@ public class AltLocContainerTest extends TestCase
             assertNotNull( loc );
             testContainer.addAlternateLocation( loc );
         }
-        Set<DestAddress> containingSet = testContainer.getAltLocsForExport( localAddress );
+        Collection<DestAddress> containingSet = testContainer.getAltLocsForExport( localAddress );
         assertTrue( containingSet.contains( persistentLoc.getHostAddress() ) );
         testContainer.addAlternateLocation( persistentLoc );
         for ( int i = 0; i < AltLocContainer.MAX_ALT_LOC_COUNT - 1; i++ )
@@ -150,7 +150,7 @@ public class AltLocContainerTest extends TestCase
             assertNotNull( loc );
             testContainer.addAlternateLocation( loc );
         }
-        Set<DestAddress> droppedSet = testContainer.getAltLocsForExport( localAddress );
+        Collection<DestAddress> droppedSet = testContainer.getAltLocsForExport( localAddress );
         assertFalse( droppedSet.contains( persistentLoc.getHostAddress() ) );
         
     }

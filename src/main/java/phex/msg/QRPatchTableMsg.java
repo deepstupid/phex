@@ -41,8 +41,8 @@ public class QRPatchTableMsg extends RouteTableUpdateMsg
      */
     public static final int MAX_MESSAGE_DATA_SIZE = 4 * 1024; // 4KB
 
-    private byte sequenceNumber;
-    private byte sequenceSize;
+    private final byte sequenceNumber;
+    private final byte sequenceSize;
     private byte compressor;
     private byte entryBits;
     private byte[] data;

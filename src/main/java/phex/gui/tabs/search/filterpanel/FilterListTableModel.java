@@ -33,7 +33,7 @@ import javax.swing.table.AbstractTableModel;
  */
 public class FilterListTableModel extends AbstractTableModel
 {
-    private SearchFilterRules rules;
+    private final SearchFilterRules rules;
     private SearchResultsDataModel displayedDataModel;
     
     public FilterListTableModel( SearchFilterRules rules )

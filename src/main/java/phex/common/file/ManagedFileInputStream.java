@@ -30,7 +30,7 @@ import java.io.InputStream;
 public class ManagedFileInputStream extends InputStream
 {
     private ByteBuffer buffer;
-    private ManagedFile managedFile;
+    private final ManagedFile managedFile;
     private long inputOffset;
     
     public ManagedFileInputStream( ManagedFile managedFile, long inputOffset )
@@ -120,8 +120,7 @@ public class ManagedFileInputStream extends InputStream
         }
         catch ( ManagedFileException exp )
         {
-            IOException ioExp = new IOException( "Cause: " + exp.getMessage() );
-            ioExp.initCause(exp);
+            IOException ioExp = new IOException( "Cause: " + exp.getMessage(), exp);
             throw ioExp;
         }
         buffer.flip();

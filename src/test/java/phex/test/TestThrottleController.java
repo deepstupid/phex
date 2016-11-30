@@ -98,7 +98,7 @@ public class TestThrottleController extends TestCase
             new BandwidthController( "Test2", 1000 );
 
         long start = System.currentTimeMillis();
-        long totalData = 10000;
+        long totalData = 500;
         while( totalData > 0 )
         {
             int toUse = controller.getAvailableByteCount( 1000, true, false );
@@ -115,7 +115,7 @@ public class TestThrottleController extends TestCase
     private static class Pump implements Runnable
     {
         private int data;
-        private BandwidthController c;
+        private final BandwidthController c;
         
         public Pump(int data, BandwidthController c)
         {

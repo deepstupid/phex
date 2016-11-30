@@ -36,9 +36,9 @@ import java.awt.event.MouseEvent;
 public class ConnectionsZone extends JPanel
 {
     private final Servent servent;
-    private NetworkHostsContainer hostsContainer;
+    private final NetworkHostsContainer hostsContainer;
     
-    private JLabel connectionLabel;
+    private final JLabel connectionLabel;
     private Icon connectedIcon;
     private Icon firewalledIcon;
     private Icon disconnectedIcon;

@@ -116,7 +116,7 @@ public class FWToolBar extends JToolBar
 
     private class ActionChangedListener implements PropertyChangeListener
     {
-        AbstractButton button;
+        final AbstractButton button;
 
         ActionChangedListener(AbstractButton b)
         {

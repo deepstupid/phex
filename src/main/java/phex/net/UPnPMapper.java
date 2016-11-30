@@ -30,7 +30,7 @@ public class UPnPMapper
     private static final Logger logger = LoggerFactory.getLogger( UPnPMapper.class );
     
     private UpnpService upnpService;
-    private Map<Service, PortMapping> activePortMappings = new HashMap<Service, PortMapping>();
+    private final Map<Service, PortMapping> activePortMappings = new HashMap<Service, PortMapping>();
     
     public void initialize()
     {

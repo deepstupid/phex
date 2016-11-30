@@ -492,7 +492,7 @@ public final class StringUtils
     
     
     
-    private static Random randomizer = new Random();
+    private static final Random randomizer = new Random();
     private static final char[] HEX_CHARS = { '0', '1', '2', '3', '4', '5', '6',
         '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
     

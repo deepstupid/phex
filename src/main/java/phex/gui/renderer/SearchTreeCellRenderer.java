@@ -42,12 +42,12 @@ public class SearchTreeCellRenderer extends DefaultTreeCellRenderer
     private static final Color DOWNLOAD_COLOR = new Color( 0x00, 0x7F, 0x00 );
     private static final Color SHARE_COLOR = Color.lightGray;
     
-    private SharedFilesService sharedFilesService;
-    private SwarmingManager downloadService;
+    private final SharedFilesService sharedFilesService;
+    private final SwarmingManager downloadService;
     
     private JTree tree;
-    private Icon folderIcon;
-    private LabeledIcon folderLabeledIcon;
+    private final Icon folderIcon;
+    private final LabeledIcon folderLabeledIcon;
     
     public SearchTreeCellRenderer( SwarmingManager downloadService )
     {

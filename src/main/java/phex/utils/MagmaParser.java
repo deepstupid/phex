@@ -78,7 +78,7 @@ public class MagmaParser
 
     private PushbackReader reader;
 
-    private List<String> magnets;
+    private final List<String> magnets;
     
     private String magmaName; 
 

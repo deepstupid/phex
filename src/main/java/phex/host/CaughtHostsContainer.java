@@ -60,8 +60,8 @@ public class CaughtHostsContainer
     
     private static final int FREE_SLOT_SET_SIZE = 8;
         
-    private phex.common.collections.PriorityQueue caughtHosts;
-    private HashSet<CaughtHost> uniqueCaughtHosts;
+    private final phex.common.collections.PriorityQueue caughtHosts;
+    private final HashSet<CaughtHost> uniqueCaughtHosts;
     
     /**
      * The CatchedHostCache provides a container with a limited size.
@@ -70,19 +70,19 @@ public class CaughtHostsContainer
      * lowest priority is dropped.
      * Access needs to be synchronized on this object.
      */
-    private CatchedHostCache catchedHostCache;
+    private final CatchedHostCache catchedHostCache;
     
     /**
      * All Hosts with free Leaf slots 
      * these are added by parsing the UP ggep extension in MsgPongs 
      */
-    private Set<CaughtHost> freeLeafSlotSet;
+    private final Set<CaughtHost> freeLeafSlotSet;
     
     /**
      * All Hosts with free Ultrpeer slots
      * these are added by parsing the UP ggep extension in MsgPongs
      */
-    private Set<CaughtHost> freeUltrapeerSlotSet;
+    private final Set<CaughtHost> freeUltrapeerSlotSet;
     
     private boolean hasChangedSinceLastSave;
     

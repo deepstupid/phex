@@ -62,7 +62,7 @@ public class SecurityTab extends FWTab
     private SecurityTableModel securityModel;
     private FWTable securityTable;
     private JScrollPane securityTableScrollPane;
-    private PhexSecurityManager securityMgr;
+    private final PhexSecurityManager securityMgr;
 
     public SecurityTab()
     {

@@ -37,7 +37,7 @@ import java.net.SocketException;
 
 public class DownloadConnection extends Connection
 {
-    private SWDownloadCandidate candidate;
+    private final SWDownloadCandidate candidate;
     
     public DownloadConnection( SWDownloadCandidate candidate )
     {

@@ -48,8 +48,8 @@ import java.awt.event.WindowEvent;
 
 public class AdvSearchRulesDialog extends JDialog implements RuleDescOwnerDialog
 {
-    private FWActionGroup actionGroup;
-    private SearchFilterRulesEditModel editModel;
+    private final FWActionGroup actionGroup;
+    private final SearchFilterRulesEditModel editModel;
     private JList ruleList;
     private RuleDescriptionPanel ruleDescPanel;
 
@@ -321,7 +321,7 @@ public class AdvSearchRulesDialog extends JDialog implements RuleDescOwnerDialog
         private static final boolean MOVE_UP = true;
         private static final boolean MOVE_DOWN = false;
 
-        private boolean moveUp;
+        private final boolean moveUp;
 
         MoveRuleAction( boolean type )
         {

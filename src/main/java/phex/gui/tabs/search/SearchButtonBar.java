@@ -44,17 +44,17 @@ import java.util.Iterator;
 public class SearchButtonBar extends FWButtonBar
 {
     private final UpdateButtonsTimerAction updateButtonsAction;
-    private SearchTab searchTab;
+    private final SearchTab searchTab;
     private SearchResultsDataModel displayedDataModel;
-    private SearchContainer searchContainer;
-    private ButtonGroup searchButtonGroup;
-    private Object accessLock = new Object();
+    private final SearchContainer searchContainer;
+    private final ButtonGroup searchButtonGroup;
+    private final Object accessLock = new Object();
     /**
      * This button is used in the button group to indicate nothing is selected.
      */
-    private AbstractButton notSelectedButton;
-    private HashMap<Search, SearchButton> searchButtonMap;
-    private ButtonHandler buttonHandler;
+    private final AbstractButton notSelectedButton;
+    private final HashMap<Search, SearchButton> searchButtonMap;
+    private final ButtonHandler buttonHandler;
     
     public SearchButtonBar( SearchTab searchTab, SearchContainer searchContainer )
     {

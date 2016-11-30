@@ -60,7 +60,7 @@ public class DSharedFile implements DElement
     private boolean hasUploadCount;
     private int uploadCount;
     
-    private List<DAlternateLocation> altLocList;
+    private final List<DAlternateLocation> altLocList;
     
     public DSharedFile()
     {

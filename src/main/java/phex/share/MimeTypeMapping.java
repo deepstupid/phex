@@ -27,34 +27,34 @@ import java.util.HashMap;
  */
 public final class MimeTypeMapping
 {
-    private static String MIMETYPE_TEXT_PLAIN = "text/plain";
-    private static String MIMETYPE_TEXT_RICHTEXT = "text/richtext";
-    private static String MIMETYPE_TEXT_HTML = "text/html";
-    private static String MIMETYPE_APPL_ZIP = "application/zip";
-    private static String MIMETYPE_APPL_RAR = "application/rar";
-    private static String MIMETYPE_APPL_GZIP = "application/gzip";
-    private static String MIMETYPE_APPL_TAR = "application/tar";
-    private static String MIMETYPE_APPL_SIT = "application/sit";
-    private static String MIMETYPE_APPL_TGZ = "application/tgz";
-    private static String MIMETYPE_APPL_GZ = "application/gz";
-    private static String MIMETYPE_APPL_MSWORD = "application/msword";
-    private static String MIMETYPE_APPL_MSEXCEL = "application/msexcel";
-    private static String MIMETYPE_APPL_PS = "application/postscript";
-    private static String MIMETYPE_APPL_PDF = "application/pdf";
-    private static String MIMETYPE_APPL_BINARY = "application/binary";
-    private static String MIMETYPE_IMG_GIF = "image/gif";
-    private static String MIMETYPE_IMG_JPEG = "image/jpeg";
-    private static String MIMETYPE_IMG_TIFF = "image/tiff";
-    private static String MIMETYPE_IMG_PNG = "image/png";
-    private static String MIMETYPE_AUDIO_AIFF = "audio/aiff";
-    private static String MIMETYPE_AUDIO_BASIC = "audio/basic";
-    private static String MIMETYPE_AUDIO_WAV = "audio/wav";
-    private static String MIMETYPE_AUDIO_MP3 = "audio/mp3";
-    private static String MIMETYPE_VIDEO_MSVIDEO = "video/x-msvideo";
-    private static String MIMETYPE_VIDEO_QUICKTIME = "video/quicktime";
-    private static String MIMETYPE_VIDEO_MPEG = "video/mpeg";
+    private static final String MIMETYPE_TEXT_PLAIN = "text/plain";
+    private static final String MIMETYPE_TEXT_RICHTEXT = "text/richtext";
+    private static final String MIMETYPE_TEXT_HTML = "text/html";
+    private static final String MIMETYPE_APPL_ZIP = "application/zip";
+    private static final String MIMETYPE_APPL_RAR = "application/rar";
+    private static final String MIMETYPE_APPL_GZIP = "application/gzip";
+    private static final String MIMETYPE_APPL_TAR = "application/tar";
+    private static final String MIMETYPE_APPL_SIT = "application/sit";
+    private static final String MIMETYPE_APPL_TGZ = "application/tgz";
+    private static final String MIMETYPE_APPL_GZ = "application/gz";
+    private static final String MIMETYPE_APPL_MSWORD = "application/msword";
+    private static final String MIMETYPE_APPL_MSEXCEL = "application/msexcel";
+    private static final String MIMETYPE_APPL_PS = "application/postscript";
+    private static final String MIMETYPE_APPL_PDF = "application/pdf";
+    private static final String MIMETYPE_APPL_BINARY = "application/binary";
+    private static final String MIMETYPE_IMG_GIF = "image/gif";
+    private static final String MIMETYPE_IMG_JPEG = "image/jpeg";
+    private static final String MIMETYPE_IMG_TIFF = "image/tiff";
+    private static final String MIMETYPE_IMG_PNG = "image/png";
+    private static final String MIMETYPE_AUDIO_AIFF = "audio/aiff";
+    private static final String MIMETYPE_AUDIO_BASIC = "audio/basic";
+    private static final String MIMETYPE_AUDIO_WAV = "audio/wav";
+    private static final String MIMETYPE_AUDIO_MP3 = "audio/mp3";
+    private static final String MIMETYPE_VIDEO_MSVIDEO = "video/x-msvideo";
+    private static final String MIMETYPE_VIDEO_QUICKTIME = "video/quicktime";
+    private static final String MIMETYPE_VIDEO_MPEG = "video/mpeg";
 
-    private static HashMap<String, String> mimeTypeMapping;
+    private static final HashMap<String, String> mimeTypeMapping;
 
     static
     {

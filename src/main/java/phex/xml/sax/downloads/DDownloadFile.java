@@ -55,11 +55,11 @@ public class DDownloadFile implements DElement
 
     private long fileSize;
 
-    private DSubElementList<DDownloadCandidate> candidateList;
+    private final DSubElementList<DDownloadCandidate> candidateList;
     
-    private DSubElementList<DDownloadScope> unverifiedScopesList;
+    private final DSubElementList<DDownloadScope> unverifiedScopesList;
 
-    private DSubElementList<DDownloadScope> finishedScopesList;
+    private final DSubElementList<DDownloadScope> finishedScopesList;
     
     public DDownloadFile()
     {

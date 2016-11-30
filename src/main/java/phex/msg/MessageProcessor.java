@@ -114,23 +114,26 @@ public class MessageProcessor
     public static byte[] readMessageBody( InputStream inStream, int dataLength )
         throws IOException
     {
-        byte[] body = new byte[ dataLength ];
-
-        int dataRead = 0;
-        int len;
-        int readSize;
-        while ( dataRead < dataLength )
-        {
-            readSize = Math.min( dataLength - dataRead, 1024 );
-            len = inStream.read( body, dataRead, readSize );
-            if ( len == -1 )
-            {
-                throw new IOException( "Connection closed by remote host" );
-            }
-            dataRead += len;
-        }
-
+        final byte[] body = new byte[dataLength];
+        inStream.read(body);
         return body;
+//        byte[] body = new byte[ dataLength ];
+//
+//        int dataRead = 0;
+//        int len;
+//        int readSize;
+//        while ( dataRead < dataLength )
+//        {
+//            readSize = Math.min( dataLength - dataRead, 1024 );
+//            len = inStream.read( body, dataRead, readSize );
+//            if ( len == -1 )
+//            {
+//                throw new IOException( "Connection closed by remote host" );
+//            }
+//            dataRead += len;
+//        }
+//
+//        return body;
     }
 
     public static MsgHeader parseMessageHeader( Connection connection,
@@ -144,18 +147,21 @@ public class MessageProcessor
         byte[] buffer )
         throws IOException
     {
-        int lenRead = 0;
-        int len;
-        while ( lenRead < MsgHeader.DATA_LENGTH )
-        {
-            len = inStream.read( buffer, lenRead, MsgHeader.DATA_LENGTH - lenRead);
-            if ( len == -1 )
-            {
-                return null;
-            }
-            lenRead += len;
-        }
+        inStream.read(buffer, 0, MsgHeader.DATA_LENGTH);
         return parseMessageHeader( ByteBuffer.wrap( buffer ) );
+
+//        int lenRead = 0;
+//        int len;
+//        while ( lenRead < MsgHeader.DATA_LENGTH )
+//        {
+//            len = inStream.read( buffer, lenRead, MsgHeader.DATA_LENGTH - lenRead);
+//            if ( len == -1 )
+//            {
+//                return null;
+//            }
+//            lenRead += len;
+//        }
+//        return parseMessageHeader( ByteBuffer.wrap( buffer ) );
     }
 
     public static MsgHeader parseMessageHeader( ByteBuffer buffer ) 

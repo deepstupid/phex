@@ -34,12 +34,12 @@ import java.awt.event.FocusEvent;
 
 public class IPTextField extends JPanel
 {
-    private JTextField part1;
-    private JTextField part2;
-    private JTextField part3;
-    private JTextField part4;
+    private final JTextField part1;
+    private final JTextField part2;
+    private final JTextField part3;
+    private final JTextField part4;
 
-    private TextFieldFocusHandler textFieldFocusHandler;
+    private final TextFieldFocusHandler textFieldFocusHandler;
 
     public IPTextField()
     {
@@ -278,7 +278,7 @@ public class IPTextField extends JPanel
      */
     public class BorderWrapping implements Border
     {
-        private Border border;
+        private final Border border;
 
         public BorderWrapping(Border border)
         {

@@ -29,8 +29,8 @@ public class QRResetTableMsg extends RouteTableUpdateMsg
 {
     // length = variant: 1 + tablelength: 4 + infinity: 1
     private static final int MESSAGE_LENGTH = 6;
-    private int tableSize;
-    private byte infinityByte;
+    private final int tableSize;
+    private final byte infinityByte;
 
     public QRResetTableMsg( int aTableSize, byte aInfinityByte )
     {

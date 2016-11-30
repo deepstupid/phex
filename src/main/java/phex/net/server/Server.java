@@ -58,13 +58,13 @@ public abstract class Server implements Runnable
      */
     protected final Servent servent;
     
-    private UPnPMapper upnpMapper;
+    private final UPnPMapper upnpMapper;
     
     private FirewallCheckTimer firewallCheckTimer;
     /**
      * The local address of this server.
      */
-    protected LocalServentAddress localAddress;
+    protected final LocalServentAddress localAddress;
     
     protected ServerSocket serverSocket;
 

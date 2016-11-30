@@ -41,7 +41,7 @@ import java.util.List;
 
 public class ExceptionPanel extends JPanel
 {
-    private FilterWizardDialog parent;
+    private final FilterWizardDialog parent;
     private ExceptionTableModel exceptionTableModel;
     private FWTable exceptionsTable;
     private JLabel selectExceptionLabel;

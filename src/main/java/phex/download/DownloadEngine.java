@@ -72,7 +72,7 @@ public class DownloadEngine
     /**
      * The download set containing the download file and download candidate.
      */
-    private SWDownloadSet downloadSet;
+    private final SWDownloadSet downloadSet;
     
     private DownloadHandler downloadHandler;
     

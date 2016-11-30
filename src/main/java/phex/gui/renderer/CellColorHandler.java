@@ -25,7 +25,7 @@ import java.awt.*;
 
 public class CellColorHandler
 {
-    private static Color green = new Color( 0, 128, 0);
+    private static final Color green = new Color( 0, 128, 0);
 
     public static void applyCellColor( TransferDataProvider provider, JComponent component )
     {

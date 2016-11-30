@@ -34,7 +34,7 @@ public class SortedProperties extends Properties
 
     public Enumeration keys()
     {
-        ArrayList<String> myList = new ArrayList<String>( (Set)super.keySet() );
+        ArrayList<String> myList = new ArrayList<>((Set) super.keySet());
         Collections.sort( myList );
         return new IteratorEnumeration( myList.iterator() );
     }

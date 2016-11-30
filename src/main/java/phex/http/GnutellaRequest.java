@@ -40,12 +40,12 @@ public class GnutellaRequest
     /**
      * The Gnutella file index from '/get/1/foo.txt' like requests.
      */
-    private int fileIndex;
+    private final int fileIndex;
 
     /**
      * The Gnutella file name from '/get/1/foo.txt' like requests.
      */
-    private String filename;
+    private final String filename;
 
     /**
      * The Gnutella URN from '/uri-res/N2R?urn:sha1:PLSTHIPQGSSZTS5FJUPAKUZWUGYQYPFB'
@@ -56,7 +56,7 @@ public class GnutellaRequest
     /**
      * Indicates if this is a tiger tree urn request or not.
      */
-    private boolean isTigerTreeRequest;
+    private final boolean isTigerTreeRequest;
 
 
     public GnutellaRequest( URN requestURN, boolean isTigerTreeRequest )

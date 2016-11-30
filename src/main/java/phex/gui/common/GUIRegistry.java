@@ -324,7 +324,7 @@ public final class GUIRegistry implements GUIRegistryConstants
     {
         logger.debug( "Loading gui settings file" );
         
-        File inputFile = Environment.getInstance().getPhexConfigFile(
+        File inputFile = Environment.getPhexConfigFile(
             EnvironmentConstants.XML_GUI_SETTINGS_FILE_NAME );
         
         DPhex dPhex;
@@ -396,7 +396,7 @@ public final class GUIRegistry implements GUIRegistryConstants
                 mainFrame.saveGUISettings( dSettings );
             }
 
-            File outputFile = Environment.getInstance().getPhexConfigFile(
+            File outputFile = Environment.getPhexConfigFile(
                 EnvironmentConstants.XML_GUI_SETTINGS_FILE_NAME );
             ManagedFile managedFile = Phex.getFileManager().getReadWriteManagedFile( outputFile );
             XMLBuilder.saveToFile( managedFile, phex );

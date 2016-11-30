@@ -31,9 +31,9 @@ import java.util.*;
  */
 public class RatedDownloadScopeList
 {
-    private static DownloadScopeComparator DOWNLOAD_SCOPE_COMPARATOR = 
+    private static final DownloadScopeComparator DOWNLOAD_SCOPE_COMPARATOR =
         new DownloadScopeComparator();
-    private static RatedDownloadScopeComparator RATED_DOWNLOAD_SCOPE_COMPARATOR = 
+    private static final RatedDownloadScopeComparator RATED_DOWNLOAD_SCOPE_COMPARATOR =
         new RatedDownloadScopeComparator();
     
     /**
@@ -47,12 +47,12 @@ public class RatedDownloadScopeList
     /**
      * A list ordered by scope start position.
      */
-    private List<RatedDownloadScope> scopeList;
+    private final List<RatedDownloadScope> scopeList;
     
     /**
      * A list ordered by download scope rating.
      */
-    private List<RatedDownloadScope> ratedScopeList;
+    private final List<RatedDownloadScope> ratedScopeList;
     
     /**
      * Cached value of aggregated lengths. It is recalculated if modification

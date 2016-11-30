@@ -70,9 +70,9 @@ public class DMetalink
      */
     public class FileEntry
     {
-        public HashMap<String, String> hashes;
-        public ArrayList<UrlEntry> urls;
-        public String filename;
+        public final HashMap<String, String> hashes;
+        public final ArrayList<UrlEntry> urls;
+        public final String filename;
 
         public FileEntry(String name)
         {
@@ -182,8 +182,8 @@ public class DMetalink
 
     public class UrlEntry
     {
-        public String type;
-        public String url;
+        public final String type;
+        public final String url;
 
         public UrlEntry ( String type, String url )
         {
@@ -191,7 +191,7 @@ public class DMetalink
         }
     }
 
-    public ArrayList<FileEntry> files;
+    public final ArrayList<FileEntry> files;
 
     public DMetalink()
     {

@@ -99,12 +99,12 @@ public class MemoryFile
     /**
      * A list of missing download scopes.
      */
-    private DownloadScopeList missingScopeList;
+    private final DownloadScopeList missingScopeList;
     
     /**
      * A list of download scopes currently blocked in downloads.
      */
-    private DownloadScopeList blockedScopeList;
+    private final DownloadScopeList blockedScopeList;
     
     /**
      * Contains DataDownloadScope with the downloaded data. No DownloadScopeList
@@ -112,29 +112,29 @@ public class MemoryFile
      * that are part of the DataDownloadScope. The bufferedDataScopeList is 
      * written to disk in regular intervals.
      */
-    private List<DataDownloadScope> bufferedDataScopeList;
+    private final List<DataDownloadScope> bufferedDataScopeList;
     
     /**
      * Counts the number of buffered bytes and ensures that buffer size
      * is limited to configured value.
      * Access needs no locking.
      */
-    private BufferVolumeTracker bufferedVolume;
+    private final BufferVolumeTracker bufferedVolume;
     
     /**
      * A list of unverified and written to disc download scopes.
      */
-    private DownloadScopeList unverifiedScopeList;
+    private final DownloadScopeList unverifiedScopeList;
     
     /**
      * A list of scopes ready to be verified.
      */
-    private DownloadScopeList toBeVerifiedScopeList;
+    private final DownloadScopeList toBeVerifiedScopeList;
     
     /**
      * A list of finished download scopes.
      */
-    private DownloadScopeList finishedScopeList;
+    private final DownloadScopeList finishedScopeList;
     
     /**
      * The finalizationPhaseScopeList aggregates all scope lists
@@ -142,7 +142,7 @@ public class MemoryFile
      * that double downloaded scopes don't creep into the 
      * finalization phase and onto the disk.
      */
-    private DownloadScopeList finalizationPhaseScopeList;
+    private final DownloadScopeList finalizationPhaseScopeList;
     
     private final ReentrantLock allocationLock;
     private final ReentrantLock finalizationLock;
@@ -169,7 +169,7 @@ public class MemoryFile
      * {@link DownloadScope}. This is mainly used to tune performance
      * during the release of scopes.
      */
-    private boolean isBlockedScopeAllocated;
+    private final boolean isBlockedScopeAllocated;
     
     private final SWDownloadFile downloadFile;
     private final RunnerQueueWorker downloadVerifyRunner;
@@ -1339,7 +1339,7 @@ public class MemoryFile
     
     public class DownloadVerificationWorker implements Runnable
     {
-        private DownloadScope scope;
+        private final DownloadScope scope;
         
         public DownloadVerificationWorker( DownloadScope scope )
         {

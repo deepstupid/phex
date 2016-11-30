@@ -138,24 +138,24 @@ public class ThreadSafeEventService implements EventService {
 
    protected static final Logger LOG = Logger.getLogger(EventService.class.getName());
 
-   private Map subscribersByEventType = new HashMap();
-   private Map subscribersByEventClass = new HashMap();
-   private Map subscribersByExactEventClass = new HashMap();
-   private Map subscribersByTopic = new HashMap();
-   private Map subscribersByTopicPattern = new HashMap();
-   private Map vetoListenersByClass = new HashMap();
-   private Map vetoListenersByExactClass = new HashMap();
-   private Map vetoListenersByTopic = new HashMap();
-   private Map vetoListenersByTopicPattern = new HashMap();
-   private Object listenerLock = new Object();
-   private Object cacheLock = new Object();
+   private final Map subscribersByEventType = new HashMap();
+   private final Map subscribersByEventClass = new HashMap();
+   private final Map subscribersByExactEventClass = new HashMap();
+   private final Map subscribersByTopic = new HashMap();
+   private final Map subscribersByTopicPattern = new HashMap();
+   private final Map vetoListenersByClass = new HashMap();
+   private final Map vetoListenersByExactClass = new HashMap();
+   private final Map vetoListenersByTopic = new HashMap();
+   private final Map vetoListenersByTopicPattern = new HashMap();
+   private final Object listenerLock = new Object();
+   private final Object cacheLock = new Object();
    private Long timeThresholdForEventTimingEventPublication;
-   private Map cacheByEvent = new HashMap/*<Class, LinkedList>*/();
+   private final Map cacheByEvent = new HashMap/*<Class, LinkedList>*/();
    private int defaultCacheSizePerClassOrTopic = 0;
    private Map cacheSizesForEventClass;
    private Map rawCacheSizesForEventClass;
    private boolean rawCacheSizesForEventClassChanged;
-   private Map cacheByTopic = new HashMap/*<Class, LinkedList>*/();
+   private final Map cacheByTopic = new HashMap/*<Class, LinkedList>*/();
    private Map cacheSizesForTopic;
    private Map rawCacheSizesForTopic;
    private boolean rawCacheSizesForTopicChanged;

@@ -61,44 +61,44 @@ public class SharedFilesService extends AbstractLifeCycle
     
     private final PhexEventService eventService;
     
-    private ReadWriteLock rwLock;
+    private final ReadWriteLock rwLock;
     
     /**
      * The search engine used to query for shared files.
      */
-    private QueryResultSearchEngine searchEngine;
+    private final QueryResultSearchEngine searchEngine;
     
     /**
      * This HashMap maps native File objects to its shared counter part in the 
      * phex system.
      */
-    private HashMap<File, SharedDirectory> directoryShareMap;
+    private final HashMap<File, SharedDirectory> directoryShareMap;
     
     /**
      * A list of shared directories.
      */
-    private ArrayList<SharedDirectory> sharedDirectories;
+    private final ArrayList<SharedDirectory> sharedDirectories;
     
     /**
      * A maps that maps URNs to the file they belong to. This is for performant
      * searching by urn.
      * When accessing this object locking via the rwLock object is required.
      */
-    private HashMap<URN, ShareFile> urnToFileMap;
+    private final HashMap<URN, ShareFile> urnToFileMap;
     
     /**
      * This map contains all absolute file paths as keys for the ShareFile
      * behind it.
      * When accessing this object locking via the rwLock object is required.
      */
-    private HashMap<String, ShareFile> nameToFileMap;
+    private final HashMap<String, ShareFile> nameToFileMap;
     
     /**
      * A map that contains the network creation time and a Set of ShareFile
      * the time belongs to. 
      * When accessing this object locking via the rwLock object is required.
      */
-    private Map<Long, Set<ShareFile>> timeToFileMap;
+    private final Map<Long, Set<ShareFile>> timeToFileMap;
     
     /**
      * This lists holds all shared files at there current index position.
@@ -107,7 +107,7 @@ public class SharedFilesService extends AbstractLifeCycle
      * the method getFileByIndex( fileIndex ).
      * When accessing this object locking via the rwLock object is required.
      */
-    private ArrayList<ShareFile> indexedSharedFiles;
+    private final ArrayList<ShareFile> indexedSharedFiles;
     
     /**
      * This list contains the shared files without gaps. It is used for direct
@@ -115,7 +115,7 @@ public class SharedFilesService extends AbstractLifeCycle
      * getFileCount().
      * When accessing this object locking via the rwLock object is required.
      */
-    private ArrayList<ShareFile> sharedFiles;
+    private final ArrayList<ShareFile> sharedFiles;
 
     /**
      * The total size of the shared files.
@@ -126,7 +126,7 @@ public class SharedFilesService extends AbstractLifeCycle
      * The string trie containing the key words and an IntSet with matching 
      * file indices. 
      */
-    private StringTrie<IntSet> keywordTrie;
+    private final StringTrie<IntSet> keywordTrie;
     
     /**
      * Local query routing table. Contains all shared files.
@@ -145,12 +145,12 @@ public class SharedFilesService extends AbstractLifeCycle
      * A instance of a background runner queue to calculate
      * urns.
      */
-    private RunnerQueueWorker urnThexCalculationRunner;
+    private final RunnerQueueWorker urnThexCalculationRunner;
     
     /**
      * Lock object to lock saving of shared file lists.
      */
-    private static Object saveSharedFilesLock = new Object();
+    private static final Object saveSharedFilesLock = new Object();
     
     /**
      * Object that holds the save job instance while a save job is running. The
@@ -863,11 +863,11 @@ public class SharedFilesService extends AbstractLifeCycle
         }
     }
     
-    public DSharedLibrary loadSharedLibrary()
+    public static DSharedLibrary loadSharedLibrary()
     {
         logger.debug( "Load shared library configuration file." );
         
-        File file = Environment.getInstance().getPhexConfigFile(
+        File file = Environment.getPhexConfigFile(
             EnvironmentConstants.XML_SHARED_LIBRARY_FILE_NAME );
 
         DPhex dPhex;
@@ -969,9 +969,9 @@ public class SharedFilesService extends AbstractLifeCycle
         public void run()
         {
             FileManager fileMgr = Phex.getFileManager();
-            File libraryFile = Environment.getInstance().getPhexConfigFile(
+            File libraryFile = Environment.getPhexConfigFile(
                 EnvironmentConstants.XML_SHARED_LIBRARY_FILE_NAME );
-            File tmpFile = Environment.getInstance().getPhexConfigFile(
+            File tmpFile = Environment.getPhexConfigFile(
                 EnvironmentConstants.XML_SHARED_LIBRARY_FILE_NAME
                 + ".tmp" );
             do

@@ -190,7 +190,7 @@ public class SharingTreeModel implements TreeModel
     
     private class RootTreeNode implements TreeNode
     {
-        private TreeNode[] childs;
+        private final TreeNode[] childs;
         
         public RootTreeNode()
         {
@@ -355,9 +355,9 @@ public class SharingTreeModel implements TreeModel
     
     private class SharedDirectoryTreeNode implements TreeNode, LibraryNode
     {
-        private SharedDirectory sharedDirectory;
+        private final SharedDirectory sharedDirectory;
         private TreeNode[] childs;
-        private TreeNode parent;
+        private final TreeNode parent;
         
         public SharedDirectoryTreeNode( SharedDirectory dir, TreeNode parent )
         {

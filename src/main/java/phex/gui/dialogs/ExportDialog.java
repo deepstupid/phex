@@ -76,7 +76,7 @@ public class ExportDialog extends BanneredDialog
     private JButton cancelBtn;
     
     
-    private List<ShareFile> shareFileList;
+    private final List<ShareFile> shareFileList;
 
     /**
      * 

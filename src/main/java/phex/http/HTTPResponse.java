@@ -23,14 +23,14 @@ public class HTTPResponse
     public static final String CRLF = "\r\n";
     private static final char SP = ' ';
 
-    private String httpVersion;
-    private short statusCode;
-    private String statusReason;
+    private final String httpVersion;
+    private final short statusCode;
+    private final String statusReason;
 
     /**
      * The http headers of the response.
      */
-    private HTTPHeaderGroup httpHeaders;
+    private final HTTPHeaderGroup httpHeaders;
 
     /**
      * For outgoing HTTP responses it is assumed that HTTP headers are not treatend

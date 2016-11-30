@@ -28,7 +28,7 @@ import javax.swing.table.AbstractTableModel;
 
 public class ConditionTableModel extends AbstractTableModel
 {
-    protected Object[][] conditions = new Object[][]
+    protected final Object[][] conditions = new Object[][]
     {
         { Boolean.FALSE, new FilenameCondition() },
         { Boolean.FALSE, new FileSizeCondition() },
@@ -36,7 +36,7 @@ public class ConditionTableModel extends AbstractTableModel
         { Boolean.FALSE, new MediaTypeCondition() } 
     };
     
-    private ConditionPanel conditionPanel;
+    private final ConditionPanel conditionPanel;
     
     public ConditionTableModel( ConditionPanel panel )
     {

@@ -57,7 +57,7 @@ public abstract class Search
      * Associated class that is able to hold search results. Access to this
      * should be locked by holding 'this'. 
      */
-    protected SearchResultHolder searchResultHolder;
+    protected final SearchResultHolder searchResultHolder;
     
     protected SearchProgress searchProgress;
     

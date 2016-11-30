@@ -46,7 +46,7 @@ public class QueryHistoryMonitorTableModel extends AbstractTableModel
     	Localizer.getString( "SearchMonitorTab_HopsTtl" )
     };
 
-    private QueryHistoryMonitor history;
+    private final QueryHistoryMonitor history;
 
     public QueryHistoryMonitorTableModel( QueryHistoryMonitor history )
     {

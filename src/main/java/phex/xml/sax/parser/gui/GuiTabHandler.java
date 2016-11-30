@@ -40,13 +40,13 @@ public class GuiTabHandler extends DefaultHandler
 {
     public static final String THIS_TAG_NAME = "tab";
 
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DTab dTab;
+    private final DTab dTab;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public GuiTabHandler( DTab dTab, Attributes attributes,
         DefaultHandler parent, SAXParser parser )

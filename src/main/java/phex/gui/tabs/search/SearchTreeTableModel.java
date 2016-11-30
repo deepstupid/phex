@@ -82,8 +82,8 @@ public class SearchTreeTableModel extends AbstractTreeTableModel
         SHA1_COLUMN_ID
     };
 
-    private static String[] tableColumns;
-    private static Class[] tableClasses;
+    private static final String[] tableColumns;
+    private static final Class[] tableClasses;
 
     /**
      * Initialize super tableColumns field
@@ -121,7 +121,7 @@ public class SearchTreeTableModel extends AbstractTreeTableModel
         };
     }
     
-    private static Object TREE_ROOT = new Object();
+    private static final Object TREE_ROOT = new Object();
     
     private ISearchDataModel displayedDataModel;
     

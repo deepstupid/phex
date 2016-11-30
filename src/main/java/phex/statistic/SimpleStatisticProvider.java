@@ -25,7 +25,7 @@ import phex.common.LongObj;
 
 public class SimpleStatisticProvider implements StatisticProvider
 {
-    protected LongObj value;
+    protected final LongObj value;
 
     public SimpleStatisticProvider()
     {

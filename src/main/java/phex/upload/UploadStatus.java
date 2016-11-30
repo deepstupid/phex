@@ -64,7 +64,7 @@ public enum UploadStatus
      */
     ABORTED(false);
     
-    private boolean isRunningStatus;
+    private final boolean isRunningStatus;
     
     UploadStatus(boolean isRunningStatus)
     {

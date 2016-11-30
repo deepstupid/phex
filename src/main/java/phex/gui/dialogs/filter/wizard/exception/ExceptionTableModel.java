@@ -28,7 +28,7 @@ import javax.swing.table.AbstractTableModel;
 
 public class ExceptionTableModel extends AbstractTableModel
 {
-    protected Object[][] conditions = new Object[][]
+    protected final Object[][] conditions = new Object[][]
     {
         { Boolean.FALSE, new NotCondition( new FilenameCondition() ) },
         { Boolean.FALSE, new NotCondition( new FileSizeCondition() ) },
@@ -36,7 +36,7 @@ public class ExceptionTableModel extends AbstractTableModel
         { Boolean.FALSE, new NotCondition( new MediaTypeCondition() ) } 
     };
     
-    private ExceptionPanel conditionPanel;
+    private final ExceptionPanel conditionPanel;
     
     public ExceptionTableModel( ExceptionPanel panel )
     {

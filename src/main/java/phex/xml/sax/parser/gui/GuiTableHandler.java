@@ -39,13 +39,13 @@ public class GuiTableHandler extends DefaultHandler
 {
     public static final String THIS_TAG_NAME = "table";
 
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DTable dTable;
+    private final DTable dTable;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public GuiTableHandler( DTable dTable, DefaultHandler parent, 
         SAXParser parser )

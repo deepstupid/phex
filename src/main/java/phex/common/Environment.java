@@ -73,7 +73,7 @@ public class Environment
      * @return the File representing the complete path to the configuration file
      *         with the given configFileName.
      */
-    public File getPhexConfigFile( String configFileName )
+    public static File getPhexConfigFile(String configFileName)
     {
         return new File( SystemProperties.getPhexConfigRoot(), configFileName );
     }
@@ -130,7 +130,7 @@ public class Environment
      * Returns true if the system is a ultrapeer os, false otherwise.
      * @return true if the system is a ultrapeer os, false otherwise.
      */
-    public boolean isUltrapeerOS()
+    public static boolean isUltrapeerOS()
     {
         // accept all none windows systems (MacOSX, Unix...) or Windows 2000 or XP.
         return !SystemUtils.IS_OS_WINDOWS || 

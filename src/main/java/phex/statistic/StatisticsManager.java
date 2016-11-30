@@ -34,7 +34,7 @@ import java.util.HashMap;
 
 public class StatisticsManager extends AbstractLifeCycle implements StatisticProviderConstants
 {
-    private HashMap<String, StatisticProvider> statisticProviderMap;
+    private final HashMap<String, StatisticProvider> statisticProviderMap;
 
     public StatisticsManager()
     {

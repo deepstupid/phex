@@ -995,7 +995,7 @@ public class SWDownloadTab extends FWTab
      */
     class SetDownloadSpeedAction extends FWAction
     {
-        private int speedInBytes;
+        private final int speedInBytes;
 
         SetDownloadSpeedAction( int speedInBytes )
         {
@@ -1050,7 +1050,7 @@ public class SWDownloadTab extends FWTab
         private static final short PRIORITY_MOVE_TO_BOTTOM =
             SwarmingManager.PRIORITY_MOVE_TO_BOTTOM;
         private static final short PRIORITY_RESORT = 100;
-        private short moveDirection;
+        private final short moveDirection;
 
         MoveDownloadPriorityAction( short type )
         {
@@ -1216,7 +1216,7 @@ public class SWDownloadTab extends FWTab
         private static final short PRIORITIZE_BEGINNING = 1;
         private static final short PRIORITIZE_BEGINNING_END = 2;
         private static final short RANDOM = 3;
-        private short strategy;
+        private final short strategy;
 
         SelectStrategyAction( short strategy )
         {

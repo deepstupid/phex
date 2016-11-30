@@ -62,7 +62,7 @@ public class TableSorter extends TableMap
 {
     public int indexes[];
      int				oldRowCount = 0;
-    private ArrayList sortingColumns = new ArrayList();
+    private final ArrayList sortingColumns = new ArrayList();
     boolean       ascending = true;
     int				compares;
      int				oldSortByColumn = -1;

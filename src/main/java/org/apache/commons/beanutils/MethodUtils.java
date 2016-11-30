@@ -58,7 +58,7 @@ public class MethodUtils {
     /**
      * Stores a cache of Methods against MethodDescriptors, in a WeakHashMap.
      */
-    private static WeakHashMap cache = new WeakHashMap();
+    private static final WeakHashMap cache = new WeakHashMap();
     
     // --------------------------------------------------------- Public Methods
     

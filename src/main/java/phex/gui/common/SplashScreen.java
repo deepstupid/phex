@@ -106,7 +106,7 @@ public class SplashScreen extends Frame
     
     private class SplashWindow extends Window implements MouseListener
     {
-        private Image image;
+        private final Image image;
         
         SplashWindow(Frame parent, Image image)
         {

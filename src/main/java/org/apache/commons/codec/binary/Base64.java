@@ -104,7 +104,7 @@ public class Base64 //implements BinaryEncoder, BinaryDecoder
      * The value of undefined encodings is <code>-1</code>.
      * </p>
      */
-    private static byte[] base64Alphabet = new byte[BASELENGTH];
+    private static final byte[] base64Alphabet = new byte[BASELENGTH];
     
     /**
      * <p>
@@ -119,7 +119,7 @@ public class Base64 //implements BinaryEncoder, BinaryDecoder
      * For example, <code>lookUpBase64Alphabet[62] </code> returns <code>'+'</code>.
      * </p>
      */
-    private static byte[] lookUpBase64Alphabet = new byte[LOOKUPLENGTH];
+    private static final byte[] lookUpBase64Alphabet = new byte[LOOKUPLENGTH];
 
     // Populating the lookup and character arrays
     static {
@@ -164,11 +164,7 @@ public class Base64 //implements BinaryEncoder, BinaryDecoder
     private static boolean isBase64(byte octect) {
         if (octect == PAD) {
             return true;
-        } else if (octect < 0 || base64Alphabet[octect] == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        } else return !(octect < 0 || base64Alphabet[octect] == -1);
     }
 
     /**
@@ -448,7 +444,7 @@ public class Base64 //implements BinaryEncoder, BinaryDecoder
             } else if (marker0 == PAD) {
                 //Two PAD e.g. 3c[Pad][Pad]
                 decodedData[encodedIndex] = (byte) (b1 << 2 | b2 >> 4);
-            } else if (marker1 == PAD) {
+            } else /*if (marker1 == PAD)*/ {
                 //One PAD e.g. 3cQ[Pad]
                 b3 = base64Alphabet[marker0];
                 

@@ -83,7 +83,7 @@ public class IntSet {
      *
      * INVARIANT: for all i<j, list[i].high < (list[j].low-1)
      */
-    private ArrayList<Interval> list;
+    private final ArrayList<Interval> list;
 
     /**
      * The size of this.  
@@ -112,7 +112,7 @@ public class IntSet {
             if (low==high)
                 return String.valueOf(low);
             else
-                return String.valueOf(low)+"-"+String.valueOf(high);
+                return String.valueOf(low)+ '-' +String.valueOf(high);
         }
     }
 
@@ -182,11 +182,11 @@ public class IntSet {
     //////////////////////// Set-like Public Methods //////////////////////////
 
     public IntSet() {
-        this.list=new ArrayList<Interval>();
+        this.list= new ArrayList<>();
     }
 
     public IntSet(int expectedSize) {
-        this.list=new ArrayList<Interval>(expectedSize);
+        this.list= new ArrayList<>(expectedSize);
     }
 
     public int size() {
@@ -200,10 +200,7 @@ public class IntSet {
 
         Interval li=get(i);
         assert  li.low<=x : "Bad return value from search.";
-        if (x<=li.high)
-            return true;
-        else
-            return false;
+        return x <= li.high;
     }
 
 
@@ -328,15 +325,15 @@ public class IntSet {
         //We can't modify this while iterating over it, so we need to
         //maintain an external list of items that must go.
         //TODO2: implement more efficiently!
-        List<Integer> removeList = new ArrayList<Integer>();
+        List<Integer> removeList = new ArrayList<>();
         for (IntSetIterator iter = this.iterator(); iter.hasNext(); ) {
             int x = iter.next();
             if (! s.contains(x))
-                removeList.add(Integer.valueOf(x));
+                removeList.add(x);
         }
         //It's marginally more efficient to remove items from end to beginning.
         for (int i=removeList.size()-1; i>=0; i--) {
-            int x = (removeList.get(i)).intValue();
+            int x = removeList.get(i);
             this.remove(x);
         }
         //Did we remove any items?

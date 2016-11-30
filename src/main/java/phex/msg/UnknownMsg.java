@@ -31,7 +31,7 @@ import phex.io.buffer.ByteBuffer;
  */
 public class UnknownMsg extends Message
 {
-    private byte[] body;
+    private final byte[] body;
 
     public UnknownMsg( MsgHeader header, byte[] payload )
     {

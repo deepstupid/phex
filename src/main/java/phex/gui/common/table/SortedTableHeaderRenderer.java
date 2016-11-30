@@ -31,7 +31,7 @@ import java.awt.*;
 
 public class SortedTableHeaderRenderer extends DefaultTableCellRenderer
 {
-    private FWTable table;
+    private final FWTable table;
     
     public SortedTableHeaderRenderer( FWTable table )
     {
@@ -80,9 +80,9 @@ public class SortedTableHeaderRenderer extends DefaultTableCellRenderer
     
     private class DirectionIcon implements Icon
     {
-        private boolean descending;
-        private int size;
-        private int priority;
+        private final boolean descending;
+        private final int size;
+        private final int priority;
 
         public DirectionIcon(boolean descending, int size, int priority) {
             this.descending = descending;

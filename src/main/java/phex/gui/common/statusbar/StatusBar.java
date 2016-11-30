@@ -53,7 +53,7 @@ import java.util.Hashtable;
  */
 public class StatusBar extends JComponent
 {
-    private Hashtable idToZones;
+    private final Hashtable idToZones;
 
     /**
      * Construct a new StatusBar

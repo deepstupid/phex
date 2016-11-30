@@ -370,7 +370,7 @@ public class FileDialogHandler
 
     private static class FileFilterWrapper implements FilenameFilter
     {
-        private FileFilter filter;
+        private final FileFilter filter;
         
         public FileFilterWrapper( FileFilter filter )
         {

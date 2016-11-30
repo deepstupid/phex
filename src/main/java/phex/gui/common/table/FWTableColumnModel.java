@@ -73,29 +73,29 @@ public class FWTableColumnModel extends DefaultTableColumnModel
      * contains a list of all columns, in the order in which were added to the
      * model.
      */
-    private List<TableColumn> initialColumns = new ArrayList<TableColumn>();
+    private final List<TableColumn> initialColumns = new ArrayList<TableColumn>();
 
     /**
      * contains a list of all column, in the order they would appear if all were
      * visible.
      */
-    private List<TableColumn> currentColumns = new ArrayList<TableColumn>();
+    private final List<TableColumn> currentColumns = new ArrayList<TableColumn>();
 
     /**
      * Set of invisible columns.
      */
-    private Set<FWTableColumn> invisibleColumns = new HashSet<FWTableColumn>();
+    private final Set<FWTableColumn> invisibleColumns = new HashSet<FWTableColumn>();
 
     /**
      * used to distinguish a real remove from hiding.
      */
-    private Map<FWTableColumn, Integer> oldIndexes = new HashMap<FWTableColumn, Integer>();
+    private final Map<FWTableColumn, Integer> oldIndexes = new HashMap<FWTableColumn, Integer>();
 
     /**
      * Listener attached to TableColumnExt instances to listen for changes to
      * their visibility status, and to hide/show the column as oppropriate
      */
-    private VisibilityListener visibilityListener = new VisibilityListener();
+    private final VisibilityListener visibilityListener = new VisibilityListener();
 
     /**
      * Creates a an empty DefaultTableColumnModelExt.

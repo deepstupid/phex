@@ -36,13 +36,13 @@ public class NotConditionHandler extends DefaultHandler
 {
     public static final String ELEMENT_NAME = DNotCondition.ELEMENT_NAME;
     
-    private CharArrayWriter text = new CharArrayWriter();
+    private final CharArrayWriter text = new CharArrayWriter();
 
-    private SAXParser parser;
+    private final SAXParser parser;
 
-    private DNotCondition notCondition;
+    private final DNotCondition notCondition;
 
-    private DefaultHandler parent;
+    private final DefaultHandler parent;
 
     public NotConditionHandler( DNotCondition notCondition,
         Attributes attributes, DefaultHandler parent, SAXParser parser )

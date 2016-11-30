@@ -20,20 +20,20 @@ package phex.common;
 
 public interface EnvironmentConstants
 {
-    public static final String CORE_PREFERENCES_FILE_NAME = "phexCorePrefs.properties";
-    public static final String GUI_PREFERENCES_FILE_NAME = "phexGuiPrefs.properties";
-    public static final String LOG_FILE_NAME = "phex.log";
-    public static final String ERROR_LOG_FILE_NAME = "phex.error.log";
-    public static final String AUTOCONNECT_HOSTS_FILE_NAME = "autoconnecthosts.cfg";
-    public static final String G_WEB_CACHE_FILE_NAME = "gwebcache.cfg";
-    public static final String UDP_HOST_CACHE_FILE_NAME = "udphostcache.cfg";
-    public static final String HOSTS_FILE_NAME = "phex.hosts";
-    public static final String XML_DOWNLOAD_FILE_NAME = "phexdownload.xml";
-    public static final String XML_RESEARCH_SERVICE_FILE_NAME = "phexresearch.xml";
-    public static final String XML_GUI_SETTINGS_FILE_NAME = "phexgui.xml";
-    public static final String XML_SECURITY_FILE_NAME = "security.xml";
-    public static final String XML_SHARED_LIBRARY_FILE_NAME = "sharedlibrary.xml";
-    public static final String XML_FILTER_LIST_FILE_NAME = "filterlist.xml";
-    public static final String XML_FAVORITES_FILE_NAME = "favorites.xml";
-    public static final String XML_SEARCH_FILTER_FILE_NAME = "searchfilters.xml";
+    String CORE_PREFERENCES_FILE_NAME = "phexCorePrefs.properties";
+    String GUI_PREFERENCES_FILE_NAME = "phexGuiPrefs.properties";
+    String LOG_FILE_NAME = "phex.log";
+    String ERROR_LOG_FILE_NAME = "phex.error.log";
+    String AUTOCONNECT_HOSTS_FILE_NAME = "autoconnecthosts.cfg";
+    String G_WEB_CACHE_FILE_NAME = "gwebcache.cfg";
+    String UDP_HOST_CACHE_FILE_NAME = "udphostcache.cfg";
+    String HOSTS_FILE_NAME = "phex.hosts";
+    String XML_DOWNLOAD_FILE_NAME = "phexdownload.xml";
+    String XML_RESEARCH_SERVICE_FILE_NAME = "phexresearch.xml";
+    String XML_GUI_SETTINGS_FILE_NAME = "phexgui.xml";
+    String XML_SECURITY_FILE_NAME = "security.xml";
+    String XML_SHARED_LIBRARY_FILE_NAME = "sharedlibrary.xml";
+    String XML_FILTER_LIST_FILE_NAME = "filterlist.xml";
+    String XML_FAVORITES_FILE_NAME = "favorites.xml";
+    String XML_SEARCH_FILTER_FILE_NAME = "searchfilters.xml";
 }

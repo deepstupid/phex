@@ -41,10 +41,10 @@ import java.awt.event.WindowEvent;
 
 public class FileNameCondEditor extends JDialog
 {
-    private RuleDescriptionPanel ruleDescPanel;
+    private final RuleDescriptionPanel ruleDescPanel;
     
-    private FilenameCondition orgCondition;
-    private FilenameCondition condition;
+    private final FilenameCondition orgCondition;
+    private final FilenameCondition condition;
     
     private JTextField termTF;
 

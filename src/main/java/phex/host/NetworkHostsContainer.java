@@ -44,7 +44,7 @@ import java.util.List;
  */
 public final class NetworkHostsContainer extends AbstractLifeCycle
 {
-    private Servent servent;
+    private final Servent servent;
 
     /**
      * The complete neighbor hood. Contains all connected and not connected

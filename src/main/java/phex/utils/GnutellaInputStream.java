@@ -42,8 +42,8 @@ public class GnutellaInputStream extends InputStream
     /**
      * The init length of the buffer.
      */
-    private int READ_BUFFER_LENGTH = 2048;
-    private int LINE_BUFFER_LENGTH = 64;
+    private final int READ_BUFFER_LENGTH = 2048;
+    private final int LINE_BUFFER_LENGTH = 64;
 
     private volatile byte[] buffer;
     private int position;

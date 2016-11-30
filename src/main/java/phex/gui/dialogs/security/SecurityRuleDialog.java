@@ -70,7 +70,7 @@ public class SecurityRuleDialog extends BanneredDialog
     private JButton cancelBtn;
     
     
-    private IpUserSecurityRule securityRule;
+    private final IpUserSecurityRule securityRule;
 
     public SecurityRuleDialog( )
     {

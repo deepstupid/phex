@@ -35,7 +35,7 @@ public interface DestAddressFactory
      *        be used that causes DestAddress.isValidAddress() to fail (-1).
      * @return a destination address.
      */
-    public DestAddress createHostAddress( String address, int defaultPort )
+    DestAddress createHostAddress(String address, int defaultPort)
         throws MalformedDestAddressException;
     
     /**
@@ -44,5 +44,5 @@ public interface DestAddressFactory
      * @param port the port of the new DestAddress.
      * @return a destination address.
      */
-    public DestAddress createHostAddress( IpAddress ipAddress, int port );
+    DestAddress createHostAddress(IpAddress ipAddress, int port);
 }

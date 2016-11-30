@@ -39,10 +39,10 @@ public class SharedLibraryHandler extends DefaultHandler
 {   
     public static final String THIS_TAG_NAME = DSharedLibrary.ELEMENT_NAME;
     
-    private CharArrayWriter text = new CharArrayWriter();
-    private SAXParser parser;
-    private DSharedLibrary dSharedLibrary;
-    private DefaultHandler parent;
+    private final CharArrayWriter text = new CharArrayWriter();
+    private final SAXParser parser;
+    private final DSharedLibrary dSharedLibrary;
+    private final DefaultHandler parent;
     
     public SharedLibraryHandler( DSharedLibrary dSharedLibrary, 
         DefaultHandler parent, SAXParser parser )

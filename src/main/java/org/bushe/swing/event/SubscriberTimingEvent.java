@@ -23,12 +23,12 @@ package org.bushe.swing.event;
  * @see ThreadSafeEventService
  */
 public class SubscriberTimingEvent extends AbstractEventServiceEvent {
-   private Long start;
-   private Long end;
-   private Long timeLimitMilliseconds;
-   private Object event;
-   private EventSubscriber subscriber;
-   private VetoEventListener vetoEventListener;
+   private final Long start;
+   private final Long end;
+   private final Long timeLimitMilliseconds;
+   private final Object event;
+   private final EventSubscriber subscriber;
+   private final VetoEventListener vetoEventListener;
    private String stringified;
 
    /**

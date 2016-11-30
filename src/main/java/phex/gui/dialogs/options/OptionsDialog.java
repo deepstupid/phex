@@ -88,7 +88,7 @@ public class OptionsDialog extends JDialog
      * The dictionary is filled with values while validating and applying the
      * changes done to the OptionsSettingsPanes.
      */
-    private HashMap inputDictionary;
+    private final HashMap inputDictionary;
 
     public OptionsDialog()
     {

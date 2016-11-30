@@ -45,12 +45,12 @@ import java.util.ArrayList;
 
 public class KeywordSearchBox extends BoxPanel
 {
-    private SearchControlPanel controlPanel;
+    private final SearchControlPanel controlPanel;
     
-    private DefaultComboBoxModel searchComboModel;
-    private JComboBox searchTermComboBox;
-    private JButton searchButton;
-    private JButton stopButton;
+    private final DefaultComboBoxModel searchComboModel;
+    private final JComboBox searchTermComboBox;
+    private final JButton searchButton;
+    private final JButton stopButton;
     
     public KeywordSearchBox( SearchControlPanel cp )
     {

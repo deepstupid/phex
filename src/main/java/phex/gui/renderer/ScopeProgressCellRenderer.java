@@ -38,7 +38,7 @@ public class ScopeProgressCellRenderer extends MultiScopeProgressBar
 {
     protected static final Border border = new EmptyBorder(2, 5, 2, 5);
     
-    private CandidateScopeProvider scopeProvider;
+    private final CandidateScopeProvider scopeProvider;
 
     /**
      * Creates a progress cell renedere for percent. Max is 100, min is 0

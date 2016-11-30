@@ -35,7 +35,7 @@ public class SecurityRuleRowRenderer implements TableCellRenderer
 {
     private static final Color darkGreen = new Color( 0x00, 0x7F, 0x00 );
     
-    private PhexSecurityManager securityMgr;
+    private final PhexSecurityManager securityMgr;
 
     public SecurityRuleRowRenderer()
     {

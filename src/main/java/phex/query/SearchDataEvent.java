@@ -37,7 +37,7 @@ public class SearchDataEvent extends EventObject
      * The type of the search change event. This can be:
      * SEARCH_STARTED, SEARCH_HITS_ADDED, SEARCH_FILTERED or SEARCH_STOPED.
      */
-    private short type;
+    private final short type;
     
     /**
      * The search data

@@ -109,7 +109,7 @@ public class FWPopupMenu extends JPopupMenu
 
     private class ActionChangedListener implements PropertyChangeListener
     {
-        JMenuItem menuItem;
+        final JMenuItem menuItem;
 
         ActionChangedListener(JMenuItem mi)
         {

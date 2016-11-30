@@ -35,11 +35,11 @@ import java.awt.event.HierarchyListener;
  * @author Michael Bushe michael@bushe.com
  */
 public class ContainerEventServiceRegistrar {
-   private JComponent jComp;
-   private EventSubscriber eventSubscriber;
-   private Class[] eventClasses;
-   private EventTopicSubscriber eventTopicSubscriber;
-   private String[] topics;
+   private final JComponent jComp;
+   private final EventSubscriber eventSubscriber;
+   private final Class[] eventClasses;
+   private final EventTopicSubscriber eventTopicSubscriber;
+   private final String[] topics;
    private EventService containerEventService;
 
    /**

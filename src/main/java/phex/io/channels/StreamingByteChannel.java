@@ -12,8 +12,8 @@ import java.nio.channels.ByteChannel;
 public class StreamingByteChannel implements ByteChannel
 {
     private boolean isOpen;
-    private InputStream inStream;
-    private OutputStream outStream;
+    private final InputStream inStream;
+    private final OutputStream outStream;
     
     public StreamingByteChannel( Socket socket ) throws IOException
     {

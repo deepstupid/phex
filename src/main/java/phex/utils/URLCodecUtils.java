@@ -31,7 +31,7 @@ import phex.common.log.NLogger;
  */
 public class URLCodecUtils
 {
-    private static URLCodec urlCodec = new URLCodec();
+    private static final URLCodec urlCodec = new URLCodec();
     
     /**
      * Decodes a URL safe string into its original form. Escaped 

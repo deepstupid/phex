@@ -39,7 +39,7 @@ import java.io.IOException;
 
 public class DirectoryPanel extends JPanel
 {
-    private ConfigurationWizardDialog parent;
+    private final ConfigurationWizardDialog parent;
     
     private JTextField incompleteDirectoryTF;
     private JTextField downloadDirectoryTF;

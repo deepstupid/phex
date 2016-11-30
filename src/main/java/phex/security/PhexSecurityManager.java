@@ -72,7 +72,7 @@ public class PhexSecurityManager extends AbstractLifeCycle
     /**
      * A list of all ip access rules.
      */
-    private ArrayList<IpSecurityRule> ipAccessRuleList;
+    private final ArrayList<IpSecurityRule> ipAccessRuleList;
     
     /**
      * Ip list containing Phex default system rules. 
@@ -450,7 +450,7 @@ public class PhexSecurityManager extends AbstractLifeCycle
         DPhex dPhex;
         try
         {
-            File securityFile = Environment.getInstance().getPhexConfigFile(
+            File securityFile = Environment.getPhexConfigFile(
                 EnvironmentConstants.XML_SECURITY_FILE_NAME );
             if ( securityFile.exists() )
             {
@@ -637,7 +637,7 @@ public class PhexSecurityManager extends AbstractLifeCycle
                 }
             }
 
-            File securityFile = Environment.getInstance().getPhexConfigFile(
+            File securityFile = Environment.getPhexConfigFile(
                 EnvironmentConstants.XML_SECURITY_FILE_NAME );
             ManagedFile managedFile = Phex.getFileManager().getReadWriteManagedFile( securityFile );
             XMLBuilder.saveToFile( managedFile, dPhex );

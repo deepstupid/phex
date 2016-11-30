@@ -34,9 +34,9 @@ import java.io.IOException;
 
 public class HandshakeStatus implements ConnectionConstants
 {
-    private int statusCode;
-    private String statusMessage;
-    private HTTPHeaderGroup responseHeaders;
+    private final int statusCode;
+    private final String statusMessage;
+    private final HTTPHeaderGroup responseHeaders;
 
     public HandshakeStatus( int statusCode, String statusMessage )
     {

@@ -39,7 +39,7 @@ import java.util.TimerTask;
 // TODO could be LifeCycle..
 public class UltrapeerCapabilityChecker extends TimerTask
 {
-    private static Logger logger = LoggerFactory.getLogger( 
+    private static final Logger logger = LoggerFactory.getLogger(
         UltrapeerCapabilityChecker.class );
     /**
      * The time period in millis to wait between checks.
@@ -72,7 +72,7 @@ public class UltrapeerCapabilityChecker extends TimerTask
         this.statisticsService = statisticsService;
         
         Environment env = Environment.getInstance();
-        isUltrapeerOS = env.isUltrapeerOS();
+        isUltrapeerOS = Environment.isUltrapeerOS();
 
         env.scheduleTimerTask( this, 0, TIMER_PERIOD );
     }
