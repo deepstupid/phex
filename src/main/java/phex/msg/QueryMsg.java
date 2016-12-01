@@ -161,7 +161,7 @@ public class QueryMsg extends Message
         }
         if ( queryURN != null )
         {
-            queryURNSet = new HashSet<URN>( 1 );
+            queryURNSet = new HashSet<>(1);
             queryURNSet.add( queryURN );
         }
         else
@@ -221,7 +221,7 @@ public class QueryMsg extends Message
         this.requesterIsXmlResultsCapable = query.requesterIsXmlResultsCapable;
         this.requestSecureOOBReplies = query.requestSecureOOBReplies;
         this.isParsed = query.isParsed;
-        this.queryURNSet = new HashSet<URN>( query.queryURNSet );
+        this.queryURNSet = new HashSet<>(query.queryURNSet);
     }
 
     /**
@@ -397,7 +397,7 @@ public class QueryMsg extends Message
     {
         StringBuffer buf = new StringBuffer(100);
 
-        buf.append("[")
+        buf.append('[')
             .append(getHeader())
             .append(", MinSpeedIsBitBased=")
             .append(minSpeedIsBitBased);
@@ -411,7 +411,7 @@ public class QueryMsg extends Message
 
         buf.append(", SearchString=")
             .append(searchString)
-            .append("]");
+            .append(']');
 
         return buf.toString();
     }
@@ -478,7 +478,7 @@ public class QueryMsg extends Message
             ggepBlock.addExtension( GGEPBlock.SECURE_OOB_ID );
         }
 
-        if (MessagePrefs.UseExtendedOriginIpAddress.get().booleanValue())
+        if (MessagePrefs.UseExtendedOriginIpAddress.get())
         {
             addPhexExtendedOriginGGEP(ggepBlock);
         }
@@ -542,7 +542,7 @@ public class QueryMsg extends Message
                 {
                     requestSecureOOBReplies = true;
                 }
-                if ( MessagePrefs.UseExtendedOriginIpAddress.get().booleanValue() )
+                if (MessagePrefs.UseExtendedOriginIpAddress.get())
                 {
                     try {
                         byte[] value = GGEPBlock.getExtensionDataInBlocks(ggepBlocks, GGEPBlock.PHEX_EXTENDED_ORIGIN);

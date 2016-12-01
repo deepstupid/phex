@@ -63,7 +63,7 @@ public class FavoritesContainer
     public FavoritesContainer( Servent servent )
     {
         this.servent = servent;
-        favoritesList = new ArrayList<FavoriteHost>();
+        favoritesList = new ArrayList<>();
         hasChangedSinceLastSave = false;
         Environment.getInstance().scheduleTimerTask(
             new SaveFavoritesTimer(), SaveFavoritesTimer.TIMER_PERIOD,
@@ -174,15 +174,7 @@ public class FavoritesContainer
                 insertBookmarkedHost( bookmarkedHost, favoritesList.size() );
             }
         }
-        catch ( IOException exp )
-        {
-            logger.error( exp.toString(), exp );
-            Environment.getInstance().fireDisplayUserMessage( 
-                UserMessageListener.FavoritesSettingsLoadFailed, 
-                new String[]{ exp.toString() } );
-            return;
-        }
-        catch ( ManagedFileException exp )
+        catch ( IOException | ManagedFileException exp )
         {
             logger.error( exp.toString(), exp );
             Environment.getInstance().fireDisplayUserMessage( 
@@ -208,8 +200,8 @@ public class FavoritesContainer
             DPhex dPhex = new DPhex();
             dPhex.setPhexVersion( PhexVersion.getFullVersion() );
             
-            DSubElementList<DFavoriteHost> dList = new DSubElementList<DFavoriteHost>( 
-                FavoritesListHandler.THIS_TAG_NAME );
+            DSubElementList<DFavoriteHost> dList = new DSubElementList<>(
+                    FavoritesListHandler.THIS_TAG_NAME);
             dPhex.setFavoritesList( dList );
             
             List<DFavoriteHost> list = dList.getSubElementList();
@@ -236,17 +228,7 @@ public class FavoritesContainer
             XMLBuilder.saveToFile( managedFile, dPhex );
             hasChangedSinceLastSave = false;
         }
-        catch ( IOException exp )
-        {
-            // TODO during close this message is never displayed since application
-            // will exit too fast. A solution to delay exit process in case 
-            // SlideInWindows are open needs to be found.
-            logger.error( exp.toString(), exp );
-            Environment.getInstance().fireDisplayUserMessage( 
-                UserMessageListener.FavoritesSettingsSaveFailed, 
-                new String[]{ exp.toString() } );
-        }
-        catch ( ManagedFileException exp )
+        catch ( IOException | ManagedFileException exp )
         {
             // TODO during close this message is never displayed since application
             // will exit too fast. A solution to delay exit process in case 

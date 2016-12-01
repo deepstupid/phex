@@ -5,5 +5,5 @@ import phex.common.address.DestAddress;
 
 public interface UdpDataHandler
 {
-    public void handleUdpData( IDataSource dataSource, DestAddress orgin );
+    void handleUdpData(IDataSource dataSource, DestAddress orgin);
 }

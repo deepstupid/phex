@@ -290,8 +290,7 @@ public class GUID implements Serializable {
         byte[] ipBytes = ip.getHostIP();
         guid.stringRepresentation = null;
         byte[] b = guid.bytes;
-        for (int i = 0; i < 4; i++)
-            b[i] = ipBytes[i];
+        System.arraycopy(ipBytes, 0, b, 0, 4);
         //guid.updateHash();
         IOUtil.serializeShortLE((short) port, guid.bytes, 13);
     }

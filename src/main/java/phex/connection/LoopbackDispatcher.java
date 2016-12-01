@@ -47,12 +47,12 @@ public class LoopbackDispatcher
         try
         {
             socket = new Socket();
-            socket.connect( new InetSocketAddress( "127.0.0.1", 
-                NetworkPrefs.ListeningPort.get().intValue() ), 1000 );
+            socket.connect( new InetSocketAddress( "127.0.0.1",
+                    NetworkPrefs.ListeningPort.get()), 1000 );
             socket.setSoTimeout( 1000 );
             outStream = socket.getOutputStream();
             
-            outStream.write( (IncomingConnectionDispatcher.MAGMA_DOWNLOAD_PREFIX + " " + fileName + "\r\n").getBytes() );
+            outStream.write( (IncomingConnectionDispatcher.MAGMA_DOWNLOAD_PREFIX + ' ' + fileName + "\r\n").getBytes() );
             outStream.flush();
             
             inStream = socket.getInputStream();
@@ -84,12 +84,12 @@ public class LoopbackDispatcher
         try
         {
             socket = new Socket();
-            socket.connect( new InetSocketAddress( "127.0.0.1", 
-                NetworkPrefs.ListeningPort.get().intValue() ), 1000 );
+            socket.connect( new InetSocketAddress( "127.0.0.1",
+                    NetworkPrefs.ListeningPort.get()), 1000 );
             socket.setSoTimeout( 1000 );
             outStream = socket.getOutputStream();
             
-            outStream.write( (IncomingConnectionDispatcher.RSS_DOWNLOAD_PREFIX + " " + fileName + "\r\n").getBytes() );
+            outStream.write( (IncomingConnectionDispatcher.RSS_DOWNLOAD_PREFIX + ' ' + fileName + "\r\n").getBytes() );
             outStream.flush();
             
             inStream = socket.getInputStream();
@@ -121,12 +121,12 @@ public class LoopbackDispatcher
         try
         {
             socket = new Socket();
-            socket.connect( new InetSocketAddress( "127.0.0.1", 
-                NetworkPrefs.ListeningPort.get().intValue() ), 1000 );
+            socket.connect( new InetSocketAddress( "127.0.0.1",
+                    NetworkPrefs.ListeningPort.get()), 1000 );
             socket.setSoTimeout( 1000 );
             outStream = socket.getOutputStream();
             
-            outStream.write( (IncomingConnectionDispatcher.URI_DOWNLOAD_PREFIX + " " + uri + "\r\n").getBytes() );
+            outStream.write( (IncomingConnectionDispatcher.URI_DOWNLOAD_PREFIX + ' ' + uri + "\r\n").getBytes() );
             outStream.flush();
             
             inStream = socket.getInputStream();

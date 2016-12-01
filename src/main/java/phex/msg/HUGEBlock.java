@@ -91,7 +91,7 @@ public class HUGEBlock
                                 URN urn = new URN( extString );
                                 if ( urns == null )
                                 {
-                                    urns = new HashSet<URN>( 3 );
+                                    urns = new HashSet<>(3);
                                 }
                                 urns.add( urn );
                             }
@@ -103,7 +103,7 @@ public class HUGEBlock
                                 // other extensions, might be rich query XML
                                 if ( others == null )
                                 {
-                                    others = new HashSet<String>( 3 );
+                                    others = new HashSet<>(3);
                                 }
                                 others.add( extString );
                             }
@@ -132,10 +132,7 @@ public class HUGEBlock
             GGEPBlock[] ggeps = GGEPBlock.parseGGEPBlocks( inStream );
             ggepBlocks = ggeps;
         }
-        catch ( InvalidGGEPBlockException exp )
-        {
-        }
-        catch ( IOException exp )
+        catch ( InvalidGGEPBlockException | IOException exp )
         {
         }
     }

@@ -65,7 +65,7 @@ public final class FileUtils
         int idx = fileName.lastIndexOf( '.' );
         if ( idx == -1 )
         {
-            return fileName + "." + newExtension;
+            return fileName + '.' + newExtension;
         }
         else
         {
@@ -170,7 +170,7 @@ public final class FileUtils
         if (source.length() != destination.length())
         {
             String message = "Failed to copy full contents from " + source
-                + " to " + destination + " - " + source.length() + "/" + destination.length();
+                + " to " + destination + " - " + source.length() + '/' + destination.length();
             throw new IOException(message);
         }
     }
@@ -458,21 +458,20 @@ public final class FileUtils
      * Checks if subDir is a sub directory of maybeParentDir. Used for internal
      * processing.
      */
-    private static boolean isChildOfDirInternal( File maybeChild, File maybeParentDir )
-    {
-        File parent = maybeChild.getParentFile();
-        // no parent dir... cant be sub
-        if ( parent == null )
-        {
-            return false;
+    private static boolean isChildOfDirInternal(File maybeChild, File maybeParentDir) {
+        while (true) {
+            File parent = maybeChild.getParentFile();
+            // no parent dir... cant be sub
+            if (parent == null) {
+                return false;
+            }
+            // parent equals we have a sub dir
+            if (parent.equals(maybeParentDir)) {
+                return true;
+            }
+            // go up one level and check again
+            maybeChild = parent;
         }
-        // parent equals we have a sub dir
-        if ( parent.equals( maybeParentDir ) )
-        {
-            return true;
-        }
-        // go up one level and check again
-        return isChildOfDirInternal( parent, maybeParentDir );
     }
     
     /**
@@ -608,7 +607,7 @@ public final class FileUtils
         if ( srcFile.length() != destFile.length() )
         {
             throw new IOException( "Failed to copy full contents from '"
-                + srcFile + "' to '" + destFile + "'" );
+                + srcFile + "' to '" + destFile + '\'');
         }
         if ( preserveFileDate )
         {
@@ -631,7 +630,7 @@ public final class FileUtils
         cleanDirectory(directory);
         if (!directory.delete()) {
             String message =
-                "Unable to delete directory " + directory + ".";
+                "Unable to delete directory " + directory + '.';
             throw new IOException(message);
         }
     }

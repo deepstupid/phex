@@ -69,7 +69,7 @@ public abstract class HandshakeHandler implements ConnectionConstants
             ipAddress.getFormatedString() ) );
             
         // accepting deflate encoding
-        if ( ConnectionPrefs.AcceptDeflateConnection.get().booleanValue() )
+        if (ConnectionPrefs.AcceptDeflateConnection.get())
         {
             openHeaders.addHeader( new HTTPHeader(
                 HTTPHeaderNames.ACCEPT_ENCODING, "deflate" ) );
@@ -121,7 +121,7 @@ public abstract class HandshakeHandler implements ConnectionConstants
             STATUS_MESSAGE_OK, crawlerHeaders );
     }
 
-    protected HTTPHeaderGroup createRejectOutgoingHeaders()
+    protected static HTTPHeaderGroup createRejectOutgoingHeaders()
     {
         // create hash map based on common headers
         HTTPHeaderGroup openHeaders = new HTTPHeaderGroup(
@@ -170,7 +170,7 @@ public abstract class HandshakeHandler implements ConnectionConstants
         }
     }
     
-    protected String buildHostAddressString(Host[] hosts, int max )
+    protected static String buildHostAddressString(Host[] hosts, int max)
     {
         StringBuffer buffer = new StringBuffer();
         max = Math.min( max, hosts.length );
@@ -180,13 +180,13 @@ public abstract class HandshakeHandler implements ConnectionConstants
             buffer.append( address.getFullHostName() );
             if( i < hosts.length - 1)
             {
-                buffer.append(",");
+                buffer.append(',');
             }
         }
         return buffer.toString();
     }
 
-    protected boolean isCrawlerConnection(HTTPHeaderGroup headers)
+    protected static boolean isCrawlerConnection(HTTPHeaderGroup headers)
     {
         HTTPHeader crawlerHeader = headers.getHeader( GnutellaHeaderNames.CRAWLER );
         if ( crawlerHeader == null )
@@ -197,11 +197,7 @@ public abstract class HandshakeHandler implements ConnectionConstants
         try
         {
             crawlerVersion = crawlerHeader.floatValue();
-            if ( crawlerVersion >= 0.1f )
-            {
-                return true;
-            }
-            return false;
+            return crawlerVersion >= 0.1f;
         }
         catch ( NumberFormatException exp )
         {

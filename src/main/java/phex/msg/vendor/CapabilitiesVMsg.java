@@ -72,7 +72,7 @@ public class CapabilitiesVMsg extends VendorMsg
                 "Vendor Message 'MessagesSupported' with invalid version: "
                     + version);
         }
-        capabilitiesSet = new HashSet<SupportedCapability>();
+        capabilitiesSet = new HashSet<>();
         try
         {
             ByteArrayInputStream dataStream = new ByteArrayInputStream( data );
@@ -114,7 +114,7 @@ public class CapabilitiesVMsg extends VendorMsg
     {
         super(VENDORID_NULL, SUBSELECTOR_CAPABILITIES, VERSION, 
             IOUtil.EMPTY_BYTE_ARRAY );
-        capabilitiesSet = new HashSet<SupportedCapability>();
+        capabilitiesSet = new HashSet<>();
         createCapabilitiesMsgData( );
     }
     
@@ -236,9 +236,8 @@ public class CapabilitiesVMsg extends VendorMsg
             if ( hashCode == -1 )
             {
                 int code = 37*version;
-                for (int i = 0; i < name.length; i++)
-                {
-                    code += 37*name[i];
+                for (byte aName : name) {
+                    code += 37 * aName;
                 }
                 hashCode = code;
             }
@@ -248,7 +247,7 @@ public class CapabilitiesVMsg extends VendorMsg
         @Override
         public String toString() 
         {
-            return new String(name) + "/" + version;
+            return new String(name) + '/' + version;
         }
     }
 }

@@ -110,7 +110,7 @@ public class QueryResponseRecord
             throw new IllegalArgumentException( "Invalid file size: " + fileSize );
         }
         String fileName = shareFile.getFileName();
-        long networkCreateTime = shareFile.getNetworkCreateTime().longValue();
+        long networkCreateTime = shareFile.getNetworkCreateTime();
         Set<DestAddress> altLocSet = null;
         if ( shareFile.getAltLocCount() > 0 )
         {
@@ -361,7 +361,7 @@ public class QueryResponseRecord
                 {
                     throw new InvalidMessageException( 
                         "Number of query response record alt-locs exceed the acceptable maximum: "
-                        + alternateLocations.length + "/" + DROP_PACKAGE_ALT_LOCATION_LIMIT );
+                        + alternateLocations.length + '/' + DROP_PACKAGE_ALT_LOCATION_LIMIT );
                 }
                 
                 byte[] pathInfoArr = GGEPBlock.getExtensionDataInBlocks(
@@ -416,11 +416,11 @@ public class QueryResponseRecord
     @Override
     public String toString()
     {
-        return	"[" +
+        return '[' +
                 "FileIndex=" + fileIndex + ", " +
                 "FileSize=" + fileSize + ", " +
                 "Filename=" + fileName +
-                "]";
+                ']';
     }
 
     private String parseMetaData( String metaDataString )

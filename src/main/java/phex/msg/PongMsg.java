@@ -441,39 +441,31 @@ public class PongMsg extends Message
     {
         PresentationManager netPresMgr = PresentationManager.getInstance();
         String[] hostCaches = packedHostCaches.split( "\n" );
-        Set<UdpHostCache> packedUdpHostCaches = new HashSet<UdpHostCache>( hostCaches.length );
-        
-        for( int i=0; i < hostCaches.length; i++ )
-        {
+        Set<UdpHostCache> packedUdpHostCaches = new HashSet<>(hostCaches.length);
+
+        for (String hostCache : hostCaches) {
             //find the position of the first key/value pair if any
-            int pos = hostCaches[i].indexOf( "&" );
-            try
-            {
+            int pos = hostCache.indexOf("&");
+            try {
                 DestAddress address;
                 //no key/value pair found
-                if( pos == -1)
-                {
-                    address = netPresMgr.createHostAddress(hostCaches[i], DefaultDestAddress.DEFAULT_PORT);
-                }
-                else 
-                {
+                if (pos == -1) {
+                    address = netPresMgr.createHostAddress(hostCache, DefaultDestAddress.DEFAULT_PORT);
+                } else {
                     //key/value pair found, but just ignore as of now
-                    String temp = hostCaches[i].substring( 0, pos );
+                    String temp = hostCache.substring(0, pos);
                     address = netPresMgr.createHostAddress(temp, DefaultDestAddress.DEFAULT_PORT);
                 }
-                AccessType access = securityMgr.controlHostAddressAccess( address );
-                if ( access == AccessType.ACCESS_GRANTED )
-                {
-                    UdpHostCache cache = new UdpHostCache( address );
-                    packedUdpHostCaches.add( cache );
+                AccessType access = securityMgr.controlHostAddressAccess(address);
+                if (access == AccessType.ACCESS_GRANTED) {
+                    UdpHostCache cache = new UdpHostCache(address);
+                    packedUdpHostCaches.add(cache);
                 }
-            }
-            catch ( MalformedDestAddressException e ) 
-            {
+            } catch (MalformedDestAddressException e) {
                 // just ignore and continue with next string
-                NLogger.warn( PongMsg.class, " Ignored " +
+                NLogger.warn(PongMsg.class, " Ignored " +
                         "One Host Cache address in a packed host cache list  "
-                        + e );
+                        + e);
                 continue;
             }
         }
@@ -491,7 +483,7 @@ public class PongMsg extends Message
                 throw new InvalidGGEPBlockException("invalid IPPORT EXTENSION DATA IN PONG");
             }
             int size = data.length/FIELD_SIZE;
-            ipPortPairs = new HashSet<DestAddress>();
+            ipPortPairs = new HashSet<>();
             int index;
             for (int i=0; i<size; i++) 
             {

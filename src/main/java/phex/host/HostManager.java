@@ -130,8 +130,8 @@ final public class HostManager extends AbstractLifeCycle
      */
     public boolean isUltrapeer()
     {
-        return ( ConnectionPrefs.AllowToBecomeUP.get().booleanValue() &&
-            ConnectionPrefs.ForceToBeUltrapeer.get().booleanValue() ) 
+        return (ConnectionPrefs.AllowToBecomeUP.get() &&
+                ConnectionPrefs.ForceToBeUltrapeer.get())
             || !isShieldedLeafNode() && networkHostsContainer.getTotalConnectionCount() > 0;
     }
 
@@ -160,11 +160,7 @@ final public class HostManager extends AbstractLifeCycle
      */
     public boolean allowDowngradeToLeaf()
     {
-        if ( isUltrapeer() )
-        {
-            return false;
-        }
-        return true;
+        return !isUltrapeer();
     }
 
     public void addConnectedHost( Host host )
@@ -249,7 +245,7 @@ final public class HostManager extends AbstractLifeCycle
                 // as a ultrapeer I'm primary searching for Ultrapeers only...
                 // to make sure I'm well connected...
                 hostCount = networkHostsContainer.getUltrapeerConnectionCount();
-                requiredHostCount = ConnectionPrefs.Up2UpConnections.get().intValue();
+                requiredHostCount = ConnectionPrefs.Up2UpConnections.get();
             }
             // we don't support legacy peers anymore ( since 3.0 ) therefore we only
             // handle leaf mode here
@@ -257,7 +253,7 @@ final public class HostManager extends AbstractLifeCycle
             {
                 // as a leaf I'm primary searching for Ultrapeers only...
                 hostCount = networkHostsContainer.getUltrapeerConnectionCount();
-                requiredHostCount = ConnectionPrefs.Leaf2UpConnections.get().intValue();
+                requiredHostCount = ConnectionPrefs.Leaf2UpConnections.get();
             }
 
             // count the number of missing connection tries this is the required count
@@ -275,7 +271,7 @@ final public class HostManager extends AbstractLifeCycle
             
             // we will never try more then a reasonable parallel tries..
             int upperLimit = Math.min( MAX_PARALLEL_CONNECTION_TRIES,
-                NetworkPrefs.MaxConcurrentConnectAttempts.get().intValue() ) - currentTryCount;
+                    NetworkPrefs.MaxConcurrentConnectAttempts.get()) - currentTryCount;
             
             int outConnectCount = Math.min( missingCount-currentTryCount, 
                 upperLimit );

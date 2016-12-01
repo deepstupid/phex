@@ -138,7 +138,7 @@ public class ConnectionEngine implements ConnectionConstants
                     continue;
                 }
                 // if message traveled too far already... drop it.
-                int MAX_TTL = MessagePrefs.MaxNetworkTTL.get().intValue();
+                int MAX_TTL = MessagePrefs.MaxNetworkTTL.get();
                 if ( hops > MAX_TTL)
                 {
                     messageService.dropMessage( header, body, 
@@ -214,7 +214,7 @@ public class ConnectionEngine implements ConnectionConstants
         {
             throw new IOException( "Negative body size. Disconnecting the remote host." );
         }
-        else if ( length > MessagePrefs.MaxLength.get().intValue() )
+        else if ( length > MessagePrefs.MaxLength.get())
         {
             // Packet looks suspiciously too big.  Disconnect them.
             if ( logger.isWarnEnabled( ) )
@@ -308,7 +308,7 @@ public class ConnectionEngine implements ConnectionConstants
         headersSend = myResponse.getResponseHeaders();
 
         // send answer to host...
-        sendStringToHost( GNUTELLA_06 + " " + myResponse.getStatusCode() + " " +
+        sendStringToHost( GNUTELLA_06 + ' ' + myResponse.getStatusCode() + ' ' +
             myResponse.getStatusMessage() + "\r\n" );
         String httpHeaderString = myResponse.getResponseHeaders().buildHTTPHeaderString();
         sendStringToHost( httpHeaderString );
@@ -317,7 +317,7 @@ public class ConnectionEngine implements ConnectionConstants
         if ( myResponse.getStatusCode() != STATUS_CODE_OK )
         {
             throw new IOException( "Connection not accepted: " +
-                myResponse.getStatusCode() + " " + myResponse.getStatusMessage() );
+                myResponse.getStatusCode() + ' ' + myResponse.getStatusMessage() );
         }
 
         HandshakeStatus inResponse = HandshakeStatus.parseHandshakeResponse(
@@ -335,7 +335,7 @@ public class ConnectionEngine implements ConnectionConstants
         if ( inResponse.getStatusCode() != STATUS_CODE_OK )
         {
             throw new IOException( "Host rejected connection: " +
-                inResponse.getStatusCode() + " " +
+                inResponse.getStatusCode() + ' ' +
                 inResponse.getStatusMessage() );
         }
         headersRead.replaceHeaders( inResponse.getResponseHeaders() );
@@ -402,7 +402,7 @@ public class ConnectionEngine implements ConnectionConstants
         HTTPHeaderGroup myResponseHeaders = myResponse.getResponseHeaders();
         headersSend.replaceHeaders( myResponseHeaders );
         // send answer to host...
-        sendStringToHost( GNUTELLA_06 + " " + myResponse.getStatusCode() + " " +
+        sendStringToHost( GNUTELLA_06 + ' ' + myResponse.getStatusCode() + ' ' +
             myResponse.getStatusMessage() + "\r\n" );
         String httpHeaderString = myResponseHeaders.buildHTTPHeaderString();
         sendStringToHost( httpHeaderString );
@@ -411,7 +411,7 @@ public class ConnectionEngine implements ConnectionConstants
         if ( myResponse.getStatusCode() != STATUS_CODE_OK )
         {
             throw new ConnectionRejectedException( "Connection not accepted: " +
-                myResponse.getStatusCode() + " " + myResponse.getStatusMessage() );
+                myResponse.getStatusCode() + ' ' + myResponse.getStatusMessage() );
         }
     }
 
@@ -483,34 +483,27 @@ public class ConnectionEngine implements ConnectionConstants
         }
         CaughtHostsContainer hostContainer = servent.getHostService().getCaughtHostsContainer();
 
-        for ( int i = 0; i < xtryHostAdresses.length; i++ )
-        {
+        for (HTTPHeader xtryHostAdress : xtryHostAdresses) {
             StringTokenizer tokenizer = new StringTokenizer(
-                xtryHostAdresses[i].getValue(), "," );
-            while( tokenizer.hasMoreTokens() )
-            {
+                    xtryHostAdress.getValue(), ",");
+            while (tokenizer.hasMoreTokens()) {
                 String hostAddressStr = tokenizer.nextToken().trim();
-                try
-                {
+                try {
                     DestAddress address = PresentationManager.getInstance()
-                        .createHostAddress( hostAddressStr, DefaultDestAddress.DEFAULT_PORT );
-                    AccessType access = securityService.controlHostAddressAccess( address );
-                    switch ( access )
-                    {
+                            .createHostAddress(hostAddressStr, DefaultDestAddress.DEFAULT_PORT);
+                    AccessType access = securityService.controlHostAddressAccess(address);
+                    switch (access) {
                         case ACCESS_DENIED:
                         case ACCESS_STRONGLY_DENIED:
                             // skip host address...
                             continue;
                     }
                     IpAddress ipAddress = address.getIpAddress();
-                    if ( !isUltrapeerList && ipAddress != null && ipAddress.isSiteLocalIP() )
-                    { // private IP have low priority except for ultrapeers.
+                    if (!isUltrapeerList && ipAddress != null && ipAddress.isSiteLocalIP()) { // private IP have low priority except for ultrapeers.
                         priority = CaughtHostsContainer.LOW_PRIORITY;
                     }
-                    hostContainer.addCaughtHost( address, priority );
-                }
-                catch ( MalformedDestAddressException exp )
-                {
+                    hostContainer.addCaughtHost(address, priority);
+                } catch (MalformedDestAddressException exp) {
                 }
             }
         }
@@ -640,14 +633,14 @@ public class ConnectionEngine implements ConnectionConstants
         
         HTTPHeader header = theirHeadersRead.getHeader( 
             GnutellaHeaderNames.VENDOR_MESSAGE );
-        if ( header != null && !header.getValue().equals("") )
+        if ( header != null && !header.getValue().isEmpty())
         {
             connectedHost.setVendorMessageSupported( true );
         }
         
         header = theirHeadersRead.getHeader( 
             GnutellaHeaderNames.GGEP );
-        if ( header != null && !header.getValue().equals("") )
+        if ( header != null && !header.getValue().isEmpty())
         {
             connectedHost.setGgepSupported( true );
         }

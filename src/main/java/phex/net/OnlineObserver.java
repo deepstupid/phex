@@ -103,7 +103,7 @@ public class OnlineObserver
             	fetchingStrategy.fetchNewHosts( FetchingReason.UpdateHosts );
             }
             
-            if ( fc >= ConnectionPrefs.OfflineConnectionFailureCount.get().intValue() )
+            if ( fc >= ConnectionPrefs.OfflineConnectionFailureCount.get())
             {
                 logger.debug( "Too many connections failed.. disconnecting network.");
                 // trigger timer to attempt to reconnect after some time...

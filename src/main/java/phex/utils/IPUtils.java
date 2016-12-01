@@ -41,11 +41,7 @@ public final class IPUtils
         String port = String.valueOf( hostAddress.getPort() );
         portFound = SecurityPrefs.FilteredPorts.get().contains( port );
         //if the port or the ip was found the host is in the invalid list
-        if ( portFound )
-        {
-            return true;
-        }
+        return portFound;
 
-        return false;
     }
 }

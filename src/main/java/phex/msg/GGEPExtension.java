@@ -71,7 +71,7 @@ public class GGEPExtension
         
         int count = altLocData.length / 6;
         
-        Set<DefaultDestAddress> altLocSet = new HashSet<DefaultDestAddress>( );
+        Set<DefaultDestAddress> altLocSet = new HashSet<>();
         int offset;
         byte[] ip;
         int port;
@@ -119,7 +119,7 @@ public class GGEPExtension
         
         int count = data.length / 6;
         
-        Set<DefaultDestAddress> proxySet = new HashSet<DefaultDestAddress>( );
+        Set<DefaultDestAddress> proxySet = new HashSet<>();
         int offset;
         byte[] ip;
         int port;

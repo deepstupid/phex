@@ -140,18 +140,16 @@ public class PriorityQueue
     public boolean removeFromAll( Object obj )
     {
         boolean removed = false;
-        for ( int i=0; i < queues.length; i++) 
-        {
-            removed = removed | queues[i].removeAll( obj );
+        for (CircularQueue queue1 : queues) {
+            removed = removed | queue1.removeAll(obj);
         }
         
         // elements have been removed.. recalculate the size
         if ( removed ) 
         {
             size = 0;
-            for (int i = 0; i < queues.length; i++)
-            {
-                size += queues[i].getSize();
+            for (CircularQueue queue : queues) {
+                size += queue.getSize();
             }
         }
         return removed;
@@ -183,9 +181,8 @@ public class PriorityQueue
      */
     public void clear()
     {
-        for ( int i = 0; i < queues.length; i++ )
-        {
-            queues[i].clear();
+        for (CircularQueue queue : queues) {
+            queue.clear();
         }
         size = 0;
     }

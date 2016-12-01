@@ -100,7 +100,7 @@ public class UltrapeerHandshakeHandler extends HandshakeHandler
         HTTPHeaderGroup myHeaders = createDefaultHandshakeHeaders();
     
         // add ultrapeer needed header for leaf guidance
-        if ( upHeader != null && Boolean.valueOf( upHeader.getValue() ).booleanValue() )
+        if ( upHeader != null && Boolean.valueOf(upHeader.getValue()))
         {
             boolean isUltrapeerNeeded = servent.getHostService().
                 getNetworkHostsContainer().hasUltrapeerSlotsAvailable();
@@ -177,7 +177,7 @@ public class UltrapeerHandshakeHandler extends HandshakeHandler
         // we accept it if we have ultrapeer slots or leaf slots for ultrapeers
         // (for leaf guidance) unfortunately we don't know if leaf guidance is accepted
         // though..
-        if ( Boolean.valueOf( upHeader.getValue() ).booleanValue() )
+        if (Boolean.valueOf(upHeader.getValue()))
         {
             if ( netHostContainer.hasUltrapeerSlotsAvailable() ||
                 netHostContainer.hasLeafSlotForUltrapeerAvailable() )
@@ -194,16 +194,9 @@ public class UltrapeerHandshakeHandler extends HandshakeHandler
         return false;
     }
 
-    private boolean isBearshare( HTTPHeaderGroup headers )
+    private static boolean isBearshare(HTTPHeaderGroup headers)
     {
         HTTPHeader header = headers.getHeader( HTTPHeaderNames.USER_AGENT );
-        if ( header != null && header.getValue().startsWith( "BearShare" ) )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return header != null && header.getValue().startsWith("BearShare");
     }
 }

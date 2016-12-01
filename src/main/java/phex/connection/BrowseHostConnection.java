@@ -116,7 +116,7 @@ public class BrowseHostConnection
         if ( response.getStatusCode() < 200 || response.getStatusCode() > 299 )
         {
             throw new BrowseHostException( "Browse host request not successfull. StatusCode: " +
-                response.getStatusCode() + " " + response.getStatusReason() );
+                response.getStatusCode() + ' ' + response.getStatusReason() );
         }
 
         HTTPHeader typeHeader = response.getHeader( HTTPHeaderNames.CONTENT_TYPE );
@@ -156,7 +156,7 @@ public class BrowseHostConnection
                 {
                     throw new IOException( "Negative body size. Drop." );
                 }
-                else if ( length > MessagePrefs.MaxLength.get().intValue() )
+                else if ( length > MessagePrefs.MaxLength.get())
                 {
                     throw new IOException("Packet too big ("+length+"). Drop.");
                 }

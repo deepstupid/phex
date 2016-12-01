@@ -31,11 +31,11 @@ import java.nio.channels.ByteChannel;
 
 public interface SocketFacade extends Closeable
 {
-    public void setSoTimeout( int socketRWTimeout ) throws SocketException;
+    void setSoTimeout(int socketRWTimeout) throws SocketException;
     
-    public ByteChannel getChannel() throws IOException;
+    ByteChannel getChannel() throws IOException;
     
-    public void close() throws IOException;
+    void close() throws IOException;
     
-    public DestAddress getRemoteAddress();
+    DestAddress getRemoteAddress();
 }

@@ -367,10 +367,11 @@ public class PatriciaTrie<K, V> extends AbstractMap<K, V> implements Trie<K, V>,
      * its overhead because we're selecting only one best matching
      * Entry from the Trie.
      */
-    private boolean selectR(TrieEntry<K, V> h, int bitIndex, 
+    private boolean selectR(final TrieEntry<K, V> h, int bitIndex,
             final K key, final int keyLength, final TrieEntry[] result) {
-        
-        if (h.bitIndex <= bitIndex) {
+
+        int hbi = h.bitIndex;
+        if (hbi <= bitIndex) {
             // If we hit the root Node and it is empty
             // we have to look for an alternative best
             // matching node.
@@ -381,13 +382,13 @@ public class PatriciaTrie<K, V> extends AbstractMap<K, V> implements Trie<K, V>,
             return true;
         }
 
-        if (!isBitSet(key, keyLength, h.bitIndex)) {
-            if (selectR(h.left, h.bitIndex, key, keyLength, result)) {
-                return selectR(h.right, h.bitIndex, key, keyLength, result);
+        if (!isBitSet(key, keyLength, hbi)) {
+            if (selectR(h.left, hbi, key, keyLength, result)) {
+                return selectR(h.right, hbi, key, keyLength, result);
             }
         } else {
-            if (selectR(h.right, h.bitIndex, key, keyLength, result)) {
-                return selectR(h.left, h.bitIndex, key, keyLength, result);
+            if (selectR(h.right, hbi, key, keyLength, result)) {
+                return selectR(h.left, hbi, key, keyLength, result);
             }
         }
         return false;
@@ -407,7 +408,8 @@ public class PatriciaTrie<K, V> extends AbstractMap<K, V> implements Trie<K, V>,
             final Cursor<? super K, ? super V> cursor,
             final TrieEntry[] result) {
 
-        if (h.bitIndex <= bitIndex) {
+        int hbi = h.bitIndex;
+        if (hbi <= bitIndex) {
             if(!h.isEmpty()) {
                 Cursor.SelectStatus ret = cursor.select(h);
                 switch(ret) {
@@ -428,13 +430,13 @@ public class PatriciaTrie<K, V> extends AbstractMap<K, V> implements Trie<K, V>,
             return true; // continue
         }
 
-        if (!isBitSet(key, keyLength, h.bitIndex)) {
-            if (selectR(h.left, h.bitIndex, key, keyLength, cursor, result)) {
-                return selectR(h.right, h.bitIndex, key, keyLength, cursor, result);
+        if (!isBitSet(key, keyLength, hbi)) {
+            if (selectR(h.left, hbi, key, keyLength, cursor, result)) {
+                return selectR(h.right, hbi, key, keyLength, cursor, result);
             }
         } else {
-            if (selectR(h.right, h.bitIndex, key, keyLength, cursor, result)) {
-                return selectR(h.left, h.bitIndex, key, keyLength, cursor, result);
+            if (selectR(h.right, hbi, key, keyLength, cursor, result)) {
+                return selectR(h.left, hbi, key, keyLength, cursor, result);
             }
         }
         

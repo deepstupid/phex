@@ -76,9 +76,10 @@ public class AlternateLocation
     public String getHTTPString()
     {
         StringBuffer buffer = new StringBuffer( hostAddress.getHostName() );
+
         int port = hostAddress.getPort();
-        if ( port != 6346 )
-        {
+        if ( port != 6346 ) {
+            buffer.ensureCapacity(6);
             buffer.append( ':' );
             buffer.append( port );
         }
@@ -98,18 +99,16 @@ public class AlternateLocation
     @Override
     public boolean equals(Object obj)
     {
-        if( !(obj instanceof AlternateLocation) )
-        {
+        if( obj == this )             return true;
+        if( !(obj instanceof AlternateLocation) ) {
             return false;
         }
 
-        if( obj == this )
-        {
-            return true;
-        }
         AlternateLocation altLoc = (AlternateLocation)obj;
-        return hostAddress.equals( altLoc.hostAddress ) &&
-            urn.equals( altLoc.urn );
+        return
+            urn.equals( altLoc.urn ) &&
+            hostAddress.equals( altLoc.hostAddress )
+            ;
     }
 
     /**
@@ -122,8 +121,10 @@ public class AlternateLocation
     public int hashCode()
     {
         int h = 7;
-        h = ( (31 *h) + ( (hostAddress != null) ? hostAddress.hashCode() : 0 ) );
-        h = ( (31 *h) + ( (urn != null) ? urn.hashCode() : 0 ) );
+//        h = ( (31 *h) + ( (hostAddress != null) ? hostAddress.hashCode() : 0 ) );
+//        h = ( (31 *h) + ( (urn != null) ? urn.hashCode() : 0 ) );
+        h = ( (31 * h) + ( hostAddress.hashCode()  ) );
+        h = ( (31 * h) + ( urn.hashCode() ) );
         return h;
     }
     
@@ -149,9 +150,8 @@ public class AlternateLocation
                 "Malformed alt-location URL: " + exp.getMessage() );
             return null;
         }
-                
-        AlternateLocation loc = new AlternateLocation( address, urn );
-        return loc;
+
+        return new AlternateLocation( address, urn );
     }
 
 

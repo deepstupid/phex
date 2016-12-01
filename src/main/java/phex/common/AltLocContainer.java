@@ -38,13 +38,13 @@ public class AltLocContainer extends LinkedMap {
     public static final int MAX_ALT_LOC_COUNT = 100;
     public static final int MAX_ALT_LOC_FOR_QUERY_COUNT = 10;
     
-    // Dummy value to associate with an Object in the backing Map
-    private static final Object PRESENT = new Object();
+//    // Dummy value to associate with an Object in the backing Map
+//    private static final Object PRESENT = new Object();
 
     /**
      * The urn each alternate location must match to be accepted.
      */
-    private URN urn;
+    private final URN urn;
 
     public AltLocContainer( URN urn ) {
         super();
@@ -97,7 +97,7 @@ public class AltLocContainer extends LinkedMap {
             // order of elements. This ensures that alt loc not seen (put) for a 
             // long time get removed from the map.
             this.remove( altLoc );
-            this.put( altLoc, PRESENT );
+            this.put( altLoc, urn );
             // make sure we have not more then MAX_ALT_LOC_COUNT alt locations.
             if ( this.size() > MAX_ALT_LOC_COUNT )
             {// drop last element
@@ -197,13 +197,13 @@ public class AltLocContainer extends LinkedMap {
     public HTTPHeader getAltLocHTTPHeaderForAddress( String headerName,
         DestAddress hostAddress, Set<AlternateLocation> sendAltLocSet )     {
         if ( isEmpty() )
-        {
             return null;
-        }
+
         int count = 0;
-        StringBuffer headerValue = new StringBuffer();
+        StringBuffer headerValue;
         synchronized (this)
         {
+            headerValue = new StringBuffer();
             Iterator<AlternateLocation> iterator = keySet().iterator();
             while( iterator.hasNext() )
             {
@@ -215,20 +215,17 @@ public class AltLocContainer extends LinkedMap {
                     continue;
                 }
                 // filter out already send alt locs...
-                if ( sendAltLocSet.contains( altLoc ) )
-                {
+                if ( sendAltLocSet.contains( altLoc ) ) {
                     continue;
                 }
                 
-                if ( count > 0 )
-                {
+                if ( count > 0 ) {
                     headerValue.append(',');
                 }
                 headerValue.append( altLoc.getHTTPString() );
                 sendAltLocSet.add( altLoc );
                 count ++;
-                if ( count == 10 )
-                {
+                if ( count == 10 ) {
                     break;
                 }
             }

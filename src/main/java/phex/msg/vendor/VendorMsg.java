@@ -171,13 +171,13 @@ public abstract class VendorMsg extends Message implements VendorMessageConstant
            // ignoring BEAR5v1 (BearHorizonPing)
            throw new InvalidMessageException(
                "Unsupported Vendor Message: " + new String( vendorId )
-               + subSelector + "v" + version);
+               + subSelector + 'v' + version);
        }
         
         
         throw new InvalidMessageException(
             "Unknown Vendor Message variant: " + new String( vendorId )
-            + subSelector + "v" + version);
+            + subSelector + 'v' + version);
     }
     
     public void setVersion( int ver )

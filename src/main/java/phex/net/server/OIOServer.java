@@ -67,15 +67,10 @@ public class OIOServer extends Server
                         incoming );
                     handleIncomingSocket( incomingFacade );
                 }
-                catch ( SocketException exp )
+                catch ( SocketException | PhexSecurityException exp )
                 {
                     NLogger.debug( OIOServer.class, exp );
-                }
-                catch ( PhexSecurityException exp )
-                {
-                    NLogger.debug( OIOServer.class, exp );
-                }
-                catch (IOException exp)
+                } catch (IOException exp)
                 {
                     NLogger.error( OIOServer.class, exp, exp);
                 }
@@ -105,7 +100,7 @@ public class OIOServer extends Server
     private void handleIncomingSocket(SocketFacade clientSocket )
         throws IOException, PhexSecurityException
     {        
-        clientSocket.setSoTimeout( NetworkPrefs.TcpRWTimeout.get().intValue() );
+        clientSocket.setSoTimeout(NetworkPrefs.TcpRWTimeout.get());
 
         DestAddress address = clientSocket.getRemoteAddress();
         NetworkHostsContainer netHostsContainer = servent.getHostService()

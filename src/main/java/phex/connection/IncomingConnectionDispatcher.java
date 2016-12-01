@@ -80,7 +80,7 @@ public class IncomingConnectionDispatcher implements Runnable
         GnutellaInputStream gInStream = null;
         try
         {
-            socket.setSoTimeout( NetworkPrefs.TcpRWTimeout.get().intValue() );
+            socket.setSoTimeout(NetworkPrefs.TcpRWTimeout.get());
             BandwidthController bwController = servent.getBandwidthService()
                 .getNetworkBandwidthController();
             Connection connection = new Connection(socket, bwController);
@@ -107,7 +107,7 @@ public class IncomingConnectionDispatcher implements Runnable
 
             DestAddress localAddress = servent.getLocalAddress();
             String greeting = servent.getGnutellaNetwork().getNetworkGreeting();
-            if ( requestLine.startsWith( greeting + "/" ) )
+            if ( requestLine.startsWith( greeting + '/') )
             {
                 handleGnutellaRequest( connection );
             }
@@ -180,19 +180,12 @@ public class IncomingConnectionDispatcher implements Runnable
                     + requestLine );
             }
         }
-        catch ( HTTPMessageException exp )
+        catch ( HTTPMessageException | IOException exp )
         {
             logger.debug( exp.toString(), exp );
             IOUtil.closeQuietly(gInStream);
             IOUtil.closeQuietly(socket);
-        }
-        catch ( IOException exp )
-        {
-            logger.debug( exp.toString(), exp );
-            IOUtil.closeQuietly(gInStream);
-            IOUtil.closeQuietly(socket);
-        }
-        catch ( Exception exp )
+        } catch ( Exception exp )
         {// catch all thats left...
             logger.error( exp.toString(), exp);
             IOUtil.closeQuietly(gInStream);

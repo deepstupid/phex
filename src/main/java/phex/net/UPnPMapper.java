@@ -30,7 +30,7 @@ public class UPnPMapper
     private static final Logger logger = LoggerFactory.getLogger( UPnPMapper.class );
     
     private UpnpService upnpService;
-    private final Map<Service, PortMapping> activePortMappings = new HashMap<Service, PortMapping>();
+    private final Map<Service, PortMapping> activePortMappings = new HashMap<>();
     
     public void initialize()
     {
@@ -62,7 +62,7 @@ public class UPnPMapper
     private static final ServiceType IP_SERVICE_TYPE = new UDAServiceType("WANIPConnection", 1);
     private static final ServiceType PPP_SERVICE_TYPE = new UDAServiceType("WANPPPConnection", 1);
 
-    private Service discoverConnectionService(Device device)
+    private static Service discoverConnectionService(Device device)
     {
         if (!device.getType().equals(IGD_DEVICE_TYPE))
         {

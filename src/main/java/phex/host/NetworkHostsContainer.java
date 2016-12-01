@@ -74,9 +74,9 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
     {
         this.servent = servent;
         
-        networkHosts = new ArrayList<Host>();
-        ultrapeerConnections = new ArrayList<Host>();
-        leafConnections = new ArrayList<Host>();
+        networkHosts = new ArrayList<>();
+        ultrapeerConnections = new ArrayList<>();
+        leafConnections = new ArrayList<>();
         
         Phex.getEventService().processAnnotations( this );
     }
@@ -128,7 +128,7 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
     {
         // Note: That we don't response on pings when the slots are full this
         // results in not getting that many incoming requests.
-        return ultrapeerConnections.size() < ConnectionPrefs.Up2UpConnections.get().intValue();
+        return ultrapeerConnections.size() < ConnectionPrefs.Up2UpConnections.get();
     }
     
     /**
@@ -138,7 +138,7 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
      */
     public int getOpenUltrapeerSlotsCount()
     {
-        return ConnectionPrefs.Up2UpConnections.get().intValue() - ultrapeerConnections.size();
+        return ConnectionPrefs.Up2UpConnections.get() - ultrapeerConnections.size();
     }
 
 
@@ -154,7 +154,7 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
         return hasLeafSlotsAvailable()
             // Allow one more up2up connection to accept this possibly leaf guided
             // ultrapeer
-            && ultrapeerConnections.size() < ConnectionPrefs.Up2UpConnections.get().intValue() + 1;
+            && ultrapeerConnections.size() < ConnectionPrefs.Up2UpConnections.get() + 1;
     }
 
     /**
@@ -166,7 +166,7 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
     {
         // Note: That we don't response on pings when the slots are full this
         // results in not getting that many incoming requests.
-        return leafConnections.size() < ConnectionPrefs.Up2LeafConnections.get().intValue();
+        return leafConnections.size() < ConnectionPrefs.Up2LeafConnections.get();
     }
     
     /**
@@ -177,7 +177,7 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
     {
         if ( servent.isUltrapeer() )
         {
-            return ConnectionPrefs.Up2LeafConnections.get().intValue() - leafConnections.size();
+            return ConnectionPrefs.Up2LeafConnections.get() - leafConnections.size();
         }
         return 0;
     }
@@ -240,7 +240,7 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
     {
         if ( isShieldedLeafNode() )
         {
-            HashSet<DestAddress> pushProxies = new HashSet<DestAddress>();
+            HashSet<DestAddress> pushProxies = new HashSet<>();
             for ( Host host : ultrapeerConnections )
             {
                 DestAddress pushProxyAddress = host.getPushProxyAddress();
@@ -465,11 +465,8 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
     public synchronized boolean isConnectedToHost( DestAddress address )
     {
         // Check for duplicate.
-        for (int i = 0; i < networkHosts.size(); i++)
-        {
-            Host host = networkHosts.get( i );
-            if ( host.getHostAddress().equals( address ) )
-            {// already connected
+        for (Host host : networkHosts) {
+            if (host.getHostAddress().equals(address)) {// already connected
                 return true;
             }
         }
@@ -490,10 +487,9 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
     {
         Host host;
         int length = hosts.length;
-        for ( int i = 0; i < length; i++ )
-        {
-            host = hosts[ i ];
-            internalRemoveNetworkHost( host );
+        for (Host host1 : hosts) {
+            host = host1;
+            internalRemoveNetworkHost(host);
         }
     }
 

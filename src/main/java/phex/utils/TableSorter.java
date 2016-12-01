@@ -205,10 +205,7 @@ space and avoid unnecessary heap allocation.
         {
             int[]	newIndexes = new int[rowCount];
 
-            for (int i = 0; i < oldRowCount; i++)
-            {
-                    newIndexes[i] = indexes[i];
-            }
+            System.arraycopy(indexes, 0, newIndexes, 0, oldRowCount);
             for (int i = oldRowCount; i < rowCount; i++)
             {
                 newIndexes[i] = i;
@@ -256,7 +253,7 @@ space and avoid unnecessary heap allocation.
         compares = 0;
         // n2sort();
         // qsort(0, indexes.length-1);
-        shuttlesort((int[])indexes.clone(), indexes, 0, indexes.length);
+        shuttlesort(indexes.clone(), indexes, 0, indexes.length);
 //		System.out.println("Compares: "+compares);
     }
 
@@ -307,9 +304,7 @@ space and avoid unnecessary heap allocation.
         order diminishes - it may drop very quickly.  */
 
         if (high - low >= 4 && compare(from[middle-1], from[middle]) <= 0) {
-            for (int i = low; i < high; i++) {
-                to[i] = from[i];
-            }
+            System.arraycopy(from, low, to, low, high - low);
             return;
         }
 

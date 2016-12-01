@@ -53,7 +53,7 @@ public class MessageProcessor
         {
             throw new IOException( "Negative body size. Drop." );
         }
-        else if ( length > MessagePrefs.MaxLength.get().intValue() )
+        else if ( length > MessagePrefs.MaxLength.get())
         {
             throw new IOException("Packet too big ("+length+"). Drop.");
         }

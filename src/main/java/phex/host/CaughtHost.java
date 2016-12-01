@@ -160,11 +160,7 @@ public class CaughtHost
         {
             return false;
         }
-        if ( !isUltrapeer )
-        {
-            return false;
-        }
-        return true;
+        return isUltrapeer;
     }
     
     /**
@@ -219,7 +215,7 @@ public class CaughtHost
     {
         return "CaughtHost[" + hostAddress.toString() + ",Failed=" + 
             lastFailedConnection + ",Successful=" + lastSuccessfulConnection +
-            ",Uptime=" + avgDailyUptime + "]";
+            ",Uptime=" + avgDailyUptime + ']';
     }
     
     /**

@@ -265,9 +265,9 @@ public class Host
     /**
      * A SACHRIFC message queue implementation.
      */
-    private MessageQueue messageQueue;
-    private SendEngine sendEngine;
-    
+    private final MessageQueue messageQueue;
+    private final SendEngine sendEngine = new SendEngine();
+
     private boolean isVendorMessageSupported;
     private boolean isGgepSupported;
     
@@ -300,6 +300,7 @@ public class Host
         receivedDropMsgCount = 0;
         maxTTL = DynamicQueryConstants.DEFAULT_MAX_TTL;
         hopsFlowLimit = -1;
+        messageQueue = new MessageQueue(this);
     }
 
     /**
@@ -780,14 +781,9 @@ public class Host
 
     public int getSendQueueLength()
     {
-        if ( messageQueue == null )
-        {
-            return 0;
-        }
-        else
-        {
+
             return messageQueue.getQueuedMessageCount();
-        }
+
     }
 
     public boolean isProducingTooMuchBadMessages(float threshold) {
@@ -797,19 +793,18 @@ public class Host
 
     public boolean isSendQueueTooLong()
     {
-        if ( messageQueue == null ) { return false; }
-        return (messageQueue.getQueuedMessageCount() >= MAX_SEND_QUEUE - 1);
+        return messageQueue.getQueuedMessageCount() >= MAX_SEND_QUEUE - 1;
     }
 
     public boolean isSendQueueInRed()
     {
-        if ( messageQueue == null ) { return false; }
-        return (messageQueue.getQueuedMessageCount() >= MAX_SEND_QUEUE * 3 / 4);
+
+        return messageQueue.getQueuedMessageCount() >= MAX_SEND_QUEUE * 3 / 4;
     }
 
     public boolean isNoVendorDisconnectApplying()
     {
-        if ( !SecurityPrefs.DisconnectNoVendorHosts.get().booleanValue() )
+        if ( !SecurityPrefs.DisconnectNoVendorHosts.get())
         {
             return false;
         }
@@ -843,7 +838,7 @@ public class Host
         }
     }
 
-    public boolean isFreeloader(long currentTime)
+    public static boolean isFreeloader(long currentTime)
     {
 // freeloaders are no real problem...       
 //        // never count a ultrapeer as freeloader...
@@ -909,8 +904,8 @@ public class Host
     @Override
     public String toString()
     {
-        return "Host" + "[" + hostAddress.getHostName() + ":"
-            + hostAddress.getPort() + "," + vendor + ",State=" + status + "]";
+        return "Host" + '[' + hostAddress.getHostName() + ':'
+            + hostAddress.getPort() + ',' + vendor + ",State=" + status + ']';
     }
 
     ////////////////////////START MessageQueue implementation///////////////////
@@ -969,7 +964,6 @@ public class Host
         }
         
         logger.debug( "Queuing message: {}", message );
-        initMessageQueue();
         synchronized (messageQueue)
         {
             messageQueue.addMessage(message);
@@ -1033,19 +1027,18 @@ public class Host
         }
     }
 
-    /**
-     * This method is here to make sure the message queue is only generated
-     * when it is actually necessary. Generating it in the constructor
-     * uses up a big amount of memory for every known Host. Together with the
-     * message queue its SendEngine is initialized.
-     */
-    private void initMessageQueue()
-    {
-        if ( messageQueue != null ) { return; }
-        // Create a queue with max-size, dropping the oldest msg when max reached.
-        messageQueue = new MessageQueue(this);
-        sendEngine = new SendEngine();
-    }
+//    /**
+//     * This method is here to make sure the message queue is only generated
+//     * when it is actually necessary. Generating it in the constructor
+//     * uses up a big amount of memory for every known Host. Together with the
+//     * message queue its SendEngine is initialized.
+//     */
+//    private void initMessageQueue()
+//    {
+//        if ( messageQueue != null ) { return; }
+//        // Create a queue with max-size, dropping the oldest msg when max reached.
+//
+//    }
 
     ////////////////////////END MessageQueue implementation/////////////////////
 

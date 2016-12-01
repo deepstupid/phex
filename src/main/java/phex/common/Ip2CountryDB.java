@@ -51,7 +51,7 @@ public class Ip2CountryDB
         isLoaded = false;
         ipCountryRangeList = new ArrayList<>();
         
-        Runnable runnable = () -> loadIp2CountryDB();
+        Runnable runnable = this::loadIp2CountryDB;
         
         // TODO block job from execution until Phex initialization is finished.
         Environment.getInstance().executeOnThreadPool( runnable, "IP2CountryLoader" );

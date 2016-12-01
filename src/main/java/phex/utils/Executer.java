@@ -115,7 +115,7 @@ public class Executer implements Runnable
             if ( commands.length > 0 )
             {
             	NLogger.error( Executer.class, "About to invoke " + Arrays.asList( commands ) );
-                Runner r = new Runner(commands); 
+                Runner r = new Runner(commands);
             }
         }
         catch (Exception ex)
@@ -125,7 +125,7 @@ public class Executer implements Runnable
             if ( commands != null )
             {
             	NLogger.error( Executer.class,
-                    "Actual command was '" + commands + "'");
+                    "Actual command was '" + commands + '\'');
             }
         }
     }
@@ -167,7 +167,7 @@ public class Executer implements Runnable
                 regex = new StringBuffer();
                 regex.append("^.*"); // any character string may precede it
                 regex.append(entry);
-                regex.append("$"); // but it must be at the end of the filename
+                regex.append('$'); // but it must be at the end of the filename
             }
 
             Pattern p = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
@@ -201,19 +201,19 @@ public class Executer implements Runnable
         for (int i = 0; i < counter ; i++)
         {
             String field = (String) it.next();
-            if ( field.startsWith("\"") || true ) // ie: unix
-            {
+//            if ( field.startsWith("\"") || true ) // ie: unix
+//            {
                 result[i] = field;
-            } else
-            {
-                result[i] = new String (quoteString + field + quoteString);
-            }
+//            } else
+//            {
+//                result[i] = new String (quoteString + field + quoteString);
+//            }
         }
         return result;
     }
 
 
-    private class Runner
+    private static class Runner
     {
         public int result;
 
@@ -307,7 +307,7 @@ public class Executer implements Runnable
             String quoteString = "\"";
             for (int i = 0; i < counter ; i++)
             {
-                result[i] = quoteString + (String) it.next() + quoteString;
+                result[i] = quoteString + it.next() + quoteString;
             }
             return result;
         }

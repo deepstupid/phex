@@ -79,21 +79,14 @@ public class HandshakeStatus implements ConnectionConstants
      */
     public boolean isDeflateAccepted()
     {
-        if ( ConnectionPrefs.AcceptDeflateConnection.get().booleanValue() &&
-            responseHeaders.isHeaderValueContaining(  
-            HTTPHeaderNames.ACCEPT_ENCODING, "deflate" ) )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return ConnectionPrefs.AcceptDeflateConnection.get().booleanValue() &&
+                responseHeaders.isHeaderValueContaining(
+                        HTTPHeaderNames.ACCEPT_ENCODING, "deflate");
     }
 
     public static HandshakeStatus parseHandshakeResponse(
         Connection connection )
-        throws ProtocolNotSupportedException, IOException
+        throws IOException
     {
         String response = connection.readLine();
         if ( response == null )

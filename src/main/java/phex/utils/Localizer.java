@@ -325,7 +325,7 @@ public class Localizer
             }
         }
         langKeyMap = loadProperties( buffer.toString() );
-        defaultLangKeyMap = loadProperties( FILES_PREFIX + "_" + DEFAULT_LOCALE );
+        defaultLangKeyMap = loadProperties( FILES_PREFIX + '_' + DEFAULT_LOCALE );
     }
 
     private static HashMap<String, String> loadProperties(String name)
@@ -399,7 +399,7 @@ public class Localizer
             if (   builder.length() > 0 
                 && !Character.isWhitespace( builder.charAt(builder.length()-1) ) )
             {
-                builder.append( " " );
+                builder.append(' ');
             }
             appendUnescaped( line.substring(line.indexOf('"') + 1, line.lastIndexOf('"')), 
                 builder );

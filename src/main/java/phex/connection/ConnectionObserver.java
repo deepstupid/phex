@@ -41,8 +41,8 @@ import java.util.List;
  */
 public class ConnectionObserver implements Runnable
 {
-    private final long SLEEP_TIME = 1000;
-    private final long PING_WAIT_TIME = 2000;
+    private static final long SLEEP_TIME = 1000;
+    private static final long PING_WAIT_TIME = 2000;
 
     private List<ConnectionSnapshoot> snapshootList;
     private List<Host> quiteList;
@@ -67,8 +67,8 @@ public class ConnectionObserver implements Runnable
 
     public void run()
     {
-        snapshootList = new ArrayList<ConnectionSnapshoot>();
-        quiteList = new ArrayList<Host>();
+        snapshootList = new ArrayList<>();
+        quiteList = new ArrayList<>();
         while( true )
         {
             snapshootList.clear();
@@ -98,13 +98,11 @@ public class ConnectionObserver implements Runnable
             {
                 // send a ping to each connection in the hope they respond to it.
                 int size = quiteList.size();
-                for ( int i = 0; i < size; i++ )
-                {
-                    Host host = quiteList.get( i );
+                for (Host host : quiteList) {
                     NLogger.debug(ConnectionObserver.class,
-                        host + " - Sending keep alive ping. " );
+                            host + " - Sending keep alive ping. ");
                     // first ping all hosts in the quite host list.
-                    messageService.pingHost( host );
+                    messageService.pingHost(host);
                 }
                 //Wait some time for the pinged hosts to respond...
                 try
@@ -114,17 +112,14 @@ public class ConnectionObserver implements Runnable
                 catch (InterruptedException e)
                 {
                 }
-                for ( int i = 0; i < size; i++ )
-                {
-                    Host host = quiteList.get( i );
+                for (Host host : quiteList) {
                     // Disconnect connection if it was still quite in the meantime
-                    ConnectionSnapshoot shoot = findSnapshoot( host );
-                    if ( shoot.hasBeenQuiet( ) )
-                    {
-                        host.setStatus( HostStatus.ERROR,
-                            Localizer.getString( "HostNotResponding" ) );
+                    ConnectionSnapshoot shoot = findSnapshoot(host);
+                    if (shoot.hasBeenQuiet()) {
+                        host.setStatus(HostStatus.ERROR,
+                                Localizer.getString("HostNotResponding"));
                         NLogger.debug(ConnectionObserver.class,
-                            host + " - Host not responding, disconnecting.." );
+                                host + " - Host not responding, disconnecting..");
                         host.disconnect();
                     }
                 }
@@ -134,37 +129,30 @@ public class ConnectionObserver implements Runnable
 
     private void findQuiteHosts( Host[] hosts )
     {
-        for ( int i = 0; i < hosts.length; i++ )
-        {
-            ConnectionSnapshoot shoot = findSnapshoot( hosts[i] );
-            if ( shoot == null )
-            {// this is a new host...
+        for (Host host : hosts) {
+            ConnectionSnapshoot shoot = findSnapshoot(host);
+            if (shoot == null) {// this is a new host...
                 continue;
             }
 
-            if ( shoot.hasBeenQuiet( ) )
-            {
-                quiteList.add( hosts[i] );
+            if (shoot.hasBeenQuiet()) {
+                quiteList.add(host);
             }
         }
     }
 
     private void createSnapshoots( Host[] hosts )
     {
-        for ( int i = 0; i < hosts.length; i++ )
-        {
-            snapshootList.add( new ConnectionSnapshoot( hosts[i] ) );
+        for (Host host : hosts) {
+            snapshootList.add(new ConnectionSnapshoot(host));
         }
     }
 
     private ConnectionSnapshoot findSnapshoot( Host host )
     {
         int size = snapshootList.size();
-        for ( int i = 0; i < size; i++ )
-        {
-            ConnectionSnapshoot shoot = snapshootList.get( i );
-            if ( shoot.host == host )
-            {
+        for (ConnectionSnapshoot shoot : snapshootList) {
+            if (shoot.host == host) {
                 return shoot;
             }
         }
@@ -202,12 +190,8 @@ public class ConnectionObserver implements Runnable
                 return true;
             }
 
-            if ( sentDiff == sendDropDiff && sentDiff != 0 )
-            {
-                return true;
-            }
+            return sentDiff == sendDropDiff && sentDiff != 0;
 
-            return false;
         }
     }
 }

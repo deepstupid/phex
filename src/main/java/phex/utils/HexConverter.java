@@ -65,7 +65,7 @@ public final class HexConverter
      * @param length the number of bytes to use.
      * @return a hex representation.
      */
-    public static final String toHexString( ByteBuffer buffer, int length )
+    public static String toHexString(ByteBuffer buffer, int length )
     {
         return toHexString( buffer, length, null );
     }
@@ -78,7 +78,7 @@ public final class HexConverter
      * @param separator the separator to use between each hex value.
      * @return a hex representation.
      */
-    public static final String toHexString( ByteBuffer buffer, int length, String separator )
+    public static String toHexString(ByteBuffer buffer, int length, String separator )
     {
         if ( length < 1 )
         {
@@ -135,7 +135,7 @@ public final class HexConverter
     /**
      * Converts the data byte array into a hex string.
      */
-    public static final String toHexString( byte[] data )
+    public static String toHexString(byte[] data )
     {
         if ( data.length == 0 )
         {
@@ -148,7 +148,7 @@ public final class HexConverter
      * Converts length bytes from the data byte array starting from offset into
      * a hex string. No separator is used between hex values.
      */
-    public static final String toHexString( byte[] data, int offset, int length )
+    public static String toHexString(byte[] data, int offset, int length )
     {
         return toHexString( data, offset, length, null );
     }
@@ -157,7 +157,7 @@ public final class HexConverter
      * Converts length bytes from the data byte array starting from offset into
      * a hex string. A separator can be provided.
      */
-    public static final String toHexString( byte[] data, int offset, int length, String separator )
+    public static String toHexString(byte[] data, int offset, int length, String separator )
     {
         if ( length < 1 )
         {
@@ -188,7 +188,7 @@ public final class HexConverter
     /**
      * Converts a single byte into a hex string.
      */
-    public static final String toHexString( byte data )
+    public static String toHexString(byte data )
     {
         StringBuffer buffer = new StringBuffer( 2 );
         buffer.append( hexValueArray[ (data >> 4) & 0x0F ] );
@@ -199,7 +199,7 @@ public final class HexConverter
     /**
      * Converts hexString into a byte array.
      */
-    public static final byte[] toBytes( String hexString )
+    public static byte[] toBytes(String hexString )
     {
         if ( hexString == null )
         {

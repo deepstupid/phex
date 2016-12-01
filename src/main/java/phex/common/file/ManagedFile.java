@@ -304,7 +304,7 @@ public class ManagedFile implements ReadOnlyManagedFile {
         return super.toString() + ",File:" + fsFile + ",access:" + accessMode;
     }
 
-    private StackTraceElement[] lastStackTraceElem;
+    //private StackTraceElement[] lastStackTraceElem;
 
     @Override
     protected void finalize() {
@@ -316,9 +316,9 @@ public class ManagedFile implements ReadOnlyManagedFile {
                 NLogger.error(ManagedFile.class, exp);
             }
             NLogger.error(ManagedFile.class, "raFile != null - " + p);
-            for (StackTraceElement el : lastStackTraceElem) {
-                NLogger.error(ManagedFile.class, el.toString());
-            }
+//            for (StackTraceElement el : lastStackTraceElem) {
+//                NLogger.error(ManagedFile.class, el.toString());
+//            }
         }
     }
 }

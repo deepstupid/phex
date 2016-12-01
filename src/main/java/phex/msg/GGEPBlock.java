@@ -31,10 +31,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.zip.DataFormatException;
 
 /**
@@ -78,7 +75,7 @@ public class GGEPBlock
     public GGEPBlock( boolean needsCobsFor0x00 )
     {
         this.needsCobsFor0x00Byte = needsCobsFor0x00;
-        headerToDataMap = new HashMap<String, byte[]>( 3 );
+        headerToDataMap = new HashMap<>(3);
     }
     
     public GGEPBlock( )
@@ -90,9 +87,9 @@ public class GGEPBlock
     public void debugDump()
     {
         System.out.println( "--------------------------------------" );
-        for( String key : headerToDataMap.keySet() )
+        for(Map.Entry<String, byte[]> stringEntry : headerToDataMap.entrySet())
         {
-            System.out.println( key + " = " + headerToDataMap.get( key ) );
+            System.out.println(stringEntry.getKey() + " = " + stringEntry.getValue());
         }
         System.out.println( "--------------------------------------" );
     }
@@ -232,21 +229,15 @@ public class GGEPBlock
     
     private boolean checkIfNeedsCobsEncoding( byte[] data )
     {
-        if ( needsCobsFor0x00Byte && contains0x00Byte( data ))
-        {
-            return true;
-        }
-        return false;
+        return needsCobsFor0x00Byte && contains0x00Byte(data);
     }
     
     private boolean contains0x00Byte(byte[] bytes) 
     {
         if (bytes != null)
         {
-            for (int i = 0; i < bytes.length; i++)
-            {                
-                if (bytes[i] == 0x00)
-                {
+            for (byte aByte : bytes) {
+                if (aByte == 0x00) {
                     return true;
                 }
             }
@@ -432,10 +423,8 @@ public class GGEPBlock
     public static boolean isExtensionHeaderInBlocks( GGEPBlock[] ggepBlocks,
         String headerID )
     {
-        for (int i = 0; i < ggepBlocks.length; i++ )
-        {
-            if ( ggepBlocks[i].isExtensionAvailable( headerID ) )
-            {
+        for (GGEPBlock ggepBlock : ggepBlocks) {
+            if (ggepBlock.isExtensionAvailable(headerID)) {
                 return true;
             }
         }
@@ -451,11 +440,9 @@ public class GGEPBlock
     public static byte[] getExtensionDataInBlocks( GGEPBlock[] ggepBlocks,
         String headerID )
     {
-        for (int i = 0; i < ggepBlocks.length; i++ )
-        {
-            if ( ggepBlocks[i].isExtensionAvailable( headerID ) )
-            {
-                return ggepBlocks[i].getExtensionData( headerID );
+        for (GGEPBlock ggepBlock : ggepBlocks) {
+            if (ggepBlock.isExtensionAvailable(headerID)) {
+                return ggepBlock.getExtensionData(headerID);
             }
         }
         return null;
@@ -464,9 +451,8 @@ public class GGEPBlock
     public static GGEPBlock mergeGGEPBlocks( GGEPBlock[] ggepBlocks )
     {
         GGEPBlock mergedBlock = new GGEPBlock();
-        for ( int i = 0; i < ggepBlocks.length; i++ )
-        {
-            mergedBlock.addAllExtensions( ggepBlocks[i] );
+        for (GGEPBlock ggepBlock : ggepBlocks) {
+            mergedBlock.addAllExtensions(ggepBlock);
         }
         return mergedBlock;
     }
@@ -486,9 +472,8 @@ public class GGEPBlock
     
     public static void debugDumpBlocks( GGEPBlock[] ggepBlocks )
     {
-        for (int i = 0; i < ggepBlocks.length; i++ )
-        {
-            ggepBlocks[i].debugDump();
+        for (GGEPBlock ggepBlock : ggepBlocks) {
+            ggepBlock.debugDump();
         }
     }
 
@@ -500,7 +485,7 @@ public class GGEPBlock
 
         public GGEPParser( )
         {
-            ggepList = new ArrayList<GGEPBlock>( 3 );
+            ggepList = new ArrayList<>(3);
         }
         
         public GGEPBlock[] parseGGEPBlocks( PushbackInputStream inStream )
@@ -604,7 +589,7 @@ public class GGEPBlock
                     }
                     else
                     {
-                        dataArr = new byte[0];
+                        dataArr = IOUtil.EMPTY_BYTE_ARRAY;
                     }
                     // check if there was a parsing failure
                     if ( dataArr != null )
@@ -768,7 +753,7 @@ public class GGEPBlock
                     }
                     else
                     {
-                        dataArr = new byte[0];
+                        dataArr = IOUtil.EMPTY_BYTE_ARRAY;
                     }
                     // check if there was a parsing failure
                     if ( dataArr != null )

@@ -84,7 +84,7 @@ public class AddressCounter
             {
                 return false;
             }
-            addressCountMap.put( significantPart, count.intValue() + 1);
+            addressCountMap.put( significantPart, count + 1);
         }
         else
         {
@@ -104,7 +104,7 @@ public class AddressCounter
                 addressCountMap.remove( significantPart );
                 return;
             }
-            addressCountMap.put( significantPart, count.intValue() - 1);
+            addressCountMap.put( significantPart, count - 1);
         }
     }
     

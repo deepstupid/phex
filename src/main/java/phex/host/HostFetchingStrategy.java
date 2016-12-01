@@ -27,14 +27,14 @@ package phex.host;
  */
 public interface HostFetchingStrategy
 {
-    public enum FetchingReason
+    enum FetchingReason
     {
         EnsureMinHosts,
         UpdateHosts
     }
     
     // temporary workaround method for post manager initialization
-    public void postManagerInitRoutine();
+    void postManagerInitRoutine();
     
     void fetchNewHosts( FetchingReason reason );
 }

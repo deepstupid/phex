@@ -83,7 +83,6 @@ public class LengthLimitedInputStream extends FilterInputStream
                 byte buffer[] = new byte[1024];
                 while ( read( buffer ) >= 0 )
                 {
-                    ;
                 }
             }
             finally

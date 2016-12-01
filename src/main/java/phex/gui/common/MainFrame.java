@@ -249,7 +249,7 @@ public class MainFrame extends JFrame
 
         if ( tabbedPane.getTabCount() == 0 )
         {
-            getContentPane().add( BorderLayout.CENTER, getLogoPanel() );
+            //getContentPane().add( BorderLayout.CENTER, getLogoPanel() );
         }
         else
         {
@@ -333,11 +333,11 @@ public class MainFrame extends JFrame
 
             if ( orgTabCount == 0 )
             {
-                getContentPane().remove( getLogoPanel() );
-                getContentPane().add( BorderLayout.CENTER, tabbedPane );
+//                getContentPane().remove( getLogoPanel() );
+//                getContentPane().add( BorderLayout.CENTER, tabbedPane );
+//                getContentPane().invalidate();
+//                getContentPane().repaint();
                 tabbedPane.setVisible( true );
-                getContentPane().invalidate();
-                getContentPane().repaint();
             }
             tabbedPane.insertTab( tab.getName(), tab.getIcon(), tab,
                 tab.getToolTip(), pos );
@@ -353,10 +353,10 @@ public class MainFrame extends JFrame
 
             if ( tabbedPane.getTabCount() == 0 )
             {
-                getContentPane().remove( tabbedPane );
-                getContentPane().add( BorderLayout.CENTER, getLogoPanel() );
-                getContentPane().invalidate();
-                getContentPane().repaint();
+//                getContentPane().remove( tabbedPane );
+//                getContentPane().add( BorderLayout.CENTER, getLogoPanel() );
+//                getContentPane().invalidate();
+//                getContentPane().repaint();
                 tabbedPane.setVisible( false );
             }
         }
@@ -464,18 +464,18 @@ public class MainFrame extends JFrame
        setTabVisible(libraryTab, true);
     }
 
-    private JPanel getLogoPanel()
-    {
-        if ( logoPanel == null )
-        {
-			ImageIcon icon = new ImageIcon( MainFrame.class.getResource(
-				SplashScreen.SPLASH_IMAGE_NAME ) );
-			Image image = icon.getImage();
-            logoPanel = new FWLogoPanel( image );
-            logoPanel.setBorder( BorderFactory.createLoweredBevelBorder() );
-        }
-        return logoPanel;
-    }
+//    private JPanel getLogoPanel()
+//    {
+//        if ( logoPanel == null )
+//        {
+//			ImageIcon icon = new ImageIcon( MainFrame.class.getResource(
+//				SplashScreen.SPLASH_IMAGE_NAME ) );
+//			Image image = icon.getImage();
+//            logoPanel = new FWLogoPanel( image );
+//            logoPanel.setBorder( BorderFactory.createLoweredBevelBorder() );
+//        }
+//        return logoPanel;
+//    }
     
     public boolean isToolbarVisible()
     {

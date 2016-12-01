@@ -348,7 +348,7 @@ public class MsgHeader
     @Override
     public String toString()
     {
-        return "Header[" + payload + "-" + getPayloadName() + ",TTL=" + ttl
+        return "Header[" + payload + '-' + getPayloadName() + ",TTL=" + ttl
             + ",Hop=" + hopsTaken + ",len=" + dataLength + ",GUID=" + msgID
             + " ]";
     }
@@ -393,7 +393,7 @@ public class MsgHeader
             throw new InvalidMessageException( "Negative body size when creating" +
             		" header from byte array.");
         }
-        else if ( length > MessagePrefs.MaxLength.get().intValue() )
+        else if ( length > MessagePrefs.MaxLength.get())
         {
            NLogger.warn( MsgHeader.class, "Body too big("+length+"). Header: " + 
                header + " Byte Array : " + new String( inbuf ) 

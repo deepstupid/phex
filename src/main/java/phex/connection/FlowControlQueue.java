@@ -27,7 +27,7 @@ import phex.utils.CircularQueue;
  * 'SACHRIFC: Simple Flow Control for Gnutella' proposal by Limewire.
  *
  */
-public class FlowControlQueue
+public class FlowControlQueue extends CircularQueue
 {
     /**
      * The number of messages dropped in this queue.
@@ -55,17 +55,13 @@ public class FlowControlQueue
      */
     private final boolean isLIFO;
 
-    /**
-     * The message queue containing all the queued messages.
-     */
-    private final CircularQueue msgQueue;
-
 
     public FlowControlQueue( int burstSize, int msgTimeout, int maxSize,
         boolean isLIFO)
     {
+        super(maxSize);
         dropCount = 0;
-        msgQueue = new CircularQueue( maxSize );
+        //msgQueue = new CircularQueue( maxSize );
         this.burstSize = burstSize;
         this.msgTimeout = msgTimeout;
         this.isLIFO = isLIFO;
@@ -73,7 +69,7 @@ public class FlowControlQueue
 
     public void addMessage( Message message )
     {
-        Object dropObj = msgQueue.addToTail( message );
+        Object dropObj = addToTail( message );
         if ( dropObj != null )
         {// count dropped msg for stats
             //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
@@ -128,18 +124,18 @@ public class FlowControlQueue
 
     private Message removeNextMessage()
     {
-        if ( msgQueue.isEmpty() )
+        if ( isEmpty() )
         {
             return null;
         }
 
         if ( isLIFO )
         {
-            return (Message)msgQueue.removeFromTail();
+            return (Message)removeFromTail();
         }
         else
         {
-            return (Message)msgQueue.removeFromHead();
+            return (Message)removeFromHead();
         }
     }
 }

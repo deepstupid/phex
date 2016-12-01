@@ -170,7 +170,7 @@ public final class NormalizableURL implements Serializable
                     host = context.getHost();
                     port = context.getPort();
                     file = context.getFile();
-                    int question = file.lastIndexOf( "?" );
+                    int question = file.lastIndexOf('?');
                     if ( question < 0 )
                         path = file;
                     else
@@ -245,9 +245,7 @@ public final class NormalizableURL implements Serializable
      * @exception MalformedURLException
      *                is never thrown, but present for compatible APIs
      */
-    public NormalizableURL(String protocol, String host, int port, String file)
-        throws MalformedURLException
-    {
+    public NormalizableURL(String protocol, String host, int port, String file) {
 
         this.protocol = protocol;
         this.host = host;
@@ -266,7 +264,7 @@ public final class NormalizableURL implements Serializable
             path = file;
 
         if ( (host != null) && (host.length() > 0) )
-            authority = (port == -1) ? host : host + ":" + port;
+            authority = (port == -1) ? host : host + ':' + port;
 
     }
 
@@ -460,7 +458,7 @@ public final class NormalizableURL implements Serializable
         if ( path == null )
         {
             if ( query != null )
-                file = "?" + query;
+                file = '?' + query;
             else
                 file = "";
             return;
@@ -472,7 +470,7 @@ public final class NormalizableURL implements Serializable
         {
             path = "/";
             if ( query != null )
-                file = path + "?" + query;
+                file = path + '?' + query;
             else
                 file = path;
             return;
@@ -482,7 +480,7 @@ public final class NormalizableURL implements Serializable
         if ( normalized.indexOf( '\\' ) >= 0 )
             normalized = normalized.replace( '\\', '/' );
         if ( !normalized.startsWith( "/" ) )
-            normalized = "/" + normalized;
+            normalized = '/' + normalized;
 
         // Resolve occurrences of "//" in the normalized path
         while ( true )
@@ -536,7 +534,7 @@ public final class NormalizableURL implements Serializable
         // Return the normalized path that we have completed
         path = normalized;
         if ( query != null )
-            file = path + "?" + query;
+            file = path + '?' + query;
         else
             file = path;
 
@@ -557,9 +555,7 @@ public final class NormalizableURL implements Serializable
             return (false);
         if ( port != other.getPort() )
             return (false);
-        if ( !compare( file, other.getFile() ) )
-            return (false);
-        return (true);
+        return compare(file, other.getFile());
 
     }
 
@@ -574,7 +570,7 @@ public final class NormalizableURL implements Serializable
         if ( protocol != null )
         {
             sb.append( protocol );
-            sb.append( ":" );
+            sb.append(':');
         }
         if ( authority != null )
         {
@@ -620,7 +616,7 @@ public final class NormalizableURL implements Serializable
         sb.append( ref );
         sb.append( ", userInfo=" );
         sb.append( userInfo );
-        sb.append( "]" );
+        sb.append(']');
         return (sb.toString());
 
         // return (toExternalForm());
@@ -638,15 +634,12 @@ public final class NormalizableURL implements Serializable
      * @param second
      *            Second string
      */
-    private boolean compare(String first, String second)
+    private static boolean compare(String first, String second)
     {
 
         if ( first == null )
         {
-            if ( second == null )
-                return (true);
-            else
-                return (false);
+            return second == null;
         }
         else
         {
@@ -699,7 +692,7 @@ public final class NormalizableURL implements Serializable
         // Parse the authority section
         if ( spec.indexOf( "//", start ) == start )
         {
-            int pathStart = spec.indexOf( "/", start + 2 );
+            int pathStart = spec.indexOf('/', start + 2 );
             if ( (pathStart >= 0) && (pathStart < limit) )
             {
                 authority = spec.substring( start + 2, pathStart );
@@ -740,11 +733,11 @@ public final class NormalizableURL implements Serializable
         }
 
         // Parse the path section
-        if ( spec.indexOf( "/", start ) == start )
+        if ( spec.indexOf('/', start ) == start )
         { // Absolute path
             path = spec.substring( start, limit );
             if ( query != null )
-                file = path + "?" + query;
+                file = path + '?' + query;
             else
                 file = path;
             return;
@@ -754,7 +747,7 @@ public final class NormalizableURL implements Serializable
         if ( path == null )
         {
             if ( query != null )
-                file = "?" + query;
+                file = '?' + query;
             else
                 file = null;
             return;
@@ -766,7 +759,7 @@ public final class NormalizableURL implements Serializable
             path += "/../";
         path += spec.substring( start, limit );
         if ( query != null )
-            file = path + "?" + query;
+            file = path + '?' + query;
         else
             file = path;
         return;

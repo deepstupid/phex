@@ -406,7 +406,7 @@ public class AddressUtils
         int v2 = (ip[2] <<  8) & 0xFF00;
         int v3 = (ip[1] << 16) & 0xFF0000;
         int v4 = (ip[0] << 24);
-        int ipValue = ((v4|v3|v2|v1)) & 0xFFFFFFFF;
+        int ipValue = ((v4|v3|v2|v1));// & 0xFFFFFFFF;
         return ipValue;
     }
     

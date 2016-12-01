@@ -32,7 +32,6 @@ import phex.event.PhexEventService;
 import phex.event.PhexEventTopics;
 import phex.gui.common.GUIRegistry;
 import phex.gui.common.MainFrame;
-import phex.gui.common.SplashScreen;
 import phex.gui.prefs.InterfacePrefs;
 import phex.gui.prefs.PhexGuiPrefs;
 import phex.prefs.core.PhexCorePrefs;
@@ -54,7 +53,6 @@ import java.util.Iterator;
  */
 public class PhexRunner
 {
-    private static SplashScreen _splashScreen;
 
     private static PhexRunner _singleton = null;
 
@@ -100,13 +98,13 @@ public class PhexRunner
         long start = System.currentTimeMillis();
         long end;
 
-        // If there are no args to evaluate, show splash asap.
-        if (args == null || args.length == 0)
-        {
-            showSplash();
-            //end = System.currentTimeMillis();
-            //System.out.println("Splash time: " + (end-start));
-        }
+//        // If there are no args to evaluate, show splash asap.
+//        if (args == null || args.length == 0)
+//        {
+//            showSplash();
+//            //end = System.currentTimeMillis();
+//            //System.out.println("Splash time: " + (end-start));
+//        }
 
         validateJavaVersion();
 
@@ -175,14 +173,14 @@ public class PhexRunner
         try
         {
             // Might be the case when arguments are used to start Phex,
-            // but there is no Phex running yet.
-            if (_splashScreen == null)
-            {
-                showSplash();
-
-                //end = System.currentTimeMillis();
-                //System.out.println("Splash time: " + (end-start));
-            }
+//            // but there is no Phex running yet.
+//            if (_splashScreen == null)
+//            {
+//                showSplash();
+//
+//                //end = System.currentTimeMillis();
+//                //System.out.println("Splash time: " + (end-start));
+//            }
 
             // Initialize settings.
             SystemProperties.migratePhexConfigRoot();
@@ -207,12 +205,6 @@ public class PhexRunner
             {
                 // Running in head-less mode so of course this
                 // doesn't work.
-            }
-
-            if (_splashScreen != null)
-            {
-                _splashScreen.closeSplash();
-                _splashScreen = null;
             }
 
             MainFrame mainFrame = null;
@@ -265,19 +257,19 @@ public class PhexRunner
         return true;
     }
 
-    private static void showSplash()
-    {
-        try 
-        {
-            _splashScreen = new SplashScreen();
-            _splashScreen.showSplash();
-        }
-        catch (java.awt.HeadlessException ex)
-        {
-            // Running in head-less mode so of course the splash
-            // doesn't work.
-        }
-    }
+//    private static void showSplash()
+//    {
+//        try
+//        {
+//            _splashScreen = new SplashScreen();
+//            _splashScreen.showSplash();
+//        }
+//        catch (java.awt.HeadlessException ex)
+//        {
+//            // Running in head-less mode so of course the splash
+//            // doesn't work.
+//        }
+//    }
 
     /**
      * @param iterator

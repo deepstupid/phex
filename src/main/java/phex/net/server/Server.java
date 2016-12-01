@@ -84,7 +84,7 @@ public abstract class Server implements Runnable
     public Server( Servent servent )
     {
         this.servent = servent;
-        hasConnectedIncomming = ConnectionPrefs.HasConnectedIncomming.get().booleanValue();
+        hasConnectedIncomming = ConnectionPrefs.HasConnectedIncomming.get();
         lastInConnectionTime = -1;
         isRunning = false;
         
@@ -115,7 +115,7 @@ public abstract class Server implements Runnable
             FirewallCheckTimer.TIMER_PERIOD,
             FirewallCheckTimer.TIMER_PERIOD );
         
-        bind( NetworkPrefs.ListeningPort.get().intValue() );
+        bind(NetworkPrefs.ListeningPort.get());
         
         try {
             upnpMapper.initialize();
@@ -150,7 +150,7 @@ public abstract class Server implements Runnable
         firewallCheckTimer.cancel();
         firewallCheckTimer = null;
         
-        ConnectionPrefs.HasConnectedIncomming.set( Boolean.valueOf( hasConnectedIncomming ) );
+        ConnectionPrefs.HasConnectedIncomming.set(hasConnectedIncomming);
         
         closeServer();
         
@@ -221,7 +221,7 @@ public abstract class Server implements Runnable
         }
         else
         {
-            return NetworkPrefs.ListeningPort.get().intValue();
+            return NetworkPrefs.ListeningPort.get();
         }
     }
 

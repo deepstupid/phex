@@ -42,8 +42,8 @@ public class CatchedHostCache
     
     public CatchedHostCache( )
     {
-        sortedHosts = new TreeSet<CaughtHost>( new CaughtHostComparator() );
-        addressHostMapping = new HashMap<DestAddress, CaughtHost>();
+        sortedHosts = new TreeSet<>(new CaughtHostComparator());
+        addressHostMapping = new HashMap<>();
     }
     
     /**
@@ -69,10 +69,10 @@ public class CatchedHostCache
         }
         sortedHosts.add(host);
 
-        if ( sortedHosts.size() >= NetworkPrefs.MaxHostInHostCache.get().intValue() ) {
+        if ( sortedHosts.size() >= NetworkPrefs.MaxHostInHostCache.get()) {
             addressHostMapping.put( host.getHostAddress(), host );
             sortedHosts.add( host );
-            if ( sortedHosts.size() >= NetworkPrefs.MaxHostInHostCache.get().intValue() )
+            if ( sortedHosts.size() >= NetworkPrefs.MaxHostInHostCache.get())
             {
                 CaughtHost dropObject = sortedHosts.first(); 
                 remove( dropObject );

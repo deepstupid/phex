@@ -74,7 +74,7 @@ public class LeafHandshakeHandler extends HandshakeHandler
         // check ultrapeer header
         HTTPHeader header = headers.getHeader( GnutellaHeaderNames.X_ULTRAPEER );
         boolean isUltrapeer = header != null && Boolean.valueOf(
-            header.getValue() ).booleanValue();
+                header.getValue());
         if ( !isUltrapeer )
         {
             if ( isOutgoing )

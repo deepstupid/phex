@@ -80,7 +80,7 @@ public class QRPatchTableMsg extends RouteTableUpdateMsg
             sequenceNumber > sequenceSize )
         {
             throw new InvalidMessageException(
-                "Invalid sequence number or size: " + sequenceNumber + "/" +
+                "Invalid sequence number or size: " + sequenceNumber + '/' +
                 sequenceSize );
         }
         compressor = aBody[3];

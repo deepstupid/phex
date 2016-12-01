@@ -69,7 +69,7 @@ public class URLUtil
     public static String buildFileURL( RemoteFile file )
     {
         return "http://" + file.getHostAddress().getFullHostName() + "/get/"
-            + file.getFileIndex() + "/" + URLCodecUtils.encodeURL( file.getFilename() );
+            + file.getFileIndex() + '/' + URLCodecUtils.encodeURL( file.getFilename() );
     }
 
     public static String buildName2ResourceURL( URN urn )
@@ -80,7 +80,7 @@ public class URLUtil
     public static String buildName2ResThexURL( URN urn, String tigerTreeRoot )
     {
         return GnutellaRequest.GNUTELLA_URI_RES_THEX_PREFIX + urn.getAsString()
-            + ";" + tigerTreeRoot;
+            + ';' + tigerTreeRoot;
     }
 
     public static String buildFullName2ResourceURL( DestAddress ha, URN urn )
@@ -102,7 +102,7 @@ public class URLUtil
         {
             return uri.getHost();
         }
-        int at = path.lastIndexOf("/");
+        int at = path.lastIndexOf('/');
         int to = path.length();
         return (at >= 0) ? path.substring(at + 1, to) : path;
     }
@@ -119,7 +119,7 @@ public class URLUtil
 
         if ( query != null && query.length() > 0 )
         {
-            return path + "?" + query;
+            return path + '?' + query;
         }
         
         if ( path == null )

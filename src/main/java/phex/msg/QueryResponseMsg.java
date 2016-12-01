@@ -302,7 +302,7 @@ public class QueryResponseMsg extends Message
                 isServerBusyByte = SERVER_BUSY_MASK;
             }
             byte isGGEPUsedByte = (byte)0;
-            if ( LibraryPrefs.AllowBrowsing.get().booleanValue() 
+            if (LibraryPrefs.AllowBrowsing.get()
               || ( pushProxyAddresses != null && pushProxyAddresses.length > 0 ) )
             {
                 isGGEPUsedByte = GGEP_MASK;
@@ -326,14 +326,14 @@ public class QueryResponseMsg extends Message
             // private QHD area
             // mark for chat able.
             bodyStream.write(
-                    NetworkPrefs.AllowChatConnection.get().booleanValue() ?
+                    NetworkPrefs.AllowChatConnection.get() ?
                         (byte) 0x01 :
                         (byte) 0x00
             );
 
             //GGEP block
-            byte[] ggepBytes = GGEPBlock.getQueryReplyGGEPBlock( 
-                LibraryPrefs.AllowBrowsing.get().booleanValue(), pushProxyAddresses );
+            byte[] ggepBytes = GGEPBlock.getQueryReplyGGEPBlock(
+                    LibraryPrefs.AllowBrowsing.get(), pushProxyAddresses );
             if ( ggepBytes.length > 0 )
             {
                 bodyStream.write( ggepBytes );
@@ -617,7 +617,7 @@ public class QueryResponseMsg extends Message
         int offset = 11;
 
         uniqueResultCount = 0;
-        Set<URN> uniqueURNs = new HashSet<URN>();
+        Set<URN> uniqueURNs = new HashSet<>();
         records = new QueryResponseRecord[ recordCount ];
         
         int highestAltLocCount = 0;
@@ -782,14 +782,12 @@ public class QueryResponseMsg extends Message
                         "QueryRespRecord with " + highestAltLocCount + " alt locs"
                         + " - vendor: " + vendorCode + " host: " + getDestAddress() + " access: " 
                         + securityService.controlHostAddressAccess( getDestAddress() ) );
-                    for ( int i=0; i < records.length; i++ )
-                    {
-                        DestAddress[] altLocs = records[i].getAlternateLocations();
-                        if ( altLocs != null && altLocs.length > maxAcceptedAltLocs )
-                        {
-                            NLogger.warn( QueryResponseMsg.class,
-                                "QueryRespRecord with " + altLocs.length + " alt locs"
-                                + " - file: " + records[i].getFilename() );
+                    for (QueryResponseRecord record : records) {
+                        DestAddress[] altLocs = record.getAlternateLocations();
+                        if (altLocs != null && altLocs.length > maxAcceptedAltLocs) {
+                            NLogger.warn(QueryResponseMsg.class,
+                                    "QueryRespRecord with " + altLocs.length + " alt locs"
+                                            + " - file: " + record.getFilename());
                         }
                     }
                     if ( getHeader().getHopsTaken() <= 1 )
@@ -802,7 +800,7 @@ public class QueryResponseMsg extends Message
                 }
                 throw new InvalidMessageException( 
                    "Number of query response record alt-locs exceed the acceptable maximum for LIME: "
-                   + highestAltLocCount + "/" + 10 );
+                   + highestAltLocCount + '/' + 10 );
             }
 
             //Parse private area of Limewire and Shareaza to read out chat

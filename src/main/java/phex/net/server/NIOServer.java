@@ -116,8 +116,8 @@ public class NIOServer extends Server
         
         PresentationManager presentationMgr = PresentationManager.getInstance();
         DestAddress newAddress = presentationMgr.createHostAddress( 
-            IpAddress.LOCAL_HOST_IP, 
-            NetworkPrefs.ListeningPort.get().intValue() );
+            IpAddress.LOCAL_HOST_IP,
+                NetworkPrefs.ListeningPort.get());
         localAddress.updateLocalAddress( newAddress );
         synchronized(this)
         {
@@ -135,7 +135,7 @@ public class NIOServer extends Server
     {
         socketChannel.configureBlocking(true);
         Socket clientSocket = socketChannel.socket();
-        clientSocket.setSoTimeout( NetworkPrefs.TcpRWTimeout.get().intValue() );
+        clientSocket.setSoTimeout(NetworkPrefs.TcpRWTimeout.get());
 
         IpAddress ip = new IpAddress( clientSocket.getInetAddress().getAddress() );
         PresentationManager presentationMgr = PresentationManager.getInstance();

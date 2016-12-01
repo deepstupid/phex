@@ -34,7 +34,7 @@ import java.util.Properties;
 public class VendorCodes
 {
     public static final String UNKNOWN = "?";
-    private static HashMap<String, String> vendorNames;
+    final private static HashMap<String, String> vendorNames = new HashMap();
     
     public static String getVendorName( String vendorCode )
     {
@@ -53,7 +53,7 @@ public class VendorCodes
     @SuppressWarnings("unchecked")
     private static synchronized void initVendorNames()
     {
-        vendorNames = new HashMap();
+
         synchronized( vendorNames )
         {
             InputStream stream = Localizer.class.getResourceAsStream( "/phex/resources/VendorCodes.properties" );

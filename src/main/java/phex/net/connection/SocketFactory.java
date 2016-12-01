@@ -51,7 +51,7 @@ public final class SocketFactory
     public static SocketFacade connect( DestAddress address ) 
         throws IOException
     {
-        return connect( address, NetworkPrefs.TcpConnectTimeout.get().intValue(),
+        return connect( address, NetworkPrefs.TcpConnectTimeout.get(),
             null );
     }
     
@@ -63,7 +63,7 @@ public final class SocketFactory
     public static SocketFacade connect( DestAddress address, Runnable acquireCallback ) 
         throws IOException
     {
-        return connect( address, NetworkPrefs.TcpConnectTimeout.get().intValue(), 
+        return connect( address, NetworkPrefs.TcpConnectTimeout.get(),
             acquireCallback );
     }
 
@@ -92,7 +92,7 @@ public final class SocketFactory
             throw new IOException("Invalid DestAddress: "
                 + address );
         }
-        if ( ProxyPrefs.UseSocks5.get().booleanValue() )
+        if (ProxyPrefs.UseSocks5.get())
         {
             return connectSock5( address, acquireCallback);
         }
@@ -111,13 +111,13 @@ public final class SocketFactory
         try
         {
             socket = createSocket( new DefaultDestAddress( ProxyPrefs.Socks5Host.get(),
-                ProxyPrefs.Socks5Port.get().intValue() ), 
-                NetworkPrefs.TcpConnectTimeout.get().intValue(), acquireCallback );
+                            ProxyPrefs.Socks5Port.get()),
+                    NetworkPrefs.TcpConnectTimeout.get(), acquireCallback );
             is = Channels.newInputStream( socket.getChannel() );
             os = Channels.newOutputStream( socket.getChannel() );
 
             byte[] header;
-            if ( ProxyPrefs.Socks5Authentication.get().booleanValue()
+            if (ProxyPrefs.Socks5Authentication.get()
                 && ProxyPrefs.Socks5User.get().length() > 0)
             {
                 header = new byte[4];
@@ -298,11 +298,10 @@ public final class SocketFactory
      */
     private static SocketFacade createSocket( DestAddress address, int connectTimeout,
         Runnable acquireCallback )
-        throws IOException, SocketException
-    {
+        throws IOException {
         synchronized ( LOCK )
         {
-            while ( concurrentConnectAttempts >= NetworkPrefs.MaxConcurrentConnectAttempts.get().intValue() )
+            while ( concurrentConnectAttempts >= NetworkPrefs.MaxConcurrentConnectAttempts.get())
             {
                 try
                 {
@@ -325,7 +324,7 @@ public final class SocketFactory
             
             SocketFacade socket = PresentationManager.getInstance().createSocket(
                 address, connectTimeout );
-            socket.setSoTimeout( NetworkPrefs.TcpRWTimeout.get().intValue() );
+            socket.setSoTimeout(NetworkPrefs.TcpRWTimeout.get());
             return socket;
         }
         finally

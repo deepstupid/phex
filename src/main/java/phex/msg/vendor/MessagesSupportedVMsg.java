@@ -65,7 +65,7 @@ public class MessagesSupportedVMsg extends VendorMsg
                 "Vendor Message 'MessagesSupported' invalid data length: "
                     + data.length);
         }
-        supportedMessages = new HashSet<SupportedMessage>();
+        supportedMessages = new HashSet<>();
         
         ByteArrayInputStream dataStream = new ByteArrayInputStream(data, 0,
             data.length);
@@ -97,7 +97,7 @@ public class MessagesSupportedVMsg extends VendorMsg
     {
         super(VENDORID_NULL, SUBSELECTOR_MESSAGES_SUPPORTED, VERSION, 
             IOUtil.EMPTY_BYTE_ARRAY );
-        supportedMessages = new HashSet<SupportedMessage>();
+        supportedMessages = new HashSet<>();
         createSupportedMsgData( );
     }
     
@@ -281,9 +281,7 @@ public class MessagesSupportedVMsg extends VendorMsg
                 return false;
             if (!Arrays.equals(vendorId, other.vendorId))
                 return false;
-            if (version != other.version)
-                return false;
-            return true;
+            return version == other.version;
         }
     }
 }

@@ -42,8 +42,8 @@ public class GnutellaInputStream extends InputStream
     /**
      * The init length of the buffer.
      */
-    private final int READ_BUFFER_LENGTH = 2048;
-    private final int LINE_BUFFER_LENGTH = 64;
+    private static final int READ_BUFFER_LENGTH = 2048;
+    private static final int LINE_BUFFER_LENGTH = 64;
 
     private volatile byte[] buffer;
     private int position;
@@ -67,12 +67,15 @@ public class GnutellaInputStream extends InputStream
         throws IOException
     {
         // first we need to inflate what is left in out buffer
-        inflater = new Inflater();
-        if ( (count - position) > 0 )
-        {
-            byte[] dummy = new byte[(count - position)];
+        Inflater inflater = new Inflater();
+        this.inflater = inflater;
 
-            System.arraycopy( buffer, position, dummy, 0, (count - position) );
+        int r = count - position;
+        if ( r > 0 )
+        {
+            byte[] dummy = new byte[r];
+
+            System.arraycopy( buffer, position, dummy, 0, r);
             inflater.setInput( dummy );
 
             try

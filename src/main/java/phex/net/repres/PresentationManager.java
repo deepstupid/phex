@@ -92,7 +92,7 @@ public abstract class PresentationManager implements DestAddressFactory
      * this method you can't rely on the availability of other managers.
      * @return true is initialization was successful, false otherwise.
      */
-    public boolean initialize()
+    public static boolean initialize()
     {
         return true;
     }
@@ -104,7 +104,7 @@ public abstract class PresentationManager implements DestAddressFactory
      * availability of other managers.
      * @return true is initialization was successful, false otherwise.
      */
-    public boolean onPostInitialization()
+    public static boolean onPostInitialization()
     {
         return true;
     }

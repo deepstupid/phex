@@ -48,26 +48,21 @@ public class EventAnnotationProcessor
         }
         Class cl = obj.getClass();
         Method[] methods = cl.getMethods();
-        for ( int i = 0; i < methods.length; i++ )
-        {
-            Method method = methods[i];
+        for (Method method : methods) {
             EventSubscriber classAnnotation = method
-                .getAnnotation( EventSubscriber.class );
-            if ( classAnnotation != null )
-            {
-                process( classAnnotation, obj, method );
+                    .getAnnotation(EventSubscriber.class);
+            if (classAnnotation != null) {
+                process(classAnnotation, obj, method);
             }
-            EventTopicSubscriber topicAnnotation = method.getAnnotation( 
-                EventTopicSubscriber.class );
-            if ( topicAnnotation != null )
-            {
-                process( topicAnnotation, obj, method );
+            EventTopicSubscriber topicAnnotation = method.getAnnotation(
+                    EventTopicSubscriber.class);
+            if (topicAnnotation != null) {
+                process(topicAnnotation, obj, method);
             }
-            EventTopicPatternSubscriber topicPatternAnnotation = method.getAnnotation( 
-                EventTopicPatternSubscriber.class );
-            if ( topicPatternAnnotation != null )
-            {
-                process( topicPatternAnnotation, obj, method );
+            EventTopicPatternSubscriber topicPatternAnnotation = method.getAnnotation(
+                    EventTopicPatternSubscriber.class);
+            if (topicPatternAnnotation != null) {
+                process(topicPatternAnnotation, obj, method);
             }
         }
     }
@@ -77,11 +72,11 @@ public class EventAnnotationProcessor
     {
         // Check args
         String topicPattern = topicPatternAnnotation.topicPattern();
-        if ( topicPattern == null )
-        {
-            throw new IllegalArgumentException(
-                "Topic pattern cannot be null for EventTopicPatternSubscriber annotation" );
-        }
+//        if ( topicPattern == null )
+//        {
+//            throw new IllegalArgumentException(
+//                "Topic pattern cannot be null for EventTopicPatternSubscriber annotation" );
+//        }
 
         // Create proxy and subscribe
         Pattern pattern = Pattern.compile( topicPattern );
@@ -100,11 +95,11 @@ public class EventAnnotationProcessor
     {
         // Check args
         String topic = topicAnnotation.topic();
-        if ( topic == null )
-        {
-            throw new IllegalArgumentException(
-                "Topic cannot be null for EventTopicSubscriber annotation" );
-        }
+//        if ( topic == null )
+//        {
+//            throw new IllegalArgumentException(
+//                "Topic cannot be null for EventTopicSubscriber annotation" );
+//        }
 
         // Create proxy and subscribe
         ProxyTopicSubscriber subscriber = new ProxyTopicSubscriber( obj,
@@ -120,12 +115,12 @@ public class EventAnnotationProcessor
     {
         // Check args
         Class eventClass = annotation.eventClass();
-        if ( eventClass == null )
-        {
-            throw new IllegalArgumentException(
-                "Event class cannot be null for EventSubscriber annotation" );
-        }
-        else if ( UseTheClassOfTheAnnotatedMethodsParameter.class
+//        if ( eventClass == null )
+//        {
+//            throw new IllegalArgumentException(
+//                "Event class cannot be null for EventSubscriber annotation" );
+//        }else
+        if ( UseTheClassOfTheAnnotatedMethodsParameter.class
             .equals( eventClass ) )
         {
             Class[] params = method.getParameterTypes();

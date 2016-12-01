@@ -106,18 +106,18 @@ public class UltrapeerCapabilityChecker extends TimerTask
         boolean isCapable =
             // the first check if we are allowed to become a ultrapeer at all...
             // if not we don't need to continue checking...
-            ConnectionPrefs.AllowToBecomeUP.get().booleanValue() &&
+                ConnectionPrefs.AllowToBecomeUP.get() &&
             // host should not be firewalled.
             !servent.isFirewalled() &&
             // host should provide a Ultrapeer capable OS
             isUltrapeerOS &&
             // the connection speed should be more then single ISDN
-            BandwidthPrefs.NetworkSpeedKbps.get().intValue() > 64 &&
+                    BandwidthPrefs.NetworkSpeedKbps.get() > 64 &&
             // also we should provide at least 10KB network bandwidth
-            BandwidthPrefs.MaxNetworkBandwidth.get().intValue() > 10 * 1024 &&
+                    BandwidthPrefs.MaxNetworkBandwidth.get() > 10 * 1024 &&
             // and at least 14KB total bandwidth (because network bandwidth might
             // be set to unlimited)
-            BandwidthPrefs.MaxTotalBandwidth.get().intValue() > 14 * 1024 &&
+                    BandwidthPrefs.MaxTotalBandwidth.get() > 14 * 1024 &&
             // the current uptime should be at least 60 minutes or 30 minutes in avg.
             ( ((LongObj)uptimeProvider.getValue()).getValue() > ONE_HOUR ||
               ((LongObj)uptimeProvider.getAverageValue()).getValue() > HALF_HOUR );
@@ -155,7 +155,7 @@ public class UltrapeerCapabilityChecker extends TimerTask
 
     private void logTraceUltrapeerCapable(UptimeStatisticProvider uptimeProvider)
     {
-        if ( !ConnectionPrefs.AllowToBecomeUP.get().booleanValue() )
+        if ( !ConnectionPrefs.AllowToBecomeUP.get())
         {
             logger.trace( "Not allowed to become UP." );
         }
@@ -167,15 +167,15 @@ public class UltrapeerCapabilityChecker extends TimerTask
         {
             logger.trace( "No ultrapeer OS." );
         }
-        if ( BandwidthPrefs.NetworkSpeedKbps.get().intValue() <= 64 )
+        if (BandwidthPrefs.NetworkSpeedKbps.get() <= 64 )
         {
             logger.trace( "Not enough network speed" );
         }
-        if ( BandwidthPrefs.MaxNetworkBandwidth.get().intValue() <= 10 * 1024 )
+        if (BandwidthPrefs.MaxNetworkBandwidth.get() <= 10 * 1024 )
         {
             logger.trace( "Not enough max network bandwidth" );
         }
-        if ( BandwidthPrefs.MaxTotalBandwidth.get().intValue() <= 14 * 1024 )
+        if (BandwidthPrefs.MaxTotalBandwidth.get() <= 14 * 1024 )
         {
             logger.trace( "Not enough max total bandwidth" );
         }

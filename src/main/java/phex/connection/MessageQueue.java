@@ -224,7 +224,7 @@ public class MessageQueue
         }
     }
 
-    private int calculatePriority( Message msg )
+    private static int calculatePriority(Message msg)
     {
         MsgHeader header = msg.getHeader();
         int messageCode = header.getPayload();

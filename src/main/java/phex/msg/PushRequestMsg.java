@@ -137,11 +137,11 @@ public class PushRequestMsg extends Message
     public String toString()
     {
         return	"[" +
-            getHeader() + " " +
+            getHeader() + ' ' +
                 "ClientGUID=" + clientGUID + ", " +
                 "FileIndex=" + fileIndex + ", " +
                 "RequestAddress=" + requestAddress + ", " +
-                "]";
+                ']';
     }
 
     private void buildBody()

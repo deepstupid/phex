@@ -133,8 +133,7 @@ public class Connection
     @Deprecated
     public String readLine() throws IOException
     {
-        String line = getInputStream().readLine();
-        return line;
+        return getInputStream().readLine();
     }
 
     /**

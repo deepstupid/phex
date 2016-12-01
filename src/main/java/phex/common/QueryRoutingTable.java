@@ -199,14 +199,12 @@ public class QueryRoutingTable
     private void add( String absoluteFilePath )
     {
         String[] words = splitFilePath( absoluteFilePath );
-        for ( int i = 0; i < words.length; i++ )
-        {
-            int hashVal = qrpHash( words[i], 0, words[i].length(), tableBits );
-            if ( !qrTable.get( hashVal ) )
-            {
+        for (String word : words) {
+            int hashVal = qrpHash(word, 0, word.length(), tableBits);
+            if (!qrTable.get(hashVal)) {
                 entryCount++;
                 // instead of TTL just mark slot
-                qrTable.set( hashVal );
+                qrTable.set(hashVal);
                 resizedQRTable = null;
             }
         }
@@ -242,12 +240,10 @@ public class QueryRoutingTable
         if ( query.hasQueryURNs() && isInvalidSearchString )
         {
             URN[] urns = query.getQueryURNs();
-            for( int i = 0; i < urns.length; i++ )
-            {
-                String urnString = urns[i].getAsString();
-                int hashVal = qrpHash( urnString, 0, urnString.length(), tableBits );
-                if( qrTable.get( hashVal ) )
-                {// if we have a single match we have a match here.
+            for (URN urn : urns) {
+                String urnString = urn.getAsString();
+                int hashVal = qrpHash(urnString, 0, urnString.length(), tableBits);
+                if (qrTable.get(hashVal)) {// if we have a single match we have a match here.
                     return true;
                 }
             }
@@ -261,11 +257,9 @@ public class QueryRoutingTable
         }
 
         String[] words = splitQueryString( searchString );
-        for ( int i = 0; i < words.length; i++ )
-        {
-            int hashVal = qrpHash( words[i], 0, words[i].length(), tableBits );
-            if ( !qrTable.get( hashVal ) )
-            {
+        for (String word : words) {
+            int hashVal = qrpHash(word, 0, word.length(), tableBits);
+            if (!qrTable.get(hashVal)) {
                 return false;
             }
         }
@@ -375,46 +369,39 @@ public class QueryRoutingTable
                 // used to determine if a new entry was set
                 boolean prevBitSet, currBitSet;
                 int loggedInvalidPatchFieldValue = 0;
-                for ( int i = 0; i < patchData.length; i++ )
-                {
-                    prevBitSet = qrTable.get( patchPosition );
-                    
+                for (byte aPatchData : patchData) {
+                    prevBitSet = qrTable.get(patchPosition);
+
                     //if ( patchData[i] == 1 - infinity )
-                    if ( patchData[i] < 0 )// use this to also accept invalid clients
+                    if (aPatchData < 0)// use this to also accept invalid clients
                     {
-                        qrTable.set( patchPosition );
+                        qrTable.set(patchPosition);
                         resizedQRTable = null;
                     }
                     //else if ( patchData[i] == infinity - 1 )
-                    else if ( patchData[i] > 0 )// use this to also accept invalid clients
+                    else if (aPatchData > 0)// use this to also accept invalid clients
                     {
-                        qrTable.clear( patchPosition );
+                        qrTable.clear(patchPosition);
                         resizedQRTable = null;
-                    }
-                    else if ( patchData[i] != 0 )
-                    {// we received a QRT with a patch data value that is not
-                     // really in range...
-                     // we like to log each value only once therefore we
-                     // flag the logged value
-                        if ( loggedInvalidPatchFieldValue == 0 ||
-                             loggedInvalidPatchFieldValue != patchData[i] )
-                        {
+                    } else if (aPatchData != 0) {// we received a QRT with a patch data value that is not
+                        // really in range...
+                        // we like to log each value only once therefore we
+                        // flag the logged value
+                        if (loggedInvalidPatchFieldValue == 0 ||
+                                loggedInvalidPatchFieldValue != aPatchData) {
                             NLogger.warn(QueryRoutingTable.class,
-                                "Received invalid PatchData field value: " 
-                                + patchData[i] + " - " + sourceHost );
-                            loggedInvalidPatchFieldValue = patchData[i];
+                                    "Received invalid PatchData field value: "
+                                            + aPatchData + " - " + sourceHost);
+                            loggedInvalidPatchFieldValue = aPatchData;
                         }
                     }
-                    currBitSet = qrTable.get( patchPosition );
-                    if ( prevBitSet && !currBitSet )
-                    {
-                        entryCount --;
+                    currBitSet = qrTable.get(patchPosition);
+                    if (prevBitSet && !currBitSet) {
+                        entryCount--;
+                    } else if (!prevBitSet && currBitSet) {
+                        entryCount++;
                     }
-                    else if ( !prevBitSet && currBitSet )
-                    {
-                        entryCount ++;
-                    }
-                    patchPosition ++;
+                    patchPosition++;
                 }
             }
             catch ( IndexOutOfBoundsException exp )
@@ -599,17 +586,14 @@ public class QueryRoutingTable
         // add QRT of leafs...
         Host[] leaves = servent.getHostService().getNetworkHostsContainer().getLeafConnections();
         QueryRoutingTable hostQRT;
-        for ( int i = 0; i < leaves.length; i++ )
-        {
+        for (Host leave : leaves) {
             // http://groups.yahoo.com/group/the_gdf/message/23092
-            if ( leaves[i].getHopsFlowLimit() < 3 )
-            {// don't aggregate QRT of a leaf which doesn't want any queries...
+            if (leave.getHopsFlowLimit() < 3) {// don't aggregate QRT of a leaf which doesn't want any queries...
                 continue;
             }
-            hostQRT = leaves[i].getLastReceivedRoutingTable();
-            if ( hostQRT != null )
-            {
-                qrTable.aggregateToRouteTable( hostQRT );
+            hostQRT = leave.getLastReceivedRoutingTable();
+            if (hostQRT != null) {
+                qrTable.aggregateToRouteTable(hostQRT);
             }
         }
     }

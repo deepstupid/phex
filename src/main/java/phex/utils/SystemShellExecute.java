@@ -133,7 +133,7 @@ public class SystemShellExecute
             result[i] = StringUtils.replace(result[i], "%filepath%", filepath, -1);
             
             replacedCmd.append( result[i] );
-            replacedCmd.append( " " );
+            replacedCmd.append(' ');
         }
         NLogger.debug(SystemShellExecute.class,
             "Executing " + replacedCmd );

@@ -21,7 +21,6 @@
  */
 package phex;
 
-import org.slf4j.LoggerFactory;
 import phex.common.Phex;
 import phex.common.ThreadTracking;
 import phex.common.log.LogUtils;
@@ -31,7 +30,6 @@ import phex.event.PhexEventService;
 import phex.event.PhexEventTopics;
 import phex.gui.common.GUIRegistry;
 import phex.gui.common.MainFrame;
-import phex.gui.common.SplashScreen;
 import phex.gui.prefs.InterfacePrefs;
 import phex.gui.prefs.PhexGuiPrefs;
 import phex.prefs.core.PhexCorePrefs;
@@ -45,7 +43,7 @@ import java.util.Iterator;
 
 
 public class Main {
-    private static SplashScreen splashScreen;
+//    private static SplashScreen splashScreen;
 
 
     /**
@@ -88,7 +86,7 @@ public class Main {
                 magmaFile = readArgument(iterator);
             } else if (argument.equalsIgnoreCase("-rss")) {
                 rssFile = readArgument(iterator);
-            } else if (argument.equalsIgnoreCase("--console")) {
+            } else if (argument.equalsIgnoreCase("-i")) {
                 startConsole = true;
             }
         }
@@ -172,23 +170,23 @@ public class Main {
          * Trying to use a jython interpreter as powerful command line interface. 
          * This blocks, so it has to be at the end.
          */
-        if (startConsole) {
+        //if (startConsole) {
             JythonInterpreter jython;
             jython = new JythonInterpreter();
             jython.startConsole();
-        }
+        //}
 
     }
 
-    private static void showSplash() {
-        try {
-            splashScreen = new SplashScreen();
-            splashScreen.showSplash();
-        } catch (java.awt.HeadlessException ex) {
-            // running in headless mode so of course the splash
-            // doesn't work
-        }
-    }
+//    private static void showSplash() {
+//        try {
+//            splashScreen = new SplashScreen();
+//            splashScreen.showSplash();
+//        } catch (java.awt.HeadlessException ex) {
+//            // running in headless mode so of course the splash
+//            // doesn't work
+//        }
+//    }
 
 
     /**

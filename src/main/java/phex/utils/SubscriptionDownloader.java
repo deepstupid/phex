@@ -87,7 +87,7 @@ public class SubscriptionDownloader extends TimerTask
         }
     }
 
-    private List<String> loadSubscriptionList()
+    private static List<String> loadSubscriptionList()
     {
         String name = "/subscription.list";
         InputStream stream = SubscriptionDownloader.class
@@ -133,7 +133,7 @@ public class SubscriptionDownloader extends TimerTask
         return Collections.emptyList();
     }
 
-    public void createDownload( String uriStr ) throws URIException
+    public static void createDownload(String uriStr) throws URIException
     {
         if (uriStr.length() == 0)
         {

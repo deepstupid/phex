@@ -322,7 +322,7 @@ public class PongFactory
             // check if we have dns name
             if( localAddress.isIpHostName() )
             {
-                data = new byte[0];
+                data = IOUtil.EMPTY_BYTE_ARRAY;
             }
             else
             {

@@ -208,8 +208,7 @@ public class BandwidthController
      * @param byteCount
      * @throws IOException 
      */
-    public synchronized void markBytesUsed( int byteCount ) throws IOException
-    {
+    public synchronized void markBytesUsed( int byteCount ) {
         assert byteCount >= 0 : "Cant mark negative byteCount used: " + byteCount;
         updateWindow( false );
         bytesRemaining -= byteCount;

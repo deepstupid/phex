@@ -98,11 +98,11 @@ public class CaughtHostsContainer
             * 2.0 / 3.0 );
         capacities[ NORMAL_PRIORITY ] = (int)Math.round( (NetworkPrefs.MaxHostInHostCache.get().doubleValue()
             - capacities[HIGH_PRIORITY]) * 2.0 / 3.0 );
-        capacities[ LOW_PRIORITY ] = NetworkPrefs.MaxHostInHostCache.get().intValue()
+        capacities[ LOW_PRIORITY ] = NetworkPrefs.MaxHostInHostCache.get()
             - capacities[HIGH_PRIORITY] - capacities[NORMAL_PRIORITY];
         caughtHosts = new phex.common.collections.PriorityQueue( capacities );
 
-        uniqueCaughtHosts = new HashSet<CaughtHost>();
+        uniqueCaughtHosts = new HashSet<>();
         catchedHostCache = new CatchedHostCache();
         
         Environment.getInstance().scheduleTimerTask(
@@ -394,11 +394,7 @@ public class CaughtHostsContainer
         {
             return false;
         }
-        if ( IPUtils.isPortInUserInvalidList( address ) )
-        {
-            return false;
-        }
-        return true;
+        return !IPUtils.isPortInUserInvalidList(address);
     }
     
     /**
@@ -452,7 +448,7 @@ public class CaughtHostsContainer
     {
         synchronized ( freeUltrapeerSlotSet )
         {
-            ArrayList<CaughtHost> freeHosts = new ArrayList<CaughtHost>( freeUltrapeerSlotSet );
+            ArrayList<CaughtHost> freeHosts = new ArrayList<>(freeUltrapeerSlotSet);
             freeHosts.trimToSize();
             return freeHosts;
         }
@@ -462,7 +458,7 @@ public class CaughtHostsContainer
     {
         synchronized ( freeLeafSlotSet )
         {
-            ArrayList<CaughtHost> freeHosts = new ArrayList<CaughtHost>( freeLeafSlotSet );
+            ArrayList<CaughtHost> freeHosts = new ArrayList<>(freeLeafSlotSet);
             freeHosts.trimToSize();
             return freeHosts;
         }
@@ -550,7 +546,7 @@ public class CaughtHostsContainer
      * @param line
      * @return the parsed CaughtHost
      */
-    private CaughtHost parseCaughtHostFromLine( String line, long now )
+    private static CaughtHost parseCaughtHostFromLine(String line, long now)
     {
         // tokenize line
         // line format can be:
@@ -703,13 +699,13 @@ public class CaughtHostsContainer
                     // IP:port,lastFailedConnection,lastSuccessfulConnection,dailyUptime,
                     // vendor,vendorVersionMajor,vendorVersionMinor,isUltrapeer
                     bw.write( hostAddress.getFullHostName() +
-                        "," + host.getLastFailedConnection() +
-                        "," + host.getLastSuccessfulConnection() +
-                        "," + host.getDailyUptime() +
-                        "," + (vendor == null ? "-" : vendor) +
-                        "," + host.getVendorVersionMajor() +
-                        "," + host.getVendorVersionMinor() +
-                        "," + host.isUltrapeer() );
+                            ',' + host.getLastFailedConnection() +
+                            ',' + host.getLastSuccessfulConnection() +
+                            ',' + host.getDailyUptime() +
+                            ',' + (vendor == null ? "-" : vendor) +
+                            ',' + host.getVendorVersionMajor() +
+                            ',' + host.getVendorVersionMinor() +
+                            ',' + host.isUltrapeer() );
                     
                     bw.newLine();
                 }
