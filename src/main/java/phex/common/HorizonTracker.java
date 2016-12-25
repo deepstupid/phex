@@ -21,7 +21,7 @@
  */
 package phex.common;
 
-import org.python.core.util.ConcurrentHashSet;
+import org.infinispan.commons.util.concurrent.ConcurrentHashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.address.DestAddress;

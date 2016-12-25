@@ -26,16 +26,9 @@ import phex.common.ThreadTracking;
 import phex.common.log.LogUtils;
 import phex.common.log.NLogger;
 import phex.connection.LoopbackDispatcher;
-import phex.event.PhexEventService;
-import phex.event.PhexEventTopics;
-import phex.gui.common.GUIRegistry;
-import phex.gui.common.MainFrame;
-import phex.gui.prefs.InterfacePrefs;
-import phex.gui.prefs.PhexGuiPrefs;
+import phex.download.swarming.PhexEventService;
 import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
-import phex.utils.JythonInterpreter;
-import phex.utils.Localizer;
 import phex.utils.SystemProperties;
 
 import java.util.Arrays;
@@ -117,9 +110,9 @@ public class Main {
             // initialize settings
             SystemProperties.migratePhexConfigRoot();
 
-            PhexGuiPrefs.init();
+//            PhexGuiPrefs.init();
+//            Localizer.initialize(InterfacePrefs.LocaleName.get());
 
-            Localizer.initialize(InterfacePrefs.LocaleName.get());
             ThreadTracking.initialize();
 
 
@@ -130,34 +123,34 @@ public class Main {
             end = System.currentTimeMillis();
             NLogger.debug(Main.class, "Pre GUI startup time: " + (end - start));
 
-            try {
-                GUIRegistry.getInstance().initialize(Servent.getInstance());
-            } catch (ExceptionInInitializerError ex) {
-                // running in headless mode so of course this
-                // doesn't work
-            }
+//            try {
+//                GUIRegistry.getInstance().initialize(Servent.getInstance());
+//            } catch (ExceptionInInitializerError ex) {
+//                // running in headless mode so of course this
+//                // doesn't work
+//            }
 //            if (splashScreen != null) {
 //                splashScreen.closeSplash();
 //                splashScreen = null;
 //            }
 
-            MainFrame mainFrame = null;
-            mainFrame = GUIRegistry.getInstance().getMainFrame();
-            if (mainFrame != null)
-                mainFrame.setVisible(true);
+//            MainFrame mainFrame = null;
+//            mainFrame = GUIRegistry.getInstance().getMainFrame();
+//            if (mainFrame != null)
+//                mainFrame.setVisible(true);
 
             end = System.currentTimeMillis();
             NLogger.debug(Main.class, "Full startup time: " + (end - start));
 
             PhexEventService eventService = Phex.getEventService();
             if (loopbackUri != null) {// correctly dispatched uri
-                eventService.publish(PhexEventTopics.Incoming_Uri, loopbackUri);
+
             }
             if (magmaFile != null) {// correctly dispatched uri
-                eventService.publish(PhexEventTopics.Incoming_Magma, magmaFile);
+
             }
             if (rssFile != null) {// correctly dispatched uri
-                eventService.publish(PhexEventTopics.Incoming_Rss, rssFile);
+
             }
         } catch (Throwable th) {
             th.printStackTrace();
@@ -166,15 +159,15 @@ public class Main {
             System.exit(1);
         }
 
-        /**
-         * Trying to use a jython interpreter as powerful command line interface. 
-         * This blocks, so it has to be at the end.
-         */
-        //if (startConsole) {
-            JythonInterpreter jython;
-            jython = new JythonInterpreter();
-            jython.startConsole();
-        //}
+//        /**
+//         * Trying to use a jython interpreter as powerful command line interface.
+//         * This blocks, so it has to be at the end.
+//         */
+//        //if (startConsole) {
+//            JythonInterpreter jython;
+//            jython = new JythonInterpreter();
+//            jython.startConsole();
+//        //}
 
     }
 

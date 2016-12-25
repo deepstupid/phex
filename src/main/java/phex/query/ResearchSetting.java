@@ -21,12 +21,10 @@
  */
 package phex.query;
 
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import phex.common.URN;
 import phex.download.RemoteFile;
+import phex.download.swarming.PhexEventService;
 import phex.download.swarming.SWDownloadFile;
-import phex.event.PhexEventService;
-import phex.event.PhexEventTopics;
 import phex.rules.Rule;
 import phex.rules.condition.FileSizeCondition;
 import phex.rules.condition.NotCondition;
@@ -74,7 +72,7 @@ public class ResearchSetting
         this.eventService = eventService;
         downloadFile = file;
         searchContainer = queryService.getBackgroundSearchContainer();
-        eventService.processAnnotations( this );
+
     }
 
     public long getLastResearchStartTime()
@@ -186,7 +184,7 @@ public class ResearchSetting
         return !ruledSearch.isSearchFinished();
     }
     
-    @EventTopicSubscriber(topic=PhexEventTopics.Search_Data)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Search_Data)
     public void onSearchDataEvent( String topic, final SearchDataEvent event )
     {
         if ( ruledSearch != event.getSource() )

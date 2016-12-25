@@ -22,11 +22,10 @@
 
 package phex.download.swarming;
 
-import org.apache.commons.collections.map.LinkedMap;
+import org.apache.commons.collections4.map.LinkedMap;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.lang.time.DateUtils;
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.*;
@@ -39,7 +38,6 @@ import phex.common.file.ManagedFileException;
 import phex.download.*;
 import phex.download.swarming.SWDownloadCandidate.CandidateStatus;
 import phex.event.*;
-import phex.event.ContainerEvent.Type;
 import phex.http.HTTPRangeSet;
 import phex.prefs.core.DownloadPrefs;
 import phex.query.ResearchSetting;
@@ -52,8 +50,6 @@ import phex.utils.URLUtil;
 import phex.xml.sax.downloads.DDownloadCandidate;
 import phex.xml.sax.downloads.DDownloadFile;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -70,7 +66,6 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
     private final SwarmingManager downloadService;
     private final PhexEventService eventService;
     
-    @Nonnull
     private MemoryFile memoryFile;
     
     /**
@@ -299,14 +294,10 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
         {
             throw new NullPointerException( "DownloadService is null." );
         }
-        if ( eventService == null )
-        {
-            throw new NullPointerException( "eventService is null." );
-        }
+
         this.downloadService = downloadService;
         this.eventService = eventService;
-        eventService.processAnnotations( this );
-        
+
         allCandidatesList = new ArrayList<SWDownloadCandidate>();
         goodCandidatesList = new ArrayList<SWDownloadCandidate>();
         mediumCandidatesList = new ArrayList<SWDownloadCandidate>();
@@ -551,7 +542,6 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
      * @param ipCounter an IPCounter to check the address availability against.
      * @return an allocated candidate.
      */
-    @CheckForNull
     public SWDownloadCandidate allocateDownloadCandidate( SWDownloadWorker worker,
         AddressCounter ipCounter )
     {
@@ -587,7 +577,6 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
      *        to find a allocatable candidate.
      * @return an allocated candidate.
      */
-    @CheckForNull
     private SWDownloadCandidate allocateDownloadCandidate( SWDownloadWorker worker,
         AddressCounter ipCounter, CandidateAllocator ... candidateAllocators )
     {
@@ -617,7 +606,6 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
         }
     }
     
-    @Nonnull
     public List<SWDownloadCandidate> getAllocatedCandidates()
     {
         synchronized( candidatesLock )
@@ -857,7 +845,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
         candidate.setStatus( CandidateStatus.IGNORED, -1, reason );
     }
     
-    @EventTopicSubscriber(topic=PhexEventTopics.Download_Candidate_Status)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Download_Candidate_Status)
     public void onCandidateStatusChange( String topic, 
         final ChangeEvent event )
     {
@@ -1236,7 +1224,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
                     downloadStartNotify();
                     break;
                 case STATUS_FILE_COMPLETED_MOVED:
-                    eventService.publish( PhexEventTopics.Download_File_Completed, this );
+
                     break;
             }
             status = newStatus;
@@ -2291,8 +2279,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
 
     private void fireDownloadCandidateAdded( SWDownloadCandidate candidate, int position )
     {
-        eventService.publish( PhexEventTopics.Download_Candidate,
-            new ContainerEvent( Type.ADDED, candidate, this, position ) );
+
     }
 
     ///////////////////// END event handling methods ////////////////////////

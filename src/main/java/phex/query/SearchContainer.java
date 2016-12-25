@@ -21,13 +21,8 @@
  */
 package phex.query;
 
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
-import phex.common.Phex;
 import phex.common.address.DestAddress;
 import phex.event.ChangeEvent;
-import phex.event.ContainerEvent;
-import phex.event.ContainerEvent.Type;
-import phex.event.PhexEventTopics;
 import phex.host.Host;
 import phex.msg.*;
 import phex.msg.vendor.OOBReplyCountVMsg;
@@ -56,8 +51,7 @@ public class SearchContainer implements MessageSubscriber<QueryResponseMsg>,
         this.queryFactory = queryFactory;
         searchList = new ArrayList<Search>();
         idSearchMap = new HashMap<GUID, Search>();
-        
-        Phex.getEventService().processAnnotations( this );
+
     }
 
     /**
@@ -279,20 +273,18 @@ public class SearchContainer implements MessageSubscriber<QueryResponseMsg>,
     ///////////////////// START event handling methods ////////////////////////
     protected void fireSearchAdded( final Search search, final int position )
     {
-        Phex.getEventService().publish( PhexEventTopics.Search_Update,
-            new ContainerEvent( Type.ADDED, search, this, position ) );
+
     }
 
     protected void fireSearchRemoved( final Search search, final int position )
     {
-        Phex.getEventService().publish( PhexEventTopics.Search_Update,
-            new ContainerEvent( Type.REMOVED, search, this, position ) );
+
     }
     
     /**
      * Reacts on online status changes to stop all searches.
      */
-    @EventTopicSubscriber(topic=PhexEventTopics.Servent_OnlineStatus)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Servent_OnlineStatus)
     public void onOnlineStatusEvent( String topic, ChangeEvent event )
     {
         OnlineStatus oldStatus = (OnlineStatus) event.getOldValue();

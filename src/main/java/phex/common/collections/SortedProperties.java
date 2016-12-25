@@ -18,7 +18,7 @@
  */
 package phex.common.collections;
 
-import org.apache.commons.collections.iterators.IteratorEnumeration;
+import org.apache.commons.collections4.iterators.IteratorEnumeration;
 
 import java.util.*;
 

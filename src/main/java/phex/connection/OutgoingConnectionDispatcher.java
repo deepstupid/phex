@@ -22,11 +22,9 @@
 package phex.connection;
 
 import phex.common.Environment;
-import phex.common.Phex;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
 import phex.connection.ConnectionStatusEvent.Status;
-import phex.event.PhexEventTopics;
 import phex.host.*;
 import phex.net.connection.Connection;
 import phex.net.connection.ConnectionFactory;
@@ -208,8 +206,6 @@ public class OutgoingConnectionDispatcher implements Runnable
     
     private void reportStatus( Status status )
     {
-        Phex.getEventService().publish( 
-            PhexEventTopics.Net_ConnectionStatus, 
-            new ConnectionStatusEvent( hostAddress, status ) );
+
     }
 }

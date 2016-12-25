@@ -35,9 +35,6 @@ import phex.common.log.LogRecord;
 import phex.download.DownloadScope;
 import phex.download.DownloadScopeList;
 import phex.download.RemoteFile;
-import phex.event.ChangeEvent;
-import phex.event.PhexEventService;
-import phex.event.PhexEventTopics;
 import phex.http.HTTPHeader;
 import phex.http.HTTPRangeSet;
 import phex.http.Range;
@@ -51,8 +48,6 @@ import phex.utils.URLUtil;
 import phex.xml.XMLUtils;
 import phex.xml.sax.downloads.DDownloadCandidate;
 
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -204,7 +199,6 @@ public class SWDownloadCandidate implements SWDownloadConstants
     /**
      * The status of the candidate.
      */
-    @Nonnull
     private CandidateStatus status;
     
     /**
@@ -243,7 +237,6 @@ public class SWDownloadCandidate implements SWDownloadConstants
      * The addresses of push proxies of this host or null
      * if not available.
      */
-    @CheckForNull
     private DestAddress[] pushProxyAddresses;
 
     /**
@@ -305,10 +298,7 @@ public class SWDownloadCandidate implements SWDownloadConstants
         }
         this.downloadFile = downloadFile;
         
-        if ( eventService == null )
-        {
-            throw new NullPointerException( "event service is null." );
-        }
+
         this.eventService = eventService;
         
         // can be null
@@ -698,7 +688,6 @@ public class SWDownloadCandidate implements SWDownloadConstants
      * or null if there are no available.
      * @return an array of push proxies or null
      */
-    @CheckForNull
     public DestAddress[] getPushProxyAddresses()
     {
         return pushProxyAddresses;
@@ -1422,8 +1411,7 @@ public class SWDownloadCandidate implements SWDownloadConstants
 
     private void fireCandidateStatusChange( CandidateStatus oldStatus, CandidateStatus newStatus )
     {
-        eventService.publish( PhexEventTopics.Download_Candidate_Status,
-            new ChangeEvent( this, oldStatus, newStatus ) );
+
     }
 
     ///////////////////// END event handling methods ////////////////////////

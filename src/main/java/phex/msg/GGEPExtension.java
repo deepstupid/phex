@@ -31,7 +31,6 @@ import phex.security.PhexSecurityManager;
 import phex.utils.HexConverter;
 import phex.utils.IOUtil;
 
-import javax.annotation.CheckForNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -97,7 +96,7 @@ public class GGEPExtension
         return altLocAddresses;
     }
     
-    @CheckForNull
+    //@CheckForNull
     public static DestAddress[] parsePushProxyExtensionData( GGEPBlock[] ggepBlocks, PhexSecurityManager securityService )
     {
         // The payload is an array of 6-byte entries.  The first 4 bytes encode

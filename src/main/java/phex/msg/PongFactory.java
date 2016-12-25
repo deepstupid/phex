@@ -35,8 +35,6 @@ import phex.host.NetworkHostsContainer;
 import phex.security.PhexSecurityManager;
 import phex.utils.IOUtil;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Collection;
 
 public class PongFactory
@@ -60,16 +58,16 @@ public class PongFactory
             PhexVersion.getMajorVersion(), PhexVersion.getMinorVersion() );
     }
     
-    @Nonnull
+    /*@NonNull*/
     private final PhexSecurityManager securityService;
     
-    @Nonnull
+    /*@NonNull*/
     private final NetworkHostsContainer netHostsContainer;
     
-    @Nonnull
+    /*@NonNull*/
     private final CaughtHostsContainer caughtHostsContainer;
     
-    @Nullable
+    /*@Nullable*/
     private final UdpHostCacheContainer uhcContainer;
     
     public PongFactory( NetworkHostsContainer netHostsContainer, 

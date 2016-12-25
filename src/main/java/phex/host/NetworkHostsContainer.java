@@ -21,14 +21,10 @@
  */
 package phex.host;
 
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import phex.common.AbstractLifeCycle;
-import phex.common.Phex;
 import phex.common.address.DestAddress;
 import phex.connection.ConnectionObserver;
 import phex.event.ChangeEvent;
-import phex.event.ContainerEvent;
-import phex.event.PhexEventTopics;
 import phex.net.connection.Connection;
 import phex.prefs.core.ConnectionPrefs;
 import phex.servent.OnlineStatus;
@@ -77,8 +73,7 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
         networkHosts = new ArrayList<>();
         ultrapeerConnections = new ArrayList<>();
         leafConnections = new ArrayList<>();
-        
-        Phex.getEventService().processAnnotations( this );
+
     }
     
     @Override
@@ -520,20 +515,18 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
     ///////////////////// START event handling methods ////////////////////////
     private void fireNetworkHostAdded( Host host, int position )
     {
-        Phex.getEventService().publish( PhexEventTopics.Net_Hosts, 
-            new ContainerEvent( ContainerEvent.Type.ADDED, host, this, position ) );
+
     }
 
     private void fireNetworkHostRemoved( Host host, int position )
     {
-        Phex.getEventService().publish( PhexEventTopics.Net_Hosts, 
-            new ContainerEvent( ContainerEvent.Type.REMOVED, host, this, position ) );
+
     }
     
     /**
      * Reacts on online status changes to initialize or save caught hosts.
      */
-    @EventTopicSubscriber(topic=PhexEventTopics.Servent_OnlineStatus)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Servent_OnlineStatus)
     public void onOnlineStatusEvent( String topic, ChangeEvent event )
     {
         OnlineStatus oldStatus = (OnlineStatus) event.getOldValue();
@@ -546,7 +539,7 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
         }
     }
     
-    @EventTopicSubscriber(topic=PhexEventTopics.Host_Disconnect)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Host_Disconnect)
     public void onHostDisconnectEvent( String topic, Host host )
     {
         cleanupHost( host );

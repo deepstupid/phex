@@ -23,12 +23,9 @@ package phex.upload;
 
 import junit.framework.TestCase;
 import phex.common.address.DefaultDestAddress;
-import phex.gui.prefs.InterfacePrefs;
-import phex.gui.prefs.PhexGuiPrefs;
 import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
 import phex.share.ShareFile;
-import phex.utils.Localizer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,8 +38,8 @@ public class HrrnQueueComparatorTest extends TestCase
     public void setUp()
     {
         PhexCorePrefs.init();
-        PhexGuiPrefs.init();
-        Localizer.initialize( InterfacePrefs.LocaleName.get() );
+//        PhexGuiPrefs.init();
+//        Localizer.initialize( InterfacePrefs.LocaleName.get() );
         Servent servent = Servent.getInstance();
         uploadManager = new UploadManager( servent );
     }
@@ -57,7 +54,7 @@ public class HrrnQueueComparatorTest extends TestCase
             testList.add( uqs );
             Thread.sleep( 10 );
         }
-        Thread.sleep( 50000 );
+        Thread.sleep( 1000 );
         long sortTime = System.currentTimeMillis();
         Collections.sort( testList, new HrrnQueueComparator( sortTime ) );
         

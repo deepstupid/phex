@@ -24,14 +24,11 @@ package phex.test;
 import junit.framework.TestCase;
 import phex.common.Phex;
 import phex.common.QueryRoutingTable;
-import phex.gui.prefs.InterfacePrefs;
-import phex.gui.prefs.PhexGuiPrefs;
 import phex.msg.*;
 import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
 import phex.share.ShareFile;
 import phex.utils.AccessUtils;
-import phex.utils.Localizer;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -54,8 +51,8 @@ public class TestQueryRoutingTable extends TestCase
         Phex.initialize();
         /// should not depend on these
         PhexCorePrefs.init();
-        PhexGuiPrefs.init();
-        Localizer.initialize( InterfacePrefs.LocaleName.get() );
+//        PhexGuiPrefs.init();
+//        Localizer.initialize( InterfacePrefs.LocaleName.get() );
         Servent servent = Servent.getInstance();
         
         qrTable = new QueryRoutingTable();

@@ -22,8 +22,7 @@
 package phex.common;
 
 import phex.common.file.FileManager;
-import phex.event.PhexEventService;
-import phex.event.PhexEventServiceImpl;
+import phex.download.swarming.PhexEventService;
 import phex.prefs.core.PrivateNetworkConstants;
 import phex.utils.SystemProperties;
 
@@ -41,7 +40,7 @@ public class Phex
     {
         //LogUtils.initializeLogging();
         
-        eventService = new PhexEventServiceImpl();
+        //eventService = new PhexEventServiceImpl();
         
         fileManager = new FileManager();        
     }

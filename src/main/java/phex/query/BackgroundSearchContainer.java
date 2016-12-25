@@ -21,10 +21,8 @@
  */
 package phex.query;
 
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import phex.common.URN;
 import phex.common.address.DestAddress;
-import phex.event.PhexEventTopics;
 import phex.msg.GUID;
 import phex.msg.QueryFactory;
 import phex.servent.Servent;
@@ -78,7 +76,7 @@ public class BackgroundSearchContainer extends SearchContainer
         return search;
     }
     
-    @EventTopicSubscriber(topic=PhexEventTopics.Search_Data)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Search_Data)
     public void onSearchDataEvent( String topic, SearchDataEvent event )
     {
         if ( event.getType() == SearchDataEvent.SEARCH_STOPED )

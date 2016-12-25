@@ -21,8 +21,6 @@
  */
 package phex.query;
 
-import phex.common.Phex;
-import phex.event.PhexEventTopics;
 import phex.host.Host;
 import phex.msg.QueryMsg;
 import phex.msghandling.MessageSubscriber;
@@ -99,8 +97,7 @@ public class QueryHistoryMonitor implements MessageSubscriber<QueryMsg>
     private void fireQueryHistoryChanged( )
     {
         // empty event..
-        Phex.getEventService().publish( PhexEventTopics.Query_Monitor,
-            "" );
+
     }
     ///////////////////// END event handling methods //////////////////////////
     

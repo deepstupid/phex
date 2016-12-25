@@ -27,8 +27,7 @@ import phex.common.Phex;
 import phex.common.address.DestAddress;
 import phex.common.bandwidth.BandwidthController;
 import phex.download.PushHandler;
-import phex.event.PhexEventService;
-import phex.event.PhexEventTopics;
+import phex.download.swarming.PhexEventService;
 import phex.host.Host;
 import phex.host.HostStatus;
 import phex.host.NetworkHostsContainer;
@@ -255,7 +254,7 @@ public class IncomingConnectionDispatcher implements Runnable
         String uriToken = requestLine.substring( URI_DOWNLOAD_PREFIX.length() + 1 );
         
         PhexEventService eventService = Phex.getEventService();
-        eventService.publish( PhexEventTopics.Incoming_Uri, uriToken );
+
     }
     
     /**
@@ -280,7 +279,7 @@ public class IncomingConnectionDispatcher implements Runnable
         }
         String fileNameToken = requestLine.substring( MAGMA_DOWNLOAD_PREFIX.length() + 1 );
         PhexEventService eventService = Phex.getEventService();
-        eventService.publish( PhexEventTopics.Incoming_Magma, fileNameToken );
+
     }
     
     private void handleIncommingRSSDownload(String requestLine) throws IOException
@@ -301,7 +300,7 @@ public class IncomingConnectionDispatcher implements Runnable
         }
         String fileNameToken = requestLine.substring( RSS_DOWNLOAD_PREFIX.length() + 1 );
         PhexEventService eventService = Phex.getEventService();
-        eventService.publish( PhexEventTopics.Incoming_Magma, fileNameToken );
+
     }
 
     private void handleIncommingGIV(String requestLine)

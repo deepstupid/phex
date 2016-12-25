@@ -26,8 +26,7 @@ import phex.common.Environment;
 import phex.common.Phex;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
-import phex.event.PhexEventService;
-import phex.event.PhexEventTopics;
+import phex.download.swarming.PhexEventService;
 import phex.io.buffer.ByteBuffer;
 import phex.net.connection.Connection;
 import phex.net.connection.ConnectionFactory;
@@ -343,8 +342,7 @@ public final class ChatEngine
                         byte[] base64Buf = Base64.decode(str);
                         str = new String(base64Buf);
                     }
-                    eventService.publish( PhexEventTopics.Chat_Update,
-                        new ChatEvent( ChatEvent.Type.MSG_REC, ChatEngine.this, str ) );
+
                 }
                 catch ( IOException exp )
                 {

@@ -21,16 +21,13 @@
  */
 package phex.bootstrap;
 
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.Environment;
-import phex.common.Phex;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
 import phex.common.address.MalformedDestAddressException;
 import phex.event.ChangeEvent;
-import phex.event.PhexEventTopics;
 import phex.msg.PongMsg;
 import phex.net.repres.PresentationManager;
 import phex.servent.Servent;
@@ -99,14 +96,13 @@ public class UdpHostCacheContainer
         isThreadRequestRunning = new AtomicBoolean( false );
         
         initialize();
-        
-        Phex.getEventService().processAnnotations( this );
+
     }
     
     /**
      * Reacts on gnutella network changes to initialize or save udp caches.
      */
-    @EventTopicSubscriber(topic=PhexEventTopics.Servent_GnutellaNetwork)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Servent_GnutellaNetwork)
     public void onGnutellaNetworkEvent( String topic, ChangeEvent event )
     {
         saveCachesToFile();

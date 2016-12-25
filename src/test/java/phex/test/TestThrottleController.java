@@ -29,6 +29,9 @@ import java.io.IOException;
 
 public class TestThrottleController extends TestCase
 {
+
+    public static final int DATA_SIZE = 200000;
+
     public TestThrottleController()
     {
     }
@@ -42,7 +45,7 @@ public class TestThrottleController extends TestCase
         c.activateLongTransferAvg( 1000, 10 );
         c.activateShortTransferAvg( 1000, 5 );
         
-        Pump pump = new Pump( 500000, c );
+        Pump pump = new Pump(DATA_SIZE, c );
         Thread t = new Thread( pump );
         t.start();
         t.join();

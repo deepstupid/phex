@@ -22,15 +22,12 @@
 package phex.net;
 
 import org.apache.commons.lang.time.DateUtils;
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.Environment;
-import phex.common.Phex;
 import phex.connection.ConnectionStatusEvent;
 import phex.connection.ConnectionStatusEvent.Status;
 import phex.event.ChangeEvent;
-import phex.event.PhexEventTopics;
 import phex.host.HostFetchingStrategy;
 import phex.host.HostFetchingStrategy.FetchingReason;
 import phex.host.NetworkHostsContainer;
@@ -70,11 +67,10 @@ public class OnlineObserver
         this.fetchingStrategy = fetchingStrategy;
         this.servent = servent;
         failedConnections = new AtomicInteger(0);
-        
-        Phex.getEventService().processAnnotations( this );
+
     }
     
-    @EventTopicSubscriber(topic=PhexEventTopics.Net_ConnectionStatus)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Net_ConnectionStatus)
     public void onConnectionStatusEvent( String topic, ConnectionStatusEvent event )
     {
         if ( event.getStatus() == Status.CONNECTION_FAILED )
@@ -155,7 +151,7 @@ public class OnlineObserver
     /**
      * Reacts on online status changes to reset failed connection counter.
      */
-    @EventTopicSubscriber(topic=PhexEventTopics.Servent_OnlineStatus)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Servent_OnlineStatus)
     public void onOnlineStatusEvent( String topic, ChangeEvent event )
     {
         OnlineStatus oldStatus = (OnlineStatus) event.getOldValue();

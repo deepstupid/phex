@@ -29,10 +29,10 @@ public class TestSHA1 extends TestCase
     {
         File javahome = SystemUtils.getJavaHome();
         File[] files = javahome.listFiles();
-        sha1TestFiles( files );
+        sha1TestFiles( files, 10 );
     }
     
-    public void sha1TestFiles( File[] files )
+    public void sha1TestFiles( File[] files, int max )
         throws Exception
     {
         for (int j = 0; j < files.length; j++)
@@ -43,11 +43,14 @@ public class TestSHA1 extends TestCase
                 String result2 = calcSHA1( files[j],
                     MessageDigest.getInstance( "SHA" ) );
                 assertTrue( result1.equals( result2 ) );
+                if (max-- <= 0)
+                    break;
             }
-            else if ( files[j].isDirectory() )
+            /*else if ( files[j].isDirectory() )
             {
                 sha1TestFiles( files[j].listFiles() );
-            }
+            }*/
+
         }
     }
     

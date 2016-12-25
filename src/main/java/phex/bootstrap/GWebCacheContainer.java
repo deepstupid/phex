@@ -21,17 +21,14 @@
  */
 package phex.bootstrap;
 
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.Environment;
 import phex.common.GeneralGnutellaNetwork;
-import phex.common.Phex;
 import phex.common.address.AddressUtils;
 import phex.common.address.DestAddress;
 import phex.connection.ProtocolNotSupportedException;
 import phex.event.ChangeEvent;
-import phex.event.PhexEventTopics;
 import phex.host.CaughtHostsContainer;
 import phex.servent.Servent;
 import phex.utils.IOUtil;
@@ -122,8 +119,7 @@ public class GWebCacheContainer
         random = new Random();
         
         initializeGWebCacheContainer();
-        
-        Phex.getEventService().processAnnotations( this );
+
     }
     
     /**
@@ -144,7 +140,7 @@ public class GWebCacheContainer
     /**
      * Reacts on gnutella network changes to initialize GWebCache.
      */
-    @EventTopicSubscriber(topic=PhexEventTopics.Servent_GnutellaNetwork)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Servent_GnutellaNetwork)
     public void onGnutellaNetworkEvent( String topic, ChangeEvent event )
     {
         initializeGWebCacheContainer();

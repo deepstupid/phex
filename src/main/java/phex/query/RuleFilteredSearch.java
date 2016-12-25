@@ -21,10 +21,8 @@
  */
 package phex.query;
 
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import phex.download.RemoteFile;
-import phex.event.PhexEventService;
-import phex.event.PhexEventTopics;
+import phex.download.swarming.PhexEventService;
 import phex.rules.Rule;
 import phex.servent.Servent;
 
@@ -33,7 +31,7 @@ import java.util.ArrayList;
 public class RuleFilteredSearch
 {
     private final Servent servent;
-    
+
     private final PhexEventService eventService;
     
     private final Search search;
@@ -70,7 +68,7 @@ public class RuleFilteredSearch
         hiddenSearchResults = new SearchResultHolder();
         this.search = search;
         this.searchFilterRules = ruleFilters;
-        eventService.processAnnotations( this );
+
     }
     
     public int getResultCount()
@@ -148,7 +146,7 @@ public class RuleFilteredSearch
         }
     }
 
-    @EventTopicSubscriber(topic=PhexEventTopics.Search_Data)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Search_Data)
     public void onSearchDataEvent( String topic, SearchDataEvent event )
     {
         if ( search != event.getSource() )
@@ -210,12 +208,12 @@ public class RuleFilteredSearch
     {
         SearchDataEvent event = new SearchDataEvent( this, searchChangeEvent.getType(),
             searchChangeEvent.getSearchData() );
-        eventService.publish( PhexEventTopics.Search_Data, event );
+
     }
 
     private void fireSearchChangeEvent( final SearchDataEvent searchChangeEvent )
     {
-        eventService.publish( PhexEventTopics.Search_Data, searchChangeEvent );
+
     }
     
     ///////////////////// END event handling methods ////////////////////////

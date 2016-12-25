@@ -21,20 +21,17 @@
  */
 package phex.host;
 
-import org.apache.commons.collections.set.ListOrderedSet;
+import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang.time.DateUtils;
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.Environment;
-import phex.common.Phex;
 import phex.common.address.AddressUtils;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
 import phex.connection.ConnectionStatusEvent;
 import phex.connection.ConnectionStatusEvent.Status;
 import phex.event.ChangeEvent;
-import phex.event.PhexEventTopics;
 import phex.host.HostFetchingStrategy.FetchingReason;
 import phex.msg.PongMsg;
 import phex.prefs.core.NetworkPrefs;
@@ -114,8 +111,7 @@ public class CaughtHostsContainer
         
         // initialize container 
         initializeCaughtHostsContainer();
-        
-        Phex.getEventService().processAnnotations( this );
+
     }
     
     /**
@@ -316,7 +312,7 @@ public class CaughtHostsContainer
      * @param event the event containing the DestAddress to report the connection status
      *        and its connection status.
      */
-    @EventTopicSubscriber(topic=PhexEventTopics.Net_ConnectionStatus)
+    ////@EventTopicSubscriber(topic=PhexEventTopics.Net_ConnectionStatus)
     public void onConnectionStatusEvent( String topic, ConnectionStatusEvent event )
     {
         DestAddress hostAddress = event.getHostAddres();
@@ -358,7 +354,7 @@ public class CaughtHostsContainer
     /**
      * Reacts on gnutella network changes to initialize or save caught hosts.
      */
-    @EventTopicSubscriber(topic=PhexEventTopics.Servent_GnutellaNetwork)
+    ////@EventTopicSubscriber(topic=PhexEventTopics.Servent_GnutellaNetwork)
     public void onGnutellaNetworkEvent( String topic, ChangeEvent event )
     {
         saveHostsContainer();

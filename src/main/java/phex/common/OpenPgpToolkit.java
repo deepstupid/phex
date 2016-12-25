@@ -16,7 +16,6 @@ import phex.utils.IOUtil;
 import phex.utils.RandomUtils;
 import phex.utils.StringUtils;
 
-import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.Security;
@@ -49,7 +48,7 @@ public class OpenPgpToolkit
             "gpg.planetcyborg.de",
             "keys.indymedia.org");
     
-    @Nonnull
+    /*@NonNull*/
     public static PGPPublicKey lookupKeyById(String keyserver, String keyId)
         throws IOException
     {

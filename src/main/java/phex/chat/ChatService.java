@@ -22,11 +22,9 @@
 package phex.chat;
 
 import phex.common.AddressCounter;
-import phex.common.Phex;
 import phex.common.address.DestAddress;
 import phex.common.bandwidth.BandwidthController;
 import phex.common.log.NLogger;
-import phex.event.PhexEventTopics;
 import phex.net.connection.Connection;
 import phex.prefs.core.NetworkPrefs;
 import phex.servent.Servent;
@@ -121,8 +119,7 @@ public class ChatService
      */
     public void fireChatConnectionOpened( final ChatEngine chatEngine )
     {
-        Phex.getEventService().publish( PhexEventTopics.Chat_Update,
-            new ChatEvent( ChatEvent.Type.OPENED, chatEngine, null ) );
+
     }
 
     /**
@@ -131,8 +128,7 @@ public class ChatService
      */
     public void fireChatConnectionFailed( final ChatEngine chatEngine )
     {
-        Phex.getEventService().publish( PhexEventTopics.Chat_Update,
-            new ChatEvent( ChatEvent.Type.FAILED, chatEngine, null ) );
+
     }
     ///////////////////// END event handling methods ////////////////////////
 }

@@ -23,10 +23,8 @@ package phex.query;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import phex.common.Phex;
 import phex.common.URN;
 import phex.download.RemoteFile;
-import phex.event.PhexEventTopics;
 import phex.msg.InvalidMessageException;
 import phex.msg.QueryMsg;
 import phex.msg.QueryResponseMsg;
@@ -179,8 +177,7 @@ public abstract class Search
 
     private void fireSearchChangeEvent( final SearchDataEvent searchChangeEvent )
     {
-        Phex.getEventService().publish( PhexEventTopics.Search_Data,
-            searchChangeEvent );
+
     }
     
     ///////////////////// END event handling methods ////////////////////////

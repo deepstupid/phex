@@ -21,7 +21,7 @@
  */
 package phex.common;
 
-import org.apache.commons.collections.map.LinkedMap;
+import org.apache.commons.collections4.map.LinkedMap;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
 import phex.http.HTTPHeader;

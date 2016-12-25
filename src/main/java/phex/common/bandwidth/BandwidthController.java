@@ -21,7 +21,7 @@
  */
 package phex.common.bandwidth;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -116,9 +116,9 @@ public class BandwidthController
         longTransferAvg = new TransferAverage( refreshRate, period );
     }
     
-    @SuppressWarnings( 
-        value= {"IS2_INCONSISTENT_SYNC"}, 
-        justification="Synchronization here kills UI performance, getting an outdated value is not critical.")
+//    @SuppressWarnings(
+//        value= {"IS2_INCONSISTENT_SYNC"},
+//        justification="Synchronization here kills UI performance, getting an outdated value is not critical.")
     public TransferAverage getShortTransferAvg()
     {
         return shortTransferAvg;
@@ -156,9 +156,9 @@ public class BandwidthController
      * Returns the throttling rate in bytes per seconds
      * @return the throttling rate in bytes per seconds
      */
-    @SuppressWarnings( 
-        value= {"UG_SYNC_SET_UNSYNC_GET"}, 
-        justification="Synchronization here kills UI performance, getting an outdated value is not critical.")
+//    @SuppressWarnings(
+//        value= {"UG_SYNC_SET_UNSYNC_GET"},
+//        justification="Synchronization here kills UI performance, getting an outdated value is not critical.")
     public long getThrottlingRate()
     {
         return throttlingRate;

@@ -29,8 +29,6 @@ import phex.common.address.DestAddress;
 import phex.common.bandwidth.BandwidthManager;
 import phex.common.log.NLogger;
 import phex.download.swarming.SwarmingManager;
-import phex.event.ChangeEvent;
-import phex.event.PhexEventTopics;
 import phex.host.DefaultHostFetchingStrategy;
 import phex.host.HostFetchingStrategy;
 import phex.host.HostManager;
@@ -481,10 +479,10 @@ public class Servent extends AbstractLifeCycle implements ServentInfo
         {
             return;
         }
-        OnlineStatus oldStatus = onlineStatus;
+        //OnlineStatus oldStatus = onlineStatus;
         onlineStatus = newStatus;
-        Phex.getEventService().publish( PhexEventTopics.Servent_OnlineStatus, 
-            new ChangeEvent( this, oldStatus, newStatus ) );
+//        Phex.getEventService().publish( PhexEventTopics.Servent_OnlineStatus,
+//            new ChangeEvent( this, oldStatus, newStatus ) );
     }
     
     /**
@@ -509,9 +507,7 @@ public class Servent extends AbstractLifeCycle implements ServentInfo
         
         GnutellaNetwork oldNetwork = gnutellaNetwork;
         gnutellaNetwork = network;
-        Phex.getEventService().publish( PhexEventTopics.Servent_GnutellaNetwork, 
-            new ChangeEvent( this, oldNetwork, gnutellaNetwork ) );
-        
+
         setOnlineStatus( oldStatus );
     }
     

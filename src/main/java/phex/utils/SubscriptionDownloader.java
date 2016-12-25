@@ -27,8 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.Environment;
 import phex.common.Phex;
-import phex.event.PhexEventService;
-import phex.event.PhexEventTopics;
+import phex.download.swarming.PhexEventService;
 import phex.prefs.core.SubscriptionPrefs;
 import phex.servent.Servent;
 import phex.share.FileRescanRunner;
@@ -77,7 +76,7 @@ public class SubscriptionDownloader extends TimerTask
                 else
                 {
                     PhexEventService eventService = Phex.getEventService();
-                    eventService.publish( PhexEventTopics.Incoming_Uri, uriStr );
+
                 }
             }
         }

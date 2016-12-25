@@ -21,18 +21,19 @@
  */
 package phex.common.log;
 
-import org.apache.commons.collections.buffer.UnboundedFifoBuffer;
-import org.apache.commons.collections.map.MultiValueMap;
 
-import java.util.Collection;
+import org.apache.commons.collections4.map.MultiValueMap;
+import org.apache.commons.collections4.queue.CircularFifoQueue;
+
+import java.util.Queue;
 
 /**
  *
  */
 public class LogBuffer
 {
-    private final UnboundedFifoBuffer buffer;
-    private final MultiValueMap ownerMap;
+    private final Queue<LogRecord> buffer;
+    private final MultiValueMap<Object,LogRecord> ownerMap;
     private int totalSize;
     private final int maxSize;
     
@@ -41,8 +42,18 @@ public class LogBuffer
     {
         this.maxSize = maxSize;
         totalSize = 0;
-        buffer = new UnboundedFifoBuffer();
         ownerMap = new MultiValueMap();
+        buffer = new CircularFifoQueue<LogRecord>(maxSize) {
+            @Override
+            public LogRecord remove() {
+                LogRecord l = super.remove();
+                if (l!=null) {
+                    ownerMap.remove(l.getOwner(), l);
+                }
+                return l;
+            }
+        }; //UnboundedFifoBuffer();
+
     }
     
     public void addLogRecord( LogRecord record )
@@ -51,23 +62,23 @@ public class LogBuffer
         buffer.add(record);
         ownerMap.put( record.getOwner(), record );
         totalSize += size;
-        validateBufferSize();
+        //validateBufferSize();
     }
     
-    public Collection<LogRecord> getLogRecords( Object owner )
-    {
-        return ownerMap.getCollection( owner );
-    }
+//    public Collection<LogRecord> getLogRecords( Object owner )
+//    {
+//        return ownerMap.getCollection( owner );
+//    }
     
-    private void validateBufferSize()
-    {
-        while ( totalSize > maxSize )
-        {
-            LogRecord record = (LogRecord) buffer.remove();
-            ownerMap.remove( record.getOwner(), record);
-            totalSize -= record.getSize();
-        }
-    }
+//    private void validateBufferSize()
+//    {
+//        while ( totalSize > maxSize )
+//        {
+//            LogRecord record = (LogRecord) buffer.remove();
+//            ownerMap.remove( record.getOwner(), record);
+//            totalSize -= record.getSize();
+//        }
+//    }
 
     /**
      * @return

@@ -21,15 +21,12 @@
  */
 package phex.api;
 
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import phex.common.Environment;
-import phex.common.Phex;
 import phex.common.URN;
 import phex.common.log.NLogger;
 import phex.download.RemoteFile;
 import phex.download.swarming.SWDownloadFile;
 import phex.download.swarming.SwarmingManager;
-import phex.event.PhexEventTopics;
 import phex.prefs.api.Setting;
 import phex.prefs.core.LibraryPrefs;
 import phex.query.*;
@@ -608,12 +605,11 @@ public class DefaultPhexDriver implements IPhexDriver
         }
 
         // Register this class to process annotations.
-        Phex.getEventService().processAnnotations(this);
 
         return true;
     }
 
-    @EventTopicSubscriber(topic=PhexEventTopics.Search_Data)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Search_Data)
     public void onSearchDataEvent(String topic, SearchDataEvent event)
     {
         SearchItem item = findSearchForEvent(event);

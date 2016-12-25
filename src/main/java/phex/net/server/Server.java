@@ -21,7 +21,6 @@
  */
 package phex.net.server;
 
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.Environment;
@@ -30,9 +29,8 @@ import phex.common.address.AddressUtils;
 import phex.common.address.DestAddress;
 import phex.common.address.IpAddress;
 import phex.common.address.LocalServentAddress;
+import phex.download.swarming.PhexEventService;
 import phex.event.ChangeEvent;
-import phex.event.PhexEventService;
-import phex.event.PhexEventTopics;
 import phex.host.NetworkHostsContainer;
 import phex.msghandling.MessageService;
 import phex.net.UPnPMapper;
@@ -247,8 +245,7 @@ public abstract class Server implements Runnable
         {
             this.netHostsContainer = netHostsContainer;
             this.messageService = messageService;
-            
-            eventService.processAnnotations( this );
+
         }
 
         @Override
@@ -287,7 +284,7 @@ public abstract class Server implements Runnable
         /**
          * Reacts on local address changes..
          */
-        @EventTopicSubscriber(topic=PhexEventTopics.Servent_LocalAddress)
+        //@EventTopicSubscriber(topic=PhexEventTopics.Servent_LocalAddress)
         public void onLocaleAddressEvent( String topic, ChangeEvent event )
         {
             lastFirewallCheckTime = 0;

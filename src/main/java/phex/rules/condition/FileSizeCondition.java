@@ -22,7 +22,7 @@
  */
 package phex.rules.condition;
 
-import org.apache.commons.collections.set.ListOrderedSet;
+import org.apache.commons.collections4.set.ListOrderedSet;
 import phex.download.RemoteFile;
 import phex.query.Search;
 import phex.xml.sax.rules.DCondition;

@@ -4,8 +4,6 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 import phex.common.Phex;
 import phex.common.address.DefaultDestAddress;
-import phex.gui.prefs.InterfacePrefs;
-import phex.gui.prefs.PhexGuiPrefs;
 import phex.http.GnutellaHeaderNames;
 import phex.http.GnutellaRequest;
 import phex.http.HTTPHeader;
@@ -17,7 +15,6 @@ import phex.share.ShareFile;
 import phex.upload.handler.AbstractUploadHandler;
 import phex.upload.handler.UploadHandler;
 import phex.upload.response.UploadResponse;
-import phex.utils.Localizer;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,8 +26,8 @@ public class UploadHandlerTest extends TestCase
     public void setUp()
     {
         PhexCorePrefs.init();
-        PhexGuiPrefs.init();
-        Localizer.initialize( InterfacePrefs.LocaleName.get() );
+//        PhexGuiPrefs.init();
+//        Localizer.initialize( InterfacePrefs.LocaleName.get() );
         Phex.initialize();
         Servent servent = Servent.getInstance();
         uploadManager = new UploadManager( servent );

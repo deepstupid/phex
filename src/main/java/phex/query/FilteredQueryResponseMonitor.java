@@ -21,12 +21,10 @@
  */
 package phex.query;
 
-import phex.common.Phex;
 import phex.common.URN;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
 import phex.download.RemoteFile;
-import phex.event.PhexEventTopics;
 import phex.host.Host;
 import phex.msg.GUID;
 import phex.msg.InvalidMessageException;
@@ -304,7 +302,6 @@ public class FilteredQueryResponseMonitor implements MessageSubscriber<QueryResp
     
     private void fireSearchDataEvent( final SearchDataEvent searchDataEvent )
     {
-        Phex.getEventService().publish( PhexEventTopics.Search_Monitor_Results,
-            searchDataEvent );
+
     }
 }

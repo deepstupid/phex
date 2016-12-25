@@ -29,8 +29,7 @@ import phex.common.collections.StringTrie;
 import phex.common.file.FileManager;
 import phex.common.file.ManagedFile;
 import phex.common.file.ManagedFileException;
-import phex.event.PhexEventService;
-import phex.event.PhexEventTopics;
+import phex.download.swarming.PhexEventService;
 import phex.event.UserMessageListener;
 import phex.msg.QueryMsg;
 import phex.prefs.core.LibraryPrefs;
@@ -38,7 +37,6 @@ import phex.servent.Servent;
 import phex.thex.FileHashCalculationHandler;
 import phex.thex.ThexCalculationWorker;
 import phex.utils.FileUtils;
-import phex.utils.ReadWriteLock;
 import phex.utils.StringUtils;
 import phex.xml.sax.DPhex;
 import phex.xml.sax.XMLBuilder;
@@ -50,6 +48,7 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  *
@@ -61,7 +60,7 @@ public class SharedFilesService extends AbstractLifeCycle
     
     private final PhexEventService eventService;
     
-    private final ReadWriteLock rwLock;
+    private final ReentrantReadWriteLock rwLock;
     
     /**
      * The search engine used to query for shared files.
@@ -162,7 +161,7 @@ public class SharedFilesService extends AbstractLifeCycle
     {
         eventService = Phex.getEventService();
         
-        rwLock = new ReadWriteLock();
+        rwLock = new ReentrantReadWriteLock();
         urnThexCalculationRunner = new RunnerQueueWorker( Thread.NORM_PRIORITY-1 );
         
         Environment.getInstance().scheduleTimerTask( 
@@ -219,7 +218,7 @@ public class SharedFilesService extends AbstractLifeCycle
      */
     private String getSharedFilePath( File file )
     {
-        rwLock.readLock();
+        rwLock.readLock().lock();
         try
         {            
             File highestDir = file.getParentFile();
@@ -255,9 +254,10 @@ public class SharedFilesService extends AbstractLifeCycle
         }
         finally
         {
-            try{ rwLock.readUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.readLock().unlock();
+//            try{ rwLock.readUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
         }
     }
     
@@ -267,16 +267,18 @@ public class SharedFilesService extends AbstractLifeCycle
      */
     public ShareFile getFileByName( String name )
     {
-        rwLock.readLock();
+        rwLock.readLock().lock();
         try
         {
             return nameToFileMap.get( name );
         }
         finally
         {
-            try{ rwLock.readUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.readLock().unlock();
+//            try{ rwLock.readUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
+
         }
     }
     
@@ -295,7 +297,7 @@ public class SharedFilesService extends AbstractLifeCycle
      */
     public ShareFile getFileAt( int index )
     {
-        rwLock.readLock();
+        rwLock.readLock().lock();
         try
         {
             if ( index >= sharedFiles.size() )
@@ -306,9 +308,10 @@ public class SharedFilesService extends AbstractLifeCycle
         }
         finally
         {
-            try{ rwLock.readUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.readLock().unlock();
+//            try{ rwLock.readUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
         }
     }
     
@@ -325,16 +328,17 @@ public class SharedFilesService extends AbstractLifeCycle
      */
     public List<ShareFile> getSharedFiles()
     {
-        rwLock.readLock();
+        rwLock.readLock().lock();
         try
         {
             return new ArrayList<ShareFile>( sharedFiles );
         }
         finally
         {
-            try{ rwLock.readUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.readLock().unlock();
+//            try{ rwLock.readUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
         }
     }
     
@@ -343,16 +347,17 @@ public class SharedFilesService extends AbstractLifeCycle
      */
     public int getFileCount()
     {
-        rwLock.readLock();
+        rwLock.readLock().lock();
         try
         {
             return sharedFiles.size();
         }
         finally
         {
-            try{ rwLock.readUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.readLock().unlock();
+            //try{ rwLock.readUnlock(); }
+            //catch (IllegalAccessException exp )
+            //{ logger.error( exp.toString(), exp ); }
         }
     }
     
@@ -361,16 +366,17 @@ public class SharedFilesService extends AbstractLifeCycle
      */
     public int getTotalFileSizeInKb()
     {
-        rwLock.readLock();
+        rwLock.readLock().lock();
         try
         {
             return totalFileSizeKb;
         }
         finally
         {
-            try{ rwLock.readUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.readLock().unlock();
+//            try{ rwLock.readUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
         }
     }
     
@@ -380,7 +386,7 @@ public class SharedFilesService extends AbstractLifeCycle
     public ShareFile getFileByIndex( int fileIndex )
         throws IndexOutOfBoundsException
     {
-        rwLock.readLock();
+        rwLock.readLock().lock();
         try
         {
             if ( fileIndex >= indexedSharedFiles.size() )
@@ -391,9 +397,11 @@ public class SharedFilesService extends AbstractLifeCycle
         }
         finally
         {
-            try{ rwLock.readUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.readLock().unlock();
+
+//            try{ rwLock.readUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
         }
     }
     
@@ -404,7 +412,7 @@ public class SharedFilesService extends AbstractLifeCycle
     public ShareFile getFileByURN( URN fileURN )
         throws IndexOutOfBoundsException
     {
-        rwLock.readLock();
+        rwLock.readLock().lock();
         try
         {
             if ( fileURN == null )
@@ -415,9 +423,10 @@ public class SharedFilesService extends AbstractLifeCycle
         }
         finally
         {
-            try{ rwLock.readUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.readLock().unlock();
+//            try{ rwLock.readUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
         }
     }
     
@@ -425,7 +434,7 @@ public class SharedFilesService extends AbstractLifeCycle
     public void clearLibrarySearchCounters()
     {   
         int index=0;
-        rwLock.readLock();
+        rwLock.readLock().lock();
         try
         {
             while(index<sharedFiles.size())
@@ -435,22 +444,19 @@ public class SharedFilesService extends AbstractLifeCycle
             }
         }
         finally
-        {    
-            try
-            {
-                rwLock.readUnlock();
-            }            
-            catch(IllegalAccessException exp)
-            {
-                logger.error(exp.toString(), exp);
-            }        
+        {
+            rwLock.readLock().unlock();
+//            try{ rwLock.readUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
+
         }    
     }
 
     public void clearLibraryUploadCounters()
     {    
         int index=0;
-        rwLock.readLock();
+        rwLock.readLock().lock();
         try
         {    
             while(index<sharedFiles.size())
@@ -461,14 +467,11 @@ public class SharedFilesService extends AbstractLifeCycle
         }        
         finally
         {
-            try
-            {
-                rwLock.readUnlock();
-            }
-            catch(IllegalAccessException exp)
-            {
-                logger.error(exp.toString(), exp);
-            }
+            rwLock.readLock().unlock();
+//            try{ rwLock.readUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
+
         }    
     }
     
@@ -479,7 +482,7 @@ public class SharedFilesService extends AbstractLifeCycle
     public boolean isURNShared( URN fileURN )
         throws IndexOutOfBoundsException
     {
-        rwLock.readLock();
+        rwLock.readLock().lock();
         try
         {
             if ( fileURN == null )
@@ -490,15 +493,17 @@ public class SharedFilesService extends AbstractLifeCycle
         }
         finally
         {
-            try{ rwLock.readUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.readLock().unlock();
+//            try{ rwLock.readUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
+
         }
     }
     
     public List<ShareFile> getFilesByURNs( URN[] urns )
     {
-        rwLock.readLock();
+        rwLock.readLock().lock();
         try
         {
             List<ShareFile> results = new ArrayList<ShareFile>( urns.length );
@@ -514,9 +519,11 @@ public class SharedFilesService extends AbstractLifeCycle
         }
         finally
         {
-            try{ rwLock.readUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.readLock().unlock();
+//            try{ rwLock.readUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
+
         }
     }
     
@@ -550,7 +557,7 @@ public class SharedFilesService extends AbstractLifeCycle
             return;
         }
         
-        rwLock.writeLock();
+        rwLock.writeLock().lock();
         int position;
         try
         {
@@ -581,18 +588,19 @@ public class SharedFilesService extends AbstractLifeCycle
         }
         finally
         {
-            try{ rwLock.writeUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.writeLock().unlock();
+//            try{ rwLock.writeUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
         }
         //fireSharedFileAdded( position );
     }
     
     private void addTimeToFile( ShareFile shareFile )
     {
-        try{ rwLock.assertWriteLock(); }
-        catch (IllegalAccessException exp )
-        { logger.error( exp.toString(), exp ); }
+//        try{ rwLock.assertWriteLock(); }
+//        catch (IllegalAccessException exp )
+//        { logger.error( exp.toString(), exp ); }
 
         Long time = shareFile.getNetworkCreateTime();
         Set<ShareFile> shareFileSet = timeToFileMap.get( time );
@@ -609,7 +617,7 @@ public class SharedFilesService extends AbstractLifeCycle
      */
     public void removeSharedFile( ShareFile shareFile )
     {
-        rwLock.writeLock();
+        rwLock.writeLock().lock();
         int position;
         try
         {
@@ -650,9 +658,11 @@ public class SharedFilesService extends AbstractLifeCycle
         }
         finally
         {
-            try{ rwLock.writeUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.writeLock().unlock();
+//            try{ rwLock.writeUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
+
         }
         //if ( position != -1 )
         //{// if removed fire events
@@ -666,9 +676,9 @@ public class SharedFilesService extends AbstractLifeCycle
      */
     private void removeTimeToFile( ShareFile shareFile )
     {
-        try{ rwLock.assertWriteLock(); }
-        catch (IllegalAccessException exp )
-        { logger.error( exp.toString(), exp ); }
+//        try{ rwLock.assertWriteLock(); }
+//        catch (IllegalAccessException exp )
+//        { logger.error( exp.toString(), exp ); }
         
         Long time = shareFile.getNetworkCreateTime();
         Set<ShareFile> shareFileSet = timeToFileMap.get(time);
@@ -690,7 +700,7 @@ public class SharedFilesService extends AbstractLifeCycle
         HashMap<File,SharedDirectory> sharedDirectoryMap,
         HashSet<SharedDirectory> sharedDirectoryList )
     {
-        rwLock.writeLock();
+        rwLock.writeLock().lock();
         try
         {
             directoryShareMap.clear();
@@ -701,9 +711,11 @@ public class SharedFilesService extends AbstractLifeCycle
         }
         finally
         {
-            try{ rwLock.writeUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.writeLock().unlock();
+//            try{ rwLock.writeUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
+
         }
     }
     
@@ -712,7 +724,7 @@ public class SharedFilesService extends AbstractLifeCycle
      */
     public SharedDirectory[] getSharedDirectories()
     {
-        rwLock.readLock();
+        rwLock.readLock().lock();
         try
         {
             SharedDirectory[] array = new SharedDirectory[ sharedDirectories.size() ];
@@ -721,9 +733,10 @@ public class SharedFilesService extends AbstractLifeCycle
         }
         finally
         {
-            try{ rwLock.readUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.readLock().unlock();
+//            try{ rwLock.readUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
         }
     }
     
@@ -736,7 +749,7 @@ public class SharedFilesService extends AbstractLifeCycle
         {
             return null;
         }
-        rwLock.readLock();
+        rwLock.readLock().lock();
         try
         {
             SharedResource resource = directoryShareMap.get( file );
@@ -748,9 +761,10 @@ public class SharedFilesService extends AbstractLifeCycle
         }
         finally
         {
-            try{ rwLock.readUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.readLock().unlock();
+//            try{ rwLock.readUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
         }
     }
     
@@ -761,7 +775,7 @@ public class SharedFilesService extends AbstractLifeCycle
      */
     public void addUrn2FileMapping( ShareFile shareFile )
     {
-        rwLock.writeLock();
+        rwLock.writeLock().lock();
         try
         {
             assert( shareFile.getURN() != null );
@@ -772,9 +786,11 @@ public class SharedFilesService extends AbstractLifeCycle
         }
         finally
         {
-            try{ rwLock.writeUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.writeLock().unlock();
+//            try{ rwLock.writeUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
+
         }
     }
     
@@ -820,7 +836,7 @@ public class SharedFilesService extends AbstractLifeCycle
      */
     public void clearSharedFiles()
     {
-        rwLock.writeLock();
+        rwLock.writeLock().lock();
         try
         {
             urnThexCalculationRunner.stopAndClear();
@@ -834,9 +850,11 @@ public class SharedFilesService extends AbstractLifeCycle
         }
         finally
         {
-            try{ rwLock.writeUnlock(); }
-            catch (IllegalAccessException exp )
-            { logger.error( exp.toString(), exp ); }
+            rwLock.writeLock().unlock();
+//            try{ rwLock.writeUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
+
         }
         //fireAllSharedFilesChanged();
     }
@@ -921,7 +939,7 @@ public class SharedFilesService extends AbstractLifeCycle
     ///////////////////// START event handling methods ////////////////////////
     private void sharedDirectoriesChanged()
     {
-        eventService.publish( PhexEventTopics.Share_Update, "" );
+
     }
     ///////////////////// END event handling methods /////////////////////////
     
@@ -978,7 +996,7 @@ public class SharedFilesService extends AbstractLifeCycle
             {
                 logger.debug( "Saving shared library." );
                 isFollowUpSaveTriggered = false;
-                rwLock.readLock();
+                rwLock.readLock().lock();
                 try
                 {
                     DPhex dPhex = new DPhex();
@@ -1042,14 +1060,10 @@ public class SharedFilesService extends AbstractLifeCycle
                 }
                 finally
                 {
-                    try
-                    {
-                        rwLock.readUnlock();
-                    }
-                    catch (IllegalAccessException exp)
-                    {
-                        logger.error( exp.toString(), exp );
-                    }
+                    rwLock.readLock().unlock();
+//            try{ rwLock.readUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
                 }
             }
             while ( isFollowUpSaveTriggered );
@@ -1065,7 +1079,7 @@ public class SharedFilesService extends AbstractLifeCycle
         private DSharedLibrary createDSharedLibrary()
         {
             DSharedLibrary library = new DSharedLibrary();
-            rwLock.readLock();
+            rwLock.readLock().lock();
             try
             {
                 List<DSharedFile> sharedFileList = library.getSubElementList();
@@ -1088,14 +1102,11 @@ public class SharedFilesService extends AbstractLifeCycle
             }
             finally
             {
-                try
-                {
-                    rwLock.readUnlock();
-                }
-                catch (IllegalAccessException exp)
-                {
-                    logger.error( exp.toString(), exp );
-                }
+                rwLock.readLock().unlock();
+//            try{ rwLock.readUnlock(); }
+//            catch (IllegalAccessException exp )
+//            { logger.error( exp.toString(), exp ); }
+
             }
             return library;
         }

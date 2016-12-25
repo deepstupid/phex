@@ -39,7 +39,6 @@ import phex.servent.Servent;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticsManager;
 
-import javax.annotation.CheckForNull;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
@@ -50,7 +49,7 @@ public class PushRequestSleeper
     private final DestAddress serventAddress;
     private final GUID clientGUID;
     private final long fileIndex;
-    @CheckForNull
+    //@CheckForNull
     private final DestAddress[] pushProxyAddresses;
 
     /**

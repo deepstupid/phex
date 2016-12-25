@@ -21,7 +21,7 @@
  */
 package phex.http;
 
-import org.apache.commons.collections.map.LinkedMap;
+import org.apache.commons.collections4.map.LinkedMap;
 import phex.common.Phex;
 
 import java.util.*;

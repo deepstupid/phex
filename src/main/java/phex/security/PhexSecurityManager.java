@@ -29,8 +29,6 @@ import phex.common.file.FileManager;
 import phex.common.file.ManagedFile;
 import phex.common.file.ManagedFileException;
 import phex.common.log.NLogger;
-import phex.event.ContainerEvent;
-import phex.event.PhexEventTopics;
 import phex.event.UserMessageListener;
 import phex.prefs.core.SecurityPrefs;
 import phex.share.SharedResource;
@@ -690,14 +688,12 @@ public class PhexSecurityManager extends AbstractLifeCycle
 
     private void fireSecurityRuleAdded( final SecurityRule rule, final int position )
     {
-        Phex.getEventService().publish( PhexEventTopics.Security_Rule ,
-            new ContainerEvent( ContainerEvent.Type.ADDED, rule, this, position ) );
+
     }
 
     private void fireSecurityRuleRemoved( final SecurityRule rule, final int position )
     {
-        Phex.getEventService().publish( PhexEventTopics.Security_Rule ,
-            new ContainerEvent( ContainerEvent.Type.REMOVED, rule, this, position ) );
+
     }
     ///////////////////// END event handling methods ////////////////////////
 }

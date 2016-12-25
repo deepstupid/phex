@@ -21,13 +21,10 @@
  */
 package phex.query;
 
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.AbstractLifeCycle;
 import phex.common.Environment;
-import phex.common.Phex;
-import phex.event.PhexEventTopics;
 import phex.host.Host;
 import phex.msg.QueryFactory;
 import phex.msg.QueryMsg;
@@ -78,8 +75,7 @@ public class QueryManager extends AbstractLifeCycle
         searchFilterRules = new SearchFilterRules( filterFile );
         //researchService = new ResearchService( new ResearchServiceConfig() );
         dynamicQueryWorker = new DynamicQueryWorker();
-        
-        Phex.getEventService().processAnnotations( this );
+
     }
 
     @Override
@@ -98,7 +94,7 @@ public class QueryManager extends AbstractLifeCycle
         searchFilterRules.save();
     }
     
-    @EventTopicSubscriber(topic=PhexEventTopics.Host_Disconnect)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Host_Disconnect)
     public void onHostDisconnectEvent( String topic, Host host )
     {
         removeHostQueries( host );

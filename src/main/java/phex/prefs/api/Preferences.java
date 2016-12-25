@@ -24,8 +24,7 @@ package phex.prefs.api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.collections.SortedProperties;
-import phex.event.PhexEventService;
-import phex.event.PhexEventTopics;
+import phex.download.swarming.PhexEventService;
 import phex.utils.FileUtils;
 import phex.utils.IOUtil;
 
@@ -95,7 +94,7 @@ public class Preferences
         saveRequiredNotify();
         if ( eventService != null )
         {
-            eventService.publish( PhexEventTopics.Prefs_Changed, event );
+
         }
     }
 

@@ -25,7 +25,7 @@ package phex.common.collections;
 // Copyright by Limewire
 
 
-import org.apache.commons.collections.iterators.EmptyIterator;
+import org.apache.commons.collections4.iterators.EmptyIterator;
 
 import java.io.Serializable;
 import java.util.*;

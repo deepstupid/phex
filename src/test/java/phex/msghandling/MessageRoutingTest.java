@@ -24,15 +24,12 @@ package phex.msghandling;
 import junit.framework.TestCase;
 import phex.common.address.DefaultDestAddress;
 import phex.common.bandwidth.BandwidthController;
-import phex.gui.prefs.InterfacePrefs;
-import phex.gui.prefs.PhexGuiPrefs;
 import phex.host.Host;
 import phex.msg.GUID;
 import phex.net.connection.Connection;
 import phex.net.repres.def.DefaultSocketFacade;
 import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
-import phex.utils.Localizer;
 import phex.utils.QueryGUIDRoutingPair;
 
 import java.net.Socket;
@@ -51,8 +48,8 @@ public class MessageRoutingTest extends TestCase
     protected void setUp()
     {
         PhexCorePrefs.init();
-        PhexGuiPrefs.init();
-        Localizer.initialize( InterfacePrefs.LocaleName.get() );
+//        PhexGuiPrefs.init();
+//        Localizer.initialize( InterfacePrefs.LocaleName.get() );
         Servent.getInstance();
         messageRouting = new MessageRouting( );
     }

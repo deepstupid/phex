@@ -22,7 +22,7 @@
  */
 package phex.common.file;
 
-import org.apache.commons.collections.map.ReferenceMap;
+import org.apache.commons.collections4.map.ReferenceMap;
 import phex.prefs.core.FilePrefs;
 
 import java.io.File;
@@ -48,7 +48,7 @@ public class FileManager
     
     public FileManager()
     {
-        fileManagedFileMap = new ReferenceMap( ReferenceMap.WEAK, ReferenceMap.WEAK );
+        fileManagedFileMap = new ReferenceMap( ReferenceMap.ReferenceStrength.WEAK, ReferenceMap.ReferenceStrength.WEAK );
     }
 
     /**

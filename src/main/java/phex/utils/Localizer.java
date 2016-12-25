@@ -25,7 +25,6 @@ package phex.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nonnull;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -216,7 +215,7 @@ public class Localizer
      * If the key is not defined it returns the key itself and prints an
      * error message on system.err.
      */
-    @Nonnull
+    /*@NonNull*/
     public static String getString(String key)
     {
         String value = langKeyMap.get( key );

@@ -29,8 +29,6 @@ import phex.msg.QueryResponseMsg;
 import phex.servent.Servent;
 import phex.utils.VendorCodes;
 
-import javax.annotation.CheckForNull;
-
 /**
  * This class holds the available informations of a QueryHit for a host.
  */
@@ -92,7 +90,7 @@ public class QueryHitHost
      */
     private final DestAddress hostAddress;
     
-    @CheckForNull
+    //@CheckForNull
     private DestAddress[] pushProxyAddresses;
     
     /**
@@ -130,7 +128,7 @@ public class QueryHitHost
     /**
      * @return Returns the pushProxyAddresses.
      */
-    @CheckForNull
+    //@CheckForNull
     public DestAddress[] getPushProxyAddresses()
     {
         return pushProxyAddresses;

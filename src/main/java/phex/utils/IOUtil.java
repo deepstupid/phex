@@ -21,7 +21,6 @@
  */
 package phex.utils;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 import phex.common.file.ManagedFile;
 import phex.common.file.ManagedFileException;
 import phex.common.file.ReadOnlyManagedFile;

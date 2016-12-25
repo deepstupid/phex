@@ -75,7 +75,7 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      * Up to 56 last bytes are kept in the padded history.
      */
     private int padded;
-    private byte[] pad;
+    private final byte[] pad;
 
     /**
      * Private context that contains the current digest key.
@@ -85,20 +85,22 @@ public final class SHA1 extends MessageDigest implements Cloneable {
     /**
      * Creates a SHA1 object with default initial state.
      */
-    public SHA1()
-    {
+    public SHA1() {
+        this(new byte[64]);
+    }
+
+    protected SHA1(byte[] pad) {
         super("SHA-1");
-        pad = new byte[64];
+        this.pad = pad;
         init();
     }
+
 
     /**
      * Clones this object.
      */
     public Object clone() throws CloneNotSupportedException {
-        final SHA1 that = (SHA1)super.clone();
-        that.pad = this.pad.clone();
-        return that;
+        return new SHA1(this.pad.clone());
     }
 
     /**
@@ -151,8 +153,9 @@ public final class SHA1 extends MessageDigest implements Cloneable {
      */
     public void engineUpdate(final byte input) {
         bytes++;
-        if (padded < 63) {
-            pad[padded++] = input;
+        int p = padded++;
+        if (p < 64) {
+            pad[p-1] = input;
             return;
         }
         pad[63] = input;

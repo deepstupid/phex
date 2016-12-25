@@ -25,13 +25,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.AddressCounter;
 import phex.common.Environment;
-import phex.common.Phex;
 import phex.common.address.DestAddress;
 import phex.common.bandwidth.BandwidthController;
 import phex.common.log.LogBuffer;
-import phex.event.ContainerEvent;
-import phex.event.ContainerEvent.Type;
-import phex.event.PhexEventTopics;
 import phex.http.HTTPRequest;
 import phex.net.connection.Connection;
 import phex.prefs.core.UploadPrefs;
@@ -378,14 +374,12 @@ public class UploadManager
 
     private void fireUploadStateAdded( UploadState uploadState, int position )
     {
-        Phex.getEventService().publish( PhexEventTopics.Upload_State,
-            new ContainerEvent( Type.ADDED, uploadState, this, position ) );
+
     }
 
     private void fireUploadStateRemoved( UploadState uploadState, int position )
     {
-        Phex.getEventService().publish( PhexEventTopics.Upload_State,
-            new ContainerEvent( Type.REMOVED, uploadState, this, position ) );
+
     }
 
     ///////////////////// END event handling methods ////////////////////////

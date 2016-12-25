@@ -8,12 +8,9 @@ import net.sourceforge.groboutils.junit.v1.TestRunnable;
 import phex.common.Phex;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.IpAddress;
-import phex.gui.prefs.InterfacePrefs;
-import phex.gui.prefs.PhexGuiPrefs;
 import phex.prefs.core.PhexCorePrefs;
 import phex.prefs.core.UploadPrefs;
 import phex.servent.Servent;
-import phex.utils.Localizer;
 import phex.utils.RandomUtils;
 
 import java.util.HashSet;
@@ -21,14 +18,17 @@ import java.util.Set;
 
 public class UploadManagerTest extends TestCase
 {
+
+    final static int runnerCount = 8;
+
     private UploadManager uploadManager;
     
     @Override
     public void setUp()
     {
         PhexCorePrefs.init();
-        PhexGuiPrefs.init();
-        Localizer.initialize( InterfacePrefs.LocaleName.get() );
+//        PhexGuiPrefs.init();
+//        Localizer.initialize( InterfacePrefs.LocaleName.get() );
         Phex.initialize();
         Servent servent = Servent.getInstance();
         uploadManager = new UploadManager( servent );
@@ -37,7 +37,7 @@ public class UploadManagerTest extends TestCase
     public void testMultiConcurrency() throws Throwable
     {
         UploadPrefs.MaxUploadsPerIP.set( Integer.valueOf( 1 ) );
-        int runnerCount = 25;
+
         TestRunnable[] runners = new TestRunnable[runnerCount];
         for ( int i=0; i<runnerCount; i++ )
         {

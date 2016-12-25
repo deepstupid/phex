@@ -21,7 +21,6 @@
  */
 package phex.query;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import org.apache.commons.lang.SystemUtils;
 import phex.common.log.NLogger;
 import phex.host.Host;
@@ -54,7 +53,7 @@ public class QueryMsgToWriterMonitor implements MessageSubscriber<QueryMsg>
 {
     private Writer outputWriter;
 
-    public QueryMsgToWriterMonitor( @NonNull Writer outputWriter )
+    public QueryMsgToWriterMonitor( /*@NonNull*/ Writer outputWriter )
     {
         if ( outputWriter == null )
         {

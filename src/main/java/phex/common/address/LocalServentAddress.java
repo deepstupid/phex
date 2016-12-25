@@ -21,9 +21,7 @@
  */
 package phex.common.address;
 
-import phex.event.ChangeEvent;
-import phex.event.PhexEventService;
-import phex.event.PhexEventTopics;
+import phex.download.swarming.PhexEventService;
 import phex.net.repres.PresentationManager;
 import phex.net.server.Server;
 import phex.prefs.core.ProxyPrefs;
@@ -115,8 +113,7 @@ public class LocalServentAddress implements DestAddress
     
     private void fireNetworkIPChanged( DestAddress newAddress )
     {
-        eventService.publish( PhexEventTopics.Servent_LocalAddress, 
-            new ChangeEvent( this, null, newAddress ) );
+
     }
 
     

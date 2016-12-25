@@ -21,7 +21,6 @@
  */
 package phex.download;
 
-import edu.umd.cs.findbugs.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.FileHandlingException;
@@ -707,8 +706,8 @@ public class MemoryFile
         }
     }
     
-    private void releaseMultiBlockedAllocScope(@NonNull DownloadScope unblockScope,
-        @NonNull SWDownloadCandidate downloadCandidate)
+    private void releaseMultiBlockedAllocScope(/*@NonNull*/ DownloadScope unblockScope,
+        /*@NonNull*/ SWDownloadCandidate downloadCandidate)
     {
         allocationLock.lock();
         try 

@@ -24,7 +24,7 @@ package phex.common.collections;
 //Modified version (1.4 2007-06-11 15:37:09) of /java/org/limewire/collection/StringTrie.java
 //Copyright by Limewire
 
-import org.apache.commons.collections.iterators.EmptyIterator;
+import org.apache.commons.collections4.iterators.EmptyIterator;
 
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -23,7 +23,6 @@ package phex.download.swarming;
 
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import phex.common.*;
 import phex.common.bandwidth.BandwidthController;
 import phex.common.file.FileManager;
@@ -34,7 +33,6 @@ import phex.common.log.NLogger;
 import phex.download.*;
 import phex.download.swarming.SWDownloadCandidate.CandidateStatus;
 import phex.event.*;
-import phex.event.ContainerEvent.Type;
 import phex.msg.QueryResponseMsg;
 import phex.prefs.core.DownloadPrefs;
 import phex.query.DownloadCandidateSnoop;
@@ -149,17 +147,20 @@ public class SwarmingManager extends AbstractLifeCycle
         {
             throw new NullPointerException( "Servent is null." );
         }
-        if ( eventService == null )
-        {
-            throw new NullPointerException( "PhexEventService is null." );
-        }
+//        if ( eventService == null )
+//        {
+//            throw new NullPointerException( "PhexEventService is null." );
+//        }
         if ( sharedFilesService == null )
         {
             throw new NullPointerException( "SharedFilesService is null." );
         }
         this.eventService = eventService;
-        
-        eventService.processAnnotations( this );
+
+        if (eventService!=null) {
+
+        }
+
         this.servent = servent;
         this.sharedFilesService = sharedFilesService;
         
@@ -1067,7 +1068,7 @@ public class SwarmingManager extends AbstractLifeCycle
         workerLauncher.triggerCycle();
     }
     
-    @EventTopicSubscriber(topic=PhexEventTopics.Download_File_Completed)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Download_File_Completed)
     public void onDownloadFileCompletedEvent(String topic, SWDownloadFile file)
     {
         // this executes a command after completion.
@@ -1125,7 +1126,7 @@ public class SwarmingManager extends AbstractLifeCycle
         }
     }
     
-    @EventTopicSubscriber(topic=PhexEventTopics.Download_Candidate)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Download_Candidate)
     public void onDownloadCandidateEvent( String topic, 
         final ContainerEvent event )
     {
@@ -1135,7 +1136,7 @@ public class SwarmingManager extends AbstractLifeCycle
         }
     }
     
-    @EventTopicSubscriber(topic=PhexEventTopics.Download_Candidate_Status)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Download_Candidate_Status)
     public void onCandidateStatusChange( String topic, 
         final ChangeEvent event )
     {
@@ -1164,14 +1165,16 @@ public class SwarmingManager extends AbstractLifeCycle
 
     private void fireDownloadFileAdded( SWDownloadFile file, int position )
     {
-        eventService.publish( PhexEventTopics.Download_File,
-            new ContainerEvent( Type.ADDED, file, this, position ) );
+        if (eventService!=null) {
+
+        }
     }
 
     private void fireDownloadFileRemoved( SWDownloadFile file, int position )
     {
-        eventService.publish( PhexEventTopics.Download_File,
-            new ContainerEvent( Type.REMOVED, file, this, position ) );
+        if (eventService!=null) {
+
+        }
     }
 
     

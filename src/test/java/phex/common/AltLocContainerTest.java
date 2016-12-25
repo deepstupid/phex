@@ -25,12 +25,9 @@ import junit.framework.TestCase;
 import phex.common.address.AddressUtils;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
-import phex.gui.prefs.InterfacePrefs;
-import phex.gui.prefs.PhexGuiPrefs;
 import phex.prefs.core.PhexCorePrefs;
 import phex.security.PhexSecurityManager;
 import phex.servent.Servent;
-import phex.utils.Localizer;
 
 import java.util.Collection;
 
@@ -51,8 +48,8 @@ public class AltLocContainerTest extends TestCase
         Phex.initialize();
         /// should not depend on these
         PhexCorePrefs.init();
-        PhexGuiPrefs.init();
-        Localizer.initialize( InterfacePrefs.LocaleName.get() );
+//        PhexGuiPrefs.init();
+//        Localizer.initialize( InterfacePrefs.LocaleName.get() );
         Servent servent = Servent.getInstance();
         
         

@@ -21,7 +21,6 @@
  */
 package phex.host;
 
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.Environment;
@@ -32,11 +31,7 @@ import phex.common.address.DestAddress;
 import phex.common.file.FileManager;
 import phex.common.file.ManagedFile;
 import phex.common.file.ManagedFileException;
-import phex.event.ChangeEvent;
-import phex.event.ContainerEvent;
-import phex.event.ContainerEvent.Type;
-import phex.event.PhexEventTopics;
-import phex.event.UserMessageListener;
+import phex.event.*;
 import phex.servent.Servent;
 import phex.xml.sax.DPhex;
 import phex.xml.sax.DSubElementList;
@@ -70,8 +65,7 @@ public class FavoritesContainer
             SaveFavoritesTimer.TIMER_PERIOD );
         
         initializeFavorites();
-        
-        Phex.getEventService().processAnnotations( this );
+
     }
     
     /**
@@ -109,7 +103,7 @@ public class FavoritesContainer
     /**
      * Reacts on gnutella network changes to initialize or save favorite hosts.
      */
-    @EventTopicSubscriber(topic=PhexEventTopics.Servent_GnutellaNetwork)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Servent_GnutellaNetwork)
     public void onGnutellaNetworkEvent( String topic, ChangeEvent event )
     {
         saveFavoriteHosts();
@@ -285,16 +279,12 @@ public class FavoritesContainer
     ///////////////////// START event handling methods ////////////////////////
     private void fireBookmarkedHostAdded( FavoriteHost host, int position )
     {
-        Phex.getEventService().publish( 
-            PhexEventTopics.Net_Favorites,
-            new ContainerEvent( Type.ADDED, host, this, position ) );
+
     }
 
     private void fireBookmarkedHostRemoved( FavoriteHost host, int position )
     {
-        Phex.getEventService().publish(
-            PhexEventTopics.Net_Favorites,
-            new ContainerEvent( Type.REMOVED, host, this, position ) );
+
     }
 
     ////////////////////// END event handling methods //////////////////////////

@@ -29,7 +29,6 @@ import phex.common.QueryRoutingTable;
 import phex.common.address.DestAddress;
 import phex.connection.ConnectionClosedException;
 import phex.connection.MessageQueue;
-import phex.event.PhexEventTopics;
 import phex.io.buffer.ByteBuffer;
 import phex.msg.GUID;
 import phex.msg.Message;
@@ -776,7 +775,7 @@ public class Host
                 connection = null;
             }
         }
-        Phex.getEventService().publish( PhexEventTopics.Host_Disconnect, this );
+
     }
 
     public int getSendQueueLength()

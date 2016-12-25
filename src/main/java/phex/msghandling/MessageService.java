@@ -21,13 +21,11 @@
  */
 package phex.msghandling;
 
-import org.bushe.swing.event.annotation.EventTopicSubscriber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.bootstrap.UdpHostCacheContainer;
 import phex.common.*;
 import phex.common.address.DestAddress;
-import phex.event.PhexEventTopics;
 import phex.host.CaughtHostsContainer;
 import phex.host.Host;
 import phex.host.NetworkHostsContainer;
@@ -95,8 +93,7 @@ public class MessageService extends AbstractLifeCycle
         
         queryMsgRoutingHandler = new QueryMsgRoutingHandler( servent, messageRouting );
         messageDispatcher.addMessageSubscriber( QueryMsg.class, queryMsgRoutingHandler );
-        
-        Phex.getEventService().processAnnotations( this );
+
     }
     
     ////////////////////////////////////////////////////////////////////////////
@@ -128,7 +125,7 @@ public class MessageService extends AbstractLifeCycle
             HopsFlowTimer.TIMER_PERIOD );
     }
     
-    @EventTopicSubscriber(topic=PhexEventTopics.Host_Disconnect)
+    //@EventTopicSubscriber(topic=PhexEventTopics.Host_Disconnect)
     public void onHostDisconnectEvent( String topic, Host host )
     {
         // remove routings of obsolete host.
