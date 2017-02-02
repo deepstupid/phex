@@ -1,31 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.phex</groupId>
-    <artifactId>Phex</artifactId>
+    <groupId>phex</groupId>
+    <artifactId>phex</artifactId>
     <packaging>jar</packaging>
-    <version>3.4.2</version>
-    <name>Phex</name>
-    <url>http://phex.org</url>
+    <version>4.0.0</version>
+    <name>phex</name>
     <properties>
-        <phex.build>156</phex.build>
-        <phex.fullVersion>${project.version}.${phex.build}</phex.fullVersion>
         <compileSource>1.8</compileSource>
         <targetSource>1.8</targetSource>
     </properties>
-    <scm>
-        <connection>scm:svn:https://phex.svn.sourceforge.net/svnroot/phex/phex/trunk</connection>
-        <developerConnection>scm:svn:https://phex.svn.sourceforge.net/svnroot/phex/phex/trunk</developerConnection>
-        <url>http://phex.svn.sourceforge.net/viewvc/phex/phex/trunk/</url>
-    </scm>
+
 
 
     <dependencies>
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-embedded</artifactId>
-            <version>9.0.0.Alpha4</version>
-        </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -57,16 +46,11 @@
             <version>1.46</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>1.1.8</version>
-            <scope>compile</scope>
-        </dependency>
+
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.1.8</version>
+            <version>1.1.9</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -107,7 +91,7 @@
         <dependency>
             <groupId>org.teleal</groupId>
             <artifactId>teleal-common</artifactId>
-            <version>1.0.13</version>
+            <version>1.0.14</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -506,10 +490,10 @@
             <!--</releases>-->
         <!--</pluginRepository>-->
     <!--</pluginRepositories>-->
-    <dependencyManagement>
-        <dependencies>
-        </dependencies>
-    </dependencyManagement>
+    <!--<dependencyManagement>-->
+        <!--<dependencies>-->
+        <!--</dependencies>-->
+    <!--</dependencyManagement>-->
     <!--<distributionManagement>-->
         <!--<repository>-->
             <!--<id>phex-repository</id>-->

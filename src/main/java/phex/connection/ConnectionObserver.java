@@ -28,7 +28,7 @@ import phex.host.Host;
 import phex.host.HostStatus;
 import phex.host.NetworkHostsContainer;
 import phex.msghandling.MessageService;
-import phex.utils.Localizer;
+import phex.util.Localizer;
 
 import java.util.ArrayList;
 import java.util.List;

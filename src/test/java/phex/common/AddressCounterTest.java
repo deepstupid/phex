@@ -5,8 +5,8 @@ import net.sourceforge.groboutils.junit.v1.MultiThreadedTestRunner;
 import net.sourceforge.groboutils.junit.v1.TestMonitorRunnable;
 import net.sourceforge.groboutils.junit.v1.TestRunnable;
 import phex.common.address.DefaultDestAddress;
-import phex.utils.AccessUtils;
-import phex.utils.RandomUtils;
+import phex.util.AccessUtils;
+import phex.util.RandomUtils;
 
 import java.util.Map;
 

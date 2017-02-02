@@ -22,7 +22,7 @@
  */
 package phex.prefs.core;
 
-import org.apache.commons.lang.SystemUtils;
+import phex.util.SystemUtils;
 import phex.prefs.api.PreferencesFactory;
 import phex.prefs.api.Setting;
 

@@ -27,7 +27,7 @@ import phex.download.swarming.*;
 import phex.msg.GUID;
 import phex.query.QueryHitHost;
 import phex.servent.Servent;
-import phex.utils.AccessUtils;
+import phex.util.AccessUtils;
 
 public class TestDownload extends TestCase
 {

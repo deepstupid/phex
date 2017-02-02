@@ -1,6 +1,6 @@
 package phex.io.channels;
 
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 import java.io.IOException;
 import java.io.InputStream;

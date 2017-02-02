@@ -25,7 +25,7 @@ import phex.net.repres.PresentationManager;
 import phex.net.repres.SocketFacade;
 import phex.prefs.core.NetworkPrefs;
 import phex.prefs.core.ProxyPrefs;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 import java.io.IOException;
 import java.io.InputStream;

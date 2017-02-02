@@ -39,7 +39,7 @@ import phex.servent.Servent;
 import phex.share.export.ExportEngine;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticsManager;
-import phex.utils.StringUtils;
+import phex.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -30,8 +30,8 @@ import phex.common.address.IpAddress;
 import phex.io.buffer.ByteBuffer;
 import phex.prefs.core.MessagePrefs;
 import phex.servent.Servent;
-import phex.utils.IOUtil;
-import phex.utils.StringUtils;
+import phex.util.IOUtil;
+import phex.util.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

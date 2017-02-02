@@ -11,7 +11,7 @@ import phex.common.address.IpAddress;
 import phex.prefs.core.PhexCorePrefs;
 import phex.prefs.core.UploadPrefs;
 import phex.servent.Servent;
-import phex.utils.RandomUtils;
+import phex.util.RandomUtils;
 
 import java.util.HashSet;
 import java.util.Set;

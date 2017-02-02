@@ -227,15 +227,15 @@ public class MultiThreadedTestRunner {
                             try {
                                 t[i].join(10L);
                             } catch (InterruptedException var12) {
-                                LOG.debug("Join for thread at index " + i + " was interrupted.");
+                                LOG.debug("Join for thread at index {} interrupted", i);
                                 iex = var12;
                             }
 
                             if(!t[i].isAlive()) {
-                                LOG.debug("Joined thread at index " + i);
+                                LOG.debug("Joined thread at index {}", i);
                                 t[i] = null;
                             } else {
-                                LOG.debug("Thread at index " + i + " still running.");
+                                LOG.debug("Thread at index {} continues", i);
                                 threadsRunning = true;
                             }
                         }
@@ -256,16 +256,16 @@ public class MultiThreadedTestRunner {
 
         for(int i = 0; i < t.length; ++i) {
             if(t[i] != null && t[i].isAlive()) {
-                LOG.debug("Stopping thread at index " + i);
+                LOG.debug("Stopping thread at index {}", i);
                 ++killCount;
                 if(!this.performKills) {
-                    LOG.error("Did not stop thread " + t[i]);
+                    LOG.error("Did not stop thread {}", t[i]);
                 } else {
                     int count = 0;
 
                     for(boolean isAlive = t[i].isAlive(); isAlive && count < 10; ++count) {
                         t[i].stop(new MultiThreadedTestRunner.TestDeathException("Thread " + i + " did not die on its own"));
-                        LOG.debug("Waiting for thread at index " + i + " to stop.");
+                        LOG.debug("Waiting for thread at index {} to stop", i);
                         Thread.yield();
                         isAlive = t[i].isAlive();
                         if(isAlive) {
@@ -274,7 +274,7 @@ public class MultiThreadedTestRunner {
                     }
 
                     if(count >= 10) {
-                        LOG.error("Thread at index " + i + " did not stop!");
+                        LOG.error("Thread at index {} did not stop!", i);
                     }
 
                     t[i] = null;

@@ -23,8 +23,8 @@ package phex.msg;
 
 import phex.common.log.NLogger;
 import phex.io.buffer.ByteBuffer;
-import phex.utils.HexConverter;
-import phex.utils.IOUtil;
+import phex.util.HexConverter;
+import phex.util.IOUtil;
 
 
 /**

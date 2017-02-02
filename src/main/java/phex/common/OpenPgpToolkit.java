@@ -11,10 +11,10 @@ import org.slf4j.LoggerFactory;
 import phex.http.HTTPHeaderNames;
 import phex.http.HttpClientFactory;
 import phex.prefs.core.ProxyPrefs;
-import phex.utils.HexConverter;
-import phex.utils.IOUtil;
-import phex.utils.RandomUtils;
-import phex.utils.StringUtils;
+import phex.util.HexConverter;
+import phex.util.IOUtil;
+import phex.util.RandomUtils;
+import phex.util.StringUtils;
 
 import java.io.IOException;
 import java.io.InputStream;

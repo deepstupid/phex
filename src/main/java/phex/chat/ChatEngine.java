@@ -31,7 +31,7 @@ import phex.io.buffer.ByteBuffer;
 import phex.net.connection.Connection;
 import phex.net.connection.ConnectionFactory;
 import phex.prefs.core.NetworkPrefs;
-import phex.utils.GnutellaInputStream;
+import phex.util.GnutellaInputStream;
 
 import java.io.IOException;
 import java.util.Locale;

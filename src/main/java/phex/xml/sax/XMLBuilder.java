@@ -25,7 +25,7 @@ package phex.xml.sax;
 import phex.common.Phex;
 import phex.common.file.*;
 import phex.common.log.NLogger;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 import phex.xml.sax.parser.UnicodeInputStream;
 
 import java.io.*;

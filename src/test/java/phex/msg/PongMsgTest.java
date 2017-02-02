@@ -22,7 +22,7 @@
 package phex.msg;
 
 import junit.framework.TestCase;
-import phex.utils.AccessUtils;
+import phex.util.AccessUtils;
 
 /**
  * 

@@ -25,10 +25,12 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import phex.common.ThreadTracking;
 import phex.prefs.core.PhexCorePrefs;
-import phex.utils.Localizer;
-import phex.utils.SystemProperties;
+import phex.util.Localizer;
+import phex.util.SystemProperties;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 
 public class PhexPerformanceSuite extends TestSuite
@@ -42,9 +44,7 @@ public class PhexPerformanceSuite extends TestSuite
     protected void setUp()
         throws Exception
     {
-        StringBuffer path = new StringBuffer(20);
-        path.append( System.getProperty("user.home") );
-        path.append( File.separator );
+        StringBuffer path = tempPath();
 
         //phex config files are hidden on all UNIX systems (also MacOSX. Since
         //there are many UNIX like operation systems with Java support out there,
@@ -65,6 +65,13 @@ public class PhexPerformanceSuite extends TestSuite
         PhexCorePrefs.init();
         
         ThreadTracking.initialize();
+    }
+
+    public static StringBuffer tempPath() throws IOException {
+        StringBuffer path = new StringBuffer(20);
+        path.append(Files.createTempDirectory("phex").toAbsolutePath().toString() );
+        path.append( File.separator );
+        return path;
     }
 
     public static Test suite()

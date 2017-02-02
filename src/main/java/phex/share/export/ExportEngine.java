@@ -26,7 +26,7 @@ import phex.common.Environment;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
 import phex.share.ShareFile;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;

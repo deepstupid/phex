@@ -23,7 +23,7 @@ package phex.statistic;
 
 import phex.common.bandwidth.BandwidthController;
 import phex.common.format.NumberFormatUtils;
-import phex.utils.Localizer;
+import phex.util.Localizer;
 
 public class TransferAverageStatisticProvider implements StatisticProvider
 {

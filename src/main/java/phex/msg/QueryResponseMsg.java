@@ -30,8 +30,8 @@ import phex.prefs.core.LibraryPrefs;
 import phex.prefs.core.NetworkPrefs;
 import phex.query.QHDFlag;
 import phex.security.PhexSecurityManager;
-import phex.utils.HexConverter;
-import phex.utils.IOUtil;
+import phex.util.HexConverter;
+import phex.util.IOUtil;
 import phex.xml.XMLUtils;
 
 import java.io.ByteArrayOutputStream;

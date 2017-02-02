@@ -3,7 +3,7 @@ package phex.metalink;
 import org.apache.commons.httpclient.URI;
 import org.xml.sax.SAXException;
 import phex.common.log.NLogger;
-import phex.utils.StringUtils;
+import phex.util.StringUtils;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;

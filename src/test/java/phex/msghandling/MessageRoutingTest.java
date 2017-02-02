@@ -30,7 +30,7 @@ import phex.net.connection.Connection;
 import phex.net.repres.def.DefaultSocketFacade;
 import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
-import phex.utils.QueryGUIDRoutingPair;
+import phex.util.QueryGUIDRoutingPair;
 
 import java.net.Socket;
 

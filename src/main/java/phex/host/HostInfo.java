@@ -22,7 +22,7 @@
  */
 package phex.host;
 
-import phex.utils.Localizer;
+import phex.util.Localizer;
 
 public class HostInfo
 {

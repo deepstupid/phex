@@ -30,8 +30,8 @@ import phex.io.buffer.ByteBuffer;
 import phex.net.repres.PresentationManager;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
-import phex.utils.HexConverter;
-import phex.utils.IOUtil;
+import phex.util.HexConverter;
+import phex.util.IOUtil;
 
 import java.util.HashSet;
 import java.util.Set;

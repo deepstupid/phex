@@ -32,7 +32,7 @@ import phex.prefs.core.LibraryPrefs;
 import phex.query.*;
 import phex.servent.OnlineStatus;
 import phex.servent.Servent;
-import phex.utils.StringUtils;
+import phex.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;

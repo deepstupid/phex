@@ -27,7 +27,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 import phex.common.MediaType;
-import phex.utils.StringUtils;
+import phex.util.StringUtils;
 import phex.xml.sax.rules.DMediaTypeCondition;
 
 import javax.xml.parsers.SAXParser;

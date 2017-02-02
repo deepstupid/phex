@@ -21,7 +21,7 @@
  */
 package phex.common;
 
-import phex.utils.URLCodecUtils;
+import phex.util.URLCodecUtils;
 
 import java.util.Locale;
 

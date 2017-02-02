@@ -21,20 +21,16 @@
  */
 package phex.api;
 
-import org.apache.commons.lang.SystemUtils;
 import phex.Main;
 import phex.common.Phex;
 import phex.common.ThreadTracking;
-import phex.common.log.LogUtils;
 import phex.common.log.NLogger;
 import phex.connection.LoopbackDispatcher;
 import phex.download.swarming.PhexEventService;
 import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
-import phex.utils.SystemProperties;
+import phex.util.SystemProperties;
 
-import javax.swing.*;
-import java.awt.*;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -99,7 +95,6 @@ public class PhexRunner
 //            //System.out.println("Splash time: " + (end-start));
 //        }
 
-        validateJavaVersion();
 
         // Parse args...
         Iterator<String> iterator = Arrays.asList( args ).iterator();
@@ -108,7 +103,6 @@ public class PhexRunner
         String magmaFile = null;
         String rssFile = null; 
         String argument;
-        Boolean startConsole = false; 
 
         while ((argument = readArgument(iterator)) != null) 
         {
@@ -132,13 +126,8 @@ public class PhexRunner
             {
                 rssFile = readArgument(iterator);
             }
-            else if (argument.equalsIgnoreCase("--console"))
-            {
-                startConsole = true; 
-            }
         }
 
-        LogUtils.initializeLogging();
 
         PhexCorePrefs.init();
 
@@ -175,8 +164,6 @@ public class PhexRunner
 //                //System.out.println("Splash time: " + (end-start));
 //            }
 
-            // Initialize settings.
-            SystemProperties.migratePhexConfigRoot();
 
 //            PhexGuiPrefs.init();
 //            Localizer.initialize(InterfacePrefs.LocaleName.get());
@@ -297,29 +284,29 @@ public class PhexRunner
         return value;
     }
 
-    private static void validateJavaVersion()
-    {
-        if (SystemUtils.isJavaVersionAtLeast(1.5f))
-        {
-            return;
-        }
-
-        JFrame frame = new JFrame("Wrong Java Version");
-        frame.setSize(new Dimension(0, 0));
-        frame.setVisible(true);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension winSize = frame.getSize();
-        Rectangle rect = new Rectangle(
-        (screenSize.width - winSize.width) / 2,
-        (screenSize.height - winSize.height) / 2,
-        winSize.width, winSize.height );
-        frame.setBounds(rect);
-        JOptionPane.showMessageDialog( frame,
-                "Please use a newer Java VM.\n" +
-                "Phex requires at least Java 1.5.0. You are using Java " + SystemUtils.JAVA_VERSION + "\n" +
-                "To get the latest Java release go to http://java.com.",
-                "Wrong Java Version", JOptionPane.WARNING_MESSAGE );
-
-        System.exit(1);
-    }
+//    private static void validateJavaVersion()
+//    {
+//        if (SystemUtils.isJavaVersionAtLeast(1.5f))
+//        {
+//            return;
+//        }
+//
+//        JFrame frame = new JFrame("Wrong Java Version");
+//        frame.setSize(new Dimension(0, 0));
+//        frame.setVisible(true);
+//        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//        Dimension winSize = frame.getSize();
+//        Rectangle rect = new Rectangle(
+//        (screenSize.width - winSize.width) / 2,
+//        (screenSize.height - winSize.height) / 2,
+//        winSize.width, winSize.height );
+//        frame.setBounds(rect);
+//        JOptionPane.showMessageDialog( frame,
+//                "Please use a newer Java VM.\n" +
+//                "Phex requires at least Java 1.5.0. You are using Java " + SystemUtils.JAVA_VERSION + "\n" +
+//                "To get the latest Java release go to http://java.com.",
+//                "Wrong Java Version", JOptionPane.WARNING_MESSAGE );
+//
+//        System.exit(1);
+//    }
 }

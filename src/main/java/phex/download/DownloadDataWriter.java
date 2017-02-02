@@ -21,7 +21,7 @@
  */
 package phex.download;
 
-import org.apache.commons.lang.time.DateUtils;
+import phex.util.DateUtils;
 import phex.common.ThreadTracking;
 import phex.common.log.NLogger;
 import phex.download.swarming.SWDownloadFile;

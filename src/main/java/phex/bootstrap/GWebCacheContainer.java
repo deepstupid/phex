@@ -31,9 +31,9 @@ import phex.connection.ProtocolNotSupportedException;
 import phex.event.ChangeEvent;
 import phex.host.CaughtHostsContainer;
 import phex.servent.Servent;
-import phex.utils.IOUtil;
-import phex.utils.NormalizableURL;
-import phex.utils.StringUtils;
+import phex.util.IOUtil;
+import phex.util.NormalizableURL;
+import phex.util.StringUtils;
 
 import java.io.*;
 import java.net.URL;

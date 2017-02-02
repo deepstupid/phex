@@ -26,7 +26,7 @@ import phex.common.bandwidth.BandwidthController;
 import phex.http.HTTPProcessor;
 import phex.http.HTTPRequest;
 import phex.net.connection.Connection;
-import phex.utils.DummySocketFacade;
+import phex.util.DummySocketFacade;
 
 public class TestHTTPProcessor extends TestCase
 {

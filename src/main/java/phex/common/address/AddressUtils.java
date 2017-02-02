@@ -26,7 +26,7 @@ import phex.net.repres.PresentationManager;
 import phex.security.AccessType;
 import phex.security.IpCidrPair;
 import phex.security.PhexSecurityManager;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 import java.io.IOException;
 import java.net.InetAddress;

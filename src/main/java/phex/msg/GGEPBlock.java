@@ -24,8 +24,8 @@ package phex.msg;
 import phex.common.address.DestAddress;
 import phex.common.address.IpAddress;
 import phex.common.log.NLogger;
-import phex.utils.HexConverter;
-import phex.utils.IOUtil;
+import phex.util.HexConverter;
+import phex.util.IOUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

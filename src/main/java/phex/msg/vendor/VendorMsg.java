@@ -25,8 +25,8 @@ import phex.io.buffer.ByteBuffer;
 import phex.msg.InvalidMessageException;
 import phex.msg.Message;
 import phex.msg.MsgHeader;
-import phex.utils.HexConverter;
-import phex.utils.IOUtil;
+import phex.util.HexConverter;
+import phex.util.IOUtil;
 
 import java.util.Arrays;
 

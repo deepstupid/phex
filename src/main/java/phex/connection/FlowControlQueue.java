@@ -19,7 +19,7 @@
 package phex.connection;
 
 import phex.msg.Message;
-import phex.utils.CircularQueue;
+import phex.util.CircularQueue;
 
 
 /**

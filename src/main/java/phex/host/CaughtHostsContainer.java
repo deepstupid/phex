@@ -22,7 +22,7 @@
 package phex.host;
 
 import org.apache.commons.collections4.set.ListOrderedSet;
-import org.apache.commons.lang.time.DateUtils;
+import phex.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.Environment;
@@ -38,7 +38,7 @@ import phex.prefs.core.NetworkPrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
 import phex.servent.Servent;
-import phex.utils.IPUtils;
+import phex.util.IPUtils;
 
 import java.io.*;
 import java.util.*;

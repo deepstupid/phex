@@ -1,4 +1,0 @@
-#!/bin/sh
-rm -r target/classes
-mvn package
-java -Xmx384m -jar target/phex.jar $@

@@ -4,10 +4,10 @@
  */
 package phex.test.performance;
 
-import com.bitzi.util.Base32;
-import com.bitzi.util.SHA1;
+import phex.util.bitzi.Base32;
+import phex.util.bitzi.SHA1;
 import junit.framework.TestCase;
-import org.apache.commons.lang.SystemUtils;
+import phex.util.SystemUtils;
 
 import java.io.File;
 import java.io.FileInputStream;

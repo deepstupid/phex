@@ -27,7 +27,7 @@ import phex.msg.GGEPBlock;
 import phex.msg.GUID;
 import phex.msg.InvalidMessageException;
 import phex.msg.MsgHeader;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

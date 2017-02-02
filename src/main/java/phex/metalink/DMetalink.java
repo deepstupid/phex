@@ -48,9 +48,9 @@
 
 package phex.metalink;
 
-import com.bitzi.util.Base32;
-import phex.utils.StringUtils;
-import phex.utils.URLCodecUtils;
+import phex.util.bitzi.Base32;
+import phex.util.StringUtils;
+import phex.util.URLCodecUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;

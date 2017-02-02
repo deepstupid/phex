@@ -22,7 +22,7 @@
 package phex.common;
 
 import phex.connection.ConnectionConstants;
-import phex.utils.FileUtils;
+import phex.util.FileUtils;
 
 import java.io.File;
 

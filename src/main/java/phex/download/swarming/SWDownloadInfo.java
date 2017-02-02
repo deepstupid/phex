@@ -23,7 +23,7 @@ package phex.download.swarming;
 
 import phex.common.format.TimeFormatUtils;
 import phex.download.swarming.SWDownloadCandidate.CandidateStatus;
-import phex.utils.Localizer;
+import phex.util.Localizer;
 
 public final class SWDownloadInfo implements SWDownloadConstants
 {

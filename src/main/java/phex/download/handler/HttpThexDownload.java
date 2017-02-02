@@ -21,9 +21,9 @@
  */
 package phex.download.handler;
 
-import com.bitzi.util.Base32;
-import com.onionnetworks.dime.DimeParser;
-import com.onionnetworks.dime.DimeRecord;
+import phex.util.bitzi.Base32;
+import phex.util.dime.DimeParser;
+import phex.util.dime.DimeRecord;
 import org.apache.commons.httpclient.ChunkedInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,8 +40,8 @@ import phex.http.*;
 import phex.net.connection.Connection;
 import phex.prefs.core.DownloadPrefs;
 import phex.thex.TTHashCalcUtils;
-import phex.utils.IOUtil;
-import phex.utils.LengthLimitedInputStream;
+import phex.util.IOUtil;
+import phex.util.LengthLimitedInputStream;
 import phex.xml.thex.ThexHashTree;
 import phex.xml.thex.ThexHashTreeCodec;
 

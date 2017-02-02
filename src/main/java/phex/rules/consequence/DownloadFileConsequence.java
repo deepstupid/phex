@@ -28,7 +28,7 @@ import phex.download.swarming.SwarmingManager;
 import phex.query.Search;
 import phex.servent.Servent;
 import phex.share.SharedFilesService;
-import phex.utils.StringUtils;
+import phex.util.StringUtils;
 import phex.xml.sax.rules.DConsequence;
 import phex.xml.sax.rules.DDownloadFileConsequence;
 

@@ -22,7 +22,7 @@
 package phex.test;
 
 import junit.framework.TestCase;
-import phex.utils.StringUtils;
+import phex.util.StringUtils;
 
 public class TestStringUtils extends TestCase
 {

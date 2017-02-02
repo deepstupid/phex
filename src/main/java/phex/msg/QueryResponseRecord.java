@@ -27,7 +27,7 @@ import phex.common.URN;
 import phex.common.address.DestAddress;
 import phex.security.PhexSecurityManager;
 import phex.share.ShareFile;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 import java.io.*;
 import java.util.Set;

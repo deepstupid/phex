@@ -22,8 +22,8 @@
  */
 package phex.share;
 
-import com.bitzi.util.Base32;
-import com.bitzi.util.SHA1;
+import phex.util.bitzi.Base32;
+import phex.util.bitzi.SHA1;
 import phex.common.AltLocContainer;
 import phex.common.URN;
 import phex.common.log.NLogger;
@@ -31,7 +31,7 @@ import phex.download.swarming.SWDownloadFile;
 import phex.download.swarming.SwarmingManager;
 import phex.prefs.core.LibraryPrefs;
 import phex.servent.Servent;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -48,8 +48,8 @@ import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticProvider;
 import phex.statistic.StatisticsManager;
 import phex.upload.PushWorker;
-import phex.utils.HexConverter;
-import phex.utils.StringUtils;
+import phex.util.HexConverter;
+import phex.util.StringUtils;
 
 import java.io.IOException;
 import java.util.HashMap;

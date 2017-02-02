@@ -22,8 +22,8 @@
 package phex.test;
 
 import junit.framework.TestCase;
-import phex.utils.AccessUtils;
-import phex.utils.CircularQueue;
+import phex.util.AccessUtils;
+import phex.util.CircularQueue;
 
 import java.util.Arrays;
 import java.util.List;

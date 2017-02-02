@@ -25,7 +25,7 @@ import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
 import phex.common.address.IpAddress;
 import phex.io.buffer.ByteBuffer;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 
 /**

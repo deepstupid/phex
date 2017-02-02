@@ -1,6 +1,6 @@
 package phex.io.buffer;
 
-import phex.utils.StringUtils;
+import phex.util.StringUtils;
 
 import java.nio.ByteBuffer;
 

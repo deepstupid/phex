@@ -28,8 +28,8 @@ import phex.msg.InvalidMessageException;
 import phex.msg.QueryResponseMsg;
 import phex.msg.vendor.OOBReplyCountVMsg;
 import phex.servent.Servent;
-import phex.utils.IOUtil;
-import phex.utils.RandomUtils;
+import phex.util.IOUtil;
+import phex.util.RandomUtils;
 
 import java.util.HashMap;
 

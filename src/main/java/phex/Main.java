@@ -23,13 +23,12 @@ package phex;
 
 import phex.common.Phex;
 import phex.common.ThreadTracking;
-import phex.common.log.LogUtils;
 import phex.common.log.NLogger;
 import phex.connection.LoopbackDispatcher;
 import phex.download.swarming.PhexEventService;
 import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
-import phex.utils.SystemProperties;
+import phex.util.SystemProperties;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -84,7 +83,6 @@ public class Main {
             }
         }
 
-        LogUtils.initializeLogging();
 
         PhexCorePrefs.init();
 
@@ -107,8 +105,6 @@ public class Main {
 //                //System.out.println("Splash time: " + (end-start));
 //            }
 
-            // initialize settings
-            SystemProperties.migratePhexConfigRoot();
 
 //            PhexGuiPrefs.init();
 //            Localizer.initialize(InterfacePrefs.LocaleName.get());
@@ -117,7 +113,6 @@ public class Main {
 
 
             Phex.initialize();
-            Servent.getInstance();
             Servent.getInstance().start();
 
             end = System.currentTimeMillis();

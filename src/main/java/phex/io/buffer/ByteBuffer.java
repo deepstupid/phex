@@ -21,7 +21,7 @@
  */
 package phex.io.buffer;
 
-import phex.utils.HexConverter;
+import phex.util.HexConverter;
 
 import java.nio.*;
 import java.nio.charset.CharacterCodingException;

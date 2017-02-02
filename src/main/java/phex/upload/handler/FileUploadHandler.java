@@ -34,7 +34,7 @@ import phex.thex.ShareFileThexData;
 import phex.upload.UploadState;
 import phex.upload.response.ShareFileUploadResponse;
 import phex.upload.response.UploadResponse;
-import phex.utils.URLUtil;
+import phex.util.URLUtil;
 
 import java.io.IOException;
 

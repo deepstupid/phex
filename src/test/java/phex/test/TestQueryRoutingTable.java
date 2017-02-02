@@ -28,7 +28,7 @@ import phex.msg.*;
 import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
 import phex.share.ShareFile;
-import phex.utils.AccessUtils;
+import phex.util.AccessUtils;
 
 import java.io.File;
 import java.util.ArrayList;

@@ -26,7 +26,7 @@ import phex.common.RunnerQueueWorker;
 import phex.common.ThreadTracking;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
-import phex.utils.Localizer;
+import phex.util.Localizer;
 
 import java.util.Stack;
 

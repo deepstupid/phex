@@ -29,7 +29,7 @@ import phex.msg.QueryFactory;
 import phex.msg.QueryResponseMsg;
 import phex.msg.QueryResponseRecord;
 import phex.servent.Servent;
-import phex.utils.SearchEngine;
+import phex.util.SearchEngine;
 
 import java.util.ArrayList;
 import java.util.StringTokenizer;

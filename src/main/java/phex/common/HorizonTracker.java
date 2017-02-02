@@ -21,7 +21,6 @@
  */
 package phex.common;
 
-import org.infinispan.commons.util.concurrent.ConcurrentHashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.address.DestAddress;
@@ -29,8 +28,10 @@ import phex.host.Host;
 import phex.msg.PongMsg;
 import phex.msghandling.MessageSubscriber;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The class tracks the estimated size of the horizon in host count,
@@ -78,7 +79,7 @@ public class HorizonTracker implements MessageSubscriber<PongMsg>
                 TrackerRefreshTimer.TIMER_PERIOD );
         
         useLastCountValues = false;
-        trackedAddresses = new ConcurrentHashSet<>();
+        trackedAddresses = Collections.newSetFromMap( new ConcurrentHashMap<>() );
     }
     
     /**

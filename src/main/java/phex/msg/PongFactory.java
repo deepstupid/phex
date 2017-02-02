@@ -33,7 +33,7 @@ import phex.host.CaughtHostsContainer;
 import phex.host.Host;
 import phex.host.NetworkHostsContainer;
 import phex.security.PhexSecurityManager;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 import java.util.Collection;
 

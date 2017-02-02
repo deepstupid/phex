@@ -22,7 +22,7 @@
 package phex.http;
 
 import phex.common.URN;
-import phex.utils.URLCodecUtils;
+import phex.util.URLCodecUtils;
 
 
 /**

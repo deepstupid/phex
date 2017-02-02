@@ -39,9 +39,9 @@ import phex.msg.vendor.MessagesSupportedVMsg;
 import phex.net.connection.Connection;
 import phex.prefs.core.SecurityPrefs;
 import phex.query.DynamicQueryConstants;
-import phex.utils.GnutellaInputStream;
-import phex.utils.GnutellaOutputStream;
-import phex.utils.Localizer;
+import phex.util.GnutellaInputStream;
+import phex.util.GnutellaOutputStream;
+import phex.util.Localizer;
 
 import java.io.IOException;
 import java.util.HashSet;

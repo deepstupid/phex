@@ -32,7 +32,7 @@ import phex.common.log.NLogger;
 import phex.event.UserMessageListener;
 import phex.prefs.core.SecurityPrefs;
 import phex.share.SharedResource;
-import phex.utils.StringUtils;
+import phex.util.StringUtils;
 import phex.xml.sax.DPhex;
 import phex.xml.sax.XMLBuilder;
 import phex.xml.sax.security.DIpAccessRule;

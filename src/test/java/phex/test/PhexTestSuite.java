@@ -26,13 +26,15 @@ import junit.framework.TestSuite;
 import phex.common.AltLocContainerTest;
 import phex.common.ThreadTracking;
 import phex.prefs.core.PhexCorePrefs;
-import phex.utils.IOUtilTest;
-import phex.utils.Localizer;
-import phex.utils.SystemProperties;
+import phex.util.IOUtilTest;
+import phex.util.Localizer;
+import phex.util.SystemProperties;
 import phex.xml.thex.TestThexHashTreeSaxHandler;
 import phex.xml.thex.ThexHashTreeCodecTest;
 
 import java.io.File;
+
+import static phex.test.performance.PhexPerformanceSuite.tempPath;
 
 
 public class PhexTestSuite extends TestSuite
@@ -46,9 +48,7 @@ public class PhexTestSuite extends TestSuite
     protected void setUp()
         throws Exception
     {
-        StringBuffer path = new StringBuffer(20);
-        path.append( System.getProperty("user.home") );
-        path.append( File.separator );
+        StringBuffer path = tempPath();
 
         //phex config files are hidden on all UNIX systems (also MacOSX. Since
         //there are many UNIX like operation systems with Java support out there,

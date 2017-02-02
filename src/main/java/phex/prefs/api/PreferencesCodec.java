@@ -1,8 +1,8 @@
 package phex.prefs.api;
 
 import phex.common.log.NLogger;
-import phex.utils.ClassUtils;
-import phex.utils.StringUtils;
+import phex.util.ClassUtils;
+import phex.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.*;

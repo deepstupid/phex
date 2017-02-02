@@ -26,7 +26,7 @@ import phex.msg.vendor.VendorMsg;
 import phex.net.connection.Connection;
 import phex.prefs.core.MessagePrefs;
 import phex.security.PhexSecurityManager;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 import java.io.IOException;
 import java.io.InputStream;

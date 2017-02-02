@@ -45,8 +45,8 @@ import phex.prefs.core.NetworkPrefs;
 import phex.prefs.core.UploadPrefs;
 import phex.security.PhexSecurityManager;
 import phex.servent.Servent;
-import phex.utils.IOUtil;
-import phex.utils.LengthLimitedInputStream;
+import phex.util.IOUtil;
+import phex.util.LengthLimitedInputStream;
 
 import java.io.IOException;
 import java.io.InputStream;

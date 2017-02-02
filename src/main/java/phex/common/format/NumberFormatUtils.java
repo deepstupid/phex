@@ -22,7 +22,7 @@
  */
 package phex.common.format;
 
-import phex.utils.Localizer;
+import phex.util.Localizer;
 
 public final class NumberFormatUtils
 {

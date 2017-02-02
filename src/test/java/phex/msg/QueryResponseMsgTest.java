@@ -32,7 +32,7 @@ import phex.prefs.core.NetworkPrefs;
 import phex.prefs.core.PhexCorePrefs;
 import phex.query.QHDFlag;
 import phex.security.PhexSecurityManager;
-import phex.utils.DummySocketFacade;
+import phex.util.DummySocketFacade;
 
 
 public class QueryResponseMsgTest extends TestCase

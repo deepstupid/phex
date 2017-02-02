@@ -41,8 +41,8 @@ import phex.upload.handler.FileUploadHandler;
 import phex.upload.handler.ThexUploadHandler;
 import phex.upload.handler.UploadHandler;
 import phex.upload.response.UploadResponse;
-import phex.utils.StringUtils;
-import phex.utils.VendorCodes;
+import phex.util.StringUtils;
+import phex.util.VendorCodes;
 
 import java.io.IOException;
 

@@ -24,7 +24,7 @@ package phex.common;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.address.IpAddress;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;

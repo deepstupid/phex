@@ -28,7 +28,7 @@ import phex.common.log.NLogger;
 import phex.http.HTTPResponse;
 import phex.io.buffer.ByteBuffer;
 import phex.share.ShareFile;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 import java.io.IOException;
 

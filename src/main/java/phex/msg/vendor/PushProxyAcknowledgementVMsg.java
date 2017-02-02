@@ -28,7 +28,7 @@ import phex.common.address.IpAddress;
 import phex.msg.GUID;
 import phex.msg.InvalidMessageException;
 import phex.msg.MsgHeader;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 /**
  *

@@ -29,8 +29,8 @@ import phex.msg.*;
 import phex.query.DynamicQueryConstants;
 import phex.servent.Servent;
 import phex.share.ShareFile;
-import phex.utils.IOUtil;
-import phex.utils.StringUtils;
+import phex.util.IOUtil;
+import phex.util.StringUtils;
 
 import java.util.*;
 import java.util.zip.DataFormatException;

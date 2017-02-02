@@ -25,8 +25,8 @@ package phex.thex;
  * TigerTree.java v 1.1 
  */
 
-import com.bitzi.util.Base32;
-import com.bitzi.util.Tiger;
+import phex.util.bitzi.Base32;
+import phex.util.bitzi.Tiger;
 
 import java.security.DigestException;
 import java.security.MessageDigest;

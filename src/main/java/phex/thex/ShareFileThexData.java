@@ -22,8 +22,8 @@
  */
 package phex.thex;
 
-import com.bitzi.util.Base32;
-import org.apache.commons.codec.binary.Base64;
+import phex.util.bitzi.Base32;
+import phex.util.Base64;
 import phex.common.log.NLogger;
 
 import java.io.ByteArrayOutputStream;

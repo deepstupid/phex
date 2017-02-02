@@ -29,7 +29,7 @@ import phex.msg.QueryMsg;
 import phex.prefs.core.LibraryPrefs;
 import phex.security.PhexSecurityManager;
 import phex.servent.Servent;
-import phex.utils.StringUtils;
+import phex.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;

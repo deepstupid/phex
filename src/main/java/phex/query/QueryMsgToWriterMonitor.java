@@ -21,7 +21,7 @@
  */
 package phex.query;
 
-import org.apache.commons.lang.SystemUtils;
+import phex.util.SystemUtils;
 import phex.common.log.NLogger;
 import phex.host.Host;
 import phex.msg.QueryMsg;

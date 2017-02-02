@@ -25,9 +25,9 @@ import phex.common.URN;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
 import phex.share.ShareFile;
-import phex.utils.IOUtil;
-import phex.utils.URLCodecUtils;
-import phex.utils.URLUtil;
+import phex.util.IOUtil;
+import phex.util.URLCodecUtils;
+import phex.util.URLUtil;
 import phex.xml.XMLUtils;
 
 import java.io.*;

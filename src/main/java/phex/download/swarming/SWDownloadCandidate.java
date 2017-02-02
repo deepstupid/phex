@@ -43,8 +43,8 @@ import phex.msg.GUID;
 import phex.net.repres.PresentationManager;
 import phex.prefs.core.DownloadPrefs;
 import phex.query.QueryHitHost;
-import phex.utils.URLCodecUtils;
-import phex.utils.URLUtil;
+import phex.util.URLCodecUtils;
+import phex.util.URLUtil;
 import phex.xml.XMLUtils;
 import phex.xml.sax.downloads.DDownloadCandidate;
 

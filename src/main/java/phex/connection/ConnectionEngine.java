@@ -45,8 +45,8 @@ import phex.query.DynamicQueryConstants;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
 import phex.servent.Servent;
-import phex.utils.HexConverter;
-import phex.utils.Localizer;
+import phex.util.HexConverter;
+import phex.util.Localizer;
 
 import java.io.IOException;
 import java.util.StringTokenizer;

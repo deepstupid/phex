@@ -22,7 +22,7 @@
 package phex.host;
 
 import phex.common.address.DestAddress;
-import phex.utils.StringUtils;
+import phex.util.StringUtils;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

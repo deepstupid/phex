@@ -25,7 +25,7 @@ import phex.host.Host;
 import phex.msg.QueryMsg;
 import phex.msghandling.MessageSubscriber;
 import phex.prefs.core.StatisticPrefs;
-import phex.utils.CircularQueue;
+import phex.util.CircularQueue;
 
 public class QueryHistoryMonitor implements MessageSubscriber<QueryMsg>
 {

@@ -21,9 +21,9 @@
  */
 package phex.common;
 
-import org.apache.commons.lang.SystemUtils;
+import phex.util.SystemUtils;
 import phex.event.UserMessageListener;
-import phex.utils.SystemProperties;
+import phex.util.SystemProperties;
 
 import java.io.File;
 import java.util.Timer;

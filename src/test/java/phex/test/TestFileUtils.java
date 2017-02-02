@@ -22,7 +22,7 @@
 package phex.test;
 
 import junit.framework.TestCase;
-import phex.utils.FileUtils;
+import phex.util.FileUtils;
 
 import java.io.File;
 import java.io.RandomAccessFile;

@@ -23,7 +23,7 @@
 package phex.test;
 
 import junit.framework.TestCase;
-import phex.utils.MagmaParser;
+import phex.util.MagmaParser;
 
 import java.io.InputStream;
 import java.util.List;

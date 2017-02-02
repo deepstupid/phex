@@ -21,7 +21,7 @@
  */
 package phex.query;
 
-import phex.utils.QueryGUIDRoutingPair;
+import phex.util.QueryGUIDRoutingPair;
 
 public class LeafGuidedSearchProgress extends DefaultSearchProgress
 {

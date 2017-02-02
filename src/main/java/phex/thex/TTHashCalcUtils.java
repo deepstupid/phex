@@ -22,8 +22,8 @@
  */
 package phex.thex;
 
-import com.bitzi.util.Tiger;
-import com.bitzi.util.TigerTree;
+import phex.util.bitzi.Tiger;
+import phex.util.bitzi.TigerTree;
 import phex.common.file.ManagedFile;
 import phex.common.file.ManagedFileInputStream;
 import phex.common.format.NumberFormatUtils;
@@ -31,7 +31,7 @@ import phex.common.log.NLogger;
 import phex.download.ThexVerificationData.ThexData;
 import phex.prefs.core.LibraryPrefs;
 import phex.share.ShareFile;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;

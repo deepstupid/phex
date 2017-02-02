@@ -23,8 +23,8 @@ package phex.connection;
 
 import phex.common.log.NLogger;
 import phex.prefs.core.NetworkPrefs;
-import phex.utils.GnutellaInputStream;
-import phex.utils.IOUtil;
+import phex.util.GnutellaInputStream;
+import phex.util.IOUtil;
 
 import java.io.IOException;
 import java.io.InputStream;

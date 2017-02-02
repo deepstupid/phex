@@ -23,7 +23,7 @@ package phex.prefs.core;
 
 import phex.prefs.api.PreferencesFactory;
 import phex.prefs.api.Setting;
-import phex.utils.SystemProperties;
+import phex.util.SystemProperties;
 
 import java.io.File;
 

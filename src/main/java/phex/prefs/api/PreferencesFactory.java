@@ -21,7 +21,7 @@
  */
 package phex.prefs.api;
 
-import phex.utils.StringUtils;
+import phex.util.StringUtils;
 
 import java.util.List;
 import java.util.Random;

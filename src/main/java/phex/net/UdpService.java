@@ -31,7 +31,7 @@ import phex.common.Environment;
 import phex.common.address.AddressUtils;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 import java.io.IOException;
 import java.net.InetAddress;

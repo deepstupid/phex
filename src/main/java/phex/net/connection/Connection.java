@@ -27,9 +27,9 @@ import phex.connection.ConnectionClosedException;
 import phex.io.buffer.ByteBuffer;
 import phex.io.channels.BandwidthByteChannel;
 import phex.net.repres.SocketFacade;
-import phex.utils.GnutellaInputStream;
-import phex.utils.GnutellaOutputStream;
-import phex.utils.IOUtil;
+import phex.util.GnutellaInputStream;
+import phex.util.GnutellaOutputStream;
+import phex.util.IOUtil;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -24,7 +24,7 @@ package phex.common;
 import phex.common.file.FileManager;
 import phex.download.swarming.PhexEventService;
 import phex.prefs.core.PrivateNetworkConstants;
-import phex.utils.SystemProperties;
+import phex.util.SystemProperties;
 
 import java.io.File;
 

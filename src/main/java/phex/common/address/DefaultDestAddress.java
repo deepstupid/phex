@@ -21,7 +21,7 @@
  */
 package phex.common.address;
 
-import org.apache.commons.lang.time.DateUtils;
+import phex.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

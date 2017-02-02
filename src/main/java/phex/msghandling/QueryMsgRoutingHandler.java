@@ -28,7 +28,7 @@ import phex.msg.QueryMsg;
 import phex.query.LeafGuidedSearchProgress;
 import phex.query.SearchProgress;
 import phex.servent.Servent;
-import phex.utils.QueryGUIDRoutingPair;
+import phex.util.QueryGUIDRoutingPair;
 
 
 class QueryMsgRoutingHandler implements MessageSubscriber<QueryMsg>

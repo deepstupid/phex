@@ -29,7 +29,7 @@ import phex.net.connection.Connection;
 import phex.prefs.core.ConnectionPrefs;
 import phex.servent.OnlineStatus;
 import phex.servent.Servent;
-import phex.utils.Localizer;
+import phex.util.Localizer;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -142,11 +142,11 @@ public class BandwidthController
         // ensure that bytes per window is at least 1
         bytesPerWindow = Math.max( (int) ((double) throttlingRate / (double) WINDOWS_PER_SECONDS), 1 ) ;
         
-        if ( logger.isDebugEnabled() )
+        /*if ( logger.isDebugEnabled() )
         {
             logger.debug('[' +controllerName + "] Set throttling rate to "
                 + bytesPerSecond + "bps (" + bytesPerWindow + " per window)");
-        }
+        }*/
         
         // keep the bytes remaining on the current window when bandwidth is dropping down..
         bytesRemaining = bytesRemaining < bytesPerWindow ? Math.min( bytesRemaining, bytesPerWindow ) : bytesRemaining;
@@ -193,12 +193,12 @@ public class BandwidthController
                     '[' +controllerName + "] Available byte count " + bytesAllowed
                 + "bps - Remaining: " + bytesRemaining + '.');
         }
-        else if ( logger.isDebugEnabled() )
+        /*else if ( logger.isDebugEnabled() )
         {
             logger.debug(
                     '[' +controllerName + "] Available byte count " + bytesAllowed
                 + "bps - Remaining: " + bytesRemaining + '.');
-        }
+        }*/
         
         return bytesAllowed;
     }
@@ -227,12 +227,12 @@ public class BandwidthController
                     '[' +controllerName + "] !Mark bytes used " + byteCount
                 + " - remaining: " + bytesRemaining + '.');
         }
-        else if ( logger.isDebugEnabled() )
+        else /*if ( logger.isDebugEnabled() )
         {
             logger.debug(
                     '[' +controllerName + "] !Mark bytes used " + byteCount
                 + " - remaining: " + bytesRemaining + '.');
-        }
+        }*/
         
         if ( shortTransferAvg != null )
         {
@@ -271,12 +271,12 @@ public class BandwidthController
                     bytesRemaining = bytesPerWindow; 
                 }                
                 lastWindowTime = now;
-                if ( logger.isDebugEnabled( ) )
-                {
-                    logger.debug(
-                            '[' +controllerName + "] Update new Window " + bytesPerWindow
-                        + " - Remaining: " + bytesRemaining + '.');
-                }
+//                if ( logger.isDebugEnabled( ) )
+//                {
+//                    logger.debug(
+//                            '[' +controllerName + "] Update new Window " + bytesPerWindow
+//                        + " - Remaining: " + bytesRemaining + '.');
+//                }
             }
             if ( !blockTillAvailable || bytesRemaining > 0 )
             {

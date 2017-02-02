@@ -22,7 +22,7 @@
  */
 package phex.rules.consequence;
 
-import org.apache.commons.lang.time.DateUtils;
+import phex.util.DateUtils;
 import phex.common.ExpiryDate;
 import phex.download.RemoteFile;
 import phex.query.Search;

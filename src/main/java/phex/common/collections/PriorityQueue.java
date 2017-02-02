@@ -21,7 +21,7 @@
  */
 package phex.common.collections;
 
-import phex.utils.CircularQueue;
+import phex.util.CircularQueue;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

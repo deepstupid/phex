@@ -31,7 +31,6 @@ import phex.msg.QueryMsg;
 import phex.msg.QueryResponseMsg;
 import phex.msg.vendor.OOBReplyCountVMsg;
 import phex.msghandling.MessageService;
-import phex.rules.SearchFilterRules;
 import phex.servent.Servent;
 
 import java.io.File;
@@ -44,7 +43,6 @@ public class QueryManager extends AbstractLifeCycle
     private final MessageService msgService;
     private final SearchContainer searchContainer;
     private final BackgroundSearchContainer backgroundSearchContainer;
-    private final SearchFilterRules searchFilterRules;
     private final DynamicQueryWorker dynamicQueryWorker;
     private final QueryFactory queryFactory;
     
@@ -72,7 +70,6 @@ public class QueryManager extends AbstractLifeCycle
             backgroundSearchContainer );
         
         File filterFile = servent.getGnutellaNetwork().getSearchFilterFile();
-        searchFilterRules = new SearchFilterRules( filterFile );
         //researchService = new ResearchService( new ResearchServiceConfig() );
         dynamicQueryWorker = new DynamicQueryWorker();
 
@@ -81,7 +78,6 @@ public class QueryManager extends AbstractLifeCycle
     @Override
     protected void doStart()
     {
-        searchFilterRules.load();
         dynamicQueryWorker.startQueryWorker();
         Environment.getInstance().scheduleTimerTask( 
             new ExpiredSearchCheckTimer(), ExpiredSearchCheckTimer.TIMER_PERIOD,
@@ -89,9 +85,8 @@ public class QueryManager extends AbstractLifeCycle
     }
     
     @Override
-    public void doStop()
-    {
-        searchFilterRules.save();
+    public void doStop() {
+
     }
     
     //@EventTopicSubscriber(topic=PhexEventTopics.Host_Disconnect)
@@ -171,11 +166,7 @@ public class QueryManager extends AbstractLifeCycle
         return lastQueryTime;
     }
 
-    public SearchFilterRules getSearchFilterRules()
-    {
-        return searchFilterRules;
-    }
-    
+
     /**
      * Stops all searches where the timeout has passed.
      */

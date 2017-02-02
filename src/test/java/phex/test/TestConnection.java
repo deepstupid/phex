@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import phex.common.bandwidth.BandwidthController;
 import phex.io.buffer.ByteBuffer;
 import phex.net.connection.Connection;
-import phex.utils.DummySocketFacade;
+import phex.util.DummySocketFacade;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

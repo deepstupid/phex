@@ -24,7 +24,7 @@ package phex.common.file;
 import phex.common.Phex;
 import phex.common.log.NLogger;
 import phex.io.buffer.ByteBuffer;
-import phex.utils.FileUtils;
+import phex.util.FileUtils;
 
 import java.io.File;
 import java.io.IOException;

@@ -23,9 +23,9 @@ package phex.msghandling;
 
 import phex.host.Host;
 import phex.msg.*;
-import phex.utils.GUIDRoutingTable;
-import phex.utils.QueryGUIDRoutingPair;
-import phex.utils.QueryGUIDRoutingTable;
+import phex.util.GUIDRoutingTable;
+import phex.util.QueryGUIDRoutingPair;
+import phex.util.QueryGUIDRoutingTable;
 
 class MessageRouting
 {

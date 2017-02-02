@@ -22,7 +22,7 @@
 package phex.common.address;
 
 import phex.common.Ip2CountryDB;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 import java.util.Arrays;
 

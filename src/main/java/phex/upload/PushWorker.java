@@ -35,8 +35,8 @@ import phex.share.ShareFile;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticProviderConstants;
 import phex.statistic.StatisticsManager;
-import phex.utils.StringUtils;
-import phex.utils.URLCodecUtils;
+import phex.util.StringUtils;
+import phex.util.URLCodecUtils;
 
 import java.io.IOException;
 

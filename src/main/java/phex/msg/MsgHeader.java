@@ -24,7 +24,7 @@ package phex.msg;
 import phex.common.log.NLogger;
 import phex.io.buffer.ByteBuffer;
 import phex.prefs.core.MessagePrefs;
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 /**
  * <p>The header of a Gnutella message.</p>

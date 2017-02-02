@@ -21,14 +21,14 @@
  */
 package phex.upload.response;
 
-import com.onionnetworks.dime.DimeGenerator;
-import com.onionnetworks.dime.DimeRecord;
+import phex.util.dime.DimeGenerator;
+import phex.util.dime.DimeRecord;
 import phex.http.HTTPResponse;
 import phex.io.buffer.ByteBuffer;
 import phex.share.ShareFile;
 import phex.thex.FileHashCalculationHandler;
 import phex.thex.ShareFileThexData;
-import phex.utils.StringUtils;
+import phex.util.StringUtils;
 import phex.xml.thex.ThexHashTree;
 import phex.xml.thex.ThexHashTreeCodec;
 

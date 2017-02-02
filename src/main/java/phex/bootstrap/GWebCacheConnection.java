@@ -36,7 +36,7 @@ import phex.net.repres.PresentationManager;
 import phex.prefs.core.ProxyPrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
-import phex.utils.*;
+import phex.util.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -21,7 +21,7 @@
  */
 package phex.security;
 
-import phex.utils.IOUtil;
+import phex.util.IOUtil;
 
 import java.util.Comparator;
 

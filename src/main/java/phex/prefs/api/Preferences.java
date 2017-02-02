@@ -25,8 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.collections.SortedProperties;
 import phex.download.swarming.PhexEventService;
-import phex.utils.FileUtils;
-import phex.utils.IOUtil;
+import phex.util.FileUtils;
+import phex.util.IOUtil;
 
 import java.io.*;
 import java.util.*;

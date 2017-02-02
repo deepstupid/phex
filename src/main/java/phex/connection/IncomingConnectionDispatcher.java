@@ -41,9 +41,9 @@ import phex.net.repres.SocketFacade;
 import phex.prefs.core.NetworkPrefs;
 import phex.servent.Servent;
 import phex.share.HttpRequestDispatcher;
-import phex.utils.GnutellaInputStream;
-import phex.utils.IOUtil;
-import phex.utils.URLCodecUtils;
+import phex.util.GnutellaInputStream;
+import phex.util.IOUtil;
+import phex.util.URLCodecUtils;
 
 import java.io.IOException;
 

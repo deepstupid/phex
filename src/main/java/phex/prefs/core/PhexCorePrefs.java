@@ -25,7 +25,7 @@ import phex.common.Environment;
 import phex.common.EnvironmentConstants;
 import phex.common.PhexVersion;
 import phex.prefs.api.Preferences;
-import phex.utils.StringUtils;
+import phex.util.StringUtils;
 
 public class PhexCorePrefs extends Preferences
 {
