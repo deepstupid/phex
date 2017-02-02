@@ -217,8 +217,7 @@ class MessageDispatcher {
 
     public void handlePing(PingMsg pingMsg, Host sourceHost) {
         if (logger.isDebugEnabled()) {
-            logger.debug("Received Ping: " + pingMsg.toString() + " - "
-                    + pingMsg.getHeader().toString());
+            logger.debug("Received Ping: {} - {}", pingMsg.toString(), pingMsg.getHeader().toString());
         }
 
 
@@ -267,7 +266,7 @@ class MessageDispatcher {
             Host[] leafs = hostMgr.getNetworkHostsContainer().getLeafConnections();
             for (int i = 0; i < leafs.length; i++) {
                 DestAddress ha = leafs[i].getHostAddress();
-                PongMsg pong = pongFactory.createOtherLeafsOutgoingPong(header.getMsgID(),
+                PongMsg pong = PongFactory.createOtherLeafsOutgoingPong(header.getMsgID(),
                         (byte) 1, (byte) 1, ha);
                 sourceHost.queueMessageToSend(pong);
             }
@@ -312,8 +311,7 @@ class MessageDispatcher {
      */
     public void handlePong(PongMsg msg, Host sourceHost) {
         if (logger.isDebugEnabled()) {
-            logger.debug("Received Pong: " + msg.getDebugString()
-                    + " - " + msg.getHeader().toString());
+            logger.debug("Received Pong: {} - {}", msg.getDebugString(), msg.getHeader().toString());
         }
 
         // count pong statistic
@@ -369,8 +367,7 @@ class MessageDispatcher {
 
     public void handleQuery(QueryMsg msg, Host sourceHost) {
         if (logger.isDebugEnabled()) {
-            logger.debug("Received Query: " + msg.toString() + " - "
-                    + msg.getHeader().toString());
+            logger.debug("Received Query: {} - {}", msg.toString(), msg.getHeader().toString());
         }
 
         // count query statistic
@@ -578,8 +575,7 @@ class MessageDispatcher {
 
     public void handleVendorMessage(VendorMsg vendorMsg, Host sourceHost) {
         if (logger.isDebugEnabled()) {
-            logger.debug("Received VendorMsg: " + vendorMsg.toString()
-                    + " - " + vendorMsg.getHeader().toString());
+            logger.debug("Received VendorMsg: {} - {}", vendorMsg.toString(), vendorMsg.getHeader().toString());
         }
 
         if (vendorMsg instanceof MessagesSupportedVMsg) {
@@ -613,7 +609,7 @@ class MessageDispatcher {
                     servent.getServentGuid());
             // TODO2 remove this once Limewire support PPR v2
             if (sourceHost.getVendor() != null &&
-                    sourceHost.getVendor().indexOf("LimeWire") != -1) {
+                    sourceHost.getVendor().contains("LimeWire")) {
                 pprmsg.setVersion(1);
             }
             sourceHost.queueMessageToSend(pprmsg);
@@ -628,7 +624,7 @@ class MessageDispatcher {
         }
     }
 
-    private void handleCapabilitiesVMsg(CapabilitiesVMsg msg, Host sourceHost) {
+    private static void handleCapabilitiesVMsg(CapabilitiesVMsg msg, Host sourceHost) {
         sourceHost.setCapabilitiesVMsgs(msg);
     }
 
@@ -659,21 +655,19 @@ class MessageDispatcher {
 
     private void handleTCPConnectBackRedirectVMsg(TCPConnectBackRedirectVMsg msg, Host sourceHost) {
         final DestAddress address = msg.getAddress();
-        Runnable connectBackRunner = new Runnable() {
-            public void run() {
-                Connection connection = null;
-                try {
-                    DestAddress connectBackAddress = new DefaultDestAddress(address.getHostName(),
-                            address.getPort());
-                    connection = ConnectionFactory.createConnection(
-                            connectBackAddress, 2000, servent.getBandwidthService().getNetworkBandwidthController());
-                    connection.write(ByteBuffer.wrap(StringUtils.getBytesInUsAscii("\n\n")));
-                    connection.flush();
-                } catch (IOException exp) { // failed.. don't care..
-                } finally {
-                    if (connection != null) {
-                        connection.disconnect();
-                    }
+        Runnable connectBackRunner = () -> {
+            Connection connection = null;
+            try {
+                DestAddress connectBackAddress = new DefaultDestAddress(address.getHostName(),
+                        address.getPort());
+                connection = ConnectionFactory.createConnection(
+                        connectBackAddress, 2000, servent.getBandwidthService().getNetworkBandwidthController());
+                connection.write(ByteBuffer.wrap(StringUtils.getBytesInUsAscii("\n\n")));
+                connection.flush();
+            } catch (IOException exp) { // failed.. don't care..
+            } finally {
+                if (connection != null) {
+                    connection.disconnect();
                 }
             }
         };
@@ -707,7 +701,7 @@ class MessageDispatcher {
         }
     }
 
-    private void handleHopsFlowVMsg(HopsFlowVMsg hopsFlowVMsg, Host sourceHost) {
+    private static void handleHopsFlowVMsg(HopsFlowVMsg hopsFlowVMsg, Host sourceHost) {
         byte hopsFlowValue = hopsFlowVMsg.getHopsValue();
         sourceHost.setHopsFlowLimit(hopsFlowValue);
     }
@@ -742,8 +736,7 @@ class MessageDispatcher {
     private void dropMessage(Message msg, String reason, Host sourceHost) {
         logger.info("Dropping message: {} from: {}", reason, sourceHost);
         if (logger.isDebugEnabled()) {
-            logger.debug("Header: [" + msg.getHeader().toString() + "] - Message: [" +
-                    msg.toString() + "].");
+            logger.debug("Header: [{}] - Message: [{}].", msg.getHeader().toString(), msg.toString());
         }
         if (sourceHost != null) {
             sourceHost.incReceivedDropCount();
@@ -755,8 +748,7 @@ class MessageDispatcher {
 
         logger.info("Dropping message: {} from: {}", reason, sourceHost);
         if (logger.isDebugEnabled()) {
-            logger.debug("Header: [" + header.toString() + "] - Body: [" +
-                    HexConverter.toHexString(body, 0, header.getDataLength()) + "].");
+            logger.debug("Header: [{}] - Body: [{}].", header.toString(), HexConverter.toHexString(body, 0, header.getDataLength()));
         }
         if (sourceHost != null) {
             sourceHost.incReceivedDropCount();

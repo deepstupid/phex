@@ -323,7 +323,7 @@ public class GGEPBlock {
      *
      * @author Madhu
      */
-    private int checkIfCompressed(String header, int headerFlags) {
+    private static int checkIfCompressed(String header, int headerFlags) {
         if (header.equals(UDP_HOST_CACHE_PHC)) {
             headerFlags |= 0x20;
         }
@@ -334,7 +334,7 @@ public class GGEPBlock {
         return needsCobsFor0x00Byte && contains0x00Byte(data);
     }
 
-    private boolean contains0x00Byte(byte[] bytes) {
+    private static boolean contains0x00Byte(byte[] bytes) {
         if (bytes != null) {
             for (byte aByte : bytes) {
                 if (aByte == 0x00) {
@@ -459,7 +459,7 @@ public class GGEPBlock {
             return ggepArray;
         }
 
-        private GGEPBlock parseGGEPBlock(InputStream inStream)
+        private static GGEPBlock parseGGEPBlock(InputStream inStream)
                 throws InvalidGGEPBlockException, IOException {
             GGEPBlock ggepBlock = new GGEPBlock();
 
@@ -538,7 +538,7 @@ public class GGEPBlock {
         /**
          * Code taken form GGEP specification document.
          */
-        private int parseDataLength(InputStream inStream)
+        private static int parseDataLength(InputStream inStream)
                 throws InvalidGGEPBlockException, IOException {
             int length = 0;
             int byteCount = 0;

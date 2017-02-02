@@ -267,7 +267,7 @@ public class GWebCacheContainer {
     }
 
     // we dont send update urls to other gwebcaches... too much trash...
-    private GWebCacheHost getGWebCacheForUpdate(GWebCacheHost ignore) {
+    private static GWebCacheHost getGWebCacheForUpdate(GWebCacheHost ignore) {
         // we dont send update urls to other gwebcaches... too much trash...
         /*
         GWebCacheHost gWebCache = null;
@@ -389,7 +389,7 @@ public class GWebCacheContainer {
      * @return the parsed GWebCache instance or null.
      * @throws IOException
      */
-    private GWebCacheHost parseGWebCacheFromLine(String line)
+    private static GWebCacheHost parseGWebCacheFromLine(String line)
             throws IOException {
         // tokenize line
         // line format can be:
@@ -560,7 +560,7 @@ public class GWebCacheContainer {
         }
     }
 
-    private boolean isCacheAccessAllowed(GWebCacheHost gWebCache) {
+    private static boolean isCacheAccessAllowed(GWebCacheHost gWebCache) {
         // check access by IP
 //    Looking up host ip turns out to be a very slow solution...
 //        byte[] hostIP = gWebCache.getHostIp();
@@ -584,7 +584,7 @@ public class GWebCacheContainer {
 
         // check access by host name
         for (String blocked : BLOCKED_WEB_CACHES) {
-            if (hostName.indexOf(blocked) != -1) {
+            if (hostName.contains(blocked)) {
                 // ignore GWebCache
                 logger.debug("GWebCache host blocked.");
                 return false;
@@ -594,24 +594,22 @@ public class GWebCacheContainer {
         return true;
     }
 
-    public boolean isPhexGWebCache(String url) {
+    public static boolean isPhexGWebCache(String url) {
         return SEED_WEB_CACHES.indexOf(url) != -1;
     }
 
     private void loadFromConfigInBackgrd() {
-        Runnable runner = new Runnable() {
-            public void run() {
-                try {
-                    File gWebCacheFile = servent.getGnutellaNetwork().getGWebCacheFile();
-                    if (!gWebCacheFile.exists()) {
-                        return;
-                    }
-                    loadGWebCacheFromReader(new FileReader(gWebCacheFile));
-                } catch (IOException exp) {
-                    logger.error("Failed loading GWebCache file.", exp);
-                } finally {
-                    ensureMinGWebCaches();
+        Runnable runner = () -> {
+            try {
+                File gWebCacheFile = servent.getGnutellaNetwork().getGWebCacheFile();
+                if (!gWebCacheFile.exists()) {
+                    return;
                 }
+                loadGWebCacheFromReader(new FileReader(gWebCacheFile));
+            } catch (IOException exp) {
+                logger.error("Failed loading GWebCache file.", exp);
+            } finally {
+                ensureMinGWebCaches();
             }
         };
         Environment.getInstance().executeOnThreadPool(runner, "LoadGWebCacheRunner");
@@ -661,8 +659,8 @@ public class GWebCacheContainer {
                     // URL         or:
                     // URL lastRequestTime failedInRowCount
                     writer.write(gWebCache.getUrl().toExternalForm() +
-                            " " + gWebCache.getLastRequestTime() +
-                            " " + gWebCache.getFailedInRowCount());
+                            ' ' + gWebCache.getLastRequestTime() +
+                            ' ' + gWebCache.getFailedInRowCount());
                     writer.newLine();
                 }
             }

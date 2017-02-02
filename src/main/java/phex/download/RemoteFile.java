@@ -209,7 +209,7 @@ public class RemoteFile {
         if (fileExtension != null)
             return fileExtension;
 
-        int index = filename.lastIndexOf(".");
+        int index = filename.lastIndexOf('.');
 
         if (index > -1) {
             fileExtension = filename.substring(index + 1, filename.length());
@@ -415,7 +415,7 @@ public class RemoteFile {
             String displayPath = pathInfo.replace('\\', '/');
             buffer.append(displayPath);
             if (!displayPath.endsWith("/")) {
-                buffer.append("/");
+                buffer.append('/');
             }
         }
         // Some servents just return the path along with the filename.

@@ -61,22 +61,31 @@ public class ConsequencesListHandler extends DefaultHandler {
      */
     public void startElement(String uri, String localName, String qName,
                              Attributes attributes) throws SAXException {
-        if (qName.equals(DFilterFromSearchConsequence.ELEMENT_NAME)) {
-            DFilterFromSearchConsequence consequence = new DFilterFromSearchConsequence();
-            consequencesListHolder.getSubElementList().add(consequence);
-            // no further content in this tag
-        } else if (qName.equals(DRemoveFromSearchConsequence.ELEMENT_NAME)) {
-            DRemoveFromSearchConsequence consequence = new DRemoveFromSearchConsequence();
-            consequencesListHolder.getSubElementList().add(consequence);
-            // no further content in this tag
-        } else if (qName.equals(DBanHostConsequence.ELEMENT_NAME)) {
-            DBanHostConsequence consequence = new DBanHostConsequence();
-            consequencesListHolder.getSubElementList().add(consequence);
-            // no further content in this tag
-        } else if (qName.equals(DDownloadFileConsequence.ELEMENT_NAME)) {
-            DDownloadFileConsequence consequence = new DDownloadFileConsequence();
-            consequencesListHolder.getSubElementList().add(consequence);
-            // no further content in this tag
+        switch (qName) {
+            case DFilterFromSearchConsequence.ELEMENT_NAME: {
+                DFilterFromSearchConsequence consequence = new DFilterFromSearchConsequence();
+                consequencesListHolder.getSubElementList().add(consequence);
+                // no further content in this tag
+                break;
+            }
+            case DRemoveFromSearchConsequence.ELEMENT_NAME: {
+                DRemoveFromSearchConsequence consequence = new DRemoveFromSearchConsequence();
+                consequencesListHolder.getSubElementList().add(consequence);
+                // no further content in this tag
+                break;
+            }
+            case DBanHostConsequence.ELEMENT_NAME: {
+                DBanHostConsequence consequence = new DBanHostConsequence();
+                consequencesListHolder.getSubElementList().add(consequence);
+                // no further content in this tag
+                break;
+            }
+            case DDownloadFileConsequence.ELEMENT_NAME: {
+                DDownloadFileConsequence consequence = new DDownloadFileConsequence();
+                consequencesListHolder.getSubElementList().add(consequence);
+                // no further content in this tag
+                break;
+            }
         }
         return;
     }

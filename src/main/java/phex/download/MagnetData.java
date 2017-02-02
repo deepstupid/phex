@@ -172,7 +172,7 @@ public class MagnetData {
         StringTokenizer tokenizer = new StringTokenizer(urlQuery, "&");
         while (tokenizer.hasMoreTokens()) {
             String param = tokenizer.nextToken().trim();
-            int seperatorIdx = param.indexOf("=");
+            int seperatorIdx = param.indexOf('=');
             if (seperatorIdx == -1) {// no = found.
                 continue;
             }
@@ -180,16 +180,22 @@ public class MagnetData {
             String value = param.substring(seperatorIdx + 1);
             value = URLCodecUtils.decodeURL(value);
 
-            if (key.equals("xt")) {
-                magnetData.addExactTopic(value);
-            } else if (key.equals("xs")) {
-                magnetData.addExactSubstitute(value);
-            } else if (key.equals("as")) {
-                magnetData.addAcceptableSubstitute(value);
-            } else if (key.equals("dn")) {
-                magnetData.setDisplayName(value);
-            } else if (key.equals("kt")) {
-                magnetData.setKeywordTopic(value);
+            switch (key) {
+                case "xt":
+                    magnetData.addExactTopic(value);
+                    break;
+                case "xs":
+                    magnetData.addExactSubstitute(value);
+                    break;
+                case "as":
+                    magnetData.addAcceptableSubstitute(value);
+                    break;
+                case "dn":
+                    magnetData.setDisplayName(value);
+                    break;
+                case "kt":
+                    magnetData.setKeywordTopic(value);
+                    break;
             }
         }
         return magnetData;

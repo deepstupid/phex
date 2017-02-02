@@ -22,7 +22,7 @@
 package phex.http;
 
 import org.apache.commons.collections4.map.LinkedMap;
-import phex.common.Phex;
+import phex.api.Phex;
 
 import java.util.*;
 
@@ -115,11 +115,7 @@ public class HTTPHeaderGroup {
             name = header.getName();
         }
 
-        List<HTTPHeader> values = headerFields.get(name);
-        if (values == null) {
-            values = new ArrayList<HTTPHeader>();
-            headerFields.put(name, values);
-        }
+        List<HTTPHeader> values = headerFields.computeIfAbsent(name, k -> new ArrayList<HTTPHeader>());
         values.add(header);
     }
 
@@ -140,11 +136,7 @@ public class HTTPHeaderGroup {
                 name = headers[i].getName();
             }
 
-            values = headerFields.get(name);
-            if (values == null) {
-                values = new ArrayList<HTTPHeader>();
-                headerFields.put(name, values);
-            }
+            values = headerFields.computeIfAbsent(name, k -> new ArrayList<HTTPHeader>());
             values.add(headers[i]);
         }
     }
@@ -164,8 +156,8 @@ public class HTTPHeaderGroup {
         } else {
             String name;
             List<HTTPHeader> values;
-            for (String key : headers.headerFields.keySet()) {
-                values = headerFields.get(key);
+            for (Map.Entry<String, List<HTTPHeader>> stringListEntry : headers.headerFields.entrySet()) {
+                values = stringListEntry.getValue();
                 name = values.get(0).getName();
                 if (lenient) {
                     name = name.toLowerCase();
@@ -329,8 +321,8 @@ public class HTTPHeaderGroup {
     public String buildHTTPHeaderString() {
         StringBuffer buffer = new StringBuffer(30 * headerFields.size());
         List<HTTPHeader> values;
-        for (String key : headerFields.keySet()) {
-            values = headerFields.get(key);
+        for (Map.Entry<String, List<HTTPHeader>> stringListEntry : headerFields.entrySet()) {
+            values = stringListEntry.getValue();
             for (HTTPHeader header : values) {
                 buffer.append(header.getName());
                 buffer.append(COLON_SEPARATOR);

@@ -123,7 +123,7 @@ public class UploadResponse {
         int count = Math.min(4, pushProxyAddresses.length);
         for (int i = 0; i < count; i++) {
             if (i > 0) {
-                headerValue.append(",");
+                headerValue.append(',');
             }
             headerValue.append(pushProxyAddresses[i].getFullHostName());
         }

@@ -55,8 +55,6 @@ public class Util {
             return true;
         } catch (SecurityException ex) {
             return false;
-        } catch (FileNotFoundException e) {
-            return false;
         } catch (IOException ex) {
             return false;
         } finally {

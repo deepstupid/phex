@@ -315,7 +315,7 @@ public class QueryHitHost {
 
 
         // remote host and local host is firewalled... download not possible
-        Servent servent = Servent.getInstance();
+        Servent servent = Servent.servent;
         if (pushNeededFlag == QHDFlag.QHD_TRUE_FLAG
                 && servent.isFirewalled()) {
             hostRating = 0;

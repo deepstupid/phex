@@ -177,11 +177,8 @@ public class DynamicQueryEngine implements DynamicQueryConstants {
             return true;
         }
 
-        if (estimatedQueriedHorizon > MAX_ESTIMATED_QUERY_HORIZON) {
-            return true;
-        }
+        return estimatedQueriedHorizon > MAX_ESTIMATED_QUERY_HORIZON;
 
-        return false;
     }
 
     /**

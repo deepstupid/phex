@@ -23,8 +23,6 @@ package phex;
 
 import ch.qos.logback.classic.Level;
 import org.slf4j.LoggerFactory;
-import phex.common.Phex;
-import phex.common.ThreadTracking;
 import phex.common.log.NLogger;
 import phex.connection.LoopbackDispatcher;
 import phex.prefs.core.PhexCorePrefs;
@@ -112,11 +110,8 @@ public class Main {
 //            PhexGuiPrefs.init();
 //            Localizer.initialize(InterfacePrefs.LocaleName.get());
 
-            ThreadTracking.initialize();
 
-
-            Phex.initialize();
-            Servent.getInstance().start();
+            Servent.servent.start();
 
             end = System.currentTimeMillis();
             NLogger.debug(Main.class, "Pre GUI startup time: " + (end - start));

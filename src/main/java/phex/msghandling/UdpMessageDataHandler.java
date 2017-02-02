@@ -40,7 +40,7 @@ import phex.servent.Servent;
 import phex.share.SharedFilesService;
 import phex.statistic.StatisticProvider;
 import phex.statistic.StatisticsManager;
-import phex.udp.UdpGuidRoutingTable;
+import phex.net.UdpGuidRoutingTable;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -158,7 +158,7 @@ public class UdpMessageDataHandler implements UdpDataHandler {
         int shareFileSize = sharedFilesService.getTotalFileSizeInKb();
 
         DestAddress localAddress = servent.getLocalAddress();
-        boolean isUdpHostCache = servent.isUdpHostCache();
+        boolean isUdpHostCache = Servent.isUdpHostCache();
 
         PongMsg pong = pongFactory.createUdpPongMsg(pingMsg, localAddress, isUdpHostCache,
                 avgDailyUptime, shareFileCount, shareFileSize, servent.isUltrapeer());
@@ -211,8 +211,8 @@ public class UdpMessageDataHandler implements UdpDataHandler {
             UdpHeadPingVMsg headPing = (UdpHeadPingVMsg) msg;
             // likely spam msg...
             logger.warn("Possible UdpHeadPing spam from {}: Features: {}, URN: {}, GUID: {}",
-                    new Object[]{orgin, headPing.getFeatures(),
-                            headPing.getUrn().getAsString(), headPing.getGuid()});
+                    orgin, headPing.getFeatures(),
+                    headPing.getUrn().getAsString(), headPing.getGuid());
         }
     }
 
@@ -221,11 +221,10 @@ public class UdpMessageDataHandler implements UdpDataHandler {
         messageService.dispatchToUdpSubscribers(msg, orgin);
     }
 
-    private void dropMessage(Message msg, DestAddress orgin, String reason) {
+    private static void dropMessage(Message msg, DestAddress orgin, String reason) {
         logger.info("Dropping UDP message: {} from {}.", reason, orgin);
         if (logger.isDebugEnabled()) {
-            logger.debug("Header: [" + msg.getHeader().toString() + "] - Message: [" +
-                    msg.toString() + "].");
+            logger.debug("Header: [{}] - Message: [{}].", msg.getHeader().toString(), msg.toString());
         }
         // TODO should we count dropping udp? currently we dont
         // fromHost.incDropCount();

@@ -78,52 +78,64 @@ public class SharedFileHandler extends DefaultHandler {
 
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
-        if (qName.equals("FID")) {
-            dFile.setFileName(text.toString());
-        } else if (qName.equals("SHA1")) {
-            dFile.setSha1(text.toString());
-        } else if (qName.equals("TxRH")) {
-            dFile.setThexRootHash(text.toString());
-        } else if (qName.equals("TxD")) {
-            try {
-                dFile.setThexTreeDepth(Integer.parseInt(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(SharedFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals("TxLLN")) {
-            dFile.setThexLowestLevelNodes(text.toString());
-        } else if (qName.equals("CT")) {
-            try {
-                dFile.setCreationTime(Long.parseLong(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(SharedFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals("LM")) {
-            try {
-                dFile.setLastModified(Long.parseLong(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(SharedFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals("LS")) {
-            try {
-                dFile.setLastSeen(Long.parseLong(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(SharedFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals("HC")) {
-            try {
-                dFile.setHitCount(Integer.parseInt(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(SharedFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals("UC")) {
-            try {
-                dFile.setUploadCount(Integer.parseInt(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(SharedFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals(THIS_TAG_NAME)) {
-            parser.getXMLReader().setContentHandler(parent);
+        switch (qName) {
+            case "FID":
+                dFile.setFileName(text.toString());
+                break;
+            case "SHA1":
+                dFile.setSha1(text.toString());
+                break;
+            case "TxRH":
+                dFile.setThexRootHash(text.toString());
+                break;
+            case "TxD":
+                try {
+                    dFile.setThexTreeDepth(Integer.parseInt(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(SharedFileHandler.class, exp, exp);
+                }
+                break;
+            case "TxLLN":
+                dFile.setThexLowestLevelNodes(text.toString());
+                break;
+            case "CT":
+                try {
+                    dFile.setCreationTime(Long.parseLong(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(SharedFileHandler.class, exp, exp);
+                }
+                break;
+            case "LM":
+                try {
+                    dFile.setLastModified(Long.parseLong(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(SharedFileHandler.class, exp, exp);
+                }
+                break;
+            case "LS":
+                try {
+                    dFile.setLastSeen(Long.parseLong(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(SharedFileHandler.class, exp, exp);
+                }
+                break;
+            case "HC":
+                try {
+                    dFile.setHitCount(Integer.parseInt(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(SharedFileHandler.class, exp, exp);
+                }
+                break;
+            case "UC":
+                try {
+                    dFile.setUploadCount(Integer.parseInt(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(SharedFileHandler.class, exp, exp);
+                }
+                break;
+            case THIS_TAG_NAME:
+                parser.getXMLReader().setContentHandler(parent);
+                break;
         }
     }
 

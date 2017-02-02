@@ -69,12 +69,16 @@ public class UpdateResponseInfoHandler extends DefaultHandler {
 
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
-        if (qName.equals("header")) {
-            dInfo.setHeader(text.toString());
-        } else if (qName.equals("text")) {
-            dInfo.setText(text.toString());
-        } else if (qName.equals(THIS_TAG_NAME)) {
-            parser.getXMLReader().setContentHandler(parent);
+        switch (qName) {
+            case "header":
+                dInfo.setHeader(text.toString());
+                break;
+            case "text":
+                dInfo.setText(text.toString());
+                break;
+            case THIS_TAG_NAME:
+                parser.getXMLReader().setContentHandler(parent);
+                break;
         }
     }
 

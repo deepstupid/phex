@@ -141,7 +141,7 @@ public class UdpHostCacheContainer {
                 String ipString = address.getFullHostName();
                 // add to the packed cache
                 packedCaches.append(ipString);
-                packedCaches.append("\n");
+                packedCaches.append('\n');
             }
         }
         return packedCaches.toString();
@@ -206,7 +206,7 @@ public class UdpHostCacheContainer {
         }
 
         synchronized (generalUdpCaches) {
-            Collections.sort(generalUdpCaches, BootstrapHostComparator.INSTANCE);
+            generalUdpCaches.sort(BootstrapHostComparator.INSTANCE);
             for (UdpHostCache cache : generalUdpCaches) {
                 if (now > cache.getEarliestReConnectTime()) {
                     list.add(cache);
@@ -265,11 +265,11 @@ public class UdpHostCacheContainer {
      * @return true if added successfully,
      * false if not added
      */
-    private boolean addTo(UdpHostCache cache, List<UdpHostCache> cacheContainer) {
+    private static boolean addTo(UdpHostCache cache, List<UdpHostCache> cacheContainer) {
         synchronized (cacheContainer) {
             if (!(cacheContainer.contains(cache))) {
                 cacheContainer.add(cache);
-                Collections.sort(cacheContainer, BootstrapHostComparator.INSTANCE);
+                cacheContainer.sort(BootstrapHostComparator.INSTANCE);
                 logger.info("Added UdpHostCache: {}", cache);
                 return true;
             }
@@ -305,7 +305,7 @@ public class UdpHostCacheContainer {
         }
     }
 
-    private UdpHostCache parseUhcFromLine(String line) {
+    private static UdpHostCache parseUhcFromLine(String line) {
         // tokenize line
         // line format can be:
         // host         or:
@@ -373,7 +373,7 @@ public class UdpHostCacheContainer {
         }
     }
 
-    private void writeCachesToFile(BufferedWriter writer, List<UdpHostCache> cacheContainer)
+    private static void writeCachesToFile(BufferedWriter writer, List<UdpHostCache> cacheContainer)
             throws IOException {
         synchronized (cacheContainer) {
             for (UdpHostCache cache : cacheContainer) {

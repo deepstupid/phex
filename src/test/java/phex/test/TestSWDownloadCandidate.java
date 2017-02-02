@@ -49,7 +49,7 @@ public class TestSWDownloadCandidate extends TestCase
             new QueryHitHost(new GUID(), new DefaultDestAddress("1.1.1.1", 1111 ), 0),
             1, "", "",  1, null, "", (short)1);
         SWDownloadFile downloadFile = new SWDownloadFile(
-            "", "", 1, null, Servent.getInstance().getDownloadService()
+            "", "", 1, null, Servent.servent.getDownloadService()
         );
         SWDownloadCandidate candidate = new SWDownloadCandidate( remoteFile,
             downloadFile, null );

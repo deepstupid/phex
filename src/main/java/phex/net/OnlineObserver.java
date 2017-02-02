@@ -81,7 +81,7 @@ public class OnlineObserver {
 
             int fc = failedConnections.incrementAndGet();
             if (logger.isDebugEnabled() && fc % 5 == 0) {
-                logger.debug("Observed " + failedConnections + " failed connections.");
+                logger.debug("Observed {} failed connections.", failedConnections);
             }
 
             // if we have 15 failed connections trigger host fetch operation, honor a delay between
@@ -115,7 +115,7 @@ public class OnlineObserver {
         autoReconnectTimer.setReconnectStatus(oldStatus);
         autoReconnectTimer.setOfflineTime(lastOfflineTime);
         Environment.getInstance().scheduleTimerTask(autoReconnectTimer,
-                1 * DateUtils.MILLIS_PER_MINUTE, 2 * DateUtils.MILLIS_PER_MINUTE);
+                DateUtils.MILLIS_PER_MINUTE, 2 * DateUtils.MILLIS_PER_MINUTE);
     }
 
     private synchronized void autoReconnectTry(OnlineStatus status) {

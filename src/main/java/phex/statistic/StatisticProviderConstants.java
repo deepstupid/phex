@@ -22,51 +22,51 @@
 package phex.statistic;
 
 public interface StatisticProviderConstants {
-    public static final String TOTAL_BANDWIDTH_PROVIDER = "TotalBandwidthProvider";
-    public static final String NETWORK_BANDWIDTH_PROVIDER = "NetworkBandwidthProvider";
-    public static final String DOWNLOAD_BANDWIDTH_PROVIDER = "DownloadBandwidthProvider";
-    public static final String UPLOAD_BANDWIDTH_PROVIDER = "UploadBandwidthProvider";
+    String TOTAL_BANDWIDTH_PROVIDER = "TotalBandwidthProvider";
+    String NETWORK_BANDWIDTH_PROVIDER = "NetworkBandwidthProvider";
+    String DOWNLOAD_BANDWIDTH_PROVIDER = "DownloadBandwidthProvider";
+    String UPLOAD_BANDWIDTH_PROVIDER = "UploadBandwidthProvider";
 
-    public static final String TOTALMSG_IN_PROVIDER = "TotalMsgInProvider";
-    public static final String PINGMSG_IN_PROVIDER = "PingMsgInProvider";
-    public static final String PONGMSG_IN_PROVIDER = "PongMsgInProvider";
-    public static final String PUSHMSG_IN_PROVIDER = "PushMsgInProvider";
-    public static final String QUERYMSG_IN_PROVIDER = "QueryMsgInProvider";
-    public static final String QUERYHITMSG_IN_PROVIDER = "QueryHitMsgInProvider";
+    String TOTALMSG_IN_PROVIDER = "TotalMsgInProvider";
+    String PINGMSG_IN_PROVIDER = "PingMsgInProvider";
+    String PONGMSG_IN_PROVIDER = "PongMsgInProvider";
+    String PUSHMSG_IN_PROVIDER = "PushMsgInProvider";
+    String QUERYMSG_IN_PROVIDER = "QueryMsgInProvider";
+    String QUERYHITMSG_IN_PROVIDER = "QueryHitMsgInProvider";
 
-    public static final String TOTALMSG_OUT_PROVIDER = "TotalMsgOutProvider";
-    public static final String PINGMSG_OUT_PROVIDER = "PingMsgOutProvider";
-    public static final String PONGMSG_OUT_PROVIDER = "PongMsgOutProvider";
-    public static final String PUSHMSG_OUT_PROVIDER = "PushMsgOutProvider";
-    public static final String QUERYMSG_OUT_PROVIDER = "QueryMsgOutProvider";
-    public static final String QUERYHITMSG_OUT_PROVIDER = "QueryHitMsgOutProvider";
+    String TOTALMSG_OUT_PROVIDER = "TotalMsgOutProvider";
+    String PINGMSG_OUT_PROVIDER = "PingMsgOutProvider";
+    String PONGMSG_OUT_PROVIDER = "PongMsgOutProvider";
+    String PUSHMSG_OUT_PROVIDER = "PushMsgOutProvider";
+    String QUERYMSG_OUT_PROVIDER = "QueryMsgOutProvider";
+    String QUERYHITMSG_OUT_PROVIDER = "QueryHitMsgOutProvider";
 
-    public static final String DROPEDMSG_TOTAL_PROVIDER = "DropedMsgTotalProvider";
-    public static final String DROPEDMSG_IN_PROVIDER = "DropedMsgInProvider";
-    public static final String DROPEDMSG_OUT_PROVIDER = "DropedMsgOutProvider";
+    String DROPEDMSG_TOTAL_PROVIDER = "DropedMsgTotalProvider";
+    String DROPEDMSG_IN_PROVIDER = "DropedMsgInProvider";
+    String DROPEDMSG_OUT_PROVIDER = "DropedMsgOutProvider";
 
-    public static final String UPTIME_PROVIDER = "UptimeProvider";
-    public static final String DAILY_UPTIME_PROVIDER = "DailyUptimeProvider";
+    String UPTIME_PROVIDER = "UptimeProvider";
+    String DAILY_UPTIME_PROVIDER = "DailyUptimeProvider";
 
-    public static final String SESSION_UPLOAD_COUNT_PROVIDER = "SessionUploadCountProvider";
-    public static final String TOTAL_UPLOAD_COUNT_PROVIDER = "TotalUploadCountProvider";
-    public static final String SESSION_DOWNLOAD_COUNT_PROVIDER = "SessionDownloadCountProvider";
-    public static final String TOTAL_DOWNLOAD_COUNT_PROVIDER = "TotalDownloadCountProvider";
+    String SESSION_UPLOAD_COUNT_PROVIDER = "SessionUploadCountProvider";
+    String TOTAL_UPLOAD_COUNT_PROVIDER = "TotalUploadCountProvider";
+    String SESSION_DOWNLOAD_COUNT_PROVIDER = "SessionDownloadCountProvider";
+    String TOTAL_DOWNLOAD_COUNT_PROVIDER = "TotalDownloadCountProvider";
 
-    public static final String PUSH_DOWNLOAD_ATTEMPTS_PROVIDER = "PushDownloadAttemptsProvider";
-    public static final String PUSH_DOWNLOAD_SUCESS_PROVIDER = "PushDownloadSucessProvider";
-    public static final String PUSH_DOWNLOAD_FAILURE_PROVIDER = "PushDownloadFailureProvider";
+    String PUSH_DOWNLOAD_ATTEMPTS_PROVIDER = "PushDownloadAttemptsProvider";
+    String PUSH_DOWNLOAD_SUCESS_PROVIDER = "PushDownloadSucessProvider";
+    String PUSH_DOWNLOAD_FAILURE_PROVIDER = "PushDownloadFailureProvider";
 
-    public static final String PUSH_DLDPUSHPROXY_ATTEMPTS_PROVIDER = "PushDldPushProxyAttemptsProvider";
-    public static final String PUSH_DLDPUSHPROXY_SUCESS_PROVIDER = "PushDldPushProxySuccessProvider";
+    String PUSH_DLDPUSHPROXY_ATTEMPTS_PROVIDER = "PushDldPushProxyAttemptsProvider";
+    String PUSH_DLDPUSHPROXY_SUCESS_PROVIDER = "PushDldPushProxySuccessProvider";
 
-    public static final String PUSH_UPLOAD_ATTEMPTS_PROVIDER = "PushUploadAttemptsProvider";
-    public static final String PUSH_UPLOAD_SUCESS_PROVIDER = "PushUploadSucessProvider";
-    public static final String PUSH_UPLOAD_FAILURE_PROVIDER = "PushUploadFailureProvider";
+    String PUSH_UPLOAD_ATTEMPTS_PROVIDER = "PushUploadAttemptsProvider";
+    String PUSH_UPLOAD_SUCESS_PROVIDER = "PushUploadSucessProvider";
+    String PUSH_UPLOAD_FAILURE_PROVIDER = "PushUploadFailureProvider";
 
-    public static final String HORIZON_HOST_COUNT_PROVIDER = "HorizonHostCountProvider";
-    public static final String HORIZON_FILE_COUNT_PROVIDER = "HorizonFileCountProvider";
-    public static final String HORIZON_FILE_SIZE_PROVIDER = "HorizonFileSizeProvider";
+    String HORIZON_HOST_COUNT_PROVIDER = "HorizonHostCountProvider";
+    String HORIZON_FILE_COUNT_PROVIDER = "HorizonFileCountProvider";
+    String HORIZON_FILE_SIZE_PROVIDER = "HorizonFileSizeProvider";
 
 
 }

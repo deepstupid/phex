@@ -85,8 +85,8 @@ public class DefaultSearchProgress implements SearchProgress {
         // return the max from all
         int totalProgress = Math.min(Math.max(resultsProgress, timeProgress), 100);
         logger.debug("Search progress: r{}, t{}, ={}",
-                new Object[]{Integer.valueOf(resultsProgress), Integer.valueOf(timeProgress),
-                        Integer.valueOf(totalProgress)});
+                Integer.valueOf(resultsProgress), Integer.valueOf(timeProgress),
+                Integer.valueOf(totalProgress));
         return totalProgress;
     }
 

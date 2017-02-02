@@ -490,7 +490,7 @@ public class Base64 //implements BinaryEncoder, BinaryDecoder
      * @throws phex.util.DecoderException if the parameter supplied is not
      *                                    of type byte[]
      */
-    public Object decode(Object pObject) throws phex.util.DecoderException {
+    public static Object decode(Object pObject) throws phex.util.DecoderException {
         if (!(pObject instanceof byte[])) {
             throw new phex.util.DecoderException("Parameter supplied to Base64 decode is not a byte[]");
         }
@@ -504,7 +504,7 @@ public class Base64 //implements BinaryEncoder, BinaryDecoder
      * @param pArray A byte array containing Base64 character data
      * @return a byte array containing binary data
      */
-    public byte[] decode(byte[] pArray) {
+    public static byte[] decode(byte[] pArray) {
         return decodeBase64(pArray);
     }
 
@@ -523,7 +523,7 @@ public class Base64 //implements BinaryEncoder, BinaryDecoder
      * @throws phex.util.EncoderException if the parameter supplied is not
      *                                    of type byte[]
      */
-    public Object encode(Object pObject) throws phex.util.EncoderException {
+    public static Object encode(Object pObject) throws phex.util.EncoderException {
         if (!(pObject instanceof byte[])) {
             throw new phex.util.EncoderException(
                     "Parameter supplied to Base64 encode is not a byte[]");
@@ -538,7 +538,7 @@ public class Base64 //implements BinaryEncoder, BinaryDecoder
      * @param pArray a byte array containing binary data
      * @return A byte array containing only Base64 character data
      */
-    public byte[] encode(byte[] pArray) {
+    public static byte[] encode(byte[] pArray) {
         return encodeBase64(pArray, false);
     }
 }

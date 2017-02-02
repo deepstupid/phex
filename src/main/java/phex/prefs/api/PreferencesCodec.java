@@ -16,7 +16,7 @@ public class PreferencesCodec {
     public static List<String> deserializeList(String name, Preferences preferences) {
         List<String> list = new ArrayList<String>();
         List<String> names = preferences.getPrefixedPropertyNames(name + LIST_DESER_POSTFIX);
-        Collections.sort(names, new ListPostfixKeyComparator());
+        names.sort(new ListPostfixKeyComparator());
         for (String key : names) {
             String value = preferences.getLoadedProperty(key);
             if (!StringUtils.isEmpty(value)) {
@@ -56,9 +56,9 @@ public class PreferencesCodec {
         if (value instanceof String) {
             properties.setProperty(name, (String) value);
         } else if (value instanceof Number) {
-            properties.setProperty(name, ((Number) value).toString());
+            properties.setProperty(name, value.toString());
         } else if (value instanceof Boolean) {
-            properties.setProperty(name, ((Boolean) value).toString());
+            properties.setProperty(name, value.toString());
         } else if (value instanceof Set) {
             Set<String> setValue = (Set<String>) value;
             int pos = 1;

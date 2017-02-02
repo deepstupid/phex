@@ -45,12 +45,11 @@ public class AltLocContainerTest extends TestCase
     @Override
     public void setUp()
     {
-        Phex.initialize();
         /// should not depend on these
         PhexCorePrefs.init();
 //        PhexGuiPrefs.init();
 //        Localizer.initialize( InterfacePrefs.LocaleName.get() );
-        Servent servent = Servent.getInstance();
+        Servent servent = Servent.servent;
         
         
         nextAltLocCounter = 0;
@@ -64,7 +63,7 @@ public class AltLocContainerTest extends TestCase
         for ( int i = 0; i < 10; i++ )
         {
             String altLocStr = "http://1.1.1." + i
-                + ":6347/uri-res/N2R?"+DEFAULT_URN+" 2002-04-30T08:30:"+ i % 60 + "Z";
+                + ":6347/uri-res/N2R?"+DEFAULT_URN+" 2002-04-30T08:30:"+ i % 60 + 'Z';
             AlternateLocation loc = AlternateLocation.parseUriResAltLoc( altLocStr,
                 securityService );
             assertNotNull( loc );
@@ -88,7 +87,7 @@ public class AltLocContainerTest extends TestCase
         for ( int i = 0; i < 10; i++ )
         {
             String altLocStr = "http://1.1.1." + i
-                + ":6347/uri-res/N2R?"+DEFAULT_URN+" 2002-04-30T08:30:"+ i % 60 + "Z";
+                + ":6347/uri-res/N2R?"+DEFAULT_URN+" 2002-04-30T08:30:"+ i % 60 + 'Z';
             AlternateLocation loc = AlternateLocation.parseUriResAltLoc( altLocStr,
                 securityService );
             assertNotNull( loc );

@@ -54,6 +54,6 @@ public class RatedDownloadScope extends DownloadScope {
     public String toString() {
         return "[RatedDownloadScope: start:" + getStart() + ",end:" + getEnd()
                 + ",countRating:" + countRating + ",speedRating:" + speedRating
-                + "@" + Integer.toHexString(hashCode()) + "]";
+                + '@' + Integer.toHexString(hashCode()) + ']';
     }
 }

@@ -239,8 +239,8 @@ public class PongFactory {
         return pong;
     }
 
-    public PongMsg createOtherLeafsOutgoingPong(GUID msgId, byte ttl,
-                                                byte hops, DestAddress address) {
+    public static PongMsg createOtherLeafsOutgoingPong(GUID msgId, byte ttl,
+                                                       byte hops, DestAddress address) {
         MsgHeader header = new MsgHeader(msgId, MsgHeader.PONG_PAYLOAD,
                 ttl, hops, 0);
         GGEPBlock ggepBlock = null;

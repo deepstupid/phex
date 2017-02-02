@@ -173,7 +173,7 @@ public class TestAlternateLocation extends TestCase
         {
             String altLocStr = "http://1.1.1." + i
                 + ":6347/uri-res/N2R?urn:sha1:PLSTHIPQGSSZTS5FJUPAKUZWUGYQYPFB 2002-04-30T08:30:"
-                + i%60 + "Z";
+                + i%60 + 'Z';
             loc = AlternateLocation.parseUriResAltLoc( altLocStr, securityService );
             assertNotNull( loc );
             container.addAlternateLocation( loc );

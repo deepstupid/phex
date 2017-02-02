@@ -69,50 +69,63 @@ public class IpAccessRuleHandler extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
-        if (qName.equals("description")) {
-            dIpAccessRule.setDescription(text.toString());
-        } else if (qName.equals("isDenyingRule")) {
-            dIpAccessRule.setDenyingRule(Boolean.valueOf(text.toString())
-                    .booleanValue());
-        } else if (qName.equals("isDisabled")) {
-            dIpAccessRule.setDisabled(Boolean.valueOf(text.toString())
-                    .booleanValue());
-        } else if (qName.equals("isDeletedOnExpiry")) {
-            dIpAccessRule.setDeletedOnExpiry(Boolean.valueOf(text.toString())
-                    .booleanValue());
-        } else if (qName.equals("isSystemRule")) {
-            dIpAccessRule.setSystemRule(Boolean.valueOf(text.toString())
-                    .booleanValue());
-        } else if (qName.equals("triggerCount")) {
-            try {
-                dIpAccessRule.setTriggerCount(Integer.parseInt(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(DownloadFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals("expiryDate")) {
-            try {
-                dIpAccessRule.setExpiryDate(Long.parseLong(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(DownloadFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals("ip")) {
-            dIpAccessRule.setIp(ParserUtils.fromHexBinary(text.toString()));
-        } else if (qName.equals("cidr")) {
-            try {
-                dIpAccessRule.setCidr(Byte.parseByte(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(DownloadFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals(THIS_TAG_NAME)) {
-            parser.getXMLReader().setContentHandler(parent);
-        } else if (qName.equals("compareIP")) {
-            dIpAccessRule.setCompareIp(ParserUtils.fromHexBinary(text.toString()));
-        } else if (qName.equals("addressType")) {
-            try {
-                dIpAccessRule.setAddressType(Integer.parseInt(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(DownloadFileHandler.class, exp, exp);
-            }
+        switch (qName) {
+            case "description":
+                dIpAccessRule.setDescription(text.toString());
+                break;
+            case "isDenyingRule":
+                dIpAccessRule.setDenyingRule(Boolean.valueOf(text.toString())
+                        .booleanValue());
+                break;
+            case "isDisabled":
+                dIpAccessRule.setDisabled(Boolean.valueOf(text.toString())
+                        .booleanValue());
+                break;
+            case "isDeletedOnExpiry":
+                dIpAccessRule.setDeletedOnExpiry(Boolean.valueOf(text.toString())
+                        .booleanValue());
+                break;
+            case "isSystemRule":
+                dIpAccessRule.setSystemRule(Boolean.valueOf(text.toString())
+                        .booleanValue());
+                break;
+            case "triggerCount":
+                try {
+                    dIpAccessRule.setTriggerCount(Integer.parseInt(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(DownloadFileHandler.class, exp, exp);
+                }
+                break;
+            case "expiryDate":
+                try {
+                    dIpAccessRule.setExpiryDate(Long.parseLong(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(DownloadFileHandler.class, exp, exp);
+                }
+                break;
+            case "ip":
+                dIpAccessRule.setIp(ParserUtils.fromHexBinary(text.toString()));
+                break;
+            case "cidr":
+                try {
+                    dIpAccessRule.setCidr(Byte.parseByte(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(DownloadFileHandler.class, exp, exp);
+                }
+                break;
+            case THIS_TAG_NAME:
+                parser.getXMLReader().setContentHandler(parent);
+                break;
+            case "compareIP":
+                dIpAccessRule.setCompareIp(ParserUtils.fromHexBinary(text.toString()));
+                break;
+            case "addressType":
+                try {
+                    dIpAccessRule.setAddressType(Integer.parseInt(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(DownloadFileHandler.class, exp, exp);
+                }
+                break;
         }
     }
 

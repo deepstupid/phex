@@ -22,8 +22,8 @@
 package phex.chat;
 
 import org.bouncycastle.util.encoders.Base64;
+import phex.api.Phex;
 import phex.common.Environment;
-import phex.common.Phex;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
 import phex.io.buffer.ByteBuffer;
@@ -120,9 +120,9 @@ public final class ChatEngine {
         try {
             if (useEncodedStr) {
                 String base64Str = new String(Base64.encode(message.getBytes()));
-                connection.write(ByteBuffer.wrap((base64Str + "\n").getBytes()));
+                connection.write(ByteBuffer.wrap((base64Str + '\n').getBytes()));
             } else {
-                connection.write(ByteBuffer.wrap((message + "\n").getBytes()));
+                connection.write(ByteBuffer.wrap((message + '\n').getBytes()));
             }
         } catch (IOException exp) {
             NLogger.warn(ChatEngine.class, exp, exp);
@@ -152,11 +152,7 @@ public final class ChatEngine {
             }
             if (upLine.startsWith("X-PHEX-ENCODED:")) {
                 foundPhexEncoded = true;
-                if (upLine.equals("X-PHEX-ENCODED: TRUE")) {
-                    useEncodedStr = true;
-                } else {
-                    useEncodedStr = false;
-                }
+                useEncodedStr = upLine.equals("X-PHEX-ENCODED: TRUE");
             }
         }
         while (line.length() > 0);
@@ -233,11 +229,7 @@ public final class ChatEngine {
             }
             if (upLine.startsWith("X-PHEX-ENCODED:")) {
                 foundPhexEncoded = true;
-                if (upLine.equals("X-PHEX-ENCODED: TRUE")) {
-                    useEncodedStr = true;
-                } else {
-                    useEncodedStr = false;
-                }
+                useEncodedStr = upLine.equals("X-PHEX-ENCODED: TRUE");
             }
         }
         while (line.length() > 0);

@@ -313,7 +313,7 @@ public class ShareFile extends SharedResource {
     }
 
     public String toString() {
-        return super.toString() + " " + getFileName() + "  " + fileIndex;
+        return super.toString() + ' ' + getFileName() + "  " + fileIndex;
     }
 
     public void clearSearchCounters() {

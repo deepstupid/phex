@@ -40,7 +40,7 @@ public class HrrnQueueComparatorTest extends TestCase
         PhexCorePrefs.init();
 //        PhexGuiPrefs.init();
 //        Localizer.initialize( InterfacePrefs.LocaleName.get() );
-        Servent servent = Servent.getInstance();
+        Servent servent = Servent.servent;
         uploadManager = new UploadManager( servent );
     }
     
@@ -56,7 +56,7 @@ public class HrrnQueueComparatorTest extends TestCase
         }
         Thread.sleep( 1000 );
         long sortTime = System.currentTimeMillis();
-        Collections.sort( testList, new HrrnQueueComparator( sortTime ) );
+        testList.sort(new HrrnQueueComparator(sortTime));
         
         for ( UploadQueueState uqs : testList )
         {

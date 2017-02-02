@@ -277,24 +277,8 @@ public class SWDownloadWorker implements Runnable {
 
             downloadEngine = new DownloadEngine(downloadSet);
             downloadEngine.setConnection(connection);
-        } catch (ConnectionFailedException exp) {
+        } catch (ConnectionFailedException | UnknownHostException | SocketTimeoutException exp) {
             // indicates a general communication error while connecting
-            downloadCandidate.addToCandidateLog(exp.toString());
-            NLogger.debug(SWDownloadWorker.class, exp.toString());
-
-            // trying push - setting failed status is directed to connectDownloadEngineViaPush()
-            connectDownloadEngineViaPush(downloadSet, true);
-            return;
-        } catch (SocketTimeoutException exp) {
-            // indicates a general communication error while connecting
-            downloadCandidate.addToCandidateLog(exp.toString());
-            NLogger.debug(SWDownloadWorker.class, exp.toString());
-
-            // trying push - setting failed status is directed to connectDownloadEngineViaPush()
-            connectDownloadEngineViaPush(downloadSet, true);
-            return;
-        } catch (UnknownHostException exp) {
-            // indicates that we failed to determine the IP address of a host.
             downloadCandidate.addToCandidateLog(exp.toString());
             NLogger.debug(SWDownloadWorker.class, exp.toString());
 
@@ -444,6 +428,6 @@ public class SWDownloadWorker implements Runnable {
     @Override
     public String toString() {
         return "[SWDownloadWorker@" + Integer.toHexString(hashCode()) + ":running:" + isRunning + ",tempWorker:"
-                + isTemporaryWorker + ",engine:" + downloadEngine + "]";
+                + isTemporaryWorker + ",engine:" + downloadEngine + ']';
     }
 }

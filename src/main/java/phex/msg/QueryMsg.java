@@ -391,9 +391,9 @@ public class QueryMsg extends Message {
         return buf.toString();
     }
 
-    private void addPhexExtendedOriginGGEP(GGEPBlock ggepBlock) {
+    private static void addPhexExtendedOriginGGEP(GGEPBlock ggepBlock) {
         DestAddress[] addresses = new DestAddress[1];
-        DestAddress localAddress = Servent.getInstance().getLocalAddress();
+        DestAddress localAddress = Servent.servent.getLocalAddress();
         addresses[0] = new DefaultDestAddress(localAddress.getIpAddress(),
                 localAddress.getPort());
         ggepBlock.addExtension(GGEPBlock.PHEX_EXTENDED_ORIGIN, addresses, 1);

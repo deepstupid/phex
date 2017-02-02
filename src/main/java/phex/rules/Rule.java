@@ -194,6 +194,6 @@ public class Rule implements Cloneable {
 
     @Override
     public String toString() {
-        return super.toString() + "[Condition: " + ruleCondition.toString() + "]";
+        return super.toString() + "[Condition: " + ruleCondition.toString() + ']';
     }
 }

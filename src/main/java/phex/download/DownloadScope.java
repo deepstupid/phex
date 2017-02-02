@@ -46,7 +46,7 @@ public class DownloadScope {
     public DownloadScope(long startOffset, long endOffset) {
         if (endOffset < startOffset) {
             throw new IllegalArgumentException("endOffset < startOffset : "
-                    + startOffset + " " + endOffset);
+                    + startOffset + ' ' + endOffset);
         }
         this.start = startOffset;
         this.end = endOffset;
@@ -142,13 +142,12 @@ public class DownloadScope {
         if (getClass() != obj.getClass()) return false;
         final DownloadScope other = (DownloadScope) obj;
         if (end != other.end) return false;
-        if (start != other.start) return false;
-        return true;
+        return start == other.start;
     }
 
     @Override
     public String toString() {
         return "[DownloadScope: start:" + start + ",end:" + end
-                + "@" + Integer.toHexString(hashCode()) + "]";
+                + '@' + Integer.toHexString(hashCode()) + ']';
     }
 }

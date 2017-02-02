@@ -65,50 +65,56 @@ public class DownloadFileHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String qName,
                              Attributes attributes) throws SAXException {
         text.reset();
-        if (qName.equals(DDownloadCandidate.ELEMENT_NAME)) {
-            DDownloadCandidate candidate = new DDownloadCandidate();
-            downloadFile.getCandidateList().getSubElementList().add(candidate);
-            DownloadCandidateHandler handler = new DownloadCandidateHandler(
-                    candidate, this, parser);
-            parser.getXMLReader().setContentHandler(handler);
-        } else if (qName.equals(DDownloadScope.UNVERIFIED_SCOPE_ELEMENT_NAME)) {
-            DDownloadScope scope = new DDownloadScope(DDownloadScope.UNVERIFIED_SCOPE_ELEMENT_NAME);
-            String start = attributes.getValue("start");
-            if (start != null) {
-                try {
-                    scope.setStart(Long.parseLong(start));
-                } catch (NumberFormatException exp) {
-                    NLogger.error(DownloadFileHandler.class, exp, exp);
+        switch (qName) {
+            case DDownloadCandidate.ELEMENT_NAME:
+                DDownloadCandidate candidate = new DDownloadCandidate();
+                downloadFile.getCandidateList().getSubElementList().add(candidate);
+                DownloadCandidateHandler handler = new DownloadCandidateHandler(
+                        candidate, this, parser);
+                parser.getXMLReader().setContentHandler(handler);
+                break;
+            case DDownloadScope.UNVERIFIED_SCOPE_ELEMENT_NAME: {
+                DDownloadScope scope = new DDownloadScope(DDownloadScope.UNVERIFIED_SCOPE_ELEMENT_NAME);
+                String start = attributes.getValue("start");
+                if (start != null) {
+                    try {
+                        scope.setStart(Long.parseLong(start));
+                    } catch (NumberFormatException exp) {
+                        NLogger.error(DownloadFileHandler.class, exp, exp);
+                    }
                 }
-            }
-            String end = attributes.getValue("end");
-            if (end != null) {
-                try {
-                    scope.setEnd(Long.parseLong(end));
-                } catch (NumberFormatException exp) {
-                    NLogger.error(DownloadFileHandler.class, exp, exp);
+                String end = attributes.getValue("end");
+                if (end != null) {
+                    try {
+                        scope.setEnd(Long.parseLong(end));
+                    } catch (NumberFormatException exp) {
+                        NLogger.error(DownloadFileHandler.class, exp, exp);
+                    }
                 }
+                downloadFile.getUnverifiedScopesList().getSubElementList().add(scope);
+                break;
             }
-            downloadFile.getUnverifiedScopesList().getSubElementList().add(scope);
-        } else if (qName.equals(DDownloadScope.FINISHED_SCOPE_ELEMENT_NAME)) {
-            DDownloadScope scope = new DDownloadScope(DDownloadScope.FINISHED_SCOPE_ELEMENT_NAME);
-            String start = attributes.getValue("start");
-            if (start != null) {
-                try {
-                    scope.setStart(Long.parseLong(start));
-                } catch (NumberFormatException exp) {
-                    NLogger.error(DownloadFileHandler.class, exp, exp);
+            case DDownloadScope.FINISHED_SCOPE_ELEMENT_NAME: {
+                DDownloadScope scope = new DDownloadScope(DDownloadScope.FINISHED_SCOPE_ELEMENT_NAME);
+                String start = attributes.getValue("start");
+                if (start != null) {
+                    try {
+                        scope.setStart(Long.parseLong(start));
+                    } catch (NumberFormatException exp) {
+                        NLogger.error(DownloadFileHandler.class, exp, exp);
+                    }
                 }
-            }
-            String end = attributes.getValue("end");
-            if (end != null) {
-                try {
-                    scope.setEnd(Long.parseLong(end));
-                } catch (NumberFormatException exp) {
-                    NLogger.error(DownloadFileHandler.class, exp, exp);
+                String end = attributes.getValue("end");
+                if (end != null) {
+                    try {
+                        scope.setEnd(Long.parseLong(end));
+                    } catch (NumberFormatException exp) {
+                        NLogger.error(DownloadFileHandler.class, exp, exp);
+                    }
                 }
+                downloadFile.getFinishedScopesList().getSubElementList().add(scope);
+                break;
             }
-            downloadFile.getFinishedScopesList().getSubElementList().add(scope);
         }
         return;
     }
@@ -116,42 +122,53 @@ public class DownloadFileHandler extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
-        if (qName.equals("created-time")) {
-            try {
-                downloadFile.setCreationTime(Long.parseLong(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(DownloadFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals("filesize")) {
-            try {
-                downloadFile.setFileSize(Long.parseLong(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(DownloadFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals("file-urn")) {
-            downloadFile.setFileURN(text.toString());
-        } else if (qName.equals("incomplete-file-name")) {
-            downloadFile.setIncompleteFileName(text.toString());
-        } else if (qName.equals("localfilename")) {
-            downloadFile.setLocalFileName(text.toString());
-        } else if (qName.equals("modified-time")) {
-            try {
-                downloadFile.setModificationTime(Long.parseLong(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(DownloadFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals("scope-strategy")) {
-            downloadFile.setScopeSelectionStrategy(text.toString());
-        } else if (qName.equals("searchterm")) {
-            downloadFile.setSearchTerm(text.toString());
-        } else if (qName.equals("status")) {
-            try {
-                downloadFile.setStatus(Integer.parseInt(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(DownloadFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals(DDownloadFile.ELEMENT_NAME)) {
-            parser.getXMLReader().setContentHandler(parent);
+        switch (qName) {
+            case "created-time":
+                try {
+                    downloadFile.setCreationTime(Long.parseLong(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(DownloadFileHandler.class, exp, exp);
+                }
+                break;
+            case "filesize":
+                try {
+                    downloadFile.setFileSize(Long.parseLong(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(DownloadFileHandler.class, exp, exp);
+                }
+                break;
+            case "file-urn":
+                downloadFile.setFileURN(text.toString());
+                break;
+            case "incomplete-file-name":
+                downloadFile.setIncompleteFileName(text.toString());
+                break;
+            case "localfilename":
+                downloadFile.setLocalFileName(text.toString());
+                break;
+            case "modified-time":
+                try {
+                    downloadFile.setModificationTime(Long.parseLong(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(DownloadFileHandler.class, exp, exp);
+                }
+                break;
+            case "scope-strategy":
+                downloadFile.setScopeSelectionStrategy(text.toString());
+                break;
+            case "searchterm":
+                downloadFile.setSearchTerm(text.toString());
+                break;
+            case "status":
+                try {
+                    downloadFile.setStatus(Integer.parseInt(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(DownloadFileHandler.class, exp, exp);
+                }
+                break;
+            case DDownloadFile.ELEMENT_NAME:
+                parser.getXMLReader().setContentHandler(parent);
+                break;
         }
     }
 

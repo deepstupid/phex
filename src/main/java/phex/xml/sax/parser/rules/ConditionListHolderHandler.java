@@ -67,48 +67,61 @@ public abstract class ConditionListHolderHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String qName,
                              Attributes attributes) throws SAXException {
         text.reset();
-        if (qName.equals(DAndConcatCondition.ELEMENT_NAME)) {
-            DAndConcatCondition condition = new DAndConcatCondition();
-            conditionListHolder.getSubElementList().add(condition);
+        switch (qName) {
+            case DAndConcatCondition.ELEMENT_NAME: {
+                DAndConcatCondition condition = new DAndConcatCondition();
+                conditionListHolder.getSubElementList().add(condition);
 
-            AndConcatConditionHandler handler = new AndConcatConditionHandler(
-                    condition, attributes, this, parser);
-            parser.getXMLReader().setContentHandler(handler);
-        } else if (qName.equals(DNotCondition.ELEMENT_NAME)) {
-            DNotCondition condition = new DNotCondition();
-            conditionListHolder.getSubElementList().add(condition);
+                AndConcatConditionHandler handler = new AndConcatConditionHandler(
+                        condition, attributes, this, parser);
+                parser.getXMLReader().setContentHandler(handler);
+                break;
+            }
+            case DNotCondition.ELEMENT_NAME: {
+                DNotCondition condition = new DNotCondition();
+                conditionListHolder.getSubElementList().add(condition);
 
-            NotConditionHandler handler = new NotConditionHandler(
-                    condition, attributes, this, parser);
-            parser.getXMLReader().setContentHandler(handler);
-        } else if (qName.equals(DFilenameCondition.ELEMENT_NAME)) {
-            DFilenameCondition condition = new DFilenameCondition();
-            conditionListHolder.getSubElementList().add(condition);
+                NotConditionHandler handler = new NotConditionHandler(
+                        condition, attributes, this, parser);
+                parser.getXMLReader().setContentHandler(handler);
+                break;
+            }
+            case DFilenameCondition.ELEMENT_NAME: {
+                DFilenameCondition condition = new DFilenameCondition();
+                conditionListHolder.getSubElementList().add(condition);
 
-            FilenameConditionHandler handler = new FilenameConditionHandler(
-                    condition, attributes, this, parser);
-            parser.getXMLReader().setContentHandler(handler);
-        } else if (qName.equals(DFileSizeCondition.ELEMENT_NAME)) {
-            DFileSizeCondition condition = new DFileSizeCondition();
-            conditionListHolder.getSubElementList().add(condition);
+                FilenameConditionHandler handler = new FilenameConditionHandler(
+                        condition, attributes, this, parser);
+                parser.getXMLReader().setContentHandler(handler);
+                break;
+            }
+            case DFileSizeCondition.ELEMENT_NAME: {
+                DFileSizeCondition condition = new DFileSizeCondition();
+                conditionListHolder.getSubElementList().add(condition);
 
-            FileSizeConditionHandler handler = new FileSizeConditionHandler(
-                    condition, attributes, this, parser);
-            parser.getXMLReader().setContentHandler(handler);
-        } else if (qName.equals(DMediaTypeCondition.ELEMENT_NAME)) {
-            DMediaTypeCondition condition = new DMediaTypeCondition();
-            conditionListHolder.getSubElementList().add(condition);
+                FileSizeConditionHandler handler = new FileSizeConditionHandler(
+                        condition, attributes, this, parser);
+                parser.getXMLReader().setContentHandler(handler);
+                break;
+            }
+            case DMediaTypeCondition.ELEMENT_NAME: {
+                DMediaTypeCondition condition = new DMediaTypeCondition();
+                conditionListHolder.getSubElementList().add(condition);
 
-            MediaTypeConditionHandler handler = new MediaTypeConditionHandler(
-                    condition, attributes, this, parser);
-            parser.getXMLReader().setContentHandler(handler);
-        } else if (qName.equals(DFileUrnCondition.ELEMENT_NAME)) {
-            DFileUrnCondition condition = new DFileUrnCondition();
-            conditionListHolder.getSubElementList().add(condition);
+                MediaTypeConditionHandler handler = new MediaTypeConditionHandler(
+                        condition, attributes, this, parser);
+                parser.getXMLReader().setContentHandler(handler);
+                break;
+            }
+            case DFileUrnCondition.ELEMENT_NAME: {
+                DFileUrnCondition condition = new DFileUrnCondition();
+                conditionListHolder.getSubElementList().add(condition);
 
-            FileUrnConditionHandler handler = new FileUrnConditionHandler(
-                    condition, attributes, this, parser);
-            parser.getXMLReader().setContentHandler(handler);
+                FileUrnConditionHandler handler = new FileUrnConditionHandler(
+                        condition, attributes, this, parser);
+                parser.getXMLReader().setContentHandler(handler);
+                break;
+            }
         }
         return;
     }

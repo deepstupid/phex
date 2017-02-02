@@ -137,7 +137,7 @@ public class FileSizeCondition implements Condition {
 
     @Override
     public String toString() {
-        return super.toString() + "[Ranges: " + ranges.toString() + "]";
+        return super.toString() + "[Ranges: " + ranges.toString() + ']';
     }
 
     public static class Range {
@@ -168,7 +168,7 @@ public class FileSizeCondition implements Condition {
 
         @Override
         public String toString() {
-            return super.toString() + "[min:" + min + ", max:" + max + "]";
+            return super.toString() + "[min:" + min + ", max:" + max + ']';
         }
     }
 }

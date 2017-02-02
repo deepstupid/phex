@@ -48,10 +48,7 @@ public class ThexHashTreeCodec {
             saxParser.parse(new InputSource(inStream),
                     new ThexHashTreeSAXHandler(hashTree));
             return hashTree;
-        } catch (ParserConfigurationException exp) {
-            NLogger.error(ThexHashTreeCodec.class, exp, exp);
-            throw new IOException("Parsing Thex HashTree failed.");
-        } catch (SAXException exp) {
+        } catch (ParserConfigurationException | SAXException exp) {
             NLogger.error(ThexHashTreeCodec.class, exp, exp);
             throw new IOException("Parsing Thex HashTree failed.");
         }

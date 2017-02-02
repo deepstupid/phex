@@ -70,6 +70,6 @@ public class NotCondition implements Condition {
 
     @Override
     public String toString() {
-        return super.toString() + "[filter: " + filter.toString() + "]";
+        return super.toString() + "[filter: " + filter.toString() + ']';
     }
 }

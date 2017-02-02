@@ -166,11 +166,8 @@ public class SearchFilter {
             return true;
         }
 
-        if (isFilenameFiltered(fullFileName)) {
-            return true;
-        }
+        return isFilenameFiltered(fullFileName);
 
-        return false;
     }
 
     private boolean isFilenameFiltered(String filename) {
@@ -181,7 +178,7 @@ public class SearchFilter {
         Iterator iterator = filterTokens.iterator();
         while (iterator.hasNext()) {
             String token = (String) iterator.next();
-            if (filename.indexOf(token) == -1) {
+            if (!filename.contains(token)) {
                 return true;
             }
         }

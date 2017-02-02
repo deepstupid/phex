@@ -12,20 +12,20 @@ public interface ServentInfo {
      *
      * @return true if the node is currently a ultrapeer, false otherwise.
      */
-    public boolean isUltrapeer();
+    boolean isUltrapeer();
 
     /**
      * Returns true if the local servent is a shielded leaf node ( has a connection
      * to a ultrapeer as a leaf).
      */
-    public boolean isShieldedLeafNode();
+    boolean isShieldedLeafNode();
 
     /**
      * Returns true if this node is allowed to become a ultrapeer, false otherwise.
      *
      * @return true if this node is allowed to become a ultrapeer, false otherwise.
      */
-    public boolean isAbleToBecomeUltrapeer();
+    boolean isAbleToBecomeUltrapeer();
 
     /**
      * The method checks if we are able to go into leaf state. This is
@@ -33,7 +33,7 @@ public interface ServentInfo {
      *
      * @return true if we are able to switch to Leaf state, false otherwise.
      */
-    public boolean allowDowngradeToLeaf();
+    boolean allowDowngradeToLeaf();
 
     /**
      * Indicates if this server is currently firewalled or assumed to be firewalled.
@@ -42,7 +42,7 @@ public interface ServentInfo {
      *
      * @return true if it has connected incoming, false otherwise.
      */
-    public boolean isFirewalled();
+    boolean isFirewalled();
 
     /**
      * Indicates if this servent has reached its upload limit, all
@@ -50,7 +50,7 @@ public interface ServentInfo {
      *
      * @return true if the upload limit is reached, false otherwise.
      */
-    public boolean isUploadLimitReached();
+    boolean isUploadLimitReached();
 
     /**
      * Returns the current local address. This will be the forced address
@@ -58,20 +58,20 @@ public interface ServentInfo {
      *
      * @return the current determined local address or the user set forced address.
      */
-    public DestAddress getLocalAddress();
+    DestAddress getLocalAddress();
 
     /**
      * Returns the GUID of the servent.
      *
      * @return the GUID of the servent.
      */
-    public GUID getServentGuid();
+    GUID getServentGuid();
 
     /**
      * Returns the current network.
      *
      * @return the current network.
      */
-    public GnutellaNetwork getGnutellaNetwork();
+    GnutellaNetwork getGnutellaNetwork();
 
 }

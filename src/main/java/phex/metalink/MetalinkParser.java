@@ -57,10 +57,7 @@ public class MetalinkParser {
                 }
                 magnets.add(new URI(magnetStr, true));
             }
-        } catch (ParserConfigurationException exp) {
-            NLogger.error(MetalinkParser.class, exp, exp);
-            throw new IOException("Parsing Metalink XML failed.");
-        } catch (SAXException exp) {
+        } catch (ParserConfigurationException | SAXException exp) {
             NLogger.error(MetalinkParser.class, exp, exp);
             throw new IOException("Parsing Metalink XML failed.");
         }

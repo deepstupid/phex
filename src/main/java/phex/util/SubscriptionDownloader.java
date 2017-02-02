@@ -85,7 +85,7 @@ public class SubscriptionDownloader extends TimerTask {
             return;
         }
         URI uri = new URI(uriStr, true);
-        Servent.getInstance().getDownloadService().addFileToDownload(uri, true);
+        Servent.servent.getDownloadService().addFileToDownload(uri, true);
     }
 
     @Override

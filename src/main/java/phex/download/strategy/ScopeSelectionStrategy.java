@@ -27,6 +27,6 @@ import phex.download.DownloadScopeList;
 import phex.download.swarming.SWDownloadFile;
 
 public interface ScopeSelectionStrategy {
-    public DownloadScope selectDownloadScope(SWDownloadFile downloadFile,
-                                             DownloadScopeList wantedScopeList, long preferredSize);
+    DownloadScope selectDownloadScope(SWDownloadFile downloadFile,
+                                      DownloadScopeList wantedScopeList, long preferredSize);
 }

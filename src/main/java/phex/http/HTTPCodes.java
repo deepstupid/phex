@@ -23,12 +23,12 @@
 package phex.http;
 
 public interface HTTPCodes {
-    public static final int HTTP_401_UNAUTHORIZED = 401;
-    public static final int HTTP_404_Not_Found = 404;
-    public static final int HTTP_403_FORBIDDEN = 403;
-    public static final int HTTP_416_Requested_Range_Not_Available = 416;
+    int HTTP_401_UNAUTHORIZED = 401;
+    int HTTP_404_Not_Found = 404;
+    int HTTP_403_FORBIDDEN = 403;
+    int HTTP_416_Requested_Range_Not_Available = 416;
 
-    public static final int HTTP_500_Internal_Server_Error = 500;
-    public static final int HTTP_503_Service_Unavailable = 503;
+    int HTTP_500_Internal_Server_Error = 500;
+    int HTTP_503_Service_Unavailable = 503;
 
 }

@@ -47,7 +47,7 @@ public class ThexVerificationData {
         this.isThexRequested = isThexRequested;
     }
 
-    public class ThexData {
+    public static class ThexData {
         private final long fileSize;
         private final List<byte[]> lowestLevelNodes;
         private final int treeDepth;

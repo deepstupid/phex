@@ -71,10 +71,7 @@ public class IpCidrPair {
         if (cidr != pair.cidr) {
             return false;
         }
-        if ((ipAddr & getNetMask()) != (pair.ipAddr & pair.getNetMask())) {
-            return false;
-        }
-        return true;
+        return (ipAddr & getNetMask()) == (pair.ipAddr & pair.getNetMask());
     }
 
     public int hashCode() {
@@ -82,6 +79,6 @@ public class IpCidrPair {
     }
 
     public String toString() {
-        return AddressUtils.ip2string(ipAddr) + "/" + cidr;
+        return AddressUtils.ip2string(ipAddr) + '/' + cidr;
     }
 }

@@ -23,6 +23,7 @@ package phex.download.swarming;
 
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
+import phex.api.Phex;
 import phex.common.*;
 import phex.common.bandwidth.BandwidthController;
 import phex.common.file.FileManager;
@@ -911,10 +912,7 @@ public class SwarmingManager extends AbstractLifeCycle {
             return true;
         }
         // also stop worker if thread is interrupted.
-        if (Thread.interrupted()) {
-            return true;
-        }
-        return false;
+        return Thread.interrupted();
     }
 
     /**
@@ -932,7 +930,7 @@ public class SwarmingManager extends AbstractLifeCycle {
     }
 
     //@EventTopicSubscriber(topic=PhexEventTopics.Download_File_Completed)
-    public void onDownloadFileCompletedEvent(String topic, SWDownloadFile file) {
+    public static void onDownloadFileCompletedEvent(String topic, SWDownloadFile file) {
         // this executes a command after completion.
         // if ( ServiceManager.sCfg.completionNotifyMethod != null )
         // {
@@ -951,31 +949,19 @@ public class SwarmingManager extends AbstractLifeCycle {
         final File destFile = file.getDestinationFile();
         if (DownloadPrefs.AutoReadoutMagmaFiles.get().booleanValue()
                 && destFile.getName().endsWith(".magma")) {
-            Environment.getInstance().executeOnThreadPool(new Runnable() {
-                public void run() {
-                    InternalFileHandler.magmaReadout(destFile);
-                }
-            }, "Readout Magma");
+            Environment.getInstance().executeOnThreadPool(() -> InternalFileHandler.magmaReadout(destFile), "Readout Magma");
         }
 
         if (DownloadPrefs.AutoReadoutMetalinkFiles.get().booleanValue()
                 && destFile.getName().endsWith(".metalink")) {
-            Environment.getInstance().executeOnThreadPool(new Runnable() {
-                public void run() {
-                    InternalFileHandler.metalinkReadout(destFile);
-                }
-            }, "Readout Metalink");
+            Environment.getInstance().executeOnThreadPool(() -> InternalFileHandler.metalinkReadout(destFile), "Readout Metalink");
         }
 
         // Interprets a downloaded rss-feed in Phex automatically.
         // TODO should we honor the content type?
         if (DownloadPrefs.AutoReadoutRSSFiles.get().booleanValue()
                 && destFile.getName().endsWith(".rss.xml")) {
-            Environment.getInstance().executeOnThreadPool(new Runnable() {
-                public void run() {
-                    InternalFileHandler.rssReadout(destFile);
-                }
-            }, "Readout RSS");
+            Environment.getInstance().executeOnThreadPool(() -> InternalFileHandler.rssReadout(destFile), "Readout RSS");
         }
     }
 
@@ -1107,7 +1093,7 @@ public class SwarmingManager extends AbstractLifeCycle {
             try {
                 NLogger.debug(SwarmingManager.class,
                         "Try to load from default download list.");
-                FileManager fileMgr = Phex.getFileManager();
+                FileManager fileMgr = Phex.files;
                 ManagedFile managedFile = fileMgr.getReadWriteManagedFile(downloadFile);
                 dPhex = XMLBuilder.loadDPhexFromFile(managedFile);
 
@@ -1131,13 +1117,7 @@ public class SwarmingManager extends AbstractLifeCycle {
                             "No SWDownloadList found.");
                 }
                 notifyWaitingWorkers();
-            } catch (IOException exp) {
-                NLogger.error(SwarmingManager.class, exp, exp);
-                Environment.getInstance().fireDisplayUserMessage(
-                        UserMessageListener.DownloadSettingsLoadFailed,
-                        new String[]{exp.toString()});
-                return;
-            } catch (ManagedFileException exp) {
+            } catch (IOException | ManagedFileException exp) {
                 NLogger.error(SwarmingManager.class, exp, exp);
                 Environment.getInstance().fireDisplayUserMessage(
                         UserMessageListener.DownloadSettingsLoadFailed,
@@ -1228,21 +1208,13 @@ public class SwarmingManager extends AbstractLifeCycle {
                             EnvironmentConstants.XML_DOWNLOAD_FILE_NAME);
                     File downloadFileBak = new File(downloadFile.getAbsolutePath() + ".bak");
 
-                    ManagedFile managedFile = Phex.getFileManager().getReadWriteManagedFile(downloadFileBak);
+                    ManagedFile managedFile = Phex.files.getReadWriteManagedFile(downloadFileBak);
                     XMLBuilder.saveToFile(managedFile, dPhex);
 
                     // Write to a backup file and copy over to ensure that at
                     // least one valid download file always exists.
                     FileUtils.copyFile(downloadFileBak, downloadFile);
-                } catch (ManagedFileException exp) {
-                    // TODO3 during close this message is never displayed since application
-                    // will exit too fast. A solution to delay exit process in case 
-                    // SlideInWindows are open needs to be found.
-                    NLogger.error(SwarmingManager.class, exp, exp);
-                    Environment.getInstance().fireDisplayUserMessage(
-                            UserMessageListener.DownloadSettingsSaveFailed,
-                            new String[]{exp.toString()});
-                } catch (IOException exp) {
+                } catch (ManagedFileException | IOException exp) {
                     // TODO3 during close this message is never displayed since application
                     // will exit too fast. A solution to delay exit process in case 
                     // SlideInWindows are open needs to be found.

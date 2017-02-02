@@ -24,44 +24,44 @@ package phex.api;
 import phex.servent.OnlineStatus;
 
 public interface IPhexDriver {
-    public static final short SEARCH_STATUS_UNDEFINED = ISearchHandle.STATUS_UNDEFINED;
+    short SEARCH_STATUS_UNDEFINED = ISearchHandle.STATUS_UNDEFINED;
 
-    public static final short SEARCH_STATUS_RUNNING = ISearchHandle.STATUS_RUNNING;
+    short SEARCH_STATUS_RUNNING = ISearchHandle.STATUS_RUNNING;
 
-    public static final short SEARCH_STATUS_FINISHED = ISearchHandle.STATUS_FINISHED;
+    short SEARCH_STATUS_FINISHED = ISearchHandle.STATUS_FINISHED;
 
-    public static final short SEARCH_STATUS_NON_EXISTING = ISearchHandle.STATUS_NON_EXISTING;
+    short SEARCH_STATUS_NON_EXISTING = ISearchHandle.STATUS_NON_EXISTING;
 
-    public static final short HIT_STATUS_UNDEF = ISearchHitHandle.STATUS_UNDEF;
+    short HIT_STATUS_UNDEF = ISearchHitHandle.STATUS_UNDEF;
 
-    public static final short HIT_STATUS_TRANSFER_NOT_RUNNING = ISearchHitHandle.STATUS_TRANSFER_NOT_RUNNING;
+    short HIT_STATUS_TRANSFER_NOT_RUNNING = ISearchHitHandle.STATUS_TRANSFER_NOT_RUNNING;
 
-    public static final short HIT_STATUS_TRANSFER_RUNNING = ISearchHitHandle.STATUS_TRANSFER_RUNNING;
+    short HIT_STATUS_TRANSFER_RUNNING = ISearchHitHandle.STATUS_TRANSFER_RUNNING;
 
-    public static final short HIT_STATUS_TRANSFER_ERROR = ISearchHitHandle.STATUS_TRANSFER_ERROR;
+    short HIT_STATUS_TRANSFER_ERROR = ISearchHitHandle.STATUS_TRANSFER_ERROR;
 
-    public static final short HIT_STATUS_TRANSFER_COMPLETED = ISearchHitHandle.STATUS_TRANSFER_COMPLETED;
+    short HIT_STATUS_TRANSFER_COMPLETED = ISearchHitHandle.STATUS_TRANSFER_COMPLETED;
 
     /**
      * Start up the local servent (start Phex in head-less mode).
      *
      * @return true on success, or false otherwise
      */
-    public boolean startServent();
+    boolean start();
 
     /**
      * Shutdown the local servent.
      *
      * @return true on success, or false otherwise
      */
-    public boolean stopServent();
+    boolean stop();
 
     /**
      * Get the local servent status.
      *
      * @return the servent status
      */
-    public OnlineStatus getServentStatus();
+    OnlineStatus getServentStatus();
 
     /**
      * Start a search.
@@ -69,7 +69,7 @@ public interface IPhexDriver {
      * @param searchString the search string
      * @return a unique id identifying the search on success, or -1 otherwise
      */
-    public long startSearch(String searchString);
+    long startSearch(String searchString);
 
     /**
      * Retrieve the search string for an existing search.
@@ -78,7 +78,7 @@ public interface IPhexDriver {
      * @return the search string if the search id specifies an existing
      * search, or null otherwise
      */
-    public String getSearchString(long searchId);
+    String getSearchString(long searchId);
 
     /**
      * Retrieve the search status for an existing search.
@@ -87,7 +87,7 @@ public interface IPhexDriver {
      * @return the search status if the search id specifies an existing
      * search, or error otherwise
      */
-    public short getSearchStatus(long searchId);
+    short getSearchStatus(long searchId);
 
     /**
      * Stop an existing search.
@@ -95,7 +95,7 @@ public interface IPhexDriver {
      * @param searchId the search id
      * @return true if the search exists and could be stopped, or false otherwise
      */
-    public boolean stopSearch(long searchId);
+    boolean stopSearch(long searchId);
 
     /**
      * Resume an existing search.
@@ -103,7 +103,7 @@ public interface IPhexDriver {
      * @param searchId the search id
      * @return true if the search exists and could be resumed, or false otherwise
      */
-    public boolean resumeSearch(long searchId);
+    boolean resumeSearch(long searchId);
 
     /**
      * Delete an existing search. If any hits exist, these are deleted too.
@@ -112,7 +112,7 @@ public interface IPhexDriver {
      * @return true if the search exists and could be stopped, or false otherwise
      * @see cancelDownload
      */
-    public boolean deleteSearch(long searchId);
+    boolean deleteSearch(long searchId);
 
     /**
      * Retrieve all existing searches.
@@ -120,7 +120,7 @@ public interface IPhexDriver {
      * @return an array containing the search ids of all existing searches,
      * or null in case of error
      */
-    public long[] getAllSearches();
+    long[] getAllSearches();
 
     /**
      * Retrieve all existing hits for a given search
@@ -129,7 +129,7 @@ public interface IPhexDriver {
      * @return if the search exists, an array containing the hit ids of all currently available
      * hits for the given, or null otherwise
      */
-    public long[] getSearchHits(long searchId);
+    long[] getSearchHits(long searchId);
 
     /**
      * Retrieve remote file name of a given hit.
@@ -137,7 +137,7 @@ public interface IPhexDriver {
      * @param hitId the hit id
      * @return the file name if the hit exists, or null otherwise
      */
-    public String getSearchHitFilename(long hitId);
+    String getSearchHitFilename(long hitId);
 
     /**
      * Retrieve the status for an existing search hit.
@@ -146,7 +146,7 @@ public interface IPhexDriver {
      * @return the status if the hit id specifies an existing
      * hit, or error otherwise
      */
-    public short getSearchHitStatus(long hitId);
+    short getSearchHitStatus(long hitId);
 
     /**
      * Start to download a hit (remote file) and save it to the specified path.
@@ -154,7 +154,7 @@ public interface IPhexDriver {
      * @param hitId the hit id
      * @return true if the download could be started successfully, or false otherwise
      */
-    public boolean startDownload(long hitId);
+    boolean startDownload(long hitId);
 
     /**
      * Stop a running download.
@@ -162,7 +162,7 @@ public interface IPhexDriver {
      * @param hitId the hit id
      * @return true if the download could be stopped successfully, or false otherwise
      */
-    public boolean stopDownload(long hitId);
+    boolean stopDownload(long hitId);
 
     /**
      * Resume a running download.
@@ -170,7 +170,7 @@ public interface IPhexDriver {
      * @param hitId the hit id
      * @return true if the download could be resumed successfully, or false otherwise
      */
-    public boolean resumeDownload(long hitId);
+    boolean resumeDownload(long hitId);
 
     /**
      * Cancel a running download, delete the hit from the hit list, delete the
@@ -180,7 +180,7 @@ public interface IPhexDriver {
      * @param hitId the hit id
      * @return true if the download could be canceled and deleted successfully, or false otherwise
      */
-    public boolean cancelDownload(long hitId);
+    boolean cancelDownload(long hitId);
 
     /**
      * This method is an alias for cancelDownload: it has the same functionality.
@@ -189,7 +189,7 @@ public interface IPhexDriver {
      * @return true if the download could be canceled and deleted successfully, or false otherwise
      * @see cancelDownload
      */
-    public boolean deleteHit(long hitId);
+    boolean deleteHit(long hitId);
 
     /**
      * Start to download a hit (remote file) and save it to the specified path.
@@ -198,7 +198,7 @@ public interface IPhexDriver {
      * @param localFilepath the path where the local file should be saved
      * @return true if the download could be started successfully, or false otherwise
      */
-    public boolean saveDownloadedFile(long hitId, String localFilepath);
+    boolean saveDownloadedFile(long hitId, String localFilepath);
 
     /**
      * Publish a local file, i.e. make it available for others to retrieve.
@@ -206,5 +206,5 @@ public interface IPhexDriver {
      * @param localFilePath path to the local file
      * @return true if the file could be published correctly, or false otherwise
      */
-    public boolean publishFile(String localFilePath);
+    boolean publishFile(String localFilePath);
 }

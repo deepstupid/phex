@@ -96,7 +96,7 @@ public class QueryResponseRecord {
         URN urn = shareFile.getURN();
         long fileSize = shareFile.getFileSize();
         if (fileSize < 0) {
-            logger.error("Invalid file size: " + fileSize);
+            logger.error("Invalid file size: {}", fileSize);
             throw new IllegalArgumentException("Invalid file size: " + fileSize);
         }
         String fileName = shareFile.getFileName();
@@ -360,7 +360,7 @@ public class QueryResponseRecord {
                 ']';
     }
 
-    private String parseMetaData(String metaDataString) {
+    private static String parseMetaData(String metaDataString) {
         // This is modified Limewire code... they seem to know what they are
         // doing in most cases... but I extended stuff a bit.
 

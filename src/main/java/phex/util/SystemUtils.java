@@ -1082,7 +1082,7 @@ public class SystemUtils {
         if (JAVA_VERSION_TRIMMED.length() >= 5) {
             str = str + JAVA_VERSION_TRIMMED.substring(4, 5);
         } else {
-            str = str + "0";
+            str = str + '0';
         }
         try {
             return Integer.parseInt(str);

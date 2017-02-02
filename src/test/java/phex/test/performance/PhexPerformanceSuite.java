@@ -23,7 +23,6 @@ package phex.test.performance;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import phex.common.ThreadTracking;
 import phex.prefs.core.PhexCorePrefs;
 import phex.util.Localizer;
 import phex.util.SystemProperties;
@@ -41,7 +40,7 @@ public class PhexPerformanceSuite extends TestSuite
         super(s);
     }
 
-    protected void setUp()
+    protected static void setUp()
         throws Exception
     {
         StringBuffer path = tempPath();
@@ -63,8 +62,7 @@ public class PhexPerformanceSuite extends TestSuite
             path.toString() );
         
         PhexCorePrefs.init();
-        
-        ThreadTracking.initialize();
+
     }
 
     public static StringBuffer tempPath() throws IOException {
@@ -78,7 +76,7 @@ public class PhexPerformanceSuite extends TestSuite
         throws Exception
     {
         PhexPerformanceSuite suite = new PhexPerformanceSuite("PhexPerformanceSuite");
-        suite.setUp();
+        PhexPerformanceSuite.setUp();
         // suite.addTestSuite( TestLogging.class );
         //suite.addTestSuite( TestQueryResultSearchEngine.class );
         //suite.addTestSuite( TestSHA1.class );

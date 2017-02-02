@@ -369,8 +369,8 @@ public class RatedDownloadScopeList {
      * @param tolerance the toleranze percentage, value of 4 indicates 4% toleranze.
      * @return
      */
-    private boolean hasCloseToleranze(RatedDownloadScope scope1, RatedDownloadScope scope2,
-                                      double tolerance) {
+    private static boolean hasCloseToleranze(RatedDownloadScope scope1, RatedDownloadScope scope2,
+                                             double tolerance) {
         double maxCount = Math.max(scope1.getCountRating(), scope2.getCountRating());
         double minCount = Math.min(scope1.getCountRating(), scope2.getCountRating());
         double threshold = maxCount - (maxCount / 100.0 * tolerance);
@@ -409,7 +409,7 @@ public class RatedDownloadScopeList {
         compressByRatings();
         ratedScopeList.clear();
         ratedScopeList.addAll(scopeList);
-        Collections.sort(ratedScopeList, RATED_DOWNLOAD_SCOPE_COMPARATOR);
+        ratedScopeList.sort(RATED_DOWNLOAD_SCOPE_COMPARATOR);
         dumpRatings();
     }
 

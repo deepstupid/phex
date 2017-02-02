@@ -62,50 +62,64 @@ public class NotConditionHandler extends DefaultHandler {
     public void startElement(String uri, String localName, String qName,
                              Attributes attributes) throws SAXException {
         text.reset();
-        if (qName.equals(DAndConcatCondition.ELEMENT_NAME)) {
-            DAndConcatCondition condition = new DAndConcatCondition();
-            notCondition.setDCondition(condition);
+        switch (qName) {
+            case DAndConcatCondition.ELEMENT_NAME: {
+                DAndConcatCondition condition = new DAndConcatCondition();
+                notCondition.setDCondition(condition);
 
-            AndConcatConditionHandler handler = new AndConcatConditionHandler(
-                    condition, attributes, this, parser);
-            parser.getXMLReader().setContentHandler(handler);
-        } else if (qName.equals(DNotCondition.ELEMENT_NAME)) {
-            DNotCondition condition = new DNotCondition();
-            notCondition.setDCondition(condition);
+                AndConcatConditionHandler handler = new AndConcatConditionHandler(
+                        condition, attributes, this, parser);
+                parser.getXMLReader().setContentHandler(handler);
+                break;
+            }
+            case DNotCondition.ELEMENT_NAME: {
+                DNotCondition condition = new DNotCondition();
+                notCondition.setDCondition(condition);
 
-            NotConditionHandler handler = new NotConditionHandler(condition,
-                    attributes, this, parser);
-            parser.getXMLReader().setContentHandler(handler);
-        } else if (qName.equals(DFilenameCondition.ELEMENT_NAME)) {
-            DFilenameCondition condition = new DFilenameCondition();
-            notCondition.setDCondition(condition);
+                NotConditionHandler handler = new NotConditionHandler(condition,
+                        attributes, this, parser);
+                parser.getXMLReader().setContentHandler(handler);
+                break;
+            }
+            case DFilenameCondition.ELEMENT_NAME: {
+                DFilenameCondition condition = new DFilenameCondition();
+                notCondition.setDCondition(condition);
 
-            FilenameConditionHandler handler = new FilenameConditionHandler(
-                    condition, attributes, this, parser);
-            parser.getXMLReader().setContentHandler(handler);
-        } else if (qName.equals(DFileSizeCondition.ELEMENT_NAME)) {
-            DFileSizeCondition condition = new DFileSizeCondition();
-            notCondition.setDCondition(condition);
+                FilenameConditionHandler handler = new FilenameConditionHandler(
+                        condition, attributes, this, parser);
+                parser.getXMLReader().setContentHandler(handler);
+                break;
+            }
+            case DFileSizeCondition.ELEMENT_NAME: {
+                DFileSizeCondition condition = new DFileSizeCondition();
+                notCondition.setDCondition(condition);
 
-            FileSizeConditionHandler handler = new FileSizeConditionHandler(
-                    condition, attributes, this, parser);
-            parser.getXMLReader().setContentHandler(handler);
-        } else if (qName.equals(DMediaTypeCondition.ELEMENT_NAME)) {
-            DMediaTypeCondition condition = new DMediaTypeCondition();
-            notCondition.setDCondition(condition);
+                FileSizeConditionHandler handler = new FileSizeConditionHandler(
+                        condition, attributes, this, parser);
+                parser.getXMLReader().setContentHandler(handler);
+                break;
+            }
+            case DMediaTypeCondition.ELEMENT_NAME: {
+                DMediaTypeCondition condition = new DMediaTypeCondition();
+                notCondition.setDCondition(condition);
 
-            MediaTypeConditionHandler handler = new MediaTypeConditionHandler(
-                    condition, attributes, this, parser);
-            parser.getXMLReader().setContentHandler(handler);
-        } else if (qName.equals(DFileUrnCondition.ELEMENT_NAME)) {
-            DFileUrnCondition condition = new DFileUrnCondition();
-            notCondition.setDCondition(condition);
+                MediaTypeConditionHandler handler = new MediaTypeConditionHandler(
+                        condition, attributes, this, parser);
+                parser.getXMLReader().setContentHandler(handler);
+                break;
+            }
+            case DFileUrnCondition.ELEMENT_NAME: {
+                DFileUrnCondition condition = new DFileUrnCondition();
+                notCondition.setDCondition(condition);
 
-            FileUrnConditionHandler handler = new FileUrnConditionHandler(
-                    condition, attributes, this, parser);
-            parser.getXMLReader().setContentHandler(handler);
-        } else {
-            NLogger.error(NotConditionHandler.class, "Missing qName: " + qName);
+                FileUrnConditionHandler handler = new FileUrnConditionHandler(
+                        condition, attributes, this, parser);
+                parser.getXMLReader().setContentHandler(handler);
+                break;
+            }
+            default:
+                NLogger.error(NotConditionHandler.class, "Missing qName: " + qName);
+                break;
         }
         return;
     }

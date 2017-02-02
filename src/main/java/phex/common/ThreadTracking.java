@@ -33,27 +33,23 @@ public class ThreadTracking {
 
     private static ThreadGroup systemGroup;
 
-    public static void initialize() {
+    static {
         // we want the system thread group
         systemGroup = Thread.currentThread().getThreadGroup();
         while (systemGroup.getParent() != null) {// not the system thread group.. go up one step
             systemGroup = systemGroup.getParent();
         }
 
-        prepareUncaughtExceptionHandler();
-
-        // TODO in the future all thread creation should go through this class
-        // to consistently use uncaught exception handling.
-        rootThreadGroup = new PhexThreadGroup("PhexRoot");
-        threadPoolGroup = new PhexThreadGroup("PhexThreadPool");
-    }
-
-    private static void prepareUncaughtExceptionHandler() {
         Thread.UncaughtExceptionHandler ucExpHandler =
                 (thread, throwable) -> NLogger.error(ThreadTracking.class,
                         "Uncaught exception: " + throwable.getMessage() + " in Thread: "
                                 + thread.getName(), throwable);
         Thread.setDefaultUncaughtExceptionHandler(ucExpHandler);
+
+        // TODO in the future all thread creation should go through this class
+        // to consistently use uncaught exception handling.
+        rootThreadGroup = new PhexThreadGroup("PhexRoot");
+        threadPoolGroup = new PhexThreadGroup("PhexThreadPool");
     }
 
     private static class PhexThreadGroup extends ThreadGroup {

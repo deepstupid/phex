@@ -134,10 +134,6 @@ public class GWebCacheConnection {
                 isCacheBad = true;
                 return false;
             }
-        } catch (UnknownHostException exp) {
-            logger.debug(exp.getMessage(), exp);
-            isCacheBad = true;
-            return false;
         } catch (IOException exp) {
             logger.debug(exp.getMessage(), exp);
             isCacheBad = true;
@@ -306,7 +302,7 @@ public class GWebCacheConnection {
             }
 
             URL requestURL = new URL(gWebCache.getUrl(), gWebCache.getUrl().getPath()
-                    + '?' + queryBuffer.toString() + QUERY_POSTFIX);
+                    + '?' + queryBuffer + QUERY_POSTFIX);
             if (requestURL.getHost() == null) {
                 logger.warn("Host is null");
                 isCacheBad = true;

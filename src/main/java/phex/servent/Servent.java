@@ -58,7 +58,7 @@ import java.util.ListIterator;
 public class Servent extends AbstractLifeCycle implements ServentInfo {
     private static final Logger logger = LoggerFactory.getLogger(Servent.class);
 
-    private static final Servent servent = new Servent();
+    public static final Servent servent = new Servent();
     private final List<LifeCycle> dependentLifeCycles;
     private final Server server;
     private final UdpService udpService;
@@ -156,10 +156,6 @@ public class Servent extends AbstractLifeCycle implements ServentInfo {
         server = new OIOServer(this);//new JettyServer();
 
         udpService = new UdpService(NetworkPrefs.ListeningPort.get().intValue());
-    }
-
-    public static Servent getInstance() {
-        return servent;
     }
 
     @Override
@@ -353,7 +349,7 @@ public class Servent extends AbstractLifeCycle implements ServentInfo {
     /**
      * Indicates if we are a udp host cache.
      */
-    public boolean isUdpHostCache() {
+    public static boolean isUdpHostCache() {
         // TODO implement logic to determine if we are udp host cache capable.
         return false;
     }

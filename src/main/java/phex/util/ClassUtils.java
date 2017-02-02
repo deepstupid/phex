@@ -71,10 +71,7 @@ public class ClassUtils {
         try {
             Object instance = clazz.newInstance();
             return instance;
-        } catch (IllegalAccessException exp) {
-            NLogger.debug(ClassUtils.class, exp, exp);
-            return null;
-        } catch (InstantiationException exp) {
+        } catch (IllegalAccessException | InstantiationException exp) {
             NLogger.debug(ClassUtils.class, exp, exp);
             return null;
         }

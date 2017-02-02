@@ -308,9 +308,7 @@ public class SWDownloadCandidate implements SWDownloadConstants {
             try {
                 downloadURI = new URI(downloadUriStr, true);
             } catch (URIException exp) {
-                logger.warn("Malformed URI in: " + downloadFile.toString() +
-                                " - " + downloadUriStr + " - " + this.toString(),
-                        exp);
+                logger.warn("Malformed URI in: {} - {} - {}", downloadFile.toString(), downloadUriStr, this.toString(), exp);
                 // continue anyway.. download candidate might still be useful
             }
         }
@@ -346,8 +344,7 @@ public class SWDownloadCandidate implements SWDownloadConstants {
             hostAddress = PresentationManager.getInstance().createHostAddress(
                     dCandidate.getRemoteHost(), DefaultDestAddress.DEFAULT_PORT);
         } catch (MalformedDestAddressException exp) {
-            logger.warn("Malformed host address in: " + downloadFile.toString() +
-                    " - " + dCandidate.getRemoteHost() + " - " + this.toString(), exp);
+            logger.warn("Malformed host address in: {} - {} - {}", downloadFile.toString(), dCandidate.getRemoteHost(), this.toString(), exp);
             throw exp;
         }
 
@@ -763,11 +760,7 @@ public class SWDownloadCandidate implements SWDownloadConstants {
             return false;
         }
         long fileSize = downloadFile.getTotalDataSize();
-        if (fileSize == SWDownloadConstants.UNKNOWN_FILE_SIZE) {// we can't handle available range set without knowing
-            // file size...
-            return false;
-        }
-        return true;
+        return fileSize != SWDownloadConstants.UNKNOWN_FILE_SIZE;
     }
 
     /**
@@ -784,8 +777,7 @@ public class SWDownloadCandidate implements SWDownloadConstants {
             long start = range.getStartOffset(fileSize);
             long end = range.getEndOffset(fileSize);
             if (end < start) {// this is an invalid range... skip it
-                logger.warn("Invalid range: " + range.buildHTTPRangeString() + " - "
-                        + start + " - " + end + " - " + fileSize + " - " + vendor);
+                logger.warn("Invalid range: {} - {} - {} - {} - {}", range.buildHTTPRangeString(), start, end, fileSize, vendor);
                 continue;
             }
             DownloadScope scope = new DownloadScope(start, end);
@@ -941,13 +933,11 @@ public class SWDownloadCandidate implements SWDownloadConstants {
         }
         this.statusReason = aStatusReason;
 
-        logger.debug("Setting status from " + oldStatus + " to " + newStatus
-                + " and raise timeout from " + statusTimeout + " to " + newStatusTimeout + "(" +
-                (newStatusTimeout - statusTimeout) + ") Reason:" + aStatusReason + ".");
+        logger.debug("Setting status from {} to {} and raise timeout from {} to {}({}) Reason:{}.", oldStatus, newStatus, statusTimeout, newStatusTimeout, newStatusTimeout - statusTimeout, aStatusReason);
         addToCandidateLog("Setting status to "
                 + SWDownloadInfo.getDownloadCandidateStatusString(this)
                 + " and raise timeout from " + statusTimeout + " to "
-                + newStatusTimeout + "(" + (newStatusTimeout - statusTimeout)
+                + newStatusTimeout + '(' + (newStatusTimeout - statusTimeout)
                 + ") Reason:" + aStatusReason + ". OldStatus: " + oldStatus);
 
         statusTimeout = newStatusTimeout;
@@ -1090,11 +1080,7 @@ public class SWDownloadCandidate implements SWDownloadConstants {
             }
         }
         if (result < 1) {
-            logger.warn("Preferred size looks strange. bps=" + lastTransferRateBPS
-                    + " and stt=" + DownloadPrefs.SegmentTransferTargetTime.get().intValue()
-                    + " res " + result
-                    + " res1 " + (lastTransferRateBPS * DownloadPrefs.SegmentTransferTargetTime.get().intValue())
-                    + " res2 " + ((-result) % DownloadPrefs.SegmentMultiple.get().intValue()));
+            logger.warn("Preferred size looks strange. bps={} and stt={} res {} res1 {} res2 {}", lastTransferRateBPS, DownloadPrefs.SegmentTransferTargetTime.get().intValue(), result, lastTransferRateBPS * DownloadPrefs.SegmentTransferTargetTime.get().intValue(), (-result) % DownloadPrefs.SegmentMultiple.get().intValue());
             result = DownloadPrefs.SegmentInitialSize.get().intValue();
         }
         logger.debug("Preferred segment size is {}", result);
@@ -1166,7 +1152,7 @@ public class SWDownloadCandidate implements SWDownloadConstants {
         buffer.append(hostAddress);
         buffer.append(" ->");
         buffer.append(super.toString());
-        buffer.append("]");
+        buffer.append(']');
         return buffer.toString();
     }
 

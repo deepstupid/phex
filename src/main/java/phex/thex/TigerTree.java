@@ -172,7 +172,7 @@ public class TigerTree extends MessageDigest {
         tiger.reset();
         tiger.update((byte) 0); // leaf prefix
         tiger.update(buf, 0, 0);
-        Object dig = (Object) tiger.digest();
+        Object dig = tiger.digest();
         return (byte[]) dig;
     }
 
@@ -245,7 +245,7 @@ public class TigerTree extends MessageDigest {
                     tiger.update((byte) 1); // node prefix
                     tiger.update(left);
                     tiger.update(right);
-                    Object dig = (Object) tiger.digest();
+                    Object dig = tiger.digest();
                     newNodes.addElement(dig);
                     if ((levelsLeft != -1) && (rows == levelsLeft)) {
                         byte[] digs = (byte[]) dig;
@@ -255,7 +255,7 @@ public class TigerTree extends MessageDigest {
                     }
                 } else {
                     //If there is a node with no peer
-                    Object obj = (Object) left;
+                    Object obj = left;
                     newNodes.addElement(obj);
                     if ((levelsLeft != -1) && (rows == levelsLeft)) {
                         byte[] digs = (byte[]) obj;
@@ -305,7 +305,7 @@ public class TigerTree extends MessageDigest {
         tiger.update((byte) 0); // leaf prefix
         tiger.update(buffer, 0, bufferOffset);
         if ((bufferOffset == 0) && (nodes.size() > 0)) return;
-        Object dig = (Object) tiger.digest();
+        Object dig = tiger.digest();
         nodes.addElement(dig);
         count++;
         //Serialization: We send the leaves

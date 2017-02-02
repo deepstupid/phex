@@ -66,22 +66,20 @@ public class BrowseHostResults extends Search {
     @Override
     public void startSearching(SearchProgress searchProgress) {
         isSearchFinished = false;
-        Runnable runner = new Runnable() {
-            public void run() {
-                BrowseHostConnection connection = new BrowseHostConnection(
-                        servent, destAddress, hostGUID, BrowseHostResults.this);
-                try {
-                    connection.sendBrowseHostRequest();
-                    browseHostStatus = BrowseHostStatus.FINISHED;
-                } catch (BrowseHostException exp) {
-                    logger.warn(exp.toString(), exp);
-                    browseHostStatus = BrowseHostStatus.BROWSE_HOST_ERROR;
-                } catch (IOException exp) {// TODO integrate error handling if no results have been returned
-                    logger.warn(exp.toString(), exp);
-                    browseHostStatus = BrowseHostStatus.CONNECTION_ERROR;
-                } finally {
-                    stopSearching();
-                }
+        Runnable runner = () -> {
+            BrowseHostConnection connection = new BrowseHostConnection(
+                    servent, destAddress, hostGUID, BrowseHostResults.this);
+            try {
+                connection.sendBrowseHostRequest();
+                browseHostStatus = BrowseHostStatus.FINISHED;
+            } catch (BrowseHostException exp) {
+                logger.warn(exp.toString(), exp);
+                browseHostStatus = BrowseHostStatus.BROWSE_HOST_ERROR;
+            } catch (IOException exp) {// TODO integrate error handling if no results have been returned
+                logger.warn(exp.toString(), exp);
+                browseHostStatus = BrowseHostStatus.CONNECTION_ERROR;
+            } finally {
+                stopSearching();
             }
         };
         Environment.getInstance().executeOnThreadPool(runner,
@@ -159,7 +157,7 @@ public class BrowseHostResults extends Search {
 
     @Override
     public String toString() {
-        return "[BrowseHostResults:" + destAddress + "," + "@" + Integer.toHexString(hashCode()) + "]";
+        return "[BrowseHostResults:" + destAddress + ',' + '@' + Integer.toHexString(hashCode()) + ']';
     }
 
     /**

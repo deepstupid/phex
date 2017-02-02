@@ -93,7 +93,7 @@ public class IncomingConnectionDispatcher implements Runnable {
             if (requestLine == null) {
                 throw new IOException("Disconnected from remote host during handshake");
             }
-            logger.debug("ConnectionRequest " + requestLine);
+            logger.debug("ConnectionRequest {}", requestLine);
 
             DestAddress localAddress = servent.getLocalAddress();
             String greeting = servent.getGnutellaNetwork().getNetworkGreeting();
@@ -112,8 +112,7 @@ public class IncomingConnectionDispatcher implements Runnable {
                 // URN requestLine = GET /uri-res/N2R?urn:sha1:PLSTHIPQGSSZTS5FJUPAKUZWUGYQYPFB HTTP/1.0
                 HTTPRequest httpRequest = HTTPProcessor.parseHTTPRequest(requestLine);
                 HTTPProcessor.parseHTTPHeaders(httpRequest, connection);
-                logger.debug(httpRequest.getRequestMethod() + " Request: "
-                        + httpRequest.buildHTTPRequestString());
+                logger.debug("{} Request: {}", httpRequest.getRequestMethod(), httpRequest.buildHTTPRequestString());
                 if (httpRequest.isGnutellaRequest()) {
                     // file upload request
                     servent.getUploadService().handleUploadRequest(
@@ -139,7 +138,7 @@ public class IncomingConnectionDispatcher implements Runnable {
                     throw new IOException("Network not connected.");
                 }
                 DestAddress address = socket.getRemoteAddress();
-                logger.debug("Chat request from: " + address);
+                logger.debug("Chat request from: {}", address);
                 servent.getChatService().acceptChat(connection);
             } else if (requestLine.startsWith(URI_DOWNLOAD_PREFIX)) {
                 handleIncommingUriDownload(requestLine);
@@ -272,7 +271,7 @@ public class IncomingConnectionDispatcher implements Runnable {
             PushHandler.handleIncommingGIV(socket, givenGUID, givenFileName);
         } catch (IndexOutOfBoundsException exp) {
             // handle possible out of bounds exception for better logging...
-            logger.error("Failed to parse GIV: " + requestLine, exp);
+            logger.error("Failed to parse GIV: {}", requestLine, exp);
         }
     }
 }

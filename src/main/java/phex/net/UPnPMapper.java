@@ -42,14 +42,12 @@ public class UPnPMapper {
 
         Device[] connectionDevices = device.findDevices(CONNECTION_DEVICE_TYPE);
         if (connectionDevices.length == 0) {
-            logger.debug("IGD doesn't support '" + CONNECTION_DEVICE_TYPE + "': "
-                    + device);
+            logger.debug("IGD doesn't support '{}': {}", CONNECTION_DEVICE_TYPE, device);
             return null;
         }
 
         Device connectionDevice = connectionDevices[0];
-        logger.debug("Using first discovered WAN connection device: "
-                + connectionDevice);
+        logger.debug("Using first discovered WAN connection device: {}", connectionDevice);
 
         Service ipConnectionService = connectionDevice
                 .findService(IP_SERVICE_TYPE);
@@ -57,8 +55,7 @@ public class UPnPMapper {
                 .findService(PPP_SERVICE_TYPE);
 
         if (ipConnectionService == null && pppConnectionService == null) {
-            logger.debug("IGD doesn't support IP or PPP WAN connection service: "
-                    + device);
+            logger.debug("IGD doesn't support IP or PPP WAN connection service: {}", device);
         }
 
         return ipConnectionService != null ? ipConnectionService
@@ -99,7 +96,7 @@ public class UPnPMapper {
             } else {
                 address = upnpService.getRouter().getNetworkAddressFactory().getBindAddresses()[0].getHostAddress();
             }
-            int port = Servent.getInstance().getLocalAddress().getPort();
+            int port = Servent.servent.getLocalAddress().getPort();
             final PortMapping desiredMapping = new PortMapping(port, address,
                     PortMapping.Protocol.TCP, "Phex NAT");
 
@@ -128,7 +125,7 @@ public class UPnPMapper {
                 while (it.hasNext()) {
                     Map.Entry<Service, PortMapping> activeEntry = it.next();
                     if (!activeEntry.getKey().equals(service)) continue;
-                    logger.warn("Device disappeared, couldn't delete port mappings: " + activeEntry.getValue());
+                    logger.warn("Device disappeared, couldn't delete port mappings: {}", activeEntry.getValue());
                     it.remove();
                 }
             }
@@ -139,19 +136,19 @@ public class UPnPMapper {
             for (Map.Entry<Service, PortMapping> activeEntry : activePortMappings
                     .entrySet()) {
                 final PortMapping pm = activeEntry.getValue();
-                logger.debug("Trying to delete port mapping on IGD: " + pm);
+                logger.debug("Trying to delete port mapping on IGD: {}", pm);
                 new PortMappingDelete(activeEntry.getKey(), registry
                         .getUpnpService().getControlPoint(), pm) {
                     @Override
                     public void success(ActionInvocation invocation) {
-                        logger.debug("Port mapping deleted: " + pm);
+                        logger.debug("Port mapping deleted: {}", pm);
                     }
 
                     @Override
                     public void failure(ActionInvocation invocation,
                                         UpnpResponse operation, String defaultMsg) {
-                        logger.warn("Failed to delete port mapping: " + pm);
-                        logger.warn("Reason: " + defaultMsg);
+                        logger.warn("Failed to delete port mapping: {}", pm);
+                        logger.warn("Reason: {}", defaultMsg);
                     }
 
                 }.run(); // Synchronous!

@@ -32,7 +32,6 @@ import java.io.PushbackInputStream;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.zip.DataFormatException;
 
 // TODO extend this class to also support writing of huge blocks.
 public class HUGEBlock {

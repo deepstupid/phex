@@ -24,22 +24,22 @@ package phex.api;
 import phex.download.swarming.SWDownloadFile;
 
 public interface ISearchHitHandle {
-    public static final short STATUS_UNDEF = -1;
+    short STATUS_UNDEF = -1;
 
-    public static final short STATUS_TRANSFER_NOT_RUNNING = SWDownloadFile.TRANSFER_NOT_RUNNING;
+    short STATUS_TRANSFER_NOT_RUNNING = SWDownloadFile.TRANSFER_NOT_RUNNING;
 
-    public static final short STATUS_TRANSFER_RUNNING = SWDownloadFile.TRANSFER_RUNNING;
+    short STATUS_TRANSFER_RUNNING = SWDownloadFile.TRANSFER_RUNNING;
 
-    public static final short STATUS_TRANSFER_ERROR = SWDownloadFile.TRANSFER_ERROR;
+    short STATUS_TRANSFER_ERROR = SWDownloadFile.TRANSFER_ERROR;
 
-    public static final short STATUS_TRANSFER_COMPLETED = SWDownloadFile.TRANSFER_COMPLETED;
+    short STATUS_TRANSFER_COMPLETED = SWDownloadFile.TRANSFER_COMPLETED;
 
     /**
      * Retrieve remote file name of a given hit.
      *
      * @return the file name if the hit exists, or null otherwise
      */
-    public String getRemoteFilename();
+    String getRemoteFilename();
 
     /**
      * Retrieve the status for an existing search hit.
@@ -47,14 +47,14 @@ public interface ISearchHitHandle {
      * @return the status if the hit handle specifies an existing
      * hit, or error otherwise
      */
-    public short getStatus();
+    short getStatus();
 
     /**
      * Start to download a hit (remote file) and save it to the specified path.
      *
      * @return true if the download could be started successfully, or false otherwise
      */
-    public boolean startDownload();
+    boolean startDownload();
 
     /**
      * Start to download a hit (remote file) and save it to the specified path.
@@ -62,21 +62,21 @@ public interface ISearchHitHandle {
      * @param localFilepath the path where the local file should be saved
      * @return true if the download could be started successfully, or false otherwise
      */
-    public boolean saveDownloadedFile(String localFilepath);
+    boolean saveDownloadedFile(String localFilepath);
 
     /**
      * Stop a running download.
      *
      * @return true if the download could be stopped successfully, or false otherwise
      */
-    public boolean stopDownload();
+    boolean stopDownload();
 
     /**
      * Resume a running download.
      *
      * @return true if the download could be resumed successfully, or false otherwise
      */
-    public boolean resumeDownload();
+    boolean resumeDownload();
 
     /**
      * Cancel a running download, delete the hit from the hit list (will not be
@@ -86,7 +86,7 @@ public interface ISearchHitHandle {
      *
      * @return true if the download could be canceled and deleted successfully, or false otherwise
      */
-    public boolean cancelDownload();
+    boolean cancelDownload();
 
     /**
      * This method is an alias for cancelDownload: it has the same functionality.
@@ -94,5 +94,5 @@ public interface ISearchHitHandle {
      * @return true if the download could be canceled and deleted successfully, or false otherwise
      * @see cancelDownload
      */
-    public boolean deleteHit();
+    boolean deleteHit();
 }

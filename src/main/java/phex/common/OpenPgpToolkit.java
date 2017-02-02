@@ -63,7 +63,7 @@ public class OpenPgpToolkit {
 
         int responseCode = client.executeMethod(method);
         if (responseCode < 200 || responseCode > 299) {
-            logger.error("Failed to connect to keyserver: " + url);
+            logger.error("Failed to connect to keyserver: {}", url);
             throw new IOException("failed rc:" + responseCode);
         }
 

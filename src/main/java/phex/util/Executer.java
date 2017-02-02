@@ -230,12 +230,12 @@ public class Executer implements Runnable {
 
                 if (result != 0) {
                     System.out.println("Process " + " returned non-zero value:" + result);
-                    System.out.println("Process output:\n" + out.toString());
-                    System.out.println("Process error:\n" + err.toString());
+                    System.out.println("Process output:\n" + out);
+                    System.out.println("Process error:\n" + err);
                 } else {
                     System.out.println("Process " + " executed successfully");
-                    System.out.println("Process output:\n" + out.toString());
-                    System.out.println("Process error:\n" + err.toString());
+                    System.out.println("Process output:\n" + out);
+                    System.out.println("Process error:\n" + err);
                 }
             } catch (Exception e) {
                 System.out.println("Error executing. ");
@@ -245,7 +245,7 @@ public class Executer implements Runnable {
         }
 
 
-        private String[] parseCommandLineOld(String commandLine) {
+        private static String[] parseCommandLineOld(String commandLine) {
             Reader r = new StringReader(commandLine);
             StreamTokenizer t = new StreamTokenizer(r);
             t.wordChars(0x0000, 0x00FF);
@@ -273,7 +273,7 @@ public class Executer implements Runnable {
             return result;
         }
 
-        public class StreamReaderThread extends Thread {
+        public static class StreamReaderThread extends Thread {
             final StringBuffer mOut;
             final InputStreamReader mIn;
 
@@ -289,7 +289,7 @@ public class Executer implements Runnable {
                     while (-1 != (ch = mIn.read()))
                         mOut.append((char) ch);
                 } catch (Exception e) {
-                    mOut.append("\nRead error:" + e.getMessage());
+                    mOut.append("\nRead error:").append(e.getMessage());
                 }
             }
         }

@@ -1,7 +1,6 @@
 package phex.upload;
 
 import junit.framework.TestCase;
-import phex.common.Phex;
 import phex.common.address.DefaultDestAddress;
 import phex.common.bandwidth.BandwidthController;
 import phex.prefs.core.BandwidthPrefs;
@@ -47,11 +46,10 @@ public class HrrnQueuePerformanceTest extends TestCase
     
     public void setUp()
     {
-        Phex.initialize();
         PhexCorePrefs.init();
 //        PhexGuiPrefs.init();
 //        Localizer.initialize( InterfacePrefs.LocaleName.get() );
-        Servent servent = Servent.getInstance();
+        Servent servent = Servent.servent;
         uploadManager = new UploadManager( servent );
         BandwidthPrefs.MaxUploadBandwidth.set( Integer.valueOf( SPEED ) );
     }
@@ -60,7 +58,7 @@ public class HrrnQueuePerformanceTest extends TestCase
     {
         System.out.println( "----------FIFO--------------" );
         Provider prov = new Provider( true, false, TOTAL_FILES );
-        Consumer cons = new Consumer( prov );
+        Consumer cons = new Consumer(prov);
         prov.start();
         try
         {
@@ -79,7 +77,7 @@ public class HrrnQueuePerformanceTest extends TestCase
     {
         System.out.println( "----------HRRN--------------" );
         Provider prov = new Provider( false, false, TOTAL_FILES );
-        Consumer cons = new Consumer( prov );
+        Consumer cons = new Consumer(prov);
         prov.start();
         
         try
@@ -99,7 +97,7 @@ public class HrrnQueuePerformanceTest extends TestCase
     {
         System.out.println( "----------FIFO-FR--------------" );
         Provider prov = new Provider( true, true, TOTAL_FILES );
-        Consumer cons = new Consumer( prov );
+        Consumer cons = new Consumer(prov);
         prov.start();
         try
         {
@@ -118,7 +116,7 @@ public class HrrnQueuePerformanceTest extends TestCase
     {
         System.out.println( "----------HRRN-FR--------------" );
         Provider prov = new Provider( false, true, TOTAL_FILES );
-        Consumer cons = new Consumer( prov );
+        Consumer cons = new Consumer(prov);
         prov.start();
         
         try
@@ -192,7 +190,7 @@ public class HrrnQueuePerformanceTest extends TestCase
             {
                 list.add( uqs );
                 long sortTime = System.currentTimeMillis();
-                Collections.sort( list, new HrrnQueueComparator( sortTime ) );
+                list.sort(new HrrnQueueComparator(sortTime));
             }
             System.out.println( "Queued (" + list.size() + "): #" + shareFile.getFileIndex() + " - " + shareFile.getFileSize() + "kb" );
         }
@@ -216,7 +214,7 @@ public class HrrnQueuePerformanceTest extends TestCase
         }
     }
     
-    public class Consumer extends Thread
+    public static class Consumer extends Thread
     {
         private final CharArrayWriter writter;
         private final List<UploadQueueState> uploads = new ArrayList<UploadQueueState>();
@@ -295,7 +293,7 @@ public class HrrnQueuePerformanceTest extends TestCase
             long end = System.currentTimeMillis();
             
             double sec = (end - start)/1000.0;
-            System.out.println( "Took: " + sec + "s");
+            System.out.println( "Took: " + sec + 's');
             System.out.println( "Transferred: " + transferred + "KB - " + transferred/sec + "KB/s");
             System.out.println( "====================================================");
             System.out.println( writter.toString() );

@@ -28,9 +28,9 @@ import phex.servent.Servent;
 import phex.xml.sax.rules.DConsequence;
 
 public interface Consequence extends Cloneable {
-    public void invoke(Search search, RemoteFile remoteFile, Servent servent);
+    void invoke(Search search, RemoteFile remoteFile, Servent servent);
 
-    public Object clone();
+    Object clone();
 
-    public DConsequence createDConsequence();
+    DConsequence createDConsequence();
 }

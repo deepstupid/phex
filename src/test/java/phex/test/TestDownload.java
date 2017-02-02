@@ -52,19 +52,19 @@ public class TestDownload extends TestCase
             (short)1 );
         SWDownloadFile downloadFile = new SWDownloadFile( "test",
             "test", remoteFile.getFileSize(), remoteFile.getURN(), 
-            Servent.getInstance().getDownloadService()
+            Servent.servent.getDownloadService()
         );
         downloadFile.addDownloadCandidate( remoteFile );
         downloadFile.setStatus( SWDownloadConstants.STATUS_FILE_WAITING );
 
-        SWDownloadWorker worker = new SWDownloadWorker( Servent.getInstance().getDownloadService() );
+        SWDownloadWorker worker = new SWDownloadWorker( Servent.servent.getDownloadService() );
 
         AddressCounter counter = new AddressCounter( Integer.MAX_VALUE, false );
         SWDownloadCandidate candidate = downloadFile.allocateDownloadCandidate( worker, counter );
         assertNotNull( candidate );
         // init avail range set
         candidate.getAvailableScopeList();
-        SWDownloadSet set = new SWDownloadSet( Servent.getInstance(), downloadFile, candidate );
+        SWDownloadSet set = new SWDownloadSet(Servent.servent, downloadFile, candidate );
         
         AccessUtils.invokeMethod( worker, "handleDownload", set );
     }

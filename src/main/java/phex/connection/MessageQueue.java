@@ -174,7 +174,7 @@ public class MessageQueue {
             // count sent drop
             host.incSentDropCount(tmpDropCount);
 
-            StatisticsManager statMgr = Servent.getInstance().getStatisticsService();
+            StatisticsManager statMgr = Servent.servent.getStatisticsService();
             ((SimpleStatisticProvider) statMgr.getStatisticProvider(
                     StatisticProviderConstants.DROPEDMSG_OUT_PROVIDER)).increment(tmpDropCount);
             // update queuedCount.
@@ -202,7 +202,7 @@ public class MessageQueue {
                     // count sent drop
                     host.incSentDropCount(tmpDropCount);
 
-                    StatisticsManager statMgr = Servent.getInstance().getStatisticsService();
+                    StatisticsManager statMgr = Servent.servent.getStatisticsService();
                     ((SimpleStatisticProvider) statMgr.getStatisticProvider(
                             StatisticProviderConstants.DROPEDMSG_OUT_PROVIDER)).increment(tmpDropCount);
                     if (msg == null) {

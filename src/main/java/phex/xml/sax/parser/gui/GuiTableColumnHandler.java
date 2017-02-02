@@ -71,28 +71,34 @@ public class GuiTableColumnHandler extends DefaultHandler {
 
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
-        if (qName.equals("columnID")) {
-            try {
-                dColumn.setColumnID(Integer.parseInt(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(SharedFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals("isVisible")) {
-            dColumn.setVisible(Boolean.valueOf(text.toString()).booleanValue());
-        } else if (qName.equals("visibleIndex")) {
-            try {
-                dColumn.setVisibleIndex(Integer.parseInt(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(SharedFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals("width")) {
-            try {
-                dColumn.setWidth(Integer.parseInt(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(SharedFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals(THIS_TAG_NAME)) {
-            parser.getXMLReader().setContentHandler(parent);
+        switch (qName) {
+            case "columnID":
+                try {
+                    dColumn.setColumnID(Integer.parseInt(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(SharedFileHandler.class, exp, exp);
+                }
+                break;
+            case "isVisible":
+                dColumn.setVisible(Boolean.valueOf(text.toString()).booleanValue());
+                break;
+            case "visibleIndex":
+                try {
+                    dColumn.setVisibleIndex(Integer.parseInt(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(SharedFileHandler.class, exp, exp);
+                }
+                break;
+            case "width":
+                try {
+                    dColumn.setWidth(Integer.parseInt(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(SharedFileHandler.class, exp, exp);
+                }
+                break;
+            case THIS_TAG_NAME:
+                parser.getXMLReader().setContentHandler(parent);
+                break;
         }
     }
 

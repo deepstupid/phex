@@ -47,10 +47,7 @@ public class PhexXmlSaxParser {
             saxParser.parse(new InputSource(inStream),
                     new PhexSAXHandler(dPhex, saxParser));
             return dPhex;
-        } catch (ParserConfigurationException exp) {
-            NLogger.error(PhexXmlSaxParser.class, exp, exp);
-            throw new IOException("Parsing Phex XML failed.");
-        } catch (SAXException exp) {
+        } catch (ParserConfigurationException | SAXException exp) {
             NLogger.error(PhexXmlSaxParser.class, exp, exp);
             throw new IOException("Parsing Phex XML failed.");
         }

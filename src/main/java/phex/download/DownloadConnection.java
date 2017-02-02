@@ -49,11 +49,11 @@ public class DownloadConnection extends Connection {
         setBandwidthController(bwCont);
 
         candidate.addToCandidateLog("Connected successfully to "
-                + candidate.getHostAddress() + ".");
+                + candidate.getHostAddress() + '.');
         candidate.setLastConnectionTime(System.currentTimeMillis());
         NLogger.debug(DownloadConnection.class,
                 "Download Engine @" + Integer.toHexString(hashCode())
-                        + " connected successfully to " + candidate.getHostAddress() + ".");
+                        + " connected successfully to " + candidate.getHostAddress() + '.');
     }
 
     /**
@@ -69,22 +69,20 @@ public class DownloadConnection extends Connection {
         DestAddress address = candidate.getHostAddress();
 
         try {
-            candidate.addToCandidateLog("Wait for connect slot " + address.getHostName() + ":"
+            candidate.addToCandidateLog("Wait for connect slot " + address.getHostName() + ':'
                     + address.getPort());
             NLogger.debug(DownloadConnection.class,
-                    "Wait for connect slot " + address.getHostName() + ":"
+                    "Wait for connect slot " + address.getHostName() + ':'
                             + address.getPort());
 
-            Runnable acquireCallback = new Runnable() {
-                public void run() {
-                    DestAddress candAddress = candidate.getHostAddress();
-                    candidate.addToCandidateLog("Connecting to " + candAddress.getHostName() + ":"
-                            + candAddress.getPort());
-                    NLogger.debug(DownloadConnection.class,
-                            "Connecting to " + candAddress.getHostName() + ":"
-                                    + candAddress.getPort());
-                    candidate.setStatus(CandidateStatus.CONNECTING);
-                }
+            Runnable acquireCallback = () -> {
+                DestAddress candAddress = candidate.getHostAddress();
+                candidate.addToCandidateLog("Connecting to " + candAddress.getHostName() + ":"
+                        + candAddress.getPort());
+                NLogger.debug(DownloadConnection.class,
+                        "Connecting to " + candAddress.getHostName() + ":"
+                                + candAddress.getPort());
+                candidate.setStatus(CandidateStatus.CONNECTING);
             };
             socket = SocketFactory.connect(address, timeout,
                     acquireCallback);
@@ -96,10 +94,10 @@ public class DownloadConnection extends Connection {
         setBandwidthController(bwCont);
 
         candidate.addToCandidateLog("Connected successfully to "
-                + candidate.getHostAddress() + ".");
+                + candidate.getHostAddress() + '.');
         candidate.setLastConnectionTime(System.currentTimeMillis());
         NLogger.debug(DownloadConnection.class,
                 "Download Engine @" + Integer.toHexString(hashCode())
-                        + " connected successfully to " + candidate.getHostAddress() + ".");
+                        + " connected successfully to " + candidate.getHostAddress() + '.');
     }
 }

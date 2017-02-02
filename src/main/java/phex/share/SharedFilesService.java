@@ -23,6 +23,7 @@ package phex.share;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import phex.api.Phex;
 import phex.common.*;
 import phex.common.collections.IntSet;
 import phex.common.collections.StringTrie;
@@ -167,7 +168,7 @@ public class SharedFilesService extends AbstractLifeCycle
 
         DPhex dPhex;
         try {
-            ManagedFile managedFile = Phex.getFileManager().getReadWriteManagedFile(file);
+            ManagedFile managedFile = Phex.files.getReadWriteManagedFile(file);
             dPhex = XMLBuilder.loadDPhexFromFile(managedFile);
             if (dPhex == null) {
                 logger.debug("No shared library configuration file found.");
@@ -547,11 +548,7 @@ public class SharedFilesService extends AbstractLifeCycle
 //        { logger.error( exp.toString(), exp ); }
 
         Long time = shareFile.getNetworkCreateTime();
-        Set<ShareFile> shareFileSet = timeToFileMap.get(time);
-        if (shareFileSet == null) {
-            shareFileSet = new HashSet<ShareFile>();
-            timeToFileMap.put(time, shareFileSet);
-        }
+        Set<ShareFile> shareFileSet = timeToFileMap.computeIfAbsent(time, k -> new HashSet<ShareFile>());
         shareFileSet.add(shareFile);
     }
 
@@ -824,7 +821,7 @@ public class SharedFilesService extends AbstractLifeCycle
          */
         @Override
         public void run() {
-            FileManager fileMgr = Phex.getFileManager();
+            FileManager fileMgr = Phex.files;
             File libraryFile = Environment.getPhexConfigFile(
                     EnvironmentConstants.XML_SHARED_LIBRARY_FILE_NAME);
             File tmpFile = Environment.getPhexConfigFile(

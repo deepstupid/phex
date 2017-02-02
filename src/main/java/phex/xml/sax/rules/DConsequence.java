@@ -26,5 +26,5 @@ import phex.rules.consequence.Consequence;
 import phex.xml.sax.DElement;
 
 public interface DConsequence extends DElement {
-    public Consequence createConsequence();
+    Consequence createConsequence();
 }

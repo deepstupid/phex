@@ -71,18 +71,23 @@ public class FavoriteHostHandler extends DefaultHandler {
 
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
-        if (qName.equals("host-name")) {
-            dHost.setHostName(text.toString());
-        } else if (qName.equals("ip")) {
-            dHost.setIp(ParserUtils.fromHexBinary(text.toString()));
-        } else if (qName.equals("port")) {
-            try {
-                dHost.setPort(Integer.parseInt(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(FavoriteHostHandler.class, exp, exp);
-            }
-        } else if (qName.equals(THIS_TAG_NAME)) {
-            parser.getXMLReader().setContentHandler(parent);
+        switch (qName) {
+            case "host-name":
+                dHost.setHostName(text.toString());
+                break;
+            case "ip":
+                dHost.setIp(ParserUtils.fromHexBinary(text.toString()));
+                break;
+            case "port":
+                try {
+                    dHost.setPort(Integer.parseInt(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(FavoriteHostHandler.class, exp, exp);
+                }
+                break;
+            case THIS_TAG_NAME:
+                parser.getXMLReader().setContentHandler(parent);
+                break;
         }
     }
 

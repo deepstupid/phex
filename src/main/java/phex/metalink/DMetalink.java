@@ -91,17 +91,17 @@ public class DMetalink {
     @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append(files.size() + " files known\n");
+        buffer.append(files.size()).append(" files known\n");
 
         for (FileEntry f : files) {
-            buffer.append("filename=" + f.filename + "\n");
+            buffer.append("filename=").append(f.filename).append('\n');
             for (UrlEntry u : f.urls) {
-                buffer.append("  url= " + u.url + "\n");
+                buffer.append("  url= ").append(u.url).append('\n');
             }
 
             Set<Entry<String, String>> hashEntrySet = f.hashes.entrySet();
             for (Entry<String, String> hash : hashEntrySet) {
-                buffer.append("  hash(" + hash.getKey() + ")= " + hash.getValue() + "\n");
+                buffer.append("  hash(").append(hash.getKey()).append(")= ").append(hash.getValue()).append('\n');
             }
         }
         return buffer.toString();
@@ -110,7 +110,7 @@ public class DMetalink {
     /**
      * The workhorse of the system
      */
-    public class FileEntry {
+    public static class FileEntry {
         public final HashMap<String, String> hashes;
         public final ArrayList<UrlEntry> urls;
         public final String filename;
@@ -166,7 +166,7 @@ public class DMetalink {
             for (DMetalink.UrlEntry urlEntry : urls) {
                 if (urlEntry.type.equals("http")) {
                     if (altSourceBuf.length() > 0) {
-                        altSourceBuf.append("&");
+                        altSourceBuf.append('&');
                     }
                     altSourceBuf.append("as=");
                     altSourceBuf.append(URLCodecUtils.encodeURL(urlEntry.url));
@@ -179,13 +179,13 @@ public class DMetalink {
             }
             if (!StringUtils.isEmpty(dnPart)) {
                 if (magnetBuffer.length() > 0) {
-                    magnetBuffer.append("&");
+                    magnetBuffer.append('&');
                 }
                 magnetBuffer.append(xtPart);
             }
             if (altSourceBuf.length() > 0) {
                 if (magnetBuffer.length() > 0) {
-                    magnetBuffer.append("&");
+                    magnetBuffer.append('&');
                 }
                 magnetBuffer.append(altSourceBuf);
             }
@@ -200,7 +200,7 @@ public class DMetalink {
         }
     }
 
-    public class UrlEntry {
+    public static class UrlEntry {
         public final String type;
         public final String url;
 

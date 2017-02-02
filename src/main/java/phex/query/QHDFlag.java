@@ -35,5 +35,5 @@ public enum QHDFlag {
     /**
      * The false flag status for QHD status.
      */
-    QHD_FALSE_FLAG;
+    QHD_FALSE_FLAG
 }

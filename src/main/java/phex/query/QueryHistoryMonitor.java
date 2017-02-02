@@ -87,7 +87,7 @@ public class QueryHistoryMonitor implements MessageSubscriber<QueryMsg> {
     }
     ///////////////////// END event handling methods //////////////////////////
 
-    public class HistoryEntry {
+    public static class HistoryEntry {
         private final Host sourceHost;
         private final QueryMsg queryMsg;
 

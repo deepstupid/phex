@@ -131,7 +131,7 @@ public final class InternalFileHandler {
 
     private static void downloadUri(URI uri) {
         try {
-            Servent.getInstance().getDownloadService().addFileToDownload(uri, true);
+            Servent.servent.getDownloadService().addFileToDownload(uri, true);
         } catch (IOException exp) {
             NLogger.warn(InternalFileHandler.class, exp.getMessage(), exp);
         }
@@ -145,7 +145,7 @@ public final class InternalFileHandler {
      */
     private static void downloadUri(URI uri, String relativeDownloadDir) {
         try {
-            Servent.getInstance().getDownloadService().addFileToDownload(uri, relativeDownloadDir, true);
+            Servent.servent.getDownloadService().addFileToDownload(uri, relativeDownloadDir, true);
         } catch (IOException exp) {
             NLogger.warn(InternalFileHandler.class, exp.getMessage(), exp);
         }

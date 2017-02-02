@@ -24,7 +24,7 @@ public class TestSHA1 extends TestCase
         super(s);
     }
     
-    public void testSHA1()
+    public static void testSHA1()
         throws Exception
     {
         File javahome = SystemUtils.getJavaHome();
@@ -32,7 +32,7 @@ public class TestSHA1 extends TestCase
         sha1TestFiles( files, 10 );
     }
     
-    public void sha1TestFiles( File[] files, int max )
+    public static void sha1TestFiles(File[] files, int max)
         throws Exception
     {
         for (int j = 0; j < files.length; j++)
@@ -54,7 +54,7 @@ public class TestSHA1 extends TestCase
         }
     }
     
-    public String calcSHA1( File file, MessageDigest messageDigest )
+    public static String calcSHA1(File file, MessageDigest messageDigest)
         throws Exception
     {  
         FileInputStream inStream = new FileInputStream( file );

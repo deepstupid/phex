@@ -77,7 +77,7 @@ public class TestCircularQueue extends TestCase
         }
     }
     
-    class TestObj
+    static class TestObj
     {
         final String id;
         TestObj(int cnt) { this.id = "id:" + cnt;}

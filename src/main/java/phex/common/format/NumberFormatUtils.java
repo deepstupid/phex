@@ -61,7 +61,7 @@ public final class NumberFormatUtils {
         }
 
         StringBuffer buf = new StringBuffer();
-        doubleToStringFormat.appendFormatted(
+        DoubleToString.appendFormatted(
                 buf, value, precision,
                 Localizer.getDecimalFormatSymbols().getDecimalSeparator(),
                 Localizer.getDecimalFormatSymbols().getGroupingSeparator(), 3, // = no grouping

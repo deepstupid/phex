@@ -27,7 +27,7 @@ import phex.query.Search;
 import phex.xml.sax.rules.DCondition;
 
 public interface Condition extends Cloneable {
-    public boolean isMatched(Search search, RemoteFile remoteFile);
+    boolean isMatched(Search search, RemoteFile remoteFile);
 
     /**
      * Validates if this condition is completly edited and ready for storage or
@@ -35,9 +35,9 @@ public interface Condition extends Cloneable {
      *
      * @return true if complet false otherwise.
      */
-    public boolean isComplete();
+    boolean isComplete();
 
-    public Object clone();
+    Object clone();
 
-    public DCondition createDCondition();
+    DCondition createDCondition();
 }

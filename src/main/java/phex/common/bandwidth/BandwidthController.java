@@ -172,9 +172,7 @@ public class BandwidthController {
         }
 
         if (bytesRemaining < 0 && logger.isErrorEnabled()) {
-            logger.error(
-                    '[' + controllerName + "] Available byte count " + bytesAllowed
-                            + "bps - Remaining: " + bytesRemaining + '.');
+            logger.error('[' + "{}] Available byte count {}bps - Remaining: {}" + '.', controllerName, bytesAllowed, bytesRemaining);
         }
         /*else if ( logger.isDebugEnabled() )
         {
@@ -205,9 +203,7 @@ public class BandwidthController {
         }
 
         if (bytesRemaining < 0 && logger.isErrorEnabled()) {
-            logger.error(
-                    '[' + controllerName + "] !Mark bytes used " + byteCount
-                            + " - remaining: " + bytesRemaining + '.');
+            logger.error('[' + "{}] !Mark bytes used {} - remaining: {}" + '.', controllerName, byteCount, bytesRemaining);
         } else /*if ( logger.isDebugEnabled() )
         {
             logger.debug(

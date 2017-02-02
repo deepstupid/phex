@@ -69,12 +69,16 @@ public class AlternateLocationHandler extends DefaultHandler {
 
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
-        if (qName.equals("host-address")) {
-            dAltLoc.setHostAddress(text.toString());
-        } else if (qName.equals("URN")) {
-            dAltLoc.setUrn(text.toString());
-        } else if (qName.equals(THIS_TAG_NAME)) {
-            parser.getXMLReader().setContentHandler(parent);
+        switch (qName) {
+            case "host-address":
+                dAltLoc.setHostAddress(text.toString());
+                break;
+            case "URN":
+                dAltLoc.setUrn(text.toString());
+                break;
+            case THIS_TAG_NAME:
+                parser.getXMLReader().setContentHandler(parent);
+                break;
         }
     }
 

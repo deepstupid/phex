@@ -5,7 +5,6 @@ import junit.framework.TestCase;
 import net.sourceforge.groboutils.junit.v1.MultiThreadedTestRunner;
 import net.sourceforge.groboutils.junit.v1.TestMonitorRunnable;
 import net.sourceforge.groboutils.junit.v1.TestRunnable;
-import phex.common.Phex;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.IpAddress;
 import phex.prefs.core.PhexCorePrefs;
@@ -29,8 +28,7 @@ public class UploadManagerTest extends TestCase
         PhexCorePrefs.init();
 //        PhexGuiPrefs.init();
 //        Localizer.initialize( InterfacePrefs.LocaleName.get() );
-        Phex.initialize();
-        Servent servent = Servent.getInstance();
+        Servent servent = Servent.servent;
         uploadManager = new UploadManager( servent );
     }
 

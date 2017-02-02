@@ -87,11 +87,7 @@ public class XQueueParameters {
                     queuePollMax = parseIntValue(lowerCaseToken);
                 }
             }
-        } catch (NumberFormatException exp) {
-            NLogger.debug(XQueueParameters.class,
-                    "Invalid X-Queue value: " + httpXQueueValue);
-            return null;
-        } catch (IndexOutOfBoundsException exp) {
+        } catch (NumberFormatException | IndexOutOfBoundsException exp) {
             NLogger.debug(XQueueParameters.class,
                     "Invalid X-Queue value: " + httpXQueueValue);
             return null;

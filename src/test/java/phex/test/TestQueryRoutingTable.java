@@ -22,7 +22,6 @@
 package phex.test;
 
 import junit.framework.TestCase;
-import phex.common.Phex;
 import phex.common.QueryRoutingTable;
 import phex.msg.*;
 import phex.prefs.core.PhexCorePrefs;
@@ -48,12 +47,11 @@ public class TestQueryRoutingTable extends TestCase
 
     protected void setUp()
     {
-        Phex.initialize();
         /// should not depend on these
         PhexCorePrefs.init();
 //        PhexGuiPrefs.init();
 //        Localizer.initialize( InterfacePrefs.LocaleName.get() );
-        Servent servent = Servent.getInstance();
+        Servent servent = Servent.servent;
         
         qrTable = new QueryRoutingTable();
         try
@@ -208,8 +206,8 @@ public class TestQueryRoutingTable extends TestCase
         List<ShareFile> list = new ArrayList<ShareFile>( 10000 );
         for ( int i=0; i<10000; i++ )
         {
-            list.add( new ShareFile(new File( new GUID().toString()+"/"+new GUID().toString()
-                +"/"+new GUID().toString()+"/"+new GUID().toString()+"/"+new GUID().toString()  ) ) );
+            list.add( new ShareFile(new File( new GUID().toString()+ '/' +new GUID().toString()
+                + '/' +new GUID().toString()+ '/' +new GUID().toString()+ '/' +new GUID().toString()  ) ) );
         }
 
         long start = System.currentTimeMillis();
@@ -220,7 +218,7 @@ public class TestQueryRoutingTable extends TestCase
         System.out.println( (end-start) );
     }
     
-    private QueryRoutingTable createRandomFilled( int size ) throws Throwable
+    private static QueryRoutingTable createRandomFilled(int size) throws Throwable
     {
         QueryRoutingTable qrTable = new QueryRoutingTable( size );
         while( qrTable.getFillRatio() < 4 )
@@ -230,7 +228,7 @@ public class TestQueryRoutingTable extends TestCase
         return qrTable;
     }
     
-    private QueryMsg createDummyMsg( String searchStr )
+    private static QueryMsg createDummyMsg(String searchStr)
     {
         return new QueryMsg( new GUID(), (byte)7, searchStr, null, false, 
             false, false, QueryMsg.NO_FEATURE_QUERY_SELECTOR );

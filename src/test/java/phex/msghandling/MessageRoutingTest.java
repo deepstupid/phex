@@ -29,7 +29,6 @@ import phex.msg.GUID;
 import phex.net.connection.Connection;
 import phex.net.repres.def.DefaultSocketFacade;
 import phex.prefs.core.PhexCorePrefs;
-import phex.servent.Servent;
 import phex.util.QueryGUIDRoutingPair;
 
 import java.net.Socket;
@@ -50,7 +49,6 @@ public class MessageRoutingTest extends TestCase
         PhexCorePrefs.init();
 //        PhexGuiPrefs.init();
 //        Localizer.initialize( InterfacePrefs.LocaleName.get() );
-        Servent.getInstance();
         messageRouting = new MessageRouting( );
     }
 
@@ -60,7 +58,7 @@ public class MessageRoutingTest extends TestCase
         GUID pushClientGUID = new GUID( );
         Host pushHost = new Host( new DefaultDestAddress( "1.1.1.1", 1111 ) );
         // to fake a connection
-        pushHost.setConnection( new Connection( new DummySocket(), 
+        pushHost.setConnection( new Connection(new DummySocket(),
             new BandwidthController( "JUnitText", Long.MAX_VALUE )) );
         messageRouting.addToPushRoutingTable( pushClientGUID, pushHost );
 
@@ -74,7 +72,7 @@ public class MessageRoutingTest extends TestCase
         GUID pingGUID = new GUID();
         Host pingHost =  new Host( new DefaultDestAddress( "2.2.2.2", 2222 ) );
         // to fake a connection
-        pingHost.setConnection( new Connection( new DummySocket(), 
+        pingHost.setConnection( new Connection(new DummySocket(),
             new BandwidthController( "JUnitText", Long.MAX_VALUE ) ) );
 
         boolean pingCheckValue = messageRouting.checkAndAddToPingRoutingTable(
@@ -94,7 +92,7 @@ public class MessageRoutingTest extends TestCase
         GUID queryGUID = new GUID();
         Host queryHost =  new Host( new DefaultDestAddress( "3.3.3.3", 3333 ) );
         // to fake a connection
-        queryHost.setConnection( new Connection( new DummySocket(), 
+        queryHost.setConnection( new Connection(new DummySocket(),
             new BandwidthController( "JUnitText", Long.MAX_VALUE )) );
 
         boolean queryCheckValue = messageRouting.checkAndAddToQueryRoutingTable(
@@ -108,7 +106,7 @@ public class MessageRoutingTest extends TestCase
         assertEquals( queryHost, pair.getHost() );
     }
 
-    private class DummySocket extends DefaultSocketFacade
+    private static class DummySocket extends DefaultSocketFacade
     {
         DummySocket()
         {

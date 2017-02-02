@@ -34,7 +34,7 @@ public abstract class TestRunnable extends Assert implements Runnable {
 
     public abstract void runTest() throws Throwable;
 
-    public void delay(long millis) throws InterruptedException {
+    public static void delay(long millis) throws InterruptedException {
         Thread.sleep(millis);
     }
 
@@ -42,22 +42,21 @@ public abstract class TestRunnable extends Assert implements Runnable {
         if(this.mttr == null) {
             throw new IllegalStateException("Owning runner never defined.  The runnables should only be started through the MultiThreadedTestRunner instance.");
         } else {
-            LOG.info("Starting test thread " + this.testIndex);
+            LOG.info("Starting test thread {}", this.testIndex);
 
             try {
                 this.runTest();
             } catch (InterruptedException var4) {
-                ;
             } catch (TestDeathException var5) {
                 if(!this.ignoreStopErrors) {
-                    LOG.info("Aborted test thread " + this.testIndex);
+                    LOG.info("Aborted test thread {}", this.testIndex);
                     throw var5;
                 }
             } catch (Throwable var6) {
                 this.mttr.handleException(var6);
             }
 
-            LOG.info("Ended test thread " + this.testIndex);
+            LOG.info("Ended test thread {}", this.testIndex);
         }
     }
 

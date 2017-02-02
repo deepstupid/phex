@@ -45,7 +45,7 @@ class UrnCalculationWorker implements Runnable {
     UrnCalculationWorker(ShareFile shareFile, SharedFilesService sharedFilesService) {
         this.shareFile = shareFile;
         this.sharedFilesService = sharedFilesService;
-        this.downloadService = Servent.getInstance().getDownloadService();
+        this.downloadService = Servent.servent.getDownloadService();
     }
 
     public void run() {

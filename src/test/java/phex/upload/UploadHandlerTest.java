@@ -2,7 +2,6 @@ package phex.upload;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import phex.common.Phex;
 import phex.common.address.DefaultDestAddress;
 import phex.http.GnutellaHeaderNames;
 import phex.http.GnutellaRequest;
@@ -28,8 +27,7 @@ public class UploadHandlerTest extends TestCase
         PhexCorePrefs.init();
 //        PhexGuiPrefs.init();
 //        Localizer.initialize( InterfacePrefs.LocaleName.get() );
-        Phex.initialize();
-        Servent servent = Servent.getInstance();
+        Servent servent = Servent.servent;
         uploadManager = new UploadManager( servent );
     }
     
@@ -68,7 +66,7 @@ public class UploadHandlerTest extends TestCase
         Assert.assertFalse( h.isQueued() );
     }
     
-    private class UploadHandlerMock extends AbstractUploadHandler
+    private static class UploadHandlerMock extends AbstractUploadHandler
     {
 
         protected UploadHandlerMock()

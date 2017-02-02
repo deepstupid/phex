@@ -137,7 +137,7 @@ public class AccessUtils
             Object retVal = method.invoke(obj, params);
             return retVal;
         }
-        catch (IllegalAccessException exp)
+        catch (IllegalAccessException | NoSuchMethodException exp)
         {
             exp.printStackTrace();
             throw new RuntimeException( exp.getMessage() );
@@ -145,11 +145,6 @@ public class AccessUtils
         catch (InvocationTargetException exp)
         {
             throw exp.getTargetException();
-        }
-        catch (NoSuchMethodException exp)
-        {
-            exp.printStackTrace();
-            throw new RuntimeException( exp.getMessage() );
         }
     }
 

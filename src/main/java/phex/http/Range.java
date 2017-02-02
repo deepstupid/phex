@@ -87,7 +87,7 @@ public class Range {
 
     @Override
     public String toString() {
-        StringBuffer buf = new StringBuffer("[Range: " + startOffset + "-" + endOffset + "]");
+        StringBuffer buf = new StringBuffer("[Range: " + startOffset + '-' + endOffset + ']');
         return buf.toString();
     }
 
@@ -128,12 +128,8 @@ public class Range {
         //     r--r
         //          r--r
         long rangeStart = range.getStartOffset(fileSize);
-        if (getStartOffset(fileSize) <= rangeStart
-                && rangeStart <= getEndOffset(fileSize)) {
-            return true;
-        } else {
-            return false;
-        }
+        return getStartOffset(fileSize) <= rangeStart
+                && rangeStart <= getEndOffset(fileSize);
     }
 
     public String buildHTTPRangeString() {

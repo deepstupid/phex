@@ -104,7 +104,7 @@ public class ShareFileThexData {
             byte[] nodeData = iterator.next();
             String node = new String(Base64.encodeBase64(nodeData));
             xjbString.append(node);
-            xjbString.append("-");
+            xjbString.append('-');
 
         }
         return xjbString.toString();

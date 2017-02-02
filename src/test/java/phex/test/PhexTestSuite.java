@@ -24,7 +24,6 @@ package phex.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import phex.common.AltLocContainerTest;
-import phex.common.ThreadTracking;
 import phex.prefs.core.PhexCorePrefs;
 import phex.util.IOUtilTest;
 import phex.util.Localizer;
@@ -45,7 +44,7 @@ public class PhexTestSuite extends TestSuite
         super(s);
     }
 
-    protected void setUp()
+    protected static void setUp()
         throws Exception
     {
         StringBuffer path = tempPath();
@@ -67,14 +66,13 @@ public class PhexTestSuite extends TestSuite
             path.toString() );
         
         PhexCorePrefs.init();
-        ThreadTracking.initialize();
     }
 
     public static Test suite()
         throws Exception
     {
         PhexTestSuite suite = new PhexTestSuite("PhexTestSuite");
-        suite.setUp();
+        PhexTestSuite.setUp();
         suite.addTestSuite(IOUtilTest.class);
         suite.addTestSuite(ThexHashTreeCodecTest.class);
         suite.addTestSuite(TestThexHashTreeSaxHandler.class);

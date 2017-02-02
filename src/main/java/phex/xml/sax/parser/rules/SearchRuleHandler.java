@@ -85,19 +85,26 @@ public class SearchRuleHandler extends DefaultHandler {
 
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
-        if (qName.equals("name")) {
-            searchRule.setName(text.toString());
-        } else if (qName.equals("notes")) {
-            searchRule.setNotes(text.toString());
-        } else if (qName.equals("description")) {
-            searchRule.setDescription(text.toString());
-        } else if (qName.equals("id")) {
-            searchRule.setId(text.toString());
-        } else if (qName.equals("permanently-enabled")) {
-            searchRule.setPermanentlyEnabled(Boolean.valueOf(text.toString())
-                    .booleanValue());
-        } else if (qName.equals(ELEMENT_NAME)) {
-            parser.getXMLReader().setContentHandler(parent);
+        switch (qName) {
+            case "name":
+                searchRule.setName(text.toString());
+                break;
+            case "notes":
+                searchRule.setNotes(text.toString());
+                break;
+            case "description":
+                searchRule.setDescription(text.toString());
+                break;
+            case "id":
+                searchRule.setId(text.toString());
+                break;
+            case "permanently-enabled":
+                searchRule.setPermanentlyEnabled(Boolean.valueOf(text.toString())
+                        .booleanValue());
+                break;
+            case ELEMENT_NAME:
+                parser.getXMLReader().setContentHandler(parent);
+                break;
         }
     }
 

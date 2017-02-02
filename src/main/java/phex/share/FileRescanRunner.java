@@ -175,7 +175,7 @@ public class FileRescanRunner implements Runnable {
 
     private void buildSharedFilesCache() {
         sharedFilesCache = new HashMap<String, DSharedFile>();
-        DSharedLibrary library = sharedFilesService.loadSharedLibrary();
+        DSharedLibrary library = SharedFilesService.loadSharedLibrary();
         if (library == null) {
             // no library found to load...
             return;
@@ -315,10 +315,7 @@ public class FileRescanRunner implements Runnable {
 
     private boolean isInSharedDirectory(File file) {
         File parentFile = file.getParentFile();
-        if (sharedDirectoryFiles.contains(parentFile)) {
-            return true;
-        }
-        return false;
+        return sharedDirectoryFiles.contains(parentFile);
     }
 
     private void setExclusionFilter(List<String> exclusionList) {
@@ -351,10 +348,7 @@ public class FileRescanRunner implements Runnable {
             return true;
         }
 
-        if (isExcludedRegExp(fileName)) {
-            return true;
-        }
-        return false;
+        return isExcludedRegExp(fileName);
     }
 
     /**

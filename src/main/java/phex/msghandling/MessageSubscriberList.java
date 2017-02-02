@@ -53,7 +53,8 @@ public class MessageSubscriberList<E extends Message> implements MessageSubscrib
         subscriberList.add(subscriber);
     }
 
-    public void addSubscribers(MessageSubscriber<E>... subscriberArr) {
+    @SafeVarargs
+    public final void addSubscribers(MessageSubscriber<E>... subscriberArr) {
         subscriberList.addAll(Arrays.asList(subscriberArr));
     }
 

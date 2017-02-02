@@ -78,10 +78,7 @@ public class UploadManager {
      * Returns true if all upload slots are filled.
      */
     public boolean isHostBusy() {
-        if (getUploadingCount() >= UploadPrefs.MaxParallelUploads.get().intValue()) {
-            return true;
-        }
-        return false;
+        return getUploadingCount() >= UploadPrefs.MaxParallelUploads.get().intValue();
     }
 
     /**
@@ -89,10 +86,7 @@ public class UploadManager {
      */
     public boolean isQueueLimitReached() {
         synchronized (queuedStateList) {
-            if (queuedStateList.size() >= UploadPrefs.MaxQueueSize.get().intValue()) {
-                return true;
-            }
-            return false;
+            return queuedStateList.size() >= UploadPrefs.MaxQueueSize.get().intValue();
         }
     }
 

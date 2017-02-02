@@ -114,6 +114,6 @@ public class WhatsNewSearch extends QuerySearch {
 
     @Override
     public String toString() {
-        return "[WhatsNewSearch," + "@" + Integer.toHexString(hashCode()) + "]";
+        return "[WhatsNewSearch," + '@' + Integer.toHexString(hashCode()) + ']';
     }
 }

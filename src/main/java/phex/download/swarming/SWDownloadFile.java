@@ -27,6 +27,7 @@ import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import phex.api.Phex;
 import phex.common.*;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
@@ -307,9 +308,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
         initialize(filename, aFileURN, aFileSize, searchString, true);
         try {
             initIncompleteFile();
-        } catch (FileHandlingException exp) {
-            logger.error(exp.toString(), exp);
-        } catch (ManagedFileException exp) {
+        } catch (FileHandlingException | ManagedFileException exp) {
             logger.error(exp.toString(), exp);
         }
     }
@@ -338,9 +337,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
             initialize(magnetFileName, urn, UNKNOWN_FILE_SIZE, searchTerm, true);
             try {
                 initIncompleteFile();
-            } catch (FileHandlingException exp) {
-                logger.error(exp.toString(), exp);
-            } catch (ManagedFileException exp) {
+            } catch (FileHandlingException | ManagedFileException exp) {
                 logger.error(exp.toString(), exp);
             }
 
@@ -368,9 +365,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
             initialize(uriFileName, null, UNKNOWN_FILE_SIZE, searchTerm, true);
             try {
                 initIncompleteFile();
-            } catch (FileHandlingException exp) {
-                logger.error(exp.toString(), exp);
-            } catch (ManagedFileException exp) {
+            } catch (FileHandlingException | ManagedFileException exp) {
                 logger.error(exp.toString(), exp);
             }
 
@@ -406,7 +401,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
         String incompleteFileName = dFile.getIncompleteFileName();
         if (!StringUtils.isEmpty(incompleteFileName)) {
             try {
-                incompleteManagedFile = Phex.getFileManager().getReadWriteManagedFile(
+                incompleteManagedFile = Phex.files.getReadWriteManagedFile(
                         new File(incompleteFileName));
             } catch (ManagedFileException exp) {
                 logger.error(exp.toString(), exp);
@@ -448,7 +443,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
                 incFileNameBuf.append(String.valueOf(tryCount));
                 incFileNameBuf.append(')');
             }
-            incFileNameBuf.append("-");
+            incFileNameBuf.append('-');
             incFileNameBuf.append(fileName);
             String incFileName = FileUtils.convertToLocalSystemFilename(
                     incFileNameBuf.toString());
@@ -499,7 +494,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
         fileSize = aFileSize;
         previewSize = fileSize / 10;
 
-        Servent servent = Servent.getInstance();
+        Servent servent = Servent.servent;
         researchSetting = new ResearchSetting(this, servent.getQueryService(),
                 servent);
         researchSetting.setSearchTerm(searchTerm);
@@ -598,7 +593,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
 
         // use get request class to parse url
         DestAddress hostAddress = altLoc.getHostAddress();
-        if (hostAddress.isLocalHost(Servent.getInstance().getLocalAddress())) {// don't add myself as candidate.
+        if (hostAddress.isLocalHost(Servent.servent.getLocalAddress())) {// don't add myself as candidate.
             return false;
         }
         SWDownloadCandidate candidate = new SWDownloadCandidate(hostAddress,
@@ -1104,7 +1099,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
                 case STATUS_FILE_COMPLETED:
                     // count the completed download
                     SimpleStatisticProvider provider = (SimpleStatisticProvider)
-                            Servent.getInstance().getStatisticsService().getStatisticProvider(
+                            Servent.servent.getStatisticsService().getStatisticProvider(
                                     StatisticsManager.SESSION_DOWNLOAD_COUNT_PROVIDER);
                     provider.increment(1);
                     // stop possible running search...
@@ -1330,7 +1325,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
         fullFileNameBuf.append(DownloadPrefs.IncompleteDirectory.get());
         fullFileNameBuf.append(File.separatorChar);
         fullFileNameBuf.append("PREVIEW");
-        fullFileNameBuf.append("-");
+        fullFileNameBuf.append('-');
         fullFileNameBuf.append(fileName);
         File previewFile = new File(fullFileNameBuf.toString());
         previewFile.deleteOnExit();
@@ -1375,7 +1370,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
             throw new RuntimeException("There should be no missing length (found "
                     + memoryFile.getMissingLength() +
                     ") and the download must be completed to move to destination file '"
-                    + fileName + "'");
+                    + fileName + '\'');
         }
 
         File destFile = getDestinationFile();
@@ -1705,7 +1700,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
             int queuedCount = queuedCandidatesSet.size();
             if (queuedCount < maxQueuedWorkers) {
                 candidate.addToCandidateLog("Accept queued candidate (" +
-                        queuedCount + "/" + maxQueuedWorkers + ")");
+                        queuedCount + '/' + maxQueuedWorkers + ')');
                 queuedCandidatesSet.add(candidate);
                 return true;
             }
@@ -1729,7 +1724,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
             if (highestCandidate != null && highestPos > candidatePos) {
                 highestCandidate.addToCandidateLog(
                         "Drop queued candidate - new alternative: " +
-                                highestPos + " - " + candidatePos + ")");
+                                highestPos + " - " + candidatePos + ')');
                 // stay busy 1 minute for each queue position but max 15 minutes.
                 highestCandidate.setStatus(CandidateStatus.BUSY,
                         Math.min(15, candidatePos) * 60);
@@ -1779,7 +1774,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
             return;
         }
         try {
-            incompleteManagedFile = Phex.getFileManager().getReadWriteManagedFile(
+            incompleteManagedFile = Phex.files.getReadWriteManagedFile(
                     createIncompleteFile(fileName));
         } catch (FileHandlingException exp) {
             String filename = exp.getFileName();
@@ -1834,8 +1829,8 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
                 }
             }
 
-            Collections.sort(goodCandidatesList, new InitialCandidatesComparator());
-            Collections.sort(mediumCandidatesList, new InitialCandidatesComparator());
+            goodCandidatesList.sort(new InitialCandidatesComparator());
+            mediumCandidatesList.sort(new InitialCandidatesComparator());
         }
     }
 

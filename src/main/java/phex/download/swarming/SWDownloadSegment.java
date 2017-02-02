@@ -164,7 +164,7 @@ public class SWDownloadSegment
         buffer.append(length);
         buffer.append("]@");
         buffer.append(hashCode());
-        buffer.append("\n");
+        buffer.append('\n');
         return buffer.toString();
     }
 

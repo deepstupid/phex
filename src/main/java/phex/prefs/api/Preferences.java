@@ -136,7 +136,7 @@ public class Preferences {
             logger.debug("No saving of preferences required.");
             return;
         }
-        logger.debug("Saving preferences to: " + prefFile.getAbsolutePath());
+        logger.debug("Saving preferences to: {}", prefFile.getAbsolutePath());
         Properties saveProperties = new SortedProperties();
 
         for (Setting<?> setting : settingMap.values()) {

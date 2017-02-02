@@ -433,14 +433,14 @@ public class PongMsg extends Message {
      *
      * @param packedHostCaches
      */
-    private Set<UdpHostCache> parsePackedHostCache(String packedHostCaches, PhexSecurityManager securityMgr) {
+    private static Set<UdpHostCache> parsePackedHostCache(String packedHostCaches, PhexSecurityManager securityMgr) {
         PresentationManager netPresMgr = PresentationManager.getInstance();
         String[] hostCaches = packedHostCaches.split("\n");
         Set<UdpHostCache> packedUdpHostCaches = new HashSet<>(hostCaches.length);
 
         for (String hostCache : hostCaches) {
             //find the position of the first key/value pair if any
-            int pos = hostCache.indexOf("&");
+            int pos = hostCache.indexOf('&');
             try {
                 DestAddress address;
                 //no key/value pair found

@@ -22,7 +22,7 @@
  */
 package phex.xml.sax;
 
-import phex.common.Phex;
+import phex.api.Phex;
 import phex.common.file.*;
 import phex.common.log.NLogger;
 import phex.util.IOUtil;
@@ -37,14 +37,13 @@ import java.io.*;
 public class XMLBuilder {
     public static DPhex loadDPhexFromFile(File file)
             throws IOException {
-        FileManager fileMgr = Phex.getFileManager();
+        FileManager fileMgr = Phex.files;
         ManagedFile managedFile;
         try {
             managedFile = fileMgr.getReadWriteManagedFile(file);
         } catch (ManagedFileException exp) {
             // TODO refactor for Java 6
-            IOException ioexp = new IOException();
-            ioexp.initCause(exp);
+            IOException ioexp = new IOException(exp);
             throw ioexp;
         }
         return loadDPhexFromFile(managedFile);
@@ -118,13 +117,12 @@ public class XMLBuilder {
     public static void saveToFile(File file, DPhex dPhex)
             throws IOException {
         try {
-            ManagedFile managedFile = Phex.getFileManager()
+            ManagedFile managedFile = Phex.files
                     .getReadWriteManagedFile(file);
             saveToFile(managedFile, dPhex);
         } catch (ManagedFileException exp) {
             // TODO refactor for Java 6
-            IOException ioexp = new IOException();
-            ioexp.initCause(exp);
+            IOException ioexp = new IOException(exp);
             throw ioexp;
         }
     }

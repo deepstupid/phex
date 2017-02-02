@@ -29,6 +29,7 @@ import phex.common.log.NLogger;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TransformerHandler;
 import javax.xml.transform.stream.StreamResult;
@@ -56,7 +57,7 @@ public class PhexXmlSaxWriter {
     public void writePhexXml(OutputStream outStream, DPhex dPhex)
             throws SAXException {
         StreamResult streamResult = new StreamResult(outStream);
-        SAXTransformerFactory tf = (SAXTransformerFactory) SAXTransformerFactory.newInstance();
+        SAXTransformerFactory tf = (SAXTransformerFactory) TransformerFactory.newInstance();
         try {
             transHandler = tf.newTransformerHandler();
         } catch (TransformerConfigurationException exp) {
@@ -112,7 +113,7 @@ public class PhexXmlSaxWriter {
         elmText(r.toString());
     }
 
-    private char hexBinaryEncode(int ch) {
+    private static char hexBinaryEncode(int ch) {
         ch &= 0xf;
         if (ch < 10)
             return (char) (48 + ch);

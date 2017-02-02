@@ -135,9 +135,7 @@ public class HTTPRangeSet {
                             httpRangeSet.addRange(startOffset, endOffset);
                         }
                     }
-                } catch (IndexOutOfBoundsException exp) {
-                    return null;
-                } catch (NumberFormatException exp) {
+                } catch (IndexOutOfBoundsException | NumberFormatException exp) {
                     return null;
                 }
             }

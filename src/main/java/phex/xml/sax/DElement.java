@@ -25,5 +25,5 @@ package phex.xml.sax;
 import org.xml.sax.SAXException;
 
 public interface DElement {
-    public void serialize(PhexXmlSaxWriter writer) throws SAXException;
+    void serialize(PhexXmlSaxWriter writer) throws SAXException;
 }

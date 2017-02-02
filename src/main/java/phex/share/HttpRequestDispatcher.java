@@ -21,7 +21,7 @@
  */
 package phex.share;
 
-import phex.common.Phex;
+import phex.api.Phex;
 import phex.common.address.DestAddress;
 import phex.common.format.NumberFormatUtils;
 import phex.common.log.NLogger;
@@ -47,8 +47,8 @@ import java.util.List;
 
 public class HttpRequestDispatcher {
     // Called by ReadWorker to handle a HTTP GET request from the remote host.
-    public void httpRequestHandler(Connection connection,
-                                   HTTPRequest httpRequest) {
+    public static void httpRequestHandler(Connection connection,
+                                          HTTPRequest httpRequest) {
         try {
             // GET / HTTP/1.1 (Browse Host request)
             if (httpRequest.getRequestMethod().equals("GET")) {
@@ -80,7 +80,7 @@ public class HttpRequestDispatcher {
         }
     }
 
-    private void sendErrorHTTP(Connection connection, String statusStr, String errMsg)
+    private static void sendErrorHTTP(Connection connection, String statusStr, String errMsg)
             throws IOException {
         StringBuffer content = new StringBuffer(300);
         content.append("<html><head><title>PHEX</title></head><body>");
@@ -105,7 +105,7 @@ public class HttpRequestDispatcher {
                 StringUtils.getBytesInUsAscii(content.toString())));
     }
 
-    private void sendFileListing(HTTPRequest httpRequest, Connection connection)
+    private static void sendFileListing(HTTPRequest httpRequest, Connection connection)
             throws IOException {
         if (!LibraryPrefs.AllowBrowsing.get().booleanValue()) {
             HTTPHeaderGroup headers = HTTPHeaderGroup.createDefaultResponseHeaders();
@@ -127,9 +127,9 @@ public class HttpRequestDispatcher {
             connection.disconnect();
             return;
         }
-        Servent servent = Servent.getInstance();
+        Servent servent = Servent.servent;
         String acceptHeaderStr = acceptHeader.getValue();
-        if (acceptHeaderStr.indexOf("application/x-gnutella-packets") != -1) {// return file listing via gnutella packages...
+        if (acceptHeaderStr.contains("application/x-gnutella-packets")) {// return file listing via gnutella packages...
             HTTPHeaderGroup headers = HTTPHeaderGroup.createDefaultResponseHeaders();
             headers.addHeader(new HTTPHeader(HTTPHeaderNames.CONTENT_TYPE,
                     "application/x-gnutella-packets"));
@@ -194,8 +194,8 @@ public class HttpRequestDispatcher {
                 sendCount += currentSendCount;
             }
             connection.flush();
-        } else if (acceptHeaderStr.indexOf("text/html") != -1
-                || acceptHeaderStr.indexOf("*/*") != -1) {// return file listing via html page...
+        } else if (acceptHeaderStr.contains("text/html")
+                || acceptHeaderStr.contains("*/*")) {// return file listing via html page...
             HTTPHeaderGroup headers = HTTPHeaderGroup.createDefaultResponseHeaders();
             headers.addHeader(new HTTPHeader(HTTPHeaderNames.CONTENT_TYPE,
                     "text/html; charset=iso-8859-1"));
@@ -219,7 +219,7 @@ public class HttpRequestDispatcher {
         connection.disconnect();
     }
 
-    private String createHTTPResponse(String code, HTTPHeaderGroup header) {
+    private static String createHTTPResponse(String code, HTTPHeaderGroup header) {
         StringBuffer buffer = new StringBuffer(100);
         buffer.append("HTTP/1.1 ");
         buffer.append(code);

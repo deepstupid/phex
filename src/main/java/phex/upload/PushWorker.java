@@ -54,7 +54,7 @@ public class PushWorker implements Runnable {
         Environment.getInstance().executeOnThreadPool(this,
                 "PushWorker-" + Integer.toHexString(hashCode()));
 
-        StatisticsManager statMgr = Servent.getInstance().getStatisticsService();
+        StatisticsManager statMgr = Servent.servent.getStatisticsService();
         ((SimpleStatisticProvider) statMgr.getStatisticProvider(
                 StatisticProviderConstants.PUSH_UPLOAD_ATTEMPTS_PROVIDER)).increment(1);
     }
@@ -64,7 +64,7 @@ public class PushWorker implements Runnable {
         try {
             httpRequest = connectAndGetRequest();
             if (httpRequest == null) {
-                StatisticsManager statMgr = Servent.getInstance().getStatisticsService();
+                StatisticsManager statMgr = Servent.servent.getStatisticsService();
                 ((SimpleStatisticProvider) statMgr.getStatisticProvider(
                         StatisticProviderConstants.PUSH_UPLOAD_FAILURE_PROVIDER)).increment(1);
                 return;
@@ -90,7 +90,7 @@ public class PushWorker implements Runnable {
     private void handleRequest(HTTPRequest httpRequest) {
         NLogger.debug(PushWorker.class, "Handle PUSH request: "
                 + httpRequest.buildHTTPRequestString());
-        StatisticsManager statMgr = Servent.getInstance().getStatisticsService();
+        StatisticsManager statMgr = Servent.servent.getStatisticsService();
         ((SimpleStatisticProvider) statMgr.getStatisticProvider(
                 StatisticProviderConstants.PUSH_UPLOAD_SUCESS_PROVIDER)).increment(1);
         if (httpRequest.isGnutellaRequest()) {
@@ -118,10 +118,7 @@ public class PushWorker implements Runnable {
             sendGIV(connection);
             httpRequest = HTTPProcessor.parseHTTPRequest(connection);
             return httpRequest;
-        } catch (IOException exp) {
-            NLogger.debug(PushWorker.class, exp);
-            return null;
-        } catch (HTTPMessageException exp) {
+        } catch (IOException | HTTPMessageException exp) {
             NLogger.debug(PushWorker.class, exp);
             return null;
         }
@@ -132,7 +129,7 @@ public class PushWorker implements Runnable {
      * @throws IOException
      */
     private void sendGIV(Connection connection) throws IOException {
-        Servent servent = Servent.getInstance();
+        Servent servent = Servent.servent;
         // I only give out file indexes in the int range
         ShareFile sfile = servent.getSharedFilesService().getFileByIndex(
                 (int) pushMsg.getFileIndex());
@@ -152,7 +149,7 @@ public class PushWorker implements Runnable {
         }
         buffer.append("\n\n");
         NLogger.debug(PushWorker.class, "Send GIV: "
-                + buffer.toString());
+                + buffer);
 
         connection.write(ByteBuffer.wrap(
                 StringUtils.getBytesInUsAscii(buffer.toString())));

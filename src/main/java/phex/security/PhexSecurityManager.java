@@ -21,6 +21,7 @@
  */
 package phex.security;
 
+import phex.api.Phex;
 import phex.common.*;
 import phex.common.address.AddressUtils;
 import phex.common.address.DestAddress;
@@ -368,10 +369,10 @@ public class PhexSecurityManager extends AbstractLifeCycle {
         }
     }
 
-    private DSecurityRule findSystemXJBRule(Map<String, DIpAccessRule> systemRuleMap, int ip,
-                                            byte cidr) {
+    private static DSecurityRule findSystemXJBRule(Map<String, DIpAccessRule> systemRuleMap, int ip,
+                                                   byte cidr) {
         DSecurityRule xjbRule = systemRuleMap.get(
-                AddressUtils.ip2string(ip) + "/" + cidr);
+                AddressUtils.ip2string(ip) + '/' + cidr);
         if (xjbRule == null || !xjbRule.isSystemRule()) {
             return null;
         }
@@ -387,7 +388,7 @@ public class PhexSecurityManager extends AbstractLifeCycle {
             File securityFile = Environment.getPhexConfigFile(
                     EnvironmentConstants.XML_SECURITY_FILE_NAME);
             if (securityFile.exists()) {
-                FileManager fileMgr = Phex.getFileManager();
+                FileManager fileMgr = Phex.files;
                 ManagedFile managedFile = fileMgr.getReadWriteManagedFile(securityFile);
                 dPhex = XMLBuilder.loadDPhexFromFile(managedFile);
             } else {
@@ -459,11 +460,11 @@ public class PhexSecurityManager extends AbstractLifeCycle {
                     } else {
                         if (dIpRule.hasCidr()) {
                             String keyStr = AddressUtils.ip2string(dIpRule.getIp())
-                                    + "/" + String.valueOf(dIpRule.getCidr());
+                                    + '/' + String.valueOf(dIpRule.getCidr());
                             systemRuleMap.put(keyStr, dIpRule);
                         } else {
                             StringBuffer keyBuf = new StringBuffer(AddressUtils.ip2string(dIpRule.getIp()));
-                            keyBuf.append("/");
+                            keyBuf.append('/');
                             if (dIpRule.getCompareIp() == null) {
                                 keyBuf.append("32");
                             } else {
@@ -479,13 +480,7 @@ public class PhexSecurityManager extends AbstractLifeCycle {
                 // optimize ipAccessRuleList
                 ipAccessRuleList.trimToSize();
             }
-        } catch (IOException exp) {
-            NLogger.error(PhexSecurityManager.class, exp, exp);
-            Environment.getInstance().fireDisplayUserMessage(
-                    UserMessageListener.SecuritySettingsLoadFailed,
-                    new String[]{exp.toString()});
-            return;
-        } catch (ManagedFileException exp) {
+        } catch (IOException | ManagedFileException exp) {
             NLogger.error(PhexSecurityManager.class, exp, exp);
             Environment.getInstance().fireDisplayUserMessage(
                     UserMessageListener.SecuritySettingsLoadFailed,
@@ -535,17 +530,9 @@ public class PhexSecurityManager extends AbstractLifeCycle {
 
             File securityFile = Environment.getPhexConfigFile(
                     EnvironmentConstants.XML_SECURITY_FILE_NAME);
-            ManagedFile managedFile = Phex.getFileManager().getReadWriteManagedFile(securityFile);
+            ManagedFile managedFile = Phex.files.getReadWriteManagedFile(securityFile);
             XMLBuilder.saveToFile(managedFile, dPhex);
-        } catch (IOException exp) {
-            // TODO during close this message is never displayed since application
-            // will exit too fast. A solution to delay exit process in case 
-            // SlideInWindows are open needs to be found.
-            NLogger.error(PhexSecurityManager.class, exp, exp);
-            Environment.getInstance().fireDisplayUserMessage(
-                    UserMessageListener.SecuritySettingsSaveFailed,
-                    new String[]{exp.toString()});
-        } catch (ManagedFileException exp) {
+        } catch (IOException | ManagedFileException exp) {
             // TODO during close this message is never displayed since application
             // will exit too fast. A solution to delay exit process in case 
             // SlideInWindows are open needs to be found.

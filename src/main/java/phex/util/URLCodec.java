@@ -188,7 +188,7 @@ public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder,
      * @param bytes array of bytes to convert to URL safe characters
      * @return array of bytes containing URL safe characters
      */
-    public byte[] encode(byte[] bytes) {
+    public static byte[] encode(byte[] bytes) {
         return encodeUrl(WWW_FORM_URL, bytes);
     }
 
@@ -202,7 +202,7 @@ public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder,
      * @return array of original bytes
      * @throws phex.util.DecoderException Thrown if URL decoding is unsuccessful
      */
-    public byte[] decode(byte[] bytes) throws phex.util.DecoderException {
+    public static byte[] decode(byte[] bytes) throws phex.util.DecoderException {
         return decodeUrl(bytes);
     }
 
@@ -217,7 +217,7 @@ public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder,
      * @throws UnsupportedEncodingException Thrown if charset is not
      *                                      supported
      */
-    public String encode(String pString, String charset)
+    public static String encode(String pString, String charset)
             throws UnsupportedEncodingException {
         if (pString == null) {
             return null;
@@ -259,7 +259,7 @@ public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder,
      * @throws UnsupportedEncodingException Thrown if charset is not
      *                                      supported
      */
-    public String decode(String pString, String charset)
+    public static String decode(String pString, String charset)
             throws phex.util.DecoderException, UnsupportedEncodingException {
         if (pString == null) {
             return null;

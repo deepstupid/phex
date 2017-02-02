@@ -21,7 +21,7 @@
  */
 package phex.tool;
 
-import phex.common.Phex;
+import phex.api.Phex;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -83,7 +83,7 @@ public class GWebCacheListBuilder {
         Iterator iterator = dataList.iterator();
         while (iterator.hasNext()) {
             String line = (String) iterator.next();
-            writer.write(line + "\n");
+            writer.write(line + '\n');
         }
         writer.close();
     }

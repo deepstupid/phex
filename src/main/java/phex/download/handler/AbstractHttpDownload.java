@@ -40,10 +40,6 @@ public abstract class AbstractHttpDownload implements DownloadHandler {
             }
         }
         // missing or unknown connection header do the HTTP method default.
-        if (response.getHTTPVersion().equals("HTTP/1.1")) {
-            isKeepAliveSupported = true;
-        } else {
-            isKeepAliveSupported = false;
-        }
+        isKeepAliveSupported = response.getHTTPVersion().equals("HTTP/1.1");
     }
 }

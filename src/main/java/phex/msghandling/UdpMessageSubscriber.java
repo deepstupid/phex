@@ -33,5 +33,5 @@ public interface UdpMessageSubscriber<T extends Message> {
      *
      * @throws InvalidMessageException
      */
-    public void onUdpMessage(T message, DestAddress sourceAddress) throws InvalidMessageException;
+    void onUdpMessage(T message, DestAddress sourceAddress) throws InvalidMessageException;
 }

@@ -21,7 +21,7 @@
  */
 package phex.upload.response;
 
-import phex.common.Phex;
+import phex.api.Phex;
 import phex.common.file.ManagedFileException;
 import phex.common.file.ReadOnlyManagedFile;
 import phex.common.log.NLogger;
@@ -45,7 +45,7 @@ public class ShareFileUploadResponse extends UploadResponse {
             throws ManagedFileException {
         super();
         this.shareFile = shareFile;
-        uploadFile = Phex.getFileManager().
+        uploadFile = Phex.files.
                 getReadOnlyManagedFile(shareFile.getSystemFile());
 
         startOffset = offset;
@@ -78,8 +78,7 @@ public class ShareFileUploadResponse extends UploadResponse {
             return read;
         } catch (ManagedFileException exp) {
             IOException ioExp = new IOException("ManagedFileException: "
-                    + exp.getMessage());
-            ioExp.initCause(exp);
+                    + exp.getMessage(), exp);
             throw ioExp;
         }
     }

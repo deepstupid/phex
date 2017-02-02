@@ -21,7 +21,7 @@
  */
 package phex.common.file;
 
-import phex.common.Phex;
+import phex.api.Phex;
 import phex.common.log.NLogger;
 import phex.io.buffer.ByteBuffer;
 import phex.util.FileUtils;
@@ -102,10 +102,10 @@ public class ManagedFile implements ReadOnlyManagedFile {
         try {
             // check if already open.
             if (raFile != null) {
-                Phex.getFileManager().trackFileInUse(this);
+                Phex.files.trackFileInUse(this);
                 return;
             }
-            Phex.getFileManager().trackFileOpen(this);
+            Phex.files.trackFileOpen(this);
 
             try {
                 raFile = new RandomAccessFile(fsFile, accessMode.fileMode);
@@ -133,7 +133,7 @@ public class ManagedFile implements ReadOnlyManagedFile {
                 throw new ManagedFileException("failed to close", exp);
             } finally {
                 raFile = null;
-                Phex.getFileManager().trackFileClose(this);
+                Phex.files.trackFileClose(this);
             }
         } finally {
             lock.unlock();

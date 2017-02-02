@@ -41,7 +41,7 @@ public class PhexCorePrefs extends Preferences {
 
     public static void init() {
         instance.load();
-        instance.updatePreferences();
+        PhexCorePrefs.updatePreferences();
 
         // count startup...
         StatisticPrefs.TotalStartupCounter.set(Integer.valueOf(
@@ -56,7 +56,7 @@ public class PhexCorePrefs extends Preferences {
     }
 
 
-    public void updatePreferences() {
+    public static void updatePreferences() {
         // first find out if this is the first time Phex is running...
         if (StringUtils.isEmpty(UpdatePrefs.RunningBuildNumber.get())) {
             // this seems to be the first time phex is running...

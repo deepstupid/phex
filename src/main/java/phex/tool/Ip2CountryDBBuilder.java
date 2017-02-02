@@ -81,8 +81,7 @@ public class Ip2CountryDBBuilder {
         Iterator<IpCountryRange> iterator = dataList.iterator();
         while (iterator.hasNext()) {
             IpCountryRange range = iterator.next();
-            writer.write("" + range.from + "," + range.to + ","
-                    + range.countryCode + "\n");
+            writer.write(range.from + "," + range.to + "," + range.countryCode + '\n');
         }
         writer.close();
     }
@@ -93,8 +92,8 @@ public class Ip2CountryDBBuilder {
         for (IpCountryRange range : dataList) {
             List<IpCidrPair> range2cidr = AddressUtils.range2cidr(range.from, range.to);
             for (IpCidrPair pair : range2cidr) {
-                writer.write(pair.getMinIp() + "," + pair.cidr + ","
-                        + range.countryCode + "\n");
+                writer.write(pair.getMinIp() + "," + pair.cidr + ','
+                        + range.countryCode + '\n');
             }
         }
         writer.close();
@@ -175,7 +174,7 @@ public class Ip2CountryDBBuilder {
 
         @Override
         public String toString() {
-            return String.valueOf(from) + " - " + String.valueOf(to) + " " + countryCode;
+            return String.valueOf(from) + " - " + String.valueOf(to) + ' ' + countryCode;
         }
 
         public int compareTo(IpCountryRange range) {

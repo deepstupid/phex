@@ -75,7 +75,7 @@ public class DimeParser implements Iterator {
             fos.flush();
             fos.close();
             fos = null;
-            System.out.println("Payload: <part-" + nextPart + ">");
+            System.out.println("Payload: <part-" + nextPart + '>');
         }
     }
 

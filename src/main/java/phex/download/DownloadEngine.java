@@ -161,9 +161,7 @@ public class DownloadEngine {
                 candidate.setStatus(CandidateStatus.CONNECTION_FAILED);
                 // might need to handle different cases on some try again on others
                 // remove
-                logger.error("Error at Host: "
-                        + candidate.getHostAddress()
-                        + " Vendor: " + candidate.getVendor(), exp);
+                logger.error("Error at Host: {} Vendor: {}", candidate.getHostAddress(), candidate.getVendor(), exp);
             } catch (IOException exp) {
                 failDownload();
                 candidate.addToCandidateLog(exp.toString());
@@ -268,12 +266,7 @@ public class DownloadEngine {
             downloadFile.markCandidateIgnored(downloadCandidate,
                     "CandidateStatusReason_HTTPError");
             downloadFile.addBadAltLoc(downloadCandidate);
-        } catch (SocketTimeoutException exp) {
-            failDownload();
-            downloadCandidate.addToCandidateLog(exp.toString());
-            downloadCandidate.setStatus(CandidateStatus.CONNECTION_FAILED);
-            logger.debug(exp.toString(), exp);
-        } catch (SocketException exp) {
+        } catch (SocketTimeoutException | SocketException exp) {
             failDownload();
             downloadCandidate.addToCandidateLog(exp.toString());
             downloadCandidate.setStatus(CandidateStatus.CONNECTION_FAILED);

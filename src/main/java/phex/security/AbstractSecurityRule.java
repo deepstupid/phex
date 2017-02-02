@@ -281,8 +281,7 @@ public abstract class AbstractSecurityRule implements SecurityRule {
         if (isDenyingRule != other.isDenyingRule) return false;
         if (isDisabled != other.isDisabled) return false;
         if (isStrongFilter != other.isStrongFilter) return false;
-        if (isSystemRule != other.isSystemRule) return false;
-        return true;
+        return isSystemRule == other.isSystemRule;
     }
 
     public abstract DSecurityRule createDSecurityRule();

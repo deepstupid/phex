@@ -101,7 +101,7 @@ public class UploadEngine {
                     if (httpRequest.getGnutellaRequest().isTigerTreeRequest()) {
                         uploadHandler = new ThexUploadHandler(sharedFilesService);
                     } else {
-                        uploadHandler = new FileUploadHandler(sharedFilesService, Servent.getInstance());
+                        uploadHandler = new FileUploadHandler(sharedFilesService, Servent.servent);
                     }
 
                     UploadResponse response = uploadHandler.determineUploadResponse(
@@ -200,7 +200,7 @@ public class UploadEngine {
             response.countUpload();
 
             // Increment the completed uploads count
-            StatisticsManager statMgr = Servent.getInstance().getStatisticsService();
+            StatisticsManager statMgr = Servent.servent.getStatisticsService();
             SimpleStatisticProvider provider = (SimpleStatisticProvider) statMgr
                     .getStatisticProvider(StatisticProviderConstants.SESSION_UPLOAD_COUNT_PROVIDER);
             provider.increment(1);

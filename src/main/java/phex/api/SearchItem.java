@@ -38,34 +38,35 @@ public class SearchItem {
 
     public static final int DEFAULT_MAXIMUM_RESULTS = 200;
 
-    private Search _search = null;
+    private final Search _search;
 
-    private long _id = -1;
+    public final long id;
 
     private String _searchString = null;
 
-    private List<SearchResultItem> _results = null;
+    private final List<SearchResultItem> _results;
 
     private int _maximuResults = DEFAULT_MAXIMUM_RESULTS;
 
-    public SearchItem(Search search) {
+    public SearchItem(Search search, long id) {
         _search = search;
+        this.id = id;
 
         _results = new ArrayList<SearchResultItem>();
 
         _maximuResults = DEFAULT_MAXIMUM_RESULTS;
     }
 
-    public SearchItem(Search search, int maximuResults) {
+    public SearchItem(Search search, int maximuResults, long id) {
         _search = search;
+        this.id = id;
 
         _results = new ArrayList<SearchResultItem>();
 
         _maximuResults = maximuResults;
     }
 
-    public SearchItem() {
-    }
+
 
     public short getStatus() {
         if (_search == null) {
@@ -81,27 +82,15 @@ public class SearchItem {
         return _search;
     }
 
-    public void setSearch(Search search) {
-        _search = search;
-    }
 
     public List<SearchResultItem> getResults() {
         return _results;
     }
 
-    public void setResults(List<SearchResultItem> results) {
-        synchronized (_results) {
-            _results = results;
-        }
-    }
 
     public SearchResultItem addResult(RemoteFile remoteFile) {
         if (remoteFile == null) {
             return null;
-        }
-
-        if (_results == null) {
-            _results = new ArrayList<SearchResultItem>();
         }
 
         synchronized (_results) {
@@ -130,7 +119,8 @@ public class SearchItem {
     }
 
     public List<SearchResultItem> addResults(RemoteFile[] remoteFiles) {
-        List<SearchResultItem> resultList = new ArrayList<SearchResultItem>();
+
+        List<SearchResultItem> resultList = new ArrayList<SearchResultItem>(remoteFiles.length);
         if (remoteFiles == null) {
             return resultList;
         }
@@ -147,11 +137,7 @@ public class SearchItem {
     }
 
     public void removeResult(SearchResultItem searchResultItem) {
-        if (searchResultItem == null) {
-            return;
-        }
-
-        if (_results == null) {
+        if (searchResultItem == null || _results == null) {
             return;
         }
 
@@ -160,14 +146,6 @@ public class SearchItem {
 
             _results.remove(searchResultItem);
         }
-    }
-
-    public long getId() {
-        return _id;
-    }
-
-    public void setId(long id) {
-        _id = id;
     }
 
     public String getSearchString() {

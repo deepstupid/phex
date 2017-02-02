@@ -227,39 +227,44 @@ public class HTTPProcessor {
                 break;
             }
             match = header.getName().toLowerCase();
-            if (match.equals("content-length")) {
-                int n = -1;
-                try {
-                    n = Integer.parseInt(header.getValue());
-                } catch (NumberFormatException e) {
-                    throw new IOException("Error parsing content-length: " +
-                            header.getName() + " - " + header.getValue());
+            switch (match) {
+                case "content-length": {
+                    int n = -1;
+                    try {
+                        n = Integer.parseInt(header.getValue());
+                    } catch (NumberFormatException e) {
+                        throw new IOException("Error parsing content-length: " +
+                                header.getName() + " - " + header.getValue());
+                    }
+                    httpRequest.setContentLength(n, false);
+                    httpRequest.addHeader(header);
+                    break;
                 }
-                httpRequest.setContentLength(n, false);
-                httpRequest.addHeader(header);
-            }
             /*else if ( match.equals( "content-type" ) )
             {
                 httpRequest.setContentType(value);
                 httpRequest.addHeaderField(name, value);
             }*/
-            else if (match.equals("host")) {
-                int n = header.getValue().indexOf(':');
-                if (n < 0) {
-                    httpRequest.setHost(header.getValue(), -1, false);
-                } else {
-                    int port = -1;
-                    try {
-                        port = Integer.parseInt(header.getValue().substring(n + 1).trim());
-                    } catch (NumberFormatException e) {
-                        throw new IOException("Error parsing host: " +
-                                header.getName() + " - " + header.getValue());
+                case "host": {
+                    int n = header.getValue().indexOf(':');
+                    if (n < 0) {
+                        httpRequest.setHost(header.getValue(), -1, false);
+                    } else {
+                        int port = -1;
+                        try {
+                            port = Integer.parseInt(header.getValue().substring(n + 1).trim());
+                        } catch (NumberFormatException e) {
+                            throw new IOException("Error parsing host: " +
+                                    header.getName() + " - " + header.getValue());
+                        }
+                        httpRequest.setHost(header.getValue().substring(0, n).trim(), port, false);
                     }
-                    httpRequest.setHost(header.getValue().substring(0, n).trim(), port, false);
+                    httpRequest.addHeader(header);
+                    break;
                 }
-                httpRequest.addHeader(header);
-            } else {
-                httpRequest.addHeader(header);
+                default:
+                    httpRequest.addHeader(header);
+                    break;
             }
         }
     }

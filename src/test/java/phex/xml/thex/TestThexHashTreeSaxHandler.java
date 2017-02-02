@@ -34,12 +34,7 @@ public class TestThexHashTreeSaxHandler extends TestCase
             saxParser.parse( new InputSource( inStream ),
                 new ThexHashTreeSAXHandler(hashTree) );
         }
-        catch ( ParserConfigurationException exp )
-        {
-            NLogger.error( TestThexHashTreeSaxHandler.class, exp, exp );
-            throw new IOException( "Parsing Thex HashTree failed." );
-        }
-        catch ( SAXException exp )
+        catch ( ParserConfigurationException | SAXException exp )
         {
             NLogger.error( TestThexHashTreeSaxHandler.class, exp, exp );
             throw new IOException( "Parsing Thex HashTree failed." );

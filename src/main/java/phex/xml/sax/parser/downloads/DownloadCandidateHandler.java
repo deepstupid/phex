@@ -70,44 +70,58 @@ public class DownloadCandidateHandler extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
-        if (qName.equals("guid")) {
-            downloadCandidate.setGuid(text.toString());
-        } else if (qName.equals("fileindex")) {
-            try {
-                downloadCandidate.setFileIndex(Long.parseLong(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(DownloadCandidateHandler.class, exp, exp);
-            }
-        } else if (qName.equals("last-connect")) {
-            try {
-                downloadCandidate.setLastConnectionTime(Long.parseLong(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(DownloadCandidateHandler.class, exp, exp);
-            }
-        } else if (qName.equals("filename")) {
-            downloadCandidate.setFileName(text.toString());
-        } else if (qName.equals("download-uri")) {
-            downloadCandidate.setDownloadUri(text.toString());
-        } else if (qName.equals("resource-urn")) {
-            downloadCandidate.setResourceUrn(text.toString());
-        } else if (qName.equals("remotehost")) {
-            downloadCandidate.setRemoteHost(text.toString());
-        } else if (qName.equals("connectionFailedRepetition")) {
-            try {
-                downloadCandidate.setConnectionFailedRepetition(Integer.parseInt(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(DownloadCandidateHandler.class, exp, exp);
-            }
-        } else if (qName.equals("vendor")) {
-            downloadCandidate.setVendor(text.toString());
-        } else if (qName.equals("isPushNeeded")) {
-            downloadCandidate.setPushNeeded(Boolean.getBoolean(text.toString()));
-        } else if (qName.equals("isThexSupported")) {
-            downloadCandidate.setThexSupported(Boolean.getBoolean(text.toString()));
-        } else if (qName.equals("isChatSupported")) {
-            downloadCandidate.setChatSupported(Boolean.getBoolean(text.toString()));
-        } else if (qName.equals(DDownloadCandidate.ELEMENT_NAME)) {
-            parser.getXMLReader().setContentHandler(parent);
+        switch (qName) {
+            case "guid":
+                downloadCandidate.setGuid(text.toString());
+                break;
+            case "fileindex":
+                try {
+                    downloadCandidate.setFileIndex(Long.parseLong(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(DownloadCandidateHandler.class, exp, exp);
+                }
+                break;
+            case "last-connect":
+                try {
+                    downloadCandidate.setLastConnectionTime(Long.parseLong(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(DownloadCandidateHandler.class, exp, exp);
+                }
+                break;
+            case "filename":
+                downloadCandidate.setFileName(text.toString());
+                break;
+            case "download-uri":
+                downloadCandidate.setDownloadUri(text.toString());
+                break;
+            case "resource-urn":
+                downloadCandidate.setResourceUrn(text.toString());
+                break;
+            case "remotehost":
+                downloadCandidate.setRemoteHost(text.toString());
+                break;
+            case "connectionFailedRepetition":
+                try {
+                    downloadCandidate.setConnectionFailedRepetition(Integer.parseInt(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(DownloadCandidateHandler.class, exp, exp);
+                }
+                break;
+            case "vendor":
+                downloadCandidate.setVendor(text.toString());
+                break;
+            case "isPushNeeded":
+                downloadCandidate.setPushNeeded(Boolean.getBoolean(text.toString()));
+                break;
+            case "isThexSupported":
+                downloadCandidate.setThexSupported(Boolean.getBoolean(text.toString()));
+                break;
+            case "isChatSupported":
+                downloadCandidate.setChatSupported(Boolean.getBoolean(text.toString()));
+                break;
+            case DDownloadCandidate.ELEMENT_NAME:
+                parser.getXMLReader().setContentHandler(parent);
+                break;
         }
     }
 

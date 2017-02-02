@@ -85,6 +85,6 @@ public abstract class ConcatCondition implements Condition, Cloneable {
 
     @Override
     public String toString() {
-        return super.toString() + "[List: " + filterList.toString() + "]";
+        return super.toString() + "[List: " + filterList.toString() + ']';
     }
 }

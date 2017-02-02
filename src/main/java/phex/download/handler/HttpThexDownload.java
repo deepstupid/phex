@@ -109,8 +109,7 @@ public class HttpThexDownload extends AbstractHttpDownload {
 
         HTTPResponse response = HTTPProcessor.parseHTTPResponse(connection);
         if (logger.isDebugEnabled()) {
-            logger.debug("HTTP Response from: " + candidate.getHostAddress() + "\n"
-                    + response.buildHTTPResponseString());
+            logger.debug("HTTP Response from: {}\n{}", candidate.getHostAddress(), response.buildHTTPResponseString());
         }
         if (DownloadPrefs.CandidateLogBufferSize.get().intValue() > 0) {
             candidate.addToCandidateLog("HTTP Response:\n"
@@ -220,15 +219,13 @@ public class HttpThexDownload extends AbstractHttpDownload {
                 xmlTree = ThexHashTreeCodec.parseThexHashTreeXML(
                         new ByteArrayInputStream(xmlData));
             } catch (MalformedURLException exp) {// catch this exp for debugging purpose.
-                logger.error("Failed to parse: '" +
-                        new String(xmlData, "UTF-8") + "' from: " + candidate.getVendor());
-                candidate.addToCandidateLog("Failed to parse: '" + new String(xmlData, "UTF-8") + "'");
+                logger.error("Failed to parse: '{}' from: {}", new String(xmlData, "UTF-8"), candidate.getVendor());
+                candidate.addToCandidateLog("Failed to parse: '" + new String(xmlData, "UTF-8") + '\'');
                 logger.error(exp.toString());
                 throw new IOException("Parsing Thex HashTree failed.");
             } catch (IOException exp) {
-                logger.error("Failed to parse: '" +
-                        new String(xmlData, "UTF-8") + "' from: " + candidate.getVendor());
-                candidate.addToCandidateLog("Failed to parse: '" + new String(xmlData, "UTF-8") + "'");
+                logger.error("Failed to parse: '{}' from: {}", new String(xmlData, "UTF-8"), candidate.getVendor());
+                candidate.addToCandidateLog("Failed to parse: '" + new String(xmlData, "UTF-8") + '\'');
                 throw exp;
             }
 
@@ -239,7 +236,7 @@ public class HttpThexDownload extends AbstractHttpDownload {
                 throw new IOException("Invalid file size: " + xmlTree.getFileSize());
             }
             if (fileSize != downloadFile.getTotalDataSize()) {
-                throw new IOException("Invalid file size: " + fileSize + "/"
+                throw new IOException("Invalid file size: " + fileSize + '/'
                         + downloadFile.getTotalDataSize());
             }
 

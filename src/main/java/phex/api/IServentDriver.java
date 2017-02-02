@@ -29,21 +29,21 @@ public interface IServentDriver {
      *
      * @return true on success, or false otherwise
      */
-    public boolean startServent();
+    boolean startServent();
 
     /**
      * Shutdown the local servent.
      *
      * @return true on success, or false otherwise
      */
-    public boolean stopServent();
+    boolean stopServent();
 
     /**
      * Get the local servent status.
      *
      * @return the servent status
      */
-    public OnlineStatus getServentStatus();
+    OnlineStatus getServentStatus();
 
     /**
      * Start a search.
@@ -51,7 +51,7 @@ public interface IServentDriver {
      * @param searchString the search string
      * @return a search handle object on success, or null otherwise
      */
-    public ISearchHandle startSearch(String searchString);
+    ISearchHandle startSearch(String searchString);
 
     /**
      * Retrieve all existing searches.
@@ -59,7 +59,7 @@ public interface IServentDriver {
      * @return an array containing the search handles of all existing searches,
      * or null in case of error
      */
-    public ISearchHandle[] getAllSearches();
+    ISearchHandle[] getAllSearches();
 
     /**
      * Publish a local file, i.e. make it available for others to retrieve.
@@ -67,5 +67,5 @@ public interface IServentDriver {
      * @param localFilePath path to the local file
      * @return true if the file could be published correctly, or false otherwise
      */
-    public boolean publishFile(String localFilePath);
+    boolean publishFile(String localFilePath);
 }

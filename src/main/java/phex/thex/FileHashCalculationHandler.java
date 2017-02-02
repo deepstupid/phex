@@ -9,7 +9,7 @@ public interface FileHashCalculationHandler {
      * @param shareFile the share file to calculate the
      *                  thex hash for.
      */
-    public void queueThexCalculation(ShareFile shareFile);
+    void queueThexCalculation(ShareFile shareFile);
 
     /**
      * Queues a ShareFile for calculating its URN.
@@ -17,5 +17,5 @@ public interface FileHashCalculationHandler {
      * @param shareFile the share file to calculate the
      *                  urn hash for.
      */
-    public void queueUrnCalculation(ShareFile shareFile);
+    void queueUrnCalculation(ShareFile shareFile);
 }

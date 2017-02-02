@@ -61,10 +61,7 @@ public class RegexpFilenameCondition implements Condition {
     public boolean isMatched(Search search, RemoteFile remoteFile) {
         String filename = remoteFile.getFilename();
         Matcher m = filterPattern.matcher(filename);
-        if (m.matches()) {
-            return true;
-        }
-        return false;
+        return m.matches();
     }
 
     public boolean isComplete() {// TODO implement together with list handling

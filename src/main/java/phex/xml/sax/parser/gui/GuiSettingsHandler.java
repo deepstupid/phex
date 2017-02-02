@@ -90,58 +90,73 @@ public class GuiSettingsHandler extends DefaultHandler {
     @Override
     public void endElement(String uri, String localName, String qName)
             throws SAXException {
-        if (qName.equals("look-and-feel-class")) {
-            dGui.setLookAndFeelClass(text.toString());
-        } else if (qName.equals("icon-pack")) {
-            dGui.setIconPackName(text.toString());
-        } else if (qName.equals("is-toolbar-visible")) {
-            dGui.setToolbarVisible(Boolean.valueOf(text.toString())
-                    .booleanValue());
-        } else if (qName.equals("is-statusbar-visible")) {
-            dGui.setStatusbarVisible(Boolean.valueOf(text.toString())
-                    .booleanValue());
-        } else if (qName.equals("is-searchbar-visible")) {
-            dGui.setSearchBarVisible(Boolean.valueOf(text.toString())
-                    .booleanValue());
-        } else if (qName.equals("is-searchlist-visible")) {
-            dGui.setSearchListVisible(Boolean.valueOf(text.toString())
-                    .booleanValue());
-        } else if (qName.equals("is-searchfilterpanel-visible")) {
-            dGui.setSearchFilterPanelVisible(Boolean.valueOf(text.toString())
-                    .booleanValue());
-        } else if (qName.equals("is-log-bandwidth-slider-used")) {
-            dGui.setLogBandwidthSliderUsed(Boolean.valueOf(text.toString())
-                    .booleanValue());
-        } else if (qName.equals("show-respect-copyright-notice")) {
-            dGui.setShowRespectCopyrightNotice(Boolean.valueOf(
-                    text.toString()).booleanValue());
-        } else if (qName.equals("window-posX")) {
-            try {
-                dGui.setWindowPosX(Integer.parseInt(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(SharedFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals("window-posY")) {
-            try {
-                dGui.setWindowPosY(Integer.parseInt(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(SharedFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals("window-width")) {
-            try {
+        switch (qName) {
+            case "look-and-feel-class":
+                dGui.setLookAndFeelClass(text.toString());
+                break;
+            case "icon-pack":
+                dGui.setIconPackName(text.toString());
+                break;
+            case "is-toolbar-visible":
+                dGui.setToolbarVisible(Boolean.valueOf(text.toString())
+                        .booleanValue());
+                break;
+            case "is-statusbar-visible":
+                dGui.setStatusbarVisible(Boolean.valueOf(text.toString())
+                        .booleanValue());
+                break;
+            case "is-searchbar-visible":
+                dGui.setSearchBarVisible(Boolean.valueOf(text.toString())
+                        .booleanValue());
+                break;
+            case "is-searchlist-visible":
+                dGui.setSearchListVisible(Boolean.valueOf(text.toString())
+                        .booleanValue());
+                break;
+            case "is-searchfilterpanel-visible":
+                dGui.setSearchFilterPanelVisible(Boolean.valueOf(text.toString())
+                        .booleanValue());
+                break;
+            case "is-log-bandwidth-slider-used":
+                dGui.setLogBandwidthSliderUsed(Boolean.valueOf(text.toString())
+                        .booleanValue());
+                break;
+            case "show-respect-copyright-notice":
+                dGui.setShowRespectCopyrightNotice(Boolean.valueOf(
+                        text.toString()).booleanValue());
+                break;
+            case "window-posX":
+                try {
+                    dGui.setWindowPosX(Integer.parseInt(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(SharedFileHandler.class, exp, exp);
+                }
+                break;
+            case "window-posY":
+                try {
+                    dGui.setWindowPosY(Integer.parseInt(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(SharedFileHandler.class, exp, exp);
+                }
+                break;
+            case "window-width":
+                try {
 
-                dGui.setWindowWidth(Integer.parseInt(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(SharedFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals("window-height")) {
-            try {
-                dGui.setWindowHeight(Integer.parseInt(text.toString()));
-            } catch (NumberFormatException exp) {
-                NLogger.error(SharedFileHandler.class, exp, exp);
-            }
-        } else if (qName.equals(THIS_TAG_NAME)) {
-            parser.getXMLReader().setContentHandler(parent);
+                    dGui.setWindowWidth(Integer.parseInt(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(SharedFileHandler.class, exp, exp);
+                }
+                break;
+            case "window-height":
+                try {
+                    dGui.setWindowHeight(Integer.parseInt(text.toString()));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(SharedFileHandler.class, exp, exp);
+                }
+                break;
+            case THIS_TAG_NAME:
+                parser.getXMLReader().setContentHandler(parent);
+                break;
         }
     }
 

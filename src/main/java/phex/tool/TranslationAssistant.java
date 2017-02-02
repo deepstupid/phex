@@ -46,7 +46,7 @@ public class TranslationAssistant {
         System.out.println("---Time: " + (end - start));
     }
 
-    private void findMissingKeys() {
+    private static void findMissingKeys() {
         List fileList = getAllPossibleLangFiles();
         InputStream stream = Localizer.class.getResourceAsStream("/phex/resources/Lang.properties");
         // make sure it is buffered
@@ -93,7 +93,7 @@ public class TranslationAssistant {
 
     }
 
-    private void findUnusedKeys() {
+    private static void findUnusedKeys() {
         List fileList = getAllPossibleLangFiles();
 
         Iterator iterator = fileList.iterator();
@@ -126,13 +126,9 @@ public class TranslationAssistant {
      * @param keys
      * @throws IOException
      */
-    private void findUnusedKeysRegEx(Set keys, File source) throws IOException {
+    private static void findUnusedKeysRegEx(Set keys, File source) throws IOException {
         if (source.isDirectory()) {
-            File[] childs = source.listFiles(new FileFilter() {
-                public boolean accept(File file) {
-                    return file.isDirectory() || file.getName().endsWith("java");
-                }
-            });
+            File[] childs = source.listFiles(file -> file.isDirectory() || file.getName().endsWith("java"));
             for (int i = 0; i < childs.length; i++) {
                 findUnusedKeysRegEx(keys, childs[i]);
             }
@@ -161,14 +157,10 @@ public class TranslationAssistant {
      * @param keys
      * @throws IOException
      */
-    private void findUnusedKeys(Set keys, File source) throws IOException {
+    private static void findUnusedKeys(Set keys, File source) throws IOException {
         if (source.isDirectory()) {
             //System.out.println( "looking in (" + keys.size() +"): " + source );
-            File[] childs = source.listFiles(new FileFilter() {
-                public boolean accept(File file) {
-                    return file.isDirectory() || file.getName().endsWith("java");
-                }
-            });
+            File[] childs = source.listFiles(file -> file.isDirectory() || file.getName().endsWith("java"));
             for (int i = 0; i < childs.length; i++) {
                 findUnusedKeys(keys, childs[i]);
             }
@@ -181,7 +173,7 @@ public class TranslationAssistant {
             String fileString = new String(byteBuf.array(), "US-ASCII");
             String[] keyArr = (String[]) keys.toArray(new String[keys.size()]);
             for (int i = 0; i < keyArr.length; i++) {
-                if (fileString.indexOf(keyArr[i]) != -1) {
+                if (fileString.contains(keyArr[i])) {
                     keys.remove(keyArr[i]);
                 }
             }
@@ -191,7 +183,7 @@ public class TranslationAssistant {
     /**
      * @return
      */
-    private List getAllPossibleLangFiles() {
+    private static List getAllPossibleLangFiles() {
         List<Locale> availableLocales = Localizer.getAvailableLocales();
         List<String> fileList = new ArrayList<String>();
         fileList.add("/phex/resources/Lang.properties");
@@ -202,14 +194,14 @@ public class TranslationAssistant {
             if (language.length() > 0) {
                 buffer.append('_');
                 buffer.append(language);
-                fileList.add("/phex/resources/" + buffer.toString() + ".properties");
-                fileList.add("/" + buffer.toString() + ".properties");
+                fileList.add("/phex/resources/" + buffer + ".properties");
+                fileList.add("/" + buffer + ".properties");
                 String country = locale.getCountry();
                 if (country.length() > 0) {
                     buffer.append('_');
                     buffer.append(country);
-                    fileList.add("/phex/resources/" + buffer.toString() + ".properties");
-                    fileList.add("/" + buffer.toString() + ".properties");
+                    fileList.add("/phex/resources/" + buffer + ".properties");
+                    fileList.add("/" + buffer + ".properties");
                 }
             }
         }

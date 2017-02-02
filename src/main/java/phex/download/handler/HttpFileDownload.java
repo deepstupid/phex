@@ -146,7 +146,7 @@ public class HttpFileDownload extends AbstractHttpDownload {
                                 !expectedRootHash.equals(contentURN.getTigerTreeRootNss())) {
                             throw new IOException(
                                     "Required TTR and content URN TTR do not match:" +
-                                            expectedRootHash + " " + contentURN.getTigerTreeRootNss());
+                                            expectedRootHash + ' ' + contentURN.getTigerTreeRootNss());
                         }
                     }
                     if (!downloadFileURN.equals(contentURN)) {
@@ -164,7 +164,7 @@ public class HttpFileDownload extends AbstractHttpDownload {
             return;
         }
         String value = header.getValue();
-        int idx = value.indexOf(";");
+        int idx = value.indexOf(';');
         if (idx < 0) {
             return;
         }
@@ -323,10 +323,10 @@ public class HttpFileDownload extends AbstractHttpDownload {
         long segmentEndOffset = segment.getEnd();
         if (segmentEndOffset == -1) {// create header with open end
             request.addHeader(new HTTPHeader(HTTPHeaderNames.RANGE,
-                    "bytes=" + downloadOffset + "-"));
+                    "bytes=" + downloadOffset + '-'));
         } else {
             request.addHeader(new HTTPHeader(HTTPHeaderNames.RANGE,
-                    "bytes=" + downloadOffset + "-" + segmentEndOffset));
+                    "bytes=" + downloadOffset + '-' + segmentEndOffset));
         }
         request.addHeader(new HTTPHeader(GnutellaHeaderNames.X_QUEUE,
                 "0.1"));
@@ -361,8 +361,7 @@ public class HttpFileDownload extends AbstractHttpDownload {
 
         HTTPResponse response = HTTPProcessor.parseHTTPResponse(connection);
         if (logger.isDebugEnabled()) {
-            logger.debug("HTTP Response from: " + candidate.getHostAddress() + "\n"
-                    + response.buildHTTPResponseString());
+            logger.debug("HTTP Response from: {}\n{}", candidate.getHostAddress(), response.buildHTTPResponseString());
         }
         if (DownloadPrefs.CandidateLogBufferSize.get().intValue() > 0) {
             candidate.addToCandidateLog("HTTP Response:\n"
@@ -614,21 +613,11 @@ public class HttpFileDownload extends AbstractHttpDownload {
                 synchronized (segment) {
                     long tmpCheckLength = lengthDownloaded + len;
                     if (tmpCheckLength < segment.getTransferredDataSize()) {
-                        logger.error("TransferredDataSize would be going down! " +
-                                " ll " + downloadLengthLeft + " l " + len + " ld "
-                                + lengthDownloaded + " gtds "
-                                + segment.getTransferredDataSize()
-                                + " seg: " + segment
-                                + " originally: " + snapshotOfSegment);
+                        logger.error("TransferredDataSize would be going down!  ll {} l {} ld {} gtds {} seg: {} originally: {}", downloadLengthLeft, len, lengthDownloaded, segment.getTransferredDataSize(), segment, snapshotOfSegment);
                         throw new IOException("TransferredDataSize would be going down!");
                     } else if (segment.getTransferDataSize() > -1
                             && tmpCheckLength > segment.getTransferDataSize()) {
-                        logger.error("TransferredDataSize would be larger then segment! " +
-                                " ll " + downloadLengthLeft + " l " + len + " ld "
-                                + lengthDownloaded + " gtds "
-                                + segment.getTransferredDataSize()
-                                + " seg: " + segment
-                                + " originally: " + snapshotOfSegment);
+                        logger.error("TransferredDataSize would be larger then segment!  ll {} l {} ld {} gtds {} seg: {} originally: {}", downloadLengthLeft, len, lengthDownloaded, segment.getTransferredDataSize(), segment, snapshotOfSegment);
                         throw new IOException("TransferredDataSize would be larger then segment!");
                     }
 
@@ -743,7 +732,7 @@ public class HttpFileDownload extends AbstractHttpDownload {
      * @return the content range start offset.
      * @throws WrongHTTPHeaderException if the content range line has wrong format.
      */
-    private ContentRange parseContentRange(String contentRangeLine)
+    private static ContentRange parseContentRange(String contentRangeLine)
             throws WrongHTTPHeaderException {
         try {
             ContentRange range = new ContentRange();

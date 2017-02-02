@@ -22,21 +22,21 @@
 package phex.connection;
 
 public interface ConnectionConstants {
-    public static final String PROTOCOL_06 = "0.6";
-    public static final String GNUTELLA_06 = "GNUTELLA/0.6";
-    public static final String GNUTELLA_06_503 = "GNUTELLA/0.6 503";
-    public static final String GNUTELLA_OK_06 = "GNUTELLA/0.6 200 OK";
+    String PROTOCOL_06 = "0.6";
+    String GNUTELLA_06 = "GNUTELLA/0.6";
+    String GNUTELLA_06_503 = "GNUTELLA/0.6 503";
+    String GNUTELLA_OK_06 = "GNUTELLA/0.6 200 OK";
 
-    public static final String GNUTELLA_CONNECT = "GNUTELLA CONNECT";
-    public static final String GNUTELLA_PHEX_CONNECT = "GNUTELLA PCONNECT";
+    String GNUTELLA_CONNECT = "GNUTELLA CONNECT";
+    String GNUTELLA_PHEX_CONNECT = "GNUTELLA PCONNECT";
 
-    public static final int STATUS_CODE_OK = 200;
-    public static final int STATUS_CODE_REJECTED = 503;
+    int STATUS_CODE_OK = 200;
+    int STATUS_CODE_REJECTED = 503;
 
-    public static final String STATUS_MESSAGE_OK = "OK";
-    public static final String STATUS_MESSAGE_BUSY = "I am busy.";
-    public static final String STATUS_MESSAGE_SHIELDED_LEAF =
+    String STATUS_MESSAGE_OK = "OK";
+    String STATUS_MESSAGE_BUSY = "I am busy.";
+    String STATUS_MESSAGE_SHIELDED_LEAF =
             "I am a shielded leaf node";
-    public static final String STATUS_MESSAGE_ACCEPT_ONLY_UP =
+    String STATUS_MESSAGE_ACCEPT_ONLY_UP =
             "I accept only Ultrapeers";
 }

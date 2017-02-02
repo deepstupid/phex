@@ -20,7 +20,7 @@
  *  --- CVS Information ---
  *  $Id: UdpGuidRoutingTable.java 3807 2007-05-19 17:06:46Z gregork $
  */
-package phex.udp;
+package phex.net;
 
 import phex.common.address.DestAddress;
 import phex.msg.GUID;

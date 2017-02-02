@@ -264,8 +264,7 @@ public class MessageService extends AbstractLifeCycle {
         messageRouting.checkAndAddToPingRoutingTable(pingMsg.getHeader().getMsgID(),
                 Host.LOCAL_HOST);
         if (logger.isDebugEnabled()) {
-            logger.debug("Queueing Ping: " + pingMsg.toString() + " - "
-                    + pingMsg.getHeader().toString() + " - Host: " + host.toString());
+            logger.debug("Queueing Ping: {} - {} - Host: {}", pingMsg.toString(), pingMsg.getHeader().toString(), host.toString());
         }
         host.queueMessageToSend(pingMsg);
     }
@@ -290,7 +289,7 @@ public class MessageService extends AbstractLifeCycle {
      * @param fromHost the host the ping came from.
      * @param hosts    the hosts to forward to.
      */
-    private void forwardPing(PingMsg msg, Host fromHost, Host[] hosts) {
+    private static void forwardPing(PingMsg msg, Host fromHost, Host[] hosts) {
         for (int i = 0; i < hosts.length; i++) {
             if (hosts[i] == fromHost) {
                 continue;

@@ -167,7 +167,7 @@ public class PushRequestSleeper {
                 int responseCode = httpClient.executeMethod(method);
 
                 NLogger.debug(PushRequestSleeper.class, "PUSH via push proxy response code: "
-                        + responseCode + " (" + urlStr + ")");
+                        + responseCode + " (" + urlStr + ')');
 
                 // if 202
                 if (responseCode == HttpURLConnection.HTTP_ACCEPTED) {

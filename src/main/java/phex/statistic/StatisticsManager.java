@@ -61,7 +61,7 @@ public class StatisticsManager extends AbstractLifeCycle implements StatisticPro
      */
     @Override
     public void doStart() {
-        Servent servent = Servent.getInstance();
+        Servent servent = Servent.servent;
         BandwidthManager manager = servent.getBandwidthService();
 
         registerStatisticProvider(TOTAL_BANDWIDTH_PROVIDER,

@@ -80,7 +80,7 @@ public class IOUtilTest extends TestCase
         assertTrue( Arrays.equals( decompressed, randomData ) );
     }
     
-    private byte[] setUpRandomData()
+    private static byte[] setUpRandomData()
     {
         byte[] randomData = new byte[ 100000 ];
         Random rand=new Random();

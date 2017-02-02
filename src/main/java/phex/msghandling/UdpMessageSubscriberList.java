@@ -53,7 +53,8 @@ public class UdpMessageSubscriberList<E extends Message> implements UdpMessageSu
         subscriberList.add(subscriber);
     }
 
-    public void addSubscribers(UdpMessageSubscriber<E>... subscriberArr) {
+    @SafeVarargs
+    public final void addSubscribers(UdpMessageSubscriber<E>... subscriberArr) {
         subscriberList.addAll(Arrays.asList(subscriberArr));
     }
 

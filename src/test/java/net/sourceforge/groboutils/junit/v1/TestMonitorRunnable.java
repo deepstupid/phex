@@ -15,13 +15,13 @@ public abstract class TestMonitorRunnable extends TestRunnable {
     public void runTest() throws Throwable {
         while(!this.isDone() && !Thread.interrupted()) {
             this.runMonitor();
-            this.yieldProcessing();
+            TestMonitorRunnable.yieldProcessing();
         }
 
         this.runMonitor();
     }
 
-    protected void yieldProcessing() throws InterruptedException {
+    protected static void yieldProcessing() throws InterruptedException {
         Thread.yield();
     }
 }

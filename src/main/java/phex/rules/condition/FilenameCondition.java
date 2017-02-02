@@ -95,7 +95,7 @@ public class FilenameCondition implements Condition {
         Iterator<String> iterator = terms.iterator();
         while (iterator.hasNext()) {
             String term = iterator.next();
-            if (filename.indexOf(term) != -1) {
+            if (filename.contains(term)) {
                 return true;
             }
         }

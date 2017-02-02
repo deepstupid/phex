@@ -19,9 +19,9 @@ public class AddressCounterTest extends TestCase
         TestRunnable[] runners = new TestRunnable[i1];
         for (int i = 0; i< i1; i++ )
         {
-            runners[i] = new Worker( ac );
+            runners[i] = new Worker(ac);
         }
-        TestRunnable[] monitors = { new Monitor(ac) };
+        TestRunnable[] monitors = {new Monitor(ac)};
         MultiThreadedTestRunner tr = new MultiThreadedTestRunner(
             runners, monitors );
         tr.runTestRunnables();
@@ -34,15 +34,15 @@ public class AddressCounterTest extends TestCase
         TestRunnable[] runners = new TestRunnable[i1];
         for (int i = 0; i< i1; i++ )
         {
-            runners[i] = new Worker( ac );
+            runners[i] = new Worker(ac);
         }
-        TestRunnable[] monitors = { new Monitor(ac) };
+        TestRunnable[] monitors = {new Monitor(ac)};
         MultiThreadedTestRunner tr = new MultiThreadedTestRunner(
             runners, monitors );
         tr.runTestRunnables();
     }
     
-    private class Worker extends TestRunnable
+    private static class Worker extends TestRunnable
     {
         private final AddressCounter ac;
         
@@ -82,7 +82,7 @@ public class AddressCounterTest extends TestCase
         }        
     }
     
-    private class Monitor extends TestMonitorRunnable 
+    private static class Monitor extends TestMonitorRunnable
     {
         private final AddressCounter ac;
         private final Map<Object, Integer> map;

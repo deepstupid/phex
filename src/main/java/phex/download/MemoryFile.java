@@ -790,10 +790,8 @@ public class MemoryFile {
                 downloadFile.setStatus(SWDownloadConstants.STATUS_FILE_COMPLETED);
                 downloadFile.moveToDestinationFile();
             }
-        } catch (FileHandlingException exp) {
+        } catch (FileHandlingException | ManagedFileException exp) {
             // this exp stops the download in download file...
-            logger.error(exp.toString(), exp);
-        } catch (ManagedFileException exp) {
             logger.error(exp.toString(), exp);
         }
     }
@@ -909,10 +907,8 @@ public class MemoryFile {
                     allocationLock.unlock();
                 }
             }
-        } catch (FileHandlingException exp) {
+        } catch (FileHandlingException | ManagedFileException exp) {
             // this exp should stop the download in download file...
-            logger.error(exp.toString(), exp);
-        } catch (ManagedFileException exp) {
             logger.error(exp.toString(), exp);
         } finally {
             scopeConsistencyCheck();

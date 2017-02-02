@@ -23,8 +23,8 @@ package phex.host;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import phex.api.Phex;
 import phex.common.Environment;
-import phex.common.Phex;
 import phex.common.QueryRoutingTable;
 import phex.common.address.DestAddress;
 import phex.connection.ConnectionClosedException;

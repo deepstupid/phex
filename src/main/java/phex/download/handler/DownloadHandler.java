@@ -11,12 +11,12 @@ public interface DownloadHandler {
      *
      * @throws IOException
      */
-    public void preProcess() throws DownloadHandlerException;
+    void preProcess() throws DownloadHandlerException;
 
     /**
      * Handles the handshake for the download.
      */
-    public void processHandshake()
+    void processHandshake()
             throws IOException, UnusableHostException, HTTPMessageException;
 
     /**
@@ -24,17 +24,17 @@ public interface DownloadHandler {
      *
      * @throws IOException
      */
-    public void processDownload() throws IOException;
+    void processDownload() throws IOException;
 
     /**
      * Performs download post process operations.
      */
-    public void postProcess();
+    void postProcess();
 
     /**
      * Stops the download.
      */
-    public void stopDownload();
+    void stopDownload();
 
     /**
      * Indicates whether the connection is keept alive and the next request can
@@ -42,5 +42,5 @@ public interface DownloadHandler {
      *
      * @return true if the next request can be send on this connection
      */
-    public boolean isAcceptingNextRequest();
+    boolean isAcceptingNextRequest();
 }

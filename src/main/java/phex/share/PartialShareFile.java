@@ -148,9 +148,7 @@ public class PartialShareFile extends ShareFile {
                     requestedRange.update(startOffset, endOffset);
                     fileStartOffset = startOffset;
                     return;
-                } catch (ManagedFileException exp) {
-                    NLogger.error(PartialShareFile.class, exp);
-                } catch (FileHandlingException exp) {
+                } catch (ManagedFileException | FileHandlingException exp) {
                     NLogger.error(PartialShareFile.class, exp);
                 }
             }
@@ -182,7 +180,7 @@ public class PartialShareFile extends ShareFile {
     /**
      * This method is not supported.
      */
-    public Integer getSearchCountObject() {
+    public static Integer getSearchCountObject() {
         throw new UnsupportedOperationException();
     }
 
@@ -203,7 +201,7 @@ public class PartialShareFile extends ShareFile {
     /**
      * This method is not supported.
      */
-    public Integer getUploadCountObject() {
+    public static Integer getUploadCountObject() {
         throw new UnsupportedOperationException();
     }
 
@@ -223,7 +221,7 @@ public class PartialShareFile extends ShareFile {
     /**
      * This method is not supported.
      */
-    public char[] getSearchCompareTerm() {
+    public static char[] getSearchCompareTerm() {
         throw new UnsupportedOperationException();
     }
 
@@ -237,7 +235,7 @@ public class PartialShareFile extends ShareFile {
     /**
      * This method is not supported.
      */
-    public void calculateURN() {
+    public static void calculateURN() {
         throw new UnsupportedOperationException();
     }
 }

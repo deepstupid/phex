@@ -38,7 +38,7 @@ public interface StatisticProvider {
      *
      * @return the current value or null.
      */
-    public Object getValue();
+    Object getValue();
 
     /**
      * Returns the avarage value this provider presents.
@@ -46,7 +46,7 @@ public interface StatisticProvider {
      *
      * @return the avarage value or null.
      */
-    public Object getAverageValue();
+    Object getAverageValue();
 
     /**
      * Returns the max value this provider presents.
@@ -54,7 +54,7 @@ public interface StatisticProvider {
      *
      * @return the max value or null.
      */
-    public Object getMaxValue();
+    Object getMaxValue();
 
     /**
      * Returns the presentation string that should be displayed for the corresponding
@@ -64,6 +64,6 @@ public interface StatisticProvider {
      *              getMaxValue()
      * @return the statistic presentation string.
      */
-    public String toStatisticString(Object value);
+    String toStatisticString(Object value);
 
 }

@@ -29,7 +29,7 @@ public class MultiThreadedTestRunner {
     private boolean performKills;
 
     public MultiThreadedTestRunner(TestRunnable[] tr) {
-        this(tr, (TestRunnable[])null);
+        this(tr, null);
     }
 
     public MultiThreadedTestRunner(TestRunnable[] runners, TestRunnable[] monitors) {
@@ -96,12 +96,11 @@ public class MultiThreadedTestRunner {
             try {
                 this.joinThreads(runnerThreads, this.maxFinalJoinTime);
             } catch (InterruptedException var20) {
-                ;
             }
 
             int ex = this.killThreads(runnerThreads);
             if(ex > 0) {
-                LOG.error(ex + " thread(s) did not stop themselves.");
+                LOG.error("{} thread(s) did not stop themselves.", ex);
                 this.setTimeoutError(this.maxFinalJoinTime);
             }
         }
@@ -111,7 +110,6 @@ public class MultiThreadedTestRunner {
         try {
             this.joinThreads(monitorThreads, this.maxFinalJoinTime);
         } catch (InterruptedException var19) {
-            ;
         }
 
         this.killThreads(monitorThreads);
@@ -188,12 +186,12 @@ public class MultiThreadedTestRunner {
 
             int count;
             for(count = 0; !threads[i1].isAlive() && count < 10; ++count) {
-                LOG.debug("Waiting for thread at index " + i1 + " to start.");
+                LOG.debug("Waiting for thread at index {} to start.", i1);
                 Thread.yield();
             }
 
             if(count >= 10) {
-                LOG.debug("Assuming thread at index " + i1 + " already finished.");
+                LOG.debug("Assuming thread at index {} already finished.", i1);
             }
         }
 
@@ -217,7 +215,7 @@ public class MultiThreadedTestRunner {
 
                 boolean enteredLoop;
                 for(long finalTime = System.currentTimeMillis() + waitTime; threadsRunning && System.currentTimeMillis() < finalTime && iex == null; threadsRunning = threadsRunning || !enteredLoop) {
-                    LOG.debug("Time = " + System.currentTimeMillis() + "; final = " + finalTime);
+                    LOG.debug("Time = {}; final = {}", System.currentTimeMillis(), finalTime);
                     threadsRunning = false;
                     enteredLoop = false;
 
@@ -286,7 +284,7 @@ public class MultiThreadedTestRunner {
     }
 
     private void setTimeoutError(long maxTime) {
-        Throwable t = this.createTimeoutError(maxTime);
+        Throwable t = MultiThreadedTestRunner.createTimeoutError(maxTime);
         Object var4 = this.synch;
         synchronized(var4) {
             if(this.exception == null) {
@@ -297,7 +295,7 @@ public class MultiThreadedTestRunner {
         }
     }
 
-    private Throwable createTimeoutError(long maxTime) {
+    private static Throwable createTimeoutError(long maxTime) {
         Throwable ret = null;
 
         try {

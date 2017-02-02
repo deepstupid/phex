@@ -187,6 +187,6 @@ public class KeywordSearch extends QuerySearch {
 
     @Override
     public String toString() {
-        return "[KeywordSearch:" + searchString + "," + super.toString() + "]";
+        return "[KeywordSearch:" + searchString + ',' + super.toString() + ']';
     }
 }

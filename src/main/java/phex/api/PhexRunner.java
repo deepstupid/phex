@@ -22,8 +22,6 @@
 package phex.api;
 
 import phex.Main;
-import phex.common.Phex;
-import phex.common.ThreadTracking;
 import phex.common.log.NLogger;
 import phex.connection.LoopbackDispatcher;
 import phex.prefs.core.PhexCorePrefs;
@@ -46,7 +44,7 @@ public class PhexRunner {
     private PhexRunner() {
     }
 
-    public static PhexRunner getInstance() {
+    public synchronized static PhexRunner the() {
         if (phex == null) {
             phex = new PhexRunner();
         }
@@ -54,20 +52,20 @@ public class PhexRunner {
         return phex;
     }
 
-    /**
-     * Don't use NLogger before arguments have been read ( -c )
-     *
-     * @param args
-     */
-    public static void main(String args[]) {
-        PhexRunner runner = getInstance();
-
-        if (runner.runPhex(args)) {
-            System.exit(0);
-        } else {
-            System.exit(1);
-        }
-    }
+//    /**
+//     * Don't use NLogger before arguments have been read ( -c )
+//     *
+//     * @param args
+//     */
+//    public static void main(String args[]) {
+//        PhexRunner runner = the();
+//
+//        if (runner.runPhex(args)) {
+//            System.exit(0);
+//        } else {
+//            System.exit(1);
+//        }
+//    }
 
     /**
      * @param iterator
@@ -100,11 +98,7 @@ public class PhexRunner {
         return value;
     }
 
-    public boolean startPhex() {
-        return runPhex(new String[0]);
-    }
-
-//    private static void showSplash()
+    //    private static void showSplash()
 //    {
 //        try
 //        {
@@ -118,7 +112,7 @@ public class PhexRunner {
 //        }
 //    }
 
-    public boolean runPhex(String args[]) {
+    public static boolean runPhex(String... args) {
         long start = System.currentTimeMillis();
         long end;
 
@@ -176,61 +170,14 @@ public class PhexRunner {
         }
 
         try {
-            // Might be the case when arguments are used to start Phex,
-//            // but there is no Phex running yet.
-//            if (_splashScreen == null)
-//            {
-//                showSplash();
-//
-//                //end = System.currentTimeMillis();
-//                //System.out.println("Splash time: " + (end-start));
-//            }
 
 
-//            PhexGuiPrefs.init();
-//            Localizer.initialize(InterfacePrefs.LocaleName.get());
-
-            ThreadTracking.initialize();
-
-            Phex.initialize();
-            Servent.getInstance();
-            Servent.getInstance().start();
-
-            end = System.currentTimeMillis();
-            NLogger.debug(Main.class, "Pre GUI startup time: " + (end - start));
-
-//            try
-//            {
-//                GUIRegistry.getInstance().initialize(Servent.getInstance());
-//            }
-//            catch (ExceptionInInitializerError ex)
-//            {
-//                // Running in head-less mode so of course this
-//                // doesn't work.
-//            }
-
-//            MainFrame mainFrame = null;
-//            mainFrame = GUIRegistry.getInstance().getMainFrame();
-//            if (mainFrame != null)
-//            {
-//                mainFrame.setVisible(true);
-//            }
+            Servent.servent.start();
 
             end = System.currentTimeMillis();
             NLogger.debug(Main.class, "Full startup time: " + (end - start));
 
 
-            if (loopbackUri != null) {// correctly dispatched uri
-
-            }
-
-            if (magmaFile != null) {// correctly dispatched uri
-
-            }
-
-            if (rssFile != null) {// correctly dispatched uri
-
-            }
         } catch (Throwable th) {
             th.printStackTrace();
             NLogger.error(Main.class, th, th);

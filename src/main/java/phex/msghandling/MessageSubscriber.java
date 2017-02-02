@@ -33,5 +33,5 @@ public interface MessageSubscriber<T extends Message> {
      *
      * @throws InvalidMessageException
      */
-    public void onMessage(T message, Host sourceHost) throws InvalidMessageException;
+    void onMessage(T message, Host sourceHost) throws InvalidMessageException;
 }

@@ -315,7 +315,7 @@ public class DimeRecord {
      * @param the number of bytes already written
      * @return an array of zero bytes which makes total size % 4 == 0
      */
-    private byte[] getPad(long size) {
+    private static byte[] getPad(long size) {
         byte[] retval = new byte[(4 - (int) (size % 4)) % 4];
         return retval;
     }
@@ -372,7 +372,7 @@ public class DimeRecord {
     public String toString() {
         return "DimeRecord(id='" + new String(id) + "', tnf='" + tnf
                 + "', type='" + new String(type) + "', length=" + data.length
-                + ", first=" + first + ", last=" + last + ")";
+                + ", first=" + first + ", last=" + last + ')';
     }
 
     /**

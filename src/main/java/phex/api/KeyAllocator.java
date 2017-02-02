@@ -40,12 +40,12 @@ public class KeyAllocator<T> {
             return null;
         }
 
-        List<Long> keys = new ArrayList<Long>();
+        List<Long> keys = new ArrayList<Long>(numberOfKeys);
         int count = 0;
 
         long currentValue = startValue;
         while (count < numberOfKeys) {
-            Long key = new Long(currentValue);
+            Long key = currentValue;
             if (!map.containsKey(key)) {
                 count++;
 

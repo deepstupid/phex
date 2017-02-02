@@ -23,8 +23,8 @@ package phex.host;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import phex.api.Phex;
 import phex.common.Environment;
-import phex.common.Phex;
 import phex.common.PhexVersion;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
@@ -118,7 +118,7 @@ public class FavoritesContainer {
             if (!favoritesFile.exists()) {
                 return;
             }
-            FileManager fileMgr = Phex.getFileManager();
+            FileManager fileMgr = Phex.files;
             ManagedFile managedFile = fileMgr.getReadWriteManagedFile(favoritesFile);
             dPhex = XMLBuilder.loadDPhexFromFile(managedFile);
             if (dPhex == null) {
@@ -194,7 +194,7 @@ public class FavoritesContainer {
             }
 
             File favoritesFile = servent.getGnutellaNetwork().getFavoritesFile();
-            ManagedFile managedFile = Phex.getFileManager().getReadWriteManagedFile(favoritesFile);
+            ManagedFile managedFile = Phex.files.getReadWriteManagedFile(favoritesFile);
 
             XMLBuilder.saveToFile(managedFile, dPhex);
             hasChangedSinceLastSave = false;

@@ -233,8 +233,8 @@ public abstract class AbstractUploadHandler implements UploadHandler {
      * @param requestedShareFile
      * @param sharedFileURN
      */
-    protected void handleAltLocRequestHeader(HTTPRequest httpRequest, UploadState uploadState,
-                                             ShareFile requestedShareFile, URN sharedFileURN, PhexSecurityManager securityService) {
+    protected static void handleAltLocRequestHeader(HTTPRequest httpRequest, UploadState uploadState,
+                                                    ShareFile requestedShareFile, URN sharedFileURN, PhexSecurityManager securityService) {
         // collect alternate locations from request...
         List<AlternateLocation> allAltLocs = new ArrayList<AlternateLocation>();
 
@@ -274,17 +274,9 @@ public abstract class AbstractUploadHandler implements UploadHandler {
     public void handleConnectionHeader(HTTPRequest httpRequest) {
         HTTPHeader header = httpRequest.getHeader(HTTPHeaderNames.CONNECTION);
         if (HTTPRequest.HTTP_11.equals(httpRequest.getHTTPVersion())) {
-            if (header != null && header.getValue().equalsIgnoreCase("CLOSE")) {
-                isPersistentConnection = false;
-            } else {
-                isPersistentConnection = true;
-            }
+            isPersistentConnection = !(header != null && header.getValue().equalsIgnoreCase("CLOSE"));
         } else {
-            if (header != null && header.getValue().equalsIgnoreCase("KEEP-ALIVE")) {
-                isPersistentConnection = true;
-            } else {
-                isPersistentConnection = false;
-            }
+            isPersistentConnection = header != null && header.getValue().equalsIgnoreCase("KEEP-ALIVE");
         }
     }
 
@@ -325,7 +317,7 @@ public abstract class AbstractUploadHandler implements UploadHandler {
             shareFile = sharedFilesService.getFileByURN(requestURN);
             // look for partials..
             if (shareFile == null && UploadPrefs.SharePartialFiles.get().booleanValue()) {
-                SwarmingManager swMgr = Servent.getInstance().getDownloadService();
+                SwarmingManager swMgr = Servent.servent.getDownloadService();
                 SWDownloadFile dwFile = swMgr.getDownloadFileByURN(requestURN);
                 if (dwFile != null) {
                     shareFile = new PartialShareFile(dwFile);

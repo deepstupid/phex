@@ -134,8 +134,7 @@ public class FileUploadHandler extends AbstractUploadHandler {
                     startOffset, contentLength);
         } catch (ManagedFileException exp) {
             IOException ioExp = new IOException("ManagedFileException: "
-                    + exp.getMessage());
-            ioExp.initCause(exp);
+                    + exp.getMessage(), exp);
             throw ioExp;
         }
 
@@ -154,8 +153,8 @@ public class FileUploadHandler extends AbstractUploadHandler {
                 HTTPHeaderNames.CONTENT_LENGTH, String.valueOf(contentLength)));
 
         response.addHttpHeader(new HTTPHeader(
-                HTTPHeaderNames.CONTENT_RANGE, "bytes " + startOffset + "-"
-                + endOffset + "/" + requestedFile.getFileSize()));
+                HTTPHeaderNames.CONTENT_RANGE, "bytes " + startOffset + '-'
+                + endOffset + '/' + requestedFile.getFileSize()));
 
         response.addHttpHeader(new HTTPHeader(HTTPHeaderNames.CONNECTION,
                 "Keep-Alive"));
