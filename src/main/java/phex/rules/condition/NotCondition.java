@@ -28,59 +28,48 @@ import phex.xml.sax.rules.DCondition;
 import phex.xml.sax.rules.DNotCondition;
 
 /**
- * Applies a NOT condition to the given search filter. That means that the 
+ * Applies a NOT condition to the given search filter. That means that the
  * filter results of the given search filter is reversed.
  */
-public class NotCondition implements Condition
-{
+public class NotCondition implements Condition {
     private Condition filter;
-    
-    public NotCondition( Condition filter )
-    {
+
+    public NotCondition(Condition filter) {
         this.filter = filter;
     }
-    
-    public Condition getContainedCondition()
-    {
+
+    public Condition getContainedCondition() {
         return filter;
     }
 
-    public boolean isMatched( Search search, RemoteFile remoteFile )
-    {
+    public boolean isMatched(Search search, RemoteFile remoteFile) {
         return !filter.isMatched(search, remoteFile);
     }
 
-    public boolean isComplete()
-    {
+    public boolean isComplete() {
         return filter != null;
     }
-    
+
     @Override
-    public Object clone()
-    {
-        try
-        {
-            NotCondition clone = (NotCondition)super.clone();
-            clone.filter = (Condition) filter.clone();            
+    public Object clone() {
+        try {
+            NotCondition clone = (NotCondition) super.clone();
+            clone.filter = (Condition) filter.clone();
             return clone;
-        }
-        catch (CloneNotSupportedException e) 
-        { 
+        } catch (CloneNotSupportedException e) {
             // this shouldn't happen, since we are Cloneable
             throw new InternalError();
         }
     }
-    
-    public synchronized DCondition createDCondition()
-    {
+
+    public synchronized DCondition createDCondition() {
         DNotCondition dCond = new DNotCondition();
-        dCond.setDCondition( filter.createDCondition() );
+        dCond.setDCondition(filter.createDCondition());
         return dCond;
     }
-    
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return super.toString() + "[filter: " + filter.toString() + "]";
     }
 }

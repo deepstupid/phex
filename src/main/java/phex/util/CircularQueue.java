@@ -28,8 +28,7 @@ import java.util.NoSuchElementException;
  * user needs to synchronized the access to its CircularQueue object.
  */
 // TODO to represent a framework class this should maybe implement the List interface.
-public class CircularQueue
-{
+public class CircularQueue {
     /**
      * The size of the queue. There is always one unused element in the queue.
      */
@@ -54,9 +53,8 @@ public class CircularQueue
      * The minimum maxSize is 1. Creates a circularQueue with a initial size of
      * 10.
      */
-    public CircularQueue( int maxSize )
-    {
-        this( Math.min( 10, maxSize ), maxSize );
+    public CircularQueue(int maxSize) {
+        this(Math.min(10, maxSize), maxSize);
     }
 
     /**
@@ -67,16 +65,14 @@ public class CircularQueue
      * maxSize to the same value.
      * The minimum maxSize is 1.
      */
-    public CircularQueue( int initialSize, int maxSize )
-    {
+    public CircularQueue(int initialSize, int maxSize) {
         // this is asserted
-        if ( maxSize < 1 )
-        {
-            throw new RuntimeException( "Min size of the CircularQueue is 1" );
+        if (maxSize < 1) {
+            throw new RuntimeException("Min size of the CircularQueue is 1");
         }
 
         size = maxSize + 1;
-        elements = new Object[ initialSize + 1];
+        elements = new Object[initialSize + 1];
         headIdx = tailIdx = 0;
     }
 
@@ -84,17 +80,15 @@ public class CircularQueue
      * Adds a object to the tail of the queue. If the queue is full a element
      * from the head is dropped to free space.
      */
-    public Object addToTail( Object obj )
-    {
+    public Object addToTail(Object obj) {
         //logQueue();
         Object dropObj = null;
-        if ( isFull() )
-        {// drop the head element
+        if (isFull()) {// drop the head element
             dropObj = removeFromHead();
         }
         ensureCapacity();
-        elements[ tailIdx ] = obj;
-        tailIdx = nextIndex( tailIdx );
+        elements[tailIdx] = obj;
+        tailIdx = nextIndex(tailIdx);
         //logQueue();
         return dropObj;
     }
@@ -103,17 +97,15 @@ public class CircularQueue
      * Adds a object to the head of the queue. If the queue is full a element
      * from the tail is dropped to free space. The dropped element is returned.
      */
-    public Object addToHead( Object obj )
-    {
+    public Object addToHead(Object obj) {
         //logQueue();
         Object dropObj = null;
-        if ( isFull() )
-        {// drop the head element
+        if (isFull()) {// drop the head element
             dropObj = removeFromTail();
         }
         ensureCapacity();
-        headIdx = prevIndex( headIdx );
-        elements[ headIdx ] = obj;
+        headIdx = prevIndex(headIdx);
+        elements[headIdx] = obj;
         //logQueue();
         return dropObj;
     }
@@ -125,64 +117,57 @@ public class CircularQueue
      * internal array they are not freed for garbage collection until they
      * are overwritten with new references.
      */
-    public void clear()
-    {
+    public void clear() {
         headIdx = 0;
         tailIdx = 0;
     }
 
     /**
      * Returns the head element of the queue.
+     *
      * @throws NoSuchElementException if queue is empty.
      */
-    public Object getFirst() throws NoSuchElementException
-    {
-        if ( isEmpty() )
-        {
+    public Object getFirst() throws NoSuchElementException {
+        if (isEmpty()) {
             throw new NoSuchElementException();
         }
-        return elements[ headIdx ];
+        return elements[headIdx];
     }
 
     /**
      * Returns the tail element of the queue.
+     *
      * @throws NoSuchElementException if queue is empty.
      */
-    public Object getLast() throws NoSuchElementException
-    {
-        if ( isEmpty() )
-        {
+    public Object getLast() throws NoSuchElementException {
+        if (isEmpty()) {
             throw new NoSuchElementException();
         }
         // adjust last index...
-        int index = prevIndex( tailIdx );
-        return elements[ index ];
+        int index = prevIndex(tailIdx);
+        return elements[index];
     }
 
     /**
      * Returns the element at index in the queue.
+     *
      * @throws IndexOutOfBoundsException if index is out of range
      */
-    public Object get( int index ) throws IndexOutOfBoundsException
-    {
-        int idx = mapIndex( index );
-        return elements[ idx ];
+    public Object get(int index) throws IndexOutOfBoundsException {
+        int idx = mapIndex(index);
+        return elements[idx];
     }
 
     /**
      * Returns the number of elements in the queue.
      */
-    public int getSize()
-    {
-        if ( headIdx <= tailIdx )
-        {
+    public int getSize() {
+        if (headIdx <= tailIdx) {
             //    H     T
             // [ |x|x|x| | ]
             //  0 1 2 3 4 5
             return tailIdx - headIdx;
-        }
-        else
-        {
+        } else {
             //    T     H
             // [x| | | |x|x]
             //  0 1 2 3 4 5
@@ -193,89 +178,79 @@ public class CircularQueue
     /**
      * Returns the maximum number of elements this queue can hold.
      */
-    public int getCapacity()
-    {
+    public int getCapacity() {
         return size - 1;
     }
 
     /**
      * Returns true is the queue is empty.
      */
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return headIdx == tailIdx;
     }
 
     /**
      * Returns true if the queue is full.
      */
-    public boolean isFull()
-    {
-        if ( elements.length == size )
-        {// the queue is fully expanded
-            return nextIndex( tailIdx ) == headIdx;
+    public boolean isFull() {
+        if (elements.length == size) {// the queue is fully expanded
+            return nextIndex(tailIdx) == headIdx;
         }
         return false;
     }
 
     /**
      * Removes and returns the element on the head of the queue
+     *
      * @throws NoSuchElementException if queue is empty.
      */
-    public Object removeFromHead() throws NoSuchElementException
-    {
-        if ( isEmpty() )
-        {
+    public Object removeFromHead() throws NoSuchElementException {
+        if (isEmpty()) {
             throw new NoSuchElementException();
         }
-        Object obj = elements[ headIdx ];
-        elements[ headIdx ] = null;
-        headIdx = nextIndex( headIdx );
+        Object obj = elements[headIdx];
+        elements[headIdx] = null;
+        headIdx = nextIndex(headIdx);
         return obj;
     }
 
     /**
      * Removes and returns the element on the tail of the queue
+     *
      * @throws NoSuchElementException if queue is empty.
      */
-    public Object removeFromTail() throws NoSuchElementException
-    {
-        if ( isEmpty() )
-        {
+    public Object removeFromTail() throws NoSuchElementException {
+        if (isEmpty()) {
             throw new NoSuchElementException();
         }
-        tailIdx = prevIndex( tailIdx );
-        Object obj = elements[ tailIdx ];
-        elements[ tailIdx ] = null;
+        tailIdx = prevIndex(tailIdx);
+        Object obj = elements[tailIdx];
+        elements[tailIdx] = null;
         return obj;
     }
-    
-    public Object remove(int idx) 
-        throws IndexOutOfBoundsException
-    {
-        Object obj = get( idx );
-        for ( int i = mapIndex( idx ); i != tailIdx; i = nextIndex( i ) ) 
-        {
-            elements[ i ] = elements[ nextIndex( i ) ];
+
+    public Object remove(int idx)
+            throws IndexOutOfBoundsException {
+        Object obj = get(idx);
+        for (int i = mapIndex(idx); i != tailIdx; i = nextIndex(i)) {
+            elements[i] = elements[nextIndex(i)];
         }
-        tailIdx = prevIndex( tailIdx );
-        elements[ tailIdx ] = null;
+        tailIdx = prevIndex(tailIdx);
+        elements[tailIdx] = null;
         return obj;
     }
-    
+
     /**
      * Removes all occurences of the object from this queue.
+     *
      * @param obj
      * @return
      */
-    public boolean removeAll( Object obj ) 
-    {
+    public boolean removeAll(Object obj) {
         boolean removed = false;
-        for (int i=0; i < getSize(); i++)
-        {
-            if ( obj.equals( get(i) ) )
-            {
-                remove( i );
+        for (int i = 0; i < getSize(); i++) {
+            if (obj.equals(get(i))) {
+                remove(i);
                 i--;
                 removed = true;
             }
@@ -283,44 +258,36 @@ public class CircularQueue
         return removed;
     }
 
-    public Iterator iterator()
-    {
+    public Iterator iterator() {
         return new CircularQueueIterator();
     }
 
-    private void ensureCapacity()
-    {
-        if ( elements.length == size )
-        {
+    private void ensureCapacity() {
+        if (elements.length == size) {
             return;
         }
-        if ( nextIndex( tailIdx ) != headIdx )
-        {
+        if (nextIndex(tailIdx) != headIdx) {
             return;
         }
         // expand array and copy over
-        int newSize = Math.min( elements.length * 2, size );
-        Object[] newElements = new Object[ newSize ];
-        if ( headIdx <= tailIdx )
-        {
+        int newSize = Math.min(elements.length * 2, size);
+        Object[] newElements = new Object[newSize];
+        if (headIdx <= tailIdx) {
             //    H     T
             // [ |x|x|x| | ]
             //  0 1 2 3 4 5
-            System.arraycopy( elements, headIdx, newElements, headIdx,
-                tailIdx - headIdx );
-        }
-        else
-        {
+            System.arraycopy(elements, headIdx, newElements, headIdx,
+                    tailIdx - headIdx);
+        } else {
             //    T     H
             // [x| | | |x|x]
             //  0 1 2 3 4 5
-            int newHeadIdx = newSize - ( elements.length - headIdx );
-            if ( tailIdx > 0 )
-            {
-                System.arraycopy( elements, 0, newElements, 0, tailIdx - 1 );
+            int newHeadIdx = newSize - (elements.length - headIdx);
+            if (tailIdx > 0) {
+                System.arraycopy(elements, 0, newElements, 0, tailIdx - 1);
             }
-            System.arraycopy( elements, headIdx, newElements, newHeadIdx,
-                elements.length - headIdx);
+            System.arraycopy(elements, headIdx, newElements, newHeadIdx,
+                    elements.length - headIdx);
             headIdx = newHeadIdx;
         }
         elements = newElements;
@@ -329,27 +296,21 @@ public class CircularQueue
     /**
      * Maps the given index into the index in the internal array.
      */
-    private int mapIndex( int index ) throws IndexOutOfBoundsException
-    {
-        if (index >= elements.length || index < 0)
-        {
-            throw new IndexOutOfBoundsException( "Index: " + index + ", Size: "
-                + elements.length);
+    private int mapIndex(int index) throws IndexOutOfBoundsException {
+        if (index >= elements.length || index < 0) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: "
+                    + elements.length);
         }
-        return ( index + headIdx ) % elements.length;
+        return (index + headIdx) % elements.length;
     }
 
     /**
      * Gets the next index for the given index.
      */
-    private int nextIndex( int idx )
-    {
-        if ( idx == elements.length - 1 )
-        {
+    private int nextIndex(int idx) {
+        if (idx == elements.length - 1) {
             return 0;
-        }
-        else
-        {
+        } else {
             return idx + 1;
         }
     }
@@ -357,14 +318,10 @@ public class CircularQueue
     /**
      * Gets the previous index for the given index.
      */
-    private int prevIndex( int idx )
-    {
-        if ( idx == 0 )
-        {
+    private int prevIndex(int idx) {
+        if (idx == 0) {
             return elements.length - 1;
-        }
-        else
-        {
+        } else {
             return idx - 1;
         }
     }
@@ -383,8 +340,7 @@ public class CircularQueue
 
     }*/
 
-    private class CircularQueueIterator implements Iterator
-    {
+    private class CircularQueueIterator implements Iterator {
         /**
          * Store originalHead to check for concurent modifications.
          */
@@ -400,44 +356,37 @@ public class CircularQueue
          */
         int nextElement;
 
-        public CircularQueueIterator()
-        {
+        public CircularQueueIterator() {
             nextElement = headIdx;
             originalHead = headIdx;
             originalTail = tailIdx;
         }
 
-        public boolean hasNext()
-        {
+        public boolean hasNext() {
             checkForComodification();
             return nextElement != tailIdx;
         }
 
-        public Object next() throws NoSuchElementException
-        {
+        public Object next() throws NoSuchElementException {
             checkForComodification();
-            if ( nextElement == tailIdx )
-            {
+            if (nextElement == tailIdx) {
                 throw new NoSuchElementException();
             }
 
-            Object obj = elements[ nextElement ];
-            nextElement = nextIndex( nextElement );
+            Object obj = elements[nextElement];
+            nextElement = nextIndex(nextElement);
             return obj;
         }
 
         /**
          * This operation is not supported.
          */
-        public void remove()
-        {
+        public void remove() {
             throw new UnsupportedOperationException();
         }
 
-        private void checkForComodification()
-        {
-            if ( originalHead != headIdx || originalTail != tailIdx )
-            {
+        private void checkForComodification() {
+            if (originalHead != headIdx || originalTail != tailIdx) {
                 throw new ConcurrentModificationException();
             }
         }

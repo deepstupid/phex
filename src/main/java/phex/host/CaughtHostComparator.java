@@ -27,42 +27,37 @@ import java.util.Comparator;
  * This class is responsible for comparing two CaughtHost instances.
  * The Comparator will determine which instance has a higher probability
  * of a successful connection.
- *
+ * <p>
  * Test from 2007-12-03 by Arne Babenhauserheide with Phex SVN  after several restarts
- * from the output of 15936 comparisions: 
- *    about 90% had a diffConnRating of 0
- *    phexVal was always 0 - this was different on previous runs
- *    only about 6.8% had an Uptime difference of 0
- *    TODO: Recheck the algorithm with long-running Phex and with restarted Phex after it had run for a long time before that. - Only commenting out teh println for that reason.
- *
- * Real statistics from many/all running Phex' would be nice to have, 
- * but creating them would mean quite a bit of effort, 
+ * from the output of 15936 comparisions:
+ * about 90% had a diffConnRating of 0
+ * phexVal was always 0 - this was different on previous runs
+ * only about 6.8% had an Uptime difference of 0
+ * TODO: Recheck the algorithm with long-running Phex and with restarted Phex after it had run for a long time before that. - Only commenting out teh println for that reason.
+ * <p>
+ * Real statistics from many/all running Phex' would be nice to have,
+ * but creating them would mean quite a bit of effort,
  * and might have privacy implications.
- *
  */
-public class CaughtHostComparator implements Comparator<CaughtHost>
-{
+public class CaughtHostComparator implements Comparator<CaughtHost> {
     /**
      * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
      */
-    public int compare(CaughtHost host1, CaughtHost host2)
-    {
-        if ( host1 == host2 || host1.equals( host2 ) )
-        {
+    public int compare(CaughtHost host1, CaughtHost host2) {
+        if (host1 == host2 || host1.equals(host2)) {
             return 0;
         }
-        
+
         // first check if last connection was failed or successfull
         int h1Rating = host1.getConnectionTimeRating();
         int h2Rating = host2.getConnectionTimeRating();
         int diff = h1Rating - h2Rating; 
-	/* 
+    /*
 	 * diffConnTime seems to have values between -2 and 2 
 	 * (each seperate check can return -1, 0 or 1).  
 	 */
         // System.out.println("diffConnTime:" + diff); // checking values
-        if ( diff != 0 )
-        {
+        if (diff != 0) {
             return diff;
         }
         
@@ -73,29 +68,26 @@ public class CaughtHostComparator implements Comparator<CaughtHost>
 	*/
         int phexVal = host1.isDecentPhexHost() ? 1 : 0;
         phexVal -= host2.isDecentPhexHost() ? 1 : 0;
-	// System.out.println("phexVal:" + phexVal); // checking values
-	if( phexVal != 0 )
-        {
+        // System.out.println("phexVal:" + phexVal); // checking values
+        if (phexVal != 0) {
             return phexVal;
         }
-        
-	// compare by daily uptime if known. 
+
+        // compare by daily uptime if known.
         diff = host1.getDailyUptime() - host2.getDailyUptime();
-	// System.out.println("diffUptime:" + diff); // checking values
-        if ( diff != 0 )
-        {
+        // System.out.println("diffUptime:" + diff); // checking values
+        if (diff != 0) {
             return diff;
         }
         // thrid compare which host has the latest successful connection
-        diff = (int)(host1.getLastSuccessfulConnection() - host2.getLastSuccessfulConnection());
-	// System.out.println("diffLastConn:" + diff); // checking values
-        if ( diff != 0)
-        {
+        diff = (int) (host1.getLastSuccessfulConnection() - host2.getLastSuccessfulConnection());
+        // System.out.println("diffLastConn:" + diff); // checking values
+        if (diff != 0) {
             return diff;
         }
         // no use the unique identification counter, it is used 
         // to have a constant difference between instances with no
         // other comparable difference.
         return host1.getUniqueId() - host2.getUniqueId();
-    }    
+    }
 }

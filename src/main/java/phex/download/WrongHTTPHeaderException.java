@@ -20,10 +20,8 @@ package phex.download;
 
 import phex.host.UnusableHostException;
 
-public class WrongHTTPHeaderException extends UnusableHostException
-{
-    public WrongHTTPHeaderException( String msg )
-    {
-        super( msg );
+public class WrongHTTPHeaderException extends UnusableHostException {
+    public WrongHTTPHeaderException(String msg) {
+        super(msg);
     }
 }

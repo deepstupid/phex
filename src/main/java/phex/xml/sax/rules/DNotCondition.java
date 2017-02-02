@@ -27,38 +27,32 @@ import phex.rules.condition.Condition;
 import phex.rules.condition.NotCondition;
 import phex.xml.sax.PhexXmlSaxWriter;
 
-public class DNotCondition implements DCondition
-{
+public class DNotCondition implements DCondition {
     static public final String ELEMENT_NAME = "not-condition";
 
     protected DCondition dCondition;
 
-    public DCondition getDCondition()
-    {
+    public DCondition getDCondition() {
         return dCondition;
     }
 
-    public void setDCondition( DCondition condition )
-    {
+    public void setDCondition(DCondition condition) {
         this.dCondition = condition;
     }
 
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
 
-        if ( dCondition != null )
-        {
-            dCondition.serialize( writer );
+        if (dCondition != null) {
+            dCondition.serialize(writer);
         }
 
-        writer.endElm( ELEMENT_NAME );
+        writer.endElm(ELEMENT_NAME);
     }
 
-    public Condition createCondition()
-    {
+    public Condition createCondition() {
         Condition condition = dCondition.createCondition();
-        NotCondition cond = new NotCondition( condition );
+        NotCondition cond = new NotCondition(condition);
         return cond;
     }
 }

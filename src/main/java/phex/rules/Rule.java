@@ -33,25 +33,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Rule implements Cloneable
-{
+public class Rule implements Cloneable {
     private String name;
-    
+
     private String description;
-    
+
     private String notes;
-    
+
     /**
      * A internal id mostly only used for Phex default rules to identify there
      * settings.
      */
     private String id;
-    
+
     private boolean isPermanentlyEnabled;
-    
+
     /**
      * A default rule indicates that this rule is delivered by Phex. The user
-     * changeability of this rule is limited. Only the following fields are 
+     * changeability of this rule is limited. Only the following fields are
      * allowed to be changed:
      * - isPermanentlyEnabled
      * - consequences
@@ -59,171 +58,142 @@ public class Rule implements Cloneable
      * to copy the rule and modify it afterwards.
      */
     private boolean isDefaultRule;
-    
+
     private AndConcatCondition ruleCondition;
     private List<Consequence> consequences;
-    
-    public Rule()
-    {
+
+    public Rule() {
         ruleCondition = new AndConcatCondition();
         consequences = new ArrayList<Consequence>();
     }
-    
-    public boolean isDefaultRule()
-    {
+
+    public boolean isDefaultRule() {
         return isDefaultRule;
     }
 
-    public void setDefaultRule( boolean isDefaultRule )
-    {
+    public void setDefaultRule(boolean isDefaultRule) {
         this.isDefaultRule = isDefaultRule;
     }
-    
-    public boolean isPermanentlyEnabled()
-    {
+
+    public boolean isPermanentlyEnabled() {
         return isPermanentlyEnabled;
     }
 
-    public void setPermanentlyEnabled( boolean isPermanentlyEnabled )
-    {
+    public void setPermanentlyEnabled(boolean isPermanentlyEnabled) {
         this.isPermanentlyEnabled = isPermanentlyEnabled;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName( String name )
-    {
+    public void setName(String name) {
         this.name = name;
     }
-    
-    public String getNotes()
-    {
+
+    public String getNotes() {
         return notes;
     }
 
-    public void setNotes( String notes )
-    {
+    public void setNotes(String notes) {
         this.notes = notes;
     }
-    
-    public String getDescription()
-    {
+
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription( String description )
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
-    
-    public String getId()
-    {
+
+    public String getId() {
         return id;
     }
 
-    public void setId( String id )
-    {
+    public void setId(String id) {
         this.id = id;
     }
 
     /**
      * Returns a unmodifiable list of the containing conditions.
+     *
      * @return
      */
-    public List<Condition> getConditions()
-    {
+    public List<Condition> getConditions() {
         return ruleCondition.getConditions();
     }
-    
-    public void clearConditions()
-    {
+
+    public void clearConditions() {
         ruleCondition.clearConditions();
     }
 
-    public Rule addCondition( Condition condition )
-    {
+    public Rule addCondition(Condition condition) {
         ruleCondition.addCondition(condition);
         return this;
     }
-    
-    public Rule removeCondition( Condition condition )
-    {
-        ruleCondition.removeCondition( condition );
+
+    public Rule removeCondition(Condition condition) {
+        ruleCondition.removeCondition(condition);
         return this;
     }
-    
+
     /**
      * Returns a unmodifiable list of the containing consequences.
+     *
      * @return
      */
-    public List<Consequence> getConsequences()
-    {
+    public List<Consequence> getConsequences() {
         return Collections.unmodifiableList(consequences);
     }
-    
-    public void addConsequence( Consequence consequence )
-    {
+
+    public void addConsequence(Consequence consequence) {
         consequences.add(consequence);
     }
-    
-    public Rule removeConsequence( Consequence consequence )
-    {
-        consequences.remove( consequence );
+
+    public Rule removeConsequence(Consequence consequence) {
+        consequences.remove(consequence);
         return this;
     }
-    
-    public void process( Search search, RemoteFile[] remoteFiles, Servent servent )
-    {
-        for ( int i = 0; i < remoteFiles.length; i++ )
-        {
+
+    public void process(Search search, RemoteFile[] remoteFiles, Servent servent) {
+        for (int i = 0; i < remoteFiles.length; i++) {
             // we stop further process if already marked for remove...
             // TODO we might also support a consequence 'stop further processing'
             // in the future.
-            if( remoteFiles[i].isFilteredRemoved() )
-            {
+            if (remoteFiles[i].isFilteredRemoved()) {
                 continue;
             }
-            
+
             boolean isMatched = ruleCondition.isMatched(search, remoteFiles[i]);
-            if ( !isMatched )
-            {
+            if (!isMatched) {
                 continue;
             }
-            
-            for ( Consequence conseq : consequences )
-            {
-                conseq.invoke( search, remoteFiles[i], servent );
+
+            for (Consequence conseq : consequences) {
+                conseq.invoke(search, remoteFiles[i], servent);
             }
         }
     }
-    
+
     @Override
-    public Object clone()
-    {
-        try
-        {
+    public Object clone() {
+        try {
             Rule clone = (Rule) super.clone();
             clone.ruleCondition = (AndConcatCondition) ruleCondition.clone();
-            
+
             clone.consequences = new ArrayList<Consequence>();
-            for ( Consequence conseq : consequences )
-            {
-                clone.consequences.add( (Consequence)conseq.clone() );
+            for (Consequence conseq : consequences) {
+                clone.consequences.add((Consequence) conseq.clone());
             }
             return clone;
-        }
-        catch ( CloneNotSupportedException exp )
-        {
+        } catch (CloneNotSupportedException exp) {
             throw new InternalError();
         }
     }
-    
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return super.toString() + "[Condition: " + ruleCondition.toString() + "]";
     }
 }

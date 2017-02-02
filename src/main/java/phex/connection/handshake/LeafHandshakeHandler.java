@@ -29,109 +29,94 @@ import phex.prefs.core.MessagePrefs;
 import phex.servent.Servent;
 
 public class LeafHandshakeHandler extends HandshakeHandler
-    implements ConnectionConstants
-{
-    public LeafHandshakeHandler( Servent servent, Host connectedHost )
-    {
-        super( servent, connectedHost );
+        implements ConnectionConstants {
+    public LeafHandshakeHandler(Servent servent, Host connectedHost) {
+        super(servent, connectedHost);
     }
 
     @Override
-    protected HTTPHeaderGroup createDefaultHandshakeHeaders()
-    {
+    protected HTTPHeaderGroup createDefaultHandshakeHeaders() {
         // create hash map based on common headers
         HTTPHeaderGroup openHeaders = super.createDefaultHandshakeHeaders();
 
         // add ultrapeer headers...
-        openHeaders.addHeader( new HTTPHeader(
-            GnutellaHeaderNames.X_ULTRAPEER, "false" ) );
-        openHeaders.addHeader( new HTTPHeader(
-            GnutellaHeaderNames.X_QUERY_ROUTING, "0.1" ) );
-        openHeaders.addHeader( new HTTPHeader(
-            GnutellaHeaderNames.X_UP_QUERY_ROUTING, "0.1" ) );
-        openHeaders.addHeader( new HTTPHeader(
-            GnutellaHeaderNames.X_DYNAMIC_QUERY, "0.1") );
-        openHeaders.addHeader( new HTTPHeader(
-            GnutellaHeaderNames.X_DEGREE,
-            ConnectionPrefs.Up2UpConnections.get().toString() ) );
-        openHeaders.addHeader( new HTTPHeader(
-            GnutellaHeaderNames.X_MAX_TTL,
-            String.valueOf( MessagePrefs.DEFAULT_DYNAMIC_QUERY_MAX_TTL ) ) );
+        openHeaders.addHeader(new HTTPHeader(
+                GnutellaHeaderNames.X_ULTRAPEER, "false"));
+        openHeaders.addHeader(new HTTPHeader(
+                GnutellaHeaderNames.X_QUERY_ROUTING, "0.1"));
+        openHeaders.addHeader(new HTTPHeader(
+                GnutellaHeaderNames.X_UP_QUERY_ROUTING, "0.1"));
+        openHeaders.addHeader(new HTTPHeader(
+                GnutellaHeaderNames.X_DYNAMIC_QUERY, "0.1"));
+        openHeaders.addHeader(new HTTPHeader(
+                GnutellaHeaderNames.X_DEGREE,
+                ConnectionPrefs.Up2UpConnections.get().toString()));
+        openHeaders.addHeader(new HTTPHeader(
+                GnutellaHeaderNames.X_MAX_TTL,
+                String.valueOf(MessagePrefs.DEFAULT_DYNAMIC_QUERY_MAX_TTL)));
 
         return openHeaders;
     }
 
     @Override
-    public HandshakeStatus createHandshakeResponse( HandshakeStatus hostResponse,
-       boolean isOutgoing )
-    {
+    public HandshakeStatus createHandshakeResponse(HandshakeStatus hostResponse,
+                                                   boolean isOutgoing) {
         HTTPHeaderGroup headers = hostResponse.getResponseHeaders();
-        if ( isOutgoing && isCrawlerConnection( headers ) )
-        {
-            return createCrawlerHandshakeStatus();            
+        if (isOutgoing && isCrawlerConnection(headers)) {
+            return createCrawlerHandshakeStatus();
         }
-        
+
         // check ultrapeer header
-        HTTPHeader header = headers.getHeader( GnutellaHeaderNames.X_ULTRAPEER );
+        HTTPHeader header = headers.getHeader(GnutellaHeaderNames.X_ULTRAPEER);
         boolean isUltrapeer = header != null && Boolean.valueOf(
                 header.getValue());
-        if ( !isUltrapeer )
-        {
-            if ( isOutgoing )
-            {
+        if (!isUltrapeer) {
+            if (isOutgoing) {
                 // no additional headers on outgoing response...
-                return new HandshakeStatus( STATUS_CODE_REJECTED,
-                    STATUS_MESSAGE_ACCEPT_ONLY_UP );
-            }
-            else
-            {
-                return new HandshakeStatus( STATUS_CODE_REJECTED,
-                    STATUS_MESSAGE_ACCEPT_ONLY_UP,
-                    createRejectIncomingHeaders() );
+                return new HandshakeStatus(STATUS_CODE_REJECTED,
+                        STATUS_MESSAGE_ACCEPT_ONLY_UP);
+            } else {
+                return new HandshakeStatus(STATUS_CODE_REJECTED,
+                        STATUS_MESSAGE_ACCEPT_ONLY_UP,
+                        createRejectIncomingHeaders());
             }
         }
-        
-        connectedHost.setConnectionType( Host.CONNECTION_LEAF_UP );
 
-        if ( isOutgoing )
-        {
+        connectedHost.setConnectionType(Host.CONNECTION_LEAF_UP);
+
+        if (isOutgoing) {
             // in case of outgoing connection I try to accept every connection
             // type to get my slots full and be well connected...
-            
-            HTTPHeaderGroup myHeaders = new HTTPHeaderGroup(
-                HTTPHeaderGroup.COMMON_HANDSHAKE_GROUP );
-            
-            // support for deflate... if accepted..
-            if ( hostResponse.isDeflateAccepted() )
-            {
-                myHeaders.addHeader( new HTTPHeader(
-                    HTTPHeaderNames.CONTENT_ENCODING, "deflate" ) );
-            }            
 
-            return new HandshakeStatus( STATUS_CODE_OK, STATUS_MESSAGE_OK,
-                myHeaders );
-        }
-        else
-        {
-            if ( servent.isShieldedLeafNode() )
-            {
+            HTTPHeaderGroup myHeaders = new HTTPHeaderGroup(
+                    HTTPHeaderGroup.COMMON_HANDSHAKE_GROUP);
+
+            // support for deflate... if accepted..
+            if (hostResponse.isDeflateAccepted()) {
+                myHeaders.addHeader(new HTTPHeader(
+                        HTTPHeaderNames.CONTENT_ENCODING, "deflate"));
+            }
+
+            return new HandshakeStatus(STATUS_CODE_OK, STATUS_MESSAGE_OK,
+                    myHeaders);
+        } else {
+            if (servent.isShieldedLeafNode()) {
                 // a none ultrapeer incoming connections and I'm a shielded leaf..
                 // we don't accept this on incoming...
-                return new HandshakeStatus( STATUS_CODE_REJECTED,
-                    STATUS_MESSAGE_SHIELDED_LEAF, createRejectIncomingHeaders() );
-            }
-            
-            HTTPHeaderGroup myHeaders = createDefaultHandshakeHeaders();
-            
-            // support for deflate... if accepted..
-            if ( hostResponse.isDeflateAccepted() )
-            {
-                myHeaders.addHeader( new HTTPHeader(
-                    HTTPHeaderNames.CONTENT_ENCODING, "deflate" ) );
+                return new HandshakeStatus(STATUS_CODE_REJECTED,
+                        STATUS_MESSAGE_SHIELDED_LEAF, createRejectIncomingHeaders());
             }
 
-            return new HandshakeStatus( STATUS_CODE_OK, STATUS_MESSAGE_OK,
-                myHeaders );
+            HTTPHeaderGroup myHeaders = createDefaultHandshakeHeaders();
+
+            // support for deflate... if accepted..
+            if (hostResponse.isDeflateAccepted()) {
+                myHeaders.addHeader(new HTTPHeader(
+                        HTTPHeaderNames.CONTENT_ENCODING, "deflate"));
+            }
+
+            return new HandshakeStatus(STATUS_CODE_OK, STATUS_MESSAGE_OK,
+                    myHeaders);
         }
     }
 }

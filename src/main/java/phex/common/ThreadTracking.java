@@ -24,58 +24,50 @@ package phex.common;
 import phex.common.log.NLogger;
 
 
-
 /**
  * This class assists in tracking Thread use.
  */
-public class ThreadTracking
-{
+public class ThreadTracking {
     public static ThreadGroup threadPoolGroup;
     public static ThreadGroup rootThreadGroup;
 
     private static ThreadGroup systemGroup;
 
-    public static void initialize()
-    {
+    public static void initialize() {
         // we want the system thread group
         systemGroup = Thread.currentThread().getThreadGroup();
-        while ( systemGroup.getParent() != null )
-        {// not the system thread group.. go up one step
+        while (systemGroup.getParent() != null) {// not the system thread group.. go up one step
             systemGroup = systemGroup.getParent();
         }
-        
+
         prepareUncaughtExceptionHandler();
-        
+
         // TODO in the future all thread creation should go through this class
         // to consistently use uncaught exception handling.
-        rootThreadGroup = new PhexThreadGroup( "PhexRoot" );
-        threadPoolGroup = new PhexThreadGroup( "PhexThreadPool" );
-    }
-    
-    private static void prepareUncaughtExceptionHandler()
-    {
-    	Thread.UncaughtExceptionHandler ucExpHandler =
-                (thread, throwable) -> NLogger.error( ThreadTracking.class,
-                    "Uncaught exception: " + throwable.getMessage() + " in Thread: "
-                    + thread.getName(), throwable );
-    	Thread.setDefaultUncaughtExceptionHandler( ucExpHandler );
+        rootThreadGroup = new PhexThreadGroup("PhexRoot");
+        threadPoolGroup = new PhexThreadGroup("PhexThreadPool");
     }
 
-    private static class PhexThreadGroup extends ThreadGroup
-    {
-        public PhexThreadGroup( String name )
-        {
-            super( systemGroup, name );
-            
+    private static void prepareUncaughtExceptionHandler() {
+        Thread.UncaughtExceptionHandler ucExpHandler =
+                (thread, throwable) -> NLogger.error(ThreadTracking.class,
+                        "Uncaught exception: " + throwable.getMessage() + " in Thread: "
+                                + thread.getName(), throwable);
+        Thread.setDefaultUncaughtExceptionHandler(ucExpHandler);
+    }
+
+    private static class PhexThreadGroup extends ThreadGroup {
+        public PhexThreadGroup(String name) {
+            super(systemGroup, name);
+
         }
-        
+
         @Override
-        public void uncaughtException(Thread t, Throwable e)
-        {
+        public void uncaughtException(Thread t, Throwable e) {
             super.uncaughtException(t, e);
-            NLogger.error( PhexThreadGroup.class, 
-                "Uncaught exception: " + e.getMessage() + " in Thread: " 
-                + t.getName(), e );
+            NLogger.error(PhexThreadGroup.class,
+                    "Uncaught exception: " + e.getMessage() + " in Thread: "
+                            + t.getName(), e);
         }
     }
 

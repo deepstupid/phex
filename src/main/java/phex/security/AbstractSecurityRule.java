@@ -26,21 +26,18 @@ import phex.xml.sax.security.DIpAccessRule;
 import phex.xml.sax.security.DSecurityRule;
 
 /**
- *
  * <ul>
  * <li>A rule has a ID to identify it on import and export.
  * <li>A rule has a name to describe it.
  * <li>A rule defines if access should be DENYED or ALLOWED.
  * <li>A rule has a counter that indicates how often it was triggered.
  * <li>A rule has a set expiry time. This can be a fixed lifetime, end of
- *     session, or indefinite.
+ * session, or indefinite.
  * <li>A rule can be enabled or disabled.
  * <li>When a rule expires it can be deleted or disabled.
  * </ul>
- *
  */
-public abstract class AbstractSecurityRule implements SecurityRule
-{
+public abstract class AbstractSecurityRule implements SecurityRule {
     /**
      * A description of the rule.
      */
@@ -87,14 +84,12 @@ public abstract class AbstractSecurityRule implements SecurityRule
      */
     protected boolean isDeletedOnExpiry;
 
-    public AbstractSecurityRule( String description, boolean isDenyingRule )
-    {
-        this( description, isDenyingRule, false, false, false );
+    public AbstractSecurityRule(String description, boolean isDenyingRule) {
+        this(description, isDenyingRule, false, false, false);
     }
-    
-    public AbstractSecurityRule( String description, boolean isDenyingRule,
-        boolean isSystemRule, boolean isStrongFilter, boolean isDisabled )
-    {
+
+    public AbstractSecurityRule(String description, boolean isDenyingRule,
+                                boolean isSystemRule, boolean isStrongFilter, boolean isDisabled) {
         this.description = description;
         this.isDenyingRule = isDenyingRule;
 
@@ -106,14 +101,13 @@ public abstract class AbstractSecurityRule implements SecurityRule
         triggerCount = 0;
     }
 
-    public AbstractSecurityRule( DIpAccessRule dRule )
-    {
+    public AbstractSecurityRule(DIpAccessRule dRule) {
         description = dRule.getDescription();
         isDenyingRule = dRule.isDenyingRule();
         isDisabled = dRule.isDisabled();
         long expiryTime = dRule.getExpiryDate();
-        
-        expiryDate = ExpiryDate.getExpiryDate( expiryTime );
+
+        expiryDate = ExpiryDate.getExpiryDate(expiryTime);
 
         isDeletedOnExpiry = dRule.isDeletedOnExpiry();
         triggerCount = dRule.getTriggerCount();
@@ -122,81 +116,73 @@ public abstract class AbstractSecurityRule implements SecurityRule
         isStrongFilter = false;
     }
 
+    public boolean isDisabled() {
+        return isDisabled;
+    }
 
     /**
      * A value of true sets this rule to be disabled, a value of true enables the
      * rule.
      */
-    public void setDisabled( boolean isDisabled )
-    {
-        if ( this.isDisabled != isDisabled )
-        {
+    public void setDisabled(boolean isDisabled) {
+        if (this.isDisabled != isDisabled) {
             this.isDisabled = isDisabled;
-        }
-    }
-
-    public boolean isDisabled()
-    {
-        return isDisabled;
-    }
-
-    /**
-     * Sets the expiry date that indicates when this rule expires. It can be a
-     * at a time, at the end of the session or never.
-     */
-    public void setExpiryDate( ExpiryDate expiryDate )
-    {
-        if ( !this.expiryDate.equals(expiryDate) )
-        {
-            this.expiryDate = expiryDate;
         }
     }
 
     /**
      * Returns the expiry date that indicates when this rule expires. It can be a
      * at a time, at the end of the session or never.
+     *
      * @return the expiry date that indicates when this rule expires.
      */
-    public ExpiryDate getExpiryDate()
-    {
+    public ExpiryDate getExpiryDate() {
         return expiryDate;
+    }
+
+    /**
+     * Sets the expiry date that indicates when this rule expires. It can be a
+     * at a time, at the end of the session or never.
+     */
+    public void setExpiryDate(ExpiryDate expiryDate) {
+        if (!this.expiryDate.equals(expiryDate)) {
+            this.expiryDate = expiryDate;
+        }
     }
 
     /**
      * Returns the number of times the rule was triggered. All checks that
      * match the rule will increment the trigger.
+     *
      * @return the number of times the rule was triggered.
      */
-    public int getTriggerCount()
-    {
+    public int getTriggerCount() {
         return triggerCount;
-    }
-
-    /**
-     * Increments the trigger count by one.
-     */
-    protected void incrementTriggerCount()
-    {
-        triggerCount ++;
     }
 
     /**
      * Sets the number of times the rule was triggered. All checks that
      * match the rule will increment the trigger.
      */
-    public void setTriggerCount( int count )
-    {
+    public void setTriggerCount(int count) {
         triggerCount = count;
+    }
+
+    /**
+     * Increments the trigger count by one.
+     */
+    protected void incrementTriggerCount() {
+        triggerCount++;
     }
 
     /**
      * Returns true when checks that match the rule will fail.
      * Returns false when all checks that do not match the rule will fail.
+     *
      * @return true when checks that match the rule will fail,
-     *         false when all checks that do not match the rule will fail.
+     * false when all checks that do not match the rule will fail.
      */
-    public boolean isDenyingRule()
-    {
+    public boolean isDenyingRule() {
         return isDenyingRule;
     }
 
@@ -204,80 +190,66 @@ public abstract class AbstractSecurityRule implements SecurityRule
      * If set to true then checks that match the rule will fail.
      * If set to false then all checks that do not match the rule will fail.
      */
-    public void setDenyingRule( boolean isDenyingRule )
-    {
-        if ( this.isDenyingRule != isDenyingRule )
-        {
+    public void setDenyingRule(boolean isDenyingRule) {
+        if (this.isDenyingRule != isDenyingRule) {
             this.isDenyingRule = isDenyingRule;
         }
     }
 
     /**
      * Returns the description of the rule.
+     *
      * @return the description of the rule.
      */
-    public String getDescription()
-    {
+    public String getDescription() {
         return description;
     }
 
     /**
      * Sets the description of the rule.
      */
-    public void setDescription( String aDescription )
-    {
-        if ( ! this.description.equals( aDescription ) )
-        {
+    public void setDescription(String aDescription) {
+        if (!this.description.equals(aDescription)) {
             description = aDescription;
         }
     }
 
 
-    public void setDeleteOnExpiry( boolean isDeletedOnExpiry )
-    {
-        if ( this.isDeletedOnExpiry != isDeletedOnExpiry )
-        {
+    public void setDeleteOnExpiry(boolean isDeletedOnExpiry) {
+        if (this.isDeletedOnExpiry != isDeletedOnExpiry) {
             this.isDeletedOnExpiry = isDeletedOnExpiry;
         }
     }
 
-    public boolean isDeletedOnExpiry()
-    {
+    public boolean isDeletedOnExpiry() {
         return isDeletedOnExpiry;
     }
 
-    public void setSystemRule( boolean isSystemRule )
-    {
-        if ( this.isSystemRule != isSystemRule )
-        {
+    public boolean isSystemRule() {
+        return isSystemRule;
+    }
+
+    public void setSystemRule(boolean isSystemRule) {
+        if (this.isSystemRule != isSystemRule) {
             this.isSystemRule = isSystemRule;
         }
     }
 
-    public boolean isSystemRule()
-    {
-        return isSystemRule;
+    public boolean isStrongFilter() {
+        return isStrongFilter;
     }
 
-    public void setStrongFilter( boolean isStrongFilter )
-    {
-        if ( this.isStrongFilter != isStrongFilter )
-        {
+    public void setStrongFilter(boolean isStrongFilter) {
+        if (this.isStrongFilter != isStrongFilter) {
             this.isStrongFilter = isStrongFilter;
         }
-    }
-
-    public boolean isStrongFilter()
-    {
-        return isStrongFilter;
     }
 
     /**
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int PRIME = 89;
         int result = 1;
         result = PRIME * result + ((description == null) ? 0 : description.hashCode());
@@ -294,27 +266,22 @@ public abstract class AbstractSecurityRule implements SecurityRule
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals( Object obj )
-    {
-        if ( this == obj ) return true;
-        if ( obj == null ) return false;
-        if ( getClass() != obj.getClass() ) return false;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         final AbstractSecurityRule other = (AbstractSecurityRule) obj;
-        if ( description == null )
-        {
-            if ( other.description != null ) return false;
-        }
-        else if ( !description.equals( other.description ) ) return false;
-        if ( expiryDate == null )
-        {
-            if ( other.expiryDate != null ) return false;
-        }
-        else if ( !expiryDate.equals( other.expiryDate ) ) return false;
-        if ( isDeletedOnExpiry != other.isDeletedOnExpiry ) return false;
-        if ( isDenyingRule != other.isDenyingRule ) return false;
-        if ( isDisabled != other.isDisabled ) return false;
-        if ( isStrongFilter != other.isStrongFilter ) return false;
-        if ( isSystemRule != other.isSystemRule ) return false;
+        if (description == null) {
+            if (other.description != null) return false;
+        } else if (!description.equals(other.description)) return false;
+        if (expiryDate == null) {
+            if (other.expiryDate != null) return false;
+        } else if (!expiryDate.equals(other.expiryDate)) return false;
+        if (isDeletedOnExpiry != other.isDeletedOnExpiry) return false;
+        if (isDenyingRule != other.isDenyingRule) return false;
+        if (isDisabled != other.isDisabled) return false;
+        if (isStrongFilter != other.isStrongFilter) return false;
+        if (isSystemRule != other.isSystemRule) return false;
         return true;
     }
 

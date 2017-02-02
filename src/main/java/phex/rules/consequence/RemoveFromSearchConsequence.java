@@ -28,27 +28,23 @@ import phex.servent.Servent;
 import phex.xml.sax.rules.DConsequence;
 import phex.xml.sax.rules.DRemoveFromSearchConsequence;
 
-public class RemoveFromSearchConsequence implements Consequence
-{
+public class RemoveFromSearchConsequence implements Consequence {
     public static final RemoveFromSearchConsequence INSTANCE =
-        new RemoveFromSearchConsequence();
-    private static final DRemoveFromSearchConsequence DELEMENT = 
-        new DRemoveFromSearchConsequence();
+            new RemoveFromSearchConsequence();
+    private static final DRemoveFromSearchConsequence DELEMENT =
+            new DRemoveFromSearchConsequence();
 
-    public void invoke( Search search, RemoteFile remoteFile, Servent servent )
-    {
+    public void invoke(Search search, RemoteFile remoteFile, Servent servent) {
         remoteFile.setFilteredRemoved(true);
     }
-    
+
     @Override
-    public Object clone()
-    {
+    public Object clone() {
         // there is only one instance...
         return INSTANCE;
     }
-    
-    public DConsequence createDConsequence()
-    {
+
+    public DConsequence createDConsequence() {
         return DELEMENT;
     }
 }

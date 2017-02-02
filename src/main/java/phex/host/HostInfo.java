@@ -24,48 +24,41 @@ package phex.host;
 
 import phex.util.Localizer;
 
-public class HostInfo
-{
+public class HostInfo {
     /**
      * Returns a localized string of the status for the given host.
      */
-    public static String getHostStatusString( Host host )
-    {
+    public static String getHostStatusString(Host host) {
         String lastStatusMsg = host.getLastStatusMsg();
-        switch ( host.getStatus() )
-        {
-        case NOT_CONNECTED:
-            return Localizer.getString( "NetHostStatus_NotConnected" );
+        switch (host.getStatus()) {
+            case NOT_CONNECTED:
+                return Localizer.getString("NetHostStatus_NotConnected");
 
-        case ERROR:
-        {
-            Object[] args =
-            { lastStatusMsg };
-            return Localizer.getFormatedString( "NetHostStatus_Error", args );
-        }
-        case CONNECTING:
-        {
-            Object[] args = { lastStatusMsg != null ? lastStatusMsg : "" };
-            return Localizer.getFormatedString( "NetHostStatus_Connecting",
-                args );
-        }
-        case ACCEPTING:
-        {
-            Object[] args =
-            { lastStatusMsg };
-            return Localizer
-                .getFormatedString( "NetHostStatus_Accepting", args );
-        }
-        case CONNECTED:
-        {
-            Object[] args = 
-            { host.isSendQueueInRed() ? Integer.valueOf( 1 ) : Integer.valueOf( 0 ) };
-            return Localizer.getFormatedString( "NetHostStatus_Connected", args );
-        }
-        case DISCONNECTED:
-            return Localizer.getString( "NetHostStatus_Disconnected" );
+            case ERROR: {
+                Object[] args =
+                        {lastStatusMsg};
+                return Localizer.getFormatedString("NetHostStatus_Error", args);
+            }
+            case CONNECTING: {
+                Object[] args = {lastStatusMsg != null ? lastStatusMsg : ""};
+                return Localizer.getFormatedString("NetHostStatus_Connecting",
+                        args);
+            }
+            case ACCEPTING: {
+                Object[] args =
+                        {lastStatusMsg};
+                return Localizer
+                        .getFormatedString("NetHostStatus_Accepting", args);
+            }
+            case CONNECTED: {
+                Object[] args =
+                        {host.isSendQueueInRed() ? Integer.valueOf(1) : Integer.valueOf(0)};
+                return Localizer.getFormatedString("NetHostStatus_Connected", args);
+            }
+            case DISCONNECTED:
+                return Localizer.getString("NetHostStatus_Disconnected");
         }
 
-        return Localizer.getString( "NetHostStatus_Unknown" );
+        return Localizer.getString("NetHostStatus_Unknown");
     }
 }

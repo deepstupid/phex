@@ -32,37 +32,29 @@ import java.util.List;
 /**
  * This is a AND concatenation search filter. All filters in this filter
  * must match the filter to get it triggered.
- *
  */
-public class AndConcatCondition extends ConcatCondition
-{
-    public synchronized boolean isMatched( Search search, RemoteFile remoteFile )
-    {
-        if ( filterList.size() == 0 )
-        {
+public class AndConcatCondition extends ConcatCondition {
+    public synchronized boolean isMatched(Search search, RemoteFile remoteFile) {
+        if (filterList.size() == 0) {
             return true;
         }
-        
+
         boolean isMatched = true;
-        for( Condition filter : filterList )
-        {
-            boolean condMatched = filter.isMatched( search, remoteFile );
-            if ( !condMatched )
-            {
+        for (Condition filter : filterList) {
+            boolean condMatched = filter.isMatched(search, remoteFile);
+            if (!condMatched) {
                 isMatched = false;
                 break;
             }
         }
         return isMatched;
     }
-    
-    public synchronized DCondition createDCondition()
-    {
+
+    public synchronized DCondition createDCondition() {
         DAndConcatCondition dCond = new DAndConcatCondition();
         List<DCondition> dList = dCond.getSubElementList();
-        for( Condition cond : filterList )
-        {
-            dList.add( cond.createDCondition() );
+        for (Condition cond : filterList) {
+            dList.add(cond.createDCondition());
         }
         return dCond;
     }

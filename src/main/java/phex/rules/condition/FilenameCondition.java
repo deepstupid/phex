@@ -33,115 +33,100 @@ import java.util.*;
 /**
  * Filters all files matching the expression.
  */
-public class FilenameCondition implements Condition
-{
+public class FilenameCondition implements Condition {
     private ListOrderedSet/*<String>*/ terms;
-    
+
     /**
      * @param expression
      * @param case1
      */
-    public FilenameCondition( )
-    {
+    public FilenameCondition() {
         terms = new ListOrderedSet();
     }
-    
+
     /**
      * Deep copy constructor.
+     *
      * @param condition
      */
-    public FilenameCondition( FilenameCondition condition )
-    {
+    public FilenameCondition(FilenameCondition condition) {
         this();
-        update( condition );
+        update(condition);
     }
-    
-    public synchronized void update( FilenameCondition condition )
-    {
+
+    public synchronized void update(FilenameCondition condition) {
         terms.clear();
         // we simply add the string.. since they are not mutable. 
         terms.addAll(condition.terms);
     }
-    
-    
-    public synchronized int getTermsCount()
-    {
+
+
+    public synchronized int getTermsCount() {
         return terms.size();
     }
-    
-    public synchronized Set<String> getTerms()
-    {
+
+    public synchronized Set<String> getTerms() {
         return Collections.unmodifiableSet(terms);
     }
-    
+
     /**
      * Returns a unmodifiable list of the ranges.
+     *
      * @return
      */
-    public synchronized List<String> getTermsList()
-    {
+    public synchronized List<String> getTermsList() {
         return terms.asList();
     }
-    
-    public synchronized FilenameCondition addTerm( String term )
-    {
+
+    public synchronized FilenameCondition addTerm(String term) {
         term = term.toLowerCase();
-        terms.add( term );
+        terms.add(term);
         return this;
     }
-    
-    public synchronized void removeTerm( String term )
-    {
+
+    public synchronized void removeTerm(String term) {
         terms.remove(term);
     }
 
-    public synchronized boolean isMatched( Search search, RemoteFile remoteFile )
-    {
+    public synchronized boolean isMatched(Search search, RemoteFile remoteFile) {
         String filename = remoteFile.getFilename();
         filename = filename.toLowerCase();
-        
+
         Iterator<String> iterator = terms.iterator();
-        while( iterator.hasNext() )
-        {
+        while (iterator.hasNext()) {
             String term = iterator.next();
-            if ( filename.indexOf( term ) != -1 )
-            {
+            if (filename.indexOf(term) != -1) {
                 return true;
             }
         }
         return false;
     }
-    
+
     /**
-     * Validates if this condition is completly edited and ready for storage or 
+     * Validates if this condition is completly edited and ready for storage or
      * requires further modifications.
+     *
      * @return true if complet false otherwise.
      */
-    public synchronized boolean isComplete()
-    {
+    public synchronized boolean isComplete() {
         return getTermsCount() > 0;
     }
-    
+
     @Override
-    public synchronized Object clone()
-    {
-        try
-        {
+    public synchronized Object clone() {
+        try {
             FilenameCondition clone = (FilenameCondition) super.clone();
             clone.terms = new ListOrderedSet();
-            clone.terms.addAll( terms );
+            clone.terms.addAll(terms);
             return clone;
-        }
-        catch (CloneNotSupportedException exp)
-        {
+        } catch (CloneNotSupportedException exp) {
             throw new InternalError();
         }
     }
 
-    public synchronized DCondition createDCondition()
-    {
+    public synchronized DCondition createDCondition() {
         DFilenameCondition dCond = new DFilenameCondition();
-        List<String> newList = new ArrayList<String>( terms );
+        List<String> newList = new ArrayList<String>(terms);
         dCond.setTerms(newList);
         return dCond;
     }

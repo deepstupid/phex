@@ -24,8 +24,7 @@ package phex.msg;
 import phex.io.buffer.ByteBuffer;
 
 
-public class QRPatchTableMsg extends RouteTableUpdateMsg
-{
+public class QRPatchTableMsg extends RouteTableUpdateMsg {
     /**
      * Constant when no compressor is used.
      */
@@ -49,13 +48,12 @@ public class QRPatchTableMsg extends RouteTableUpdateMsg
     private int dataOffset;
     private int dataLength;
 
-    public QRPatchTableMsg( byte aSequenceNumber, byte aSequenceSize,
-        byte aCompressor, byte aEntryBits, byte[] aData, int aDataOffset,
-        int aDataLength )
-    {
+    public QRPatchTableMsg(byte aSequenceNumber, byte aSequenceSize,
+                           byte aCompressor, byte aEntryBits, byte[] aData, int aDataOffset,
+                           int aDataLength) {
         // length = variant: 1 + SEQ_NO: 1 + SEQ_SIZE: 1 + COMPRESSOR: 1
         //    + ENTRY_BITS: 1 + data length
-        super( PATCH_TABLE_VARIANT, 5 + aDataLength );
+        super(PATCH_TABLE_VARIANT, 5 + aDataLength);
         sequenceNumber = aSequenceNumber;
         sequenceSize = aSequenceSize;
         compressor = aCompressor;
@@ -65,77 +63,68 @@ public class QRPatchTableMsg extends RouteTableUpdateMsg
         dataLength = aDataLength;
     }
 
-    public QRPatchTableMsg( MsgHeader header, byte[] aBody )
-        throws InvalidMessageException
-    {
-        super( PATCH_TABLE_VARIANT, header );
-        header.setDataLength( aBody.length );
+    public QRPatchTableMsg(MsgHeader header, byte[] aBody)
+            throws InvalidMessageException {
+        super(PATCH_TABLE_VARIANT, header);
+        header.setDataLength(aBody.length);
 
         // since we dont forward this message we are not memorizing the body!
 
         sequenceNumber = aBody[1];
         sequenceSize = aBody[2];
         // validate
-        if ( sequenceNumber == 0 || sequenceSize == 0 ||
-            sequenceNumber > sequenceSize )
-        {
+        if (sequenceNumber == 0 || sequenceSize == 0 ||
+                sequenceNumber > sequenceSize) {
             throw new InvalidMessageException(
-                "Invalid sequence number or size: " + sequenceNumber + '/' +
-                sequenceSize );
+                    "Invalid sequence number or size: " + sequenceNumber + '/' +
+                            sequenceSize);
         }
         compressor = aBody[3];
         // validate
-        if ( !(compressor == COMPRESSOR_NONE || compressor == COMPRESSOR_ZLIB) )
-        {
+        if (!(compressor == COMPRESSOR_NONE || compressor == COMPRESSOR_ZLIB)) {
             throw new InvalidMessageException(
-                "Invalid compressor type: " + compressor );
+                    "Invalid compressor type: " + compressor);
         }
         entryBits = aBody[4];
         dataOffset = 0;
         dataLength = aBody.length - 5;
-        data = new byte[ dataLength ];
-        System.arraycopy( aBody, 5, data, 0, dataLength );
+        data = new byte[dataLength];
+        System.arraycopy(aBody, 5, data, 0, dataLength);
     }
 
 
-    public byte getSequenceNumber()
-    {
+    public byte getSequenceNumber() {
         return sequenceNumber;
     }
 
-    public byte getSequenceSize()
-    {
+    public byte getSequenceSize() {
         return sequenceSize;
     }
 
-    public byte getCompressor()
-    {
+    public byte getCompressor() {
         return compressor;
     }
 
-    public byte getEntryBits()
-    {
+    public byte getEntryBits() {
         return entryBits;
     }
 
-    public byte[] getPatchData()
-    {
+    public byte[] getPatchData() {
         return data;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public ByteBuffer createMessageBuffer()
-    {
-        ByteBuffer buffer = ByteBuffer.allocate( dataLength + 5 );
-        buffer.put( variant )
-              .put( sequenceNumber )
-              .put( sequenceSize )
-              .put( compressor )
-              .put( entryBits )
-              .put( data, dataOffset, dataLength );
+    public ByteBuffer createMessageBuffer() {
+        ByteBuffer buffer = ByteBuffer.allocate(dataLength + 5);
+        buffer.put(variant)
+                .put(sequenceNumber)
+                .put(sequenceSize)
+                .put(compressor)
+                .put(entryBits)
+                .put(data, dataOffset, dataLength);
         buffer.rewind();
         return buffer;
     }

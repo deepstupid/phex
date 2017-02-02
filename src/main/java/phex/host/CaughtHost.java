@@ -27,23 +27,22 @@ import phex.util.StringUtils;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 
+ *
  */
-public class CaughtHost
-{
+public class CaughtHost {
     private static final AtomicInteger UNIQUE_ID_PROVIDER = new AtomicInteger(0);
-    
+
     /**
-     * A unique id of a host, it's main use is to provide 
+     * A unique id of a host, it's main use is to provide
      * distinction in CaughtHostComparator.
      */
     private final int uniqueId;
-    
+
     /**
      * The address of the host.
      */
     private final DestAddress hostAddress;
-    
+
     private long lastFailedConnection;
     private long lastSuccessfulConnection;
     private int avgDailyUptime;
@@ -51,180 +50,156 @@ public class CaughtHost
     private int vendorVersionMajor;
     private int vendorVersionMinor;
     private boolean isUltrapeer;
-    
+
     /**
      * @param address
      */
-    public CaughtHost( DestAddress address  )
-    {
+    public CaughtHost(DestAddress address) {
         this.uniqueId = UNIQUE_ID_PROVIDER.incrementAndGet();
         hostAddress = address;
         lastFailedConnection = -1;
         lastSuccessfulConnection = -1;
     }
-    
-    public DestAddress getHostAddress()
-    {
+
+    public DestAddress getHostAddress() {
         return hostAddress;
     }
-    
-    public void setVendor(String vendor, int vendorVersionMajor, int vendorVersionMinor )
-    {
+
+    public void setVendor(String vendor, int vendorVersionMajor, int vendorVersionMinor) {
         this.vendor = vendor;
         this.vendorVersionMajor = vendorVersionMajor;
         this.vendorVersionMinor = vendorVersionMinor;
     }
-        
+
     /**
      * @return the vendor
      */
-    public String getVendor()
-    {
+    public String getVendor() {
         return vendor;
     }
 
     /**
      * @return the vendorVersionMajor
      */
-    public int getVendorVersionMajor()
-    {
+    public int getVendorVersionMajor() {
         return vendorVersionMajor;
     }
 
     /**
      * @return the vendorVersionMinor
      */
-    public int getVendorVersionMinor()
-    {
+    public int getVendorVersionMinor() {
         return vendorVersionMinor;
+    }
+
+    /**
+     * @return the daily average uptime.
+     */
+    public int getDailyUptime() {
+        return avgDailyUptime;
     }
 
     /**
      * @param dailyUptime
      */
-    public void setDailyUptime(int dailyUptime)
-    {
+    public void setDailyUptime(int dailyUptime) {
         avgDailyUptime = dailyUptime;
     }
-    
-    /**
-     * @return the daily average uptime. 
-     */
-    public int getDailyUptime()
-    {
-        return avgDailyUptime;
-    }
-    
+
     /**
      * @return the isUltrapeer
      */
-    public boolean isUltrapeer()
-    {
+    public boolean isUltrapeer() {
         return isUltrapeer;
     }
 
     /**
      * @param isUltrapeer the isUltrapeer to set
      */
-    public void setUltrapeer(boolean isUltrapeer)
-    {
+    public void setUltrapeer(boolean isUltrapeer) {
         this.isUltrapeer = isUltrapeer;
     }
 
-    public boolean equals( Object o )
-    {
-        if ( !(o instanceof CaughtHost ) )
-        {
+    public boolean equals(Object o) {
+        if (!(o instanceof CaughtHost)) {
             return false;
         }
-        return hostAddress.equals( ((CaughtHost)o).hostAddress );
+        return hostAddress.equals(((CaughtHost) o).hostAddress);
     }
-    
-    public int hashCode()
-    {
+
+    public int hashCode() {
         return hostAddress.hashCode();
     }
-    
+
     /**
      * Returns true if this host has a PHEX vendor code and
      * a daily avg uptime of at least 2 hour and is a ultrapeer.
+     *
      * @return true if this is a decent Phex host, false otherwise.
-     */ 
-    public boolean isDecentPhexHost()
-    {
-        if ( !StringUtils.equals( vendor, "PHEX" ) )
-        {
+     */
+    public boolean isDecentPhexHost() {
+        if (!StringUtils.equals(vendor, "PHEX")) {
             return false;
         }
-        if ( avgDailyUptime < 3600 )
-        {
+        if (avgDailyUptime < 3600) {
             return false;
         }
         return isUltrapeer;
     }
-    
+
     /**
      * Returns 1 if the last connection was successful, -1 if the last
      * connection failed or 0 if not connected.
+     *
      * @return 1 if the last connection was successful, -1 if the last
      * connection failed or 0 if not connected.
      */
-    public int getConnectionTimeRating()
-    {
-        if ( lastSuccessfulConnection == -1 && lastFailedConnection == -1 )
-        {
+    public int getConnectionTimeRating() {
+        if (lastSuccessfulConnection == -1 && lastFailedConnection == -1) {
             return 0;
         }
-        if ( lastFailedConnection > lastSuccessfulConnection )
-        {
+        if (lastFailedConnection > lastSuccessfulConnection) {
             return -1;
-        }
-        else
-        {
+        } else {
             return 1;
         }
     }
-    
-    /**
-     * @param l
-     */
-    public void setLastFailedConnection(long l)
-    {
-        lastFailedConnection = l;
-    }
 
-    /**
-     * @param l
-     */
-    public void setLastSuccessfulConnection(long l)
-    {
-        lastSuccessfulConnection = l;
-    }
-
-    public long getLastFailedConnection()
-    {
+    public long getLastFailedConnection() {
         return lastFailedConnection;
     }
 
-    public long getLastSuccessfulConnection()
-    {
+    /**
+     * @param l
+     */
+    public void setLastFailedConnection(long l) {
+        lastFailedConnection = l;
+    }
+
+    public long getLastSuccessfulConnection() {
         return lastSuccessfulConnection;
     }
-    
-    public String toString()
-    {
-        return "CaughtHost[" + hostAddress.toString() + ",Failed=" + 
-            lastFailedConnection + ",Successful=" + lastSuccessfulConnection +
-            ",Uptime=" + avgDailyUptime + ']';
-    }
-    
+
     /**
-     * The id given to each CaughtHost. This is only introduced 
+     * @param l
+     */
+    public void setLastSuccessfulConnection(long l) {
+        lastSuccessfulConnection = l;
+    }
+
+    public String toString() {
+        return "CaughtHost[" + hostAddress.toString() + ",Failed=" +
+                lastFailedConnection + ",Successful=" + lastSuccessfulConnection +
+                ",Uptime=" + avgDailyUptime + ']';
+    }
+
+    /**
+     * The id given to each CaughtHost. This is only introduced
      * to be used in a comparator.
+     *
      * @return the unique id
      */
-    public int getUniqueId()
-    {
+    public int getUniqueId() {
         return uniqueId;
     }
 

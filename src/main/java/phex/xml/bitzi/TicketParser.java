@@ -25,29 +25,25 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class TicketParser
-{
-    private static final Pattern GOODNESS_PATTERN = Pattern.compile( 
-        "bz:fileGoodness=\"([-.0-9]*)\"", Pattern.MULTILINE );
+public class TicketParser {
+    private static final Pattern GOODNESS_PATTERN = Pattern.compile(
+            "bz:fileGoodness=\"([-.0-9]*)\"", Pattern.MULTILINE);
+
     /**
      * Currently parses only the file goodness rating out of the ticket.
+     *
      * @param ticket
      * @return the bitzi file rating.
      */
-    public static float parseBitzFileRating( String ticket )
-    {
-        Matcher m = GOODNESS_PATTERN.matcher( ticket );
-        if ( !m.find() )
-        {
+    public static float parseBitzFileRating(String ticket) {
+        Matcher m = GOODNESS_PATTERN.matcher(ticket);
+        if (!m.find()) {
             return Float.NEGATIVE_INFINITY;
         }
-        String rating = m.group( 1 );
-        try
-        {
-            return Float.parseFloat( rating );
-        }
-        catch ( NumberFormatException exp )
-        {
+        String rating = m.group(1);
+        try {
+            return Float.parseFloat(rating);
+        } catch (NumberFormatException exp) {
             return Float.NEGATIVE_INFINITY;
         }
     }

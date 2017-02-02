@@ -27,65 +27,56 @@ import java.util.Arrays;
 
 public class IpPortAddress {
 
-    /** Cache the hash code for the address */
-    private int hash = 0;
-
     private final byte[] ipAddress;
     private final byte[] port;
+    /**
+     * Cache the hash code for the address
+     */
+    private int hash = 0;
 
-    public IpPortAddress(byte[] hostIp)
-    {
+    public IpPortAddress(byte[] hostIp) {
         int offset = 0;
         this.ipAddress = new byte[4];
-        while (offset < 4)
-        {
+        while (offset < 4) {
             this.ipAddress[offset] = hostIp[offset];
             offset++;
         }
 
         this.port = new byte[4];
-        if (hostIp.length  > 6) {
+        if (hostIp.length > 6) {
             offset = 0;
-            while (offset < 4)
-            {
-                this.port[offset] = hostIp[offset+4];
-                offset++;                
+            while (offset < 4) {
+                this.port[offset] = hostIp[offset + 4];
+                offset++;
             }
-        }
-        else {
+        } else {
             offset = 0;
-            while (offset < 2)
-            {
-                this.port[offset] = hostIp[offset+4];
+            while (offset < 2) {
+                this.port[offset] = hostIp[offset + 4];
                 offset++;
             }
         }
     }
 
-    public IpPortAddress(String IpAddress, int port)
-    {
+    public IpPortAddress(String IpAddress, int port) {
         this.ipAddress = AddressUtils.parseIP(IpAddress);
         this.port = new byte[4];
-        IOUtil.serializeShortLE((short)port, this.port, 0);
+        IOUtil.serializeShortLE((short) port, this.port, 0);
     }
 
-    public byte[] getOrigIpAddress()
-    {
+    public byte[] getOrigIpAddress() {
         return this.ipAddress;
     }
 
-    public byte[] getOrigPort()
-    {
+    public byte[] getOrigPort() {
         return this.port;
     }
 
-    public String getIpAddress()
-    {
+    public String getIpAddress() {
         return AddressUtils.ip2string(this.ipAddress);
     }
 
-    public int getPort()
-    {
+    public int getPort() {
         return IOUtil.deserializeInt(this.port, 0);
     }
 
@@ -93,12 +84,10 @@ public class IpPortAddress {
      * Override hashCode() to ensure that two different instances with equal IpPortAddress
      * generate the same hashCode. This is necessary to find IpPortAddress in Maps.
      */
-    public int hashCode()
-    {
-        if ( hash == 0 )
-        {
-            int ipVal1 = IOUtil.deserializeInt( ipAddress, 0 );            
-            int ipVal2 = IOUtil.deserializeInt( port, 0 );
+    public int hashCode() {
+        if (hash == 0) {
+            int ipVal1 = IOUtil.deserializeInt(ipAddress, 0);
+            int ipVal2 = IOUtil.deserializeInt(port, 0);
             hash = ipVal2 * 31;
             hash = hash + ipVal1 * 59;
         }
@@ -106,28 +95,23 @@ public class IpPortAddress {
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
-        if( !(obj instanceof IpPortAddress) )
-        {
+    public boolean equals(Object obj) {
+        if (!(obj instanceof IpPortAddress)) {
             return false;
         }
 
-        if( obj == this )
-        {
+        if (obj == this) {
             return true;
         }
-        IpPortAddress ipPortAddr = (IpPortAddress)obj;
-        return ipPortAddr.equals( ipPortAddr.getOrigIpAddress(), ipPortAddr.getOrigPort() );
+        IpPortAddress ipPortAddr = (IpPortAddress) obj;
+        return ipPortAddr.equals(ipPortAddr.getOrigIpAddress(), ipPortAddr.getOrigPort());
     }
 
-    public boolean equals( byte[] ip, byte[] port )
-    {
-        if ( ipAddress != null )
-        {
-            return Arrays.equals( this.ipAddress, ip ) && Arrays.equals( this.port, port );
+    public boolean equals(byte[] ip, byte[] port) {
+        if (ipAddress != null) {
+            return Arrays.equals(this.ipAddress, ip) && Arrays.equals(this.port, port);
         }
         return false;
     }
-    
+
 }

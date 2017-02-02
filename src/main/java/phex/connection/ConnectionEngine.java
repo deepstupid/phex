@@ -45,7 +45,6 @@ import phex.query.DynamicQueryConstants;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
 import phex.servent.Servent;
-import phex.util.HexConverter;
 import phex.util.Localizer;
 
 import java.io.IOException;
@@ -54,7 +53,7 @@ import java.util.StringTokenizer;
 /**
  * <p>A worker that handles the communication between this and another gnutella
  * node.</p>
- *
+ * <p>
  * <p>The remote node is represented as a Host object. Depending on whether the
  * host is in incoming or outgoing mode, this will perform the relevant
  * handshake negotiations. If this was an
@@ -65,26 +64,22 @@ import java.util.StringTokenizer;
  * messages and finally queuing a request with the Message Manager to pass on any
  * messages that must be generated in response.</p>
  */
-public class ConnectionEngine implements ConnectionConstants
-{
-    private static final Logger logger = LoggerFactory.getLogger( ConnectionEngine.class );
-    
+public class ConnectionEngine implements ConnectionConstants {
+    private static final Logger logger = LoggerFactory.getLogger(ConnectionEngine.class);
+
     private final Servent servent;
     private final MessageService messageService;
     private final PhexSecurityManager securityService;
-
+    private final Host connectedHost;
+    private final Connection connection;
     /**
      * pre-allocated buffer for repeated uses.
      */
     private byte[] headerBuffer;
-
-    private final Host connectedHost;
-    private final Connection connection; 
     private HTTPHeaderGroup headersRead;
     private HTTPHeaderGroup headersSend;
 
-    public ConnectionEngine( Servent servent, Host connectedHost )
-    {
+    public ConnectionEngine(Servent servent, Host connectedHost) {
         this.servent = servent;
         this.messageService = servent.getMessageService();
         this.securityService = servent.getSecurityService();
@@ -93,13 +88,10 @@ public class ConnectionEngine implements ConnectionConstants
     }
 
     public void processIncomingData()
-        throws IOException
-    {
-        headerBuffer = new byte[ MsgHeader.DATA_LENGTH ];
-        try
-        {
-            while ( true )
-            {
+            throws IOException {
+        headerBuffer = new byte[MsgHeader.DATA_LENGTH];
+        try {
+            while (true) {
                 MsgHeader header = readHeader();
 
                 if (header.getPayload() == 2) {
@@ -121,364 +113,309 @@ public class ConnectionEngine implements ConnectionConstants
                     continue;
                 }
 
-                byte[] body = MessageProcessor.readMessageBody( connection,
-                    header.getDataLength() );
+                byte[] body = MessageProcessor.readMessageBody(connection,
+                        header.getDataLength());
 
                 connectedHost.incReceivedCount();
-
 
 
                 int ttl = header.getTTL();
                 int hops = header.getHopsTaken();
                 // verify valid ttl and hops data
-                if ( ttl < 0 || hops < 0 )
-                {
-                    messageService.dropMessage( header, body, 
-                        "TTL or hops below 0", connectedHost );
+                if (ttl < 0 || hops < 0) {
+                    messageService.dropMessage(header, body,
+                            "TTL or hops below 0", connectedHost);
                     continue;
                 }
                 // if message traveled too far already... drop it.
                 int MAX_TTL = MessagePrefs.MaxNetworkTTL.get();
-                if ( hops > MAX_TTL)
-                {
-                    messageService.dropMessage( header, body, 
-                        "Hops larger then maxNetworkTTL", connectedHost );
+                if (hops > MAX_TTL) {
+                    messageService.dropMessage(header, body,
+                            "Hops larger then maxNetworkTTL", connectedHost);
                     continue;
                 }
                 // limit TTL if too high!
-                if ( ttl >= MAX_TTL)
-                {
-                    header.setTTL( (byte)(MAX_TTL - hops) );
+                if (ttl >= MAX_TTL) {
+                    header.setTTL((byte) (MAX_TTL - hops));
                 }
 
                 Message message;
-                try
-                {
+                try {
                     message = MessageProcessor.createMessageFromBody(
-                        header, body, securityService );
-                    if ( message == null )
-                    { // unknown message type...
-                        messageService.dropMessage( header, body,
-                            "Unknown message type", connectedHost );
+                            header, body, securityService);
+                    if (message == null) { // unknown message type...
+                        messageService.dropMessage(header, body,
+                                "Unknown message type", connectedHost);
                         continue;
                     }
-                }
-                catch ( InvalidMessageException exp )
-                {
-                    messageService.dropMessage( header, body,
-                        "Invalid message: " + exp.getMessage(), connectedHost );
-                    logger.warn( exp.toString(), exp );
+                } catch (InvalidMessageException exp) {
+                    messageService.dropMessage(header, body,
+                            "Invalid message: " + exp.getMessage(), connectedHost);
+                    logger.warn("drop {}", exp.getMessage()); //exp.toString(), exp);
                     continue;
                 }
 
                 // count the hop and decrement TTL...
                 header.countHop();
 
-                messageService.dispatchMessage( message, connectedHost );
+                messageService.dispatchMessage(message, connectedHost);
             }
-        }
-        catch ( IOException exp )
-        {
-            logger.debug( exp.toString(), exp );
-            if ( connectedHost.isConnected() )
-            {
-                connectedHost.setStatus( HostStatus.ERROR, exp.getMessage());
+        } catch (IOException exp) {
+            logger.debug(exp.toString(), exp);
+            if (connectedHost.isConnected()) {
+                connectedHost.setStatus(HostStatus.ERROR, exp.getMessage());
                 connectedHost.disconnect();
             }
             throw exp;
-        }
-        catch ( Exception exp )
-        {
-            logger.warn( exp.toString(), exp );
-            if (connectedHost.isConnected() )
-            {
-                connectedHost.setStatus( HostStatus.ERROR, exp.getMessage());
+        } catch (Exception exp) {
+            logger.warn(exp.toString(), exp);
+            if (connectedHost.isConnected()) {
+                connectedHost.setStatus(HostStatus.ERROR, exp.getMessage());
                 connectedHost.disconnect();
             }
-            throw new IOException( "Exception occured: " + exp.getMessage() );
+            throw new IOException("Exception occured: " + exp.getMessage());
         }
     }
 
     private MsgHeader readHeader()
-        throws IOException
-    {
-        MsgHeader header = MessageProcessor.parseMessageHeader( connection,
-            headerBuffer );
-        if ( header == null )
-        {
+            throws IOException {
+        MsgHeader header = MessageProcessor.parseMessageHeader(connection,
+                headerBuffer);
+        if (header == null) {
             throw new ConnectionClosedException("Connection closed by remote host");
         }
 
         int length = header.getDataLength();
-        if ( length < 0 )
-        {
-            throw new IOException( "Negative body size. Disconnecting the remote host." );
-        }
-        else if ( length > MessagePrefs.MaxLength.get())
-        {
+        if (length < 0) {
+            throw new IOException("Negative body size. Disconnecting the remote host.");
+        } else if (length > MessagePrefs.MaxLength.get()) {
             // Packet looks suspiciously too big.  Disconnect them.
-            if ( logger.isWarnEnabled( ) )
-            {
+            if (logger.isWarnEnabled()) {
                 // max 256KB when over 64KB max message length
-                byte[] body = MessageProcessor.readMessageBody(
-                    connection, 262144 );
-                String hexBody = HexConverter.toHexString( body );
-                logger.warn( connectedHost + 
-                    " - Body too big. Header: " + header + "\nBody(256KB): " + hexBody );
+                /*byte[] body = MessageProcessor.readMessageBody(
+                        connection, 262144);*/
+                //String hexBody = HexConverter.toHexString(body);
+                logger.warn("{} Body too big: {}", connectedHost, header);
+                        //" - Body too big. Header: " + header + "\nBody(256KB): " + hexBody);
             }
 
             throw new IOException("Packet too big. Disconnecting the remote host.");
         }
-        header.setArrivalTime( System.currentTimeMillis() );
+        header.setArrivalTime(System.currentTimeMillis());
 
         return header;
     }
 
     //////////////////// Connection initialization //////////////////////////////
-    
-    public void initHostHandshake( )
-        throws IOException
-    {
-        try
-        {
-            if ( connectedHost.isIncomming() )
-            {
+
+    public void initHostHandshake() throws IOException {
+        try {
+            if (connectedHost.isIncomming()) {
                 initializeIncomingWith06();
-            }
-            else
-            {
+            } else {
                 initializeOutgoingWith06();
             }
-            configureConnectionType( headersSend, headersRead );
-            postHandshakeConfiguration( headersSend, headersRead );
-        }
-        finally
-        {
-            if ( headersRead != null )
-            {
+            configureConnectionType(headersSend, headersRead);
+            postHandshakeConfiguration(headersSend, headersRead);
+        } finally {
+            if (headersRead != null) {
                 // use the connection header whether connection was ok or not
-                handleXTryHeaders( headersRead );
+                handleXTryHeaders(headersRead);
                 // give free to gc
                 headersRead = null;
                 headersSend = null;
             }
         }
-        
+
         // Connection to remote gnutella host is completed at this point.
-        connectedHost.setStatus( HostStatus.CONNECTED );
-        servent.getHostService().addConnectedHost( connectedHost );
-        
+        connectedHost.setStatus(HostStatus.CONNECTED);
+        servent.getHostService().addConnectedHost(connectedHost);
+
         // send UDP ping as soon as we have recognized host
-        servent.getMessageService().sendUdpPing( connectedHost.getHostAddress() );
+        servent.getMessageService().sendUdpPing(connectedHost.getHostAddress());
 
         // queue first Ping msg to send.
         // add ping routing to local host to track my initial pings...
-        servent.getMessageService().pingHost( connectedHost, 
-            MessagePrefs.TTL.get().byteValue() );
-        
+        servent.getMessageService().pingHost(connectedHost,
+                MessagePrefs.TTL.get().byteValue());
+
         // after initial handshake ping send message supported VM.
-        if ( connectedHost.isVendorMessageSupported( ) )
-        {
+        if (connectedHost.isVendorMessageSupported()) {
             MessagesSupportedVMsg vMsg = MessagesSupportedVMsg.getMyMsgSupported();
-            connectedHost.queueMessageToSend( vMsg );
-            
+            connectedHost.queueMessageToSend(vMsg);
+
             CapabilitiesVMsg capVMsg = CapabilitiesVMsg.getMyCapabilitiesVMsg();
-            connectedHost.queueMessageToSend( capVMsg );
+            connectedHost.queueMessageToSend(capVMsg);
         }
     }
 
     private void initializeIncomingWith06()
-        throws IOException
-    {
+            throws IOException {
         // read connect headers
-        headersRead = HTTPProcessor.parseHTTPHeaders( connection );
-        if ( logger.isDebugEnabled( ) )
-        {
-            logger.debug( "{} - Connect headers: {}", 
-                connectedHost, headersRead.buildHTTPHeaderString() );
-        }
-        configureRemoteHost( headersRead );
+        headersRead = HTTPProcessor.parseHTTPHeaders(connection);
+        /*if (logger.isDebugEnabled()) {
+            logger.debug("{} - Connect headers: {}",
+                    connectedHost, headersRead.buildHTTPHeaderString());
+        }*/
+        configureRemoteHost(headersRead);
 
         // create appropriate handshake handler that takes care about headers
         // and logic...
         HandshakeHandler handshakeHandler = HandshakeHandler.createHandshakeHandler(
-            servent, connectedHost );
+                servent, connectedHost);
         HandshakeStatus myResponse = handshakeHandler.createHandshakeResponse(
-            new HandshakeStatus( headersRead ), false );
+                new HandshakeStatus(headersRead), false);
         headersSend = myResponse.getResponseHeaders();
 
         // send answer to host...
-        sendStringToHost( GNUTELLA_06 + ' ' + myResponse.getStatusCode() + ' ' +
-            myResponse.getStatusMessage() + "\r\n" );
+        sendStringToHost(GNUTELLA_06 + ' ' + myResponse.getStatusCode() + ' ' +
+                myResponse.getStatusMessage() + "\r\n");
         String httpHeaderString = myResponse.getResponseHeaders().buildHTTPHeaderString();
-        sendStringToHost( httpHeaderString );
-        sendStringToHost( "\r\n" );
+        sendStringToHost(httpHeaderString);
+        sendStringToHost("\r\n");
 
-        if ( myResponse.getStatusCode() != STATUS_CODE_OK )
-        {
-            throw new IOException( "Connection not accepted: " +
-                myResponse.getStatusCode() + ' ' + myResponse.getStatusMessage() );
+        if (myResponse.getStatusCode() != STATUS_CODE_OK) {
+            throw new IOException("Connection not accepted: " +
+                    myResponse.getStatusCode() + ' ' + myResponse.getStatusMessage());
         }
 
         HandshakeStatus inResponse = HandshakeStatus.parseHandshakeResponse(
-            connection );
-        if ( logger.isDebugEnabled( ) )
-        {
-            logger.debug( connectedHost + " - Response Code: '" 
-                + inResponse.getStatusCode() + "'." );
-            logger.debug( connectedHost + " - Response Message: '" 
-                + inResponse.getStatusMessage() + "'."  );
-            logger.debug( connectedHost + " - Response Headers: "
-                + inResponse.getResponseHeaders().buildHTTPHeaderString() );
-        }
+                connection);
 
-        if ( inResponse.getStatusCode() != STATUS_CODE_OK )
-        {
-            throw new IOException( "Host rejected connection: " +
-                inResponse.getStatusCode() + ' ' +
-                inResponse.getStatusMessage() );
+        /*if (logger.isDebugEnabled()) {
+            logger.debug(connectedHost + " - Response Code: '"
+                    + inResponse.getStatusCode() + "'.");
+            logger.debug(connectedHost + " - Response Message: '"
+                    + inResponse.getStatusMessage() + "'.");
+            logger.debug(connectedHost + " - Response Headers: "
+                    + inResponse.getResponseHeaders().buildHTTPHeaderString());
+        }*/
+
+        if (inResponse.getStatusCode() != STATUS_CODE_OK) {
+            throw new IOException("Host rejected connection: " +
+                    inResponse.getStatusCode() + ' ' +
+                    inResponse.getStatusMessage());
         }
-        headersRead.replaceHeaders( inResponse.getResponseHeaders() );
+        headersRead.replaceHeaders(inResponse.getResponseHeaders());
     }
 
     private void initializeOutgoingWith06()
-        throws IOException
-    {
-        connectedHost.setStatus( HostStatus.CONNECTING,
-            Localizer.getString( "Negotiate0_6Handshake") );
+            throws IOException {
+        connectedHost.setStatus(HostStatus.CONNECTING,
+                Localizer.getString("Negotiate0_6Handshake"));
 
         // Send the first handshake greeting to the remote host.
         String greeting = servent.getGnutellaNetwork().getNetworkGreeting();
 
         String requestLine = greeting + '/' + PROTOCOL_06 + "\r\n";
-        StringBuffer requestBuffer = new StringBuffer( 100 );
-        requestBuffer.append( requestLine );
+        StringBuffer requestBuffer = new StringBuffer(100);
+        requestBuffer.append(requestLine);
 
         // create appropriate handshake handler that takes care about headers
         // and logic...
         HandshakeHandler handshakeHandler = HandshakeHandler.createHandshakeHandler(
-            servent, connectedHost );
+                servent, connectedHost);
 
-        HTTPHeaderGroup handshakeHeaders =  
-            handshakeHandler.createOutgoingHandshakeHeaders();
-        requestBuffer.append( handshakeHeaders.buildHTTPHeaderString() );
-        requestBuffer.append( "\r\n" );
+        HTTPHeaderGroup handshakeHeaders =
+                handshakeHandler.createOutgoingHandshakeHeaders();
+        requestBuffer.append(handshakeHeaders.buildHTTPHeaderString());
+        requestBuffer.append("\r\n");
         headersSend = handshakeHeaders;
 
         String requestStr = requestBuffer.toString();
-        sendStringToHost( requestStr );
+        sendStringToHost(requestStr);
 
         HandshakeStatus handshakeResponse = HandshakeStatus.parseHandshakeResponse(
-            connection );
+                connection);
         headersRead = handshakeResponse.getResponseHeaders();
-        if ( logger.isDebugEnabled( ) )
-        {
-            logger.debug( connectedHost + " - Response Code: '" 
-                + handshakeResponse.getStatusCode() + "'." );
-            logger.debug( connectedHost + " - Response Message: '" 
-                + handshakeResponse.getStatusMessage() + "'."  );
-            logger.debug( connectedHost + " - Response Headers: "
-                + headersRead.buildHTTPHeaderString() );
-        }
 
-        if ( handshakeResponse.getStatusCode() != STATUS_CODE_OK )
-        {
-            if ( handshakeResponse.getStatusCode() == STATUS_CODE_REJECTED )
-            {
+        /*if (logger.isDebugEnabled()) {
+            logger.debug(connectedHost + " - Response Code: '"
+                    + handshakeResponse.getStatusCode() + "'.");
+            logger.debug(connectedHost + " - Response Message: '"
+                    + handshakeResponse.getStatusMessage() + "'.");
+            logger.debug(connectedHost + " - Response Headers: "
+                    + headersRead.buildHTTPHeaderString());
+        }*/
+
+        if (handshakeResponse.getStatusCode() != STATUS_CODE_OK) {
+            if (handshakeResponse.getStatusCode() == STATUS_CODE_REJECTED) {
                 throw new ConnectionRejectedException(
-                    handshakeResponse.getStatusCode() + " "
-                    + handshakeResponse.getStatusMessage() );
+                        handshakeResponse.getStatusCode() + " "
+                                + handshakeResponse.getStatusMessage());
+            } else {
+                throw new ConnectionRejectedException(
+                        "Gnutella 0.6 connection rejected. Status: " +
+                                handshakeResponse.getStatusCode() + " - " +
+                                handshakeResponse.getStatusMessage());
             }
-            throw new ConnectionRejectedException(
-                "Gnutella 0.6 connection rejected. Status: " +
-                handshakeResponse.getStatusCode() + " - " +
-                handshakeResponse.getStatusMessage() );
         }
 
-        configureRemoteHost( headersRead );
+        configureRemoteHost(headersRead);
 
         HandshakeStatus myResponse = handshakeHandler.createHandshakeResponse(
-            handshakeResponse, true );
+                handshakeResponse, true);
         HTTPHeaderGroup myResponseHeaders = myResponse.getResponseHeaders();
-        headersSend.replaceHeaders( myResponseHeaders );
+        headersSend.replaceHeaders(myResponseHeaders);
         // send answer to host...
-        sendStringToHost( GNUTELLA_06 + ' ' + myResponse.getStatusCode() + ' ' +
-            myResponse.getStatusMessage() + "\r\n" );
+        sendStringToHost(GNUTELLA_06 + ' ' + myResponse.getStatusCode() + ' ' +
+                myResponse.getStatusMessage() + "\r\n");
         String httpHeaderString = myResponseHeaders.buildHTTPHeaderString();
-        sendStringToHost( httpHeaderString );
-        sendStringToHost( "\r\n" );
+        sendStringToHost(httpHeaderString);
+        sendStringToHost("\r\n");
 
-        if ( myResponse.getStatusCode() != STATUS_CODE_OK )
-        {
-            throw new ConnectionRejectedException( "Connection not accepted: " +
-                myResponse.getStatusCode() + ' ' + myResponse.getStatusMessage() );
+        if (myResponse.getStatusCode() != STATUS_CODE_OK) {
+            throw new ConnectionRejectedException("Connection not accepted: " +
+                    myResponse.getStatusCode() + ' ' + myResponse.getStatusMessage());
         }
     }
 
-    private void configureConnectionType( HTTPHeaderGroup myHeadersSend,
-       HTTPHeaderGroup theirHeadersRead )
-    {
+    private void configureConnectionType(HTTPHeaderGroup myHeadersSend,
+                                         HTTPHeaderGroup theirHeadersRead) {
         HTTPHeader myUPHeader = myHeadersSend.getHeader(
-            GnutellaHeaderNames.X_ULTRAPEER );
+                GnutellaHeaderNames.X_ULTRAPEER);
         HTTPHeader theirUPHeader = theirHeadersRead.getHeader(
-            GnutellaHeaderNames.X_ULTRAPEER );
-        if ( myUPHeader == null || theirUPHeader == null )
-        {
-            connectedHost.setConnectionType( Host.CONNECTION_NORMAL );
-        }
-        else if ( myUPHeader.booleanValue() )
-        {
-            if ( theirUPHeader.booleanValue() )
-            {
-                connectedHost.setConnectionType( Host.CONNECTION_UP_UP );
+                GnutellaHeaderNames.X_ULTRAPEER);
+        if (myUPHeader == null || theirUPHeader == null) {
+            connectedHost.setConnectionType(Host.CONNECTION_NORMAL);
+        } else if (myUPHeader.booleanValue()) {
+            if (theirUPHeader.booleanValue()) {
+                connectedHost.setConnectionType(Host.CONNECTION_UP_UP);
+            } else {
+                connectedHost.setConnectionType(Host.CONNECTION_UP_LEAF);
             }
-            else
-            {
-                connectedHost.setConnectionType( Host.CONNECTION_UP_LEAF );
-            }
-        }
-        else // !myUPHeader.booleanValue()
+        } else // !myUPHeader.booleanValue()
         {
-            if ( theirUPHeader.booleanValue() )
-            {
-                connectedHost.setConnectionType( Host.CONNECTION_LEAF_UP );
-            }
-            else
-            {
-                connectedHost.setConnectionType( Host.CONNECTION_NORMAL );
+            if (theirUPHeader.booleanValue()) {
+                connectedHost.setConnectionType(Host.CONNECTION_LEAF_UP);
+            } else {
+                connectedHost.setConnectionType(Host.CONNECTION_NORMAL);
             }
         }
     }
 
-    private void handleXTryHeaders( HTTPHeaderGroup headers )
-    {
+    private void handleXTryHeaders(HTTPHeaderGroup headers) {
         // X-Try header is not used by most servents anymore... (2003-02-25)
         // we read still read it a while though...
         // http://groups.yahoo.com/group/the_gdf/message/14316
         HTTPHeader[] hostAddresses = headers.getHeaders(
-            GnutellaHeaderNames.X_TRY );
-        if ( hostAddresses != null )
-        {
-            handleXTryHosts( hostAddresses, true );
+                GnutellaHeaderNames.X_TRY);
+        if (hostAddresses != null) {
+            handleXTryHosts(hostAddresses, true);
         }
         // for us ultrapeers have low priority other high.. since we can't connect to UP..
         hostAddresses = headers.getHeaders(
-            GnutellaHeaderNames.X_TRY_ULTRAPEERS );
-        if ( hostAddresses != null )
-        {
-            handleXTryHosts( hostAddresses, false );
+                GnutellaHeaderNames.X_TRY_ULTRAPEERS);
+        if (hostAddresses != null) {
+            handleXTryHosts(hostAddresses, false);
         }
     }
 
-    private void handleXTryHosts( HTTPHeader[] xtryHostAdresses, boolean isUltrapeerList )
-    {
+    private void handleXTryHosts(HTTPHeader[] xtryHostAdresses, boolean isUltrapeerList) {
         short priority;
-        if ( isUltrapeerList )
-        {
+        if (isUltrapeerList) {
             priority = CaughtHostsContainer.HIGH_PRIORITY;
-        }
-        else
-        {
+        } else {
             priority = CaughtHostsContainer.NORMAL_PRIORITY;
         }
         CaughtHostsContainer hostContainer = servent.getHostService().getCaughtHostsContainer();
@@ -508,154 +445,124 @@ public class ConnectionEngine implements ConnectionConstants
             }
         }
     }
-    
+
     /**
      * This method uses the header fields to set attributes of the remote host
      * accordingly.
      */
-    private void configureRemoteHost( HTTPHeaderGroup headers )
-    {
-        HTTPHeader header = headers.getHeader( HTTPHeaderNames.USER_AGENT );
-        if ( header != null )
-        {
-            if (!connectedHost.setVendor( header.getValue() )) {
+    private void configureRemoteHost(HTTPHeaderGroup headers) {
+        HTTPHeader header = headers.getHeader(HTTPHeaderNames.USER_AGENT);
+        if (header != null) {
+            if (!connectedHost.setVendor(header.getValue())) {
                 return;
             }
         }
 
-        if ( connectedHost.isIncomming() )
-        {
-            header = headers.getHeader( GnutellaHeaderNames.LISTEN_IP );
-            if ( header == null )
-            {
-                header = headers.getHeader( GnutellaHeaderNames.X_MY_ADDRESS );
+        if (connectedHost.isIncomming()) {
+            header = headers.getHeader(GnutellaHeaderNames.LISTEN_IP);
+            if (header == null) {
+                header = headers.getHeader(GnutellaHeaderNames.X_MY_ADDRESS);
             }
-            if ( header != null )
-            {
+            if (header != null) {
                 DestAddress addi = connectedHost.getHostAddress();
                 // parse port
-                int port = AddressUtils.parsePort( header.getValue() );
-                if ( port > 0 )
-                {
-                    connectedHost.setHostAddress( new DefaultDestAddress( 
-                        addi.getIpAddress(), port ) );
+                int port = AddressUtils.parsePort(header.getValue());
+                if (port > 0) {
+                    connectedHost.setHostAddress(new DefaultDestAddress(
+                            addi.getIpAddress(), port));
                 }
             }
         }
-        
-        header = headers.getHeader( GnutellaHeaderNames.REMOTE_IP );
-        if ( header != null )
-        {
-            byte[] remoteIP = AddressUtils.parseIP( header.getValue() );
-            if ( remoteIP != null )
-            {
-                IpAddress ip = new IpAddress( remoteIP );
+
+        header = headers.getHeader(GnutellaHeaderNames.REMOTE_IP);
+        if (header != null) {
+            byte[] remoteIP = AddressUtils.parseIP(header.getValue());
+            if (remoteIP != null) {
+                IpAddress ip = new IpAddress(remoteIP);
                 DestAddress address = PresentationManager.getInstance().createHostAddress(ip, -1);
-                servent.updateLocalAddress( address );                
+                servent.updateLocalAddress(address);
             }
         }
 
-        header = headers.getHeader( GnutellaHeaderNames.X_QUERY_ROUTING );
-        if ( header != null )
-        {
-            try
-            {
-                float version = Float.parseFloat( header.getValue() );
-                if ( version >= 0.1f )
-                {
-                    connectedHost.setQueryRoutingSupported( true );
+        header = headers.getHeader(GnutellaHeaderNames.X_QUERY_ROUTING);
+        if (header != null) {
+            try {
+                float version = Float.parseFloat(header.getValue());
+                if (version >= 0.1f) {
+                    connectedHost.setQueryRoutingSupported(true);
                 }
-            }
-            catch ( NumberFormatException e )
-            { // no qr supported... don't care
+            } catch (NumberFormatException e) { // no qr supported... don't care
             }
         }
 
-        header = headers.getHeader( GnutellaHeaderNames.X_UP_QUERY_ROUTING );
-        if ( header != null )
-        {
-            try
-            {
-                float version = Float.parseFloat( header.getValue() );
-                if ( version >= 0.1f )
-                {
-                    connectedHost.setUPQueryRoutingSupported( true );
+        header = headers.getHeader(GnutellaHeaderNames.X_UP_QUERY_ROUTING);
+        if (header != null) {
+            try {
+                float version = Float.parseFloat(header.getValue());
+                if (version >= 0.1f) {
+                    connectedHost.setUPQueryRoutingSupported(true);
                 }
-            }
-            catch ( NumberFormatException e )
-            { // no qr supported... don't care
+            } catch (NumberFormatException e) { // no qr supported... don't care
             }
         }
-        
-        header = headers.getHeader( GnutellaHeaderNames.X_DYNAMIC_QUERY );
-        if ( header != null )
-        {
-            try
-            {
+
+        header = headers.getHeader(GnutellaHeaderNames.X_DYNAMIC_QUERY);
+        if (header != null) {
+            try {
                 float version = header.floatValue();
-                if ( version >= 0.1f )
-                {
-                    connectedHost.setDynamicQuerySupported( true );
+                if (version >= 0.1f) {
+                    connectedHost.setDynamicQuerySupported(true);
                 }
-            }
-            catch ( NumberFormatException e)
-            {// no dynamiy query supported... don't care
+            } catch (NumberFormatException e) {// no dynamiy query supported... don't care
             }
         }
-        
-        byte maxTTL = headers.getByteHeaderValue( GnutellaHeaderNames.X_MAX_TTL, 
-            DynamicQueryConstants.DEFAULT_MAX_TTL );
-        connectedHost.setMaxTTL( maxTTL );
-        
-        int degree = headers.getIntHeaderValue( GnutellaHeaderNames.X_DEGREE, 
-            DynamicQueryConstants.NON_DYNAMIC_QUERY_DEGREE );
-        connectedHost.setUltrapeerDegree( degree );
+
+        byte maxTTL = headers.getByteHeaderValue(GnutellaHeaderNames.X_MAX_TTL,
+                DynamicQueryConstants.DEFAULT_MAX_TTL);
+        connectedHost.setMaxTTL(maxTTL);
+
+        int degree = headers.getIntHeaderValue(GnutellaHeaderNames.X_DEGREE,
+                DynamicQueryConstants.NON_DYNAMIC_QUERY_DEGREE);
+        connectedHost.setUltrapeerDegree(degree);
     }
-    
-    private void postHandshakeConfiguration( HTTPHeaderGroup myHeadersSend,
-       HTTPHeaderGroup theirHeadersRead )
-       throws IOException
+
+    private void postHandshakeConfiguration(HTTPHeaderGroup myHeadersSend,
+                                            HTTPHeaderGroup theirHeadersRead)
+            throws IOException
 
     {
-        if ( myHeadersSend.isHeaderValueContaining( HTTPHeaderNames.ACCEPT_ENCODING,
-            "deflate" ) && theirHeadersRead.isHeaderValueContaining(
-            HTTPHeaderNames.CONTENT_ENCODING, "deflate" ) )
-        {
+        if (myHeadersSend.isHeaderValueContaining(HTTPHeaderNames.ACCEPT_ENCODING,
+                "deflate") && theirHeadersRead.isHeaderValueContaining(
+                HTTPHeaderNames.CONTENT_ENCODING, "deflate")) {
             connectedHost.activateInputInflation();
         }
-        if ( theirHeadersRead.isHeaderValueContaining( HTTPHeaderNames.ACCEPT_ENCODING,
-            "deflate" ) && myHeadersSend.isHeaderValueContaining(
-            HTTPHeaderNames.CONTENT_ENCODING, "deflate" ) )
-        {
+        if (theirHeadersRead.isHeaderValueContaining(HTTPHeaderNames.ACCEPT_ENCODING,
+                "deflate") && myHeadersSend.isHeaderValueContaining(
+                HTTPHeaderNames.CONTENT_ENCODING, "deflate")) {
             connectedHost.activateOutputDeflation();
         }
-        
-        
-        HTTPHeader header = theirHeadersRead.getHeader( 
-            GnutellaHeaderNames.VENDOR_MESSAGE );
-        if ( header != null && !header.getValue().isEmpty())
-        {
-            connectedHost.setVendorMessageSupported( true );
+
+
+        HTTPHeader header = theirHeadersRead.getHeader(
+                GnutellaHeaderNames.VENDOR_MESSAGE);
+        if (header != null && !header.getValue().isEmpty()) {
+            connectedHost.setVendorMessageSupported(true);
         }
-        
-        header = theirHeadersRead.getHeader( 
-            GnutellaHeaderNames.GGEP );
-        if ( header != null && !header.getValue().isEmpty())
-        {
-            connectedHost.setGgepSupported( true );
-        }
-        else
-        {
-            connectedHost.setGgepSupported( false );
+
+        header = theirHeadersRead.getHeader(
+                GnutellaHeaderNames.GGEP);
+        if (header != null && !header.getValue().isEmpty()) {
+            connectedHost.setGgepSupported(true);
+        } else {
+            connectedHost.setGgepSupported(false);
         }
     }
 
-    private void sendStringToHost( String str )
-        throws IOException
-    {
-        logger.debug( "{} - Send: {}", connectedHost, str );
-        byte[] bytes = str.getBytes( "ISO8859-1" );
-        connection.write( ByteBuffer.wrap( bytes ) );
+    private void sendStringToHost(String str)
+            throws IOException {
+        //logger.debug("{} - Send: {}", connectedHost, str);
+        byte[] bytes = str.getBytes("ISO8859-1");
+        connection.write(ByteBuffer.wrap(bytes));
         connection.flush();
     }
 }

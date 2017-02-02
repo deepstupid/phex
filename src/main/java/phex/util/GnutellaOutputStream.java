@@ -18,29 +18,27 @@
  * 
  *  --- CVS Information ---
  *  $Id: GnutellaOutputStream.java 3362 2006-03-30 22:27:26Z gregork $
- */package phex.util;
+ */
+package phex.util;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * 
+ *
  */
-public class GnutellaOutputStream extends OutputStream
-{
+public class GnutellaOutputStream extends OutputStream {
     private boolean isOutputDeflated;
     private OutputStream outStream;
-        
-    public GnutellaOutputStream( OutputStream outStream )
-    {
+
+    public GnutellaOutputStream(OutputStream outStream) {
         this.outStream = outStream;
         isOutputDeflated = false;
     }
-    
-    public void activateOutputDeflation()
-    {
+
+    public void activateOutputDeflation() {
         FixedDeflaterOutputStream deflaterOutStream =
-            new FixedDeflaterOutputStream( outStream );
+                new FixedDeflaterOutputStream(outStream);
         outStream = deflaterOutStream;
         isOutputDeflated = true;
     }
@@ -48,35 +46,29 @@ public class GnutellaOutputStream extends OutputStream
     /**
      * @see java.io.OutputStream#write(int)
      */
-    public void write(int b) throws IOException
-    {
+    public void write(int b) throws IOException {
         int totalOut = 0;
-        if ( isOutputDeflated )
-        {
-            totalOut = ((FixedDeflaterOutputStream)outStream).getTotalOut();
+        if (isOutputDeflated) {
+            totalOut = ((FixedDeflaterOutputStream) outStream).getTotalOut();
         }
-        outStream.write( b );
+        outStream.write(b);
     }
-    
-    public void write( byte[] b ) throws IOException
-    {
-        this.write( b, 0, b.length );        
+
+    public void write(byte[] b) throws IOException {
+        this.write(b, 0, b.length);
     }
-    
-    public void write( byte[] b, int off, int len ) throws IOException
-    {
+
+    public void write(byte[] b, int off, int len) throws IOException {
         int totalOut = 0;
-        if ( isOutputDeflated )
-        {
-            totalOut = ((FixedDeflaterOutputStream)outStream).getTotalOut();
+        if (isOutputDeflated) {
+            totalOut = ((FixedDeflaterOutputStream) outStream).getTotalOut();
         }
-        
-        outStream.write( b, off, len );        
+
+        outStream.write(b, off, len);
     }
-    
+
     public void flush()
-        throws IOException
-    {
+            throws IOException {
         outStream.flush();
     }
 }

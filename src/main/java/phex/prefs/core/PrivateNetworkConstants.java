@@ -22,33 +22,32 @@
  */
 package phex.prefs.core;
 
-public interface PrivateNetworkConstants
-{
-    /** 
+public interface PrivateNetworkConstants {
+    /**
      * If you like to use a PRIVATE_NETWORK specify here your chosen network
-     * name for a private Net by replacing null with "<Network Name>". 
-     * If you do, please choose a short ID for your Network, which will 
-     * be displaed in the Vendor-String. 
-     * You might want to choose a name, which can last, for you can't know, 
-     * how your network will exist. 
-     * For better appearance, put a space in front of it 
-     * and write it in lowercase. (Your privateversion.number will be appended) 
+     * name for a private Net by replacing null with "<Network Name>".
+     * If you do, please choose a short ID for your Network, which will
+     * be displaed in the Vendor-String.
+     * You might want to choose a name, which can last, for you can't know,
+     * how your network will exist.
+     * For better appearance, put a space in front of it
+     * and write it in lowercase. (Your privateversion.number will be appended)
      */
     public final static String PRIVATE_NETWORK = null;
-    public final static String PRIVATE_BUILD_ID = ""; 
-    
+    public final static String PRIVATE_BUILD_ID = "";
+
     /**
      * The default value to indicate if this node is forced to be ultrapeer.
-     * In a small private network you might want to make everyone an Ultrapeer. 
+     * In a small private network you might want to make everyone an Ultrapeer.
      */
     public static final boolean DEFAULT_FORCE_TOBE_ULTRAPEER = false;
-    
+
     /**
-     * Assign here the default network to use. This can be the 
+     * Assign here the default network to use. This can be the
      * GENERAL_GNUTELLA_NETWORK or the self defined PRIVATE_NETWORK.
-     * If you want to change something, do so above. 
+     * If you want to change something, do so above.
      */
-    public static String DEFAULT_NETWORK_TO_USE = PRIVATE_NETWORK == null ? 
-        NetworkPrefs.GENERAL_GNUTELLA_NETWORK : PRIVATE_NETWORK;    
+    public static String DEFAULT_NETWORK_TO_USE = PRIVATE_NETWORK == null ?
+            NetworkPrefs.GENERAL_GNUTELLA_NETWORK : PRIVATE_NETWORK;
 
 }

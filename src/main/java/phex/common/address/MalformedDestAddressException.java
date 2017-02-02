@@ -19,11 +19,9 @@
 package phex.common.address;
 
 @SuppressWarnings("serial")
-public class MalformedDestAddressException extends Exception
-{
+public class MalformedDestAddressException extends Exception {
 
-    public MalformedDestAddressException( String msg )
-    {
-        super( msg );
+    public MalformedDestAddressException(String msg) {
+        super(msg);
     }
 }

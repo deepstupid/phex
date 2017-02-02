@@ -21,27 +21,22 @@
  */
 package phex.security;
 
-public class HittingIpCidrPair extends IpCidrPair
-{
+public class HittingIpCidrPair extends IpCidrPair {
     private volatile int hits = 0;
-    
-    public HittingIpCidrPair( int ip, byte cidr )
-    {
-        super( ip, cidr );
+
+    public HittingIpCidrPair(int ip, byte cidr) {
+        super(ip, cidr);
     }
-    
-    public int getHits()
-    {
+
+    public int getHits() {
         return hits;
     }
-    
-    public void setHits( int hits )
-    {
+
+    public void setHits(int hits) {
         this.hits = hits;
     }
-    
-    public void countHit()
-    {
-        hits ++;
+
+    public void countHit() {
+        hits++;
     }
 }

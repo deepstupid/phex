@@ -18,23 +18,19 @@
  */
 package phex.msg;
 
-public class InvalidGGEPBlockException extends Exception
-{
-    public InvalidGGEPBlockException( )
-    {
-        super( );
+public class InvalidGGEPBlockException extends Exception {
+    public InvalidGGEPBlockException() {
+        super();
     }
 
-    public InvalidGGEPBlockException( String msg )
-    {
-        super( msg );
+    public InvalidGGEPBlockException(String msg) {
+        super(msg);
     }
-    
+
     /**
      * @param cause
      */
-    public InvalidGGEPBlockException( Throwable cause )
-    {
-        super( cause );
+    public InvalidGGEPBlockException(Throwable cause) {
+        super(cause);
     }
 }

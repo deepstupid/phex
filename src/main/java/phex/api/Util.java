@@ -23,28 +23,22 @@ package phex.api;
 
 import java.io.*;
 
-public class Util
-{
-    public static boolean copyFile(String sourceFilePath, String destinationFilePath)
-    {
-        if (sourceFilePath == null || destinationFilePath == null)
-        {
+public class Util {
+    public static boolean copyFile(String sourceFilePath, String destinationFilePath) {
+        if (sourceFilePath == null || destinationFilePath == null) {
             return false;
         }
 
         BufferedInputStream inputStream = null;
         BufferedOutputStream outputStream = null;
-        try
-        {
+        try {
             File inputFile = new File(sourceFilePath);
-            if (!inputFile.isFile())
-            {
+            if (!inputFile.isFile()) {
                 return false;
             }
 
             File outputFile = new File(destinationFilePath);
-            if (outputFile.exists())
-            {
+            if (outputFile.exists()) {
                 return false;
             }
 
@@ -52,73 +46,50 @@ public class Util
             outputStream = new BufferedOutputStream(new FileOutputStream(outputFile));
 
             int c = inputStream.read();
-            while (c != -1)
-            {
+            while (c != -1) {
                 outputStream.write(c);
 
                 c = inputStream.read();
             }
 
             return true;
-        }
-        catch (SecurityException ex)
-        {
+        } catch (SecurityException ex) {
             return false;
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             return false;
-        }
-        catch (IOException ex)
-        {
+        } catch (IOException ex) {
             return false;
-        }
-        finally
-        {
-            if (inputStream != null)
-            {
-                try
-                {
+        } finally {
+            if (inputStream != null) {
+                try {
                     inputStream.close();
-                }
-                catch (IOException ex)
-                {
+                } catch (IOException ex) {
                 }
             }
 
-            if (outputStream != null)
-            {
-                try
-                {
+            if (outputStream != null) {
+                try {
                     outputStream.close();
-                }
-                catch (IOException ex)
-                {
+                } catch (IOException ex) {
                 }
             }
         }
     }
 
-    public static boolean moveFile(String sourceFilePath, String destinationFilePath)
-    {
-        try
-        {
-            if (sourceFilePath == null)
-            {
+    public static boolean moveFile(String sourceFilePath, String destinationFilePath) {
+        try {
+            if (sourceFilePath == null) {
                 return false;
             }
 
             final boolean copyOK = copyFile(sourceFilePath, destinationFilePath);
-            if (!copyOK)
-            {
+            if (!copyOK) {
                 return false;
             }
 
             File file = new File(sourceFilePath);
             return file.delete();
-        }
-        catch (SecurityException ex)
-        {
+        } catch (SecurityException ex) {
             return false;
         }
     }

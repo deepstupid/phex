@@ -35,10 +35,9 @@ import javax.xml.parsers.SAXParser;
 import java.io.CharArrayWriter;
 
 /**
- * 
+ *
  */
-public class DownloadFileHandler extends DefaultHandler
-{
+public class DownloadFileHandler extends DefaultHandler {
     private final CharArrayWriter text = new CharArrayWriter();
 
     private final SAXParser parser;
@@ -47,8 +46,7 @@ public class DownloadFileHandler extends DefaultHandler
 
     private final DefaultHandler parent;
 
-    public DownloadFileHandler( DDownloadFile downloadFile, DefaultHandler parent, SAXParser parser )
-    {
+    public DownloadFileHandler(DDownloadFile downloadFile, DefaultHandler parent, SAXParser parser) {
         this.downloadFile = downloadFile;
         this.parser = parser;
         this.parent = parent;
@@ -57,167 +55,111 @@ public class DownloadFileHandler extends DefaultHandler
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
     @Override
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes ) throws SAXException
-    {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes) throws SAXException {
         text.reset();
-        if ( qName.equals( DDownloadCandidate.ELEMENT_NAME ) )
-        {
+        if (qName.equals(DDownloadCandidate.ELEMENT_NAME)) {
             DDownloadCandidate candidate = new DDownloadCandidate();
-            downloadFile.getCandidateList().getSubElementList().add( candidate );
+            downloadFile.getCandidateList().getSubElementList().add(candidate);
             DownloadCandidateHandler handler = new DownloadCandidateHandler(
-                candidate, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( DDownloadScope.UNVERIFIED_SCOPE_ELEMENT_NAME ) )
-        {
-            DDownloadScope scope = new DDownloadScope( DDownloadScope.UNVERIFIED_SCOPE_ELEMENT_NAME );
+                    candidate, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(DDownloadScope.UNVERIFIED_SCOPE_ELEMENT_NAME)) {
+            DDownloadScope scope = new DDownloadScope(DDownloadScope.UNVERIFIED_SCOPE_ELEMENT_NAME);
             String start = attributes.getValue("start");
-            if ( start != null )
-            {
-                try
-                {
-                    scope.setStart( Long.parseLong( start ) );
-                }
-                catch ( NumberFormatException exp ) 
-                {
-                    NLogger.error( DownloadFileHandler.class, exp, exp );
+            if (start != null) {
+                try {
+                    scope.setStart(Long.parseLong(start));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(DownloadFileHandler.class, exp, exp);
                 }
             }
             String end = attributes.getValue("end");
-            if ( end != null )
-            {
-                try
-                {
-                    scope.setEnd( Long.parseLong( end ) );
-                }
-                catch ( NumberFormatException exp ) 
-                {
-                    NLogger.error( DownloadFileHandler.class, exp, exp );
+            if (end != null) {
+                try {
+                    scope.setEnd(Long.parseLong(end));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(DownloadFileHandler.class, exp, exp);
                 }
             }
-            downloadFile.getUnverifiedScopesList().getSubElementList().add( scope );
-        }
-        else if ( qName.equals( DDownloadScope.FINISHED_SCOPE_ELEMENT_NAME ) )
-        {
-            DDownloadScope scope = new DDownloadScope( DDownloadScope.FINISHED_SCOPE_ELEMENT_NAME );
+            downloadFile.getUnverifiedScopesList().getSubElementList().add(scope);
+        } else if (qName.equals(DDownloadScope.FINISHED_SCOPE_ELEMENT_NAME)) {
+            DDownloadScope scope = new DDownloadScope(DDownloadScope.FINISHED_SCOPE_ELEMENT_NAME);
             String start = attributes.getValue("start");
-            if ( start != null )
-            {
-                try
-                {
-                    scope.setStart( Long.parseLong( start ) );
-                }
-                catch ( NumberFormatException exp ) 
-                {
-                    NLogger.error( DownloadFileHandler.class, exp, exp );
+            if (start != null) {
+                try {
+                    scope.setStart(Long.parseLong(start));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(DownloadFileHandler.class, exp, exp);
                 }
             }
             String end = attributes.getValue("end");
-            if ( end != null )
-            {
-                try
-                {
-                    scope.setEnd( Long.parseLong( end ) );
-                }
-                catch ( NumberFormatException exp ) 
-                {
-                    NLogger.error( DownloadFileHandler.class, exp, exp );
+            if (end != null) {
+                try {
+                    scope.setEnd(Long.parseLong(end));
+                } catch (NumberFormatException exp) {
+                    NLogger.error(DownloadFileHandler.class, exp, exp);
                 }
             }
-            downloadFile.getFinishedScopesList().getSubElementList().add( scope );
+            downloadFile.getFinishedScopesList().getSubElementList().add(scope);
         }
         return;
     }
 
     @Override
-    public void endElement( String uri, String localName, String qName )
-        throws SAXException
-    {
-        if ( qName.equals( "created-time" ) )
-        {
-            try
-            {
-                downloadFile.setCreationTime( Long.parseLong( text.toString() ) );
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equals("created-time")) {
+            try {
+                downloadFile.setCreationTime(Long.parseLong(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(DownloadFileHandler.class, exp, exp);
             }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( DownloadFileHandler.class, exp, exp );
+        } else if (qName.equals("filesize")) {
+            try {
+                downloadFile.setFileSize(Long.parseLong(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(DownloadFileHandler.class, exp, exp);
             }
-        }
-        else if ( qName.equals( "filesize" ) )
-        {
-            try
-            {
-                downloadFile.setFileSize( Long.parseLong( text.toString() ) );
+        } else if (qName.equals("file-urn")) {
+            downloadFile.setFileURN(text.toString());
+        } else if (qName.equals("incomplete-file-name")) {
+            downloadFile.setIncompleteFileName(text.toString());
+        } else if (qName.equals("localfilename")) {
+            downloadFile.setLocalFileName(text.toString());
+        } else if (qName.equals("modified-time")) {
+            try {
+                downloadFile.setModificationTime(Long.parseLong(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(DownloadFileHandler.class, exp, exp);
             }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( DownloadFileHandler.class, exp, exp );
+        } else if (qName.equals("scope-strategy")) {
+            downloadFile.setScopeSelectionStrategy(text.toString());
+        } else if (qName.equals("searchterm")) {
+            downloadFile.setSearchTerm(text.toString());
+        } else if (qName.equals("status")) {
+            try {
+                downloadFile.setStatus(Integer.parseInt(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(DownloadFileHandler.class, exp, exp);
             }
-        }
-        else if ( qName.equals( "file-urn" ) )
-        {
-            downloadFile.setFileURN( text.toString() );
-        }
-        else if ( qName.equals( "incomplete-file-name" ) )
-        {
-            downloadFile.setIncompleteFileName( text.toString() );
-        }
-        else if ( qName.equals( "localfilename" ) )
-        {
-            downloadFile.setLocalFileName( text.toString() );
-        }
-        else if ( qName.equals( "modified-time" ) )
-        {
-            try
-            {
-                downloadFile.setModificationTime( Long.parseLong( text.toString() ) );
-            }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( DownloadFileHandler.class, exp, exp );
-            }
-        }
-        else if ( qName.equals( "scope-strategy" ) )
-        {
-            downloadFile.setScopeSelectionStrategy( text.toString() );
-        }
-        else if ( qName.equals( "searchterm" ) )
-        {
-            downloadFile.setSearchTerm( text.toString() );
-        }
-        else if ( qName.equals( "status" ) )
-        {
-            try
-            {
-                downloadFile.setStatus( Integer.parseInt( text.toString() ) );
-            }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( DownloadFileHandler.class, exp, exp );
-            }
-        }
-        else if ( qName.equals( DDownloadFile.ELEMENT_NAME ) )
-        {
-            parser.getXMLReader().setContentHandler( parent );
+        } else if (qName.equals(DDownloadFile.ELEMENT_NAME)) {
+            parser.getXMLReader().setContentHandler(parent);
         }
     }
 
-    public InputSource resolveEntity( String publicId, String systemId )
-    {
+    public InputSource resolveEntity(String publicId, String systemId) {
         return null;
     }
 
-    public void characters( char[] ch, int start, int length )
-    {
-        text.write( ch, start, length );
+    public void characters(char[] ch, int start, int length) {
+        text.write(ch, start, length);
     }
 }

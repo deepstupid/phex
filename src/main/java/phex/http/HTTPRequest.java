@@ -23,8 +23,7 @@ package phex.http;
 
 import phex.common.URN;
 
-public class HTTPRequest
-{
+public class HTTPRequest {
     public static final String GET_REQUEST = "GET";
     public static final String HEAD_REQUEST = "HEAD";
     public static final String HTTP_11 = "HTTP/1.1";
@@ -46,33 +45,28 @@ public class HTTPRequest
      * The http version information.
      */
     private final String httpVersion;
-
+    /**
+     * The http headers of the request.
+     */
+    private final HTTPHeaderGroup httpHeaders;
     /**
      * The GnutellaRequest object if it was parsed out of the request URI. If
      * the request was parsed but remains null, the request uri is no Gnutella
      * request uri.
      */
     private GnutellaRequest gnutellaRequest;
-    
     /**
      * Indicates whether the request uri was tried to be parsed into a GnutellaRequest.
      */
     private boolean isGnutellaRequestParsed;
-
     // parsed header fields
     private int contentLength;
     private String hostName;
     private int hostPort;
 
-    /**
-     * The http headers of the request.
-     */
-    private final HTTPHeaderGroup httpHeaders;
-
-    public HTTPRequest( String aRequestMethod, String aRequestURI,
-        boolean isOutgoing )
-    {
-        this( aRequestMethod, aRequestURI, "HTTP/1.1", isOutgoing );
+    public HTTPRequest(String aRequestMethod, String aRequestURI,
+                       boolean isOutgoing) {
+        this(aRequestMethod, aRequestURI, "HTTP/1.1", isOutgoing);
     }
 
     /**
@@ -84,85 +78,76 @@ public class HTTPRequest
      * @param aRequestMethod
      * @param aRequestURI
      * @param aHttpVersion
-     * @param isOutgoing For outgoing HTTP requests it is assumed that HTTP
-     * headers are not treatend lenient, since we care for the correct header
-     * case. On incomming (isOutgoing == false) we like to treat headers lenient
-     * to ignore case differencies.
+     * @param isOutgoing     For outgoing HTTP requests it is assumed that HTTP
+     *                       headers are not treatend lenient, since we care for the correct header
+     *                       case. On incomming (isOutgoing == false) we like to treat headers lenient
+     *                       to ignore case differencies.
      */
-    public HTTPRequest( String aRequestMethod, String aRequestURI,
-        String aHttpVersion, boolean isOutgoing )
-    {
+    public HTTPRequest(String aRequestMethod, String aRequestURI,
+                       String aHttpVersion, boolean isOutgoing) {
         requestMethod = aRequestMethod;
         requestURI = aRequestURI;
         httpVersion = aHttpVersion;
-        if ( isOutgoing )
-        {
+        if (isOutgoing) {
             httpHeaders = HTTPHeaderGroup.createDefaultRequestHeaders();
-        }
-        else
-        {
-            httpHeaders = new HTTPHeaderGroup( true );
+        } else {
+            httpHeaders = new HTTPHeaderGroup(true);
         }
         isGnutellaRequestParsed = false;
     }
 
-    public void setContentLength( int length, boolean addHeader )
-    {
+    public void setContentLength(int length, boolean addHeader) {
         contentLength = length;
-        if ( addHeader )
-        {
-            httpHeaders.addHeader( new HTTPHeader( HTTPHeaderNames.CONTENT_LENGTH,
-                String.valueOf( length ) ) );
+        if (addHeader) {
+            httpHeaders.addHeader(new HTTPHeader(HTTPHeaderNames.CONTENT_LENGTH,
+                    String.valueOf(length)));
         }
     }
 
-    public void setHost( String server, int port, boolean addHeader )
-    {
+    public void setHost(String server, int port, boolean addHeader) {
         hostName = server;
         hostPort = port;
-        if ( addHeader )
-        {
+        if (addHeader) {
             int bufLength = hostName.length() + 5;
-            StringBuffer buffer = new StringBuffer( bufLength );
-            buffer.append( hostName );
-            if ( hostPort > 0 )
-            {
-                buffer.append( ':' );
-                buffer.append( String.valueOf( hostPort ) );
+            StringBuffer buffer = new StringBuffer(bufLength);
+            buffer.append(hostName);
+            if (hostPort > 0) {
+                buffer.append(':');
+                buffer.append(String.valueOf(hostPort));
             }
-            httpHeaders.addHeader( new HTTPHeader( HTTPHeaderNames.HOST,
-                buffer.toString() ) );
+            httpHeaders.addHeader(new HTTPHeader(HTTPHeaderNames.HOST,
+                    buffer.toString()));
         }
     }
 
     /**
      * Adds a http header.
-     * @param name the name of the header field.
+     *
+     * @param name  the name of the header field.
      * @param value the value of the header field.
      */
-    public void addHeader( HTTPHeader header )
-    {
-        httpHeaders.addHeader( header );
+    public void addHeader(HTTPHeader header) {
+        httpHeaders.addHeader(header);
     }
 
     /**
      * Adds a http header array.
+     *
      * @param headers a HTTPHeader array to add.
      */
-    public void addHeaders( HTTPHeader[] headers )
-    {
-        httpHeaders.addHeaders( headers );
+    public void addHeaders(HTTPHeader[] headers) {
+        httpHeaders.addHeaders(headers);
     }
 
     /**
      * Returns the header field for the given name. If not available it
      * returns null.
+     *
      * @param name the header field name.
      * @return the value of the header field.
      */
-    public HTTPHeader getHeader( String name )
-    {
-        return httpHeaders.getHeader( name );
+    public HTTPHeader getHeader(String name) {
+        return httpHeaders.getHeader(name);
     }
 
     /**
@@ -173,81 +158,70 @@ public class HTTPRequest
      * @param name the header field name.
      * @return the values of the header field.
      */
-    public HTTPHeader[] getHeaders( String name )
-    {
-        return httpHeaders.getHeaders( name );
+    public HTTPHeader[] getHeaders(String name) {
+        return httpHeaders.getHeaders(name);
     }
 
     /**
      * Returns request method.
+     *
      * @return request method.
      */
-    public String getRequestMethod()
-    {
+    public String getRequestMethod() {
         return requestMethod;
     }
-    
-    public boolean isHeadRequest()
-    {
-        return HEAD_REQUEST.equals( requestMethod );
+
+    public boolean isHeadRequest() {
+        return HEAD_REQUEST.equals(requestMethod);
     }
 
     /**
      * Returns the URI of the request.
+     *
      * @return the URI of the request.
      */
-    public String getRequestURI()
-    {
+    public String getRequestURI() {
         return requestURI;
     }
 
-    public String getHTTPVersion()
-    {
+    public String getHTTPVersion() {
         return httpVersion;
     }
 
     /**
      * Returns the GnutellaRequest that is represented by the request uri.
      * If the request is no GnutellaRequest null is returned.
+     *
      * @return the GnutellaRequest that is represented by the request uri.
      * If the request is no GnutellaRequest null is returned.
      */
-    public GnutellaRequest getGnutellaRequest()
-    {
-        if ( !isGnutellaRequestParsed )
-        {
+    public GnutellaRequest getGnutellaRequest() {
+        if (!isGnutellaRequestParsed) {
             parseGnutellaRequest();
         }
         return gnutellaRequest;
     }
-		
-    public boolean isGnutellaRequest()
-    {
-        if ( !isGnutellaRequestParsed )
-        {
+
+    public boolean isGnutellaRequest() {
+        if (!isGnutellaRequestParsed) {
             parseGnutellaRequest();
         }
         return gnutellaRequest != null;
     }
-    
-    public String buildHTTPRequestString()
-    {
+
+    public String buildHTTPRequestString() {
         return requestMethod + SP + requestURI + SP + httpVersion + CRLF
-            + httpHeaders.buildHTTPHeaderString() + CRLF;
+                + httpHeaders.buildHTTPHeaderString() + CRLF;
     }
-    
-    private void parseGnutellaRequest()
-    {
-        gnutellaRequest = GnutellaRequest.parseGnutellaRequest( requestURI );
-        if ( gnutellaRequest != null && gnutellaRequest.getURN() == null)
-        {
+
+    private void parseGnutellaRequest() {
+        gnutellaRequest = GnutellaRequest.parseGnutellaRequest(requestURI);
+        if (gnutellaRequest != null && gnutellaRequest.getURN() == null) {
             // learn from http headers if possible...
-            HTTPHeader header = getHeader( 
-                GnutellaHeaderNames.X_GNUTELLA_CONTENT_URN );
-            if (header != null)
-            {
-                if (URN.isValidURN(header.getValue()))
-                {
+            HTTPHeader header = getHeader(
+                    GnutellaHeaderNames.X_GNUTELLA_CONTENT_URN);
+            if (header != null) {
+                if (URN.isValidURN(header.getValue())) {
                     URN urn = new URN(header.getValue());
                     gnutellaRequest.setContentURN(urn);
                 }

@@ -26,36 +26,26 @@ import phex.common.HorizonTracker;
 /**
  *
  */
-public class HorizonStatisticProvider implements StatisticProvider
-{
-    public enum Type 
-    { 
-        HOST_COUNT, FILE_COUNT, FILE_SIZE 
-    }
-    
+public class HorizonStatisticProvider implements StatisticProvider {
     private final HorizonTracker horizonTracker;
     private final Type type;
-    
-    public HorizonStatisticProvider( Type type, HorizonTracker horizonTracker )
-    {
+    public HorizonStatisticProvider(Type type, HorizonTracker horizonTracker) {
         this.horizonTracker = horizonTracker;
         this.type = type;
     }
-    
+
     /**
      * @see phex.statistic.StatisticProvider#getValue()
      */
     @SuppressWarnings("boxing")
-    public Object getValue()
-    {
-        switch ( type )
-        {
-        case HOST_COUNT:
-            return horizonTracker.getTotalHostCount();
-        case FILE_COUNT:
-            return horizonTracker.getTotalFileCount();
-        case FILE_SIZE:
-            return horizonTracker.getTotalFileSize();
+    public Object getValue() {
+        switch (type) {
+            case HOST_COUNT:
+                return horizonTracker.getTotalHostCount();
+            case FILE_COUNT:
+                return horizonTracker.getTotalFileCount();
+            case FILE_SIZE:
+                return horizonTracker.getTotalFileSize();
         }
         return null;
     }
@@ -63,26 +53,22 @@ public class HorizonStatisticProvider implements StatisticProvider
     /**
      * @see phex.statistic.StatisticProvider#getAverageValue()
      */
-    public Object getAverageValue()
-    {
-        switch ( type )
-        {
-        case FILE_SIZE:
-            long count = horizonTracker.getTotalFileCount();
-            if ( count != 0 )
-            {
-                int val = (int)((double)horizonTracker.getTotalFileSize() / (double)count);
-                return Integer.valueOf( val );
-            }
-            break;
-        case FILE_COUNT:
-            int hostCount = horizonTracker.getTotalHostCount();
-            if ( hostCount != 0 )
-            {
-                int val = (int)((double)horizonTracker.getTotalFileCount() / (double)hostCount);
-                return Integer.valueOf( val );
-            }
-            break;            
+    public Object getAverageValue() {
+        switch (type) {
+            case FILE_SIZE:
+                long count = horizonTracker.getTotalFileCount();
+                if (count != 0) {
+                    int val = (int) ((double) horizonTracker.getTotalFileSize() / (double) count);
+                    return Integer.valueOf(val);
+                }
+                break;
+            case FILE_COUNT:
+                int hostCount = horizonTracker.getTotalHostCount();
+                if (hostCount != 0) {
+                    int val = (int) ((double) horizonTracker.getTotalFileCount() / (double) hostCount);
+                    return Integer.valueOf(val);
+                }
+                break;
         }
         return null;
     }
@@ -90,16 +76,18 @@ public class HorizonStatisticProvider implements StatisticProvider
     /**
      * @see phex.statistic.StatisticProvider#getMaxValue()
      */
-    public Object getMaxValue()
-    {
+    public Object getMaxValue() {
         return null;
     }
 
     /**
      * @see phex.statistic.StatisticProvider#toStatisticString(java.lang.Object)
      */
-    public String toStatisticString(Object value)
-    {
+    public String toStatisticString(Object value) {
         return value.toString();
+    }
+
+    public enum Type {
+        HOST_COUNT, FILE_COUNT, FILE_SIZE
     }
 }

@@ -22,8 +22,6 @@
  */
 package phex.share;
 
-import phex.util.bitzi.Base32;
-import phex.util.bitzi.SHA1;
 import phex.common.AltLocContainer;
 import phex.common.URN;
 import phex.common.log.NLogger;
@@ -32,49 +30,45 @@ import phex.download.swarming.SwarmingManager;
 import phex.prefs.core.LibraryPrefs;
 import phex.servent.Servent;
 import phex.util.IOUtil;
+import phex.util.bitzi.Base32;
+import phex.util.bitzi.SHA1;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
 
-class UrnCalculationWorker implements Runnable
-{
+class UrnCalculationWorker implements Runnable {
     private final SwarmingManager downloadService;
     private final SharedFilesService sharedFilesService;
     private final ShareFile shareFile;
-    
-    UrnCalculationWorker( ShareFile shareFile, SharedFilesService sharedFilesService )
-    {
+
+    UrnCalculationWorker(ShareFile shareFile, SharedFilesService sharedFilesService) {
         this.shareFile = shareFile;
         this.sharedFilesService = sharedFilesService;
         this.downloadService = Servent.getInstance().getDownloadService();
     }
-    
-    public void run()
-    {
+
+    public void run() {
         boolean succ = calculateURN();
         // if calculation succeed
-        if ( succ )
-        {
+        if (succ) {
             // add the urn to the map to share by urn
-            sharedFilesService.addUrn2FileMapping( shareFile );
+            sharedFilesService.addUrn2FileMapping(shareFile);
             sharedFilesService.triggerSaveSharedFiles();
         }
     }
-    
+
     /**
      * Calculates the URN of the file for HUGE support. This method can take
      * some time for large files. For URN calculation a SHA-1 digest is created
      * over the complete file and the SHA-1 digest is translated into a Base32
      * representation.
      */
-    private boolean calculateURN()
-    {
+    private boolean calculateURN() {
         int urnCalculationMode = LibraryPrefs.UrnCalculationMode.get().intValue();
         FileInputStream inStream = null;
-        try
-        {
-            inStream = new FileInputStream( shareFile.getSystemFile() );
+        try {
+            inStream = new FileInputStream(shareFile.getSystemFile());
             MessageDigest messageDigest =
                     //new SHA1();
                     SHA1.get();
@@ -83,16 +77,12 @@ class UrnCalculationWorker implements Runnable
             int length;
             long start = System.currentTimeMillis();
             long start2 = System.currentTimeMillis();
-            while ((length = inStream.read(buffer)) != -1)
-            {
+            while ((length = inStream.read(buffer)) != -1) {
                 messageDigest.update(buffer, 0, length);
                 long end2 = System.currentTimeMillis();
-                try
-                {
+                try {
                     Thread.sleep((end2 - start2) * urnCalculationMode);
-                }
-                catch (InterruptedException exp)
-                {
+                } catch (InterruptedException exp) {
                     // reset interrupted flag
                     Thread.currentThread().interrupt();
                     return false;
@@ -103,32 +93,26 @@ class UrnCalculationWorker implements Runnable
             byte[] shaDigest = messageDigest.digest();
             long end = System.currentTimeMillis();
             URN urn = new URN("urn:sha1:" + Base32.encode(shaDigest));
-            shareFile.setURN( urn );
-            if ( NLogger.isDebugEnabled( UrnCalculationWorker.class ) )
-            {
-            	NLogger.debug( UrnCalculationWorker.class, "SHA1 time: "
-                    + (end - start) + " size: " + shareFile.getSystemFile().length());
+            shareFile.setURN(urn);
+            if (NLogger.isDebugEnabled(UrnCalculationWorker.class)) {
+                NLogger.debug(UrnCalculationWorker.class, "SHA1 time: "
+                        + (end - start) + " size: " + shareFile.getSystemFile().length());
             }
-            
+
             // check if we find a download with the same urn and capture alt locs
             // from it
-            SWDownloadFile file = downloadService.getDownloadFileByURN( urn );
-            if ( file != null )
-            {
+            SWDownloadFile file = downloadService.getDownloadFileByURN(urn);
+            if (file != null) {
                 AltLocContainer altCont = file.getGoodAltLocContainer();
-                shareFile.getAltLocContainer().addContainer( altCont );
+                shareFile.getAltLocContainer().addContainer(altCont);
             }
-            
+
             return true;
-        }
-        catch (IOException exp)
-        {// dont care... no urn could be calculated...
+        } catch (IOException exp) {// dont care... no urn could be calculated...
             NLogger.debug(UrnCalculationWorker.class, exp, exp);
             return false;
-        }
-        finally
-        {
-            IOUtil.closeQuietly( inStream );
+        } finally {
+            IOUtil.closeQuietly(inStream);
         }
     }
 }

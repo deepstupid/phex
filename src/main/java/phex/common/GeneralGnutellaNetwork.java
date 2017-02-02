@@ -29,67 +29,59 @@ import java.io.File;
 /**
  * The representation of the general Gnutella network.
  */
-public class GeneralGnutellaNetwork extends GnutellaNetwork
-{    
+public class GeneralGnutellaNetwork extends GnutellaNetwork {
     @Override
-    public String getName()
-    {
+    public String getName() {
         return NetworkPrefs.GENERAL_GNUTELLA_NETWORK;
     }
-    
+
     /**
      * @see phex.common.GnutellaNetwork#getHostsFile()
      */
     @Override
-    public File getHostsFile()
-    {
+    public File getHostsFile() {
         return Environment.getPhexConfigFile(
-            EnvironmentConstants.HOSTS_FILE_NAME );
+                EnvironmentConstants.HOSTS_FILE_NAME);
     }
-    
+
     /**
      * @see phex.common.GnutellaNetwork#getBookmarkedHostsFile()
      */
     @Override
-    public File getFavoritesFile()
-    {
+    public File getFavoritesFile() {
         return Environment.getPhexConfigFile(
-            EnvironmentConstants.XML_FAVORITES_FILE_NAME );
+                EnvironmentConstants.XML_FAVORITES_FILE_NAME);
     }
-    
+
     /**
      *
      */
     @Override
-    public File getSearchFilterFile()
-    {
+    public File getSearchFilterFile() {
         return Environment.getPhexConfigFile(
-            EnvironmentConstants.XML_SEARCH_FILTER_FILE_NAME );
+                EnvironmentConstants.XML_SEARCH_FILTER_FILE_NAME);
     }
 
     /**
      * @see phex.common.GnutellaNetwork#getGWebCacheFile()
      */
     @Override
-    public File getGWebCacheFile()
-    {
+    public File getGWebCacheFile() {
         return Environment.getPhexConfigFile(
-            EnvironmentConstants.G_WEB_CACHE_FILE_NAME );
+                EnvironmentConstants.G_WEB_CACHE_FILE_NAME);
     }
-    
+
     /**
      * @see phex.common.GnutellaNetwork#getUdpHostCacheFile()
      */
     @Override
-    public File getUdpHostCacheFile()
-    {
+    public File getUdpHostCacheFile() {
         return Environment.getPhexConfigFile(
-            EnvironmentConstants.UDP_HOST_CACHE_FILE_NAME );
+                EnvironmentConstants.UDP_HOST_CACHE_FILE_NAME);
     }
-    
+
     @Override
-    public String getNetworkGreeting()
-    {
+    public String getNetworkGreeting() {
         return ConnectionConstants.GNUTELLA_CONNECT;
     }
 }

@@ -25,55 +25,53 @@ import phex.common.bandwidth.BandwidthController;
 import phex.common.format.NumberFormatUtils;
 import phex.util.Localizer;
 
-public class TransferAverageStatisticProvider implements StatisticProvider
-{
+public class TransferAverageStatisticProvider implements StatisticProvider {
     private final BandwidthController bwController;
-    
-    public TransferAverageStatisticProvider( BandwidthController bwController )
-    {
+
+    public TransferAverageStatisticProvider(BandwidthController bwController) {
         this.bwController = bwController;
     }
-    
+
     /**
      * Returns the current value this provider presents.
      * The return value can be null in case no value is provided.
+     *
      * @return the current value or null.
      */
-    public Object getValue()
-    {
-        return Long.valueOf( bwController.getShortTransferAvg().getAverage() );
+    public Object getValue() {
+        return Long.valueOf(bwController.getShortTransferAvg().getAverage());
     }
 
     /**
      * Returns the avarage value this provider presents.
      * The return value can be null in case no value is provided.
+     *
      * @return the avarage value or null.
      */
-    public Object getAverageValue()
-    {
-        return Long.valueOf( bwController.getLongTransferAvg().getAverage() );
+    public Object getAverageValue() {
+        return Long.valueOf(bwController.getLongTransferAvg().getAverage());
     }
 
     /**
      * Returns the max value this provider presents.
      * The return value can be null in case no value is provided.
+     *
      * @return the max value or null.
      */
-    public Object getMaxValue()
-    {
+    public Object getMaxValue() {
         return null;
     }
 
     /**
      * Returns the presentation string that should be displayed for the corresponding
      * value.
+     *
      * @param value the value returned from getValue(), getAverageValue() or
-     * getMaxValue()
+     *              getMaxValue()
      * @return the statistic presentation string.
      */
-    public String toStatisticString( Object value )
-    {
-        return NumberFormatUtils.formatSignificantByteSize( 
-            (Number)value ) + Localizer.getString( "PerSec" );
+    public String toStatisticString(Object value) {
+        return NumberFormatUtils.formatSignificantByteSize(
+                (Number) value) + Localizer.getString("PerSec");
     }
 }

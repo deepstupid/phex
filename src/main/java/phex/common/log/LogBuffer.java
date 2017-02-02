@@ -30,16 +30,14 @@ import java.util.Queue;
 /**
  *
  */
-public class LogBuffer
-{
+public class LogBuffer {
     private final Queue<LogRecord> buffer;
-    private final MultiValueMap<Object,LogRecord> ownerMap;
-    private int totalSize;
+    private final MultiValueMap<Object, LogRecord> ownerMap;
     private final int maxSize;
-    
-    
-    public LogBuffer( int maxSize )
-    {
+    private int totalSize;
+
+
+    public LogBuffer(int maxSize) {
         this.maxSize = maxSize;
         totalSize = 0;
         ownerMap = new MultiValueMap();
@@ -47,7 +45,7 @@ public class LogBuffer
             @Override
             public LogRecord remove() {
                 LogRecord l = super.remove();
-                if (l!=null) {
+                if (l != null) {
                     ownerMap.remove(l.getOwner(), l);
                 }
                 return l;
@@ -55,21 +53,20 @@ public class LogBuffer
         }; //UnboundedFifoBuffer();
 
     }
-    
-    public void addLogRecord( LogRecord record )
-    {
+
+    public void addLogRecord(LogRecord record) {
         int size = record.getSize();
         buffer.add(record);
-        ownerMap.put( record.getOwner(), record );
+        ownerMap.put(record.getOwner(), record);
         totalSize += size;
         //validateBufferSize();
     }
-    
+
 //    public Collection<LogRecord> getLogRecords( Object owner )
 //    {
 //        return ownerMap.getCollection( owner );
 //    }
-    
+
 //    private void validateBufferSize()
 //    {
 //        while ( totalSize > maxSize )
@@ -83,16 +80,14 @@ public class LogBuffer
     /**
      * @return
      */
-    public int getFillSize()
-    {
+    public int getFillSize() {
         return totalSize;
     }
 
     /**
      * @return
      */
-    public int getElementCount()
-    {
+    public int getElementCount() {
         return buffer.size();
     }
 }

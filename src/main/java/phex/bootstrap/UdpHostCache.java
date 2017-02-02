@@ -27,8 +27,7 @@ import phex.common.address.DestAddress;
 /**
  * Represents the Udp Host Cache
  */
-public class UdpHostCache extends BootstrapHost
-{
+public class UdpHostCache extends BootstrapHost {
     /**
      * Maximum permissible failure count on a cache
      */
@@ -36,62 +35,53 @@ public class UdpHostCache extends BootstrapHost
 
     private final DestAddress address;
 
-    public UdpHostCache( DestAddress addr )
-    {
-        this( addr, 0 );
+    public UdpHostCache(DestAddress addr) {
+        this(addr, 0);
     }
 
-    public UdpHostCache( DestAddress addr, int failCount )
-    {
-        super( false );
+    public UdpHostCache(DestAddress addr, int failCount) {
+        super(false);
         address = addr;
-        setFailedInRowCount( failCount );
+        setFailedInRowCount(failCount);
     }
 
-    public UdpHostCache( String aHostName, int aPort, int failCount )
-        throws IllegalArgumentException
-    {
-        this( new DefaultDestAddress( aHostName, aPort ), 
-            failCount );
+    public UdpHostCache(String aHostName, int aPort, int failCount)
+            throws IllegalArgumentException {
+        this(new DefaultDestAddress(aHostName, aPort),
+                failCount);
     }
 
-    public DestAddress getHostAddress()
-    {
+    public DestAddress getHostAddress() {
         return this.address;
     }
 
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
     @Override
-    public boolean equals( Object obj )
-    {
-        if ( this == obj )
-        {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if ( obj instanceof UdpHostCache )
-        {
+        if (obj instanceof UdpHostCache) {
             UdpHostCache objCache = (UdpHostCache) obj;
-            return this.address.equals( objCache.address );
+            return this.address.equals(objCache.address);
         }
         return false;
     }
 
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return 13 * 31 + this.address.hashCode();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         String str = " Host Address : " + address + " [ failure count : "
-            + getFailedInRowCount() + " ] ";
+                + getFailedInRowCount() + " ] ";
 
         return str;
     }

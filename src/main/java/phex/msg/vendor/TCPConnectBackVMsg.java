@@ -27,57 +27,49 @@ import phex.msg.MsgHeader;
 import phex.util.IOUtil;
 
 /**
- * 
+ *
  */
-public class TCPConnectBackVMsg extends VendorMsg
-{
+public class TCPConnectBackVMsg extends VendorMsg {
     public static final int VERSION = 1;
-    
+
     private int port;
-    
-    public TCPConnectBackVMsg( MsgHeader header, byte[] vendorId, int subSelector, 
-        int version, byte[] data ) throws InvalidMessageException
-    {
-        super( header, vendorId, subSelector, version, data );
-        if ( version > VERSION )
-        {
+
+    public TCPConnectBackVMsg(MsgHeader header, byte[] vendorId, int subSelector,
+                              int version, byte[] data) throws InvalidMessageException {
+        super(header, vendorId, subSelector, version, data);
+        if (version > VERSION) {
             throw new InvalidMessageException(
-                "Vendor Message 'TCPConnectBack' with invalid version: " + version );
+                    "Vendor Message 'TCPConnectBack' with invalid version: " + version);
         }
-        if ( data.length != 2 )
-        {
+        if (data.length != 2) {
             throw new InvalidMessageException(
-                "Vendor Message 'TCPConnectBack' invalid data length: " + data.length );
+                    "Vendor Message 'TCPConnectBack' invalid data length: " + data.length);
         }
-        
+
         // parse connect back port
-        port = IOUtil.unsignedShort2Int( IOUtil.deserializeShortLE( data, 0  ) );
-        if( !AddressUtils.isPortInRange( port ) )
-        {
-            throw new InvalidMessageException( 
-                "Invalid connect back port: " + port );
+        port = IOUtil.unsignedShort2Int(IOUtil.deserializeShortLE(data, 0));
+        if (!AddressUtils.isPortInRange(port)) {
+            throw new InvalidMessageException(
+                    "Invalid connect back port: " + port);
         }
     }
-    
-    public TCPConnectBackVMsg( int port )
-    {
-        super( VENDORID_BEAR, SUBSELECTOR_TCP_CONNECT_BACK, VERSION, 
-              buildDataBody(port) );
+
+    public TCPConnectBackVMsg(int port) {
+        super(VENDORID_BEAR, SUBSELECTOR_TCP_CONNECT_BACK, VERSION,
+                buildDataBody(port));
         this.port = port;
-    }
-    
-    public int getPort()
-    {
-        return port;
     }
 
     /**
      * @param port
      */
-    private static byte[] buildDataBody( int port )
-    {
+    private static byte[] buildDataBody(int port) {
         byte[] data = new byte[2];
-        IOUtil.serializeShortLE( (short)port, data, 0 );
-        return data; 
+        IOUtil.serializeShortLE((short) port, data, 0);
+        return data;
+    }
+
+    public int getPort() {
+        return port;
     }
 }

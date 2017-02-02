@@ -32,58 +32,49 @@ import phex.common.log.NLogger;
  * to merge following segments after donwload. Also the files that correspond
  * to these segments will be merged once we have a sequence of downloaded segments.
  */
-public class SWDownloadSegment 
-    implements TransferDataProvider, SWDownloadConstants
-{
+public class SWDownloadSegment
+        implements TransferDataProvider, SWDownloadConstants {
     /**
      * The start offset of the download scope, inclusive.
      * Expected: start <= end
      */
     private final long start;
-    
+
     private final long length;
-    
-    /**
-     * Defines the bytes already downloaded.
-     */
-    private long transferredDataSize;
-
-    /**
-     * Used to store the current progress.
-     */
-    private Integer currentProgress;
-
     /**
      * The download file that this segment belongs to.
      */
     private final SWDownloadFile downloadFile;
-
+    private final TransferAverage transferAverage;
+    /**
+     * Defines the bytes already downloaded.
+     */
+    private long transferredDataSize;
+    /**
+     * Used to store the current progress.
+     */
+    private Integer currentProgress;
     /**
      * Transfer start time
      */
     private long transferStartTime;
-
     /**
      * Transfer stop time
      */
     private long transferStopTime;
-    
-    private final TransferAverage transferAverage;
-        
+
     /**
-     * 
      * @param aDownloadFile
      * @param aStartPos
      * @param aLength
      */
-    public SWDownloadSegment( SWDownloadFile aDownloadFile, long aStartPos, long aLength )
-    {
+    public SWDownloadSegment(SWDownloadFile aDownloadFile, long aStartPos, long aLength) {
         start = aStartPos;
         length = aLength;
         downloadFile = aDownloadFile;
         transferredDataSize = 0;
-        currentProgress = Integer.valueOf( 0 );
-        transferAverage = new TransferAverage( 1000, 6 );
+        currentProgress = Integer.valueOf(0);
+        transferAverage = new TransferAverage(1000, 6);
     }
 
     /**
@@ -91,67 +82,41 @@ public class SWDownloadSegment
      * the segment start position plus the already transferred data size.
      * During a transfer this start position will move.
      */
-    public long getTransferStartPosition()
-    {
+    public long getTransferStartPosition() {
         return start + transferredDataSize;
     }
 
     /**
      * Returns the stop position of the segment, inclusive.
      */
-    public long getEnd()
-    {
-        if ( length == UNKNOWN_FILE_SIZE )
-        {
+    public long getEnd() {
+        if (length == UNKNOWN_FILE_SIZE) {
             return -1;
         }
         return start + length - 1;
     }
-    
+
     /**
      * Returns the start position of the segment, inclusive.
      */
-    public long getStart()
-    {
+    public long getStart() {
         return start;
     }
 
     /**
      * Returns the length that is left to download.
      */
-    public long getTransferDataSizeLeft()
-    {
-        if ( length == UNKNOWN_FILE_SIZE )
-        {
+    public long getTransferDataSizeLeft() {
+        if (length == UNKNOWN_FILE_SIZE) {
             return -1;
         }
-        return Math.max( 0, length - transferredDataSize );
-    }
-
-    /**
-     * Sets the size of the data that has been transferred.
-     */
-    public void setTransferredDataSize( long size )
-    {
-        if ( size < transferredDataSize )
-        {
-            throw new IllegalArgumentException( "Transfered data size is not allowed to go down!");
-        }
-        if ( length > UNKNOWN_FILE_SIZE && size > length )
-        {
-            throw new IllegalArgumentException( "Transfered data size is not to grow beyond segments size!");
-        }
-            
-        long diff = size - transferredDataSize;
-        transferAverage.addValue(diff);
-        transferredDataSize = size;
+        return Math.max(0, length - transferredDataSize);
     }
 
     /**
      * Indicate that the download is just starting.
      */
-    public void downloadStartNotify()
-    {
+    public void downloadStartNotify() {
         transferStartTime = System.currentTimeMillis();
         transferStopTime = 0;
     }
@@ -159,11 +124,9 @@ public class SWDownloadSegment
     /**
      * Indicate that the download is no longer running.
      */
-    public void downloadStopNotify()
-    {
+    public void downloadStopNotify() {
         // Ignore nested calls.
-        if( transferStopTime == 0 )
-        {
+        if (transferStopTime == 0) {
             transferStopTime = System.currentTimeMillis();
         }
     }
@@ -171,110 +134,112 @@ public class SWDownloadSegment
     /**
      * Returns the progress in percent. If status == completed will always be 100%.
      */
-    public Integer getProgress()
-    {
+    public Integer getProgress() {
         int percentage;
         long transferDataSize = getTransferDataSize();
-        if ( transferDataSize > 0 )
-        {
-            percentage = (int)( getTransferredDataSize() * 100L / transferDataSize );
-        }
-        else
-        {
+        if (transferDataSize > 0) {
+            percentage = (int) (getTransferredDataSize() * 100L / transferDataSize);
+        } else {
             percentage = 0;
         }
-        
 
-        if ( currentProgress.intValue() != percentage )
-        {
+
+        if (currentProgress.intValue() != percentage) {
             // only create new object if necessary
-            currentProgress = Integer.valueOf( percentage );
+            currentProgress = Integer.valueOf(percentage);
         }
 
         return currentProgress;
     }
-        
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         StringBuffer buffer = new StringBuffer();
-        buffer.append( getClass().getName() );
-        buffer.append( "[start: " );
-        buffer.append( start );
-        buffer.append( ", so far: " );
-        buffer.append( transferredDataSize );
-        buffer.append( " of " );
-        buffer.append( length );
-        buffer.append( "]@" );
-        buffer.append( hashCode() );
-        buffer.append( "\n" );
+        buffer.append(getClass().getName());
+        buffer.append("[start: ");
+        buffer.append(start);
+        buffer.append(", so far: ");
+        buffer.append(transferredDataSize);
+        buffer.append(" of ");
+        buffer.append(length);
+        buffer.append("]@");
+        buffer.append(hashCode());
+        buffer.append("\n");
         return buffer.toString();
     }
-    
-    private void validateTransferredDataSize()
-    {
-        if ( length != UNKNOWN_FILE_SIZE &&
-             transferredDataSize > length )
-        {
-            NLogger.error( SWDownloadFile.class, 
-                "Transferred data size above transfer data size: " + toString() );
+
+    private void validateTransferredDataSize() {
+        if (length != UNKNOWN_FILE_SIZE &&
+                transferredDataSize > length) {
+            NLogger.error(SWDownloadFile.class,
+                    "Transferred data size above transfer data size: " + toString());
         }
     }
-    
+
     /**
      * Returns the transfer speed from the bandwidth controller of this download.
+     *
      * @return
      */
-    public long getTransferSpeed()
-    {
-        if ( transferStopTime > 0 && (transferStopTime - transferStartTime) < 1000 )
-        { // transfer was faster then 1 sec.. we likely dont have speed data collected.
-          // we return the full transferred data size
+    public long getTransferSpeed() {
+        if (transferStopTime > 0 && (transferStopTime - transferStartTime) < 1000) { // transfer was faster then 1 sec.. we likely dont have speed data collected.
+            // we return the full transferred data size
             return transferredDataSize;
         }
         return transferAverage.getAverage();
     }
-    
-    //////// START TransferDataProvider Interface ///////////
-    
+
     /**
      * Returns the data size that has already be transferred.
      */
-    public long getTransferredDataSize()
-    {
+    public long getTransferredDataSize() {
         return transferredDataSize;
+    }
+
+    //////// START TransferDataProvider Interface ///////////
+
+    /**
+     * Sets the size of the data that has been transferred.
+     */
+    public void setTransferredDataSize(long size) {
+        if (size < transferredDataSize) {
+            throw new IllegalArgumentException("Transfered data size is not allowed to go down!");
+        }
+        if (length > UNKNOWN_FILE_SIZE && size > length) {
+            throw new IllegalArgumentException("Transfered data size is not to grow beyond segments size!");
+        }
+
+        long diff = size - transferredDataSize;
+        transferAverage.addValue(diff);
+        transferredDataSize = size;
     }
 
     /**
      * This is the total size of the available data. Even if its not importend
      * for the transfer itself.
      */
-    public long getTotalDataSize()
-    {
+    public long getTotalDataSize() {
         return getTransferDataSize();
     }
-    
+
     /**
      * Returns the length of the segment.
      */
-    public long getTransferDataSize()
-    {
+    public long getTransferDataSize() {
         return length;
     }
-    
+
     /**
      * Not implemented... uses own transfer rate calculation
      */
-    public void setTransferRateTimestamp( long timestamp )
-    {
+    public void setTransferRateTimestamp(long timestamp) {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Not implemented... uses own transfer rate calculation
      */
-    public int getShortTermTransferRate()
-    {
+    public int getShortTermTransferRate() {
         throw new UnsupportedOperationException();
     }
 
@@ -283,27 +248,22 @@ public class SWDownloadSegment
      * the transfer since the last start of the transfer. This means after a
      * transfer was interrupted and is resumed again the calculation restarts.
      */
-    public int getLongTermTransferRate()
-    {
-        return (int)getTransferSpeed();
+    public int getLongTermTransferRate() {
+        return (int) getTransferSpeed();
     }
-    
+
     /**
      * Return the data transfer status.
      * It can be TRANSFER_RUNNING, TRANSFER_NOT_RUNNING, TRANSFER_COMPLETED,
      * TRANSFER_ERROR.
      */
-    public short getDataTransferStatus()
-    {
-        if ( transferStartTime != 0 && transferStopTime == 0 )
-        {
+    public short getDataTransferStatus() {
+        if (transferStartTime != 0 && transferStopTime == 0) {
             return TRANSFER_RUNNING;
-        }
-        else
-        {
+        } else {
             return TRANSFER_NOT_RUNNING;
         }
     }
-    
+
     //////// END TransferDataProvider Interface ///////////
 }

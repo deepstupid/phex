@@ -39,55 +39,43 @@ import phex.servent.Servent;
 import java.io.IOException;
 import java.net.*;
 
-public class OIOServer extends Server
-{
-    public OIOServer( Servent servent )
-    {
-        super( servent );
+public class OIOServer extends Server {
+    public OIOServer(Servent servent) {
+        super(servent);
     }
 
     // The listening thread.
-    public void run()
-    {
-        if (NLogger.isDebugEnabled( OIOServer.class ))
-            NLogger.debug( OIOServer.class,
-                "Listener started. Listening on: "
-                    + serverSocket.getInetAddress().getHostAddress() + ':'
-                    + serverSocket.getLocalPort());
-        
-        try
-        {
-            while ( serverSocket != null && !serverSocket.isClosed() )
-            {  
-                try
-                {
+    public void run() {
+        if (NLogger.isDebugEnabled(OIOServer.class))
+            NLogger.debug(OIOServer.class,
+                    "Listener started. Listening on: "
+                            + serverSocket.getInetAddress().getHostAddress() + ':'
+                            + serverSocket.getLocalPort());
+
+        try {
+            while (serverSocket != null && !serverSocket.isClosed()) {
+                try {
                     Socket incoming = serverSocket.accept();
                     // create facade...
-                    DefaultSocketFacade incomingFacade = new DefaultSocketFacade( 
-                        incoming );
-                    handleIncomingSocket( incomingFacade );
-                }
-                catch ( SocketException | PhexSecurityException exp )
-                {
-                    NLogger.debug( OIOServer.class, exp );
-                } catch (IOException exp)
-                {
-                    NLogger.error( OIOServer.class, exp, exp);
+                    DefaultSocketFacade incomingFacade = new DefaultSocketFacade(
+                            incoming);
+                    handleIncomingSocket(incomingFacade);
+                } catch (SocketException | PhexSecurityException exp) {
+                    NLogger.debug(OIOServer.class, exp);
+                } catch (IOException exp) {
+                    NLogger.error(OIOServer.class, exp, exp);
                 }
             }
-        }
-        catch ( Exception exp )
-        {
-            NLogger.error( OIOServer.class, exp, exp );
+        } catch (Exception exp) {
+            NLogger.error(OIOServer.class, exp, exp);
         }
 
         isRunning = false;
-        NLogger.debug( OIOServer.class, "Listener stopped.");
+        NLogger.debug(OIOServer.class, "Listener stopped.");
         DestAddress newAddress = PresentationManager.getInstance().createHostAddress(
-            IpAddress.LOCAL_HOST_IP, DefaultDestAddress.DEFAULT_PORT );
-        localAddress.updateLocalAddress( newAddress );
-        synchronized(this)
-        {
+                IpAddress.LOCAL_HOST_IP, DefaultDestAddress.DEFAULT_PORT);
+        localAddress.updateLocalAddress(newAddress);
+        synchronized (this) {
             notifyAll();
         }
     }
@@ -97,25 +85,23 @@ public class OIOServer extends Server
      * @throws PhexSecurityException
      * @throws SocketException
      */
-    private void handleIncomingSocket(SocketFacade clientSocket )
-        throws IOException, PhexSecurityException
-    {        
+    private void handleIncomingSocket(SocketFacade clientSocket)
+            throws IOException, PhexSecurityException {
         clientSocket.setSoTimeout(NetworkPrefs.TcpRWTimeout.get());
 
         DestAddress address = clientSocket.getRemoteAddress();
         NetworkHostsContainer netHostsContainer = servent.getHostService()
-            .getNetworkHostsContainer();
+                .getNetworkHostsContainer();
 
         // if not already connected and connection is not from a private address.
         IpAddress remoteIp = address.getIpAddress();
         assert remoteIp != null;
         if (!netHostsContainer.isConnectedToHost(address)
-            && !remoteIp.isSiteLocalIP() )
-        {
+                && !remoteIp.isSiteLocalIP()) {
             hasConnectedIncomming = true;
             lastInConnectionTime = System.currentTimeMillis();
         }
-        
+
         // Set this will defeat the Nagle Algorithm, making short bursts of
         // transmission faster, but will be worse for the overall network.
         // incoming.setTcpNoDelay(true);
@@ -123,27 +109,25 @@ public class OIOServer extends Server
         // Create a Host object for the incoming connection
         // and hand it off to a ReadWorker to handle.
         AccessType access = servent.getSecurityService()
-            .controlHostAddressAccess(address);
-        switch (access)
-        {
+                .controlHostAddressAccess(address);
+        switch (access) {
             case ACCESS_DENIED:
             case ACCESS_STRONGLY_DENIED:
-                throw new PhexSecurityException("Host access denied: " + address );
+                throw new PhexSecurityException("Host access denied: " + address);
         }
 
-        NLogger.debug( OIOServer.class, 
-            "Accepted incoming connection from: "
-                + address.getFullHostName());
+        NLogger.debug(OIOServer.class,
+                "Accepted incoming connection from: "
+                        + address.getFullHostName());
 
         IncomingConnectionDispatcher dispatcher = new IncomingConnectionDispatcher(
-            clientSocket, servent );
-        Environment.getInstance().executeOnThreadPool( dispatcher,
-            "IncomingConnectionDispatcher-" + Integer.toHexString(hashCode()));
+                clientSocket, servent);
+        Environment.getInstance().executeOnThreadPool(dispatcher,
+                "IncomingConnectionDispatcher-" + Integer.toHexString(hashCode()));
     }
 
     @Override
-    protected synchronized void bind( int initialPort ) throws IOException
-    {
+    protected synchronized void bind(int initialPort) throws IOException {
         assert (serverSocket == null);
 
         serverSocket = new ServerSocket();
@@ -153,22 +137,17 @@ public class OIOServer extends Server
         boolean error;
         int tryingPort = initialPort;
         // try to find new port if port not valid
-        do
-        {
+        do {
             error = false;
 
-            try
-            {
-                NLogger.debug( OIOServer.class, "Binding to port " + tryingPort );
-                serverSocket.bind(new InetSocketAddress( tryingPort ));
-            }
-            catch (SocketException exp)
-            {
-                NLogger.debug( OIOServer.class, "Binding failed to port " + tryingPort );
-                if (tries > 50)
-                {
-                    throw new BindException( "Failed to bind to port (" + initialPort + " - " 
-                        + tryingPort + "). Last reason was: " + exp.getMessage() );
+            try {
+                NLogger.debug(OIOServer.class, "Binding to port " + tryingPort);
+                serverSocket.bind(new InetSocketAddress(tryingPort));
+            } catch (SocketException exp) {
+                NLogger.debug(OIOServer.class, "Binding failed to port " + tryingPort);
+                if (tries > 50) {
+                    throw new BindException("Failed to bind to port (" + initialPort + " - "
+                            + tryingPort + "). Last reason was: " + exp.getMessage());
                 }
                 error = true;
                 tryingPort++;
@@ -180,21 +159,16 @@ public class OIOServer extends Server
         IpAddress hostIP = resolveLocalHostIP();
         tryingPort = serverSocket.getLocalPort();
         DestAddress newAddress = PresentationManager.getInstance().createHostAddress(
-            hostIP, tryingPort );
-        localAddress.updateLocalAddress( newAddress );
+                hostIP, tryingPort);
+        localAddress.updateLocalAddress(newAddress);
     }
-    
+
     @Override
-    protected synchronized void closeServer()
-    {
-        if ( serverSocket != null )
-        {
-            try
-            {
+    protected synchronized void closeServer() {
+        if (serverSocket != null) {
+            try {
                 serverSocket.close();
-            }
-            catch (IOException exp)
-            {// ignore
+            } catch (IOException exp) {// ignore
             }
             serverSocket = null;
         }

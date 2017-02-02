@@ -21,11 +21,12 @@
  */
 package phex;
 
+import ch.qos.logback.classic.Level;
+import org.slf4j.LoggerFactory;
 import phex.common.Phex;
 import phex.common.ThreadTracking;
 import phex.common.log.NLogger;
 import phex.connection.LoopbackDispatcher;
-import phex.download.swarming.PhexEventService;
 import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
 import phex.util.SystemProperties;
@@ -35,11 +36,16 @@ import java.util.Iterator;
 
 
 public class Main {
-//    private static SplashScreen splashScreen;
 
+    static {
+        boolean DEBUG = true;
+        if (!DEBUG) {
+            ((ch.qos.logback.classic.Logger) (LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME)))
+                    .setLevel(Level.INFO);
+        }
+    }
 
     /**
-     * Don't use NLogger before arguments have been read ( -c )
      *
      * @param args
      */
@@ -63,7 +69,6 @@ public class Main {
         String magmaFile = null;
         String rssFile = null;
         String argument;
-        Boolean startConsole = false;
 
         while ((argument = readArgument(iterator)) != null) {
             if (argument.equalsIgnoreCase("-c")) {
@@ -78,8 +83,6 @@ public class Main {
                 magmaFile = readArgument(iterator);
             } else if (argument.equalsIgnoreCase("-rss")) {
                 rssFile = readArgument(iterator);
-            } else if (argument.equalsIgnoreCase("-i")) {
-                startConsole = true;
             }
         }
 
@@ -137,7 +140,7 @@ public class Main {
             end = System.currentTimeMillis();
             NLogger.debug(Main.class, "Full startup time: " + (end - start));
 
-            PhexEventService eventService = Phex.getEventService();
+
             if (loopbackUri != null) {// correctly dispatched uri
 
             }
@@ -154,15 +157,7 @@ public class Main {
             System.exit(1);
         }
 
-//        /**
-//         * Trying to use a jython interpreter as powerful command line interface.
-//         * This blocks, so it has to be at the end.
-//         */
-//        //if (startConsole) {
-//            JythonInterpreter jython;
-//            jython = new JythonInterpreter();
-//            jython.startConsole();
-//        //}
+
 
     }
 

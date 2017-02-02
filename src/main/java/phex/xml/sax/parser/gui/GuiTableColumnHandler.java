@@ -34,10 +34,9 @@ import javax.xml.parsers.SAXParser;
 import java.io.CharArrayWriter;
 
 /**
- * 
+ *
  */
-public class GuiTableColumnHandler extends DefaultHandler
-{
+public class GuiTableColumnHandler extends DefaultHandler {
     public static final String THIS_TAG_NAME = DTableColumn.ELEMENT_NAME;
 
     private final CharArrayWriter text = new CharArrayWriter();
@@ -48,9 +47,8 @@ public class GuiTableColumnHandler extends DefaultHandler
 
     private final DefaultHandler parent;
 
-    public GuiTableColumnHandler( DTableColumn dColumn,
-        DefaultHandler parent, SAXParser parser )
-    {
+    public GuiTableColumnHandler(DTableColumn dColumn,
+                                 DefaultHandler parent, SAXParser parser) {
         this.dColumn = dColumn;
         this.parser = parser;
         this.parent = parent;
@@ -59,72 +57,50 @@ public class GuiTableColumnHandler extends DefaultHandler
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes ) throws SAXException
-    {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes) throws SAXException {
         text.reset();
         return;
     }
 
-    public void endElement( String uri, String localName, String qName )
-        throws SAXException
-    {
-        if ( qName.equals( "columnID" ) )
-        {
-            try
-            {
-                dColumn.setColumnID( Integer.parseInt( text.toString() ) );
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equals("columnID")) {
+            try {
+                dColumn.setColumnID(Integer.parseInt(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(SharedFileHandler.class, exp, exp);
             }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( SharedFileHandler.class, exp, exp );
+        } else if (qName.equals("isVisible")) {
+            dColumn.setVisible(Boolean.valueOf(text.toString()).booleanValue());
+        } else if (qName.equals("visibleIndex")) {
+            try {
+                dColumn.setVisibleIndex(Integer.parseInt(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(SharedFileHandler.class, exp, exp);
             }
-        }
-        else if ( qName.equals( "isVisible" ) )
-        {   
-            dColumn.setVisible( Boolean.valueOf( text.toString() ).booleanValue() );
-        }
-        else if ( qName.equals( "visibleIndex" ) )
-        {
-            try
-            {
-                dColumn.setVisibleIndex( Integer.parseInt( text.toString() ) );
+        } else if (qName.equals("width")) {
+            try {
+                dColumn.setWidth(Integer.parseInt(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(SharedFileHandler.class, exp, exp);
             }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( SharedFileHandler.class, exp, exp );
-            }
-        }
-        else if ( qName.equals( "width" ) )
-        {
-            try
-            {
-                dColumn.setWidth( Integer.parseInt( text.toString() ) );
-            }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( SharedFileHandler.class, exp, exp );
-            }
-        }
-        else if ( qName.equals( THIS_TAG_NAME ) )
-        {
-            parser.getXMLReader().setContentHandler( parent );
+        } else if (qName.equals(THIS_TAG_NAME)) {
+            parser.getXMLReader().setContentHandler(parent);
         }
     }
 
-    public InputSource resolveEntity( String publicId, String systemId )
-    {
+    public InputSource resolveEntity(String publicId, String systemId) {
         return null;
     }
 
-    public void characters( char[] ch, int start, int length )
-    {
-        text.write( ch, start, length );
+    public void characters(char[] ch, int start, int length) {
+        text.write(ch, start, length);
     }
 }

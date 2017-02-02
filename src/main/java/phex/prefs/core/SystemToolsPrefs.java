@@ -25,41 +25,39 @@ package phex.prefs.core;
 import phex.prefs.api.PreferencesFactory;
 import phex.prefs.api.Setting;
 
-public class SystemToolsPrefs extends PhexCorePrefs
-{
+public class SystemToolsPrefs extends PhexCorePrefs {
     /**
      * The command to execute for video media types on systems other then
      * Windows and Mac OSX
      */
     public static final Setting<String> OpenVideoCmdOtherOS;
-    
+
     /**
      * The command to execute for image media types on systems other then
      * Windows and Mac OSX (usually Unix systems).
      */
     public static final Setting<String> OpenImageCmdOtherOS;
-    
+
     /**
      * The command to execute for audio media types on systems other then
      * Windows and Mac OSX (usually Unix systems).
      */
     public static final Setting<String> OpenAudioCmdOtherOS;
-        
+
     /**
-     * The browser command to execute for none video, image, audio media types 
+     * The browser command to execute for none video, image, audio media types
      * on systems other then Windows and Mac OSX (usually Unix systems).
      */
     public static final Setting<String> OpenBrowserCmdOtherOS;
-    
-    static
-    {
-        OpenVideoCmdOtherOS = PreferencesFactory.createStringSetting( 
-            "SystemTools.OpenVideoCmdOtherOS", "xterm -e mplayer %filepath%", instance );
-        OpenImageCmdOtherOS = PreferencesFactory.createStringSetting( 
-            "SystemTools.OpenImageCmdOtherOS", "ee %filepath%", instance );
-        OpenAudioCmdOtherOS = PreferencesFactory.createStringSetting( 
-            "SystemTools.OpenAudioCmdOtherOS", "xterm -e mplayer %filepath%", instance );
-        OpenBrowserCmdOtherOS = PreferencesFactory.createStringSetting( 
-            "SystemTools.OpenBrowserCmdOtherOS", "mozilla -remote openURL(%filepath%,new-window)", instance );
+
+    static {
+        OpenVideoCmdOtherOS = PreferencesFactory.createStringSetting(
+                "SystemTools.OpenVideoCmdOtherOS", "xterm -e mplayer %filepath%", instance);
+        OpenImageCmdOtherOS = PreferencesFactory.createStringSetting(
+                "SystemTools.OpenImageCmdOtherOS", "ee %filepath%", instance);
+        OpenAudioCmdOtherOS = PreferencesFactory.createStringSetting(
+                "SystemTools.OpenAudioCmdOtherOS", "xterm -e mplayer %filepath%", instance);
+        OpenBrowserCmdOtherOS = PreferencesFactory.createStringSetting(
+                "SystemTools.OpenBrowserCmdOtherOS", "mozilla -remote openURL(%filepath%,new-window)", instance);
     }
 }

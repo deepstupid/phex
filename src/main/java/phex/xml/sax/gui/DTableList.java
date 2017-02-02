@@ -30,82 +30,68 @@ import phex.xml.sax.PhexXmlSaxWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DTableList implements DElement
-{
+public class DTableList implements DElement {
     public static final String ELEMENT_NAME = "table-list";
-    
+
     private final List<DTable> tableList;
-    
+
     private boolean isSetShowHorizontalLines;
     private boolean showHorizontalLines;
-    
+
     private boolean isSetShowVerticalLines;
     private boolean showVerticalLines;
-    
-    
 
-    public DTableList()
-    {
+
+    public DTableList() {
         tableList = new ArrayList<DTable>();
     }
-    
-    public boolean isSetShowHorizontalLines()
-    {
+
+    public boolean isSetShowHorizontalLines() {
         return isSetShowHorizontalLines;
     }
 
-    public boolean isSetShowVerticalLines()
-    {
+    public boolean isSetShowVerticalLines() {
         return isSetShowVerticalLines;
     }
-    
-    public boolean isShowHorizontalLines()
-    {
+
+    public boolean isShowHorizontalLines() {
         return showHorizontalLines;
     }
 
-    public void setShowHorizontalLines( boolean showHorizontalLines )
-    {
+    public void setShowHorizontalLines(boolean showHorizontalLines) {
         isSetShowHorizontalLines = true;
         this.showHorizontalLines = showHorizontalLines;
     }
 
-    public boolean isShowVerticalLines()
-    {
+    public boolean isShowVerticalLines() {
         return showVerticalLines;
     }
 
-    public void setShowVerticalLines( boolean showVerticalLines )
-    {
+    public void setShowVerticalLines(boolean showVerticalLines) {
         isSetShowVerticalLines = true;
         this.showVerticalLines = showVerticalLines;
     }
 
-    public List<DTable> getTableList()
-    {
+    public List<DTable> getTableList() {
         return tableList;
     }
 
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
         AttributesImpl attributes = new AttributesImpl();
-        if( isSetShowHorizontalLines )
-        {
-            attributes.addAttribute( "", "", "showHorizontalLines", "CDATA",
-                String.valueOf( showHorizontalLines ) );
+        if (isSetShowHorizontalLines) {
+            attributes.addAttribute("", "", "showHorizontalLines", "CDATA",
+                    String.valueOf(showHorizontalLines));
         }
-        if( isSetShowVerticalLines )
-        {
-            attributes.addAttribute( "", "", "showVerticalLines", "CDATA",
-                String.valueOf( showVerticalLines ) );
+        if (isSetShowVerticalLines) {
+            attributes.addAttribute("", "", "showVerticalLines", "CDATA",
+                    String.valueOf(showVerticalLines));
         }
-        writer.startElm( ELEMENT_NAME, attributes );
-        
-        for ( DTable dTable : tableList )
-        {
+        writer.startElm(ELEMENT_NAME, attributes);
+
+        for (DTable dTable : tableList) {
             dTable.serialize(writer);
         }
-        
-        writer.endElm( ELEMENT_NAME );
+
+        writer.endElm(ELEMENT_NAME);
     }
 }

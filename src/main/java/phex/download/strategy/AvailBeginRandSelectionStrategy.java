@@ -28,22 +28,20 @@ import phex.download.swarming.SWDownloadFile;
 import java.util.Random;
 
 /**
- * This download strategy first analysis if there is a useful scope by 
- * availability. If no scope was found and the file is streamable there is a 
+ * This download strategy first analysis if there is a useful scope by
+ * availability. If no scope was found and the file is streamable there is a
  * 50% chance that the beginning is selected otherwise a random segment is chosen.
  */
-public class AvailBeginRandSelectionStrategy implements ScopeSelectionStrategy
-{
+public class AvailBeginRandSelectionStrategy implements ScopeSelectionStrategy {
     private final Random random;
     private final ScopeSelectionStrategy availStrategy;
     private final ScopeSelectionStrategy beginStrategy;
     private final ScopeSelectionStrategy randStrategy;
-    
+
     protected AvailBeginRandSelectionStrategy(
-        AvailabilityScopeSelectionStrategy availStrategy,
-        PrefereBeginingScopeSelectionStrategy beginStrategy,
-        RandomScopeSelectionStrategy randStrategy )
-    {
+            AvailabilityScopeSelectionStrategy availStrategy,
+            PrefereBeginingScopeSelectionStrategy beginStrategy,
+            RandomScopeSelectionStrategy randStrategy) {
         this.random = new Random();
         this.availStrategy = availStrategy;
         this.beginStrategy = beginStrategy;
@@ -51,27 +49,23 @@ public class AvailBeginRandSelectionStrategy implements ScopeSelectionStrategy
     }
 
 
-    public DownloadScope selectDownloadScope( SWDownloadFile downloadFile,
-        DownloadScopeList wantedScopeList, long preferredSize )
-    {
+    public DownloadScope selectDownloadScope(SWDownloadFile downloadFile,
+                                             DownloadScopeList wantedScopeList, long preferredSize) {
         DownloadScope scope = availStrategy.selectDownloadScope(
-            downloadFile, wantedScopeList, preferredSize);
-        
-        if ( scope == null && downloadFile.isDestinationStreamable() )
-        {
+                downloadFile, wantedScopeList, preferredSize);
+
+        if (scope == null && downloadFile.isDestinationStreamable()) {
             // choose beginning by 50%
-            boolean useBegin = random.nextBoolean( );
-            if ( useBegin )
-            {
-                scope = beginStrategy.selectDownloadScope(downloadFile, 
-                    wantedScopeList, preferredSize);
+            boolean useBegin = random.nextBoolean();
+            if (useBegin) {
+                scope = beginStrategy.selectDownloadScope(downloadFile,
+                        wantedScopeList, preferredSize);
             }
         }
-        
-        if ( scope == null )
-        {
+
+        if (scope == null) {
             scope = randStrategy.selectDownloadScope(
-                downloadFile, wantedScopeList, preferredSize);
+                    downloadFile, wantedScopeList, preferredSize);
         }
         return scope;
     }

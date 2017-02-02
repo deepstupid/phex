@@ -21,6 +21,8 @@
  */
 package phex.msg;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import phex.common.address.DestAddress;
 import phex.common.address.IpAddress;
 import phex.common.log.NLogger;
@@ -39,8 +41,10 @@ import java.util.zip.DataFormatException;
  * Document Revision Version 0.51
  * Protocol Version 0.5
  */
-public class GGEPBlock
-{
+public class GGEPBlock {
+
+    private static final Logger logger = LoggerFactory.getLogger(GGEPBlock.class);
+
     /**
      * This is a magic number is used to help distinguish GGEP extensions from
      * legacy data which may exist.  It must be set to the value 0xC3.
@@ -67,175 +71,271 @@ public class GGEPBlock
     public static final String CREATION_TIME_HEADER_ID = "CT";
     public static final String SECURE_OOB_ID = "SO";
     public static final String LARGE_FILE_HEADER_ID = "LF";
-
+    private static byte[] browseHostGGEPBlock;
     private final HashMap<String, byte[]> headerToDataMap;
-    
     private final boolean needsCobsFor0x00Byte;
 
-    public GGEPBlock( boolean needsCobsFor0x00 )
-    {
+    public GGEPBlock(boolean needsCobsFor0x00) {
         this.needsCobsFor0x00Byte = needsCobsFor0x00;
         headerToDataMap = new HashMap<>(3);
     }
-    
-    public GGEPBlock( )
-    {
+
+    public GGEPBlock() {
         // unknown if we need cobs or not but to make sure useing it cant be bad.
-        this( true );
+        this(true);
     }
 
-    public void debugDump()
-    {
-        System.out.println( "--------------------------------------" );
-        for(Map.Entry<String, byte[]> stringEntry : headerToDataMap.entrySet())
-        {
+    public static byte[] getQueryReplyGGEPBlock(
+            boolean isBrowseHostSupported, DestAddress[] pushProxyAddresses) {
+        if (pushProxyAddresses != null && pushProxyAddresses.length > 0) {// we need to create the GGEP block in realtime.
+            GGEPBlock ggepBlock = new GGEPBlock(true);
+            if (isBrowseHostSupported) {
+                ggepBlock.addExtension(GGEPBlock.BROWSE_HOST_HEADER_ID);
+            }
+            ggepBlock.addExtension(PUSH_PROXY_HEADER_ID,
+                    pushProxyAddresses, 4);
+
+            byte[] data = ggepBlock.getBytes();
+            return data;
+        } else if (isBrowseHostSupported) {
+            if (browseHostGGEPBlock == null) {
+                GGEPBlock ggepBlock = new GGEPBlock(true);
+                ggepBlock.addExtension(GGEPBlock.BROWSE_HOST_HEADER_ID);
+                browseHostGGEPBlock = ggepBlock.getBytes();
+            }
+            return browseHostGGEPBlock;
+        } else {
+            return IOUtil.EMPTY_BYTE_ARRAY;
+        }
+    }
+
+    /**
+     * @param creationTime       in millis
+     * @param alternateLocations
+     * @return the ggep block data
+     */
+    public static byte[] getQueryReplyRecordGGEPBlock(long creationTime,
+                                                      DestAddress[] alternateLocations, long fileSize) {
+        if (creationTime > 0 ||
+                (alternateLocations != null && alternateLocations.length > 0) ||
+                fileSize > Integer.MAX_VALUE) {// we need to create the GGEP block in realtime.
+            GGEPBlock ggepBlock = new GGEPBlock(true);
+            if (creationTime > 0) {
+                ggepBlock.addExtension(GGEPBlock.CREATION_TIME_HEADER_ID,
+                        creationTime / 1000);
+            }
+            if (alternateLocations != null && alternateLocations.length > 0) {
+                ggepBlock.addExtension(ALTERNATE_LOCATIONS_HEADER_ID,
+                        alternateLocations, 10);
+            }
+            if (fileSize > Integer.MAX_VALUE) {
+                ggepBlock.addExtension(LARGE_FILE_HEADER_ID, fileSize);
+            }
+            byte[] data = ggepBlock.getBytes();
+            return data;
+        } else {
+            return IOUtil.EMPTY_BYTE_ARRAY;
+        }
+    }
+
+    /**
+     * Returns if the extension is available in any GGEP block.
+     *
+     * @param ggepBlocks
+     * @param headerID
+     * @return true is extension is found, false otherwise.
+     */
+    public static boolean isExtensionHeaderInBlocks(GGEPBlock[] ggepBlocks,
+                                                    String headerID) {
+        for (GGEPBlock ggepBlock : ggepBlocks) {
+            if (ggepBlock.isExtensionAvailable(headerID)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns the extension if available in any GGEP block or null if not available.
+     *
+     * @param ggepBlocks
+     * @param headerID
+     * @return the extension if available in any GGEP block or null if not available.
+     */
+    public static byte[] getExtensionDataInBlocks(GGEPBlock[] ggepBlocks,
+                                                  String headerID) {
+        for (GGEPBlock ggepBlock : ggepBlocks) {
+            if (ggepBlock.isExtensionAvailable(headerID)) {
+                return ggepBlock.getExtensionData(headerID);
+            }
+        }
+        return null;
+    }
+
+    public static GGEPBlock mergeGGEPBlocks(GGEPBlock[] ggepBlocks) {
+        GGEPBlock mergedBlock = new GGEPBlock();
+        for (GGEPBlock ggepBlock : ggepBlocks) {
+            mergedBlock.addAllExtensions(ggepBlock);
+        }
+        return mergedBlock;
+    }
+
+    public static GGEPBlock[] parseGGEPBlocks(byte[] body, int offset) {
+        GGEPParser parser = new GGEPParser();
+        return parser.parseGGEPBlocks(body, offset);
+    }
+
+    public static GGEPBlock[] parseGGEPBlocks(PushbackInputStream inStream)
+            throws InvalidGGEPBlockException, IOException {
+        GGEPParser parser = new GGEPParser();
+        return parser.parseGGEPBlocks(inStream);
+    }
+
+    public static void debugDumpBlocks(GGEPBlock[] ggepBlocks) {
+        for (GGEPBlock ggepBlock : ggepBlocks) {
+            ggepBlock.debugDump();
+        }
+    }
+
+    public void debugDump() {
+        System.out.println("--------------------------------------");
+        for (Map.Entry<String, byte[]> stringEntry : headerToDataMap.entrySet()) {
             System.out.println(stringEntry.getKey() + " = " + stringEntry.getValue());
         }
-        System.out.println( "--------------------------------------" );
+        System.out.println("--------------------------------------");
     }
 
     /**
      * Adds a GGEP extension to a extension block without a data segment.
+     *
      * @param header the header name of the extension
      */
-    public void addExtension( String header )
-    {
-        addExtension( header, "".getBytes() );
+    public void addExtension(String header) {
+        addExtension(header, "".getBytes());
     }
 
     /**
      * Adds a GGEP extension to a extension block with a data segment.
+     *
      * @param header the header name of the extension
-     * @param data the data of the extension.
+     * @param data   the data of the extension.
      */
-    public void addExtension( String header, byte[] data )
-    {
-        headerToDataMap.put( header, data );
+    public void addExtension(String header, byte[] data) {
+        headerToDataMap.put(header, data);
     }
-    
-    /** 
+
+    /**
      * Adds a GGEP extension to a extension block with an integer value.
+     *
      * @param header the header name of the extension
-     * @param value the integer data, it should be an unsigned integer value
+     * @param value  the integer data, it should be an unsigned integer value
      */
-    public void addExtension( String header, int value )
-    {
-        addExtension( header, IOUtil.serializeInt2MinLE( value ) );
+    public void addExtension(String header, int value) {
+        addExtension(header, IOUtil.serializeInt2MinLE(value));
     }
-    
-    /** 
+
+    /**
      * Adds a GGEP extension to a extension block with an long value.
+     *
      * @param header the header name of the extension
-     * @param value the long data, it should be an unsigned long value
+     * @param value  the long data, it should be an unsigned long value
      */
-    public void addExtension( String header, long value )
-    {
-        addExtension( header, IOUtil.serializeLong2MinLE( value ) );
+    public void addExtension(String header, long value) {
+        addExtension(header, IOUtil.serializeLong2MinLE(value));
     }
-    
+
     /**
      * Adds multiple addresses as extension to this GGEP block in the common
      * standard IP format. Maximal maxAmount addresses are added.
+     *
      * @param header
      * @param addresses
      * @param maxAmount
      */
-    public void addExtension( String header, DestAddress[] addresses,
-        int maxAmount )
-    {
-        try
-        {
+    public void addExtension(String header, DestAddress[] addresses,
+                             int maxAmount) {
+        try {
             ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-            int count = Math.min( addresses.length, maxAmount );
-            for ( int i = 0; i < count; i++ )
-            {
+            int count = Math.min(addresses.length, maxAmount);
+            for (int i = 0; i < count; i++) {
                 IpAddress ip = addresses[i].getIpAddress();
-                if ( ip != null )
-                {
-                    outStream.write( ip.getHostIP() );
-                    IOUtil.serializeShortLE( 
-                        (short)addresses[i].getPort(), outStream );
+                if (ip != null) {
+                    outStream.write(ip.getHostIP());
+                    IOUtil.serializeShortLE(
+                            (short) addresses[i].getPort(), outStream);
                 }
             }
-            if ( outStream.size() > 0 )
-            {
-                addExtension( header, outStream.toByteArray() );
+            if (outStream.size() > 0) {
+                addExtension(header, outStream.toByteArray());
             }
-        }
-        catch ( IOException exp )
-        {// this should never occur..
-            NLogger.error( GGEPBlock.class, exp, exp );
+        } catch (IOException exp) {// this should never occur..
+            NLogger.error(GGEPBlock.class, exp, exp);
         }
     }
-    
-    public void addAllExtensions( GGEPBlock block )
-    {
-        headerToDataMap.putAll( block.headerToDataMap );
+
+
+    //////////////////////// Static helpers ////////////////////////////////////
+
+    public void addAllExtensions(GGEPBlock block) {
+        headerToDataMap.putAll(block.headerToDataMap);
     }
-    
-    public byte[] getExtensionData( String header )
-    {
-        return headerToDataMap.get( header );
+
+    public byte[] getExtensionData(String header) {
+        return headerToDataMap.get(header);
     }
-    
+
     /**
      * Returns defaultValue in case no data is found or data is not valid.
+     *
      * @param header
      * @param defaultValue
      * @return the value of the extension or the given defaultValue in case
-     *         data is not valid. 
+     * data is not valid.
      */
-    public long getLongExtensionData( String header, long defaultValue )
-    {
-        byte[] data = getExtensionData( header );
-        if (data == null || data.length < 1 || data.length > 8)
-        {
+    public long getLongExtensionData(String header, long defaultValue) {
+        byte[] data = getExtensionData(header);
+        if (data == null || data.length < 1 || data.length > 8) {
             return defaultValue;
         }
-        return IOUtil.deserializeLongLE( data, 0, data.length );
+        return IOUtil.deserializeLongLE(data, 0, data.length);
     }
-    
+
     /**
      * Returns defaultValue in case no data is found or data is not valid.
+     *
      * @param header
      * @param defaultValue
      * @return the value of the extension or the given defaultValue in case
-     *         data is not valid.
+     * data is not valid.
      */
-    public byte getByteExtensionData( String header, byte defaultValue )
-    {
-        byte[] data = getExtensionData( header );
-        if (data == null || data.length != 1 )
-        {
+    public byte getByteExtensionData(String header, byte defaultValue) {
+        byte[] data = getExtensionData(header);
+        if (data == null || data.length != 1) {
             return defaultValue;
         }
         return data[0];
     }
-    
+
     /**
      * Checks if the data associated with a header is in compressed form.
      * If it is compressed then the bit 5 ( starting from 0 )
      * of the header Flags is set
+     *
      * @author Madhu
      */
-    private int checkIfCompressed( String header, int headerFlags )
-    {
-        if( header.equals( UDP_HOST_CACHE_PHC ) )
-        {
+    private int checkIfCompressed(String header, int headerFlags) {
+        if (header.equals(UDP_HOST_CACHE_PHC)) {
             headerFlags |= 0x20;
         }
         return headerFlags;
     }
-    
-    private boolean checkIfNeedsCobsEncoding( byte[] data )
-    {
+
+    private boolean checkIfNeedsCobsEncoding(byte[] data) {
         return needsCobsFor0x00Byte && contains0x00Byte(data);
     }
-    
-    private boolean contains0x00Byte(byte[] bytes) 
-    {
-        if (bytes != null)
-        {
+
+    private boolean contains0x00Byte(byte[] bytes) {
+        if (bytes != null) {
             for (byte aByte : bytes) {
                 if (aByte == 0x00) {
                     return true;
@@ -244,289 +344,128 @@ public class GGEPBlock
         }
         return false;
     }
-    
-    
+
     /**
      * Returns the byte representation of the GGEP block.
+     *
      * @return the byte representation of the GGEP block.
      */
-    public byte[] getBytes()
-    {
-        ByteArrayOutputStream outStream = new ByteArrayOutputStream( 30 );
-        outStream.write( MAGIC_NUMBER );
+    public byte[] getBytes() {
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream(30);
+        outStream.write(MAGIC_NUMBER);
 
         Iterator<String> iterator = headerToDataMap.keySet().iterator();
-        while( iterator.hasNext() )
-        {
+        while (iterator.hasNext()) {
             String headerKey = iterator.next();
-            byte[] dataBytes = headerToDataMap.get( headerKey );
+            byte[] dataBytes = headerToDataMap.get(headerKey);
 
             int headerFlags = 0x00;
-            
-            // needed if we add compressed data with a headerKey. 
+
+            // needed if we add compressed data with a headerKey.
             // For ex the PHC extension
-            headerFlags = checkIfCompressed( headerKey, headerFlags );
-            boolean needsCobsEncoding = checkIfNeedsCobsEncoding( dataBytes );
-            if ( needsCobsEncoding )
-            {
+            headerFlags = checkIfCompressed(headerKey, headerFlags);
+            boolean needsCobsEncoding = checkIfNeedsCobsEncoding(dataBytes);
+            if (needsCobsEncoding) {
                 headerFlags |= 0x40;
-                dataBytes = IOUtil.cobsEncode( dataBytes );
+                dataBytes = IOUtil.cobsEncode(dataBytes);
             }
-            if ( !iterator.hasNext() )
-            {
+            if (!iterator.hasNext()) {
                 headerFlags |= 0x80;
             }
             byte[] headerBytes = headerKey.getBytes();
             headerFlags = headerFlags | headerBytes.length;
-            outStream.write( headerFlags );
-            try
-            {
-                outStream.write( headerBytes );
-            }
-            catch ( IOException exp )
-            {
+            outStream.write(headerFlags);
+            try {
+                outStream.write(headerBytes);
+            } catch (IOException exp) {
                 assert false : "Exception occured which should never happen.";
-                throw new RuntimeException( exp );
+                throw new RuntimeException(exp);
             }
 
             int dataLength = dataBytes.length;
             int tmp = dataLength & 0x3f000;
             // first byte...
-            if ( tmp != 0 )
-            {
+            if (tmp != 0) {
                 // shift left to drop of non relevant bytes...
                 tmp = tmp >> 12;
                 tmp = 0x80 | tmp;
-                outStream.write( tmp );
+                outStream.write(tmp);
             }
             tmp = dataLength & 0xFC0;
-            if ( tmp != 0 )
-            {
+            if (tmp != 0) {
                 // shift left to drop of non relevant bytes...
                 tmp = tmp >> 6;
                 tmp = 0x80 | tmp;
-                outStream.write( tmp );
+                outStream.write(tmp);
             }
 
             tmp = dataLength & 0x3F;
             tmp = 0x40 | tmp;
-            outStream.write( tmp );
+            outStream.write(tmp);
 
-            if ( dataLength > 0 )
-            {
-                try
-                {
-                    outStream.write( dataBytes );
-                }
-                catch ( IOException exp )
-                {
+            if (dataLength > 0) {
+                try {
+                    outStream.write(dataBytes);
+                } catch (IOException exp) {
                     assert false : "Exception occured which should never happen.";
-                    throw new RuntimeException( exp );
+                    throw new RuntimeException(exp);
                 }
             }
         }
-        
+
         return outStream.toByteArray();
     }
 
     /**
      * Checks if the extension with the given headerID is available.
+     *
      * @param headerID the header to look for.
      * @return true if the extension is available, false otherwise.
      */
-    public boolean isExtensionAvailable( String headerID )
-    {
-        return headerToDataMap.containsKey( headerID );
+    public boolean isExtensionAvailable(String headerID) {
+        return headerToDataMap.containsKey(headerID);
     }
 
-
-    //////////////////////// Static helpers ////////////////////////////////////
-
-
-    private static byte[] browseHostGGEPBlock;
-
-    public static byte[] getQueryReplyGGEPBlock( 
-        boolean isBrowseHostSupported, DestAddress[] pushProxyAddresses )
-    {
-        if ( pushProxyAddresses != null && pushProxyAddresses.length > 0 )
-        {// we need to create the GGEP block in realtime.
-            GGEPBlock ggepBlock = new GGEPBlock( true );
-            if ( isBrowseHostSupported )
-            {
-                ggepBlock.addExtension( GGEPBlock.BROWSE_HOST_HEADER_ID );
-            }
-            ggepBlock.addExtension(PUSH_PROXY_HEADER_ID, 
-                pushProxyAddresses, 4);
-
-            byte[] data = ggepBlock.getBytes();
-            return data;
-        }
-        else if ( isBrowseHostSupported )
-        {
-            if ( browseHostGGEPBlock == null )
-            {
-                GGEPBlock ggepBlock = new GGEPBlock( true );
-                ggepBlock.addExtension( GGEPBlock.BROWSE_HOST_HEADER_ID );
-                browseHostGGEPBlock = ggepBlock.getBytes();
-            }
-            return browseHostGGEPBlock;
-        }
-        else
-        {
-            return IOUtil.EMPTY_BYTE_ARRAY;
-        }
-    }
-    
-    /**
-     * 
-     * @param creationTime in millis
-     * @param alternateLocations
-     * @return the ggep block data
-     */
-    public static byte[] getQueryReplyRecordGGEPBlock( long creationTime,
-        DestAddress[] alternateLocations, long fileSize )
-    {
-        if ( creationTime > 0 || 
-           ( alternateLocations != null && alternateLocations.length > 0 ) ||
-           fileSize > Integer.MAX_VALUE )
-        {// we need to create the GGEP block in realtime.
-            GGEPBlock ggepBlock = new GGEPBlock( true );
-            if ( creationTime > 0 )
-            {
-                ggepBlock.addExtension( GGEPBlock.CREATION_TIME_HEADER_ID, 
-                    creationTime / 1000 );
-            }
-            if ( alternateLocations != null && alternateLocations.length > 0 )
-            {
-                ggepBlock.addExtension(ALTERNATE_LOCATIONS_HEADER_ID, 
-                    alternateLocations, 10);
-            }
-            if ( fileSize > Integer.MAX_VALUE )
-            {
-                ggepBlock.addExtension( LARGE_FILE_HEADER_ID, fileSize );
-            }
-            byte[] data = ggepBlock.getBytes();
-            return data;
-        }
-        else
-        {
-            return IOUtil.EMPTY_BYTE_ARRAY;
-        }
-    }
-
-    /**
-     * Returns if the extension is available in any GGEP block.
-     * @param ggepBlocks
-     * @param headerID
-     * @return true is extension is found, false otherwise.
-     */
-    public static boolean isExtensionHeaderInBlocks( GGEPBlock[] ggepBlocks,
-        String headerID )
-    {
-        for (GGEPBlock ggepBlock : ggepBlocks) {
-            if (ggepBlock.isExtensionAvailable(headerID)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    /**
-     * Returns the extension if available in any GGEP block or null if not available.
-     * @param ggepBlocks
-     * @param headerID
-     * @return the extension if available in any GGEP block or null if not available.
-     */
-    public static byte[] getExtensionDataInBlocks( GGEPBlock[] ggepBlocks,
-        String headerID )
-    {
-        for (GGEPBlock ggepBlock : ggepBlocks) {
-            if (ggepBlock.isExtensionAvailable(headerID)) {
-                return ggepBlock.getExtensionData(headerID);
-            }
-        }
-        return null;
-    }
-    
-    public static GGEPBlock mergeGGEPBlocks( GGEPBlock[] ggepBlocks )
-    {
-        GGEPBlock mergedBlock = new GGEPBlock();
-        for (GGEPBlock ggepBlock : ggepBlocks) {
-            mergedBlock.addAllExtensions(ggepBlock);
-        }
-        return mergedBlock;
-    }
-    
-    public static GGEPBlock[] parseGGEPBlocks( byte[] body, int offset )
-    {
-        GGEPParser parser = new GGEPParser();
-        return parser.parseGGEPBlocks( body, offset );
-    }
-    
-    public static GGEPBlock[] parseGGEPBlocks( PushbackInputStream inStream )
-        throws InvalidGGEPBlockException, IOException
-    {
-        GGEPParser parser = new GGEPParser();
-        return parser.parseGGEPBlocks( inStream );
-    }
-    
-    public static void debugDumpBlocks( GGEPBlock[] ggepBlocks )
-    {
-        for (GGEPBlock ggepBlock : ggepBlocks) {
-            ggepBlock.debugDump();
-        }
-    }
-
-
-    private static class GGEPParser
-    {
-        private int offset;
+    private static class GGEPParser {
         private final List<GGEPBlock> ggepList;
+        private int offset;
 
-        public GGEPParser( )
-        {
+        public GGEPParser() {
             ggepList = new ArrayList<>(3);
         }
-        
-        public GGEPBlock[] parseGGEPBlocks( PushbackInputStream inStream )
-            throws InvalidGGEPBlockException, IOException
-        {
+
+        public GGEPBlock[] parseGGEPBlocks(PushbackInputStream inStream)
+                throws InvalidGGEPBlockException, IOException {
             // the ggep specification requires us to support more then one GGEP
             // extension:
             // 'Extension blocks may contain an arbitrary number of GGEP blocks
             // packed one against another.'
             byte b;
-            while ( true )
-            {
-                b = (byte)inStream.read();
-                if ( b == -1 )
-                {
+            while (true) {
+                b = (byte) inStream.read();
+                if (b == -1) {
                     break;
-                }
-                else if ( b != MAGIC_NUMBER )
-                {
+                } else if (b != MAGIC_NUMBER) {
                     // not ggep anymore
                     // push back and break...
                     inStream.unread(b);
                     break;
                 }
-                ggepList.add( parseGGEPBlock( inStream ) );
+                ggepList.add(parseGGEPBlock(inStream));
             }
 
-            GGEPBlock[] ggepArray = new GGEPBlock[ ggepList.size() ];
-            ggepList.toArray( ggepArray );
+            GGEPBlock[] ggepArray = new GGEPBlock[ggepList.size()];
+            ggepList.toArray(ggepArray);
             return ggepArray;
         }
-        
-        private GGEPBlock parseGGEPBlock( InputStream inStream )
-            throws InvalidGGEPBlockException, IOException
-        {
+
+        private GGEPBlock parseGGEPBlock(InputStream inStream)
+                throws InvalidGGEPBlockException, IOException {
             GGEPBlock ggepBlock = new GGEPBlock();
 
             boolean isLastExtension = false;
             int b;
-            while ( !isLastExtension)
-            {
+            while (!isLastExtension) {
                 // parse the extension header flags. They must be in form:
                 // - 7: Last Extension
                 // - 6: Encoding
@@ -536,8 +475,7 @@ public class GGEPBlock
 
                 // validate extension byte
                 b = inStream.read();
-                if ( (b & 0x10) != 0)
-                {
+                if ((b & 0x10) != 0) {
                     throw new InvalidGGEPBlockException();
                 }
                 // last bit in header
@@ -547,98 +485,79 @@ public class GGEPBlock
 
                 // first 4 bit
                 short headerLength = (short) (b & 0x0F);
-                if ( headerLength == 0 )
-                {// 0 not allowed...
+                if (headerLength == 0) {// 0 not allowed...
                     throw new InvalidGGEPBlockException();
                 }
-                
-                byte[] headerData = new byte[ headerLength ];
-                inStream.read( headerData, 0, headerLength );
-                
+
+                byte[] headerData = new byte[headerLength];
+                inStream.read(headerData, 0, headerLength);
+
                 // parse the rest of the extension header.
-                String header = new String( headerData, 0, headerLength );
+                String header = new String(headerData, 0, headerLength);
 
                 // parse the data length
-                int dataLength = parseDataLength( inStream );
+                int dataLength = parseDataLength(inStream);
                 byte[] dataArr = null;
-                try
-                {
-                    if ( dataLength > 0 )
-                    {
+                try {
+                    if (dataLength > 0) {
                         // get data as byte array...
-                        dataArr = new byte[ dataLength ];
-                        inStream.read( dataArr, 0, dataLength );
-                        
-                        if ( isCompressed )
-                        {
+                        dataArr = new byte[dataLength];
+                        inStream.read(dataArr, 0, dataLength);
+
+                        if (isCompressed) {
                             // use zlib inflator to decompress
-                            dataArr = IOUtil.inflate( dataArr );
+                            dataArr = IOUtil.inflate(dataArr);
                         }
-    
-                        if ( isEncoded )
-                        {
-                            try
-                            {
-                                dataArr = IOUtil.cobsDecode( dataArr );
-                            }
-                            catch ( IOException exp )
-                            {// set to null in case of parsing error
+
+                        if (isEncoded) {
+                            try {
+                                dataArr = IOUtil.cobsDecode(dataArr);
+                            } catch (IOException exp) {// set to null in case of parsing error
                                 dataArr = null;
                             }
                         }
-                    }
-                    else
-                    {
+                    } else {
                         dataArr = IOUtil.EMPTY_BYTE_ARRAY;
                     }
                     // check if there was a parsing failure
-                    if ( dataArr != null )
-                    {
-                        ggepBlock.addExtension( header, dataArr );
+                    if (dataArr != null) {
+                        ggepBlock.addExtension(header, dataArr);
                     }
-                }
-                catch ( DataFormatException exp )
-                {// in case the inflate data format does not work.
-                    if ( NLogger.isWarnEnabled( GGEPBlock.class ) ) 
-                    {
-                        NLogger.warn(GGEPBlock.class,
-                            "Invalid GGEP data format. Header: '" +
-                            header + "' Data: '"
-                            + HexConverter.toHexString(dataArr) + "'.", exp );
-                    }
+                } catch (DataFormatException exp) {// in case the inflate data format does not work.
+
+                    logger.warn(
+                            "Invalid GGEP data format. Header: {}", header);
+                                        //header + "' Data: '"
+                                        //+ HexConverter.toHexString(dataArr) + "'.", exp);
+
                 }
             }
             return ggepBlock;
         }
-        
+
         /**
          * Code taken form GGEP specification document.
          */
-        private int parseDataLength( InputStream inStream )
-            throws InvalidGGEPBlockException, IOException
-        {
+        private int parseDataLength(InputStream inStream)
+                throws InvalidGGEPBlockException, IOException {
             int length = 0;
             int byteCount = 0;
             byte currentByte;
-            do
-            {
-                byteCount ++;
-                if ( byteCount > 3 )
-                {
+            do {
+                byteCount++;
+                if (byteCount > 3) {
                     throw new InvalidGGEPBlockException();
                 }
-                currentByte = (byte)inStream.read();
-                length = (length << 6) | ( currentByte & 0x3F );
+                currentByte = (byte) inStream.read();
+                length = (length << 6) | (currentByte & 0x3F);
             }
-            while ( 0x40 != (currentByte & 0x40) );
+            while (0x40 != (currentByte & 0x40));
             return length;
         }
 
-        public GGEPBlock[] parseGGEPBlocks( byte[] body, int aOffset )
-        {
+        public GGEPBlock[] parseGGEPBlocks(byte[] body, int aOffset) {
             offset = aOffset;
-            try
-            {
+            try {
                 // the ggep specification requires us to support more then one GGEP
                 // extension:
                 // 'Extension blocks may contain an arbitrary number of GGEP blocks
@@ -646,33 +565,28 @@ public class GGEPBlock
                 // It could happen that the GUID appended to a query hit has
                 // the MAGIC_NUMBER as its first byte. This might result in a
                 // InvalidGGEPBlockException, but should not further disrupt parsing.
-                while ( body.length > offset && body[ offset ] == MAGIC_NUMBER )
-                {
+                while (body.length > offset && body[offset] == MAGIC_NUMBER) {
                     // skip magic number
-                    offset ++;
-                    ggepList.add( parseGGEPBlock( body ) );
+                    offset++;
+                    ggepList.add(parseGGEPBlock(body));
                 }
-            }
-            catch ( InvalidGGEPBlockException exp )
-            {// failed to further parse GGEP block.. skipping block
-             // and follow-up blocks. Sucessfully parsed blocks are
-             // used as valid results.
-                NLogger.debug( GGEPBlock.class, exp, exp );
+            } catch (InvalidGGEPBlockException exp) {// failed to further parse GGEP block.. skipping block
+                // and follow-up blocks. Sucessfully parsed blocks are
+                // used as valid results.
+                NLogger.debug(GGEPBlock.class, exp, exp);
             }
 
-            GGEPBlock[] ggepArray = new GGEPBlock[ ggepList.size() ];
-            ggepList.toArray( ggepArray );
+            GGEPBlock[] ggepArray = new GGEPBlock[ggepList.size()];
+            ggepList.toArray(ggepArray);
             return ggepArray;
         }
 
-        private GGEPBlock parseGGEPBlock( byte[] body )
-            throws InvalidGGEPBlockException
-        {
+        private GGEPBlock parseGGEPBlock(byte[] body)
+                throws InvalidGGEPBlockException {
             GGEPBlock ggepBlock = new GGEPBlock();
 
             boolean isLastExtension = false;
-            while ( !isLastExtension)
-            {
+            while (!isLastExtension) {
                 // parse the extension header flags. They must be in form:
                 // - 7: Last Extension
                 // - 6: Encoding
@@ -682,8 +596,7 @@ public class GGEPBlock
 
                 // validate extension byte
                 byte b = 0;
-                if ( body.length > offset && ((b = body[offset]) & 0x10) != 0)
-                {
+                if (body.length > offset && ((b = body[offset]) & 0x10) != 0) {
                     throw new InvalidGGEPBlockException();
                 }
                 // last bit in header
@@ -691,86 +604,67 @@ public class GGEPBlock
                 boolean isEncoded = (b & 0x40) != 0;
                 boolean isCompressed = (b & 0x20) != 0;
                 boolean isReserved = (b & 0x10) != 0;
-                if( isReserved )
-                {
-                    throw new InvalidGGEPBlockException( "Reserved bit set to 1" );
+                if (isReserved) {
+                    throw new InvalidGGEPBlockException("Reserved bit set to 1");
                 }
 
                 // first 4 bit
                 short headerLength = (short) (b & 0x0F);
-                if ( headerLength == 0 )
-                {// 0 not allowed...
+                if (headerLength == 0) {// 0 not allowed...
                     throw new InvalidGGEPBlockException();
                 }
-                offset ++;
+                offset++;
 
                 // parse the rest of the extension header.
-                String header = new String( body, offset, headerLength );
+                String header = new String(body, offset, headerLength);
                 offset += headerLength;
 
                 // parse the data length
-                int dataLength = parseDataLength( body );
+                int dataLength = parseDataLength(body);
                 byte[] dataArr = null;
-                try
-                {
-                    if ( dataLength > 0 )
-                    {
+                try {
+                    if (dataLength > 0) {
                         // get data as byte array...
-                        dataArr = new byte[ dataLength ];
-                        try
-                        {
-                            System.arraycopy( body, offset, dataArr, 0, dataLength);
-                        }
-                        catch ( IndexOutOfBoundsException exp )
-                        {
-                            if ( NLogger.isDebugEnabled( GGEPBlock.class ) )
-                            {
-                                NLogger.warn( GGEPBlock.class, exp, exp );
-                                NLogger.warn( GGEPBlock.class, "Offset: " + offset 
-                                    + "- Buffer: " + HexConverter.toHexString( body ) );
+                        dataArr = new byte[dataLength];
+                        try {
+                            System.arraycopy(body, offset, dataArr, 0, dataLength);
+                        } catch (IndexOutOfBoundsException exp) {
+                            if (NLogger.isDebugEnabled(GGEPBlock.class)) {
+                                NLogger.warn(GGEPBlock.class, exp, exp);
+                                NLogger.warn(GGEPBlock.class, "Offset: " + offset
+                                        + "- Buffer: " + HexConverter.toHexString(body));
                             }
-                            throw new InvalidGGEPBlockException( exp );
+                            throw new InvalidGGEPBlockException(exp);
                         }
                         offset += dataLength;
-                        
-                        if ( isCompressed )
-                        {
+
+                        if (isCompressed) {
                             // use zlib inflator to decompress
-                            dataArr = IOUtil.inflate( dataArr );
+                            dataArr = IOUtil.inflate(dataArr);
                         }
-    
-                        if ( isEncoded )
-                        {
-                            try
-                            {
-                                dataArr = IOUtil.cobsDecode( dataArr );
-                            }
-                            catch ( IOException exp )
-                            {// set to null in case of parsing error
+
+                        if (isEncoded) {
+                            try {
+                                dataArr = IOUtil.cobsDecode(dataArr);
+                            } catch (IOException exp) {// set to null in case of parsing error
                                 dataArr = null;
                             }
                         }
-                    }
-                    else
-                    {
+                    } else {
                         dataArr = IOUtil.EMPTY_BYTE_ARRAY;
                     }
                     // check if there was a parsing failure
-                    if ( dataArr != null )
-                    {
-                        ggepBlock.addExtension( header, dataArr );
+                    if (dataArr != null) {
+                        ggepBlock.addExtension(header, dataArr);
                     }
-                }
-                catch ( DataFormatException exp )
-                {// in case the inflate data format does not work.
-                    if ( NLogger.isWarnEnabled( GGEPBlock.class ) ) 
-                    {
+                } catch (DataFormatException exp) {// in case the inflate data format does not work.
+                    if (NLogger.isWarnEnabled(GGEPBlock.class)) {
                         NLogger.warn(GGEPBlock.class,
-                            "Invalid GGEP data format. Header: '" +
-                            header + "' Data: '"
-                            + HexConverter.toHexString(dataArr) + "'.", exp );
-                        NLogger.warn( GGEPBlock.class, "Offset: " + offset 
-                            + "- Buffer: " + HexConverter.toHexString( body ) );
+                                "Invalid GGEP data format. Header: '" +
+                                        header + "' Data: '"
+                                        + HexConverter.toHexString(dataArr) + "'.", exp);
+                        NLogger.warn(GGEPBlock.class, "Offset: " + offset
+                                + "- Buffer: " + HexConverter.toHexString(body));
                     }
                 }
             }
@@ -780,24 +674,21 @@ public class GGEPBlock
         /**
          * Code taken form GGEP specification document.
          */
-        private int parseDataLength( byte[] body )
-            throws InvalidGGEPBlockException
-        {
+        private int parseDataLength(byte[] body)
+                throws InvalidGGEPBlockException {
             int length = 0;
             int byteCount = 0;
             byte currentByte;
-            do
-            {
-                byteCount ++;
-                if ( byteCount > 3 )
-                {
+            do {
+                byteCount++;
+                if (byteCount > 3) {
                     throw new InvalidGGEPBlockException();
                 }
-                currentByte = body[ offset ];
-                offset ++;
-                length = (length << 6) | ( currentByte & 0x3F );
+                currentByte = body[offset];
+                offset++;
+                length = (length << 6) | (currentByte & 0x3F);
             }
-            while ( 0x40 != (currentByte & 0x40) );
+            while (0x40 != (currentByte & 0x40));
             return length;
         }
     }

@@ -39,21 +39,10 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ManagedFile implements ReadOnlyManagedFile {
     private static final int MAX_WRITE_TRIES = 10;
     private static final int WRITE_RETRY_DELAY = 100;
-
-    public enum AccessMode {
-        READ_ONLY_ACCESS("r"), READ_WRITE_ACCESS("rwd");
-        private final String fileMode;
-
-        AccessMode(String fileMode) {
-            this.fileMode = fileMode;
-        }
-    }
-
     private final ReentrantLock lock;
     private File fsFile;
     private AccessMode accessMode;
     private RandomAccessFile raFile;
-
     public ManagedFile(File file) {
         fsFile = file;
         lock = new ReentrantLock();
@@ -194,7 +183,6 @@ public class ManagedFile implements ReadOnlyManagedFile {
         }
     }
 
-
     public int read(ByteBuffer buffer, long pos)
             throws ManagedFileException {
         try {
@@ -224,25 +212,6 @@ public class ManagedFile implements ReadOnlyManagedFile {
             throw new ManagedFileException("read failes: interrupted", exp);
         } catch (Exception exp) {
             throw new ManagedFileException("read fails", exp);
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public void setLength(long newLength) throws ManagedFileException {
-        try {
-            lock.lockInterruptibly();
-
-            checkOpenFile();
-            if (raFile == null) {
-                throw new ManagedFileException("read failes: raFile null");
-            }
-            raFile.setLength(newLength);
-        } catch (InterruptedException exp) {
-            Thread.currentThread().interrupt();
-            throw new ManagedFileException("read failes: interrupted", exp);
-        } catch (Exception exp) {
-            throw new ManagedFileException("setLength fails", exp);
         } finally {
             lock.unlock();
         }
@@ -290,6 +259,25 @@ public class ManagedFile implements ReadOnlyManagedFile {
         return fsFile.length();
     }
 
+    public void setLength(long newLength) throws ManagedFileException {
+        try {
+            lock.lockInterruptibly();
+
+            checkOpenFile();
+            if (raFile == null) {
+                throw new ManagedFileException("read failes: raFile null");
+            }
+            raFile.setLength(newLength);
+        } catch (InterruptedException exp) {
+            Thread.currentThread().interrupt();
+            throw new ManagedFileException("read failes: interrupted", exp);
+        } catch (Exception exp) {
+            throw new ManagedFileException("setLength fails", exp);
+        } finally {
+            lock.unlock();
+        }
+    }
+
     public String getAbsolutePath() {
         return fsFile.getAbsolutePath();
     }
@@ -297,14 +285,12 @@ public class ManagedFile implements ReadOnlyManagedFile {
     public boolean exists() {
         return fsFile.exists();
     }
-    /////// Decorated File methods ///////
 
     @Override
     public String toString() {
         return super.toString() + ",File:" + fsFile + ",access:" + accessMode;
     }
-
-    //private StackTraceElement[] lastStackTraceElem;
+    /////// Decorated File methods ///////
 
     @Override
     protected void finalize() {
@@ -319,6 +305,17 @@ public class ManagedFile implements ReadOnlyManagedFile {
 //            for (StackTraceElement el : lastStackTraceElem) {
 //                NLogger.error(ManagedFile.class, el.toString());
 //            }
+        }
+    }
+
+    //private StackTraceElement[] lastStackTraceElem;
+
+    public enum AccessMode {
+        READ_ONLY_ACCESS("r"), READ_WRITE_ACCESS("rwd");
+        private final String fileMode;
+
+        AccessMode(String fileMode) {
+            this.fileMode = fileMode;
         }
     }
 }

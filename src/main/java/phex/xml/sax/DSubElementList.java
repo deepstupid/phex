@@ -6,54 +6,45 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class DSubElementList<E extends DElement> implements DElement
-{
+public class DSubElementList<E extends DElement> implements DElement {
     private final String elementName;
     private List<E> subElementList;
-    
+
     /**
      * Creates an unnamed subelement list, without surounding tags.
      */
-    public DSubElementList( )
-    {
+    public DSubElementList() {
         elementName = null;
     }
-    
+
     /**
      * Creates an named subelement list, with surounding tags.
      */
-    public DSubElementList( String name )
-    {
+    public DSubElementList(String name) {
         elementName = name;
     }
 
-    public List<E> getSubElementList()
-    {
-        if ( subElementList == null )
-        {
+    public List<E> getSubElementList() {
+        if (subElementList == null) {
             subElementList = new ArrayList<E>();
         }
         return subElementList;
     }
 
-    public void serialize( PhexXmlSaxWriter writer )
-        throws SAXException
-    {
-        if ( elementName != null )
-        {
-            writer.startElm( elementName, null );
+    public void serialize(PhexXmlSaxWriter writer)
+            throws SAXException {
+        if (elementName != null) {
+            writer.startElm(elementName, null);
         }
 
         Iterator<E> iterator = subElementList.iterator();
-        while ( iterator.hasNext() )
-        {
+        while (iterator.hasNext()) {
             E subElement = iterator.next();
-            subElement.serialize( writer );
+            subElement.serialize(writer);
         }
 
-        if ( elementName != null )
-        {
-            writer.endElm( elementName );
+        if (elementName != null) {
+            writer.endElm(elementName);
         }
     }
 }

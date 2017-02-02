@@ -25,40 +25,33 @@ import phex.util.CircularQueue;
 /**
  * This queue handles the flow control algorithem described in the
  * 'SACHRIFC: Simple Flow Control for Gnutella' proposal by Limewire.
- *
  */
-public class FlowControlQueue extends CircularQueue
-{
-    /**
-     * The number of messages dropped in this queue.
-     */
-    private int dropCount;
-
+public class FlowControlQueue extends CircularQueue {
     /**
      * The number of messages send by each message burst.
      */
     private final int burstSize;
-
-    /**
-     * The number of messages send in the curretn message burst.
-     */
-    private int currentBurstCount;
-
     /**
      * The lifetime of a message.
      */
     private final int msgTimeout;
-
     /**
      * Indicates whether the queue is a lifo of fifo queue. This is necessary to
      * handle the different message types.
      */
     private final boolean isLIFO;
+    /**
+     * The number of messages dropped in this queue.
+     */
+    private int dropCount;
+    /**
+     * The number of messages send in the curretn message burst.
+     */
+    private int currentBurstCount;
 
 
-    public FlowControlQueue( int burstSize, int msgTimeout, int maxSize,
-        boolean isLIFO)
-    {
+    public FlowControlQueue(int burstSize, int msgTimeout, int maxSize,
+                            boolean isLIFO) {
         super(maxSize);
         dropCount = 0;
         //msgQueue = new CircularQueue( maxSize );
@@ -67,75 +60,61 @@ public class FlowControlQueue extends CircularQueue
         this.isLIFO = isLIFO;
     }
 
-    public void addMessage( Message message )
-    {
-        Object dropObj = addToTail( message );
-        if ( dropObj != null )
-        {// count dropped msg for stats
+    public void addMessage(Message message) {
+        Object dropObj = addToTail(message);
+        if (dropObj != null) {// count dropped msg for stats
             //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
             //    "Dropping overflowing message: " + message );
-            dropCount ++;
+            dropCount++;
         }
     }
 
-    public Message removeMessage( )
-    {
-        if ( currentBurstCount == burstSize )
-        {// all elements of this burst returned.
+    public Message removeMessage() {
+        if (currentBurstCount == burstSize) {// all elements of this burst returned.
             return null;
         }
 
         long expiredCreationTime = System.currentTimeMillis() - msgTimeout;
-        while (true)
-        {
+        while (true) {
             Message message = removeNextMessage();
-            if ( message == null )
-            {
+            if (message == null) {
                 // no more messages in queue
                 return null;
             }
 
-            if ( message.getCreationTime() < expiredCreationTime )
-            {
+            if (message.getCreationTime() < expiredCreationTime) {
                 // drop message
                 //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
                 //    "Dropping expired message: " + message );
-                dropCount ++;
+                dropCount++;
                 continue;
             }
 
             // found a message, return it and count it to the current burst.
-            currentBurstCount ++;
+            currentBurstCount++;
             return message;
         }
     }
 
-    public void initNewMessageBurst()
-    {
+    public void initNewMessageBurst() {
         currentBurstCount = 0;
     }
 
-    public int getAndResetDropCount()
-    {
+    public int getAndResetDropCount() {
         int tmpDropCount = dropCount;
         dropCount = 0;
         return tmpDropCount;
     }
 
-    private Message removeNextMessage()
-    {
-        if ( isEmpty() )
-        {
+    private Message removeNextMessage() {
+        if (isEmpty()) {
             return null;
         }
 
-        if ( isLIFO )
-        {
-            return (Message)removeFromTail();
-        }
-        else
-        {
-            return (Message)removeFromHead();
+        if (isLIFO) {
+            return (Message) removeFromTail();
+        } else {
+            return (Message) removeFromHead();
         }
     }
 }

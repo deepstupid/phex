@@ -39,37 +39,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class BrowseHostResults extends Search
-{
-    private static final Logger logger = LoggerFactory.getLogger( BrowseHostResults.class );
-    /**
-     *
-     */
-    public enum BrowseHostStatus
-    {
-        INITIALIZING, CONNECTING, FETCHING, FINISHED, CONNECTION_ERROR, BROWSE_HOST_ERROR
-    }
-
+public class BrowseHostResults extends Search {
+    private static final Logger logger = LoggerFactory.getLogger(BrowseHostResults.class);
     private final DestAddress destAddress;
     private final GUID hostGUID;
-    
     private BrowseHostStatus browseHostStatus;
 
-    public BrowseHostResults( Servent servent, DestAddress hostAddress, GUID aHostGUID )
-    {
-        super( servent );
+    public BrowseHostResults(Servent servent, DestAddress hostAddress, GUID aHostGUID) {
+        super(servent);
         this.destAddress = hostAddress;
         hostGUID = aHostGUID;
         browseHostStatus = BrowseHostStatus.INITIALIZING;
     }
 
-    public DestAddress getDestAddress()
-    {
+    public DestAddress getDestAddress() {
         return destAddress;
     }
 
-    public GUID getHostGUID()
-    {
+    public GUID getHostGUID() {
         return hostGUID;
     }
 
@@ -77,98 +64,78 @@ public class BrowseHostResults extends Search
      * queryService is not required for browse host
      */
     @Override
-    public void startSearching( SearchProgress searchProgress )
-    {
+    public void startSearching(SearchProgress searchProgress) {
         isSearchFinished = false;
-        Runnable runner = new Runnable()
-        {
-            public void run()
-            {
+        Runnable runner = new Runnable() {
+            public void run() {
                 BrowseHostConnection connection = new BrowseHostConnection(
-                    servent, destAddress, hostGUID, BrowseHostResults.this );
-                try
-                {
+                        servent, destAddress, hostGUID, BrowseHostResults.this);
+                try {
                     connection.sendBrowseHostRequest();
                     browseHostStatus = BrowseHostStatus.FINISHED;
-                }
-                catch ( BrowseHostException exp )
-                {
-                    logger.warn( exp.toString(), exp);
+                } catch (BrowseHostException exp) {
+                    logger.warn(exp.toString(), exp);
                     browseHostStatus = BrowseHostStatus.BROWSE_HOST_ERROR;
-                }
-                catch ( IOException exp )
-                {// TODO integrate error handling if no results have been returned
-                    logger.warn( exp.toString(), exp);
+                } catch (IOException exp) {// TODO integrate error handling if no results have been returned
+                    logger.warn(exp.toString(), exp);
                     browseHostStatus = BrowseHostStatus.CONNECTION_ERROR;
-                }
-                finally
-                {
-                    stopSearching();   
+                } finally {
+                    stopSearching();
                 }
             }
         };
-        Environment.getInstance().executeOnThreadPool( runner,
-            "BrowseHostConnection-" + Integer.toHexString(runner.hashCode()) );
+        Environment.getInstance().executeOnThreadPool(runner,
+                "BrowseHostConnection-" + Integer.toHexString(runner.hashCode()));
         fireSearchStarted();
     }
-    
-    public void setBrowseHostStatus( BrowseHostStatus status )
-    {
-        if ( status == null )
-        {
+
+    public BrowseHostStatus getBrowseHostStatus() {
+        return browseHostStatus;
+    }
+
+    public void setBrowseHostStatus(BrowseHostStatus status) {
+        if (status == null) {
             throw new NullPointerException();
         }
         browseHostStatus = status;
     }
 
-    public BrowseHostStatus getBrowseHostStatus()
-    {
-        return browseHostStatus;
-    }
-
     @Override
-    public void stopSearching()
-    {
+    public void stopSearching() {
         isSearchFinished = true;
         fireSearchStoped();
     }
-    
+
     @Override
-    public int getProgress()
-    {
-        switch ( browseHostStatus )
-        {
-        case INITIALIZING:
-            return 0;
-        case CONNECTING:
-            return 10;
-        case FETCHING:
-            return 50;
-        case FINISHED:
-        case CONNECTION_ERROR:
-        case BROWSE_HOST_ERROR:
-        default:
-            return 100;
+    public int getProgress() {
+        switch (browseHostStatus) {
+            case INITIALIZING:
+                return 0;
+            case CONNECTING:
+                return 10;
+            case FETCHING:
+                return 50;
+            case FINISHED:
+            case CONNECTION_ERROR:
+            case BROWSE_HOST_ERROR:
+            default:
+                return 100;
         }
     }
 
     @Override
-    public void processResponse( QueryResponseMsg msg )
-        throws InvalidMessageException
-    {
-        QueryHitHost qhHost = QueryHitHost.createFrom( msg );
+    public void processResponse(QueryResponseMsg msg)
+            throws InvalidMessageException {
+        QueryHitHost qhHost = QueryHitHost.createFrom(msg);
 
         RemoteFile rfile;
         QueryResponseRecord[] records = msg.getMsgRecords();
-        ArrayList<RemoteFile> newHitList = new ArrayList<RemoteFile>( records.length );
-        for (int i = 0; i < records.length; i++)
-        {
-            if ( !isResponseRecordValid( records[i] ) )
-            {// skip record.
+        ArrayList<RemoteFile> newHitList = new ArrayList<RemoteFile>(records.length);
+        for (int i = 0; i < records.length; i++) {
+            if (!isResponseRecordValid(records[i])) {// skip record.
                 continue;
             }
-            synchronized( this )
-            {
+            synchronized (this) {
                 long fileSize = records[i].getFileSize();
                 String filename = records[i].getFilename();
                 URN urn = records[i].getURN();
@@ -176,24 +143,29 @@ public class BrowseHostResults extends Search
                 String metaData = records[i].getMetaData();
                 String pathInfo = records[i].getPathInfo();
 
-                rfile = new RemoteFile( qhHost, fileIndex, filename, pathInfo,
-                    fileSize, urn, metaData, (short)100 );
-                searchResultHolder.addQueryHit( rfile );
-                newHitList.add( rfile );
+                rfile = new RemoteFile(qhHost, fileIndex, filename, pathInfo,
+                        fileSize, urn, metaData, (short) 100);
+                searchResultHolder.addQueryHit(rfile);
+                newHitList.add(rfile);
             }
         }
         // if something was added...
-        if ( newHitList.size() > 0 )
-        {
-            RemoteFile[] newHits = new RemoteFile[ newHitList.size() ];
-            newHitList.toArray( newHits );
-            fireSearchHitsAdded( newHits );
+        if (newHitList.size() > 0) {
+            RemoteFile[] newHits = new RemoteFile[newHitList.size()];
+            newHitList.toArray(newHits);
+            fireSearchHitsAdded(newHits);
         }
     }
-    
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "[BrowseHostResults:" + destAddress + "," + "@" + Integer.toHexString(hashCode()) + "]";
+    }
+
+    /**
+     *
+     */
+    public enum BrowseHostStatus {
+        INITIALIZING, CONNECTING, FETCHING, FINISHED, CONNECTION_ERROR, BROWSE_HOST_ERROR
     }
 }

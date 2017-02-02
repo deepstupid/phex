@@ -25,33 +25,29 @@ import phex.io.buffer.ByteBuffer;
 
 /**
  * <p>Messages of unknown type.</p>
- *
+ * <p>
  * <p>This would appear to destroy the function property of the header if not
  * careful. I may be missing something, though.</p>
  */
-public class UnknownMsg extends Message
-{
+public class UnknownMsg extends Message {
     private final byte[] body;
 
-    public UnknownMsg( MsgHeader header, byte[] payload )
-    {
-        super( header );
+    public UnknownMsg(MsgHeader header, byte[] payload) {
+        super(header);
         body = payload;
-        getHeader().setDataLength( body.length );
+        getHeader().setDataLength(body.length);
     }
 
-    public byte[] getBody()
-    {
+    public byte[] getBody() {
         return body;
     }
-    
+
     /**
      * This operation is not supported for unknown message.
      * They are simply dropped.
      */
     @Override
-    public ByteBuffer createMessageBuffer()
-    {
+    public ByteBuffer createMessageBuffer() {
         throw new UnsupportedOperationException();
     }
 }

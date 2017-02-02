@@ -27,13 +27,12 @@ import phex.query.Search;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchItem
-{
-    public static final short STATUS_UNDEFINED    = -1;
+public class SearchItem {
+    public static final short STATUS_UNDEFINED = -1;
 
-    public static final short STATUS_RUNNING      = 0;
+    public static final short STATUS_RUNNING = 0;
 
-    public static final short STATUS_FINISHED     = 1;
+    public static final short STATUS_FINISHED = 1;
 
     public static final short STATUS_NON_EXISTING = 2;
 
@@ -49,96 +48,74 @@ public class SearchItem
 
     private int _maximuResults = DEFAULT_MAXIMUM_RESULTS;
 
-    public SearchItem(Search search)
-    {
-        _search  = search;
+    public SearchItem(Search search) {
+        _search = search;
 
         _results = new ArrayList<SearchResultItem>();
 
         _maximuResults = DEFAULT_MAXIMUM_RESULTS;
     }
 
-    public SearchItem(Search search, int maximuResults)
-    {
-        _search  = search;
+    public SearchItem(Search search, int maximuResults) {
+        _search = search;
 
         _results = new ArrayList<SearchResultItem>();
 
         _maximuResults = maximuResults;
     }
 
-    public SearchItem()
-    {
+    public SearchItem() {
     }
 
-    public short getStatus()
-    {
-        if (_search == null)
-        {
+    public short getStatus() {
+        if (_search == null) {
             return STATUS_NON_EXISTING;
-        }
-        else if (_search.isSearchFinished())
-        {
+        } else if (_search.isSearchFinished()) {
             return STATUS_FINISHED;
-        }
-        else
-        {
+        } else {
             return STATUS_RUNNING;
         }
     }
 
-    public void setSearch(Search search)
-    {
-        _search = search;
-    }
-
-    public Search getSearch()
-    {
+    public Search getSearch() {
         return _search;
     }
 
-    public void setResults(List<SearchResultItem> results)
-    {
-        synchronized(_results)
-        {
+    public void setSearch(Search search) {
+        _search = search;
+    }
+
+    public List<SearchResultItem> getResults() {
+        return _results;
+    }
+
+    public void setResults(List<SearchResultItem> results) {
+        synchronized (_results) {
             _results = results;
         }
     }
 
-    public List<SearchResultItem> getResults()
-    {
-        return _results;
-    }
-
-    public SearchResultItem addResult(RemoteFile remoteFile)
-    {
-        if (remoteFile == null)
-        {
+    public SearchResultItem addResult(RemoteFile remoteFile) {
+        if (remoteFile == null) {
             return null;
         }
 
-        if (_results == null)
-        {
+        if (_results == null) {
             _results = new ArrayList<SearchResultItem>();
         }
 
-        synchronized(_results)
-        {
-            if (_results.size() >= _maximuResults)
-            {
+        synchronized (_results) {
+            if (_results.size() >= _maximuResults) {
                 return null;
             }
 
-            for (SearchResultItem item : _results)
-            {
-                if (item == null)
-                {
+            for (SearchResultItem item : _results) {
+                if (item == null) {
                     continue;
                 }
 
                 // Do not add a file twice.
-                if (item.getRemoteFile() == remoteFile)
-                {
+                if (item.getRemoteFile() == remoteFile) {
                     return null;
                 }
             }
@@ -152,20 +129,16 @@ public class SearchItem
         }
     }
 
-    public List<SearchResultItem> addResults(RemoteFile [] remoteFiles)
-    {
+    public List<SearchResultItem> addResults(RemoteFile[] remoteFiles) {
         List<SearchResultItem> resultList = new ArrayList<SearchResultItem>();
-        if (remoteFiles == null)
-        {
+        if (remoteFiles == null) {
             return resultList;
         }
 
-        for (RemoteFile remoteFile : remoteFiles)
-        {
+        for (RemoteFile remoteFile : remoteFiles) {
             SearchResultItem resultItem = addResult(remoteFile);
 
-            if (resultItem != null)
-            {
+            if (resultItem != null) {
                 resultList.add(resultItem);
             }
         }
@@ -173,53 +146,43 @@ public class SearchItem
         return resultList;
     }
 
-    public void removeResult(SearchResultItem searchResultItem)
-    {
-        if (searchResultItem == null)
-        {
+    public void removeResult(SearchResultItem searchResultItem) {
+        if (searchResultItem == null) {
             return;
         }
 
-        if (_results == null)
-        {
+        if (_results == null) {
             return;
         }
 
-        synchronized(_results)
-        {
+        synchronized (_results) {
             searchResultItem.setSearchItem(null);
 
             _results.remove(searchResultItem);
         }
     }
 
-    public void setId(long id)
-    {
-        _id = id;
-    }
-
-    public long getId()
-    {
+    public long getId() {
         return _id;
     }
 
-    public void setSearchString(String searchString)
-    {
-        _searchString = searchString;
+    public void setId(long id) {
+        _id = id;
     }
 
-    public String getSearchString()
-    {
+    public String getSearchString() {
         return _searchString;
     }
 
-    public void setMaximuResults(int maximuResults)
-    {
-        this._maximuResults = maximuResults;
+    public void setSearchString(String searchString) {
+        _searchString = searchString;
     }
 
-    public int getMaximuResults()
-    {
+    public int getMaximuResults() {
         return _maximuResults;
+    }
+
+    public void setMaximuResults(int maximuResults) {
+        this._maximuResults = maximuResults;
     }
 }

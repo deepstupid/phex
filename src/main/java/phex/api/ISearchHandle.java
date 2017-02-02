@@ -21,13 +21,12 @@
  */
 package phex.api;
 
-public interface ISearchHandle
-{
-    public static final short STATUS_UNDEFINED    = -1;
+public interface ISearchHandle {
+    public static final short STATUS_UNDEFINED = -1;
 
-    public static final short STATUS_RUNNING      = 0;
+    public static final short STATUS_RUNNING = 0;
 
-    public static final short STATUS_FINISHED     = 1;
+    public static final short STATUS_FINISHED = 1;
 
     public static final short STATUS_NON_EXISTING = 2;
 
@@ -63,11 +62,11 @@ public interface ISearchHandle
 
     /**
      * Delete an existing search. If any hits exist, these are deleted too.
-     * @see cancelDownload
-     * After executing this method successfully, this search will no longer
-     * be returned by 
      *
      * @return true if the search exists and could be stopped, or false otherwise
+     * @see cancelDownload
+     * After executing this method successfully, this search will no longer
+     * be returned by
      */
     public boolean deleteSearch();
 
@@ -77,5 +76,5 @@ public interface ISearchHandle
      * @return if the search exists, an array containing the hit handles of all currently available
      * hits for the given, or null otherwise
      */
-    public ISearchHitHandle [] getSearchHits();
+    public ISearchHitHandle[] getSearchHits();
 }

@@ -24,50 +24,41 @@ package phex.util;
 import phex.common.log.NLogger;
 
 /**
- * 
+ *
  */
-public class URLCodecUtils
-{
+public class URLCodecUtils {
     private static final URLCodec urlCodec = new URLCodec();
-    
+
     /**
-     * Decodes a URL safe string into its original form. Escaped 
+     * Decodes a URL safe string into its original form. Escaped
      * characters are converted back to their original representation.
      *
      * @param pString URL safe string to convert into its original form
-     * @return original string 
+     * @return original string
      * @throws RuntimeException Thrown if URL decoding is unsuccessful.
-     * 		This only happens in the case of a UnsupportedEncodingException
-     * 		which should never occur in reality.
+     *                          This only happens in the case of a UnsupportedEncodingException
+     *                          which should never occur in reality.
      */
-    public static String decodeURL( String url )
-    {
-        try
-        {
-            return urlCodec.decode( url );
-        }
-        catch ( DecoderException exp )
-        {
-            NLogger.error( URLCodecUtils.class, exp, exp );
-            throw new RuntimeException( exp.toString() + ": " + exp.getMessage() );
+    public static String decodeURL(String url) {
+        try {
+            return urlCodec.decode(url);
+        } catch (DecoderException exp) {
+            NLogger.error(URLCodecUtils.class, exp, exp);
+            throw new RuntimeException(exp.toString() + ": " + exp.getMessage());
         }
     }
-    
+
     /**
      * @throws RuntimeException Thrown if URL encoding is unsuccessful.
-     * 		This only happens in the case of a UnsupportedEncodingException
-     * 		which should never occur in reality.
+     *                          This only happens in the case of a UnsupportedEncodingException
+     *                          which should never occur in reality.
      */
-    public static String encodeURL( String url )
-    {
-        try
-        {
-            return urlCodec.encode( url );
-        }
-        catch ( EncoderException exp )
-        {
-            NLogger.error( URLCodecUtils.class, exp, exp );
-            throw new RuntimeException( exp.toString() + ": " + exp.getMessage() );
+    public static String encodeURL(String url) {
+        try {
+            return urlCodec.encode(url);
+        } catch (EncoderException exp) {
+            NLogger.error(URLCodecUtils.class, exp, exp);
+            throw new RuntimeException(exp.toString() + ": " + exp.getMessage());
         }
     }
 }

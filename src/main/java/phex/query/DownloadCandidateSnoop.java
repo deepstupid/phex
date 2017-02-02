@@ -36,80 +36,68 @@ import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
 
 /**
- * This class monitors incoming {@link QueryResponseMsg} and tries to find 
+ * This class monitors incoming {@link QueryResponseMsg} and tries to find
  * corresponding {@link SWDownloadFile} to add new candidates.
  */
-public class DownloadCandidateSnoop implements MessageSubscriber<QueryResponseMsg>
-{   
+public class DownloadCandidateSnoop implements MessageSubscriber<QueryResponseMsg> {
     private final SwarmingManager swarmingMgr;
     private final PhexSecurityManager securityService;
 
-    public DownloadCandidateSnoop( SwarmingManager swarmingMgr, PhexSecurityManager securityService )
-    {
+    public DownloadCandidateSnoop(SwarmingManager swarmingMgr, PhexSecurityManager securityService) {
         this.swarmingMgr = swarmingMgr;
         this.securityService = securityService;
     }
-    
+
     /**
      * Checks incoming {@link QueryResponseMsg} against {@link SWDownloadFile}
      * to find possible candidates.
      */
-    public void onMessage(QueryResponseMsg message, Host sourceHost)
-    {
-        if( !ConnectionPrefs.EnableQueryHitSnooping.get().booleanValue() )
-        {
+    public void onMessage(QueryResponseMsg message, Host sourceHost) {
+        if (!ConnectionPrefs.EnableQueryHitSnooping.get().booleanValue()) {
             return;
         }
-        
-        try
-        {
+
+        try {
             QueryHitHost qhHost = null;
             QueryResponseRecord[] records = message.getMsgRecords();
-            for (QueryResponseRecord rec : records)
-            {            
-                if ( !isResponseRecordValid( rec ) )
-                {// skip record.
+            for (QueryResponseRecord rec : records) {
+                if (!isResponseRecordValid(rec)) {// skip record.
                     continue;
                 }
-                SWDownloadFile swdlf = swarmingMgr.getDownloadFile( rec.getFileSize(),
-                    rec.getURN() );
-                if ( swdlf == null )
-                {
+                SWDownloadFile swdlf = swarmingMgr.getDownloadFile(rec.getFileSize(),
+                        rec.getURN());
+                if (swdlf == null) {
                     continue;
                 }
-                
-                if ( qhHost == null )
-                {
-                    qhHost = QueryHitHost.createFrom( message );
+
+                if (qhHost == null) {
+                    qhHost = QueryHitHost.createFrom(message);
                 }
                 // add record as candidate...
-                RemoteFile rFile = new RemoteFile( qhHost, rec.getFileIndex(),
-                    rec.getFilename(), rec.getPathInfo(), rec.getFileSize(),
-                    rec.getURN(), rec.getMetaData(), (short) -1 );
+                RemoteFile rFile = new RemoteFile(qhHost, rec.getFileIndex(),
+                        rec.getFilename(), rec.getPathInfo(), rec.getFileSize(),
+                        rec.getURN(), rec.getMetaData(), (short) -1);
                 swdlf.addDownloadCandidate(rFile);
             }
-        }
-        catch (InvalidMessageException e)
-        {
+        } catch (InvalidMessageException e) {
             // message is invalid...
             return;
         }
     }
-    
+
     /**
-     * Used to check if the record is valid. In this case a 
+     * Used to check if the record is valid. In this case a
      * security check is done on the record URN.
+     *
      * @param record
      * @return true if valid, false otherwise.
      */
-    private boolean isResponseRecordValid( QueryResponseRecord record )
-    {
+    private boolean isResponseRecordValid(QueryResponseRecord record) {
         // REWORK maybe we should if we should move the altloc security check
         // from GGEPExtension.parseAltExtensionData to here to?
         URN urn = record.getURN();
-        if ( urn != null && securityService.controlUrnAccess( urn ) != AccessType.ACCESS_GRANTED )
-        {
-            NLogger.debug( DownloadCandidateSnoop.class, "Record contains blocked URN: " + urn.getAsString() );
+        if (urn != null && securityService.controlUrnAccess(urn) != AccessType.ACCESS_GRANTED) {
+            NLogger.debug(DownloadCandidateSnoop.class, "Record contains blocked URN: " + urn.getAsString());
             return false;
         }
         return true;

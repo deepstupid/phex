@@ -33,104 +33,87 @@ import phex.servent.Servent;
 import java.util.ArrayList;
 
 
-public class WhatsNewSearch extends QuerySearch
-{
-    public WhatsNewSearch( QueryFactory queryFactory, Servent servent )
-    {
-        super( servent );
+public class WhatsNewSearch extends QuerySearch {
+    public WhatsNewSearch(QueryFactory queryFactory, Servent servent) {
+        super(servent);
         queryMsg = queryFactory.createWhatsNewQuery();
     }
-    
+
     @Override
-    public void processResponse( QueryResponseMsg msg )
-        throws InvalidMessageException
-    {
+    public void processResponse(QueryResponseMsg msg)
+            throws InvalidMessageException {
         //we like to receive results even if the query was stopped already.
-        
+
         // check if it is a response for this query?
-        if (!msg.getHeader().getMsgID().equals( queryMsg.getHeader().getMsgID()))
-        {
+        if (!msg.getHeader().getMsgID().equals(queryMsg.getHeader().getMsgID())) {
             return;
         }
 
         // remoteHost.log("Got response to my query.  " + msg);
-        
-        QueryHitHost qhHost = QueryHitHost.createFrom( msg );
+
+        QueryHitHost qhHost = QueryHitHost.createFrom(msg);
         RemoteFile rfile;
         QueryResponseRecord[] records = msg.getMsgRecords();
-        ArrayList<RemoteFile> newHitList = new ArrayList<RemoteFile>( records.length );
-        for (int i = 0; i < records.length; i++)
-        {
-            if ( !isResponseRecordValid( records[i] ) )
-            {// skip record.
+        ArrayList<RemoteFile> newHitList = new ArrayList<RemoteFile>(records.length);
+        for (int i = 0; i < records.length; i++) {
+            if (!isResponseRecordValid(records[i])) {// skip record.
                 continue;
             }
-            synchronized( this )
-            {   
+            synchronized (this) {
                 long fileSize = records[i].getFileSize();
                 String filename = records[i].getFilename();
                 URN urn = records[i].getURN();
                 int fileIndex = records[i].getFileIndex();
                 String metaData = records[i].getMetaData();
-                
+
                 // find duplicate from same host...
-                RemoteFile availableHit = searchResultHolder.findQueryHit( qhHost, urn, filename,
-                    fileSize, fileIndex );
-                
-                if ( availableHit != null )
-                {
+                RemoteFile availableHit = searchResultHolder.findQueryHit(qhHost, urn, filename,
+                        fileSize, fileIndex);
+
+                if (availableHit != null) {
                     // update availableHit
-                    availableHit.updateQueryHitHost( qhHost );
-                    availableHit.setMetaData( metaData );
-                }
-                else
-                {
+                    availableHit.updateQueryHitHost(qhHost);
+                    availableHit.setMetaData(metaData);
+                } else {
                     String pathInfo = records[i].getPathInfo();
-                    rfile = new RemoteFile( qhHost, fileIndex, filename, pathInfo,
-                        fileSize, urn, metaData, (short)100 );
-                    searchResultHolder.addQueryHit( rfile );
-                    newHitList.add( rfile );
+                    rfile = new RemoteFile(qhHost, fileIndex, filename, pathInfo,
+                            fileSize, urn, metaData, (short) 100);
+                    searchResultHolder.addQueryHit(rfile);
+                    newHitList.add(rfile);
                 }
                 // handle possible AlternateLocations
                 DestAddress[] alternateLocations = records[i].getAlternateLocations();
-                if ( urn != null && alternateLocations != null)
-                {
-                    for ( int j = 0; j < alternateLocations.length; j++ )
-                    {
+                if (urn != null && alternateLocations != null) {
+                    for (int j = 0; j < alternateLocations.length; j++) {
                         // find duplicate from same host...
-                        QueryHitHost qhh = new QueryHitHost( null, alternateLocations[j], -1 );
-                        
-                        availableHit = searchResultHolder.findQueryHit( qhHost, 
-                            urn, filename, fileSize, fileIndex );
-                        if ( availableHit != null )
-                        {
+                        QueryHitHost qhh = new QueryHitHost(null, alternateLocations[j], -1);
+
+                        availableHit = searchResultHolder.findQueryHit(qhHost,
+                                urn, filename, fileSize, fileIndex);
+                        if (availableHit != null) {
                             // update availableHit
-                            availableHit.updateQueryHitHost( qhHost );
-                            availableHit.setMetaData( metaData );
-                        }
-                        else
-                        {
-                            rfile = new RemoteFile( qhh, -1, filename, "", 
-                                fileSize, urn, metaData, (short)100 );
-                            searchResultHolder.addQueryHit( rfile );
-                            newHitList.add( rfile );
+                            availableHit.updateQueryHitHost(qhHost);
+                            availableHit.setMetaData(metaData);
+                        } else {
+                            rfile = new RemoteFile(qhh, -1, filename, "",
+                                    fileSize, urn, metaData, (short) 100);
+                            searchResultHolder.addQueryHit(rfile);
+                            newHitList.add(rfile);
                         }
                     }
                 }
             }
         }
         // if something was added...
-        if ( newHitList.size() > 0 )
-        {
-            RemoteFile[] newHits = new RemoteFile[ newHitList.size() ];
-            newHitList.toArray( newHits );
-            fireSearchHitsAdded( newHits );
+        if (newHitList.size() > 0) {
+            RemoteFile[] newHits = new RemoteFile[newHitList.size()];
+            newHitList.toArray(newHits);
+            fireSearchHitsAdded(newHits);
         }
     }
-        
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "[WhatsNewSearch," + "@" + Integer.toHexString(hashCode()) + "]";
     }
 }

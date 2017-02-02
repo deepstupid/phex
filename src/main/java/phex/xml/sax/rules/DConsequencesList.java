@@ -25,12 +25,10 @@ package phex.xml.sax.rules;
 import phex.xml.sax.DElement;
 import phex.xml.sax.DSubElementList;
 
-public class DConsequencesList extends DSubElementList<DConsequence> implements DElement
-{
+public class DConsequencesList extends DSubElementList<DConsequence> implements DElement {
     static public final String ELEMENT_NAME = "consequences-list";
-    
-    public DConsequencesList()
-    {
-        super( ELEMENT_NAME );
+
+    public DConsequencesList() {
+        super(ELEMENT_NAME);
     }
 }

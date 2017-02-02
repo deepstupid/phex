@@ -32,69 +32,58 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * 
+ *
  */
-public class GWebCacheListBuilder
-{
+public class GWebCacheListBuilder {
     private static final String listUrl = "http://www.rodage.net/gnetcache/gcache.php?urlfile=1000";
     private static List<String> dataList;
-    
-    public static void main( String[] args )
-        throws Exception
-    {
+
+    public static void main(String[] args)
+            throws Exception {
         dataList = new ArrayList<String>();
-        System.setProperty( "http.agent", Phex.getFullPhexVendor() );
-        
-        URL url = new URL( listUrl );
+        System.setProperty("http.agent", Phex.getFullPhexVendor());
+
+        URL url = new URL(listUrl);
         URLConnection connection = url.openConnection();
         InputStream inputStream = connection.getInputStream();
         readData(inputStream);
-        System.out.println( "Total data read: " + dataList.size() );
+        System.out.println("Total data read: " + dataList.size());
         inputStream.close();
-        writeToOutputFile( );
+        writeToOutputFile();
     }
-    
-    private static void readData(InputStream inputStream) throws IOException
-    {
-        BufferedReader reader = new BufferedReader( new InputStreamReader(
-            inputStream ) );
+
+    private static void readData(InputStream inputStream) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(
+                inputStream));
         String line = reader.readLine();
         // the first line might contain an error
-        if ( line != null && line.startsWith( "ERROR" ) )
-        {
-            System.err.println( line );
+        if (line != null && line.startsWith("ERROR")) {
+            System.err.println(line);
             return;
         }
-        while ( line != null )
-        {
-            try
-            {
-                URL url = new URL( line );
-                if ( !url.getProtocol().equals( "http" ) )
-                {
-                    System.err.println( "Skipped " + line );
+        while (line != null) {
+            try {
+                URL url = new URL(line);
+                if (!url.getProtocol().equals("http")) {
+                    System.err.println("Skipped " + line);
                     continue;
                 }
-                dataList.add( line );
-            }
-            catch ( MalformedURLException exp )
-            {//ignore false url
-                System.err.println( "Skipped " + line );
+                dataList.add(line);
+            } catch (MalformedURLException exp) {//ignore false url
+                System.err.println("Skipped " + line);
             }
             line = reader.readLine();
         }
     }
-    
-    private static void writeToOutputFile( ) throws IOException
-    {
+
+    private static void writeToOutputFile() throws IOException {
         // write to output file
         BufferedWriter writer = new BufferedWriter(
-            new FileWriter( "src/phex/resources/gwebcache.cfg" ) );
+                new FileWriter("src/phex/resources/gwebcache.cfg"));
         Iterator iterator = dataList.iterator();
-        while ( iterator.hasNext() )
-        {
-            String line = (String)iterator.next();
-            writer.write( line + "\n" );
+        while (iterator.hasNext()) {
+            String line = (String) iterator.next();
+            writer.write(line + "\n");
         }
         writer.close();
     }

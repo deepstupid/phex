@@ -36,243 +36,201 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class QueryResultSearchEngine
-{
+public class QueryResultSearchEngine {
     public static final String INDEX_QUERY_STRING = "    ";
-    
+
     private final SharedFilesService sharedFilesService;
     private final Servent servent;
-    
-    public QueryResultSearchEngine( Servent servent, SharedFilesService sharedFilesService )
-    {
+
+    public QueryResultSearchEngine(Servent servent, SharedFilesService sharedFilesService) {
         this.servent = servent;
         this.sharedFilesService = sharedFilesService;
     }
-    
+
     /**
      * Search the sharefile database and get groups of sharefiles.
      * It returns empty results if the query source and the local host
-     * are both firewalled. 
+     * are both firewalled.
+     *
      * @param queryMsg the query
      * @return the found results.
      */
-    public List<ShareFile> handleQuery( QueryMsg queryMsg )
-    {
+    public List<ShareFile> handleQuery(QueryMsg queryMsg) {
         // Perform search on my list.
-        
+
         // Only send results if we support the possible query feature.
-        if ( queryMsg.getFeatureQuerySelector() > QueryMsg.WHAT_IS_NEW_FEATURE_QUERY_SELECTOR )
-        {
+        if (queryMsg.getFeatureQuerySelector() > QueryMsg.WHAT_IS_NEW_FEATURE_QUERY_SELECTOR) {
             return Collections.emptyList();
         }
 
         // If the query source and the local host are both firewalled, return no results
         // as per http://groups.yahoo.com/group/the_gdf/files/Proposals/MinSpeed.html
-        if ( queryMsg.isRequesterFirewalled() && servent.isFirewalled() )
-        {
+        if (queryMsg.isRequesterFirewalled() && servent.isFirewalled()) {
             return Collections.emptyList();
         }
         // if all upload slots are filled dont return any search results.
         // This holds away unnecessary connection attempts.
-        if ( servent.isUploadLimitReached() )
-        {
+        if (servent.isUploadLimitReached()) {
             return Collections.emptyList();
         }
-        
-        if ( queryMsg.isWhatsNewQuery() )
-        {// we handle what is new queries special and return the 3 newest files
-            return sharedFilesService.getNewestFiles( 3 );
+
+        if (queryMsg.isWhatsNewQuery()) {// we handle what is new queries special and return the 3 newest files
+            return sharedFilesService.getNewestFiles(3);
         }
 
         String searchStr = queryMsg.getSearchString();
-        if ( searchStr.equals( INDEX_QUERY_STRING ) )
-        {
-            NLogger.debug( QueryResultSearchEngine.class,
-                "Index query detected." );
+        if (searchStr.equals(INDEX_QUERY_STRING)) {
+            NLogger.debug(QueryResultSearchEngine.class,
+                    "Index query detected.");
             return sharedFilesService.getSharedFiles();
         }
 
         // first check for URN query...
         List<ShareFile> urnMatches = null;
         URN[] urns = queryMsg.getQueryURNs();
-        if ( urns.length > 0 )
-        {
-            urnMatches = sharedFilesService.getFilesByURNs( urns );
-            if ( urnMatches.size() == urns.length )
-            {// we found all requested files by URN.
+        if (urns.length > 0) {
+            urnMatches = sharedFilesService.getFilesByURNs(urns);
+            if (urnMatches.size() == urns.length) {// we found all requested files by URN.
                 // return results and be happy that we are already finished.
-                return provideResultData( urnMatches, null, queryMsg.getOriginIpAddress() );
+                return provideResultData(urnMatches, null, queryMsg.getOriginIpAddress());
             }
         }
-        
+
         // if there are no urns or not all urns have a hit check for 
         // keyword matches...
-        IntSet keyWordMatches = handleKeywordSearch( searchStr );
-        
-        return provideResultData( urnMatches, keyWordMatches, queryMsg.getOriginIpAddress() );
+        IntSet keyWordMatches = handleKeywordSearch(searchStr);
+
+        return provideResultData(urnMatches, keyWordMatches, queryMsg.getOriginIpAddress());
     }
-    
+
     /**
      * Performs the keyword query on the search string.
+     *
      * @param searchStr the search string
      * @return an IntSet containing the result file index positions.
      */
-    private IntSet handleKeywordSearch( String searchStr )
-    {
+    private IntSet handleKeywordSearch(String searchStr) {
         IntSet searchMatches = null;
-        
+
         int searchStrLength = searchStr.length();
         int startPos = 0;
         int endPos;
         Iterator<IntSet> indexIterator;
-        while ( startPos < searchStrLength ) 
-        {
-            if ( StringUtils.isFileDelimiter( searchStr.charAt( startPos ) ) ) 
-            {
-                startPos ++;
+        while (startPos < searchStrLength) {
+            if (StringUtils.isFileDelimiter(searchStr.charAt(startPos))) {
+                startPos++;
                 continue;
             }
-            for ( endPos = startPos + 1; endPos < searchStrLength; endPos ++ ) 
-            {
-                if ( StringUtils.isFileDelimiter( searchStr.charAt( endPos ) ) )
-                {
+            for (endPos = startPos + 1; endPos < searchStrLength; endPos++) {
+                if (StringUtils.isFileDelimiter(searchStr.charAt(endPos))) {
                     break;
                 }
             }
-            
+
             // search for prefixed keyword using word delimiters.
-            indexIterator = sharedFilesService.getIndexIteratorForPrefixTerm( 
-                searchStr, startPos, endPos );
-            if ( indexIterator.hasNext() )
-            {
+            indexIterator = sharedFilesService.getIndexIteratorForPrefixTerm(
+                    searchStr, startPos, endPos);
+            if (indexIterator.hasNext()) {
                 IntSet keywordMatches = null;
-                while ( indexIterator.hasNext() ) 
-                {                
+                while (indexIterator.hasNext()) {
                     IntSet match = indexIterator.next();
-                    if ( keywordMatches == null ) 
-                    {
-                        if ( startPos == 0 && endPos == searchStrLength && !indexIterator.hasNext() )
-                        {
+                    if (keywordMatches == null) {
+                        if (startPos == 0 && endPos == searchStrLength && !indexIterator.hasNext()) {
                             return match;
                         }
                         keywordMatches = new IntSet();
                     }
-                    keywordMatches.addAll( match );
+                    keywordMatches.addAll(match);
                 }
 
-                if ( searchMatches == null )
-                {
+                if (searchMatches == null) {
                     searchMatches = keywordMatches;
-                }
-                else
-                {
-                    searchMatches.retainAll( keywordMatches );
-                    if ( searchMatches.size() == 0 )
-                    {
+                } else {
+                    searchMatches.retainAll(keywordMatches);
+                    if (searchMatches.size() == 0) {
                         // no match we can abort the keyword search
                         return null;
                     }
                 }
-            } 
-            else 
-            {
+            } else {
                 // no match we can abort the complete keyword search
                 return null;
             }
             startPos = endPos;
         }
-        
+
         return searchMatches;
     }
-    
-    private List<ShareFile> provideResultData( List<ShareFile> urnMatches, 
-        IntSet keywordMatches, byte[] originIpAddress )
-    {
+
+    private List<ShareFile> provideResultData(List<ShareFile> urnMatches,
+                                              IntSet keywordMatches, byte[] originIpAddress) {
         int count = 0;
-        if ( urnMatches != null )
-        {
+        if (urnMatches != null) {
             count += urnMatches.size();
         }
-        if ( keywordMatches != null )
-        {
+        if (keywordMatches != null) {
             count += keywordMatches.size();
         }
-        if ( count == 0 )
-        {
+        if (count == 0) {
             return Collections.emptyList();
         }
-        
+
         PhexSecurityManager securityService = servent.getSecurityService();
         List<ShareFile> resultList = new ArrayList<ShareFile>();
         final int maxResults = LibraryPrefs.MaxResultsPerQuery.get().intValue();
         int resultListSize = 0;
-        if ( urnMatches != null && urnMatches.size() > 0 )
-        {
-            for ( ShareFile shareFile : urnMatches )
-            {
-                try 
-                {
+        if (urnMatches != null && urnMatches.size() > 0) {
+            for (ShareFile shareFile : urnMatches) {
+                try {
                     SharedDirectory dir = sharedFilesService.getSharedDirectory(shareFile.getSystemFile().getParentFile());
-                    if (!securityService.isEligibleIpAddress(originIpAddress, dir))
-                    {
+                    if (!securityService.isEligibleIpAddress(originIpAddress, dir)) {
                         continue;
                     }
-                }
-                catch (Exception exp)
-                {
-                    NLogger.warn( QueryResultSearchEngine.class, exp, exp );
+                } catch (Exception exp) {
+                    NLogger.warn(QueryResultSearchEngine.class, exp, exp);
                 }
 
                 // increment search count for files in list
                 shareFile.incSearchCount();
-                resultList.add( shareFile );
-                resultListSize ++;
-                if ( resultListSize >= maxResults )
-                {
+                resultList.add(shareFile);
+                resultListSize++;
+                if (resultListSize >= maxResults) {
                     break;
                 }
             }
         }
-        if ( keywordMatches != null && keywordMatches.size() > 0 
-          && resultListSize < maxResults)
-        {
+        if (keywordMatches != null && keywordMatches.size() > 0
+                && resultListSize < maxResults) {
             IntSetIterator iterator = keywordMatches.iterator();
-            while( iterator.hasNext() )
-            {
+            while (iterator.hasNext()) {
                 int index = iterator.next();
-                ShareFile shareFile = sharedFilesService.getFileByIndex( index );
-                if ( shareFile != null )
-                {
-                    try 
-                    {
+                ShareFile shareFile = sharedFilesService.getFileByIndex(index);
+                if (shareFile != null) {
+                    try {
                         SharedDirectory dir = sharedFilesService.getSharedDirectory(shareFile.getSystemFile().getParentFile());
-                        if (!securityService.isEligibleIpAddress(originIpAddress, dir))
-                        {
+                        if (!securityService.isEligibleIpAddress(originIpAddress, dir)) {
                             continue;
                         }
-                    }
-                    catch (Exception exp)
-                    {
-                        NLogger.warn( QueryResultSearchEngine.class, exp, exp );
+                    } catch (Exception exp) {
+                        NLogger.warn(QueryResultSearchEngine.class, exp, exp);
                     }
 
                     // increment search count for files in list
                     shareFile.incSearchCount();
-                    resultList.add( shareFile );
-                    resultListSize ++;
-                    if ( resultListSize >= maxResults )
-                    {
+                    resultList.add(shareFile);
+                    resultListSize++;
+                    if (resultListSize >= maxResults) {
                         break;
                     }
                 }
             }
         }
-        
-        assert( resultList.size() <= maxResults );
-                
+
+        assert (resultList.size() <= maxResults);
+
         return resultList;
     }
-        
+
 
 //    private ArrayList<ShareFile> handleOldKeywordSearch( String searchStr )
 //    {

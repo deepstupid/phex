@@ -24,13 +24,11 @@ package phex.xml.sax.share;
 
 import phex.xml.sax.DSubElementList;
 
-public class DSharedLibrary extends DSubElementList<DSharedFile>
-{
+public class DSharedLibrary extends DSubElementList<DSharedFile> {
     public static final String ELEMENT_NAME = "sharedLibrary";
 
-    public DSharedLibrary( )
-    {
-        super( ELEMENT_NAME );
+    public DSharedLibrary() {
+        super(ELEMENT_NAME);
     }
 
 }

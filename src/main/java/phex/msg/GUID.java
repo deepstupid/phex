@@ -66,7 +66,7 @@ public class GUID implements Serializable {
         seed = seed + ipValue;
         randomizer = new Random(seed);
 
-        EMPTY_GUID = new GUID( new byte[DATA_LENGTH] /* zeros */);
+        EMPTY_GUID = new GUID(new byte[DATA_LENGTH] /* zeros */);
     }
 
     // Atributes
@@ -113,6 +113,15 @@ public class GUID implements Serializable {
         setBytes(guidBytes);
     }
 
+    public static void applyOOBQueryMarkings(GUID guid, IpAddress ip, int port) {
+        byte[] ipBytes = ip.getHostIP();
+        guid.stringRepresentation = null;
+        byte[] b = guid.bytes;
+        System.arraycopy(ipBytes, 0, b, 0, 4);
+        //guid.updateHash();
+        IOUtil.serializeShortLE((short) port, guid.bytes, 13);
+    }
+
     private void setBytes(byte[] guidBytes) {
         if (guidBytes.length != DATA_LENGTH) {
             throw new IllegalArgumentException(
@@ -124,6 +133,18 @@ public class GUID implements Serializable {
         stringRepresentation = null;
         bytes = guidBytes;
         //updateHash();
+    }
+
+    /**
+     * <p>Return the 16 byte GUID image.</p>
+     * <p>
+     * <p><em>Important:</em> Do not modify the return value.</p>
+     *
+     * @return the current 16 byte GUID image
+     */
+    public byte[] getGuid() {
+        // The caller better not modified it.
+        return bytes;
     }
 
     /**
@@ -139,17 +160,16 @@ public class GUID implements Serializable {
         setBytes(guidBytes);
     }
 
-    /**
-     * <p>Return the 16 byte GUID image.</p>
-     * <p>
-     * <p><em>Important:</em> Do not modify the return value.</p>
-     *
-     * @return the current 16 byte GUID image
-     */
-    public byte[] getGuid() {
-        // The caller better not modified it.
-        return bytes;
-    }
+//    /**
+//     * <p>Appears to be identical to setGuid().</p>
+//     *
+//     * @param guidBytes the byte array to copy from
+//     */
+//    public void copy(byte[] guidBytes) {
+//        stringRepresentation = null;
+//        System.arraycopy(guidBytes, 0, bytes, 0, DATA_LENGTH);
+//        updateHash();
+//    }
 
     @Override
     public boolean equals(Object obj) {
@@ -161,17 +181,6 @@ public class GUID implements Serializable {
         }
         return false;
     }
-
-//    /**
-//     * <p>Appears to be identical to setGuid().</p>
-//     *
-//     * @param guidBytes the byte array to copy from
-//     */
-//    public void copy(byte[] guidBytes) {
-//        stringRepresentation = null;
-//        System.arraycopy(guidBytes, 0, bytes, 0, DATA_LENGTH);
-//        updateHash();
-//    }
 
     /**
      * <p>Copy the byte image of this GUID into outbuf, starting at byte offset
@@ -226,7 +235,6 @@ public class GUID implements Serializable {
         }
         return stringRepresentation;
     }
-
 
     private String generateString() {
         StringBuffer buffer = new StringBuffer(20);
@@ -283,16 +291,6 @@ public class GUID implements Serializable {
                 | (0xFF0000 & b[14] << 16) | (b[15] << 24);
 
         return v1 ^ v2 ^ v3 ^ v4;
-    }
-
-
-    public static void applyOOBQueryMarkings(GUID guid, IpAddress ip, int port) {
-        byte[] ipBytes = ip.getHostIP();
-        guid.stringRepresentation = null;
-        byte[] b = guid.bytes;
-        System.arraycopy(ipBytes, 0, b, 0, 4);
-        //guid.updateHash();
-        IOUtil.serializeShortLE((short) port, guid.bytes, 13);
     }
 
     public static final class GUIDComparator implements Comparator<GUID> {

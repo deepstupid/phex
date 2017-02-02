@@ -28,146 +28,118 @@ import java.io.File;
 import java.io.IOException;
 import java.security.Security;
 
-public class SystemProperties
-{
-
-    public static String HOME() {
-        return System.getProperty( "user.home" );
-    }
+public class SystemProperties {
 
     public static final String PHEX_CONFIG_PATH_SYSPROP = "phex.config.path";
     public static final String PHEX_DOWNLOAD_PATH_SYSPROP = "phex.download.path";
     private volatile static File phexConfigRoot;
     private volatile static File phexDownloadsRoot;
-        
+
+    public static String HOME() {
+        return System.getProperty("user.home");
+    }
+
     /**
      * For a HTTPURLConnection java uses configured proxy settings.
      */
-    public static void updateProxyProperties()
-    {
-        System.setProperty( "http.agent", Phex.getFullPhexVendor() );
-        if ( ProxyPrefs.UseHttp.get().booleanValue() )
-        {
-            System.setProperty( "http.proxyHost", ProxyPrefs.HttpHost.get() );
-            System.setProperty( "http.proxyPort", ProxyPrefs.HttpPort.get().toString() );
+    public static void updateProxyProperties() {
+        System.setProperty("http.agent", Phex.getFullPhexVendor());
+        if (ProxyPrefs.UseHttp.get().booleanValue()) {
+            System.setProperty("http.proxyHost", ProxyPrefs.HttpHost.get());
+            System.setProperty("http.proxyPort", ProxyPrefs.HttpPort.get().toString());
+        } else {
+            System.setProperty("http.proxyHost", "");
+            System.setProperty("http.proxyPort", "");
         }
-        else
-        {
-            System.setProperty( "http.proxyHost", "" );
-            System.setProperty( "http.proxyPort", "" );
-        }
-        
+
         // cache DNS name lookups for only 30 minutes
-        System.setProperty( "networkaddress.cache.ttl", "1800" );
-        Security.setProperty( "networkaddress.cache.ttl", "1800" );
+        System.setProperty("networkaddress.cache.ttl", "1800");
+        Security.setProperty("networkaddress.cache.ttl", "1800");
     }
-    
+
     /**
      * Sets the directory into which Phex adds its configuration files. When
      * configRoot is null the directory is set to:<br>
      * {user.home}/phex on windows systems and<br>
      * {user.home}/.phex on unix and mac systems.
-     * 
+     *
      * @deprecated since Phex 3.0, drop support once 2.x is not in use anymore
      */
     @Deprecated
-    private static File getOldPhexConfigRoot( )
-    {        
+    private static File getOldPhexConfigRoot() {
         StringBuffer path = new StringBuffer(20);
         path.append(HOME());
-        path.append( File.separator );
+        path.append(File.separator);
 
         //phex config files are hidden on all UNIX systems (also MacOSX. Since
         //there are many UNIX like operation systems with Java support out there,
         //we can not recognize the OS through it's name. Thus we check if the
         //root of the filesystem starts with "/" since only UNIX uses such
         //filesystem conventions
-        if ( File.separatorChar == '/' )
-        {
-            path.append ('.');
+        if (File.separatorChar == '/') {
+            path.append('.');
         }
-        path.append ("phex");
-        File configRoot = new File( path.toString() );
+        path.append("phex");
+        File configRoot = new File(path.toString());
         return configRoot;
     }
-    
 
-    
+
     /**
      * Returns the full path to the Phex directory of the user's home. This
      * directory is plattform dependent.
      * - Unix: ~/.phex/
      * - OSX: ~/Library/Application Support/Phex/
      * - Windows: ..../Documents and Settings/username/Application Data/Phex/
+     *
      * @throws RuntimeException in case creating a possible missing Phex config root fails
-     *         or the phexConfigRoot is not a directory.
+     *                          or the phexConfigRoot is not a directory.
      */
-    public static File getPhexConfigRoot()
-    {
-        if ( phexConfigRoot == null )
-        {
+    public static File getPhexConfigRoot() {
+        if (phexConfigRoot == null) {
             phexConfigRoot = initPhexConfigRoot();
         }
-        if ( phexConfigRoot.exists() )
-        {
-            if ( !phexConfigRoot.isDirectory() )
-            {
-                throw new RuntimeException( "Config location is not a directory: " + phexConfigRoot.getAbsolutePath() );
+        if (phexConfigRoot.exists()) {
+            if (!phexConfigRoot.isDirectory()) {
+                throw new RuntimeException("Config location is not a directory: " + phexConfigRoot.getAbsolutePath());
             }
-        }
-        else
-        {
-            try
-            {
-                FileUtils.forceMkdir( phexConfigRoot );
-            }
-            catch ( IOException exp )
-            {
-                throw new RuntimeException( "Failed creating config directory: " + phexConfigRoot.getAbsolutePath() );
+        } else {
+            try {
+                FileUtils.forceMkdir(phexConfigRoot);
+            } catch (IOException exp) {
+                throw new RuntimeException("Failed creating config directory: " + phexConfigRoot.getAbsolutePath());
             }
         }
         return phexConfigRoot;
     }
 
-    private static File initPhexConfigRoot()
-    {
+    private static File initPhexConfigRoot() {
         // to prevent problems wait with assigning userPath...
-        String tmpUserPath = System.getProperty( PHEX_CONFIG_PATH_SYSPROP );
-        if ( StringUtils.isEmpty( tmpUserPath ) )
-        {
-            if ( SystemUtils.IS_OS_WINDOWS )
-            {
-                String appDataEnv = System.getenv( "APPDATA" );
-                if ( StringUtils.isEmpty( appDataEnv ) )
-                {
+        String tmpUserPath = System.getProperty(PHEX_CONFIG_PATH_SYSPROP);
+        if (StringUtils.isEmpty(tmpUserPath)) {
+            if (SystemUtils.IS_OS_WINDOWS) {
+                String appDataEnv = System.getenv("APPDATA");
+                if (StringUtils.isEmpty(appDataEnv)) {
                     tmpUserPath = HOME() + File.separator + "Application Data";
                 }
                 tmpUserPath = appDataEnv + File.separator
-                    + "Phex" + File.separator;
-            }
-            else if ( SystemUtils.IS_OS_MAC_OSX )
-            {
+                        + "Phex" + File.separator;
+            } else if (SystemUtils.IS_OS_MAC_OSX) {
                 tmpUserPath = HOME() + File.separator
-                    + "Library" + File.separator + "Application Support";
+                        + "Library" + File.separator + "Application Support";
                 tmpUserPath = tmpUserPath + File.separator + "Phex" + File.separator;
-            }
-            else
-            {
+            } else {
                 tmpUserPath = HOME() + File.separator
-                    + ".phex" + File.separator;
+                        + ".phex" + File.separator;
             }
-        }
-        else
-        {
-            if ( !tmpUserPath.endsWith( File.separator ) )
-            {
+        } else {
+            if (!tmpUserPath.endsWith(File.separator)) {
                 tmpUserPath = tmpUserPath + File.separator;
             }
         }
-        File dir = new File( tmpUserPath );
+        File dir = new File(tmpUserPath);
         return dir;
     }
-
 
 
     /**
@@ -176,58 +148,45 @@ public class SystemProperties
      * - Unix: ~/phex/
      * - OSX: ~/Library/Application Support/Phex/
      * - Windows: ..../Documents and Settings/username/Application Data/Phex/
+     *
      * @throws RuntimeException in case creating a possible missing Phex config root fails
-     *         or the phexConfigRoot is not a directory.
+     *                          or the phexConfigRoot is not a directory.
      */
-    public static File getPhexDownloadsRoot()
-    {
-        if ( phexDownloadsRoot == null )
-        {
+    public static File getPhexDownloadsRoot() {
+        if (phexDownloadsRoot == null) {
             phexDownloadsRoot = initPhexDownloadsRoot();
         }
-        if ( phexDownloadsRoot.exists() )
-        {
-            if ( !phexDownloadsRoot.isDirectory() )
-            {
-                throw new RuntimeException( "Config location is not a directory: " + phexDownloadsRoot.getAbsolutePath() );
+        if (phexDownloadsRoot.exists()) {
+            if (!phexDownloadsRoot.isDirectory()) {
+                throw new RuntimeException("Config location is not a directory: " + phexDownloadsRoot.getAbsolutePath());
             }
         }
         // Don't create directory here... it might be different in user configuration.
         return phexDownloadsRoot;
     }
 
-    private static File initPhexDownloadsRoot()
-    {
+    private static File initPhexDownloadsRoot() {
         // to prevent problems wait with assigning userPath...
-        String tmpUserPath = System.getProperty( PHEX_DOWNLOAD_PATH_SYSPROP );
-        if ( StringUtils.isEmpty( tmpUserPath ) ) 
-        {
-            if ( SystemUtils.IS_OS_WINDOWS )
-            {
+        String tmpUserPath = System.getProperty(PHEX_DOWNLOAD_PATH_SYSPROP);
+        if (StringUtils.isEmpty(tmpUserPath)) {
+            if (SystemUtils.IS_OS_WINDOWS) {
                 tmpUserPath = HOME() + File.separator + "Downloads" + File.separator + "Phex";
-            }
-            else if ( SystemUtils.IS_OS_MAC_OSX )
-            {
+            } else if (SystemUtils.IS_OS_MAC_OSX) {
                 tmpUserPath = HOME() + File.separator
-                    + "Library" + File.separator + "Application Support";
+                        + "Library" + File.separator + "Application Support";
                 tmpUserPath = tmpUserPath + File.separator + "Phex" + File.separator;
-            }
-            else
-            {
+            } else {
                 tmpUserPath = HOME() + File.separator
-                    + "phex" + File.separator;
+                        + "phex" + File.separator;
             }
-        }
-        else
-        {
-            if ( !tmpUserPath.endsWith( File.separator ) ) 
-            {
+        } else {
+            if (!tmpUserPath.endsWith(File.separator)) {
                 tmpUserPath = tmpUserPath + File.separator;
             }
         }
-        File dir = new File( tmpUserPath );
+        File dir = new File(tmpUserPath);
         return dir;
-    }        
+    }
 
 
 }

@@ -26,8 +26,7 @@ package phex.common;
  * recommended to be modified if you know what you are doing.
  *!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 
-public class PhexVersion
-{
+public class PhexVersion {
     // The Phex version number MUST always consists of 3 digits separated by a dot.
     // Even if the last or last two digest are a zero. This is important to attach
     // the build number always as the fourth position of the version. The build
@@ -36,44 +35,41 @@ public class PhexVersion
     private static final String VERSION = "3.4.2";
     private static final String BUILD = "156";
     private static final String FULL_VERSION = "3.4.2.156";
-    
-    private static final int MAJOR_VERSION = Integer.parseInt( 
-        VERSION.substring( 0, VERSION.indexOf('.') ) );
-    private static final int MINOR_VERSION = Integer.parseInt( 
-        VERSION.substring( VERSION.indexOf('.')+1, 
-        VERSION.indexOf('.', VERSION.indexOf('.')+1) ) );
-    
-    
-    public static String getFullVersion()
-    {
+
+    private static final int MAJOR_VERSION = Integer.parseInt(
+            VERSION.substring(0, VERSION.indexOf('.')));
+    private static final int MINOR_VERSION = Integer.parseInt(
+            VERSION.substring(VERSION.indexOf('.') + 1,
+                    VERSION.indexOf('.', VERSION.indexOf('.') + 1)));
+
+
+    public static String getFullVersion() {
         return FULL_VERSION;
     }
-    
-    public static String getVersion()
-    {
+
+    public static String getVersion() {
         return VERSION;
     }
-    
+
     /**
      * Returns the major version number of the version.
+     *
      * @return the major version.
      */
-    public static int getMajorVersion()
-    {
+    public static int getMajorVersion() {
         return MAJOR_VERSION;
     }
-    
+
     /**
      * Returns the major version number of the version.
+     *
      * @return the major version.
      */
-    public static int getMinorVersion()
-    {
+    public static int getMinorVersion() {
         return MINOR_VERSION;
     }
-    
-    public static String getBuild()
-    {
+
+    public static String getBuild() {
         return BUILD;
     }
 }

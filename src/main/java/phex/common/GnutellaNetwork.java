@@ -29,30 +29,28 @@ import java.io.File;
  * This class represents an abstract Gnutella network representation.
  * The network representation is used to distinguish between different
  * type of gnutella networks. This could be the General Gnutella Network
- * or a named private network the user likes to create or join.  
- * 
+ * or a named private network the user likes to create or join.
  */
-public abstract class GnutellaNetwork
-{
-    public abstract String getName();
-    
-    public abstract File getHostsFile();
-    public abstract File getGWebCacheFile();
-    public abstract File getUdpHostCacheFile();
-    public abstract File getFavoritesFile();
-    public abstract File getSearchFilterFile();
-    
-    public abstract String getNetworkGreeting();
-    
-    public static GnutellaNetwork getGnutellaNetworkFromString( String networkName )
-    {
-        if ( networkName.equals( NetworkPrefs.GENERAL_GNUTELLA_NETWORK ) )
-        {// use general gnutella network.
+public abstract class GnutellaNetwork {
+    public static GnutellaNetwork getGnutellaNetworkFromString(String networkName) {
+        if (networkName.equals(NetworkPrefs.GENERAL_GNUTELLA_NETWORK)) {// use general gnutella network.
             return new GeneralGnutellaNetwork();
-        }
-        else
-        {// use named gnutella network.
-            return new NamedGnutellaNetwork( networkName );
+        } else {// use named gnutella network.
+            return new NamedGnutellaNetwork(networkName);
         }
     }
+
+    public abstract String getName();
+
+    public abstract File getHostsFile();
+
+    public abstract File getGWebCacheFile();
+
+    public abstract File getUdpHostCacheFile();
+
+    public abstract File getFavoritesFile();
+
+    public abstract File getSearchFilterFile();
+
+    public abstract String getNetworkGreeting();
 }

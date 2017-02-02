@@ -24,37 +24,28 @@ package phex.util;
 import java.util.StringTokenizer;
 
 
-public class VersionUtils
-{
+public class VersionUtils {
     /**
      * A version is supposed to be separated by . ( i.e. 1.2.3.4 )
      * returns >0 if version1 is greater then version2
      * returns 0 if both versions are equal
      * returns <0 if version2 is greater then version1
      */
-    public static int compare(String version1, String version2)
-    {
+    public static int compare(String version1, String version2) {
         int result = 0;
-        int[] versionArr1 = tokenizeVersion( version1 );
-        int[] versionArr2 = tokenizeVersion( version2 );
+        int[] versionArr1 = tokenizeVersion(version1);
+        int[] versionArr2 = tokenizeVersion(version2);
         int value1 = 0;
         int value2 = 0;
-        for (int i = 0; result == 0 && ( i < versionArr1.length || i < versionArr2.length ); i++)
-        {
-            if (versionArr1.length > i)
-            {
-                value1 = versionArr1[ i ];
-            }
-            else
-            {
+        for (int i = 0; result == 0 && (i < versionArr1.length || i < versionArr2.length); i++) {
+            if (versionArr1.length > i) {
+                value1 = versionArr1[i];
+            } else {
                 value1 = 0;
             }
-            if (versionArr2.length > i)
-            {
-                value2 = versionArr2[ i ];
-            }
-            else
-            {
+            if (versionArr2.length > i) {
+                value2 = versionArr2[i];
+            } else {
                 value2 = 0;
             }
             result = value1 - value2;
@@ -62,15 +53,13 @@ public class VersionUtils
         return result;
     }
 
-    private static int[] tokenizeVersion(String version)
-    {
-        StringTokenizer tok = new StringTokenizer( version, "." );
+    private static int[] tokenizeVersion(String version) {
+        StringTokenizer tok = new StringTokenizer(version, ".");
         int count = tok.countTokens();
-        int[] arr = new int[ count ];
+        int[] arr = new int[count];
 
-        for (int i = 0; i < count; i++)
-        {
-            arr[ i ] = Integer.parseInt( tok.nextToken() );
+        for (int i = 0; i < count; i++) {
+            arr[i] = Integer.parseInt(tok.nextToken());
         }
         return arr;
     }

@@ -22,14 +22,12 @@
  */
 package phex.download.handler;
 
-public class DownloadHandlerException extends Exception
-{
+public class DownloadHandlerException extends Exception {
 
     /**
-     * 
+     *
      */
-    public DownloadHandlerException()
-    {
+    public DownloadHandlerException() {
         super();
     }
 
@@ -37,25 +35,22 @@ public class DownloadHandlerException extends Exception
      * @param message
      * @param cause
      */
-    public DownloadHandlerException( String message, Throwable cause )
-    {
-        super( message, cause );
+    public DownloadHandlerException(String message, Throwable cause) {
+        super(message, cause);
     }
 
     /**
      * @param message
      */
-    public DownloadHandlerException( String message )
-    {
-        super( message );
+    public DownloadHandlerException(String message) {
+        super(message);
     }
 
     /**
      * @param cause
      */
-    public DownloadHandlerException( Throwable cause )
-    {
-        super( cause );
+    public DownloadHandlerException(Throwable cause) {
+        super(cause);
     }
-    
+
 }

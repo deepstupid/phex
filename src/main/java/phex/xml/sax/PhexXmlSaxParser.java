@@ -34,32 +34,25 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * 
+ *
  */
-public class PhexXmlSaxParser
-{
-    public static DPhex parsePhexXml( InputStream inStream )   
-        throws IOException
-    {
+public class PhexXmlSaxParser {
+    public static DPhex parsePhexXml(InputStream inStream)
+            throws IOException {
         SAXParserFactory spf = SAXParserFactory.newInstance();
-        try
-        {
+        try {
             SAXParser saxParser = spf.newSAXParser();
-        
+
             DPhex dPhex = new DPhex();
-            saxParser.parse( new InputSource( inStream ),
-                new PhexSAXHandler( dPhex, saxParser ) );
+            saxParser.parse(new InputSource(inStream),
+                    new PhexSAXHandler(dPhex, saxParser));
             return dPhex;
-        }
-        catch ( ParserConfigurationException exp )
-        {
-            NLogger.error( PhexXmlSaxParser.class, exp, exp );
-            throw new IOException( "Parsing Phex XML failed." );
-        }
-        catch ( SAXException exp )
-        {
-            NLogger.error( PhexXmlSaxParser.class, exp, exp );
-            throw new IOException( "Parsing Phex XML failed." );
+        } catch (ParserConfigurationException exp) {
+            NLogger.error(PhexXmlSaxParser.class, exp, exp);
+            throw new IOException("Parsing Phex XML failed.");
+        } catch (SAXException exp) {
+            NLogger.error(PhexXmlSaxParser.class, exp, exp);
+            throw new IOException("Parsing Phex XML failed.");
         }
     }
 }

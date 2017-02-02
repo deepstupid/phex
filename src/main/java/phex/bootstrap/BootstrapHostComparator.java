@@ -23,31 +23,22 @@ package phex.bootstrap;
 
 import java.util.Comparator;
 
-public class BootstrapHostComparator implements Comparator<BootstrapHost>
-{
+public class BootstrapHostComparator implements Comparator<BootstrapHost> {
     public static final BootstrapHostComparator INSTANCE = new BootstrapHostComparator();
-    
-    private BootstrapHostComparator()
-    {
+
+    private BootstrapHostComparator() {
     }
-    
-    public int compare( BootstrapHost h1, BootstrapHost h2 )
-    {
-        if ( h1.equals(h2) )
-        {
+
+    public int compare(BootstrapHost h1, BootstrapHost h2) {
+        if (h1.equals(h2)) {
             return 0;
         }
         long diff = h1.getEarliestReConnectTime() - h2.getEarliestReConnectTime();
-        if ( diff == 0)
-        {
+        if (diff == 0) {
             return h1.hashCode() - h2.hashCode();
-        }
-        else if ( diff > 0 )
-        {
+        } else if (diff > 0) {
             return 1;
-        }
-        else
-        {
+        } else {
             return -1;
         }
     }

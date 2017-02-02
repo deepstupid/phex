@@ -29,34 +29,28 @@ import phex.xml.sax.PhexXmlSaxWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DSecurity implements DElement
-{
+public class DSecurity implements DElement {
     public static final String ELEMENT_NAME = "security";
-    
+
     private List<DSecurityRule> ipAccessRuleList;
-    
+
     /**
      * @return the ipAccessList
      */
-    public List<DSecurityRule> getIpAccessRuleList()
-    {
-        if ( ipAccessRuleList == null )
-        {
+    public List<DSecurityRule> getIpAccessRuleList() {
+        if (ipAccessRuleList == null) {
             ipAccessRuleList = new ArrayList<DSecurityRule>();
         }
         return ipAccessRuleList;
     }
 
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
-        if( ipAccessRuleList != null )
-        {
-            for ( DSecurityRule rule : ipAccessRuleList )
-            {
-                rule.serialize( writer );
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
+        if (ipAccessRuleList != null) {
+            for (DSecurityRule rule : ipAccessRuleList) {
+                rule.serialize(writer);
             }
         }
-        writer.endElm( ELEMENT_NAME );
+        writer.endElm(ELEMENT_NAME);
     }
 }

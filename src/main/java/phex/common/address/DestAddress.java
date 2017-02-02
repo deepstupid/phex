@@ -21,18 +21,19 @@
  */
 package phex.common.address;
 
-public interface DestAddress
-{
+public interface DestAddress {
     /**
      * Returns a host name representation. No port should be appended and it should
      * never return null.
+     *
      * @return a host name.
      */
     String getHostName();
-    
+
     /**
      * Returns the full host name representation. Including possible port. It
      * should never return null.
+     *
      * @return the full host name.
      */
     String getFullHostName();
@@ -40,14 +41,15 @@ public interface DestAddress
     /**
      * Returns whether the host name returned by getHostName() is the string
      * representation of a IP or not.
-     * 
-     * @return Returns true if the host name is the string representation of 
+     *
+     * @return Returns true if the host name is the string representation of
      * the IP, false otherwise.
      */
     boolean isIpHostName();
 
     /**
      * Returns the port of this destination address.
+     *
      * @return the port
      */
     int getPort();
@@ -56,19 +58,22 @@ public interface DestAddress
      * Returns the IP address of this destination address. In case the IP address
      * can't be resolved (which should be tried!) or there is no IP for this kind
      * of destination address null can be returned.
+     *
      * @return the IpAddress or null.
      */
     IpAddress getIpAddress();
 
     boolean equals(DestAddress address);
+
     boolean equals(byte[] ipAddress, int port);
 
     int hashCode();
 
     /**
-     * Returns the country code of this destination address. In case the 
+     * Returns the country code of this destination address. In case the
      * IP has not been resolved yet null can be returned. In case no country
      * code could be found "" can be returned.
+     *
      * @return the country code, empty string or null.
      */
     String getCountryCode();
@@ -78,24 +83,25 @@ public interface DestAddress
      * of this localhost.
      *
      * @param localAddress the local address to compare against.
-     * @return a <code>boolean</code> indicating if the DestAddress represents 
-     *         localhost.
+     * @return a <code>boolean</code> indicating if the DestAddress represents
+     * localhost.
      */
     boolean isLocalHost(DestAddress localAddress);
-    
+
     /**
-     * Checks if the DestAddress is a site local address. Meaning a address in 
-     * the private LAN. 
+     * Checks if the DestAddress is a site local address. Meaning a address in
+     * the private LAN.
      *
-     * @return a <code>boolean</code> indicating if the DestAddress is 
+     * @return a <code>boolean</code> indicating if the DestAddress is
      * a site local address; or false if address is not a site local address.
      */
     boolean isSiteLocalAddress();
-    
+
     /**
      * Checks if the DestAddress is completely valid. Each DestAddress must
      * by itself what is required to make up a valid address.
-     * @return a <code>boolean</code> indicating if the DestAddress is 
+     *
+     * @return a <code>boolean</code> indicating if the DestAddress is
      * valid; or false otherwise.
      */
     boolean isValidAddress();

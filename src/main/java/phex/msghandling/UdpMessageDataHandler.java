@@ -45,12 +45,11 @@ import phex.udp.UdpGuidRoutingTable;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public class UdpMessageDataHandler implements UdpDataHandler
-{
-    private static final Logger logger = LoggerFactory.getLogger( UdpMessageDataHandler.class );
-    
+public class UdpMessageDataHandler implements UdpDataHandler {
+    private static final Logger logger = LoggerFactory.getLogger(UdpMessageDataHandler.class);
+
     private static final int UDP_PING_PERIOD = 1000 * 3 * 10;
-    
+
     private final Servent servent;
     private final StatisticsManager statsService;
     private final SharedFilesService sharedFilesService;
@@ -59,17 +58,15 @@ public class UdpMessageDataHandler implements UdpDataHandler
     private final HostManager hostService;
     private final MessageService messageService;
     private final UdpService udpService;
-    
-    private final UdpGuidRoutingTable pingRoutingTable;
-    
 
-    
+    private final UdpGuidRoutingTable pingRoutingTable;
+
+
     public UdpMessageDataHandler(Servent servent,
-        StatisticsManager statsService, SharedFilesService sharedFilesService,
-        PongFactory pongFactory, PhexSecurityManager securityService,
-        HostManager hostService, MessageService messageService,
-        UdpService udpService )
-    {
+                                 StatisticsManager statsService, SharedFilesService sharedFilesService,
+                                 PongFactory pongFactory, PhexSecurityManager securityService,
+                                 HostManager hostService, MessageService messageService,
+                                 UdpService udpService) {
         super();
         this.servent = servent;
         this.statsService = statsService;
@@ -79,227 +76,193 @@ public class UdpMessageDataHandler implements UdpDataHandler
         this.hostService = hostService;
         this.messageService = messageService;
         this.udpService = udpService;
-        
+
         //create the routing table with a lifetime of the 
         //udp send ping time interval....so a pong will only be accepted if
         //it comes within the period between 0 to 2 * lifetime
-        pingRoutingTable = new UdpGuidRoutingTable( UDP_PING_PERIOD );
+        pingRoutingTable = new UdpGuidRoutingTable(UDP_PING_PERIOD);
     }
-    
 
-    public void handleUdpData(IDataSource dataSource, DestAddress orgin )
-    {
-        try
-        {
-            ByteBuffer headerBuffer = ByteBuffer.allocate( MsgHeader.DATA_LENGTH );
-            dataSource.read( headerBuffer );
+
+    public void handleUdpData(IDataSource dataSource, DestAddress orgin) {
+        try {
+            ByteBuffer headerBuffer = ByteBuffer.allocate(MsgHeader.DATA_LENGTH);
+            dataSource.read(headerBuffer);
             headerBuffer.flip();
-            MsgHeader msgHeader = MessageProcessor.parseMessageHeader( headerBuffer );
-            
+            MsgHeader msgHeader = MessageProcessor.parseMessageHeader(headerBuffer);
+
             int length = msgHeader.getDataLength();
-            if ( length < 0 )
-            {
-                throw new IOException( "Negative body size. Drop." );
+            if (length < 0) {
+                throw new IOException("Negative body size. Drop.");
+            } else if (length > MessagePrefs.MaxLength.get().intValue()) {
+                throw new IOException("Packet too big (" + length + "). Drop.");
             }
-            else if ( length > MessagePrefs.MaxLength.get().intValue() )
-            {
-                throw new IOException("Packet too big ("+length+"). Drop.");
-            }
-            
-            ByteBuffer bodyBuffer = ByteBuffer.allocate( length );
-            dataSource.read( bodyBuffer );
+
+            ByteBuffer bodyBuffer = ByteBuffer.allocate(length);
+            dataSource.read(bodyBuffer);
             bodyBuffer.flip();
-            
-            try
-            {
-                Message msg = MessageProcessor.createMessageFromBody( msgHeader, bodyBuffer.array(), 
-                    securityService );
-                msg.setUdpMsg( true );
-                AccessType access = securityService.controlHostAddressAccess( orgin );
-                if ( access == AccessType.ACCESS_STRONGLY_DENIED )
-                {
+
+            try {
+                Message msg = MessageProcessor.createMessageFromBody(msgHeader, bodyBuffer.array(),
+                        securityService);
+                msg.setUdpMsg(true);
+                AccessType access = securityService.controlHostAddressAccess(orgin);
+                if (access == AccessType.ACCESS_STRONGLY_DENIED) {
                     // drop message
-                    dropMessage( msg, orgin, "IP access strongly denied." );
+                    dropMessage(msg, orgin, "IP access strongly denied.");
                     return;
                 }
-                
+
                 msgHeader.countHop();
-             
+
                 // Now check the payload field and take appropriate action
-                switch( msgHeader.getPayload() )
-                {
-                    case MsgHeader.PING_PAYLOAD :
-                        handlePing( (PingMsg)msg, orgin );
+                switch (msgHeader.getPayload()) {
+                    case MsgHeader.PING_PAYLOAD:
+                        handlePing((PingMsg) msg, orgin);
                         break;
-                    case MsgHeader.PONG_PAYLOAD :
-                        handlePong( (PongMsg)msg, orgin );
+                    case MsgHeader.PONG_PAYLOAD:
+                        handlePong((PongMsg) msg, orgin);
                         break;
                     case MsgHeader.QUERY_HIT_PAYLOAD:
-                        handleQueryResponse( (QueryResponseMsg)msg, orgin );
+                        handleQueryResponse((QueryResponseMsg) msg, orgin);
                         break;
                     case MsgHeader.VENDOR_MESSAGE_PAYLOAD:
                     case MsgHeader.STANDARD_VENDOR_MESSAGE_PAYLOAD:
-                        handleVendorMessage( (VendorMsg)msg, orgin );
+                        handleVendorMessage((VendorMsg) msg, orgin);
                         break;
                     default:
-                        logger.debug( "Rcv unrecognized Msg from: {}", orgin );
+                        logger.debug("Rcv unrecognized Msg from: {}", orgin);
                         break;
-                }                
+                }
+            } catch (InvalidMessageException exp) {
+                logger.warn(exp.toString(), exp);
             }
-            catch ( InvalidMessageException exp )
-            {
-                logger.warn( exp.toString(), exp );
-            }
-        }
-        catch ( IOException exp )
-        {
-            logger.warn( exp.toString(), exp );
+        } catch (IOException exp) {
+            logger.warn(exp.toString(), exp);
         }
     }
 
-    private void handlePing( PingMsg pingMsg, DestAddress orgin ) throws IOException
-    {
+    private void handlePing(PingMsg pingMsg, DestAddress orgin) throws IOException {
         MsgHeader header = pingMsg.getHeader();
-        if ( header.getHopsTaken() > 1 )
-        {
-            dropMessage( pingMsg, orgin, "Udp Ping traveled more then 1 hop." );
+        if (header.getHopsTaken() > 1) {
+            dropMessage(pingMsg, orgin, "Udp Ping traveled more then 1 hop.");
             return;
         }
-        logger.debug( "Rcv UDP PingMsg {} from {}", pingMsg, orgin );
+        logger.debug("Rcv UDP PingMsg {} from {}", pingMsg, orgin);
 
         // respond to ping
         StatisticProvider uptimeProvider = statsService.getStatisticProvider(
-            StatisticsManager.DAILY_UPTIME_PROVIDER );
-        int avgDailyUptime = ((Integer)uptimeProvider.getValue()).intValue();
+                StatisticsManager.DAILY_UPTIME_PROVIDER);
+        int avgDailyUptime = ((Integer) uptimeProvider.getValue()).intValue();
         int shareFileCount = sharedFilesService.getFileCount();
         int shareFileSize = sharedFilesService.getTotalFileSizeInKb();
-        
+
         DestAddress localAddress = servent.getLocalAddress();
         boolean isUdpHostCache = servent.isUdpHostCache();
-        
-        PongMsg pong = pongFactory.createUdpPongMsg( pingMsg, localAddress, isUdpHostCache,
-            avgDailyUptime, shareFileCount, shareFileSize, servent.isUltrapeer() );
-        
-        udpService.sendDatagram( pong.getbytes(), orgin );
+
+        PongMsg pong = pongFactory.createUdpPongMsg(pingMsg, localAddress, isUdpHostCache,
+                avgDailyUptime, shareFileCount, shareFileSize, servent.isUltrapeer());
+
+        udpService.sendDatagram(pong.getbytes(), orgin);
     }
 
-    
-    private void handlePong( PongMsg pongMsg, DestAddress orgin )
-    {
-        logger.debug( "Rcv PongMsg {} from: {}", pongMsg, orgin );
+
+    private void handlePong(PongMsg pongMsg, DestAddress orgin) {
+        logger.debug("Rcv PongMsg {} from: {}", pongMsg, orgin);
         MsgHeader header = pongMsg.getHeader();
-        if ( header.getHopsTaken() > 1 )
-        {
-            dropMessage( pongMsg, orgin, "Udp Pong traveled more then 1 hop." );
+        if (header.getHopsTaken() > 1) {
+            dropMessage(pongMsg, orgin, "Udp Pong traveled more then 1 hop.");
             return;
         }
-        
+
         // first check if we had sent a ping to receive a pong
         GUID guid = header.getMsgID();
-        DestAddress address = pingRoutingTable.getAndRemoveRouting( guid ); 
-        if( address == null )
-        {
+        DestAddress address = pingRoutingTable.getAndRemoveRouting(guid);
+        if (address == null) {
             // did not find routing for this pong
-            logger.warn( "Recieved not requested UDP Pong from {}", orgin );
+            logger.warn("Recieved not requested UDP Pong from {}", orgin);
             return;
         }
-        
+
         // thought of comparing the address in the table to the pong packet's address
         // but since its udp the packet can come from any interface of the packet's host
         // so just be happy that u sent a ping with the same guid
-        
+
         DestAddress pongAddress = pongMsg.getPongAddress();
         // Security checking makes no sense for UDP pong, since we already know
         // from the routing check above that we requested the pong with a ping
         // it can be expected to be fine.
-        
-        boolean isNew = hostService.catchHosts( pongMsg );
-        if ( isNew )
-        {
-            messageService.addPongToCache( pongMsg );
+
+        boolean isNew = hostService.catchHosts(pongMsg);
+        if (isNew) {
+            messageService.addPongToCache(pongMsg);
         }
     }
-    
-    private void handleQueryResponse( QueryResponseMsg msg, DestAddress orgin ) 
-        throws InvalidMessageException
-    {
-        messageService.dispatchToUdpSubscribers( msg, orgin );
+
+    private void handleQueryResponse(QueryResponseMsg msg, DestAddress orgin)
+            throws InvalidMessageException {
+        messageService.dispatchToUdpSubscribers(msg, orgin);
     }
-    
-    private void handleVendorMessage(VendorMsg msg, DestAddress orgin) throws InvalidMessageException
-    {
-        if ( msg instanceof OOBReplyCountVMsg )
-        {
-            handleOOBReplyCountVMsg( (OOBReplyCountVMsg)msg, orgin );
-        }
-        else if ( msg instanceof UdpHeadPingVMsg )
-        {
+
+    private void handleVendorMessage(VendorMsg msg, DestAddress orgin) throws InvalidMessageException {
+        if (msg instanceof OOBReplyCountVMsg) {
+            handleOOBReplyCountVMsg((OOBReplyCountVMsg) msg, orgin);
+        } else if (msg instanceof UdpHeadPingVMsg) {
             UdpHeadPingVMsg headPing = (UdpHeadPingVMsg) msg;
             // likely spam msg...
-            logger.warn( "Possible UdpHeadPing spam from {}: Features: {}, URN: {}, GUID: {}", 
-                new Object[] { orgin, headPing.getFeatures(),
-                headPing.getUrn().getAsString(), headPing.getGuid() } );
+            logger.warn("Possible UdpHeadPing spam from {}: Features: {}, URN: {}, GUID: {}",
+                    new Object[]{orgin, headPing.getFeatures(),
+                            headPing.getUrn().getAsString(), headPing.getGuid()});
         }
     }
 
     private void handleOOBReplyCountVMsg(OOBReplyCountVMsg msg,
-        DestAddress orgin) throws InvalidMessageException
-    {
-        messageService.dispatchToUdpSubscribers( msg, orgin );
+                                         DestAddress orgin) throws InvalidMessageException {
+        messageService.dispatchToUdpSubscribers(msg, orgin);
     }
-    
-    private void dropMessage( Message msg, DestAddress orgin, String reason )
-    {
-        logger.info( "Dropping UDP message: {} from {}.", reason, orgin );
-        if ( logger.isDebugEnabled( ) )
-        {
-            logger.debug( "Header: [" + msg.getHeader().toString() + "] - Message: [" +
-                msg.toString() + "].");
+
+    private void dropMessage(Message msg, DestAddress orgin, String reason) {
+        logger.info("Dropping UDP message: {} from {}.", reason, orgin);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Header: [" + msg.getHeader().toString() + "] - Message: [" +
+                    msg.toString() + "].");
         }
         // TODO should we count dropping udp? currently we dont
         // fromHost.incDropCount();
         // MessageCountStatistic.dropedMsgInCounter.increment( 1 );
     }
 
-    public void sendUdpPing( PingMsg pingMsg, DestAddress destination )
-    {
+    public void sendUdpPing(PingMsg pingMsg, DestAddress destination) {
         GUID guid = pingMsg.getHeader().getMsgID();
-        if( ! (pingRoutingTable.checkAndAddRouting( guid, destination ) ) )
-        {
+        if (!(pingRoutingTable.checkAndAddRouting(guid, destination))) {
             //could not add to routing table
-            logger.warn( "Ping with duplicate guid not sent {} for message: {}", 
-                guid, pingMsg );
+            logger.warn("Ping with duplicate guid not sent {} for message: {}",
+                    guid, pingMsg);
             return;
         }
-        logger.debug( "guid: {} successfully added to routing table for udp ping: \n {}", guid, pingMsg );
-        
+
+        //logger.debug("guid: {} successfully added to routing table for udp ping: \n {}", guid, pingMsg);
+
         byte[] data = pingMsg.getBytes();
-        try
-        {
-            udpService.sendDatagram( data, destination );
-        }
-        catch ( IOException exp )
-        {
-            logger.warn( exp.toString(), exp );
+        try {
+            udpService.sendDatagram(data, destination);
+        } catch (IOException exp) {
+            logger.warn("ping {} {}", destination, exp.getMessage());
         }
     }
-    
-    public void sendMessageAcknowledgementVMsg( MessageAcknowledgementVMsg respMsg, 
-        DestAddress destination )
-    {
+
+    public void sendMessageAcknowledgementVMsg(MessageAcknowledgementVMsg respMsg,
+                                               DestAddress destination) {
         phex.io.buffer.ByteBuffer headerBuf = respMsg.createHeaderBuffer();
         phex.io.buffer.ByteBuffer messageBuf = respMsg.createMessageBuffer();
         int len = headerBuf.remaining();
-        byte[] data = new byte[ len + messageBuf.remaining() ];
-        headerBuf.get( data, 0, len );
-        messageBuf.get( data, len, messageBuf.remaining() );
-        try
-        {
-            udpService.sendDatagram( data, destination );
-        }
-        catch ( IOException exp )
-        {
-            logger.warn( exp.toString(), exp );
+        byte[] data = new byte[len + messageBuf.remaining()];
+        headerBuf.get(data, 0, len);
+        messageBuf.get(data, len, messageBuf.remaining());
+        try {
+            udpService.sendDatagram(data, destination);
+        } catch (IOException exp) {
+            logger.warn(exp.toString(), exp);
         }
     }
 }

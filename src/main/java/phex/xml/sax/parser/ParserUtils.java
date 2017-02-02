@@ -22,74 +22,65 @@
  */
 package phex.xml.sax.parser;
 
-public class ParserUtils
-{
-    public static byte[] fromHexBinary( String s )
-    {
+public class ParserUtils {
+    public static byte[] fromHexBinary(String s) {
         int len = s.length();
-        if ( len % 2 != 0 ) return null;
+        if (len % 2 != 0) return null;
         byte out[] = new byte[len / 2];
-        for ( int i = 0; i < len; i += 2 )
-        {
-            int h = hexToBin( s.charAt( i ) );
-            int l = hexToBin( s.charAt( i + 1 ) );
-            if ( h == -1 || l == -1 ) return null;
+        for (int i = 0; i < len; i += 2) {
+            int h = hexToBin(s.charAt(i));
+            int l = hexToBin(s.charAt(i + 1));
+            if (h == -1 || l == -1) return null;
             out[i / 2] = (byte) (h * 16 + l);
         }
 
         return out;
     }
 
-    public static String collapseWhiteSpace( String text )
-    {
+    public static String collapseWhiteSpace(String text) {
         int len = text.length();
         int s;
-        for ( s = 0; s < len; s++ )
-            if ( isWhiteSpace( text.charAt( s ) ) ) break;
+        for (s = 0; s < len; s++)
+            if (isWhiteSpace(text.charAt(s))) break;
 
-        if ( s == len ) return text;
-        StringBuffer result = new StringBuffer( len );
-        if ( s != 0 )
-        {
-            for ( int i = 0; i < s; i++ )
-                result.append( text.charAt( i ) );
+        if (s == len) return text;
+        StringBuffer result = new StringBuffer(len);
+        if (s != 0) {
+            for (int i = 0; i < s; i++)
+                result.append(text.charAt(i));
 
-            result.append( ' ' );
+            result.append(' ');
         }
         boolean inStripMode = true;
-        for ( int i = s + 1; i < len; i++ )
-        {
-            char ch = text.charAt( i );
-            boolean b = isWhiteSpace( ch );
-            if ( !inStripMode || !b )
-            {
+        for (int i = s + 1; i < len; i++) {
+            char ch = text.charAt(i);
+            boolean b = isWhiteSpace(ch);
+            if (!inStripMode || !b) {
                 inStripMode = b;
-                if ( inStripMode )
-                    result.append( ' ' );
+                if (inStripMode)
+                    result.append(' ');
                 else
-                    result.append( ch );
+                    result.append(ch);
             }
         }
 
         len = result.length();
-        if ( len > 0 && result.charAt( len - 1 ) == ' ' )
-            result.setLength( len - 1 );
+        if (len > 0 && result.charAt(len - 1) == ' ')
+            result.setLength(len - 1);
         return result.toString();
     }
 
-    private static final boolean isWhiteSpace( char ch )
-    {
-        if ( ch > ' ' )
+    private static final boolean isWhiteSpace(char ch) {
+        if (ch > ' ')
             return false;
         else
             return ch == '\t' || ch == '\n' || ch == '\r' || ch == ' ';
     }
 
-    private static int hexToBin( char ch )
-    {
-        if ( '0' <= ch && ch <= '9' ) return ch - 48;
-        if ( 'A' <= ch && ch <= 'F' ) return (ch - 65) + 10;
-        if ( 'a' <= ch && ch <= 'f' )
+    private static int hexToBin(char ch) {
+        if ('0' <= ch && ch <= '9') return ch - 48;
+        if ('A' <= ch && ch <= 'F') return (ch - 65) + 10;
+        if ('a' <= ch && ch <= 'f')
             return (ch - 97) + 10;
         else
             return -1;

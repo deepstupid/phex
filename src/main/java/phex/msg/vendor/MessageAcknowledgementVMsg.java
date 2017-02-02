@@ -32,20 +32,16 @@ import phex.util.IOUtil;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class MessageAcknowledgementVMsg extends VendorMsg
-{
-    private static final Logger logger = LoggerFactory.getLogger( 
-        MessageAcknowledgementVMsg.class );
-    
+public class MessageAcknowledgementVMsg extends VendorMsg {
     public static final int VERSION = 3;
-    
+    private static final Logger logger = LoggerFactory.getLogger(
+            MessageAcknowledgementVMsg.class);
+
     public MessageAcknowledgementVMsg(MsgHeader header, byte[] vendorId,
-        int subSelector, int version, byte[] data)
-        throws InvalidMessageException
-    {
+                                      int subSelector, int version, byte[] data)
+            throws InvalidMessageException {
         super(header, vendorId, subSelector, version, data);
-        if ( version != VERSION )
-        {
+        if (version != VERSION) {
             throw new InvalidMessageException("Vendor Message 'MessageACKVMsg' with invalid version: "
                     + version);
         }
@@ -54,36 +50,31 @@ public class MessageAcknowledgementVMsg extends VendorMsg
         //    throw new InvalidMessageException("Vendor Message 'MessageACKVMsg' invalid data length: "
         //            + data.length);
     }
-    
-    
-    public MessageAcknowledgementVMsg( GUID guid, int resultCount, byte[] securityToken )
-    {
-        super( VENDORID_LIME, SUBSELECTOR_MESSAGE_ACK, VERSION, 
-            buildDataBody( resultCount, securityToken ) );
-        getHeader().setMsgID( guid );
+
+
+    public MessageAcknowledgementVMsg(GUID guid, int resultCount, byte[] securityToken) {
+        super(VENDORID_LIME, SUBSELECTOR_MESSAGE_ACK, VERSION,
+                buildDataBody(resultCount, securityToken));
+        getHeader().setMsgID(guid);
     }
-    
-    private static byte[] buildDataBody( int resultCount, byte[] securityToken )
-    {
-        if ( resultCount <= 0 || resultCount > 255)
+
+    private static byte[] buildDataBody(int resultCount, byte[] securityToken) {
+        if (resultCount <= 0 || resultCount > 255)
             throw new IllegalArgumentException(
-                "Invalid number of results: " + resultCount );
+                    "Invalid number of results: " + resultCount);
         byte[] countBytes = new byte[2];
-        try
-        {
+        try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-            IOUtil.serializeShortLE( (short)resultCount, countBytes, 0 );
+            IOUtil.serializeShortLE((short) resultCount, countBytes, 0);
             out.write(countBytes[0]);
-            GGEPBlock ggepBlock = new GGEPBlock( true );
-            ggepBlock.addExtension( GGEPBlock.SECURE_OOB_ID, securityToken );
-            out.write( ggepBlock.getBytes() );
+            GGEPBlock ggepBlock = new GGEPBlock(true);
+            ggepBlock.addExtension(GGEPBlock.SECURE_OOB_ID, securityToken);
+            out.write(ggepBlock.getBytes());
             return out.toByteArray();
-        }
-        catch (IOException exp)
-        {
+        } catch (IOException exp) {
             // should never happen
-            logger.error( exp.toString(), exp );
-            throw new RuntimeException( exp );
+            logger.error(exp.toString(), exp);
+            throw new RuntimeException(exp);
         }
     }
 }

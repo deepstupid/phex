@@ -35,57 +35,47 @@ import java.util.List;
 /**
  * Filters all files matching the expression.
  */
-public class DFileUrnCondition implements DCondition
-{
+public class DFileUrnCondition implements DCondition {
     static public final String ELEMENT_NAME = "fileurn-condition";
-    
+
     private List<String> urns;
-    
+
     /**
      * @param expression
      * @param case1
      */
-    public DFileUrnCondition( )
-    {
+    public DFileUrnCondition() {
         urns = new ArrayList<String>();
     }
 
-    public List<String> getUrns()
-    {
+    public List<String> getUrns() {
         return urns;
     }
 
-    public void setUrns( List<String> urns )
-    {
+    public void setUrns(List<String> urns) {
         this.urns = urns;
     }
 
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
-        
-        if ( urns != null )
-        {
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
+
+        if (urns != null) {
             Iterator iterator = urns.iterator();
-            while ( iterator.hasNext() )
-            {
-                writer.startElm( "urn", null );
-                writer.elmText( (String)iterator.next() );
-                writer.endElm( "urn" );
+            while (iterator.hasNext()) {
+                writer.startElm("urn", null);
+                writer.elmText((String) iterator.next());
+                writer.endElm("urn");
             }
         }
-        
-        writer.endElm( ELEMENT_NAME );
+
+        writer.endElm(ELEMENT_NAME);
     }
 
-    public Condition createCondition()
-    {
-        FileUrnCondition cond = new FileUrnCondition( );
-        for ( String urn : urns )
-        {
-            if ( URN.isValidURN( urn ) )
-            {
-                cond.addUrn( new URN( urn ) );
+    public Condition createCondition() {
+        FileUrnCondition cond = new FileUrnCondition();
+        for (String urn : urns) {
+            if (URN.isValidURN(urn)) {
+                cond.addUrn(new URN(urn));
             }
         }
         return cond;

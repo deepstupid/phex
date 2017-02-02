@@ -21,7 +21,6 @@
  */
 package phex.host;
 
-import phex.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.Environment;
@@ -33,166 +32,143 @@ import phex.servent.Servent;
 import phex.statistic.StatisticProviderConstants;
 import phex.statistic.StatisticsManager;
 import phex.statistic.UptimeStatisticProvider;
+import phex.util.DateUtils;
 
 import java.util.TimerTask;
 
 // TODO could be LifeCycle..
-public class UltrapeerCapabilityChecker extends TimerTask
-{
+public class UltrapeerCapabilityChecker extends TimerTask {
     private static final Logger logger = LoggerFactory.getLogger(
-        UltrapeerCapabilityChecker.class );
+            UltrapeerCapabilityChecker.class);
     /**
      * The time period in millis to wait between checks.
      */
     private static final long TIMER_PERIOD = 10 * 1000;
-    
+
     private static final long ONE_HOUR = 60 * 60 * 1000;
     private static final long HALF_HOUR = 30 * 60 * 1000;
 
     private final Servent servent;
     private final StatisticsManager statisticsService;
     private final boolean isUltrapeerOS;
-    
+
     private volatile boolean isUltrapeerCapable;
     private volatile boolean isPerfectUltrapeer;
-    
 
-    public UltrapeerCapabilityChecker( Servent servent, 
-        StatisticsManager statisticsService )
-    {
-        if ( servent == null )
-        {
-            throw new NullPointerException( "servent missing." );
+
+    public UltrapeerCapabilityChecker(Servent servent,
+                                      StatisticsManager statisticsService) {
+        if (servent == null) {
+            throw new NullPointerException("servent missing.");
         }
-        if ( statisticsService == null )
-        {
-            throw new NullPointerException( "statisticsService missing." );
+        if (statisticsService == null) {
+            throw new NullPointerException("statisticsService missing.");
         }
         this.servent = servent;
         this.statisticsService = statisticsService;
-        
+
         Environment env = Environment.getInstance();
         isUltrapeerOS = Environment.isUltrapeerOS();
 
-        env.scheduleTimerTask( this, 0, TIMER_PERIOD );
+        env.scheduleTimerTask(this, 0, TIMER_PERIOD);
     }
 
     /**
      * Provided run implementation of TimerTask.
      */
     @Override
-    public void run()
-    {
-        try
-        {
+    public void run() {
+        try {
             checkIfUltrapeerCapable();
-        }
-        catch ( Throwable th )
-        {
-            logger.error( th.toString(), th );
+        } catch (Throwable th) {
+            logger.error(th.toString(), th);
         }
     }
 
-    private void checkIfUltrapeerCapable()
-    {
-        UptimeStatisticProvider uptimeProvider = (UptimeStatisticProvider)statisticsService.
-            getStatisticProvider( StatisticProviderConstants.UPTIME_PROVIDER );
-        if ( uptimeProvider == null )
-        {// we can't measure uptime... -> we are not capable...
+    private void checkIfUltrapeerCapable() {
+        UptimeStatisticProvider uptimeProvider = (UptimeStatisticProvider) statisticsService.
+                getStatisticProvider(StatisticProviderConstants.UPTIME_PROVIDER);
+        if (uptimeProvider == null) {// we can't measure uptime... -> we are not capable...
             isUltrapeerCapable = false;
             return;
         }
-        
+
         boolean isCapable =
-            // the first check if we are allowed to become a ultrapeer at all...
-            // if not we don't need to continue checking...
+                // the first check if we are allowed to become a ultrapeer at all...
+                // if not we don't need to continue checking...
                 ConnectionPrefs.AllowToBecomeUP.get() &&
-            // host should not be firewalled.
-            !servent.isFirewalled() &&
-            // host should provide a Ultrapeer capable OS
-            isUltrapeerOS &&
-            // the connection speed should be more then single ISDN
-                    BandwidthPrefs.NetworkSpeedKbps.get() > 64 &&
-            // also we should provide at least 10KB network bandwidth
-                    BandwidthPrefs.MaxNetworkBandwidth.get() > 10 * 1024 &&
-            // and at least 14KB total bandwidth (because network bandwidth might
-            // be set to unlimited)
-                    BandwidthPrefs.MaxTotalBandwidth.get() > 14 * 1024 &&
-            // the current uptime should be at least 60 minutes or 30 minutes in avg.
-            ( ((LongObj)uptimeProvider.getValue()).getValue() > ONE_HOUR ||
-              ((LongObj)uptimeProvider.getAverageValue()).getValue() > HALF_HOUR );
-        
-        if ( logger.isTraceEnabled() && !isCapable )
-        {
-            logTraceUltrapeerCapable( uptimeProvider );
+                        // host should not be firewalled.
+                        !servent.isFirewalled() &&
+                        // host should provide a Ultrapeer capable OS
+                        isUltrapeerOS &&
+                        // the connection speed should be more then single ISDN
+                        BandwidthPrefs.NetworkSpeedKbps.get() > 64 &&
+                        // also we should provide at least 10KB network bandwidth
+                        BandwidthPrefs.MaxNetworkBandwidth.get() > 10 * 1024 &&
+                        // and at least 14KB total bandwidth (because network bandwidth might
+                        // be set to unlimited)
+                        BandwidthPrefs.MaxTotalBandwidth.get() > 14 * 1024 &&
+                        // the current uptime should be at least 60 minutes or 30 minutes in avg.
+                        (((LongObj) uptimeProvider.getValue()).getValue() > ONE_HOUR ||
+                                ((LongObj) uptimeProvider.getAverageValue()).getValue() > HALF_HOUR);
+
+        if (logger.isTraceEnabled() && !isCapable) {
+            logTraceUltrapeerCapable(uptimeProvider);
         }
 
         isUltrapeerCapable = isCapable;
-        
-        if ( isUltrapeerCapable && !servent.isUltrapeer() )
-        {
+
+        if (isUltrapeerCapable && !servent.isUltrapeer()) {
             long now = System.currentTimeMillis();
-            
+
             long lastQueryTime = servent.getQueryService().getLastQueryTime();
-            
+
             BandwidthController upBandCont = servent.getBandwidthService().getUploadBandwidthController();
             long upAvg = upBandCont.getLongTransferAvg().getAverage();
 
             boolean isPerfect =
-                // last query is 5 minutes ago
-                now - lastQueryTime > 5 * DateUtils.MILLIS_PER_MINUTE &&
-                upAvg < 2 * 1024;
-                
+                    // last query is 5 minutes ago
+                    now - lastQueryTime > 5 * DateUtils.MILLIS_PER_MINUTE &&
+                            upAvg < 2 * 1024;
+
             isPerfectUltrapeer = isPerfect;
             servent.upgradeToUltrapeer();
-        }
-        else
-        {
+        } else {
             isPerfectUltrapeer = false;
         }
-        logger.debug( "UP capable: {}, perfect: {}", isUltrapeerCapable, isPerfectUltrapeer );
+        logger.debug("UP capable: {}, perfect: {}", isUltrapeerCapable, isPerfectUltrapeer);
     }
 
-    private void logTraceUltrapeerCapable(UptimeStatisticProvider uptimeProvider)
-    {
-        if ( !ConnectionPrefs.AllowToBecomeUP.get())
-        {
-            logger.trace( "Not allowed to become UP." );
+    private void logTraceUltrapeerCapable(UptimeStatisticProvider uptimeProvider) {
+        if (!ConnectionPrefs.AllowToBecomeUP.get()) {
+            logger.trace("Not allowed to become UP.");
         }
-        if ( servent.isFirewalled() )
-        {
-            logger.trace( "Servent is firewalled." );
+        if (servent.isFirewalled()) {
+            logger.trace("Servent is firewalled.");
         }
-        if ( !isUltrapeerOS )
-        {
-            logger.trace( "No ultrapeer OS." );
+        if (!isUltrapeerOS) {
+            logger.trace("No ultrapeer OS.");
         }
-        if (BandwidthPrefs.NetworkSpeedKbps.get() <= 64 )
-        {
-            logger.trace( "Not enough network speed" );
+        if (BandwidthPrefs.NetworkSpeedKbps.get() <= 64) {
+            logger.trace("Not enough network speed");
         }
-        if (BandwidthPrefs.MaxNetworkBandwidth.get() <= 10 * 1024 )
-        {
-            logger.trace( "Not enough max network bandwidth" );
+        if (BandwidthPrefs.MaxNetworkBandwidth.get() <= 10 * 1024) {
+            logger.trace("Not enough max network bandwidth");
         }
-        if (BandwidthPrefs.MaxTotalBandwidth.get() <= 14 * 1024 )
-        {
-            logger.trace( "Not enough max total bandwidth" );
+        if (BandwidthPrefs.MaxTotalBandwidth.get() <= 14 * 1024) {
+            logger.trace("Not enough max total bandwidth");
         }
-        if ( ((LongObj)uptimeProvider.getValue()).getValue() <= ONE_HOUR ||
-            ((LongObj)uptimeProvider.getAverageValue()).getValue() <= HALF_HOUR )
-        {
-            logger.trace( "Not enough current or avg uptime." );
+        if (((LongObj) uptimeProvider.getValue()).getValue() <= ONE_HOUR ||
+                ((LongObj) uptimeProvider.getAverageValue()).getValue() <= HALF_HOUR) {
+            logger.trace("Not enough current or avg uptime.");
         }
     }
 
-    public boolean isUltrapeerCapable()
-    {
+    public boolean isUltrapeerCapable() {
         return isUltrapeerCapable;
     }
-    
-    public boolean isPerfectUltrapeer()
-    {
+
+    public boolean isPerfectUltrapeer() {
         return isPerfectUltrapeer;
     }
 }

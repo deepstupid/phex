@@ -34,138 +34,113 @@ import java.io.*;
  * Helper class to create, generate and parse a xml Document from various
  * resources.
  */
-public class XMLBuilder
-{
-    public static DPhex loadDPhexFromFile( File file )
-        throws IOException
-    {
+public class XMLBuilder {
+    public static DPhex loadDPhexFromFile(File file)
+            throws IOException {
         FileManager fileMgr = Phex.getFileManager();
         ManagedFile managedFile;
-        try
-        {
-            managedFile = fileMgr.getReadWriteManagedFile( file );
-        }
-        catch ( ManagedFileException exp )
-        {
+        try {
+            managedFile = fileMgr.getReadWriteManagedFile(file);
+        } catch (ManagedFileException exp) {
             // TODO refactor for Java 6
-            IOException ioexp = new IOException( );
-            ioexp.initCause( exp );
+            IOException ioexp = new IOException();
+            ioexp.initCause(exp);
             throw ioexp;
         }
-        return loadDPhexFromFile( managedFile );
+        return loadDPhexFromFile(managedFile);
     }
 
     /**
      * Tries to load the DPhex marshaled object from the given file.
      * If the file doesn't exist, null is returned.
+     *
      * @param managedFile the file to load the DPhex object from.
      * @return the DPhex object or null if file doesn't exist.
-     * @throws IOException 
+     * @throws IOException
      */
-    public static DPhex loadDPhexFromFile( ManagedFile managedFile )
-        throws IOException
-    {
-        if ( !managedFile.exists() )
-        {
+    public static DPhex loadDPhexFromFile(ManagedFile managedFile)
+            throws IOException {
+        if (!managedFile.exists()) {
             return null;
         }
-        NLogger.debug( XMLBuilder.class, "Loading DPhex from: " + managedFile );
+        NLogger.debug(XMLBuilder.class, "Loading DPhex from: " + managedFile);
         InputStream inStream = null;
-        try
-        {
+        try {
             managedFile.acquireFileLock();
-            inStream = new ManagedFileInputStream( managedFile, 0 );
+            inStream = new ManagedFileInputStream(managedFile, 0);
             return readDPhexFromStream(inStream);
-        }        
-        finally
-        {
-            IOUtil.closeQuietly( inStream );
-            IOUtil.closeQuietly( managedFile );
+        } finally {
+            IOUtil.closeQuietly(inStream);
+            IOUtil.closeQuietly(managedFile);
             managedFile.releaseFileLock();
         }
     }
-        
+
     /**
      * Trys to read the DPhex marshaled object from the given stream.
+     *
      * @param inStream the stream to read the DPhex object from.
      * @return the DPhex object.
-     * @throws IOException 
+     * @throws IOException
      */
-    public static DPhex readDPhexFromStream( InputStream inStream ) 
-        throws IOException
-    {
+    public static DPhex readDPhexFromStream(InputStream inStream)
+            throws IOException {
         // TODO workaround for Java 1.4.2 bug, when files contain optional BOM 
         // http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=4508058
         // should only occur with crimson parser in java 1.4 but seems like
         // xerces in java 1.5 is able to handle these. Though we always use it
         // to be save.
-        UnicodeInputStream ucInStream = new UnicodeInputStream( inStream, "UTF-8" );
+        UnicodeInputStream ucInStream = new UnicodeInputStream(inStream, "UTF-8");
         // make sure we are not interrupted before continuing.
-        if ( Thread.currentThread().isInterrupted() )
-        {
+        if (Thread.currentThread().isInterrupted()) {
             throw new InterruptedIOException("Thread interrupted.");
         }
-        try
-        {
+        try {
             ucInStream.getEncoding();
-        }
-        catch ( IllegalStateException exp) 
-        {
-            if ( Thread.currentThread().isInterrupted() )
-            {
+        } catch (IllegalStateException exp) {
+            if (Thread.currentThread().isInterrupted()) {
                 throw new InterruptedIOException("Thread interrupted.");
-            }
-            else
-            {
+            } else {
                 NLogger.error(XMLBuilder.class, exp, exp);
             }
         }
-        DPhex phex = PhexXmlSaxParser.parsePhexXml( ucInStream );
+        DPhex phex = PhexXmlSaxParser.parsePhexXml(ucInStream);
         return phex;
     }
-    
-    public static byte[] serializeToBytes( DPhex dPhex ) 
-        throws IOException
-    {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream( );
+
+    public static byte[] serializeToBytes(DPhex dPhex)
+            throws IOException {
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
         PhexXmlSaxWriter.serializePhexXml(bos, dPhex);
         return bos.toByteArray();
     }
-    
-    public static void saveToFile( File file, DPhex dPhex )
-        throws IOException
-    {
-        try
-        {
+
+    public static void saveToFile(File file, DPhex dPhex)
+            throws IOException {
+        try {
             ManagedFile managedFile = Phex.getFileManager()
-                .getReadWriteManagedFile( file );
-            saveToFile( managedFile, dPhex );
-        }
-        catch ( ManagedFileException exp )
-        {
+                    .getReadWriteManagedFile(file);
+            saveToFile(managedFile, dPhex);
+        } catch (ManagedFileException exp) {
             // TODO refactor for Java 6
-            IOException ioexp = new IOException( );
-            ioexp.initCause( exp );
+            IOException ioexp = new IOException();
+            ioexp.initCause(exp);
             throw ioexp;
         }
     }
-    
-    public static void saveToFile( ManagedFile managedFile, DPhex dPhex )
-        throws IOException, ManagedFileException
-    {
+
+    public static void saveToFile(ManagedFile managedFile, DPhex dPhex)
+            throws IOException, ManagedFileException {
         ManagedFileOutputStream outStream = null;
-        try
-        {
+        try {
             managedFile.acquireFileLock();
-            managedFile.setLength( 0 );
-            outStream = new ManagedFileOutputStream( managedFile, 0 );
+            managedFile.setLength(0);
+            outStream = new ManagedFileOutputStream(managedFile, 0);
             PhexXmlSaxWriter.serializePhexXml(outStream, dPhex);
-        }
-        finally
-        {
-            IOUtil.closeQuietly( outStream );
-            IOUtil.closeQuietly( managedFile );
+        } finally {
+            IOUtil.closeQuietly(outStream);
+            IOUtil.closeQuietly(managedFile);
             managedFile.releaseFileLock();
         }
-    }    
+    }
 }

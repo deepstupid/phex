@@ -31,8 +31,7 @@ import java.util.NoSuchElementException;
  * priority is reached the oldest items of this priority are overwritten.
  * The priorities are indexed from 0 ( lowest priority ) to n ( highest priortiy ).
  */
-public class PriorityQueue
-{
+public class PriorityQueue {
     /**
      * The priority queues.
      */
@@ -48,105 +47,96 @@ public class PriorityQueue
      * Creates a new priority queue. The length of the capacities array represent
      * the number of used prioritys. The value of a array element defines the
      * capacity of a priority.
+     *
      * @param capacities The length of the capacities array represent
-     *        the number of used prioritys. The value of a array element defines
-     *        the capacity of a priority.
+     *                   the number of used prioritys. The value of a array element defines
+     *                   the capacity of a priority.
      */
-    public PriorityQueue( int[] capacities )
-    {
-        queues = new CircularQueue[ capacities.length ];
-        for ( int i = 0; i < capacities.length; i++ )
-        {
-            queues[i] = new CircularQueue( (int)Math.ceil( capacities[i] / 4.0 ),
-                capacities[i] );
+    public PriorityQueue(int[] capacities) {
+        queues = new CircularQueue[capacities.length];
+        for (int i = 0; i < capacities.length; i++) {
+            queues[i] = new CircularQueue((int) Math.ceil(capacities[i] / 4.0),
+                    capacities[i]);
         }
     }
 
     /**
      * Adds a element to the head of the given priority. If the capacity of this
      * priority is reached the tail element of the priority is removed and returned.
-     * @param obj The element to add.
+     *
+     * @param obj      The element to add.
      * @param priority The priority that this elements belongs to.
      */
-    public Object addToHead( Object obj, int priority )
-    {
-        if ( priority < 0 || priority >= queues.length )
-        {
-            throw new IllegalArgumentException( "Priority out of range: "
-                + priority );
+    public Object addToHead(Object obj, int priority) {
+        if (priority < 0 || priority >= queues.length) {
+            throw new IllegalArgumentException("Priority out of range: "
+                    + priority);
         }
-        Object dropObj = queues[priority].addToHead( obj );
-        if ( dropObj == null )
-        {// no element is dropped raise size...
+        Object dropObj = queues[priority].addToHead(obj);
+        if (dropObj == null) {// no element is dropped raise size...
             size++;
         }
         return dropObj;
     }
 
     /**
-     *
      * Removes and returns the element with the hightest priority.
+     *
      * @return
      * @throws NoSuchElementException
      */
-    public Object removeMaxPriority( )
-    	throws NoSuchElementException
-    {
-        for ( int i = queues.length - 1; i >= 0; i-- )
-        {
-            if ( queues[i].isEmpty() )
-            {
+    public Object removeMaxPriority()
+            throws NoSuchElementException {
+        for (int i = queues.length - 1; i >= 0; i--) {
+            if (queues[i].isEmpty()) {
                 continue;
             }
             // maintain size.
             size--;
             return queues[i].removeFromHead();
         }
-        throw new NoSuchElementException( "PriorityQueue is empty" );
+        throw new NoSuchElementException("PriorityQueue is empty");
     }
-    
+
     /**
      * Removes and returns a structure containing :
-     * the element with the highest priority 
+     * the element with the highest priority
      * the priority associated with the element
+     *
      * @return
      * @throws NoSuchElementException
      */
     public Object[] remove()
-        throws NoSuchElementException
-    {
-        for ( int i = queues.length - 1; i >= 0; i-- )
-        {
-            if ( queues[i].isEmpty() )
-            {
+            throws NoSuchElementException {
+        for (int i = queues.length - 1; i >= 0; i--) {
+            if (queues[i].isEmpty()) {
                 continue;
             }
             // maintain size.
             size--;
-            
+
             Object[] elementAndPriotity = new Object[2];
             elementAndPriotity[0] = queues[i].removeFromHead();
             elementAndPriotity[1] = i;
             return elementAndPriotity;
         }
-        throw new NoSuchElementException( "PriorityQueue is empty" );
+        throw new NoSuchElementException("PriorityQueue is empty");
     }
-    
+
     /**
      * Removes the object from all priorities
+     *
      * @param obj
      * @return
      */
-    public boolean removeFromAll( Object obj )
-    {
+    public boolean removeFromAll(Object obj) {
         boolean removed = false;
         for (CircularQueue queue1 : queues) {
             removed = removed | queue1.removeAll(obj);
         }
-        
+
         // elements have been removed.. recalculate the size
-        if ( removed ) 
-        {
+        if (removed) {
             size = 0;
             for (CircularQueue queue : queues) {
                 size += queue.getSize();
@@ -154,24 +144,22 @@ public class PriorityQueue
         }
         return removed;
     }
-    
-    public int getSize()
-    {
+
+    public int getSize() {
         return size;
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return size == 0;
     }
 
     /**
      * Returns true if the queue for the priority is full.
+     *
      * @param priority
      * @return
      */
-    public boolean isFull( int priority )
-    {
+    public boolean isFull(int priority) {
         return queues[priority].isFull();
     }
 
@@ -179,24 +167,20 @@ public class PriorityQueue
      * Clears the queues. Afterwards no elements from the queues can be accessed
      * anymore.
      */
-    public void clear()
-    {
+    public void clear() {
         for (CircularQueue queue : queues) {
             queue.clear();
         }
         size = 0;
     }
 
-    public Iterator iterator()
-    {
+    public Iterator iterator() {
         // TODO this could be improved with creating its own iterator...
         // but that would be more work ;-)
-        CompoundIterator iterator = new CompoundIterator( queues.length );
-        for ( int i = queues.length - 1; i >= 0; i-- )
-        {
-            if ( queues[i].getSize() > 0 )
-            {
-                iterator.addIterator( queues[i].iterator() );
+        CompoundIterator iterator = new CompoundIterator(queues.length);
+        for (int i = queues.length - 1; i >= 0; i--) {
+            if (queues[i].getSize() > 0) {
+                iterator.addIterator(queues[i].iterator());
             }
         }
         return iterator;

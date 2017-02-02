@@ -31,42 +31,38 @@ import java.util.TreeMap;
 /**
  * @author Madhu
  */
-public class UdpGuidRoutingTable
-{
+public class UdpGuidRoutingTable {
     /**
      * The max number of entries in a single route table. This could lead to have
      * a total of 2 * MAX_ROUTE_TABLE_SIZE entrys in total.
      */
     private static final int MAX_ROUTE_TABLE_SIZE = 50;
-    
-    protected Map<GUID, DestAddress> currentMap;
-    protected Map<GUID, DestAddress> lastMap;
-    
     /**
      * The lifetime of a map. After this number of millis passed the lastMap will be
      * replaced by the currentMap.
      */
     private final long lifetime;
-
+    protected Map<GUID, DestAddress> currentMap;
+    protected Map<GUID, DestAddress> lastMap;
     /**
      * The time when the next replace is done and the lastMap will be
      * replaced by the currentMap.
      */
     private long nextReplaceTime;
-    
+
     /**
      * The routing table will store at least lifetime to 2 * lifetime of GUID
      * mappings.
+     *
      * @param lifetime the lifetime in millis of a map. After this time is passed
-     * the lastMap will be replaced by the currentMap.
+     *                 the lastMap will be replaced by the currentMap.
      */
-    public UdpGuidRoutingTable( long lifetime )
-    {
+    public UdpGuidRoutingTable(long lifetime) {
         this.lifetime = lifetime;
-        currentMap = new TreeMap<GUID, DestAddress>( new GUID.GUIDComparator() );
-        lastMap = new TreeMap<GUID, DestAddress>( new GUID.GUIDComparator() );
+        currentMap = new TreeMap<GUID, DestAddress>(new GUID.GUIDComparator());
+        lastMap = new TreeMap<GUID, DestAddress>(new GUID.GUIDComparator());
     }
-    
+
     /**
      * Checks if a routing for the GUID is already available. If the routing is
      * already available, we return false to indicate the message was already
@@ -78,10 +74,9 @@ public class UdpGuidRoutingTable
      * already available, to indicate the message was already
      * routed. If the routing is not available it is added and true is returned.
      */
-    public synchronized boolean checkAndAddRouting( GUID guid, DestAddress address )
-    {
+    public synchronized boolean checkAndAddRouting(GUID guid, DestAddress address) {
         checkForSwitch();
-        
+
 //        // check if still connected.
 //        NetworkHostsContainer netContainer = 
 //            HostManager.getInstance().getNetworkHostsContainer();
@@ -89,28 +84,20 @@ public class UdpGuidRoutingTable
 //        {
 //            return false;
 //        }
-        
-        if ( !currentMap.containsKey( guid ) && !lastMap.containsKey( guid ) )
-        {
-            // update or add guid routing to new host in currentMap
-            currentMap.put( guid, address );
-            return true;
+
+        if (!lastMap.containsKey(guid)) {
+            return currentMap.putIfAbsent(guid, address) == null;
         }
-        else
-        {
-            return false;
-        }
+        return false;
     }
-    
+
     /**
      * Check to delete old entries. If the lifetime has passed.
      */
-    protected void checkForSwitch()
-    {
+    protected void checkForSwitch() {
         long currentTime = System.currentTimeMillis();
         // check if enough time has passed or the map size reached the max.
-        if ( currentTime < nextReplaceTime && currentMap.size() < MAX_ROUTE_TABLE_SIZE )
-        {
+        if (currentTime < nextReplaceTime && currentMap.size() < MAX_ROUTE_TABLE_SIZE) {
             return;
         }
 
@@ -119,60 +106,55 @@ public class UdpGuidRoutingTable
         lastMap = currentMap;
         currentMap = temp;
         nextReplaceTime = currentTime + lifetime;
-        return;
     }
-    
+
     /**
      * Trys to find the Host address for the given GUID.
+     *
      * @param guid the GUID for which the address is to be found.
      * @return the Hostaddress associated with the guid.
      */
-    public synchronized DestAddress getRouting( GUID guid )
-    {
+    public synchronized DestAddress getRouting(GUID guid) {
         DestAddress address = null;
-        
+
         // first check in the current map
-        address = currentMap.get( guid );
-        if( address != null )
-        {
+        address = currentMap.get(guid);
+        if (address != null) {
             return address;
         }
-        
+
         // now check in the last map
-        address = lastMap.get( guid );
-        if( address != null )
-        {
+        address = lastMap.get(guid);
+        if (address != null) {
             return address;
         }
-        
+
         //not found
         return null;
     }
-    
+
     /**
      * Trys to find the Host address for the given GUID.
+     *
      * @param guid the GUID for which the address is to be found.
-     * @return the Hostaddress associated with the guid if present 
+     * @return the Hostaddress associated with the guid if present
      * or null
      */
-    public synchronized DestAddress getAndRemoveRouting( GUID guid )
-    {
+    public synchronized DestAddress getAndRemoveRouting(GUID guid) {
         DestAddress address = null;
-        
+
         // first check in the current map
-        address = currentMap.remove( guid );
-        if( address != null )
-        {
+        address = currentMap.remove(guid);
+        if (address != null) {
             return address;
         }
-        
+
         // now check in the last map
-        address = lastMap.remove( guid );
-        if( address != null )
-        {
+        address = lastMap.remove(guid);
+        if (address != null) {
             return address;
         }
-        
+
         //not found
         return null;
     }

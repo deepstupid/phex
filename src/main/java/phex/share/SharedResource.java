@@ -28,37 +28,34 @@ import java.io.File;
  * Represents a shared resource on the file system.
  * This can be a file or directory.
  */
-public abstract class SharedResource
-{
+public abstract class SharedResource {
     protected File systemFile;
-    
-    public SharedResource( File file )
-    {
+
+    public SharedResource(File file) {
         systemFile = file;
     }
-    
+
     /**
      * Only called from subclasses like PartialShareFile.
      */
-    protected SharedResource( )
-    {
+    protected SharedResource() {
     }
 
     /**
      * Returns the backed file object.
+     *
      * @return the backed file object.
      */
-    public File getSystemFile()
-    {
+    public File getSystemFile() {
         return systemFile;
     }
 
     /**
      * Returns the file name without path information.
+     *
      * @return the file name without path information.
      */
-    public String getFileName()
-    {
+    public String getFileName() {
         return systemFile.getName();
     }
 
@@ -66,12 +63,11 @@ public abstract class SharedResource
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int prime = 307;
         int result = 1;
         result = prime * result
-            + ((systemFile == null) ? 0 : systemFile.hashCode());
+                + ((systemFile == null) ? 0 : systemFile.hashCode());
         return result;
     }
 
@@ -79,24 +75,21 @@ public abstract class SharedResource
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj)
-    {
-        if ( this == obj )
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if ( obj == null )
+        if (obj == null)
             return false;
-        if ( getClass() != obj.getClass() )
+        if (getClass() != obj.getClass())
             return false;
         final SharedResource other = (SharedResource) obj;
-        if ( systemFile == null )
-        {
-            if ( other.systemFile != null )
+        if (systemFile == null) {
+            if (other.systemFile != null)
                 return false;
-        }
-        else if ( !systemFile.equals( other.systemFile ) )
+        } else if (!systemFile.equals(other.systemFile))
             return false;
         return true;
     }
-    
-    
+
+
 }

@@ -24,11 +24,12 @@ package phex.common.file;
 import phex.io.buffer.ByteBuffer;
 
 
-public interface ReadOnlyManagedFile
-{
+public interface ReadOnlyManagedFile {
     int read(ByteBuffer buffer, long pos)
-        throws ManagedFileException;
+            throws ManagedFileException;
+
     void closeFile()
-        throws ManagedFileException;
+            throws ManagedFileException;
+
     long getLength();
 }

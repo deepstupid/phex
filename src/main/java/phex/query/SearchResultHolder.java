@@ -33,121 +33,102 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * Holds search results of a Search.
  */
-public class SearchResultHolder
-{
+public class SearchResultHolder {
     /**
      * The list of query hits returned by the query. Contains the RemoteFile
      * objects.
      */
     private final List<RemoteFile> queryHitList;
-    
-    protected SearchResultHolder()
-    {
+
+    protected SearchResultHolder() {
         queryHitList = new CopyOnWriteArrayList<>();
     }
-    
-    public void addQueryHit( RemoteFile remoteFile )
-    {
+
+    public void addQueryHit(RemoteFile remoteFile) {
         queryHitList.add(remoteFile);
     }
-    
+
     /**
      * Returns the query hit count.
      */
-    public int getQueryHitCount()
-    {
+    public int getQueryHitCount() {
         return queryHitList.size();
     }
-    
+
     /**
      * Returns the query hit at the given index.
      */
-    public RemoteFile getQueryHit( int index )
-    {
-        if ( index < 0 || index >= queryHitList.size() )
-        {
+    public RemoteFile getQueryHit(int index) {
+        if (index < 0 || index >= queryHitList.size()) {
             return null;
         }
-        return queryHitList.get( index );
+        return queryHitList.get(index);
 
     }
 
     /**
      * Returns the query hits at the given indices.
      */
-    public RemoteFile[] getQueryHits( int[] indices )
-    {
+    public RemoteFile[] getQueryHits(int[] indices) {
         RemoteFile[] results = new RemoteFile[indices.length];
-        for ( int i = 0; i < indices.length; i++ )
-        {
-            results[i] = queryHitList.get( indices[i] );
+        for (int i = 0; i < indices.length; i++) {
+            results[i] = queryHitList.get(indices[i]);
         }
         return results;
     }
-    
+
     /**
      * Trys to find a query hit in the search results. It will first check for
      * hostGUID and URN if no URN is provided it will use fileName, fileSize and
      * fileIndex to indentify a file.
      * If not query hit is found null is returned.
-     * @param hostGUID the host GUID to look for.
-     * @param urn the host URN to look for.
-     * @param fileName The file name to look for if no URN is provided.
-     * @param fileSize The file size to look for if no URN is provided.
+     *
+     * @param hostGUID  the host GUID to look for.
+     * @param urn       the host URN to look for.
+     * @param fileName  The file name to look for if no URN is provided.
+     * @param fileSize  The file size to look for if no URN is provided.
      * @param fileIndex The file index to look for if no URN is provided.
      * @return The RemoteFile if found or null otherwise.
      */
-    public RemoteFile findQueryHit( QueryHitHost qhh, URN urn,
-        String fileName, long fileSize, int fileIndex )
-    {
+    public RemoteFile findQueryHit(QueryHitHost qhh, URN urn,
+                                   String fileName, long fileSize, int fileIndex) {
         GUID fileHostGUID;
         GUID hostGUID = qhh.getHostGUID();
         DestAddress hostAddress = qhh.getHostAddress();
 
         int size = queryHitList.size();
-        for ( int i = 0; i < size; i++ )
-        {
-            RemoteFile file = queryHitList.get( i );
+        for (int i = 0; i < size; i++) {
+            RemoteFile file = queryHitList.get(i);
 
             fileHostGUID = file.getRemoteClientID();
-            
+
             boolean foundMatch = false;
             // first try by comparing GUIDs if possible
-            if ( fileHostGUID != null && hostGUID != null )
-            {
-                if ( fileHostGUID.equals( hostGUID ) )
-                {
+            if (fileHostGUID != null && hostGUID != null) {
+                if (fileHostGUID.equals(hostGUID)) {
                     foundMatch = true;
                 }
             }
-            
-            if ( !foundMatch )
-            {// now try by comparing IP:port
+
+            if (!foundMatch) {// now try by comparing IP:port
                 DestAddress fileHostAddress = file.getHostAddress();
-                if ( fileHostAddress.equals( hostAddress ) )
-                {
+                if (fileHostAddress.equals(hostAddress)) {
                     foundMatch = true;
                 }
             }
-            
-            if ( !foundMatch )
-            {
+
+            if (!foundMatch) {
                 continue;
             }
 
-            if ( urn != null && file.getURN() != null )
-            {
-                if ( urn.equals( file.getURN() ) )
-                {
+            if (urn != null && file.getURN() != null) {
+                if (urn.equals(file.getURN())) {
                     return file;
                 }
-            }
-            else
-            {
-                if ( fileIndex == file.getFileIndex()
-                    && fileSize == file.getFileSize()
-                    && fileName.equals( file.getFilename() ) )
-                {
+            } else {
+                if (fileIndex == file.getFileIndex()
+                        && fileSize == file.getFileSize()
+                        && fileName.equals(file.getFilename())) {
                     return file;
                 }
             }

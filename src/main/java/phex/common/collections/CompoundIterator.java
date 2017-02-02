@@ -31,8 +31,7 @@ import java.util.NoSuchElementException;
  * with each other.
  */
 // TODO3 could be replaced by org.apache.commons.collections.iterators.IteratorChain.
-public class CompoundIterator implements Iterator
-{
+public class CompoundIterator implements Iterator {
     /**
      * The list of iterators.
      */
@@ -43,50 +42,41 @@ public class CompoundIterator implements Iterator
      */
     private int counter;
 
-    public CompoundIterator( int numberOfIterators )
-    {
+    public CompoundIterator(int numberOfIterators) {
         iteratorList = new ArrayList<>(numberOfIterators);
         counter = 0;
     }
 
-    public void addIterator( Iterator iterator )
-    {
-        iteratorList.add( iterator );
+    public void addIterator(Iterator iterator) {
+        iteratorList.add(iterator);
     }
 
-    public boolean hasNext()
-    {
-        while ( counter < iteratorList.size() )
-        {
-            Iterator current = iteratorList.get( counter );
-            if ( current.hasNext() )
-            {
+    public boolean hasNext() {
+        while (counter < iteratorList.size()) {
+            Iterator current = iteratorList.get(counter);
+            if (current.hasNext()) {
                 return true;
             }
-            counter ++;
+            counter++;
         }
         return false;
     }
 
-    public Object next()
-    {
-        while ( counter < iteratorList.size())
-        {
-            Iterator current = iteratorList.get( counter );
-            if ( current.hasNext())
-            {
+    public Object next() {
+        while (counter < iteratorList.size()) {
+            Iterator current = iteratorList.get(counter);
+            if (current.hasNext()) {
                 return current.next();
             }
             counter++;
         }
-        throw new NoSuchElementException( "No more elements in iterator." );
+        throw new NoSuchElementException("No more elements in iterator.");
     }
 
     /**
      * This operation is not supported.
      */
-    public void remove()
-    {
+    public void remove() {
         throw new UnsupportedOperationException();
     }
 }

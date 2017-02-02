@@ -32,91 +32,72 @@ import java.io.PushbackInputStream;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.zip.DataFormatException;
 
 // TODO extend this class to also support writing of huge blocks.
-public class HUGEBlock
-{
+public class HUGEBlock {
     private GGEPBlock[] ggepBlocks = null;
 
     private Set<URN> urns = null;
 
     private Set<String> others = null;
-    
-    public HUGEBlock( byte[] data )
-    {
-        ByteArrayOutputStream tempBuffer = new ByteArrayOutputStream(64);
-        
-        ByteArrayInputStream baInStream = new ByteArrayInputStream( data );
-        PushbackInputStream inStream = new PushbackInputStream( 
-            baInStream );
 
-        try
-        {
+    public HUGEBlock(byte[] data) {
+        ByteArrayOutputStream tempBuffer = new ByteArrayOutputStream(64);
+
+        ByteArrayInputStream baInStream = new ByteArrayInputStream(data);
+        PushbackInputStream inStream = new PushbackInputStream(
+                baInStream);
+
+        try {
             byte b;
-            while( true )
-            {
-                b = (byte)inStream.read();
-                if( b == -1 || b == 0x00 )
-                {
+            while (true) {
+                b = (byte) inStream.read();
+                if (b == -1 || b == 0x00) {
                     break;
                 }
                 // GGEP
-                if ( b == GGEPBlock.MAGIC_NUMBER )
-                {
+                if (b == GGEPBlock.MAGIC_NUMBER) {
                     inStream.unread(b);
-                    parseGGEPBlock( inStream );
-                }
-                else
-                { // HUGE
+                    parseGGEPBlock(inStream);
+                } else { // HUGE
                     tempBuffer.reset();
-                    while ( true )
-                    {
+                    while (true) {
                         tempBuffer.write(b);
-                        b = (byte)inStream.read();
-                        if( b == -1 || b == 0x1c )
-                        {
+                        b = (byte) inStream.read();
+                        if (b == -1 || b == 0x1c) {
                             break;
                         }
                     }
-                    if ( b == -1 || b == 0x1c )
-                    {
-                        try
-                        {
-                            String extString = new String( tempBuffer.toByteArray(), "UTF-8" );
-                            
+                    if (b == -1 || b == 0x1c) {
+                        try {
+                            String extString = new String(tempBuffer.toByteArray(), "UTF-8");
+
                             // first check if this is a query by URN
                             // ( urn:<NID>:<NSS> )
-                            if ( URN.isValidURN( extString ) )
-                            {
-                                URN urn = new URN( extString );
-                                if ( urns == null )
-                                {
+                            if (URN.isValidURN(extString)) {
+                                URN urn = new URN(extString);
+                                if (urns == null) {
                                     urns = new HashSet<>(3);
                                 }
-                                urns.add( urn );
+                                urns.add(urn);
                             }
                             // TODO3 we dont track URN type request yet. we always 
                             // return sha1 type urns on query replies since there is
                             // currently only one known urn type
-                            else
-                            {
+                            else {
                                 // other extensions, might be rich query XML
-                                if ( others == null )
-                                {
+                                if (others == null) {
                                     others = new HashSet<>(3);
                                 }
-                                others.add( extString );
+                                others.add(extString);
                             }
-                        }
-                        catch (IOException exp)
-                        {
+                        } catch (IOException exp) {
                         }
                     }
                 }
             }
-        }
-        catch (IOException exp)
-        {// should not happen
+        } catch (IOException exp) {// should not happen
             NLogger.error(HUGEBlock.class, exp, exp);
         }
     }
@@ -125,43 +106,30 @@ public class HUGEBlock
      * @param offset
      * @return
      */
-    private void parseGGEPBlock( PushbackInputStream inStream )
-    {
-        try
-        {
-            GGEPBlock[] ggeps = GGEPBlock.parseGGEPBlocks( inStream );
+    private void parseGGEPBlock(PushbackInputStream inStream) {
+        try {
+            GGEPBlock[] ggeps = GGEPBlock.parseGGEPBlocks(inStream);
             ggepBlocks = ggeps;
-        }
-        catch ( InvalidGGEPBlockException | IOException exp )
-        {
+        } catch (InvalidGGEPBlockException | IOException exp) {
         }
     }
 
-    public GGEPBlock[] getGGEPBlocks()
-    {
+    public GGEPBlock[] getGGEPBlocks() {
         return ggepBlocks;
     }
 
-    public Set<URN> getURNS()
-    {
-        if ( urns == null )
-        {
+    public Set<URN> getURNS() {
+        if (urns == null) {
             return Collections.emptySet();
-        }
-        else
-        {
+        } else {
             return urns;
         }
     }
 
-    public Set<String> getOthers()
-    {
-        if ( others == null )
-        {
+    public Set<String> getOthers() {
+        if (others == null) {
             return Collections.emptySet();
-        }
-        else
-        {
+        } else {
             return others;
         }
     }

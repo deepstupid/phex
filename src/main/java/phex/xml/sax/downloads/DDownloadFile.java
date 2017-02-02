@@ -27,261 +27,209 @@ import phex.xml.sax.DElement;
 import phex.xml.sax.DSubElementList;
 import phex.xml.sax.PhexXmlSaxWriter;
 
-public class DDownloadFile implements DElement
-{
+public class DDownloadFile implements DElement {
     public static final String ELEMENT_NAME = "swDownloadFile";
-
+    private final DSubElementList<DDownloadCandidate> candidateList;
+    private final DSubElementList<DDownloadScope> unverifiedScopesList;
+    private final DSubElementList<DDownloadScope> finishedScopesList;
     private String localFileName;
     private String destinationDirectory;
     private String incompleteFileName;
-
     private String searchTerm;
-
     private String fileURN;
-
     private String scopeSelectionStrategy;
-
     private boolean hasStatus;
-
     private int status;
-
     private boolean hasCreationTime;
     private long creationTime;
-
     private boolean hasModificationTime;
     private long modificationTime;
-
     private boolean hasFileSize;
-
     private long fileSize;
 
-    private final DSubElementList<DDownloadCandidate> candidateList;
-    
-    private final DSubElementList<DDownloadScope> unverifiedScopesList;
-
-    private final DSubElementList<DDownloadScope> finishedScopesList;
-    
-    public DDownloadFile()
-    {
-        candidateList = new DSubElementList<DDownloadCandidate>(  );
-        unverifiedScopesList = new DSubElementList<DDownloadScope>(  );
-        finishedScopesList = new DSubElementList<DDownloadScope>(  );
+    public DDownloadFile() {
+        candidateList = new DSubElementList<DDownloadCandidate>();
+        unverifiedScopesList = new DSubElementList<DDownloadScope>();
+        finishedScopesList = new DSubElementList<DDownloadScope>();
     }
 
     /**
      * @return the destinationDirectory
      */
-    public String getDestinationDirectory()
-    {
+    public String getDestinationDirectory() {
         return destinationDirectory;
     }
 
     /**
      * @param destinationDirectory the destinationDirectory to set
      */
-    public void setDestinationDirectory( String destinationDirectory )
-    {
+    public void setDestinationDirectory(String destinationDirectory) {
         this.destinationDirectory = destinationDirectory;
     }
 
-    public long getCreationTime()
-    {
+    public long getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime( long creationTime )
-    {
+    public void setCreationTime(long creationTime) {
         this.creationTime = creationTime;
         hasCreationTime = true;
     }
 
-    public long getFileSize()
-    {
+    public long getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize( long fileSize )
-    {
+    public void setFileSize(long fileSize) {
         this.fileSize = fileSize;
         hasFileSize = true;
     }
 
-    public String getFileURN()
-    {
+    public String getFileURN() {
         return fileURN;
     }
 
-    public void setFileURN( String fileURN )
-    {
+    public void setFileURN(String fileURN) {
         this.fileURN = fileURN;
     }
 
-    public String getIncompleteFileName()
-    {
+    public String getIncompleteFileName() {
         return incompleteFileName;
     }
 
-    public void setIncompleteFileName( String incompleteFileName )
-    {
+    public void setIncompleteFileName(String incompleteFileName) {
         this.incompleteFileName = incompleteFileName;
     }
 
-    public String getLocalFileName()
-    {
+    public String getLocalFileName() {
         return localFileName;
     }
 
-    public void setLocalFileName( String localFileName )
-    {
+    public void setLocalFileName(String localFileName) {
         this.localFileName = localFileName;
     }
 
-    public long getModificationTime()
-    {
+    public long getModificationTime() {
         return modificationTime;
     }
 
-    public void setModificationTime( long modificationTime )
-    {
+    public void setModificationTime(long modificationTime) {
         this.modificationTime = modificationTime;
         hasModificationTime = true;
     }
 
-    public String getScopeSelectionStrategy()
-    {
+    public String getScopeSelectionStrategy() {
         return scopeSelectionStrategy;
     }
 
-    public void setScopeSelectionStrategy( String scopeSelectionStrategy )
-    {
+    public void setScopeSelectionStrategy(String scopeSelectionStrategy) {
         this.scopeSelectionStrategy = scopeSelectionStrategy;
     }
 
-    public String getSearchTerm()
-    {
+    public String getSearchTerm() {
         return searchTerm;
     }
 
-    public void setSearchTerm( String searchTerm )
-    {
+    public void setSearchTerm(String searchTerm) {
         this.searchTerm = searchTerm;
     }
 
-    public int getStatus()
-    {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus( int status )
-    {
+    public void setStatus(int status) {
         this.status = status;
         hasStatus = true;
     }
 
-    public DSubElementList<DDownloadCandidate> getCandidateList()
-    {
+    public DSubElementList<DDownloadCandidate> getCandidateList() {
         return candidateList;
     }
 
-    public DSubElementList<DDownloadScope> getUnverifiedScopesList()
-    {
+    public DSubElementList<DDownloadScope> getUnverifiedScopesList() {
         return unverifiedScopesList;
     }
-    
-    public DSubElementList<DDownloadScope> getFinishedScopesList()
-    {
+
+    public DSubElementList<DDownloadScope> getFinishedScopesList() {
         return finishedScopesList;
     }
 
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
 
-        if ( localFileName != null )
-        {
-            writer.startElm( "localfilename", null );
-            writer.elmText( localFileName );
-            writer.endElm( "localfilename" );
-        }
-        
-        if ( destinationDirectory != null )
-        {
-            writer.startElm( "dest-dir", null );
-            writer.elmText( destinationDirectory );
-            writer.endElm( "dest-dir" );
+        if (localFileName != null) {
+            writer.startElm("localfilename", null);
+            writer.elmText(localFileName);
+            writer.endElm("localfilename");
         }
 
-        if ( incompleteFileName != null )
-        {
-            writer.startElm( "incomplete-file-name", null );
-            writer.elmText( incompleteFileName );
-            writer.endElm( "incomplete-file-name" );
+        if (destinationDirectory != null) {
+            writer.startElm("dest-dir", null);
+            writer.elmText(destinationDirectory);
+            writer.endElm("dest-dir");
         }
 
-        if ( searchTerm != null )
-        {
-            writer.startElm( "searchterm", null );
-            writer.elmText( searchTerm );
-            writer.endElm( "searchterm" );
+        if (incompleteFileName != null) {
+            writer.startElm("incomplete-file-name", null);
+            writer.elmText(incompleteFileName);
+            writer.endElm("incomplete-file-name");
         }
 
-        if ( fileURN != null )
-        {
-            writer.startElm( "file-urn", null );
-            writer.elmText( fileURN );
-            writer.endElm( "file-urn" );
+        if (searchTerm != null) {
+            writer.startElm("searchterm", null);
+            writer.elmText(searchTerm);
+            writer.endElm("searchterm");
         }
 
-        if ( scopeSelectionStrategy != null )
-        {
-            writer.startElm( "scope-strategy", null );
-            writer.elmText( scopeSelectionStrategy );
-            writer.endElm( "scope-strategy" );
+        if (fileURN != null) {
+            writer.startElm("file-urn", null);
+            writer.elmText(fileURN);
+            writer.endElm("file-urn");
         }
 
-        if ( hasStatus )
-        {
-            writer.startElm( "status", null );
-            writer.elmInt( status );
-            writer.endElm( "status" );
+        if (scopeSelectionStrategy != null) {
+            writer.startElm("scope-strategy", null);
+            writer.elmText(scopeSelectionStrategy);
+            writer.endElm("scope-strategy");
         }
 
-        if ( hasCreationTime )
-        {
-            writer.startElm( "created-time", null );
-            writer.elmLong( creationTime );
-            writer.endElm( "created-time" );
+        if (hasStatus) {
+            writer.startElm("status", null);
+            writer.elmInt(status);
+            writer.endElm("status");
         }
 
-        if ( hasModificationTime )
-        {
-            writer.startElm( "modified-time", null );
-            writer.elmLong( modificationTime );
-            writer.endElm( "modified-time" );
+        if (hasCreationTime) {
+            writer.startElm("created-time", null);
+            writer.elmLong(creationTime);
+            writer.endElm("created-time");
         }
 
-        if ( hasFileSize )
-        {
-            writer.startElm( "filesize", null );
-            writer.elmLong( fileSize );
-            writer.endElm( "filesize" );
+        if (hasModificationTime) {
+            writer.startElm("modified-time", null);
+            writer.elmLong(modificationTime);
+            writer.endElm("modified-time");
         }
 
-        if ( candidateList != null && !candidateList.getSubElementList().isEmpty() )
-        {
-            candidateList.serialize( writer );
-        }
-        
-        if ( unverifiedScopesList != null && !unverifiedScopesList.getSubElementList().isEmpty() )
-        {
-            unverifiedScopesList.serialize( writer );
-        }
-        
-        if ( finishedScopesList != null && !finishedScopesList.getSubElementList().isEmpty() )
-        {
-            finishedScopesList.serialize( writer );
+        if (hasFileSize) {
+            writer.startElm("filesize", null);
+            writer.elmLong(fileSize);
+            writer.endElm("filesize");
         }
 
-        writer.endElm( ELEMENT_NAME );
+        if (candidateList != null && !candidateList.getSubElementList().isEmpty()) {
+            candidateList.serialize(writer);
+        }
+
+        if (unverifiedScopesList != null && !unverifiedScopesList.getSubElementList().isEmpty()) {
+            unverifiedScopesList.serialize(writer);
+        }
+
+        if (finishedScopesList != null && !finishedScopesList.getSubElementList().isEmpty()) {
+            finishedScopesList.serialize(writer);
+        }
+
+        writer.endElm(ELEMENT_NAME);
     }
 }

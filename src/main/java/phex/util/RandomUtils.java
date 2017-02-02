@@ -23,29 +23,26 @@ package phex.util;
 
 import java.util.Random;
 
-public class RandomUtils
-{
+public class RandomUtils {
     public static final Random RANDOM = new Random();
-    
-    public static byte[] getBytes( int count )
-    {
-        byte[] res = new byte[ count ];
-        RANDOM.nextBytes( res );
+
+    public static byte[] getBytes(int count) {
+        byte[] res = new byte[count];
+        RANDOM.nextBytes(res);
         return res;
     }
-    
+
     /**
      * Returns an int between 0 (inclusive) and maxValue (exclusive).
+     *
      * @param maxValue the maximal value to allow
      * @return an int between 0 (inclusive) and maxValue (exclusive).
      */
-    public static int getInt( int maxValue )
-    {
-        return RANDOM.nextInt( maxValue );
+    public static int getInt(int maxValue) {
+        return RANDOM.nextInt(maxValue);
     }
-    
-    public static long getLong()
-    {
+
+    public static long getLong() {
         return RANDOM.nextLong();
     }
 }

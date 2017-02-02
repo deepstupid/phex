@@ -24,7 +24,10 @@ package phex.servent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.chat.ChatService;
-import phex.common.*;
+import phex.common.AbstractLifeCycle;
+import phex.common.GnutellaNetwork;
+import phex.common.LifeCycle;
+import phex.common.MultipleException;
 import phex.common.address.DestAddress;
 import phex.common.bandwidth.BandwidthManager;
 import phex.download.swarming.SwarmingManager;
@@ -56,58 +59,35 @@ public class Servent extends AbstractLifeCycle implements ServentInfo {
     private static final Logger logger = LoggerFactory.getLogger(Servent.class);
 
     private static final Servent servent = new Servent();
-
-    public static Servent getInstance() {
-        return servent;
-    }
-
     private final List<LifeCycle> dependentLifeCycles;
-
+    private final Server server;
+    private final UdpService udpService;
+    // hold reference to not loose to GC.
+    @SuppressWarnings("unused")
+    private final OnlineObserver onlineObserver;
+    private final HostFetchingStrategy hostFetchingStrategy;
+    private final ChatService chatService;
+    private final MessageService messageService;
+    private final UploadManager uploadService;
+    private final QueryManager queryService;
+    private final HostManager hostService;
+    private final PhexSecurityManager securityService;
+    private final SharedFilesService sharedFilesService;
+    private final BandwidthManager bandwidthService;
+    private final StatisticsManager statisticsService;
+    private final SwarmingManager downloadService;
     /**
      * The GUID of the servent. Derived from NetworkPrefs.ServentGuid
      */
     private GUID serventGuid;
-
     /**
      * The Gnutella Network configuration and settings separation class.
      */
     private GnutellaNetwork gnutellaNetwork;
-
-    private final Server server;
-
-    private final UdpService udpService;
-
     /**
      * The online status of the servent.
      */
     private OnlineStatus onlineStatus;
-
-    // hold reference to not loose to GC.
-    @SuppressWarnings("unused")
-    private final OnlineObserver onlineObserver;
-
-    private final HostFetchingStrategy hostFetchingStrategy;
-
-    private final ChatService chatService;
-
-    private final MessageService messageService;
-
-    private final UploadManager uploadService;
-
-    private final QueryManager queryService;
-
-    private final HostManager hostService;
-
-    private final PhexSecurityManager securityService;
-
-    private final SharedFilesService sharedFilesService;
-
-    private final BandwidthManager bandwidthService;
-
-    private final StatisticsManager statisticsService;
-
-    private final SwarmingManager downloadService;
-
     private UltrapeerCapabilityChecker upChecker;
 
     private Servent() {
@@ -145,7 +125,7 @@ public class Servent extends AbstractLifeCycle implements ServentInfo {
         sharedFilesService = new SharedFilesService(this);
         dependentLifeCycles.add(sharedFilesService);
 
-        downloadService = new SwarmingManager(this, Phex.getEventService(), sharedFilesService);
+        downloadService = new SwarmingManager(this, sharedFilesService);
         dependentLifeCycles.add(downloadService);
 
         bandwidthService = new BandwidthManager();
@@ -176,6 +156,10 @@ public class Servent extends AbstractLifeCycle implements ServentInfo {
         server = new OIOServer(this);//new JettyServer();
 
         udpService = new UdpService(NetworkPrefs.ListeningPort.get().intValue());
+    }
+
+    public static Servent getInstance() {
+        return servent;
     }
 
     @Override

@@ -39,40 +39,44 @@ import java.util.Vector;
  * as the internal algorithm (using the approach as revised
  * in December 2002, to add unique prefixes to leaf and node
  * operations)
- *
+ * <p>
  * For simplicity, calculates one entire generation before
  * starting on the next. A more space-efficient approach
  * would use a stack, and calculate each node as soon as
  * its children ara available.
  */
-public class TigerTree extends MessageDigest
-{
+public class TigerTree extends MessageDigest {
     private static final int BLOCKSIZE = 1024;
 
     private static final double fblockSize = 1024.0;
 
     private static final int HASHSIZE = 24;
 
-    /** 1024 byte buffer */
+    /**
+     * 1024 byte buffer
+     */
     private final byte[] buffer;
-
-    int count = 0;
-
-    /** Buffer offset */
-    private int bufferOffset;
-
-    /** Offset in serialization*/
-    private int serializationOffset = 0;
-
-    private int serializationLeavesOffset = 0;
-
-    /** Number of bytes hashed until now. */
-    private long byteCount;
-
-    /** Internal Tiger MD instance */
+    /**
+     * Internal Tiger MD instance
+     */
     private final MessageDigest tiger;
-
-    /** Interim tree node hash values */
+    int count = 0;
+    /**
+     * Buffer offset
+     */
+    private int bufferOffset;
+    /**
+     * Offset in serialization
+     */
+    private int serializationOffset = 0;
+    private int serializationLeavesOffset = 0;
+    /**
+     * Number of bytes hashed until now.
+     */
+    private long byteCount;
+    /**
+     * Interim tree node hash values
+     */
     private Vector nodes;
 
     /**
@@ -95,8 +99,7 @@ public class TigerTree extends MessageDigest
      * Constructor
      */
     public TigerTree(long filesize, int serializSize, int levelsLeft)
-        throws NoSuchAlgorithmException
-    {
+            throws NoSuchAlgorithmException {
         super("TigerTree");
         buffer = new byte[BLOCKSIZE];
         bufferOffset = 0;
@@ -121,8 +124,7 @@ public class TigerTree extends MessageDigest
     }
 
     public TigerTree(int levelsLeft, int digestSize, int serializSize,
-        Vector nodes, boolean check) throws NoSuchAlgorithmException
-    {
+                     Vector nodes, boolean check) throws NoSuchAlgorithmException {
         super("TigerTree");
         buffer = new byte[BLOCKSIZE];
         bufferOffset = 0;
@@ -146,8 +148,7 @@ public class TigerTree extends MessageDigest
 
     }
 
-    public TigerTree() throws NoSuchAlgorithmException
-    {
+    public TigerTree() throws NoSuchAlgorithmException {
         super("TigerTree");
         buffer = new byte[BLOCKSIZE];
         bufferOffset = 0;
@@ -167,8 +168,7 @@ public class TigerTree extends MessageDigest
         nodes = new Vector();
     }
 
-    public byte[] calculate(byte[] buf)
-    {
+    public byte[] calculate(byte[] buf) {
         tiger.reset();
         tiger.update((byte) 0); // leaf prefix
         tiger.update(buf, 0, 0);
@@ -176,34 +176,28 @@ public class TigerTree extends MessageDigest
         return (byte[]) dig;
     }
 
-    protected int engineGetDigestLength()
-    {
+    protected int engineGetDigestLength() {
         return HASHSIZE;
     }
 
-    protected byte[] getSerialization()
-    {
+    protected byte[] getSerialization() {
         return serialization;
     }
 
-    protected void engineUpdate(byte in)
-    {
+    protected void engineUpdate(byte in) {
         byteCount += 1;
         buffer[bufferOffset++] = in;
-        if (bufferOffset == BLOCKSIZE)
-        {
+        if (bufferOffset == BLOCKSIZE) {
             blockUpdate();
             bufferOffset = 0;
         }
     }
 
-    protected void engineUpdate(byte[] in, int offset, int length)
-    {
+    protected void engineUpdate(byte[] in, int offset, int length) {
         byteCount += length;
 
         int remaining;
-        while (length >= (remaining = BLOCKSIZE - bufferOffset))
-        {
+        while (length >= (remaining = BLOCKSIZE - bufferOffset)) {
             System.arraycopy(in, offset, buffer, bufferOffset, remaining);
             bufferOffset += remaining;
             blockUpdate();
@@ -216,23 +210,18 @@ public class TigerTree extends MessageDigest
         bufferOffset += length;
     }
 
-    protected byte[] engineDigest()
-    {
+    protected byte[] engineDigest() {
         byte[] hash = new byte[HASHSIZE];
-        try
-        {
+        try {
             engineDigest(hash, 0, HASHSIZE);
-        }
-        catch (DigestException e)
-        {
+        } catch (DigestException e) {
             return null;
         }
         return hash;
     }
 
     protected int engineDigest(byte[] buf, int offset, int len)
-        throws DigestException
-    {
+            throws DigestException {
         if (len < HASHSIZE) throw new DigestException();
 
         // hash any remaining fragments
@@ -240,21 +229,17 @@ public class TigerTree extends MessageDigest
         int rows = 0;//number of rows already calculated
         // composite neighboring nodes together up to top value
 
-        while (nodes.size() > 1)
-        {
+        while (nodes.size() > 1) {
             rows++;
-            if (check && rows > levelsLeft)
-            {
+            if (check && rows > levelsLeft) {
                 t.setSerializationByte(serialization);
                 return HASHSIZE;
             }
             Vector newNodes = new Vector();
             Enumeration iter = nodes.elements();
-            while (iter.hasMoreElements())
-            {
+            while (iter.hasMoreElements()) {
                 byte[] left = (byte[]) iter.nextElement();
-                if (iter.hasMoreElements())
-                {
+                if (iter.hasMoreElements()) {
                     byte[] right = (byte[]) iter.nextElement();
                     tiger.reset();
                     tiger.update((byte) 1); // node prefix
@@ -262,24 +247,20 @@ public class TigerTree extends MessageDigest
                     tiger.update(right);
                     Object dig = (Object) tiger.digest();
                     newNodes.addElement(dig);
-                    if ((levelsLeft != -1) && (rows == levelsLeft))
-                    {
+                    if ((levelsLeft != -1) && (rows == levelsLeft)) {
                         byte[] digs = (byte[]) dig;
                         System.arraycopy(digs, 0, serialization,
-                            serializationOffset, digs.length);
+                                serializationOffset, digs.length);
                         serializationOffset += digs.length;
                     }
-                }
-                else
-                {
+                } else {
                     //If there is a node with no peer
                     Object obj = (Object) left;
                     newNodes.addElement(obj);
-                    if ((levelsLeft != -1) && (rows == levelsLeft))
-                    {
+                    if ((levelsLeft != -1) && (rows == levelsLeft)) {
                         byte[] digs = (byte[]) obj;
                         System.arraycopy(digs, 0, serialization,
-                            serializationOffset, digs.length);
+                                serializationOffset, digs.length);
                         serializationOffset += digs.length;
                     }
                 }
@@ -292,8 +273,7 @@ public class TigerTree extends MessageDigest
 
         engineReset();
 
-        if (t != null)
-        {
+        if (t != null) {
             t.setHashSize(HASHSIZE);
             t.setSerialization(Base32.encode(serialization));
             t.setRoot(Base32.encode(root));
@@ -301,21 +281,18 @@ public class TigerTree extends MessageDigest
         return HASHSIZE;
     }
 
-    public Thex getThex()
-    {
+    public Thex getThex() {
         return t;
     }
 
-    protected void engineReset()
-    {
+    protected void engineReset() {
         bufferOffset = 0;
         byteCount = 0;
         nodes = new Vector();
         tiger.reset();
     }
 
-    public Object clone() throws CloneNotSupportedException
-    {
+    public Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException();
     }
 
@@ -323,8 +300,7 @@ public class TigerTree extends MessageDigest
      * Update the internal state with a single block of size 1024
      * (or less, in final block) from the internal buffer.
      */
-    protected void blockUpdate()
-    {
+    protected void blockUpdate() {
         tiger.reset();
         tiger.update((byte) 0); // leaf prefix
         tiger.update(buffer, 0, bufferOffset);
@@ -334,12 +310,11 @@ public class TigerTree extends MessageDigest
         count++;
         //Serialization: We send the leaves
         //Dig is a 1024 byte array
-        if (levelsLeft == -1)
-        {
+        if (levelsLeft == -1) {
 
             byte[] digst = (byte[]) dig;
             System.arraycopy(digst, 0, serialization,
-                serializationLeavesOffset, digst.length);
+                    serializationLeavesOffset, digst.length);
             serializationLeavesOffset += digst.length;
         }
 

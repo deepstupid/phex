@@ -29,47 +29,38 @@ import phex.servent.Servent;
  * This class is responsible to ping the neighborhood and find new hosts for the
  * PongCache and for the CaughtHostsContainer.
  */
-public class PingWorker implements Runnable
-{
+public class PingWorker implements Runnable {
     private static final int SLEEP_TIME = 5000;
     private final Servent servent;
-    
-    public PingWorker( Servent servent )
-    {
+
+    public PingWorker(Servent servent) {
         this.servent = servent;
     }
-    
-    public void start()
-    {
-        Thread thread = new Thread( ThreadTracking.rootThreadGroup, this,
-            "PingWorker-" + Integer.toHexString( hashCode() ) );
-        thread.setPriority( Thread.NORM_PRIORITY );
-        thread.setDaemon( true );
+
+    public void start() {
+        Thread thread = new Thread(ThreadTracking.rootThreadGroup, this,
+                "PingWorker-" + Integer.toHexString(hashCode()));
+        thread.setPriority(Thread.NORM_PRIORITY);
+        thread.setDaemon(true);
         thread.start();
     }
-    
-    public void run()
-    {
-        
-        while( true )
-        {
 
-            
-            if( servent.isUltrapeer() )
-            {
+    public void run() {
+
+        while (true) {
+
+
+            if (servent.isUltrapeer()) {
                 Host[] hosts = servent.getHostService().getUltrapeerConnections();
                 // TODO only forward to a selected amount (75%) of node if there are more
                 // then 4-5 node.
-                servent.getMessageService().pingHosts( (byte)3, hosts );
+                servent.getMessageService().pingHosts((byte) 3, hosts);
             }
 
             // Sleep some time...
-            try
-            {
-                Thread.sleep( SLEEP_TIME );
-            }
-            catch (InterruptedException e)
-            {
+            try {
+                Thread.sleep(SLEEP_TIME);
+            } catch (InterruptedException e) {
             }
         }
     }

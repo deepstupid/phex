@@ -27,65 +27,54 @@ import java.util.Date;
  * A expiry date is used to hold a timestamp of an expiry or the indication that
  * it never expires or expires at the end of the session.
  */
-public class ExpiryDate extends Date
-{
+public class ExpiryDate extends Date {
     public static final long EXPIRES_NEVER = Long.MAX_VALUE;
     public static final long EXPIRES_END_OF_SESSION = -1;
 
-    public static final ExpiryDate NEVER_EXPIRY_DATE = new ExpiryDate( EXPIRES_NEVER );
-    public static final ExpiryDate SESSION_EXPIRY_DATE = new ExpiryDate( EXPIRES_END_OF_SESSION );
-    
+    public static final ExpiryDate NEVER_EXPIRY_DATE = new ExpiryDate(EXPIRES_NEVER);
+    public static final ExpiryDate SESSION_EXPIRY_DATE = new ExpiryDate(EXPIRES_END_OF_SESSION);
+
+    /**
+     * @param expiryDate The date in millis after which this rule expires, use EXPIRES_NEVER
+     *                   (Long.MAX_VALUE) for indefinite (never), or EXPIRES_END_OF_SESSION (-1)
+     *                   for end of session.
+     */
+    private ExpiryDate(long expiryDate) {
+        super(expiryDate);
+    }
+
     /**
      * Returns a expiry date object for the given expiry date. When Long.MAX_VALUE
      * is used as input then NEVER_EXPIRY_DATE is returned, if -1 is used as
      * input SESSION_EXPIRY_DATE is returned.
      * Any other values return a new ExpiryDate representing the given input date.
+     *
      * @param expiryDate
      * @return
      */
-    public static ExpiryDate getExpiryDate( long expiryDate )
-    {
-        if ( expiryDate == EXPIRES_NEVER )
-        {
+    public static ExpiryDate getExpiryDate(long expiryDate) {
+        if (expiryDate == EXPIRES_NEVER) {
             return NEVER_EXPIRY_DATE;
-        }
-        else if ( expiryDate == EXPIRES_END_OF_SESSION )
-        {
+        } else if (expiryDate == EXPIRES_END_OF_SESSION) {
             return SESSION_EXPIRY_DATE;
-        }
-        else
-        {
-            return new ExpiryDate( expiryDate );
+        } else {
+            return new ExpiryDate(expiryDate);
         }
     }
 
-    /**
-     * @param expiryDate The date in millis after which this rule expires, use EXPIRES_NEVER
-     * (Long.MAX_VALUE) for indefinite (never), or EXPIRES_END_OF_SESSION (-1)
-     * for end of session.
-     */
-    private ExpiryDate( long expiryDate )
-    {
-        super( expiryDate );
-    }
-
-    public boolean isExpiringEndOfSession()
-    {
+    public boolean isExpiringEndOfSession() {
         return getTime() == EXPIRES_END_OF_SESSION;
     }
 
-    public boolean isExpiringNever()
-    {
+    public boolean isExpiringNever() {
         return getTime() == EXPIRES_NEVER;
     }
-    
-    public boolean isExpired()
-    {
-        if ( isExpiringEndOfSession() || isExpiringNever() )
-        {
+
+    public boolean isExpired() {
+        if (isExpiringEndOfSession() || isExpiringNever()) {
             return false;
         }
-        
+
         return getTime() < System.currentTimeMillis();
     }
 }

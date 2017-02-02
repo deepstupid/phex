@@ -34,74 +34,63 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class UploadState implements TransferDataProvider
-{
+public class UploadState implements TransferDataProvider {
     /**
      * The upload manager.
      */
     private final UploadManager uploadManager;
-
-    /**
-     * Defines the length already uploaded.
-     */
-    private long transferredDataSize;
-
-    /**
-     * Used to store the current progress.
-     */
-    private int currentProgress;
-
-    /**
-     * The status of the upload
-     */
-    private UploadStatus status;
-
-    /**
-     * The host address that request the upload.
-     */
-    private DestAddress hostAddress;
-
-    /**
-     * The vendor that requests the upload.
-     */
-    private String vendor;
-
-    private String fileName;
-    private URN fileURN;
-
-    /**
-     * The upload engine working on this upload or null if not available.
-     */
-    private UploadEngine uploadEngine;
-
-    /*
-     * Total data sent previously with the same connection
-     */
-    private long previousSegmentsSize;
-    
     private final TransferAverage transferAverage;
-    
     /**
      * This is a List holding all AltLocs already send to this connection during
      * this session. It is used to make sure the same AltLocs are not send twice
      * to the same connection.
      */
     private final Set<AlternateLocation> sendAltLocSet;
+    /**
+     * Defines the length already uploaded.
+     */
+    private long transferredDataSize;
+    /**
+     * Used to store the current progress.
+     */
+    private int currentProgress;
+    /**
+     * The status of the upload
+     */
+    private UploadStatus status;
+    /**
+     * The host address that request the upload.
+     */
+    private DestAddress hostAddress;
+    /**
+     * The vendor that requests the upload.
+     */
+    private String vendor;
+    private String fileName;
+    private URN fileURN;
+    /**
+     * The upload engine working on this upload or null if not available.
+     */
+    private UploadEngine uploadEngine;
+    /*
+     * Total data sent previously with the same connection
+     */
+    private long previousSegmentsSize;
+    private long transferLength;
 
     /**
      * This is used to create a upload state object that is used for displaying
      * it in the upload queue.
+     *
      * @param hostAddress the host address of the host.
-     * @param vendor the vendor string of the host.
+     * @param vendor      the vendor string of the host.
      */
-    public UploadState( DestAddress hostAddress, String vendor, UploadManager uploadManager )
-    {
-        this( hostAddress, vendor, null, null, -1, uploadManager );
+    public UploadState(DestAddress hostAddress, String vendor, UploadManager uploadManager) {
+        this(hostAddress, vendor, null, null, -1, uploadManager);
     }
 
-    public UploadState( DestAddress hostAddress, String vendor,
-        String fileName, URN fileURN, long contentLength, UploadManager uploadManager )
-    {
+    public UploadState(DestAddress hostAddress, String vendor,
+                       String fileName, URN fileURN, long contentLength, UploadManager uploadManager) {
         this.uploadManager = uploadManager;
         transferredDataSize = 0;
         previousSegmentsSize = 0;
@@ -114,184 +103,152 @@ public class UploadState implements TransferDataProvider
         this.fileURN = fileURN;
         transferLength = contentLength;
         status = UploadStatus.ACCEPTING_REQUEST;
-        
-        transferAverage = new TransferAverage( 1000, 10 );
+
+        transferAverage = new TransferAverage(1000, 10);
     }
 
-    public void update( String fileName, URN fileURN, long contentLength )
-    {
+    public void update(String fileName, URN fileURN, long contentLength) {
         this.fileName = fileName;
         this.fileURN = fileURN;
         transferLength = contentLength;
     }
-    
-    public Set<AlternateLocation> getSendAltLocSet()
-    {
+
+    public Set<AlternateLocation> getSendAltLocSet() {
         return sendAltLocSet;
     }
 
-    public String getVendor()
-    {
+    public String getVendor() {
         return vendor;
     }
-    
-    public void setVendor( String vendor )
-    {
+
+    public void setVendor(String vendor) {
         this.vendor = vendor;
     }
 
-    public String getFileName()
-    {
+    public String getFileName() {
         return fileName;
     }
-    
-    public void setFileName( String fileName )
-    {
+
+    public void setFileName(String fileName) {
         this.fileName = fileName;
     }
 
-    public URN getFileURN()
-    {
+    public URN getFileURN() {
         return fileURN;
     }
 
-    public DestAddress getHostAddress()
-    {
+    public DestAddress getHostAddress() {
         return hostAddress;
     }
-    
-    public void setHostAddress( DestAddress hostAddress )
-    {
+
+    public void setHostAddress(DestAddress hostAddress) {
         this.hostAddress = hostAddress;
     }
 
-    public UploadStatus getStatus()
-    {
+    public UploadStatus getStatus() {
         return status;
-    }
-    
-    public void addToUploadLog( String message )
-    {
-        if ( UploadPrefs.UploadStateLogBufferSize.get().intValue() > 0 )
-        {
-            LogRecord record = new LogRecord( this, message );
-            uploadManager.getUploadStateLogBuffer().addLogRecord( record );
-        }
     }
 
     /**
      * This method should only be called by UploadManager!!
      */
-    public void setStatus( UploadStatus newStatus )
-    {
+    public void setStatus(UploadStatus newStatus) {
         // dont care for same status
-        if ( status == newStatus )
-        {
+        if (status == newStatus) {
             return;
         }
-        NLogger.debug( UploadState.class, "UploadState Status "
-            + newStatus );
-        addToUploadLog( "UploadState Status " + newStatus );
+        NLogger.debug(UploadState.class, "UploadState Status "
+                + newStatus);
+        addToUploadLog("UploadState Status " + newStatus);
 
         this.status = newStatus;
     }
 
-    public boolean isUploadRunning()
-    {
+    public void addToUploadLog(String message) {
+        if (UploadPrefs.UploadStateLogBufferSize.get().intValue() > 0) {
+            LogRecord record = new LogRecord(this, message);
+            uploadManager.getUploadStateLogBuffer().addLogRecord(record);
+        }
+    }
+
+    public boolean isUploadRunning() {
         return status.isRunningStatus();
     }
-    
-    public boolean isReadyForCleanup()
-    {
+
+    public boolean isReadyForCleanup() {
         return status == UploadStatus.COMPLETED ||
-               status == UploadStatus.FINISHED ||
-               status == UploadStatus.ABORTED;
+                status == UploadStatus.FINISHED ||
+                status == UploadStatus.ABORTED;
     }
 
-    public void setUploadEngine( UploadEngine uploadEngine )
-    {
+    public void setUploadEngine(UploadEngine uploadEngine) {
         this.uploadEngine = uploadEngine;
-    }
-
-    public void setTransferredDataSize( long aTransferredSize )
-    {
-        long diff = aTransferredSize - transferredDataSize;
-        if ( diff < 0 ) // a new block is being transferred
-        {
-            previousSegmentsSize += transferredDataSize;
-            transferAverage.addValue(aTransferredSize);
-        } 
-        else
-        {
-            transferAverage.addValue(diff);
-        }
-        transferredDataSize = aTransferredSize;
     }
 
     /**
      * Returns the progress in percent. If mStatus == sCompleted will always be 100%.
      */
-    public int getProgress()
-    {
-        if( status == UploadStatus.COMPLETED || status == UploadStatus.FINISHED )
-        {
+    public int getProgress() {
+        if (status == UploadStatus.COMPLETED || status == UploadStatus.FINISHED) {
             currentProgress = 100;
-        }
-        else
-        {
+        } else {
             long toTransfer = getTransferDataSize();
-            currentProgress = (int)(getTransferredDataSize() * 100L / (toTransfer == 0L ? 1L : toTransfer));
+            currentProgress = (int) (getTransferredDataSize() * 100L / (toTransfer == 0L ? 1L : toTransfer));
         }
         return currentProgress;
     }
 
-    public void stopUpload()
-    {
-        if ( uploadEngine != null )
-        {
+    public void stopUpload() {
+        if (uploadEngine != null) {
             uploadEngine.stopUpload();
         }
         boolean succ = uploadManager.trySetUploadStatus(this, UploadStatus.ABORTED);
-        if ( !succ )
-        {
+        if (!succ) {
             // setting to aborted should never fail.
-            throw new RuntimeException("Status transition from " 
-                + getStatus() + " to " + UploadStatus.ABORTED + " failed.");
+            throw new RuntimeException("Status transition from "
+                    + getStatus() + " to " + UploadStatus.ABORTED + " failed.");
         }
     }
-    
+
     /**
      * Returns the transfer speed from the bandwidth controller of this upload.
+     *
      * @return the transfer.
      */
-    public long getTransferSpeed()
-    {
+    public long getTransferSpeed() {
         return transferAverage.getAverage();
     }
 
     ////////////////////// TransferDataProvider Interface //////////////////////
 
-    private long transferLength;
-
-    public long getTransferDataSize()
-    {
+    public long getTransferDataSize() {
         return transferLength + previousSegmentsSize;
     }
 
     /**
      * Indicate how much of the file has been uploaded on this transfer.
      */
-    public long getTransferredDataSize()
-    {
+    public long getTransferredDataSize() {
         return transferredDataSize + previousSegmentsSize;
+    }
+
+    public void setTransferredDataSize(long aTransferredSize) {
+        long diff = aTransferredSize - transferredDataSize;
+        if (diff < 0) // a new block is being transferred
+        {
+            previousSegmentsSize += transferredDataSize;
+            transferAverage.addValue(aTransferredSize);
+        } else {
+            transferAverage.addValue(diff);
+        }
+        transferredDataSize = aTransferredSize;
     }
 
     /**
      * This is the total size of the available data. Even if its not important
      * for the transfer itself.
      */
-    public long getTotalDataSize()
-    {
+    public long getTotalDataSize() {
         // in case of upload this is the same as the size that is transfered.
         return getTransferDataSize();
     }
@@ -299,16 +256,14 @@ public class UploadState implements TransferDataProvider
     /**
      * Not implemented... uses own transfer rate calculation
      */
-    public void setTransferRateTimestamp( long timestamp )
-    {
+    public void setTransferRateTimestamp(long timestamp) {
         throw new UnsupportedOperationException();
     }
 
     /**
      * Not implemented... uses own transfer rate calculation
      */
-    public int getShortTermTransferRate()
-    {
+    public int getShortTermTransferRate() {
         throw new UnsupportedOperationException();
     }
 
@@ -317,9 +272,8 @@ public class UploadState implements TransferDataProvider
      * the transfer since the last start of the transfer. This means after a
      * transfer was interrupted and is resumed again the calculation restarts.
      */
-    public int getLongTermTransferRate()
-    {
-        return (int)getTransferSpeed();
+    public int getLongTermTransferRate() {
+        return (int) getTransferSpeed();
     }
 
     /**
@@ -327,10 +281,8 @@ public class UploadState implements TransferDataProvider
      * It can be TRANSFER_RUNNING, TRANSFER_NOT_RUNNING, TRANSFER_COMPLETED,
      * TRANSFER_ERROR.
      */
-    public short getDataTransferStatus()
-    {
-        switch ( status )
-        {
+    public short getDataTransferStatus() {
+        switch (status) {
             case HANDSHAKE:
             case UPLOADING_DATA:
             case UPLOADING_THEX:

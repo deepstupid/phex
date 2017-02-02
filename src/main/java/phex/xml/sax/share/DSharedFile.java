@@ -30,235 +30,189 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class DSharedFile implements DElement
-{
+public class DSharedFile implements DElement {
     public static final String ELEMENT_NAME = "SF";
-    
+    private final List<DAlternateLocation> altLocList;
     private String fileName;
-    
     private String sha1;
-    
     private String thexRootHash;
-    
     private boolean hasThexTreeDepth;
     private int thexTreeDepth;
-    
     private String thexLowestLevelNodes;
-
     private boolean hasCreationTime;
     private long creationTime;
-    
     private boolean hasLastModified;
     private long lastModified;
-
     private boolean hasHitCount;
     private int hitCount;
-
     private boolean hasLastSeen;
     private long lastSeen;
-
     private boolean hasUploadCount;
     private int uploadCount;
-    
-    private final List<DAlternateLocation> altLocList;
-    
-    public DSharedFile()
-    {
+
+    public DSharedFile() {
         altLocList = new ArrayList<DAlternateLocation>();
     }
-    
-    public List<DAlternateLocation> getAltLocList()
-    {
+
+    public List<DAlternateLocation> getAltLocList() {
         return altLocList;
     }
 
-    public long getCreationTime()
-    {
+    public long getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime( long creationTime )
-    {
+    public void setCreationTime(long creationTime) {
         hasCreationTime = true;
         this.creationTime = creationTime;
     }
 
-    public String getFileName()
-    {
+    public String getFileName() {
         return fileName;
     }
 
-    public void setFileName( String fileName )
-    {
+    public void setFileName(String fileName) {
         this.fileName = fileName;
     }
 
-    public int getHitCount()
-    {
+    public int getHitCount() {
         return hitCount;
     }
 
-    public void setHitCount( int hitCount )
-    {
+    public void setHitCount(int hitCount) {
         hasHitCount = true;
         this.hitCount = hitCount;
     }
 
-    public long getLastModified()
-    {
+    public long getLastModified() {
         return lastModified;
     }
 
-    public void setLastModified( long lastModified )
-    {
+    public void setLastModified(long lastModified) {
         hasLastModified = true;
         this.lastModified = lastModified;
     }
 
-    public long getLastSeen()
-    {
+    public long getLastSeen() {
         return lastSeen;
     }
 
-    public void setLastSeen( long lastSeen )
-    {
+    public void setLastSeen(long lastSeen) {
         hasLastSeen = true;
         this.lastSeen = lastSeen;
     }
 
-    public String getSha1()
-    {
+    public String getSha1() {
         return sha1;
     }
 
-    public void setSha1( String sha1 )
-    {
+    public void setSha1(String sha1) {
         this.sha1 = sha1;
     }
 
-    public String getThexLowestLevelNodes()
-    {
+    public String getThexLowestLevelNodes() {
         return thexLowestLevelNodes;
     }
 
-    public void setThexLowestLevelNodes( String thexLowestLevelNodes )
-    {
+    public void setThexLowestLevelNodes(String thexLowestLevelNodes) {
         this.thexLowestLevelNodes = thexLowestLevelNodes;
     }
 
-    public String getThexRootHash()
-    {
+    public String getThexRootHash() {
         return thexRootHash;
     }
 
-    public void setThexRootHash( String thexRootHash )
-    {
+    public void setThexRootHash(String thexRootHash) {
         this.thexRootHash = thexRootHash;
     }
 
-    public int getThexTreeDepth()
-    {
+    public int getThexTreeDepth() {
         return thexTreeDepth;
     }
 
-    public void setThexTreeDepth( int thexTreeDepth )
-    {
+    public void setThexTreeDepth(int thexTreeDepth) {
         hasThexTreeDepth = true;
         this.thexTreeDepth = thexTreeDepth;
     }
 
-    public int getUploadCount()
-    {
+    public int getUploadCount() {
         return uploadCount;
     }
 
-    public void setUploadCount( int uploadCount )
-    {
+    public void setUploadCount(int uploadCount) {
         hasUploadCount = true;
         this.uploadCount = uploadCount;
     }
 
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
-        
-        if( fileName != null )
-        {
-            writer.startElm( "FID", null );
-            writer.elmText( fileName );
-            writer.endElm( "FID" );
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
+
+        if (fileName != null) {
+            writer.startElm("FID", null);
+            writer.elmText(fileName);
+            writer.endElm("FID");
         }
-        
-        if( sha1 != null )
-        {
-            writer.startElm( "SHA1", null );
-            writer.elmText( sha1 );
-            writer.endElm( "SHA1" );
+
+        if (sha1 != null) {
+            writer.startElm("SHA1", null);
+            writer.elmText(sha1);
+            writer.endElm("SHA1");
         }
-        
-        if( thexRootHash != null )
-        {
-            writer.startElm( "TxRH", null );
-            writer.elmText( thexRootHash );
-            writer.endElm( "TxRH" );
+
+        if (thexRootHash != null) {
+            writer.startElm("TxRH", null);
+            writer.elmText(thexRootHash);
+            writer.endElm("TxRH");
         }
-        
-        if( hasThexTreeDepth )
-        {
-            writer.startElm( "TxD", null );
-            writer.elmInt( thexTreeDepth );
-            writer.endElm( "TxD" );
+
+        if (hasThexTreeDepth) {
+            writer.startElm("TxD", null);
+            writer.elmInt(thexTreeDepth);
+            writer.endElm("TxD");
         }
-        
-        if( thexLowestLevelNodes != null )
-        {
-            writer.startElm( "TxLLN", null );
-            writer.elmText( thexLowestLevelNodes );
-            writer.endElm( "TxLLN" );
+
+        if (thexLowestLevelNodes != null) {
+            writer.startElm("TxLLN", null);
+            writer.elmText(thexLowestLevelNodes);
+            writer.endElm("TxLLN");
         }
-        
-        if( hasCreationTime )
-        {
-            writer.startElm( "CT", null );
-            writer.elmLong( creationTime );
-            writer.endElm( "CT" );
+
+        if (hasCreationTime) {
+            writer.startElm("CT", null);
+            writer.elmLong(creationTime);
+            writer.endElm("CT");
         }
-        
-        if( hasLastModified )
-        {
-            writer.startElm( "LM", null );
-            writer.elmLong( lastModified );
-            writer.endElm( "LM" );
+
+        if (hasLastModified) {
+            writer.startElm("LM", null);
+            writer.elmLong(lastModified);
+            writer.endElm("LM");
         }
-        
-        if( hasLastSeen )
-        {
-            writer.startElm( "LS", null );
-            writer.elmLong( lastSeen );
-            writer.endElm( "LS" );
+
+        if (hasLastSeen) {
+            writer.startElm("LS", null);
+            writer.elmLong(lastSeen);
+            writer.endElm("LS");
         }
-        
-        if( hasHitCount )
-        {
-            writer.startElm( "HC", null );
-            writer.elmLong( hitCount );
-            writer.endElm( "HC" );
+
+        if (hasHitCount) {
+            writer.startElm("HC", null);
+            writer.elmLong(hitCount);
+            writer.endElm("HC");
         }
-        
-        if( hasUploadCount )
-        {
-            writer.startElm( "UC", null );
-            writer.elmLong( uploadCount );
-            writer.endElm( "UC" );
+
+        if (hasUploadCount) {
+            writer.startElm("UC", null);
+            writer.elmLong(uploadCount);
+            writer.endElm("UC");
         }
-        
+
         Iterator iterator = altLocList.iterator();
-        while( iterator.hasNext() )
-        {
+        while (iterator.hasNext()) {
             DElement element = (DElement) iterator.next();
             element.serialize(writer);
         }
-        
-        writer.endElm( ELEMENT_NAME );
+
+        writer.endElm(ELEMENT_NAME);
     }
 }

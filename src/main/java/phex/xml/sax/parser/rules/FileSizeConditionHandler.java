@@ -33,8 +33,7 @@ import phex.xml.sax.rules.DFileSizeCondition;
 import javax.xml.parsers.SAXParser;
 import java.io.CharArrayWriter;
 
-public class FileSizeConditionHandler extends DefaultHandler
-{
+public class FileSizeConditionHandler extends DefaultHandler {
     public static final String ELEMENT_NAME = DFileSizeCondition.ELEMENT_NAME;
 
     private final CharArrayWriter text = new CharArrayWriter();
@@ -45,9 +44,8 @@ public class FileSizeConditionHandler extends DefaultHandler
 
     private final DefaultHandler parent;
 
-    public FileSizeConditionHandler( DFileSizeCondition condition, Attributes attributes,
-        DefaultHandler parent, SAXParser parser )
-    {
+    public FileSizeConditionHandler(DFileSizeCondition condition, Attributes attributes,
+                                    DefaultHandler parent, SAXParser parser) {
         this.condition = condition;
         this.parser = parser;
         this.parent = parent;
@@ -56,66 +54,53 @@ public class FileSizeConditionHandler extends DefaultHandler
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes ) throws SAXException
-    {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes) throws SAXException {
         text.reset();
-        if ( qName.equals( "range" ) )
-        {
+        if (qName.equals("range")) {
             long min = -1;
             long max = -1;
-            
+
             String minStr = attributes.getValue("min");
             String maxStr = attributes.getValue("max");
-            try
-            {
-                min = Long.parseLong( minStr );
+            try {
+                min = Long.parseLong(minStr);
+            } catch (NumberFormatException exp) {
+                NLogger.error(FileSizeConditionHandler.class, exp, exp);
             }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( FileSizeConditionHandler.class, exp, exp );
+            try {
+                max = Long.parseLong(maxStr);
+            } catch (NumberFormatException exp) {
+                NLogger.error(FileSizeConditionHandler.class, exp, exp);
             }
-            try
-            {
-                max = Long.parseLong( maxStr );
-            }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( FileSizeConditionHandler.class, exp, exp );
-            }
-            
-            if ( min >= 0 || max >= 0 )
-            {
-                FileSizeCondition.Range range = new FileSizeCondition.Range( min,
-                    max );
-                condition.getRanges().add( range );
+
+            if (min >= 0 || max >= 0) {
+                FileSizeCondition.Range range = new FileSizeCondition.Range(min,
+                        max);
+                condition.getRanges().add(range);
             }
         }
         return;
     }
 
-    public void endElement( String uri, String localName, String qName )
-        throws SAXException
-    {
-        if ( qName.equals( ELEMENT_NAME ) )
-        {
-            parser.getXMLReader().setContentHandler( parent );
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equals(ELEMENT_NAME)) {
+            parser.getXMLReader().setContentHandler(parent);
         }
     }
 
-    public InputSource resolveEntity( String publicId, String systemId )
-    {
+    public InputSource resolveEntity(String publicId, String systemId) {
         return null;
     }
 
-    public void characters( char[] ch, int start, int length )
-    {
-        text.write( ch, start, length );
+    public void characters(char[] ch, int start, int length) {
+        text.write(ch, start, length);
     }
 }

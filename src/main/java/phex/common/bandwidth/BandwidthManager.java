@@ -26,80 +26,70 @@ import phex.prefs.core.BandwidthPrefs;
 /**
  * Manages all bandwidth controllers.
  */
-public class BandwidthManager
-{
+public class BandwidthManager {
     private final BandwidthController serventBandwidthController;
     private final BandwidthController networkBandwidthController;
     private final BandwidthController downloadBandwidthController;
     private final BandwidthController uploadBandwidthController;
-    
-    public BandwidthManager()
-    {
-        serventBandwidthController = new BandwidthController( "ServentThrottle",
+
+    public BandwidthManager() {
+        serventBandwidthController = new BandwidthController("ServentThrottle",
                 BandwidthPrefs.MaxTotalBandwidth.get());
         serventBandwidthController.activateShortTransferAvg(1000, 5);
         serventBandwidthController.activateLongTransferAvg(2000, 90);
-            
-        networkBandwidthController = new BandwidthController( "NetworkThrottle",
+
+        networkBandwidthController = new BandwidthController("NetworkThrottle",
                 BandwidthPrefs.MaxNetworkBandwidth.get(),
-                serventBandwidthController );
+                serventBandwidthController);
         networkBandwidthController.activateShortTransferAvg(1000, 5);
         networkBandwidthController.activateLongTransferAvg(2000, 90);
 
-        downloadBandwidthController = new BandwidthController( "DownloadThrottle",
+        downloadBandwidthController = new BandwidthController("DownloadThrottle",
                 BandwidthPrefs.MaxDownloadBandwidth.get(),
-                serventBandwidthController );
+                serventBandwidthController);
         downloadBandwidthController.activateShortTransferAvg(1000, 5);
         downloadBandwidthController.activateLongTransferAvg(2000, 90);
-        
-        uploadBandwidthController = new BandwidthController( "UploadThrottle",
+
+        uploadBandwidthController = new BandwidthController("UploadThrottle",
                 BandwidthPrefs.MaxUploadBandwidth.get(),
-                serventBandwidthController );
+                serventBandwidthController);
         uploadBandwidthController.activateShortTransferAvg(1000, 5);
         uploadBandwidthController.activateLongTransferAvg(2000, 90);
     }
 
-    public void setDownloadBandwidth( int newDownloadBwInBytes )
-    {
+    public void setDownloadBandwidth(int newDownloadBwInBytes) {
         BandwidthPrefs.MaxDownloadBandwidth.set(newDownloadBwInBytes);
         downloadBandwidthController.setThrottlingRate(newDownloadBwInBytes);
     }
 
-    public void setNetworkBandwidth(int newNetworkBwInBytes)
-    {
+    public void setNetworkBandwidth(int newNetworkBwInBytes) {
         BandwidthPrefs.MaxNetworkBandwidth.set(newNetworkBwInBytes);
         networkBandwidthController.setThrottlingRate(newNetworkBwInBytes);
     }
-    
-    public void setServentBandwidth(int newPhexBwInBytes)
-    {
+
+    public void setServentBandwidth(int newPhexBwInBytes) {
         BandwidthPrefs.MaxTotalBandwidth.set(newPhexBwInBytes);
         serventBandwidthController.setThrottlingRate(newPhexBwInBytes);
     }
 
-    public void setUploadBandwidth(int newUploadBwInBytes)
-    {
+    public void setUploadBandwidth(int newUploadBwInBytes) {
         BandwidthPrefs.MaxUploadBandwidth.set(newUploadBwInBytes);
         uploadBandwidthController.setThrottlingRate(newUploadBwInBytes);
     }
 
-    public BandwidthController getServentBandwidthController()
-    {
+    public BandwidthController getServentBandwidthController() {
         return serventBandwidthController;
     }
 
-    public BandwidthController getNetworkBandwidthController()
-    {
+    public BandwidthController getNetworkBandwidthController() {
         return networkBandwidthController;
     }
 
-    public BandwidthController getDownloadBandwidthController()
-    {
+    public BandwidthController getDownloadBandwidthController() {
         return downloadBandwidthController;
     }
 
-    public BandwidthController getUploadBandwidthController()
-    {
+    public BandwidthController getUploadBandwidthController() {
         return uploadBandwidthController;
     }
 }

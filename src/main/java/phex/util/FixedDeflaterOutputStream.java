@@ -30,43 +30,37 @@ import java.util.zip.DeflaterOutputStream;
  * Fixed DeflaterOutputStream to solve the problem:
  * http://developer.java.sun.com/developer/bugParade/bugs/4255743.html
  */
-public class FixedDeflaterOutputStream extends DeflaterOutputStream
-{    
-    public FixedDeflaterOutputStream(OutputStream outStream )
-    {
-        super( outStream );
+public class FixedDeflaterOutputStream extends DeflaterOutputStream {
+    public FixedDeflaterOutputStream(OutputStream outStream) {
+        super(outStream);
     }
-    
+
     public void flush()
-        throws IOException
-    {
-        if( def.finished() )
-        {
+            throws IOException {
+        if (def.finished()) {
             return;
-        } 
-        
+        }
+
         // This code is from the javasoft bug database to solve the flushing
         // problem..
         // http://developer.java.sun.com/developer/bugParade/bugs/4255743.html
         // By switching compression level we force Deflater to flush its data.
-        def.setInput( IOUtil.EMPTY_BYTE_ARRAY, 0, 0);
+        def.setInput(IOUtil.EMPTY_BYTE_ARRAY, 0, 0);
 
-        def.setLevel( Deflater.NO_COMPRESSION );
+        def.setLevel(Deflater.NO_COMPRESSION);
         deflate();
 
-        def.setLevel( Deflater.DEFAULT_COMPRESSION );
+        def.setLevel(Deflater.DEFAULT_COMPRESSION);
         deflate();
 
         super.flush();
     }
-    
-    public int getTotalIn()
-    {
+
+    public int getTotalIn() {
         return def.getTotalIn();
     }
-    
-    public int getTotalOut()
-    {
+
+    public int getTotalOut() {
         return def.getTotalOut();
     }
 }

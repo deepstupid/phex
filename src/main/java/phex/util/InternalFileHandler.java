@@ -32,44 +32,38 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Offers internal handling for files like magma-lists, rss-feeds, podcasts and similar. 
+ * Offers internal handling for files like magma-lists, rss-feeds, podcasts and similar.
  */
-public final class InternalFileHandler
-{
-    public static void magmaReadout( File file )
-    {
-    	try
-        {
-            BufferedInputStream inStream = new BufferedInputStream( new FileInputStream( file ) );
-            MagmaParser parser = new MagmaParser( inStream );
+public final class InternalFileHandler {
+    public static void magmaReadout(File file) {
+        try {
+            BufferedInputStream inStream = new BufferedInputStream(new FileInputStream(file));
+            MagmaParser parser = new MagmaParser(inStream);
             parser.start();
 
             List magnetList = parser.getMagnets();
             String relativeDownloadDir = parser.getMagmaName();
             Iterator iter = magnetList.iterator();
-        
+
             // Sync subscription operation with a possible rescan process, this 
             // prevents downloads of files already existing but not yet scanned.
             FileRescanRunner.sync();
 
-            while (iter.hasNext())
-            {
+            while (iter.hasNext()) {
                 String magnet = (String) iter.next();
-                URI uri = new URI( magnet, true );
+                URI uri = new URI(magnet, true);
 
                 // dont add already downloading or shared urns.
                 // If we didn't get a relativeDownloadDir, 
                 // Download to the default folder. 
-                if ( relativeDownloadDir.length() == 0 )
-                {
-                    downloadUri( uri );
+                if (relativeDownloadDir.length() == 0) {
+                    downloadUri(uri);
                 }
                 // Else download to the relativeDOwnloadDir inside the default folder. 
-                else
-                {
-                    downloadUri( uri, relativeDownloadDir );                    
+                else {
+                    downloadUri(uri, relativeDownloadDir);
                 }
-                
+
             }
 /*            String uuri = parser.getUpdateURI();
             if ( uuri != null)
@@ -79,55 +73,45 @@ public final class InternalFileHandler
             }
 
             */
-            
-        }
-        catch (IOException exp)
-        {
-            NLogger.warn( InternalFileHandler.class, exp.getMessage(), exp);
+
+        } catch (IOException exp) {
+            NLogger.warn(InternalFileHandler.class, exp.getMessage(), exp);
         }
     }
-    public static void rssReadout( File file )
-    {
-            if (!file.exists())
-        {
+
+    public static void rssReadout(File file) {
+        if (!file.exists()) {
             return;
         }
-        try
-        {
+        try {
             Reader reader = new BufferedReader(new FileReader(file));
             RSSParser parser = new RSSParser(reader);
             parser.start();
 
             List magnetList = parser.getMagnets();
             Iterator iter = magnetList.iterator();
-        
+
             // Sync subscription operation with a possible rescan process, this 
             // prevents downloads of files already existing but not yet scanned.
             FileRescanRunner.sync();
 
-            while (iter.hasNext())
-            {
+            while (iter.hasNext()) {
                 String magnet = (String) iter.next();
-                URI uri = new URI( magnet, true );
-                downloadUri( uri );
+                URI uri = new URI(magnet, true);
+                downloadUri(uri);
             }
 
-        }
-        catch (IOException exp)
-        {
-            NLogger.error( InternalFileHandler.class, exp.getMessage(), exp);
+        } catch (IOException exp) {
+            NLogger.error(InternalFileHandler.class, exp.getMessage(), exp);
         }
     }
-    
-    public static void metalinkReadout( File metalinkFile )
-    {
-        if ( !metalinkFile.exists() )
-        {
+
+    public static void metalinkReadout(File metalinkFile) {
+        if (!metalinkFile.exists()) {
             return;
         }
-        List<URI> magnetList = MetalinkParser.parseMagnetUriFromFile( metalinkFile );
-        if ( magnetList == null || magnetList.isEmpty() )
-        {
+        List<URI> magnetList = MetalinkParser.parseMagnetUriFromFile(metalinkFile);
+        if (magnetList == null || magnetList.isEmpty()) {
             return;
         }
 
@@ -135,45 +119,35 @@ public final class InternalFileHandler
         // prevents downloads of files already existing but not yet scanned.
         FileRescanRunner.sync();
 
-        for ( URI magnet : magnetList )
-        {
-            downloadUri( magnet );
+        for (URI magnet : magnetList) {
+            downloadUri(magnet);
         }
     }
 
-    public static void scheduledReadout( URI uri, long time )
-    {
+    public static void scheduledReadout(URI uri, long time) {
         // this should download again after a certain time. 
-    	downloadUri( uri );
+        downloadUri(uri);
     }
 
-    private static void downloadUri( URI uri )
-    {
-        try
-        {
-            Servent.getInstance().getDownloadService().addFileToDownload( uri, true );
-        }
-        catch (IOException exp)
-        {
-            NLogger.warn( InternalFileHandler.class, exp.getMessage(), exp);
+    private static void downloadUri(URI uri) {
+        try {
+            Servent.getInstance().getDownloadService().addFileToDownload(uri, true);
+        } catch (IOException exp) {
+            NLogger.warn(InternalFileHandler.class, exp.getMessage(), exp);
         }
     }
 
     /**
      * Download the uri to the specified relative download dir
-     *  
-     * @param uri: A magnet uri
-     * @param relativeDownloadDir: The name of the target download dir inside the default download dir. 
+     *
+     * @param uri:                 A magnet uri
+     * @param relativeDownloadDir: The name of the target download dir inside the default download dir.
      */
-    private static void downloadUri( URI uri, String relativeDownloadDir )
-    {
-        try
-        {
-            Servent.getInstance().getDownloadService().addFileToDownload( uri, relativeDownloadDir, true );
-        }
-        catch (IOException exp)
-        {
-            NLogger.warn( InternalFileHandler.class, exp.getMessage(), exp);
+    private static void downloadUri(URI uri, String relativeDownloadDir) {
+        try {
+            Servent.getInstance().getDownloadService().addFileToDownload(uri, relativeDownloadDir, true);
+        } catch (IOException exp) {
+            NLogger.warn(InternalFileHandler.class, exp.getMessage(), exp);
         }
     }
 

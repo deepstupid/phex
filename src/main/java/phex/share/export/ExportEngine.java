@@ -40,94 +40,79 @@ import java.util.Map;
 /**
  *
  */
-public class ExportEngine
-{
+public class ExportEngine {
     public static final String USE_MAGNET_URL_WITH_XS = "UseMagnetURLWithXS";
     public static final String USE_MAGNET_URL_WITH_FREEBASE = "UseMagnetURLWithFreeBase";
-    
+
     private final DestAddress serventAddress;
     private InputStream styleSheetStream;
     private OutputStream destinationStream;
     private List<ShareFile> exportData;
     private Map<String, String> exportOptions;
-    
-    public ExportEngine( DestAddress serventAddress, OutputStream destinationStream, List<ShareFile> exportData )
-    {
-        this( serventAddress, null, destinationStream, exportData, null );
+
+    public ExportEngine(DestAddress serventAddress, OutputStream destinationStream, List<ShareFile> exportData) {
+        this(serventAddress, null, destinationStream, exportData, null);
     }
-    
-    public ExportEngine( DestAddress serventAddress, InputStream styleSheetStream, 
-        OutputStream destinationStream, List<ShareFile> exportData, 
-        Map<String, String> exportOptions )
-    {
-        if ( destinationStream == null )
-        {
-            throw new NullPointerException( "No destination to export to" );
+
+    public ExportEngine(DestAddress serventAddress, InputStream styleSheetStream,
+                        OutputStream destinationStream, List<ShareFile> exportData,
+                        Map<String, String> exportOptions) {
+        if (destinationStream == null) {
+            throw new NullPointerException("No destination to export to");
         }
-        if ( exportData == null )
-        {
-            throw new NullPointerException( "No data to export given." );
+        if (exportData == null) {
+            throw new NullPointerException("No data to export given.");
         }
-        if ( styleSheetStream == null )
-        {
+        if (styleSheetStream == null) {
             styleSheetStream = ClassLoader.getSystemResourceAsStream(
-                "phex/resources/defaultSharedFilesHTMLExport.xsl" );
-                //"phex/resources/magmaSharedFilesYAMLExport.xsl" );
+                    "phex/resources/defaultSharedFilesHTMLExport.xsl");
+            //"phex/resources/magmaSharedFilesYAMLExport.xsl" );
         }
-        
+
         this.serventAddress = serventAddress;
         this.styleSheetStream = styleSheetStream;
         this.destinationStream = destinationStream;
         this.exportData = exportData;
         this.exportOptions = exportOptions;
-    }    
-    
+    }
+
     /**
      * Known options:
-     *  - UseMagnetURLWithXS = true
-     *  - UseMagnetURLWithFreeBase = true
+     * - UseMagnetURLWithXS = true
+     * - UseMagnetURLWithFreeBase = true
+     *
      * @param options
      */
-    public void setExportOptions( Map<String, String> options )
-    {
+    public void setExportOptions(Map<String, String> options) {
         exportOptions = options;
     }
-    
-    public void startExport(  )
-    {
+
+    public void startExport() {
         PipedOutputStream pipedOutStream = new PipedOutputStream();
         PipedInputStream pipedInputStream = new PipedInputStream();
-        try
-        {
-            pipedOutStream.connect( pipedInputStream );
-            
-            SharedFilesPipeFiller fillerRunnable = new SharedFilesPipeFiller( serventAddress, 
-                pipedOutStream, exportData, exportOptions );
-            Environment.getInstance().executeOnThreadPool( fillerRunnable, "SharedFilesPipeFiller" );
-    
-            
-            StreamSource styleSheetSource = new StreamSource( styleSheetStream );
-            StreamSource dataSource = new StreamSource( pipedInputStream );
-            StreamResult result = new StreamResult( destinationStream );
-            try
-            {
+        try {
+            pipedOutStream.connect(pipedInputStream);
+
+            SharedFilesPipeFiller fillerRunnable = new SharedFilesPipeFiller(serventAddress,
+                    pipedOutStream, exportData, exportOptions);
+            Environment.getInstance().executeOnThreadPool(fillerRunnable, "SharedFilesPipeFiller");
+
+
+            StreamSource styleSheetSource = new StreamSource(styleSheetStream);
+            StreamSource dataSource = new StreamSource(pipedInputStream);
+            StreamResult result = new StreamResult(destinationStream);
+            try {
                 Transformer transformer = TransformerFactory.newInstance()
-                    .newTransformer(styleSheetSource);
+                        .newTransformer(styleSheetSource);
                 transformer.transform(dataSource, result);
+            } catch (TransformerException exp) {
+                NLogger.error(ExportEngine.class, exp, exp);
             }
-            catch (TransformerException exp)
-            {
-                NLogger.error( ExportEngine.class, exp, exp );
-            }
-        }
-        catch ( IOException exp )
-        {
-            NLogger.error( ExportEngine.class, exp, exp );
-        }
-        finally
-        {
-            IOUtil.closeQuietly( pipedInputStream );
-            IOUtil.closeQuietly( pipedOutStream );
+        } catch (IOException exp) {
+            NLogger.error(ExportEngine.class, exp, exp);
+        } finally {
+            IOUtil.closeQuietly(pipedInputStream);
+            IOUtil.closeQuietly(pipedOutStream);
         }
     }
 }

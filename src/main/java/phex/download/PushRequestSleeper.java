@@ -42,8 +42,7 @@ import phex.statistic.StatisticsManager;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
-public class PushRequestSleeper
-{
+public class PushRequestSleeper {
     private final StatisticsManager statsService;
     private final MessageService msgService;
     private final DestAddress serventAddress;
@@ -58,9 +57,8 @@ public class PushRequestSleeper
      */
     private SocketFacade givenSocket;
 
-    public PushRequestSleeper( Servent servent, GUID aClientGUID, long aFileIndex, 
-        DestAddress[] pushProxyAddresses )
-    {
+    public PushRequestSleeper(Servent servent, GUID aClientGUID, long aFileIndex,
+                              DestAddress[] pushProxyAddresses) {
         this.statsService = servent.getStatisticsService();
         this.msgService = servent.getMessageService();
         this.serventAddress = servent.getLocalAddress();
@@ -69,30 +67,27 @@ public class PushRequestSleeper
         this.pushProxyAddresses = pushProxyAddresses;
     }
 
-    public GUID getGUID()
-    {
+    public GUID getGUID() {
         return clientGUID;
     }
 
     /**
      * Returns the file index of the push request.
      */
-    public long getFileIndex()
-    {
+    public long getFileIndex() {
         return fileIndex;
     }
 
     /**
      * we don't care about index or file name.. important is that we have a
      * open connection and we try to request what we want through it...
+     *
      * @param aGivenSocket
      * @param givenGUID
      * @return
      */
-    public synchronized boolean acceptGIVConnection( SocketFacade aGivenSocket, GUID givenGUID )
-    {
-        if ( !clientGUID.equals( givenGUID ) )
-        {
+    public synchronized boolean acceptGIVConnection(SocketFacade aGivenSocket, GUID givenGUID) {
+        if (!clientGUID.equals(givenGUID)) {
             return false;
         }
 
@@ -109,130 +104,108 @@ public class PushRequestSleeper
      * the request times out or the requested host answers.
      * Null is returned if the connection can't be made.
      */
-    public synchronized SocketFacade requestSocketViaPush()
-    {
+    public synchronized SocketFacade requestSocketViaPush() {
         boolean succ = false;
-        try
-        {
-            if ( pushProxyAddresses != null && pushProxyAddresses.length > 0 )
-            {
+        try {
+            if (pushProxyAddresses != null && pushProxyAddresses.length > 0) {
                 succ = requestViaPushProxies();
             }
-            
-            if ( !succ )
-            {
+
+            if (!succ) {
                 succ = requestViaPushRoute();
             }
-            
-            if ( !succ )
-            {
+
+            if (!succ) {
                 return null;
             }
-            
-            try
-            {
+
+            try {
                 // wait until the host connects to us or the timeout is reached
-                wait( DownloadPrefs.PushRequestTimeout.get().intValue() );
-            }
-            catch ( InterruptedException exp )
-            {// reset interruption
+                wait(DownloadPrefs.PushRequestTimeout.get().intValue());
+            } catch (InterruptedException exp) {// reset interruption
                 Thread.currentThread().interrupt();
             }
             // no socket given during sleeping time.
-            if ( givenSocket == null )
-            {
+            if (givenSocket == null) {
                 return null;
             }
             return givenSocket;
-        }
-        finally
-        {
-            PushHandler.unregisterPushRequestSleeper( this );
+        } finally {
+            PushHandler.unregisterPushRequestSleeper(this);
         }
     }
-    
-    private boolean requestViaPushProxies()
-    {
+
+    private boolean requestViaPushProxies() {
         assert pushProxyAddresses != null && pushProxyAddresses.length > 0;
-        
+
         // format: /gnet/push-proxy?guid=<ServentIdAsABase16UrlEncodedString>
         String requestPart = "/gnet/push-proxy?guid=" + clientGUID.toHexString();
 
-        ((SimpleStatisticProvider)statsService.getStatisticProvider(
-            StatisticsManager.PUSH_DLDPUSHPROXY_ATTEMPTS_PROVIDER)).increment(1);
-        
-        for (int i = 0; i < pushProxyAddresses.length; i++)
-        {
-            String urlStr = "http://" + 
+        ((SimpleStatisticProvider) statsService.getStatisticProvider(
+                StatisticsManager.PUSH_DLDPUSHPROXY_ATTEMPTS_PROVIDER)).increment(1);
+
+        for (int i = 0; i < pushProxyAddresses.length; i++) {
+            String urlStr = "http://" +
                     pushProxyAddresses[i].getFullHostName() + requestPart;
-            NLogger.debug( PushRequestSleeper.class, "PUSH via push proxy: " + urlStr );
-            
+            NLogger.debug(PushRequestSleeper.class, "PUSH via push proxy: " + urlStr);
+
             HttpClient httpClient = HttpClientFactory.createHttpClient();
-            httpClient.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, 
-                new DefaultHttpMethodRetryHandler( 1, false ) );
-            
-            httpClient.getParams().setSoTimeout( 10000 );
-            httpClient.getHttpConnectionManager().getParams().setConnectionTimeout( 5000 );
+            httpClient.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
+                    new DefaultHttpMethodRetryHandler(1, false));
+
+            httpClient.getParams().setSoTimeout(10000);
+            httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(5000);
             HeadMethod method = null;
-            try
-            {
-                method = new HeadMethod( urlStr );
-                method.addRequestHeader( GnutellaHeaderNames.X_NODE,
-                    serventAddress.getFullHostName() );
-                method.addRequestHeader( "Cache-Control", "no-cache");
-                method.addRequestHeader( HTTPHeaderNames.CONNECTION,
-                    "close" );
-                
-                int responseCode = httpClient.executeMethod( method );
-                
-                NLogger.debug( PushRequestSleeper.class, "PUSH via push proxy response code: "
-                        + responseCode + " ("+urlStr+")" );
-                
+            try {
+                method = new HeadMethod(urlStr);
+                method.addRequestHeader(GnutellaHeaderNames.X_NODE,
+                        serventAddress.getFullHostName());
+                method.addRequestHeader("Cache-Control", "no-cache");
+                method.addRequestHeader(HTTPHeaderNames.CONNECTION,
+                        "close");
+
+                int responseCode = httpClient.executeMethod(method);
+
+                NLogger.debug(PushRequestSleeper.class, "PUSH via push proxy response code: "
+                        + responseCode + " (" + urlStr + ")");
+
                 // if 202
-                if ( responseCode == HttpURLConnection.HTTP_ACCEPTED )
-                {
-                    ((SimpleStatisticProvider)statsService.getStatisticProvider(
-                        StatisticsManager.PUSH_DLDPUSHPROXY_SUCESS_PROVIDER)).increment(1);
+                if (responseCode == HttpURLConnection.HTTP_ACCEPTED) {
+                    ((SimpleStatisticProvider) statsService.getStatisticProvider(
+                            StatisticsManager.PUSH_DLDPUSHPROXY_SUCESS_PROVIDER)).increment(1);
                     return true;
                 }
-            }
-            catch ( IOException exp )
-            {
-                NLogger.warn( PushRequestSleeper.class, exp );
-            }
-            finally
-            {
-                if ( method != null )
-                {
+            } catch (IOException exp) {
+                NLogger.warn(PushRequestSleeper.class, exp);
+            } finally {
+                if (method != null) {
                     method.releaseConnection();
                 }
             }
         }
         return false;
     }
-    
+
     /**
      * <p>Prepares and sends a push request via the push route.</p>
-     *
+     * <p>
      * <p>This will attempt to queue a push message to send back in response to
      * a query hit that needs push to fetch the file. This is used to help obtain
      * a socket to download a file from.</p>
      */
-    private boolean requestViaPushRoute()
-    {
+    private boolean requestViaPushRoute() {
         // pushing only works if we have a valid IP to use in the push message.
-        if( serventAddress.getIpAddress() == null )
-        {
-            NLogger.warn( PushRequestSleeper.class, "Local address has no IP to use for PUSH." );
+        if (serventAddress.getIpAddress() == null) {
+            NLogger.warn(PushRequestSleeper.class, "Local address has no IP to use for PUSH.");
             return false;
         }
         // according to the_gdf it is all right to send a push with a private
         // local address
         // http://groups.yahoo.com/group/the_gdf/message/14305
-        PushRequestMsg push = new PushRequestMsg( clientGUID, fileIndex,
-            serventAddress );
-        
+        PushRequestMsg push = new PushRequestMsg(clientGUID, fileIndex,
+                serventAddress);
+
         // Route the PushRequestMsg.
-        return msgService.routePushMessage( push );        
+        return msgService.routePushMessage(push);
     }
 }

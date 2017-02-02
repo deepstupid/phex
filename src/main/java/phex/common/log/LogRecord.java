@@ -24,53 +24,44 @@ package phex.common.log;
 /**
  *
  */
-public class LogRecord
-{
+public class LogRecord {
     private long timestamp;
     private Object owner;
     private String message;
-    
+
     /**
      * @param message
      */
-    public LogRecord(Object owner, String message)
-    {
-        if ( owner == null || message == null )
-        {
+    public LogRecord(Object owner, String message) {
+        if (owner == null || message == null) {
             throw new NullPointerException();
         }
         this.owner = owner;
         timestamp = System.currentTimeMillis();
         this.message = message;
     }
-    
-    public long getTimestamp()
-    {
+
+    public long getTimestamp() {
         return timestamp;
     }
-    
-    public void setTimestamp(long date)
-    {
+
+    public void setTimestamp(long date) {
         this.timestamp = date;
     }
-    
-    public String getMessage()
-    {
+
+    public String getMessage() {
         return message;
     }
-    
-    public void setMessage(String message)
-    {
+
+    public void setMessage(String message) {
         this.message = message;
     }
-    
-    public int getSize()
-    {
+
+    public int getSize() {
         return message.length() + 8;
     }
-    
-    public Object getOwner()
-    {
+
+    public Object getOwner() {
         return owner;
     }
 }

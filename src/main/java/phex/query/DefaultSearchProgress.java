@@ -24,126 +24,102 @@ package phex.query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DefaultSearchProgress implements SearchProgress
-{
-    private static final Logger logger = LoggerFactory.getLogger( DefaultSearchProgress.class );
+public class DefaultSearchProgress implements SearchProgress {
     /**
      * The default value defining the number of millis a query is running
-     * before it times out. ( 5 minutes ) 
+     * before it times out. ( 5 minutes )
      */
     public static final int DEFAULT_QUERY_TIMEOUT = 5 * 60 * 1000;
-    
     /**
      * The number of results to get if we are starting a dynamic query
      * as a ultrapeer.
      */
     public static final int DESIRED_RESULTS = 200;
-    
     /**
      * The number of results to get if we are starting a dynamic query
      * with hash.
      */
     public static final int DESIRED_HASH_RESULTS = 20;
-    
-    
-    private long startTime;
-    
+    private static final Logger logger = LoggerFactory.getLogger(DefaultSearchProgress.class);
     private final long lifetime;
-    
     private final int desiredResultsCount;
-    
     protected volatile int receivedResultsCount;
-        
-    protected DefaultSearchProgress( long lifetime, int desiredResultsCount )
-    {
+    private long startTime;
+
+    protected DefaultSearchProgress(long lifetime, int desiredResultsCount) {
         this.lifetime = lifetime;
         this.desiredResultsCount = desiredResultsCount;
         receivedResultsCount = 0;
         startTime = 0;
     }
-    
-    public int getProgress()
-    {
-        if ( isSearchFinished() )
-        {
+
+    public static DefaultSearchProgress createForForMeProgress(boolean isUrnQuery) {
+        return new DefaultSearchProgress(DEFAULT_QUERY_TIMEOUT,
+                isUrnQuery ? DESIRED_HASH_RESULTS : DESIRED_RESULTS);
+    }
+
+    public static DefaultSearchProgress createStandardProgress(long lifetime, int desiredResultsCount) {
+        return new DefaultSearchProgress(lifetime, desiredResultsCount);
+    }
+
+    public int getProgress() {
+        if (isSearchFinished()) {
             return 100;
         }
-        if ( startTime <= 0 )
-        {
+        if (startTime <= 0) {
             return 0;
         }
-        
+
         int resultsProgress = 0;
-        if ( getDesiredResultsCount() > 0 )
-        {
-            resultsProgress = (int)((double)getReceivedResultsCount() / (double)getDesiredResultsCount() * 100d );
+        if (getDesiredResultsCount() > 0) {
+            resultsProgress = (int) ((double) getReceivedResultsCount() / (double) getDesiredResultsCount() * 100d);
         }
-                
+
         int timeProgress = 0;
-        if ( lifetime > 0 )
-        {
+        if (lifetime > 0) {
             long currentTime = System.currentTimeMillis();
             // time progress...
             long timeLeft = startTime + lifetime - currentTime;
-            timeProgress = (int)(100D - Math.max( 0D, timeLeft ) / lifetime * 100D );
+            timeProgress = (int) (100D - Math.max(0D, timeLeft) / lifetime * 100D);
         }
         // return the max from all
-        int totalProgress = Math.min( Math.max( resultsProgress, timeProgress ), 100);
-        logger.debug( "Search progress: r{}, t{}, ={}", 
-            new Object[] { Integer.valueOf( resultsProgress ), Integer.valueOf( timeProgress ),
-            Integer.valueOf( totalProgress ) } );
+        int totalProgress = Math.min(Math.max(resultsProgress, timeProgress), 100);
+        logger.debug("Search progress: r{}, t{}, ={}",
+                new Object[]{Integer.valueOf(resultsProgress), Integer.valueOf(timeProgress),
+                        Integer.valueOf(totalProgress)});
         return totalProgress;
     }
-    
-    public void searchStarted()
-    {
+
+    public void searchStarted() {
         startTime = System.currentTimeMillis();
     }
-    
-    public int getDesiredResultsCount()
-    {
+
+    public int getDesiredResultsCount() {
         return desiredResultsCount;
     }
-    
-    public int getReceivedResultsCount()
-    {
+
+    public int getReceivedResultsCount() {
         return receivedResultsCount;
     }
-    
-    public void incReceivedResultsCount( int inc )
-    {
+
+    public void incReceivedResultsCount(int inc) {
         receivedResultsCount += inc;
     }
-    
-    public boolean isSearchFinished()
-    {
-        if ( getDesiredResultsCount() > 0 && 
-            getReceivedResultsCount() >= getDesiredResultsCount() )
-        {
+
+    public boolean isSearchFinished() {
+        if (getDesiredResultsCount() > 0 &&
+                getReceivedResultsCount() >= getDesiredResultsCount()) {
             return true;
         }
-        
-        if ( lifetime > 0 )
-        {
+
+        if (lifetime > 0) {
             // check if the query has timed out
             long currentTime = System.currentTimeMillis();
-            if ( currentTime > startTime + lifetime )
-            {
+            if (currentTime > startTime + lifetime) {
                 return true;
             }
         }
-        
+
         return false;
-    }
-    
-    public static DefaultSearchProgress createForForMeProgress( boolean isUrnQuery )
-    {
-        return new DefaultSearchProgress( DEFAULT_QUERY_TIMEOUT, 
-            isUrnQuery ? DESIRED_HASH_RESULTS : DESIRED_RESULTS );
-    }
-    
-    public static DefaultSearchProgress createStandardProgress( long lifetime, int desiredResultsCount )
-    {
-        return new DefaultSearchProgress( lifetime, desiredResultsCount );
     }
 }

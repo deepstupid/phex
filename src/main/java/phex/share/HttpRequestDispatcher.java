@@ -45,113 +45,99 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HttpRequestDispatcher
-{
+public class HttpRequestDispatcher {
     // Called by ReadWorker to handle a HTTP GET request from the remote host.
     public void httpRequestHandler(Connection connection,
-        HTTPRequest httpRequest)
-    {
-        try
-        {
+                                   HTTPRequest httpRequest) {
+        try {
             // GET / HTTP/1.1 (Browse Host request)
-            if ( httpRequest.getRequestMethod().equals( "GET" ) )
-            {
+            if (httpRequest.getRequestMethod().equals("GET")) {
                 String requestURI = httpRequest.getRequestURI();
-                if ( requestURI.equals( "/" ) )
-                {
+                if (requestURI.equals("/")) {
                     // The remote host just want the index.html.
                     // Return a list of shared files.
-                    sendFileListing( httpRequest, connection );
+                    sendFileListing(httpRequest, connection);
                     return;
-                }
-                else if ( requestURI.equals( "/robots.txt" ) )
-                {// this appears to be a lost search engine... reject it...
-                    HTTPResponse response = new HTTPResponse( (short)200, "OK", true );
-                    response.addHeader( new HTTPHeader(HTTPHeaderNames.CONNECTION, "close") );
-                    response.addHeader( new HTTPHeader(HTTPHeaderNames.CONTENT_TYPE, "text/plain") );
-                    response.addHeader( new HTTPHeader(HTTPHeaderNames.CONTENT_LENGTH, "") );
+                } else if (requestURI.equals("/robots.txt")) {// this appears to be a lost search engine... reject it...
+                    HTTPResponse response = new HTTPResponse((short) 200, "OK", true);
+                    response.addHeader(new HTTPHeader(HTTPHeaderNames.CONNECTION, "close"));
+                    response.addHeader(new HTTPHeader(HTTPHeaderNames.CONTENT_TYPE, "text/plain"));
+                    response.addHeader(new HTTPHeader(HTTPHeaderNames.CONTENT_LENGTH, ""));
                     String httpData = response.buildHTTPResponseString();
                     String robotsText = "User-agent: *\r\nDisallow: /";
-                    connection.write( ByteBuffer.wrap( 
-                        StringUtils.getBytesInUsAscii( httpData ) ) );
-                    connection.write( ByteBuffer.wrap( 
-                        StringUtils.getBytesInUsAscii( robotsText ) ) );
+                    connection.write(ByteBuffer.wrap(
+                            StringUtils.getBytesInUsAscii(httpData)));
+                    connection.write(ByteBuffer.wrap(
+                            StringUtils.getBytesInUsAscii(robotsText)));
                     return;
                 }
             }
-        
-            sendErrorHTTP( connection, "404 Not Found",
-                "File not found." );
-        }
-        catch (IOException exp)
-        {
+
+            sendErrorHTTP(connection, "404 Not Found",
+                    "File not found.");
+        } catch (IOException exp) {
             NLogger.debug(HttpRequestDispatcher.class, exp, exp);
         }
     }
 
-    private void sendErrorHTTP( Connection connection, String statusStr, String errMsg)
-        throws IOException
-    {
-        StringBuffer content = new StringBuffer( 300 );
-        content.append( "<html><head><title>PHEX</title></head><body>" );
-        content.append( errMsg );
-        content.append( "<hr>Visit the Phex website at " );
-        content.append( "<a href=\"http://phex.sourceforge.net\">http://phex.sourceforge.net</a>." );
-        content.append( "</body>" );
-        content.append( "</html>" );
+    private void sendErrorHTTP(Connection connection, String statusStr, String errMsg)
+            throws IOException {
+        StringBuffer content = new StringBuffer(300);
+        content.append("<html><head><title>PHEX</title></head><body>");
+        content.append(errMsg);
+        content.append("<hr>Visit the Phex website at ");
+        content.append("<a href=\"http://phex.sourceforge.net\">http://phex.sourceforge.net</a>.");
+        content.append("</body>");
+        content.append("</html>");
 
-        StringBuffer buf = new StringBuffer( 300 );
-        buf.append( "HTTP/1.1 " ).append( statusStr ).append( HTTPRequest.CRLF );
-        buf.append( "Server: " ).append( Phex.getFullPhexVendor() ).append( HTTPRequest.CRLF );
-        buf.append( "Connection: close" ).append( HTTPRequest.CRLF );
-        buf.append( "Content-Type: text/plain" ).append( HTTPRequest.CRLF );
-        buf.append( "Content-Length: " ).append( content.length() ).append( HTTPRequest.CRLF );
-        buf.append( "\r\n" );
-        
-        connection.write( ByteBuffer.wrap( 
-            StringUtils.getBytesInUsAscii( buf.toString() ) ) );
-        
-        connection.write( ByteBuffer.wrap( 
-            StringUtils.getBytesInUsAscii( content.toString() ) ) );
+        StringBuffer buf = new StringBuffer(300);
+        buf.append("HTTP/1.1 ").append(statusStr).append(HTTPRequest.CRLF);
+        buf.append("Server: ").append(Phex.getFullPhexVendor()).append(HTTPRequest.CRLF);
+        buf.append("Connection: close").append(HTTPRequest.CRLF);
+        buf.append("Content-Type: text/plain").append(HTTPRequest.CRLF);
+        buf.append("Content-Length: ").append(content.length()).append(HTTPRequest.CRLF);
+        buf.append("\r\n");
+
+        connection.write(ByteBuffer.wrap(
+                StringUtils.getBytesInUsAscii(buf.toString())));
+
+        connection.write(ByteBuffer.wrap(
+                StringUtils.getBytesInUsAscii(content.toString())));
     }
 
     private void sendFileListing(HTTPRequest httpRequest, Connection connection)
-        throws IOException
-    {        
-        if ( !LibraryPrefs.AllowBrowsing.get().booleanValue() )
-        {
+            throws IOException {
+        if (!LibraryPrefs.AllowBrowsing.get().booleanValue()) {
             HTTPHeaderGroup headers = HTTPHeaderGroup.createDefaultResponseHeaders();
-            String response = createHTTPResponse( "403 Browsing disabled", headers );
-            connection.write( ByteBuffer.wrap( 
-                StringUtils.getBytesInUsAscii( response ) ) );
+            String response = createHTTPResponse("403 Browsing disabled", headers);
+            connection.write(ByteBuffer.wrap(
+                    StringUtils.getBytesInUsAscii(response)));
             connection.flush();
             connection.disconnect();
             return;
         }
-        
-        HTTPHeader acceptHeader = httpRequest.getHeader( "Accept" );
-        if ( acceptHeader == null )
-        {
+
+        HTTPHeader acceptHeader = httpRequest.getHeader("Accept");
+        if (acceptHeader == null) {
             HTTPHeaderGroup headers = HTTPHeaderGroup.createDefaultResponseHeaders();
-            String response = createHTTPResponse( "406 Not Acceptable", headers );
-            connection.write( ByteBuffer.wrap( 
-                StringUtils.getBytesInUsAscii( response ) ) );
+            String response = createHTTPResponse("406 Not Acceptable", headers);
+            connection.write(ByteBuffer.wrap(
+                    StringUtils.getBytesInUsAscii(response)));
             connection.flush();
             connection.disconnect();
             return;
         }
         Servent servent = Servent.getInstance();
         String acceptHeaderStr = acceptHeader.getValue();
-        if ( acceptHeaderStr.indexOf( "application/x-gnutella-packets" ) != -1 )
-        {// return file listing via gnutella packages...
+        if (acceptHeaderStr.indexOf("application/x-gnutella-packets") != -1) {// return file listing via gnutella packages...
             HTTPHeaderGroup headers = HTTPHeaderGroup.createDefaultResponseHeaders();
-            headers.addHeader( new HTTPHeader( HTTPHeaderNames.CONTENT_TYPE,
-                "application/x-gnutella-packets" ) );
-            headers.addHeader( new HTTPHeader( HTTPHeaderNames.CONNECTION,
-                "close" ) );
-            String response = createHTTPResponse( "200 OK", headers );
-            connection.write( ByteBuffer.wrap( 
-                StringUtils.getBytesInUsAscii( response ) ) );
+            headers.addHeader(new HTTPHeader(HTTPHeaderNames.CONTENT_TYPE,
+                    "application/x-gnutella-packets"));
+            headers.addHeader(new HTTPHeader(HTTPHeaderNames.CONNECTION,
+                    "close"));
+            String response = createHTTPResponse("200 OK", headers);
+            connection.write(ByteBuffer.wrap(
+                    StringUtils.getBytesInUsAscii(response)));
             connection.flush();
 
             // now send QueryReplys...
@@ -165,90 +151,83 @@ public class HttpRequestDispatcher
                         continue;
                     eligibleShareFiles.add(shareFile);
                 }
-            }
-            catch (Exception exp)
-            {
-                NLogger.warn( HttpRequestDispatcher.class, exp, exp );
+            } catch (Exception exp) {
+                NLogger.warn(HttpRequestDispatcher.class, exp, exp);
             }
             shareFiles = eligibleShareFiles;
 
-            MsgHeader header = new MsgHeader( new GUID(),
-                MsgHeader.QUERY_HIT_PAYLOAD, (byte) 2, (byte) 0, -1 );
+            MsgHeader header = new MsgHeader(new GUID(),
+                    MsgHeader.QUERY_HIT_PAYLOAD, (byte) 2, (byte) 0, -1);
 
             QueryResponseRecord record;
             ShareFile sfile;
             int sendCount = 0;
             int toSendCount = shareFiles.size();
-            while ( sendCount < toSendCount )
-            {
-                int currentSendCount = Math.min( 255, toSendCount - sendCount );
+            while (sendCount < toSendCount) {
+                int currentSendCount = Math.min(255, toSendCount - sendCount);
                 QueryResponseRecord[] records = new QueryResponseRecord[currentSendCount];
-                for (int i = 0; i < currentSendCount; i++)
-                {
-                    sfile = shareFiles.get( sendCount + i );
-                    record = QueryResponseRecord.createFromShareFile( sfile,
-                        servent.getLocalAddress() );
+                for (int i = 0; i < currentSendCount; i++) {
+                    sfile = shareFiles.get(sendCount + i);
+                    record = QueryResponseRecord.createFromShareFile(sfile,
+                            servent.getLocalAddress());
                     records[i] = record;
                 }
 
                 DestAddress hostAddress = servent.getLocalAddress();
-                QueryResponseMsg queryResponse = new QueryResponseMsg( header,
-                    servent.getServentGuid(), hostAddress,
-                    Math.round( BandwidthPrefs.MaxUploadBandwidth.get().floatValue()
-                        / NumberFormatUtils.ONE_KB ), 
-                    records, servent.getHostService().getNetworkHostsContainer().getPushProxies(),
-                    !servent.isFirewalled(), servent.isUploadLimitReached() );
+                QueryResponseMsg queryResponse = new QueryResponseMsg(header,
+                        servent.getServentGuid(), hostAddress,
+                        Math.round(BandwidthPrefs.MaxUploadBandwidth.get().floatValue()
+                                / NumberFormatUtils.ONE_KB),
+                        records, servent.getHostService().getNetworkHostsContainer().getPushProxies(),
+                        !servent.isFirewalled(), servent.isUploadLimitReached());
 
                 // send msg over the wire 
                 ByteBuffer headerBuf = queryResponse.createHeaderBuffer();
-                connection.write( headerBuf );
+                connection.write(headerBuf);
                 ByteBuffer messageBuf = queryResponse.createMessageBuffer();
-                connection.write( messageBuf );
+                connection.write(messageBuf);
 
                 // and count message
-                ((SimpleStatisticProvider)servent.getStatisticsService().getStatisticProvider( 
-                    StatisticsManager.QUERYMSG_OUT_PROVIDER )).increment( 1 );
+                ((SimpleStatisticProvider) servent.getStatisticsService().getStatisticProvider(
+                        StatisticsManager.QUERYMSG_OUT_PROVIDER)).increment(1);
 
                 sendCount += currentSendCount;
             }
             connection.flush();
-        }
-        else if ( acceptHeaderStr.indexOf( "text/html" ) != -1
-            || acceptHeaderStr.indexOf( "*/*" ) != -1 )
-        {// return file listing via html page...
+        } else if (acceptHeaderStr.indexOf("text/html") != -1
+                || acceptHeaderStr.indexOf("*/*") != -1) {// return file listing via html page...
             HTTPHeaderGroup headers = HTTPHeaderGroup.createDefaultResponseHeaders();
-            headers.addHeader( new HTTPHeader( HTTPHeaderNames.CONTENT_TYPE,
-                "text/html; charset=iso-8859-1" ) );
-            headers.addHeader( new HTTPHeader( HTTPHeaderNames.CONNECTION,
-                "close" ) );
-            String response = createHTTPResponse( "200 OK", headers );
-            connection.write( ByteBuffer.wrap( 
-                StringUtils.getBytesInUsAscii( response ) ) );
+            headers.addHeader(new HTTPHeader(HTTPHeaderNames.CONTENT_TYPE,
+                    "text/html; charset=iso-8859-1"));
+            headers.addHeader(new HTTPHeader(HTTPHeaderNames.CONNECTION,
+                    "close"));
+            String response = createHTTPResponse("200 OK", headers);
+            connection.write(ByteBuffer.wrap(
+                    StringUtils.getBytesInUsAscii(response)));
             connection.flush();
 
             // now send html
-            ExportEngine exportEngine = new ExportEngine( 
-                servent.getLocalAddress(),
-                connection.getOutputStream(),
-                servent.getSharedFilesService().getSharedFiles() );
+            ExportEngine exportEngine = new ExportEngine(
+                    servent.getLocalAddress(),
+                    connection.getOutputStream(),
+                    servent.getSharedFilesService().getSharedFiles());
             exportEngine.startExport();
-            
+
             connection.flush();
         }
         // close connection as indicated in the header
         connection.disconnect();
     }
 
-    private String createHTTPResponse(String code, HTTPHeaderGroup header)
-    {
-        StringBuffer buffer = new StringBuffer( 100 );
-        buffer.append( "HTTP/1.1 " );
-        buffer.append( code );
-        buffer.append( "\r\n" );
-        buffer.append( header.buildHTTPHeaderString() );
-        buffer.append( "\r\n" );
+    private String createHTTPResponse(String code, HTTPHeaderGroup header) {
+        StringBuffer buffer = new StringBuffer(100);
+        buffer.append("HTTP/1.1 ");
+        buffer.append(code);
+        buffer.append("\r\n");
+        buffer.append(header.buildHTTPHeaderString());
+        buffer.append("\r\n");
         return buffer.toString();
     }
 
-    
+
 }

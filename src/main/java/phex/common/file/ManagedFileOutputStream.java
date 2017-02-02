@@ -27,67 +27,53 @@ import phex.io.buffer.ByteBuffer;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class ManagedFileOutputStream extends OutputStream
-{   
-    private ByteBuffer buffer;
+public class ManagedFileOutputStream extends OutputStream {
     private final ManagedFile managedFile;
+    private ByteBuffer buffer;
     private long outputPosition;
-    
-    public ManagedFileOutputStream( ManagedFile managedFile, long outputPosition )
-    {
+
+    public ManagedFileOutputStream(ManagedFile managedFile, long outputPosition) {
         this.managedFile = managedFile;
         this.outputPosition = outputPosition;
-        buffer = ByteBuffer.allocate( BufferSize._64K );
+        buffer = ByteBuffer.allocate(BufferSize._64K);
     }
-    
+
     @Override
-	public void write( int b ) throws IOException
-    {
-        if ( !buffer.hasRemaining() )
-        {
+    public void write(int b) throws IOException {
+        if (!buffer.hasRemaining()) {
             flush();
         }
-        buffer.put( (byte)b );
+        buffer.put((byte) b);
     }
-    
+
     @Override
-	public void write(byte[] b, int offset, int length) throws IOException
-    {
+    public void write(byte[] b, int offset, int length) throws IOException {
         if ((offset < 0) || (offset > b.length) || (length < 0) ||
-            ((offset + length) > b.length) || ((offset + length) < 0)) 
-        {
+                ((offset + length) > b.length) || ((offset + length) < 0)) {
             throw new IndexOutOfBoundsException();
-        }
-        else if (length == 0) 
-        {
+        } else if (length == 0) {
             return;
         }
-        
+
         int written = 0;
-        while ( written < length )
-        {
-            int toWrite = Math.min( length-written, buffer.remaining() );
-            buffer.put( b, offset+written, toWrite );
+        while (written < length) {
+            int toWrite = Math.min(length - written, buffer.remaining());
+            buffer.put(b, offset + written, toWrite);
             written += toWrite;
-            if ( !buffer.hasRemaining() )
-            {
+            if (!buffer.hasRemaining()) {
                 flush();
             }
         }
     }
-    
+
     @Override
-	public void flush() throws IOException
-    {
+    public void flush() throws IOException {
         buffer.flip();
-        try
-        {
-            managedFile.write(buffer, outputPosition );
-        }
-        catch ( ManagedFileException exp )
-        {
-            IOException ioExp = new IOException( "ManagedFileException: " 
-                + exp.getMessage(), exp);
+        try {
+            managedFile.write(buffer, outputPosition);
+        } catch (ManagedFileException exp) {
+            IOException ioExp = new IOException("ManagedFileException: "
+                    + exp.getMessage(), exp);
             throw ioExp;
         }
         outputPosition += buffer.limit();
@@ -95,8 +81,7 @@ public class ManagedFileOutputStream extends OutputStream
     }
 
     @Override
-	public void close() throws IOException
-    {
+    public void close() throws IOException {
         flush();
         buffer = null;
     }

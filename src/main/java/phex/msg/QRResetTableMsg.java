@@ -25,48 +25,44 @@ import phex.io.buffer.ByteBuffer;
 import phex.util.IOUtil;
 
 
-public class QRResetTableMsg extends RouteTableUpdateMsg
-{
+public class QRResetTableMsg extends RouteTableUpdateMsg {
     // length = variant: 1 + tablelength: 4 + infinity: 1
     private static final int MESSAGE_LENGTH = 6;
     private final int tableSize;
     private final byte infinityByte;
 
-    public QRResetTableMsg( int aTableSize, byte aInfinityByte )
-    {
-        super( RESET_TABLE_VARIANT, MESSAGE_LENGTH );
+    public QRResetTableMsg(int aTableSize, byte aInfinityByte) {
+        super(RESET_TABLE_VARIANT, MESSAGE_LENGTH);
         tableSize = aTableSize;
         infinityByte = aInfinityByte;
     }
 
-    public QRResetTableMsg( MsgHeader header, byte[] aBody )
-    {
-        super( RESET_TABLE_VARIANT, header );
-        header.setDataLength( aBody.length );
+    public QRResetTableMsg(MsgHeader header, byte[] aBody) {
+        super(RESET_TABLE_VARIANT, header);
+        header.setDataLength(aBody.length);
         // since we dont forward this message we are not memorizing the body!
-        tableSize = IOUtil.deserializeIntLE( aBody, 1 );
+        tableSize = IOUtil.deserializeIntLE(aBody, 1);
         infinityByte = aBody[5];
     }
 
     /**
      * Returns the used table size.
+     *
      * @return the used table size.
      */
-    public int getTableSize()
-    {
+    public int getTableSize() {
         return tableSize;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public ByteBuffer createMessageBuffer()
-    {
-        ByteBuffer buffer = ByteBuffer.allocate( MESSAGE_LENGTH );
-        buffer.put( variant )
-              .putIntLE( tableSize )
-              .put( infinityByte );
+    public ByteBuffer createMessageBuffer() {
+        ByteBuffer buffer = ByteBuffer.allocate(MESSAGE_LENGTH);
+        buffer.put(variant)
+                .putIntLE(tableSize)
+                .put(infinityByte);
         buffer.rewind();
         return buffer;
     }

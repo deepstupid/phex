@@ -28,25 +28,24 @@ import phex.upload.response.UploadResponse;
 
 import java.io.IOException;
 
-public interface UploadHandler
-{
+public interface UploadHandler {
     public boolean isPersistentConnection();
-    
+
     public boolean isQueued();
-    
+
     /**
-     * Returns the earliest timestamp the connection is allowed to come back with the  
+     * Returns the earliest timestamp the connection is allowed to come back with the
      * next request attempt.
      */
     public long getQueueMinNextPollTime();
-    
+
     /**
-     * Returns he maximum time in millis the connection can wait with the next 
+     * Returns he maximum time in millis the connection can wait with the next
      * request before it times out.
      */
     public int getQueueMaxNextPollTime();
 
-    public UploadResponse determineUploadResponse( HTTPRequest httpRequest, UploadState uploadState,
-        UploadManager uploadMgr ) 
-        throws IOException;
+    public UploadResponse determineUploadResponse(HTTPRequest httpRequest, UploadState uploadState,
+                                                  UploadManager uploadMgr)
+            throws IOException;
 }

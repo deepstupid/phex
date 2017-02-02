@@ -21,10 +21,8 @@ package phex.util;
 import phex.common.address.DestAddress;
 import phex.prefs.core.SecurityPrefs;
 
-public final class IPUtils
-{
-    private IPUtils()
-    {
+public final class IPUtils {
+    private IPUtils() {
     }
 
     /**
@@ -33,13 +31,12 @@ public final class IPUtils
      * @param hostAddress is the address of the host, ip and port to be searched for
      * @return true if the host ip or host port was found in the invalid list
      */
-    public static boolean isPortInUserInvalidList( DestAddress hostAddress )
-    {
-        boolean portFound ;
+    public static boolean isPortInUserInvalidList(DestAddress hostAddress) {
+        boolean portFound;
 
         //check if the port is in the invalid list
-        String port = String.valueOf( hostAddress.getPort() );
-        portFound = SecurityPrefs.FilteredPorts.get().contains( port );
+        String port = String.valueOf(hostAddress.getPort());
+        portFound = SecurityPrefs.FilteredPorts.get().contains(port);
         //if the port or the ip was found the host is in the invalid list
         return portFound;
 

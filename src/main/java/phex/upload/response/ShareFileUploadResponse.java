@@ -32,76 +32,63 @@ import phex.util.IOUtil;
 
 import java.io.IOException;
 
-public class ShareFileUploadResponse extends UploadResponse
-{
+public class ShareFileUploadResponse extends UploadResponse {
     private final ShareFile shareFile;
     private ReadOnlyManagedFile uploadFile;
 
     private long startOffset;
     private long currentOffset;
-    
+
     private long length;
 
-    public ShareFileUploadResponse( ShareFile shareFile, long offset, long length ) 
-        throws ManagedFileException
-    {
+    public ShareFileUploadResponse(ShareFile shareFile, long offset, long length)
+            throws ManagedFileException {
         super();
         this.shareFile = shareFile;
         uploadFile = Phex.getFileManager().
-            getReadOnlyManagedFile( shareFile.getSystemFile() );
-        
+                getReadOnlyManagedFile(shareFile.getSystemFile());
+
         startOffset = offset;
         currentOffset = startOffset;
         this.length = length;
-        
-        if ( offset == 0 && length == uploadFile.getLength() )
-        {
+
+        if (offset == 0 && length == uploadFile.getLength()) {
             httpResponse = new HTTPResponse((short) 200, "OK", true);
-        }
-        else
-        {
+        } else {
             httpResponse = new HTTPResponse((short) 206, "Partial Content",
-                true);
+                    true);
         }
     }
-    
-    public int remainingBody()
-    {
-        return (int)(startOffset + length - currentOffset);
+
+    public int remainingBody() {
+        return (int) (startOffset + length - currentOffset);
     }
-    
+
     @Override
-    public int fillBody( ByteBuffer byteBuffer ) 
-        throws IOException
-    {
-        try
-        {
-            if ( NLogger.isDebugEnabled( ShareFileUploadResponse.class ) )
-            {
-                String log = "Reading in " + byteBuffer.remaining() + " bytes at " + 
-                    currentOffset + " from " + uploadFile;
-                NLogger.debug( ShareFileUploadResponse.class, log );
+    public int fillBody(ByteBuffer byteBuffer)
+            throws IOException {
+        try {
+            if (NLogger.isDebugEnabled(ShareFileUploadResponse.class)) {
+                String log = "Reading in " + byteBuffer.remaining() + " bytes at " +
+                        currentOffset + " from " + uploadFile;
+                NLogger.debug(ShareFileUploadResponse.class, log);
             }
-            int read = uploadFile.read( byteBuffer, currentOffset );
+            int read = uploadFile.read(byteBuffer, currentOffset);
             currentOffset += read;
             return read;
-        } 
-        catch ( ManagedFileException exp )
-        {
-            IOException ioExp = new IOException( "ManagedFileException: "
-                + exp.getMessage() );
-            ioExp.initCause( exp );
+        } catch (ManagedFileException exp) {
+            IOException ioExp = new IOException("ManagedFileException: "
+                    + exp.getMessage());
+            ioExp.initCause(exp);
             throw ioExp;
         }
     }
-    
-    public void countUpload()
-    {
+
+    public void countUpload() {
         shareFile.incUploadCount();
     }
-    
-    public void close()
-    {
-        IOUtil.closeQuietly( uploadFile );
+
+    public void close() {
+        IOUtil.closeQuietly(uploadFile);
     }
 }

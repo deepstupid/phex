@@ -27,34 +27,30 @@ import java.io.File;
 /**
  *
  */
-public class SharedDirectory extends SharedResource
-{
+public class SharedDirectory extends SharedResource {
     public static final short SHARED_DIRECTORY = 1;
     public static final short UNSHARED_PARENT_DIRECTORY = 2;
-    
+
     /**
      * The type of the shared directory. This can be SHARED_DIRECTORY or PARTIALY_SHARED_DIRECTORY.
      */
     private short type;
-    
-    public SharedDirectory( File file )
-    {
-        super( file );
+
+    public SharedDirectory(File file) {
+        super(file);
     }
-    
+
     /**
      * @return Returns the type.
      */
-    public short getType()
-    {
+    public short getType() {
         return type;
     }
-    
+
     /**
      * @param type The type to set.
      */
-    public void setType(short type)
-    {
+    public void setType(short type) {
         this.type = type;
     }
 }

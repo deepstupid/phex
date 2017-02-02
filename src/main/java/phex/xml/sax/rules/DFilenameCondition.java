@@ -34,55 +34,46 @@ import java.util.List;
 /**
  * Filters all files matching the expression.
  */
-public class DFilenameCondition implements DCondition
-{
+public class DFilenameCondition implements DCondition {
     static public final String ELEMENT_NAME = "filename-condition";
-    
+
     private List<String> terms;
-    
+
     /**
      * @param expression
      * @param case1
      */
-    public DFilenameCondition( )
-    {
+    public DFilenameCondition() {
         terms = new ArrayList<String>();
     }
 
-    public List<String> getTerms()
-    {
+    public List<String> getTerms() {
         return terms;
     }
 
-    public void setTerms( List<String> terms )
-    {
+    public void setTerms(List<String> terms) {
         this.terms = terms;
     }
 
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
-        
-        if ( terms != null )
-        {
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
+
+        if (terms != null) {
             Iterator iterator = terms.iterator();
-            while ( iterator.hasNext() )
-            {
-                writer.startElm( "term", null );
-                writer.elmText( (String)iterator.next() );
-                writer.endElm( "term" );
+            while (iterator.hasNext()) {
+                writer.startElm("term", null);
+                writer.elmText((String) iterator.next());
+                writer.endElm("term");
             }
         }
-        
-        writer.endElm( ELEMENT_NAME );
+
+        writer.endElm(ELEMENT_NAME);
     }
 
-    public Condition createCondition()
-    {
-        FilenameCondition cond = new FilenameCondition( );
+    public Condition createCondition() {
+        FilenameCondition cond = new FilenameCondition();
         Iterator iterator = terms.iterator();
-        while ( iterator.hasNext() )
-        {
+        while (iterator.hasNext()) {
             cond.addTerm((String) iterator.next());
         }
         return cond;

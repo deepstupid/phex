@@ -25,36 +25,32 @@ import phex.common.format.TimeFormatUtils;
 import phex.download.swarming.SWDownloadCandidate.CandidateStatus;
 import phex.util.Localizer;
 
-public final class SWDownloadInfo implements SWDownloadConstants
-{
+public final class SWDownloadInfo implements SWDownloadConstants {
     // dont allow to create instances
-    private SWDownloadInfo()
-    {
+    private SWDownloadInfo() {
     }
 
     /**
      * Returns a localized string for the given status of a download file.
      */
-    public static String getDownloadFileStatusString( int status )
-    {
-        switch( status )
-        {
+    public static String getDownloadFileStatusString(int status) {
+        switch (status) {
             case STATUS_FILE_WAITING:
-                return Localizer.getString( STATUS_FILE_WAITING_KEY );
+                return Localizer.getString(STATUS_FILE_WAITING_KEY);
             case STATUS_FILE_DOWNLOADING:
-                return Localizer.getString( STATUS_FILE_DOWNLOADING_KEY );
+                return Localizer.getString(STATUS_FILE_DOWNLOADING_KEY);
             case STATUS_FILE_COMPLETED:
             case STATUS_FILE_COMPLETED_MOVED:
-                return Localizer.getString( STATUS_FILE_COMPLETED_KEY );
+                return Localizer.getString(STATUS_FILE_COMPLETED_KEY);
             case STATUS_FILE_STOPPED:
-                return Localizer.getString( STATUS_FILE_STOPPED_KEY );
+                return Localizer.getString(STATUS_FILE_STOPPED_KEY);
             case STATUS_FILE_QUEUED:
-                return Localizer.getString( STATUS_FILE_QUEUED_KEY );
+                return Localizer.getString(STATUS_FILE_QUEUED_KEY);
             default:
                 Object[] arguments = new Object[1];
-                arguments[0] = Integer.valueOf( status );
-                return Localizer.getFormatedString( STATUS_UNRECOGNIZED_KEY,
-                    arguments );
+                arguments[0] = Integer.valueOf(status);
+                return Localizer.getFormatedString(STATUS_UNRECOGNIZED_KEY,
+                        arguments);
         }
     }
 
@@ -62,75 +58,73 @@ public final class SWDownloadInfo implements SWDownloadConstants
      * Returns a localized string for the given status of a download candidate.
      */
     public static String getDownloadCandidateStatusString(
-        SWDownloadCandidate candidate )
-    {
+            SWDownloadCandidate candidate) {
         Object[] arguments;
         CandidateStatus status = candidate.getStatus();
-        switch( status )
-        {
+        switch (status) {
             case IGNORED:
-                return Localizer.getString( STATUS_CANDIDATE_IGNORED_KEY )
-                    + " (" + Localizer.getString( candidate.getStatusReason() ) + ").";
+                return Localizer.getString(STATUS_CANDIDATE_IGNORED_KEY)
+                        + " (" + Localizer.getString(candidate.getStatusReason()) + ").";
             case BAD:
                 arguments = new Object[2];
-                arguments[0] = Long.valueOf( candidate.getStatusTimeLeft() / 1000 );
+                arguments[0] = Long.valueOf(candidate.getStatusTimeLeft() / 1000);
                 arguments[1] = TimeFormatUtils.convertSecondsToTime(
-                    (int)(candidate.getStatusTimeLeft() / 1000 ) );
-                return Localizer.getFormatedString( STATUS_CANDIDATE_BAD_KEY,
-                    arguments );
+                        (int) (candidate.getStatusTimeLeft() / 1000));
+                return Localizer.getFormatedString(STATUS_CANDIDATE_BAD_KEY,
+                        arguments);
             case WAITING:
-                return Localizer.getString( STATUS_CANDIDATE_WAITING_KEY );
+                return Localizer.getString(STATUS_CANDIDATE_WAITING_KEY);
             case BUSY:
                 arguments = new Object[2];
-                arguments[0] = Long.valueOf( candidate.getStatusTimeLeft() / 1000 );
+                arguments[0] = Long.valueOf(candidate.getStatusTimeLeft() / 1000);
                 arguments[1] = TimeFormatUtils.convertSecondsToTime(
-                    (int)(candidate.getStatusTimeLeft() / 1000 ) );
-                return Localizer.getFormatedString( STATUS_CANDIDATE_BUSY_KEY,
-                    arguments );
+                        (int) (candidate.getStatusTimeLeft() / 1000));
+                return Localizer.getFormatedString(STATUS_CANDIDATE_BUSY_KEY,
+                        arguments);
             case CONNECTING:
                 arguments = new Object[1];
-                arguments[0] = Long.valueOf( candidate.getStatusTimeLeft() / 1000 );
-                return Localizer.getFormatedString( STATUS_CANDIDATE_CONNECTING_KEY,
-                    arguments );
+                arguments[0] = Long.valueOf(candidate.getStatusTimeLeft() / 1000);
+                return Localizer.getFormatedString(STATUS_CANDIDATE_CONNECTING_KEY,
+                        arguments);
             case ALLOCATING_SEGMENT:
-                return Localizer.getString( STATUS_CANDIDATE_ALLOCATING_SEGMENT_KEY );
+                return Localizer.getString(STATUS_CANDIDATE_ALLOCATING_SEGMENT_KEY);
             case RANGE_UNAVAILABLE:
                 arguments = new Object[1];
                 arguments[0] = TimeFormatUtils.convertSecondsToTime(
-                    (int)(candidate.getStatusTimeLeft() / 1000) );
-                return Localizer.getFormatedString( STATUS_CANDIDATE_RANGE_UNAVAILABLE_KEY,
-                    arguments );
+                        (int) (candidate.getStatusTimeLeft() / 1000));
+                return Localizer.getFormatedString(STATUS_CANDIDATE_RANGE_UNAVAILABLE_KEY,
+                        arguments);
             case REMOTLY_QUEUED:
                 arguments = new Object[3];
                 arguments[0] = candidate.getXQueueParameters().getPosition();
                 arguments[1] = TimeFormatUtils.convertSecondsToTime(
-                    (int)(candidate.getStatusTimeLeft() / 1000 ) );
-                return Localizer.getFormatedString( STATUS_CANDIDATE_REMOTLY_QUEUED_KEY,
-                    arguments );
+                        (int) (candidate.getStatusTimeLeft() / 1000));
+                return Localizer.getFormatedString(STATUS_CANDIDATE_REMOTLY_QUEUED_KEY,
+                        arguments);
             case CONNECTION_FAILED:
                 arguments = new Object[3];
-                arguments[0] = Integer.valueOf( candidate.getFailedConnectionTries() );
-                arguments[1] = Long.valueOf( candidate.getStatusTimeLeft() / 1000 );
+                arguments[0] = Integer.valueOf(candidate.getFailedConnectionTries());
+                arguments[1] = Long.valueOf(candidate.getStatusTimeLeft() / 1000);
                 arguments[2] = TimeFormatUtils.convertSecondsToTime(
-                    (int)(candidate.getStatusTimeLeft() / 1000 ) );
-                return Localizer.getFormatedString( STATUS_CANDIDATE_CONNECTION_FAILED_KEY,
-                    arguments );
+                        (int) (candidate.getStatusTimeLeft() / 1000));
+                return Localizer.getFormatedString(STATUS_CANDIDATE_CONNECTION_FAILED_KEY,
+                        arguments);
             case PUSH_REQUEST:
                 arguments = new Object[1];
-                arguments[0] = Long.valueOf( candidate.getStatusTimeLeft() / 1000 );
-                return Localizer.getFormatedString( STATUS_CANDIDATE_PUSH_REQUEST_KEY,
-                    arguments );
+                arguments[0] = Long.valueOf(candidate.getStatusTimeLeft() / 1000);
+                return Localizer.getFormatedString(STATUS_CANDIDATE_PUSH_REQUEST_KEY,
+                        arguments);
             case REQUESTING:
-                return Localizer.getFormatedString( STATUS_CANDIDATE_REQUESTING_KEY,
-                    (Object[])null );
+                return Localizer.getFormatedString(STATUS_CANDIDATE_REQUESTING_KEY,
+                        (Object[]) null);
             case DOWNLOADING:
-                return Localizer.getFormatedString( STATUS_CANDIDATE_DOWNLOADING_KEY,
-                    (Object[])null );
+                return Localizer.getFormatedString(STATUS_CANDIDATE_DOWNLOADING_KEY,
+                        (Object[]) null);
             default:
                 arguments = new Object[1];
                 arguments[0] = status.name();
-                return Localizer.getFormatedString( STATUS_UNRECOGNIZED_KEY,
-                    arguments );
+                return Localizer.getFormatedString(STATUS_UNRECOGNIZED_KEY,
+                        arguments);
         }
     }
 }

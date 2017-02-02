@@ -22,9 +22,9 @@
  */
 package phex.thex;
 
-import phex.util.bitzi.Base32;
-import phex.util.Base64;
 import phex.common.log.NLogger;
+import phex.util.Base64;
+import phex.util.bitzi.Base32;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -36,109 +36,92 @@ import java.util.StringTokenizer;
 /**
  *
  */
-public class ShareFileThexData
-{
+public class ShareFileThexData {
     private String rootHash;
     private List<byte[]> lowestLevelNodes;
     private int treeDepth;
-    
+
 
     /**
-     * 
+     *
      */
-    public ShareFileThexData( byte[] rootHash, 
-        List<byte[]> lowestLevelNodes, int depth )
-    {
-        this.rootHash = Base32.encode( rootHash );
+    public ShareFileThexData(byte[] rootHash,
+                             List<byte[]> lowestLevelNodes, int depth) {
+        this.rootHash = Base32.encode(rootHash);
         this.lowestLevelNodes = lowestLevelNodes;
         this.treeDepth = depth;
     }
-    
-    public ShareFileThexData( String rootHash, 
-        String xjbLowestLevelNodes, int depth )
-    {
+
+    public ShareFileThexData(String rootHash,
+                             String xjbLowestLevelNodes, int depth) {
         this.rootHash = rootHash;
-        this.lowestLevelNodes = parseXJBLowestLevelNodes( xjbLowestLevelNodes );
+        this.lowestLevelNodes = parseXJBLowestLevelNodes(xjbLowestLevelNodes);
         this.treeDepth = depth;
     }
-    
-    public String getRootHash()
-    {
+
+    private static List<byte[]> parseXJBLowestLevelNodes(String xjbString) {
+        StringTokenizer tokenizer = new StringTokenizer(xjbString, "-");
+        List<byte[]> list = new ArrayList<byte[]>();
+        while (tokenizer.hasMoreTokens()) {
+            String node = tokenizer.nextToken();
+            byte[] nodeData = Base64.decodeBase64(node.getBytes());
+            list.add(nodeData);
+        }
+        return list;
+    }
+
+    public String getRootHash() {
         return rootHash;
     }
-    
-    public int getTreeDepth()
-    {
+
+    public int getTreeDepth() {
         return treeDepth;
     }
-    
-    public byte[] getSerializedTreeNodes()
-    {
+
+    public byte[] getSerializedTreeNodes() {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-        List<List<byte[]>> allNodes = TTHashCalcUtils.calculateMerkleParentNodes( 
-            lowestLevelNodes );
+        List<List<byte[]>> allNodes = TTHashCalcUtils.calculateMerkleParentNodes(
+                lowestLevelNodes);
         Iterator<List<byte[]>> iterator = allNodes.iterator();
-        try
-        {
-            while ( iterator.hasNext() )
-            {
+        try {
+            while (iterator.hasNext()) {
                 Iterator<byte[]> subIterator = (iterator.next()).iterator();
-                while ( subIterator.hasNext() )
-                {
-                    outStream.write( subIterator.next() );
+                while (subIterator.hasNext()) {
+                    outStream.write(subIterator.next());
                 }
             }
-        }
-        catch (IOException exp)
-        {// this should never happen!
-            NLogger.error( ShareFileThexData.class, exp, exp );
+        } catch (IOException exp) {// this should never happen!
+            NLogger.error(ShareFileThexData.class, exp, exp);
             throw new RuntimeException(exp);
         }
         return outStream.toByteArray();
     }
-    
-    public String getXJBLowestLevelNodes()
-    {
+
+    public String getXJBLowestLevelNodes() {
         Iterator<byte[]> iterator = lowestLevelNodes.iterator();
         StringBuffer xjbString = new StringBuffer();
-        while( iterator.hasNext() )
-        {
+        while (iterator.hasNext()) {
             byte[] nodeData = iterator.next();
-            String node = new String( Base64.encodeBase64( nodeData ) );
-            xjbString.append( node );
-            xjbString.append( "-" );
-            
+            String node = new String(Base64.encodeBase64(nodeData));
+            xjbString.append(node);
+            xjbString.append("-");
+
         }
         return xjbString.toString();
     }
-    
+
     /**
      * @param rootHash2
      * @param xjbLowestLevelNodes
      * @param depth
      */
-    public void updateFromCache( String rootHash, String xjbLowestLevelNodes, int depth )
-    {
+    public void updateFromCache(String rootHash, String xjbLowestLevelNodes, int depth) {
         this.rootHash = rootHash;
-        this.lowestLevelNodes = parseXJBLowestLevelNodes( xjbLowestLevelNodes );
+        this.lowestLevelNodes = parseXJBLowestLevelNodes(xjbLowestLevelNodes);
         this.treeDepth = depth;
     }
-    
-    private static List<byte[]> parseXJBLowestLevelNodes( String xjbString )
-    {
-        StringTokenizer tokenizer = new StringTokenizer( xjbString, "-");
-        List<byte[]> list = new ArrayList<byte[]>();
-        while ( tokenizer.hasMoreTokens() )
-        {
-            String node = tokenizer.nextToken();
-            byte[] nodeData = Base64.decodeBase64( node.getBytes() );
-            list.add( nodeData );
-        }
-        return list;
-    }
-    
-    
-    
+
+
 //    public int calculateTotalNodeCount()
 //    {
 //        int prev = lowestLevelNodes.size();

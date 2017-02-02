@@ -23,33 +23,29 @@ package phex.query;
 
 import phex.util.QueryGUIDRoutingPair;
 
-public class LeafGuidedSearchProgress extends DefaultSearchProgress
-{
+public class LeafGuidedSearchProgress extends DefaultSearchProgress {
     /**
      * The number of results to get if we are starting the dynamic query
      * for a leaf.
      */
     public static final int DESIRED_LEAF_GUIDED_RESULTS = 50;
-    
+
     private final QueryGUIDRoutingPair routingPair;
-    
-    public LeafGuidedSearchProgress( QueryGUIDRoutingPair routingPair,
-        boolean isUrnQuery )
-    {
-        super( DEFAULT_QUERY_TIMEOUT,
-            isUrnQuery ? DESIRED_HASH_RESULTS : DESIRED_LEAF_GUIDED_RESULTS );
+
+    public LeafGuidedSearchProgress(QueryGUIDRoutingPair routingPair,
+                                    boolean isUrnQuery) {
+        super(DEFAULT_QUERY_TIMEOUT,
+                isUrnQuery ? DESIRED_HASH_RESULTS : DESIRED_LEAF_GUIDED_RESULTS);
         this.routingPair = routingPair;
     }
-    
+
     @Override
-    public int getReceivedResultsCount()
-    {
+    public int getReceivedResultsCount() {
         return routingPair.getRoutedResultCount();
     }
-    
+
     @Override
-    public void incReceivedResultsCount( int inc )
-    {
+    public void incReceivedResultsCount(int inc) {
         throw new UnsupportedOperationException();
     }
 }

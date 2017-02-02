@@ -27,10 +27,9 @@ import phex.query.Search;
 import phex.servent.Servent;
 import phex.xml.sax.rules.DConsequence;
 
-public interface Consequence extends Cloneable
-{
-    public void invoke( Search search, RemoteFile remoteFile, Servent servent );
-    
+public interface Consequence extends Cloneable {
+    public void invoke(Search search, RemoteFile remoteFile, Servent servent);
+
     public Object clone();
 
     public DConsequence createDConsequence();

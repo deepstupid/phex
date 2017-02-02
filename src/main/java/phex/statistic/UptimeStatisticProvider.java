@@ -25,68 +25,64 @@ import phex.common.LongObj;
 import phex.common.format.TimeFormatUtils;
 import phex.prefs.core.StatisticPrefs;
 
-public class UptimeStatisticProvider implements StatisticProvider
-{
-    private long startTime;
+public class UptimeStatisticProvider implements StatisticProvider {
     private final LongObj valueObj;
     private final LongObj avgObj;
     private final LongObj maxObj;
+    private long startTime;
 
 
-    public UptimeStatisticProvider()
-    {
+    public UptimeStatisticProvider() {
         valueObj = new LongObj();
-        avgObj = new LongObj( );
-        maxObj = new LongObj( StatisticPrefs.MaximalUptime.get().longValue() );
+        avgObj = new LongObj();
+        maxObj = new LongObj(StatisticPrefs.MaximalUptime.get().longValue());
         startUptimeMeasurement();
     }
 
-    private void startUptimeMeasurement()
-    {
+    private void startUptimeMeasurement() {
         startTime = System.currentTimeMillis();
     }
 
     /**
      * Returns the current value this provider presents.
      * The return value can be null in case no value is provided.
+     *
      * @return the current value or null.
      */
-    public Object getValue()
-    {
+    public Object getValue() {
         long value = System.currentTimeMillis() - startTime;
-        valueObj.setValue( value );
+        valueObj.setValue(value);
         return valueObj;
     }
 
     /**
      * Returns the average value this provider presents.
      * The return value can be null in case no value is provided.
+     *
      * @return the average value or null.
      */
-    public Object getAverageValue()
-    {
-        LongObj currentUptimeObj = ( LongObj )getValue();
+    public Object getAverageValue() {
+        LongObj currentUptimeObj = (LongObj) getValue();
         long currentUptime = currentUptimeObj.longValue();
         // current uptime might be negative...
-        currentUptime = Math.max( currentUptime, 0 );
-        long avgUptime = ( currentUptime + 
-            StatisticPrefs.MovingTotalUptime.get().longValue() )
-            / ( StatisticPrefs.MovingTotalUptimeCount.get().intValue() + 1 );
-        avgObj.setValue( avgUptime );
+        currentUptime = Math.max(currentUptime, 0);
+        long avgUptime = (currentUptime +
+                StatisticPrefs.MovingTotalUptime.get().longValue())
+                / (StatisticPrefs.MovingTotalUptimeCount.get().intValue() + 1);
+        avgObj.setValue(avgUptime);
         return avgObj;
     }
 
     /**
      * Returns the max value this provider presents.
      * The return value can be null in case no value is provided.
+     *
      * @return the max value or null.
      */
-    public Object getMaxValue()
-    {
+    public Object getMaxValue() {
         long uptime = System.currentTimeMillis() - startTime;
-        if ( uptime > maxObj.getValue() )
-        {
-            maxObj.setValue( uptime );
+        if (uptime > maxObj.getValue()) {
+            maxObj.setValue(uptime);
         }
         return maxObj;
     }
@@ -94,41 +90,38 @@ public class UptimeStatisticProvider implements StatisticProvider
     /**
      * Returns the presentation string that should be displayed for the corresponding
      * value.
+     *
      * @param value the value returned from getValue(), getAverageValue() or
-     * getMaxValue()
+     *              getMaxValue()
      * @return the statistic presentation string.
      */
-    public String toStatisticString( Object value )
-    {
+    public String toStatisticString(Object value) {
         return TimeFormatUtils.formatSignificantElapsedTime(
-            ((LongObj)value).longValue() / 1000 );
+                ((LongObj) value).longValue() / 1000);
     }
 
-    public void saveUptimeStats()
-    {
-        LongObj obj = ( LongObj )getMaxValue();
-        StatisticPrefs.MaximalUptime.set( Long.valueOf( obj.getValue() ) );
+    public void saveUptimeStats() {
+        LongObj obj = (LongObj) getMaxValue();
+        StatisticPrefs.MaximalUptime.set(Long.valueOf(obj.getValue()));
 
         long mtu = StatisticPrefs.MovingTotalUptime.get().intValue();
         int mtuCount = StatisticPrefs.MovingTotalUptimeCount.get().intValue();
-        if ( mtuCount >= 25 )
-        {
+        if (mtuCount >= 25) {
             // substract one average uptime...
-            mtu -= ( mtu / mtuCount );
-            StatisticPrefs.MovingTotalUptime.set( Long.valueOf( mtu ) );
+            mtu -= (mtu / mtuCount);
+            StatisticPrefs.MovingTotalUptime.set(Long.valueOf(mtu));
             mtuCount--;
-            StatisticPrefs.MovingTotalUptimeCount.set( Integer.valueOf( mtuCount ) );
+            StatisticPrefs.MovingTotalUptimeCount.set(Integer.valueOf(mtuCount));
         }
 
-        obj = ( LongObj )getValue();
+        obj = (LongObj) getValue();
         // sometimes time might be negative since clocks can go backwards
         // due to DST adjustments. In this case ignore the uptime value.
-        if ( obj.longValue() > 0 )
-        {
+        if (obj.longValue() > 0) {
             mtu += obj.longValue();
-            StatisticPrefs.MovingTotalUptime.set( Long.valueOf( mtu ) );
+            StatisticPrefs.MovingTotalUptime.set(Long.valueOf(mtu));
             mtuCount++;
-            StatisticPrefs.MovingTotalUptimeCount.set( Integer.valueOf( mtuCount ) );
+            StatisticPrefs.MovingTotalUptimeCount.set(Integer.valueOf(mtuCount));
         }
     }
 }

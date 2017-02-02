@@ -22,23 +22,21 @@
  */
 package phex.rules.consequence;
 
-import phex.util.DateUtils;
 import phex.common.ExpiryDate;
 import phex.download.RemoteFile;
 import phex.query.Search;
 import phex.security.BanHostBatch;
 import phex.servent.Servent;
+import phex.util.DateUtils;
 import phex.xml.sax.rules.DBanHostConsequence;
 import phex.xml.sax.rules.DConsequence;
 
-public class BanHostConsequence implements Consequence
-{
+public class BanHostConsequence implements Consequence {
     public static final BanHostConsequence INSTANCE = new BanHostConsequence();
 
     private static final DBanHostConsequence DELEMENT = new DBanHostConsequence();
 
-    public void invoke(Search search, final RemoteFile remoteFile, Servent servent)
-    {
+    public void invoke(Search search, final RemoteFile remoteFile, Servent servent) {
         // handle a ban like a remove we dont like to see the RemoteHost
         // again in this consequence
         remoteFile.setFilteredRemoved(true);
@@ -47,18 +45,16 @@ public class BanHostConsequence implements Consequence
                 .currentTimeMillis()
                 + DateUtils.MILLIS_PER_DAY * 7);
         BanHostBatch.addDestAddress(remoteFile.getHostAddress(), expDate,
-            servent.getSecurityService() );
+                servent.getSecurityService());
     }
 
     @Override
-    public Object clone()
-    {
+    public Object clone() {
         // there is only one instance...
         return INSTANCE;
     }
 
-    public DConsequence createDConsequence()
-    {
+    public DConsequence createDConsequence() {
         return DELEMENT;
     }
 }

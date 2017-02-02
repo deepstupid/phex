@@ -18,8 +18,7 @@
  */
 package phex.common;
 
-public class FileHandlingException extends Exception
-{
+public class FileHandlingException extends Exception {
     public static final int RENAME_FAILED = 0;
     public static final int FILE_ALREADY_EXISTS = 1;
     public static final int CREATE_FILE_FAILED = 2;
@@ -27,48 +26,41 @@ public class FileHandlingException extends Exception
     private final int type;
     private final String fileName;
 
-    public FileHandlingException( int aType )
-    {
-        this( aType, null, null );
+    public FileHandlingException(int aType) {
+        this(aType, null, null);
     }
-    
-    public FileHandlingException( int aType, Throwable cause )
-    {
-        this( aType, null, cause );
+
+    public FileHandlingException(int aType, Throwable cause) {
+        this(aType, null, cause);
     }
-    
-    public FileHandlingException( int aType, String fileName, Throwable cause )
-    {
-        super( cause );
+
+    public FileHandlingException(int aType, String fileName, Throwable cause) {
+        super(cause);
         type = aType;
         this.fileName = fileName;
     }
 
-    public int getType()
-    {
+    public int getType() {
         return type;
     }
-    
-    public String getFileName()
-    {
+
+    public String getFileName() {
         return fileName;
     }
-    
+
     @Override
-    public String toString()
-    {
-        StringBuffer buffer = new StringBuffer( super.toString() );
-        buffer.append( ": " );
-        switch ( type )
-        {
+    public String toString() {
+        StringBuffer buffer = new StringBuffer(super.toString());
+        buffer.append(": ");
+        switch (type) {
             case RENAME_FAILED:
-                buffer.append( "Rename file failed.");
+                buffer.append("Rename file failed.");
                 break;
             case FILE_ALREADY_EXISTS:
-                buffer.append( "File already exists.");
+                buffer.append("File already exists.");
                 break;
             case CREATE_FILE_FAILED:
-                buffer.append( "Creating file failed.");
+                buffer.append("Creating file failed.");
                 break;
         }
         return buffer.toString();

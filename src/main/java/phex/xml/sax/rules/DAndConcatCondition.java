@@ -28,21 +28,17 @@ import phex.xml.sax.DSubElementList;
 
 import java.util.Iterator;
 
-public class DAndConcatCondition extends DSubElementList<DCondition> implements DCondition
-{
+public class DAndConcatCondition extends DSubElementList<DCondition> implements DCondition {
     static public final String ELEMENT_NAME = "and-condition";
-    
-    public DAndConcatCondition()
-    {
-        super( ELEMENT_NAME );
+
+    public DAndConcatCondition() {
+        super(ELEMENT_NAME);
     }
 
-    public Condition createCondition()
-    {
-        AndConcatCondition cond = new AndConcatCondition( );
+    public Condition createCondition() {
+        AndConcatCondition cond = new AndConcatCondition();
         Iterator<DCondition> childsIterator = getSubElementList().iterator();
-        while ( childsIterator.hasNext() )
-        {
+        while (childsIterator.hasNext()) {
             DCondition dCond = childsIterator.next();
             Condition condition = dCond.createCondition();
             cond.addCondition(condition);

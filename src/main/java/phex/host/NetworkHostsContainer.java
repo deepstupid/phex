@@ -38,8 +38,7 @@ import java.util.List;
 /**
  * Responsible for holding all hosts of the current network neighbor hood.
  */
-public final class NetworkHostsContainer extends AbstractLifeCycle
-{
+public final class NetworkHostsContainer extends AbstractLifeCycle {
     private final Servent servent;
 
     /**
@@ -53,34 +52,30 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
      * Contains a list of connected ultrapeer connections.
      */
     private final List<Host> ultrapeerConnections;
-
+    /**
+     * Contains a list of connected leaf connections, in case we act as there
+     * Ultrapeer.
+     */
+    private final List<Host> leafConnections;
     /**
      * The number of connections that are leafUltrapeerConnections inside the
      * ultrapeerConnections list.
      */
     private int leafUltrapeerConnectionCount;
 
-    /**
-     * Contains a list of connected leaf connections, in case we act as there
-     * Ultrapeer.
-     */
-    private final List<Host> leafConnections;
-    
-    public NetworkHostsContainer( Servent servent )
-    {
+    public NetworkHostsContainer(Servent servent) {
         this.servent = servent;
-        
+
         networkHosts = new ArrayList<>();
         ultrapeerConnections = new ArrayList<>();
         leafConnections = new ArrayList<>();
 
     }
-    
+
     @Override
-    protected void doStart()
-    {
-        ConnectionObserver observer = new ConnectionObserver( this, 
-            servent.getMessageService() );
+    protected void doStart() {
+        ConnectionObserver observer = new ConnectionObserver(this,
+                servent.getMessageService());
         observer.start();
     }
 
@@ -88,51 +83,50 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
      * Returns true if the local host is a shielded leaf node ( has a connection
      * to a ultrapeer).
      */
-    public synchronized boolean isShieldedLeafNode()
-    {
+    public synchronized boolean isShieldedLeafNode() {
         return leafUltrapeerConnectionCount > 0;
     }
 
     /**
      * Indicates if connection to leafs are available.
-     * @return true if connection to leafs are available, 
-     *         false otherwise
+     *
+     * @return true if connection to leafs are available,
+     * false otherwise
      */
-    public synchronized boolean hasLeafConnections()
-    {
+    public synchronized boolean hasLeafConnections() {
         // we are a ultrapeer if we have any leaf slots filled.
         return !leafConnections.isEmpty();
     }
 
     /**
      * Indicates if connection to ultrapeers are available.
-     * @return true if connection to ultrapeers are available, 
-     *         false otherwise
+     *
+     * @return true if connection to ultrapeers are available,
+     * false otherwise
      */
-    public synchronized boolean hasUltrapeerConnections()
-    {
+    public synchronized boolean hasUltrapeerConnections() {
         return !ultrapeerConnections.isEmpty();
     }
 
     /**
      * Used to check if we have anymore ultrapeer slots. Usually this method
      * should only be used used as a Ultrapeer.
+     *
      * @return true if ultrapeer slots are available, false otherwise.
      */
-    public boolean hasUltrapeerSlotsAvailable()
-    {
+    public boolean hasUltrapeerSlotsAvailable() {
         // Note: That we don't response on pings when the slots are full this
         // results in not getting that many incoming requests.
         return ultrapeerConnections.size() < ConnectionPrefs.Up2UpConnections.get();
     }
-    
+
     /**
      * Returns the number of open slots for leaf nodes. Usually this method
      * should only be used used as a Ultrapeer.
+     *
      * @return the number of open slots for leaf nodes.
      */
-    public int getOpenUltrapeerSlotsCount()
-    {
+    public int getOpenUltrapeerSlotsCount() {
         return ConnectionPrefs.Up2UpConnections.get() - ultrapeerConnections.size();
     }
 
@@ -141,115 +135,107 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
      * Used to check if we would provide a Ultrapeer that will become a possible
      * leaf through leaf guidance a slot. This is only the case if we have not
      * already a ultrapeer too much and if we have a leaf slot available.
-     * @return true if we have a leaf slot available to guide a ultrapeer, 
-     *         false otherwise
+     *
+     * @return true if we have a leaf slot available to guide a ultrapeer,
+     * false otherwise
      */
-    public boolean hasLeafSlotForUltrapeerAvailable()
-    {
+    public boolean hasLeafSlotForUltrapeerAvailable() {
         return hasLeafSlotsAvailable()
-            // Allow one more up2up connection to accept this possibly leaf guided
-            // ultrapeer
-            && ultrapeerConnections.size() < ConnectionPrefs.Up2UpConnections.get() + 1;
+                // Allow one more up2up connection to accept this possibly leaf guided
+                // ultrapeer
+                && ultrapeerConnections.size() < ConnectionPrefs.Up2UpConnections.get() + 1;
     }
 
     /**
      * Used to check if we have anymore leaf slots. Usually this method
      * is only used used as a Ultrapeer.
+     *
      * @return true if we have leaf slots available, false otherwise.
      */
-    public boolean hasLeafSlotsAvailable()
-    {
+    public boolean hasLeafSlotsAvailable() {
         // Note: That we don't response on pings when the slots are full this
         // results in not getting that many incoming requests.
         return leafConnections.size() < ConnectionPrefs.Up2LeafConnections.get();
     }
-    
+
     /**
      * Returns the number of open slots for leaf nodes.
+     *
      * @return the number of open slots for leaf nodes.
      */
-    public int getOpenLeafSlotsCount()
-    {
-        if ( servent.isUltrapeer() )
-        {
+    public int getOpenLeafSlotsCount() {
+        if (servent.isUltrapeer()) {
             return ConnectionPrefs.Up2LeafConnections.get() - leafConnections.size();
         }
         return 0;
     }
-    
-    public synchronized Host[] getNetworkHosts()
-    {
-        Host[] hosts = new Host[ networkHosts.size() ];
-        networkHosts.toArray( hosts );
-        return hosts; 
+
+    public synchronized Host[] getNetworkHosts() {
+        Host[] hosts = new Host[networkHosts.size()];
+        networkHosts.toArray(hosts);
+        return hosts;
     }
 
     /**
      * Returns all available connected ultrapeers.
+     *
      * @return all available connected ultrapeers.
      */
-    public synchronized Host[] getUltrapeerConnections()
-    {
-        Host[] hosts = new Host[ ultrapeerConnections.size() ];
-        ultrapeerConnections.toArray( hosts );
+    public synchronized Host[] getUltrapeerConnections() {
+        Host[] hosts = new Host[ultrapeerConnections.size()];
+        ultrapeerConnections.toArray(hosts);
         return hosts;
     }
 
     /**
      * Returns all available connected leafs.
+     *
      * @return all available connected leafs.
      */
-    public synchronized Host[] getLeafConnections()
-    {
-        Host[] hosts = new Host[ leafConnections.size() ];
-        leafConnections.toArray( hosts );
+    public synchronized Host[] getLeafConnections() {
+        Host[] hosts = new Host[leafConnections.size()];
+        leafConnections.toArray(hosts);
         return hosts;
     }
 
     /**
      * The total number of connections (ultrapeers and leafs).
+     *
      * @return the total number of connections.
      */
-    public synchronized int getTotalConnectionCount()
-    {
+    public synchronized int getTotalConnectionCount() {
         return ultrapeerConnections.size()
-            + leafConnections.size();
+                + leafConnections.size();
     }
-    
-    public synchronized int getLeafConnectionCount()
-    {
+
+    public synchronized int getLeafConnectionCount() {
         return leafConnections.size();
     }
 
-    public synchronized int getUltrapeerConnectionCount()
-    {
+    public synchronized int getUltrapeerConnectionCount() {
         return ultrapeerConnections.size();
     }
-    
+
     /**
-     * Returns a array of push proxy addresses or null if 
+     * Returns a array of push proxy addresses or null if
      * this is not a shielded leaf node.
+     *
      * @return a array of push proxy addresses or null.
      */
-    public DestAddress[] getPushProxies() 
-    {
-        if ( isShieldedLeafNode() )
-        {
+    public DestAddress[] getPushProxies() {
+        if (isShieldedLeafNode()) {
             HashSet<DestAddress> pushProxies = new HashSet<>();
-            for ( Host host : ultrapeerConnections )
-            {
+            for (Host host : ultrapeerConnections) {
                 DestAddress pushProxyAddress = host.getPushProxyAddress();
-                if ( pushProxyAddress != null )
-                {
-                    pushProxies.add( pushProxyAddress );
-                    if ( pushProxies.size() == 4 )
-                    {
+                if (pushProxyAddress != null) {
+                    pushProxies.add(pushProxyAddress);
+                    if (pushProxies.size() == 4) {
                         break;
                     }
                 }
             }
-            DestAddress[] addresses = new DestAddress[ pushProxies.size() ];
-            pushProxies.toArray( addresses );
+            DestAddress[] addresses = new DestAddress[pushProxies.size()];
+            pushProxies.toArray(addresses);
             return addresses;
         }
         return null;
@@ -258,52 +244,38 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
     /**
      * Adds a connected host to the connected host list. But only if its already
      * in the network host list.
+     *
      * @param host the host to add to the connected host list.
      */
-    public synchronized void addConnectedHost( Host host )
-    {
+    public synchronized void addConnectedHost(Host host) {
         // make sure host is still in network and not already removed
-        if ( !networkHosts.contains( host ) )
-        {// host is already removed by user action...
+        if (!networkHosts.contains(host)) {// host is already removed by user action...
             host.disconnect();
             return;
         }
 
-        if ( host.isUltrapeer() )
-        {
-            ultrapeerConnections.add( host );
-            if ( host.isLeafUltrapeerConnection() )
-            {
+        if (host.isUltrapeer()) {
+            ultrapeerConnections.add(host);
+            if (host.isLeafUltrapeerConnection()) {
                 leafUltrapeerConnectionCount++;
             }
-        }
-        else if ( host.isUltrapeerLeafConnection() )
-        {
-            leafConnections.add( host );
-        }
-        else
-        {
+        } else if (host.isUltrapeerLeafConnection()) {
+            leafConnections.add(host);
+        } else {
             assert false : "Peer connections should not be used anymore";
         }
         //dump();
     }
 
-    private synchronized void cleanupHost( Host host )
-    {
-        if ( host.isUltrapeer() )
-        {
-            boolean isRemoved = ultrapeerConnections.remove( host );
-            if ( isRemoved && host.isLeafUltrapeerConnection() )
-            {
+    private synchronized void cleanupHost(Host host) {
+        if (host.isUltrapeer()) {
+            boolean isRemoved = ultrapeerConnections.remove(host);
+            if (isRemoved && host.isLeafUltrapeerConnection()) {
                 leafUltrapeerConnectionCount--;
             }
-        }
-        else if ( host.isUltrapeerLeafConnection() )
-        {
-            leafConnections.remove( host );
-        }
-        else
-        {
+        } else if (host.isUltrapeerLeafConnection()) {
+            leafConnections.remove(host);
+        } else {
             // There seem to be situations this is called? why?
             //assert false : "Peer connections should not be used anymore";
         }
@@ -314,29 +286,23 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
      * Checks if a connected host is able to keep up...
      * if not it will be removed...
      */
-    public synchronized void periodicallyCheckHosts()
-    {
+    public synchronized void periodicallyCheckHosts() {
         HostStatus status;
         long currentTime = System.currentTimeMillis();
 
-        Host[] badHosts = new Host[ networkHosts.size() ];
+        Host[] badHosts = new Host[networkHosts.size()];
         int badHostsPos = 0;
         //boolean isShieldedLeafNode = isShieldedLeafNode();
 
-        for( Host host : networkHosts )
-        {
+        for (Host host : networkHosts) {
             status = host.getStatus();
-            if ( status == HostStatus.CONNECTED )
-            {
+            if (status == HostStatus.CONNECTED) {
                 String policyInfraction = null;
-                if ( host.isSendQueueTooLong() )
-                {
-                    policyInfraction = Localizer.getString( "SendQueueTooLong" );
-                }
-                else if ( host.isNoVendorDisconnectApplying() )
-                {
-                    policyInfraction = Localizer.getString( "NoVendorString" );
-                } else if (host.isProducingTooMuchBadMessages(0.1f ) ) {
+                if (host.isSendQueueTooLong()) {
+                    policyInfraction = Localizer.getString("SendQueueTooLong");
+                } else if (host.isNoVendorDisconnectApplying()) {
+                    policyInfraction = Localizer.getString("NoVendorString");
+                } else if (host.isProducingTooMuchBadMessages(0.1f)) {
                     policyInfraction = "Bad Messages";
                 }
                 // freeloaders are no real problem
@@ -344,121 +310,102 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
                 // {
                 //     policyInfraction = Localizer.getString( "FreeloaderNotSharing" );
                 // }
-                if ( policyInfraction != null )
-                {
+                if (policyInfraction != null) {
                     //Logger.logMessage( Logger.FINE, "log.core.msg",
                     //    "Applying disconnect policy to host: " + host +
                     //    " drops: " + host.tooManyDropPackets() +
                     //    " queue: " + host.sendQueueTooLong() );
-                    host.setStatus( HostStatus.ERROR, policyInfraction, currentTime );
+                    host.setStatus(HostStatus.ERROR, policyInfraction, currentTime);
                     host.disconnect();
                 }
             }
         }
         // kill all bad hosts...
-        if ( badHostsPos > 0 )
-        {
-            removeNetworkHosts( badHosts );
+        if (badHostsPos > 0) {
+            removeNetworkHosts(badHosts);
         }
     }
 
-    public synchronized Host getNetworkHostAt( int index )
-    {
-        if ( index < 0 || index >= networkHosts.size() )
-        {
+    public synchronized Host getNetworkHostAt(int index) {
+        if (index < 0 || index >= networkHosts.size()) {
             return null;
         }
-        return networkHosts.get( index );
+        return networkHosts.get(index);
     }
 
-    public synchronized Host[] getNetworkHostsAt( int[] indices )
-    {
+    public synchronized Host[] getNetworkHostsAt(int[] indices) {
         int length = indices.length;
-        Host[] hosts = new Host[ length ];
-        for ( int i = 0; i < length; i++ )
-        {
-            if ( indices[i] < 0 || indices[i] >= networkHosts.size() )
-            {
+        Host[] hosts = new Host[length];
+        for (int i = 0; i < length; i++) {
+            if (indices[i] < 0 || indices[i] >= networkHosts.size()) {
                 hosts[i] = null;
-            }
-            else
-            {
-                hosts[i] = networkHosts.get( indices[i] );
+            } else {
+                hosts[i] = networkHosts.get(indices[i]);
             }
         }
         return hosts;
     }
-    
-    public synchronized Host getNetworkHost( DestAddress address )
-    {
-        for ( Host networkHost : networkHosts )
-        {
+
+    public synchronized Host getNetworkHost(DestAddress address) {
+        for (Host networkHost : networkHosts) {
             DestAddress networkAddress = networkHost.getHostAddress();
-            if ( networkAddress.equals( address ) )
-            {
+            if (networkAddress.equals(address)) {
                 return networkHost;
-            }            
+            }
         }
         //not found
         return null;
     }
 
     /**
-     * Returns the count of the complete neighbour hood, containing all 
+     * Returns the count of the complete neighbour hood, containing all
      * connected and not connected hosts independent from its connection type.
      */
-    public synchronized int getNetworkHostCount()
-    {
+    public synchronized int getNetworkHostCount() {
         return networkHosts.size();
     }
 
     /**
      * Returns the count of the networks hosts with the given status.
      */
-    public synchronized int getNetworkHostCount( HostStatus status )
-    {
+    public synchronized int getNetworkHostCount(HostStatus status) {
         int count = 0;
-        for( Host host : networkHosts )
-        {
-            if ( host.getStatus() == status )
-            {
+        for (Host host : networkHosts) {
+            if (host.getStatus() == status) {
                 count++;
             }
         }
         return count;
     }
-    
-    public synchronized Host createOutgoingHost( DestAddress hostAddress )
-    {
-        Host host = new Host( hostAddress );
-        host.setType( Host.Type.OUTGOING );
-        addNetworkHost( host );
+
+    public synchronized Host createOutgoingHost(DestAddress hostAddress) {
+        Host host = new Host(hostAddress);
+        host.setType(Host.Type.OUTGOING);
+        addNetworkHost(host);
         return host;
     }
-    
-    public synchronized Host createIncomingHost( DestAddress hostAddress, 
-        Connection connection )
-    {
-        Host host = new Host( hostAddress, connection );
-        host.setType( Host.Type.INCOMING );
-        addNetworkHost( host );
+
+    public synchronized Host createIncomingHost(DestAddress hostAddress,
+                                                Connection connection) {
+        Host host = new Host(hostAddress, connection);
+        host.setType(Host.Type.INCOMING);
+        addNetworkHost(host);
         return host;
     }
-    
+
     /**
      * Adds a host to the network host list.
+     *
      * @param host the host to add to the network host list.
      */
-    private synchronized void addNetworkHost( Host host )
-    {
+    private synchronized void addNetworkHost(Host host) {
         int position = networkHosts.size();
-        networkHosts.add( host );
-        fireNetworkHostAdded( host, position );
+        networkHosts.add(host);
+        fireNetworkHostAdded(host, position);
         //dump();
     }
-    
-    public synchronized boolean isConnectedToHost( DestAddress address )
-    {
+
+    public synchronized boolean isConnectedToHost(DestAddress address) {
         // Check for duplicate.
         for (Host host : networkHosts) {
             if (host.getHostAddress().equals(address)) {// already connected
@@ -468,18 +415,15 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
         return false;
     }
 
-    public synchronized void removeAllNetworkHosts()
-    {
+    public synchronized void removeAllNetworkHosts() {
         Host host;
-        while ( networkHosts.size() > 0 )
-        {
-            host = networkHosts.get( 0 );
-            internalRemoveNetworkHost( host );
+        while (networkHosts.size() > 0) {
+            host = networkHosts.get(0);
+            internalRemoveNetworkHost(host);
         }
     }
 
-    public synchronized void removeNetworkHosts( Host[] hosts )
-    {
+    public synchronized void removeNetworkHosts(Host[] hosts) {
         Host host;
         int length = hosts.length;
         for (Host host1 : hosts) {
@@ -488,61 +432,52 @@ public final class NetworkHostsContainer extends AbstractLifeCycle
         }
     }
 
-    public synchronized void removeNetworkHost( Host host )
-    {
-        internalRemoveNetworkHost( host );
+    public synchronized void removeNetworkHost(Host host) {
+        internalRemoveNetworkHost(host);
     }
 
     /**
      * Disconnects from host.
      */
-    private synchronized void internalRemoveNetworkHost( Host host )
-    {
-        if ( host == null )
-        {
+    private synchronized void internalRemoveNetworkHost(Host host) {
+        if (host == null) {
             return;
         }
         host.disconnect();
-        int position = networkHosts.indexOf( host );
-        if ( position >= 0 )
-        {
-            networkHosts.remove( position );
-            fireNetworkHostRemoved( host, position );
+        int position = networkHosts.indexOf(host);
+        if (position >= 0) {
+            networkHosts.remove(position);
+            fireNetworkHostRemoved(host, position);
         }
         //dump();
     }
 
     ///////////////////// START event handling methods ////////////////////////
-    private void fireNetworkHostAdded( Host host, int position )
-    {
+    private void fireNetworkHostAdded(Host host, int position) {
 
     }
 
-    private void fireNetworkHostRemoved( Host host, int position )
-    {
+    private void fireNetworkHostRemoved(Host host, int position) {
 
     }
-    
+
     /**
      * Reacts on online status changes to initialize or save caught hosts.
      */
     //@EventTopicSubscriber(topic=PhexEventTopics.Servent_OnlineStatus)
-    public void onOnlineStatusEvent( String topic, ChangeEvent event )
-    {
+    public void onOnlineStatusEvent(String topic, ChangeEvent event) {
         OnlineStatus oldStatus = (OnlineStatus) event.getOldValue();
         OnlineStatus newStatus = (OnlineStatus) event.getNewValue();
-        if (    newStatus == OnlineStatus.OFFLINE 
-             && oldStatus != OnlineStatus.OFFLINE )
-        {// switch from any online to offline status
-         // Disconnect all hosts
+        if (newStatus == OnlineStatus.OFFLINE
+                && oldStatus != OnlineStatus.OFFLINE) {// switch from any online to offline status
+            // Disconnect all hosts
             removeAllNetworkHosts();
         }
     }
-    
+
     //@EventTopicSubscriber(topic=PhexEventTopics.Host_Disconnect)
-    public void onHostDisconnectEvent( String topic, Host host )
-    {
-        cleanupHost( host );
+    public void onHostDisconnectEvent(String topic, Host host) {
+        cleanupHost(host);
     }
     ///////////////////// END event handling methods ////////////////////////
 }

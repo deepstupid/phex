@@ -32,43 +32,35 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.nio.channels.ByteChannel;
 
-public class DefaultSocketFacade implements SocketFacade
-{
-    private DestAddress remoteAddress;
+public class DefaultSocketFacade implements SocketFacade {
     private final Socket socket;
+    private DestAddress remoteAddress;
     private StreamingByteChannel channel;
-    
-    public DefaultSocketFacade( Socket aSocket )
-    {
+
+    public DefaultSocketFacade(Socket aSocket) {
         socket = aSocket;
     }
-    
-    public ByteChannel getChannel() throws IOException
-    {
-        if ( channel == null )
-        {
-            channel = new StreamingByteChannel( socket );
+
+    public ByteChannel getChannel() throws IOException {
+        if (channel == null) {
+            channel = new StreamingByteChannel(socket);
         }
         return channel;
     }
 
-    public void setSoTimeout( int socketRWTimeout )
-        throws SocketException
-    {
+    public void setSoTimeout(int socketRWTimeout)
+            throws SocketException {
         socket.setSoTimeout(socketRWTimeout);
     }
-    
-    public void close() throws IOException
-    {
+
+    public void close() throws IOException {
         socket.close();
     }
-    
-    public DestAddress getRemoteAddress()
-    {
-        if ( remoteAddress == null )
-        {
+
+    public DestAddress getRemoteAddress() {
+        if (remoteAddress == null) {
             remoteAddress = new DefaultDestAddress(
-                socket.getInetAddress().getHostAddress(), socket.getPort() );
+                    socket.getInetAddress().getHostAddress(), socket.getPort());
         }
         return remoteAddress;
     }

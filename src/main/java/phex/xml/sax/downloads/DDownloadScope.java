@@ -27,64 +27,54 @@ import org.xml.sax.helpers.AttributesImpl;
 import phex.xml.sax.DElement;
 import phex.xml.sax.PhexXmlSaxWriter;
 
-public class DDownloadScope implements DElement
-{
+public class DDownloadScope implements DElement {
     public static final String FINISHED_SCOPE_ELEMENT_NAME = "finished-scopes";
     public static final String UNVERIFIED_SCOPE_ELEMENT_NAME = "unverified-scopes";
-    
+
     private final String elementName;
-    
+
     private boolean hasStart;
     private long start;
-    
+
     private boolean hasEnd;
     private long end;
-    
-    public DDownloadScope( String elementName )
-    {
-        if ( elementName == null )
-        {
+
+    public DDownloadScope(String elementName) {
+        if (elementName == null) {
             throw new NullPointerException();
         }
         this.elementName = elementName;
     }
-    
-    public long getEnd()
-    {
+
+    public long getEnd() {
         return end;
     }
 
-    public void setEnd( long end )
-    {
+    public void setEnd(long end) {
         this.end = end;
         hasEnd = true;
     }
 
-    public long getStart()
-    {
+    public long getStart() {
         return start;
     }
 
-    public void setStart( long start )
-    {
+    public void setStart(long start) {
         this.start = start;
         hasStart = true;
     }
 
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
         AttributesImpl attributes = new AttributesImpl();
-        if( hasStart )
-        {
-            attributes.addAttribute( "", "", "start", "CDATA",
-                String.valueOf( start ) );
+        if (hasStart) {
+            attributes.addAttribute("", "", "start", "CDATA",
+                    String.valueOf(start));
         }
-        if( hasEnd )
-        {
-            attributes.addAttribute( "", "", "end", "CDATA",
-                String.valueOf( end ) );
+        if (hasEnd) {
+            attributes.addAttribute("", "", "end", "CDATA",
+                    String.valueOf(end));
         }
-        writer.startElm( elementName, attributes );
-        writer.endElm( elementName );
+        writer.startElm(elementName, attributes);
+        writer.endElm(elementName);
     }
 }

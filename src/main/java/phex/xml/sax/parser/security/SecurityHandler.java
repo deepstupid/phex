@@ -32,69 +32,61 @@ import phex.xml.sax.security.DSecurity;
 import javax.xml.parsers.SAXParser;
 import java.io.CharArrayWriter;
 
-public class SecurityHandler extends DefaultHandler
-{
+public class SecurityHandler extends DefaultHandler {
     public static final String THIS_TAG_NAME = DSecurity.ELEMENT_NAME;
-    
+
     private final CharArrayWriter text = new CharArrayWriter();
     private final SAXParser parser;
     private final DSecurity dSecurity;
     private final DefaultHandler parent;
-    
-    public SecurityHandler( DSecurity dSecurity, 
-        DefaultHandler parent, SAXParser parser )
-    {
+
+    public SecurityHandler(DSecurity dSecurity,
+                           DefaultHandler parent, SAXParser parser) {
         this.dSecurity = dSecurity;
         this.parser = parser;
         this.parent = parent;
     }
-    
+
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
     @Override
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes)
-        throws SAXException
-    {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes)
+            throws SAXException {
         text.reset();
-        if ( qName.equals( DIpAccessRule.ELEMENT_NAME ) )
-        {
+        if (qName.equals(DIpAccessRule.ELEMENT_NAME)) {
             DIpAccessRule rule = new DIpAccessRule();
-            dSecurity.getIpAccessRuleList( ).add( rule );
-            
-            IpAccessRuleHandler handler = new IpAccessRuleHandler( 
-                rule, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
+            dSecurity.getIpAccessRuleList().add(rule);
+
+            IpAccessRuleHandler handler = new IpAccessRuleHandler(
+                    rule, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
         }
         return;
     }
-    
+
     @Override
-    public void endElement(String uri, String localName, String qName) 
-        throws SAXException
-    {
-        if ( qName.equals( THIS_TAG_NAME ) )
-        {
-            parser.getXMLReader().setContentHandler( parent );
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equals(THIS_TAG_NAME)) {
+            parser.getXMLReader().setContentHandler(parent);
         }
     }
-     
+
     @Override
-    public InputSource resolveEntity( String publicId, String systemId )
-    {
+    public InputSource resolveEntity(String publicId, String systemId) {
         return null;
     }
 
     @Override
-    public void characters( char[] ch, int start, int length )
-    {
-        text.write( ch, start, length );
+    public void characters(char[] ch, int start, int length) {
+        text.write(ch, start, length);
     }
 }

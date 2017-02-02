@@ -27,22 +27,18 @@ import phex.rules.consequence.Consequence;
 import phex.rules.consequence.FilterFromSearchConsequence;
 import phex.xml.sax.PhexXmlSaxWriter;
 
-public class DFilterFromSearchConsequence implements DConsequence
-{
+public class DFilterFromSearchConsequence implements DConsequence {
     public static final String ELEMENT_NAME = "filterfromsearch-consequence";
-    
-    public DFilterFromSearchConsequence()
-    {
+
+    public DFilterFromSearchConsequence() {
     }
-    
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
-        writer.endElm( ELEMENT_NAME );
+
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
+        writer.endElm(ELEMENT_NAME);
     }
-    
-    public Consequence createConsequence()
-    {
+
+    public Consequence createConsequence() {
         return FilterFromSearchConsequence.INSTANCE;
     }
 }

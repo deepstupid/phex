@@ -27,48 +27,40 @@ import phex.download.swarming.SWDownloadFile;
 
 import java.util.Random;
 
-public class BeginEndAvailRandSelectionStrategy implements ScopeSelectionStrategy
-{
+public class BeginEndAvailRandSelectionStrategy implements ScopeSelectionStrategy {
     private final Random random;
     private final ScopeSelectionStrategy beginStrategy;
     private final ScopeSelectionStrategy endStrategy;
     private final ScopeSelectionStrategy availRandStrategy;
-    
+
     protected BeginEndAvailRandSelectionStrategy(
-        PrefereBeginingScopeSelectionStrategy beginStrategy,
-        PrefereEndScopeSelectionStrategy endStrategy,
-        AvailRandSelectionStrategy availRandStrategy)
-    {
+            PrefereBeginingScopeSelectionStrategy beginStrategy,
+            PrefereEndScopeSelectionStrategy endStrategy,
+            AvailRandSelectionStrategy availRandStrategy) {
         this.random = new Random();
         this.beginStrategy = beginStrategy;
         this.endStrategy = endStrategy;
         this.availRandStrategy = availRandStrategy;
     }
 
-    public DownloadScope selectDownloadScope( SWDownloadFile downloadFile,
-        DownloadScopeList wantedScopeList, long preferredSize )
-    {
+    public DownloadScope selectDownloadScope(SWDownloadFile downloadFile,
+                                             DownloadScopeList wantedScopeList, long preferredSize) {
         DownloadScope scope = null;
         // choose begin/end by 50%
-        boolean useBeginEnd = random.nextBoolean( );
-        if ( useBeginEnd )
-        {
-            boolean useBegin = random.nextBoolean( );
-            if ( useBegin )
-            {
+        boolean useBeginEnd = random.nextBoolean();
+        if (useBeginEnd) {
+            boolean useBegin = random.nextBoolean();
+            if (useBegin) {
                 scope = beginStrategy.selectDownloadScope(
-                    downloadFile, wantedScopeList, preferredSize );
-            }
-            else
-            {
+                        downloadFile, wantedScopeList, preferredSize);
+            } else {
                 scope = endStrategy.selectDownloadScope(
-                    downloadFile, wantedScopeList, preferredSize );
+                        downloadFile, wantedScopeList, preferredSize);
             }
         }
-        if ( scope == null )
-        {
+        if (scope == null) {
             scope = availRandStrategy.selectDownloadScope(
-                downloadFile, wantedScopeList, preferredSize);
+                    downloadFile, wantedScopeList, preferredSize);
         }
         return scope;
     }

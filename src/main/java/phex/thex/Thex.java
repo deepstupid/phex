@@ -26,12 +26,11 @@ import phex.download.swarming.SWDownloadSegment;
 
 /**
  * @author Laura Requena
- *
- * To change the template for this generated type comment go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
+ *         <p>
+ *         To change the template for this generated type comment go to
+ *         Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-public class Thex
-{
+public class Thex {
 
     private String root;
 
@@ -51,54 +50,44 @@ public class Thex
 
     private SWDownloadSegment segment;
 
-    public Thex()
-    {
+    public Thex() {
         //leavesHashes = new Vector();
     }
 
-    public String getRoot()
-    {
+    public String getRoot() {
         return root;
     }
 
-    public void setSegment(SWDownloadSegment sg)
-    {
-        segment = sg;
+    public void setRoot(String root) {
+        this.root = root;
     }
 
-    public SWDownloadSegment getSegment()
-    {
+    public SWDownloadSegment getSegment() {
         return segment;
     }
 
-    public int getNodes10serSegment()
-    {
+    public void setSegment(SWDownloadSegment sg) {
+        segment = sg;
+    }
+
+    public int getNodes10serSegment() {
         return nodes10serSegment;
     }
 
-    public int getFirstBlock()
-    {
-        return firstBlock;
-    }
-
-    public void setLevelsLeft(int levelsL)
-    {
-        levelsLeft = levelsL;
-    }
-
-    public int getLevelsLeft()
-    {
-        return levelsLeft;
-    }
-
-    public void setNodes10serSegment(int nodes10ser)
-    {
+    public void setNodes10serSegment(int nodes10ser) {
         nodes10serSegment = nodes10ser;
     }
 
-    public void setFirstBlock(int firstB)
-    {
+    public int getFirstBlock() {
+        return firstBlock;
+    }
+
+    public void setFirstBlock(int firstB) {
         firstBlock = firstB;
+    }
+
+    public int getLevelsLeft() {
+        return levelsLeft;
     }
 
 //    public Vector getLeavesHashes()
@@ -111,38 +100,31 @@ public class Thex
 //        leavesHashes.add(hash);
 //    }
 
-    public String getSerialization()
-    {
+    public void setLevelsLeft(int levelsL) {
+        levelsLeft = levelsL;
+    }
+
+    public String getSerialization() {
         return serialization;
     }
 
-    public byte[] getSerializationByte()
-    {
-        return serializationByte;
-    }
-
-    public int getHashSize()
-    {
-        return hashSize;
-    }
-
-    public void setRoot(String root)
-    {
-        this.root = root;
-    }
-
-    public void setSerialization(String serialization)
-    {
+    public void setSerialization(String serialization) {
         this.serialization = serialization;
     }
 
-    public void setSerializationByte(byte[] serializationByte)
-    {
+    public byte[] getSerializationByte() {
+        return serializationByte;
+    }
+
+    public void setSerializationByte(byte[] serializationByte) {
         this.serializationByte = serializationByte;
     }
 
-    public void setHashSize(int hashSize)
-    {
+    public int getHashSize() {
+        return hashSize;
+    }
+
+    public void setHashSize(int hashSize) {
         this.hashSize = hashSize;
     }
 

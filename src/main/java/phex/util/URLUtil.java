@@ -27,126 +27,110 @@ import phex.download.RemoteFile;
 import phex.http.GnutellaRequest;
 
 
-public class URLUtil
-{
-    
-    
+public class URLUtil {
+
+
     /**
      * Returns a url to look up a URN over bitzi.com.
+     *
      * @param urn the URN to look up.
      * @return the bitzi url.
      */
-    public static String buildBitziLookupURL( URN urn )
-    {
+    public static String buildBitziLookupURL(URN urn) {
         String url = "http://bitzi.com/lookup/" +
-            urn.getNamespaceSpecificString() + "?detail&ref=phex";
+                urn.getNamespaceSpecificString() + "?detail&ref=phex";
         return url;
     }
 
     /**
      * Returns a magnet URL in the format:
      * magnet:?xt=urn:sha1:<sha1NSS>&dn=<filename>
-     * @param sha1NSS the sha1 of the file.
+     *
+     * @param sha1NSS  the sha1 of the file.
      * @param filename the filename
      * @return the magnet URL string.
      */
-    public static String buildMagnetURL( String sha1NSS, String filename )
-    {
+    public static String buildMagnetURL(String sha1NSS, String filename) {
         String url = "magnet:?xt=urn:sha1:" + sha1NSS + "&dn="
-            + URLCodecUtils.encodeURL( filename );
-        return url;
-    }
-    
-    public static String buildMagnetURLWithXS( String sha1NSS, String filename,
-        DestAddress ha )
-    {
-        String url = "magnet:?xt=urn:sha1:" + sha1NSS + 
-            "&dn=" + URLCodecUtils.encodeURL( filename ) +
-            "&xs=" + buildHostURL( ha ) + GnutellaRequest.GNUTELLA_URI_RES_PREFIX + "urn:sha1:" + sha1NSS;
+                + URLCodecUtils.encodeURL(filename);
         return url;
     }
 
-    public static String buildFileURL( RemoteFile file )
-    {
+    public static String buildMagnetURLWithXS(String sha1NSS, String filename,
+                                              DestAddress ha) {
+        String url = "magnet:?xt=urn:sha1:" + sha1NSS +
+                "&dn=" + URLCodecUtils.encodeURL(filename) +
+                "&xs=" + buildHostURL(ha) + GnutellaRequest.GNUTELLA_URI_RES_PREFIX + "urn:sha1:" + sha1NSS;
+        return url;
+    }
+
+    public static String buildFileURL(RemoteFile file) {
         return "http://" + file.getHostAddress().getFullHostName() + "/get/"
-            + file.getFileIndex() + '/' + URLCodecUtils.encodeURL( file.getFilename() );
+                + file.getFileIndex() + '/' + URLCodecUtils.encodeURL(file.getFilename());
     }
 
-    public static String buildName2ResourceURL( URN urn )
-    {
+    public static String buildName2ResourceURL(URN urn) {
         return GnutellaRequest.GNUTELLA_URI_RES_PREFIX + urn.getAsString();
     }
-    
-    public static String buildName2ResThexURL( URN urn, String tigerTreeRoot )
-    {
+
+    public static String buildName2ResThexURL(URN urn, String tigerTreeRoot) {
         return GnutellaRequest.GNUTELLA_URI_RES_THEX_PREFIX + urn.getAsString()
-            + ';' + tigerTreeRoot;
+                + ';' + tigerTreeRoot;
     }
 
-    public static String buildFullName2ResourceURL( DestAddress ha, URN urn )
-    {
-        return buildHostURL( ha ) + GnutellaRequest.GNUTELLA_URI_RES_PREFIX + urn.getAsString();
+    public static String buildFullName2ResourceURL(DestAddress ha, URN urn) {
+        return buildHostURL(ha) + GnutellaRequest.GNUTELLA_URI_RES_PREFIX + urn.getAsString();
     }
 
-    public static String buildHostURL( DestAddress address )
-    {
+    public static String buildHostURL(DestAddress address) {
         return "http://" + address.getFullHostName();
     }
-    
-    public static String getFileNameFromUri( URI uri )
-        throws URIException
-    {
+
+    public static String getFileNameFromUri(URI uri)
+            throws URIException {
         String path;
         path = uri.getPath();
-        if ( path == null )
-        {
+        if (path == null) {
             return uri.getHost();
         }
         int at = path.lastIndexOf('/');
         int to = path.length();
         return (at >= 0) ? path.substring(at + 1, to) : path;
     }
-    
-    public static String getPathQueryFromUri( URI uri )
-        throws URIException
-    {
+
+    public static String getPathQueryFromUri(URI uri)
+            throws URIException {
         String path;
         String query;
         path = uri.getPath();
         query = uri.getQuery();
-        
+
         uri.getCurrentHierPath();
 
-        if ( query != null && query.length() > 0 )
-        {
+        if (query != null && query.length() > 0) {
             return path + '?' + query;
         }
-        
-        if ( path == null )
-        {
+
+        if (path == null) {
             return "/";
-        }
-        else
-        {
+        } else {
             return path;
         }
     }
-    
+
     /**
      * Tries to identify a URN in the query part of the uri.
+     *
      * @param uri
      * @return the urn if found otherwise null
      * @throws URIException
      */
-    public static URN getQueryURN( URI uri )
-        throws URIException
-    {
+    public static URN getQueryURN(URI uri)
+            throws URIException {
         String query = uri.getQuery();
-        if ( query != null && query.length() > 0 )
-        {
-            if ( URN.isValidURN(query) )
-            {
-                return new URN( query );
+        if (query != null && query.length() > 0) {
+            if (URN.isValidURN(query)) {
+                return new URN(query);
             }
         }
         return null;

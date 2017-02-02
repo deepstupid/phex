@@ -28,56 +28,49 @@ import phex.msg.MsgHeader;
 /**
  *
  */
-public class HopsFlowVMsg extends VendorMsg
-{
+public class HopsFlowVMsg extends VendorMsg {
     public static final int VERSION = 1;
-    
+
     /**
      * Creates a new hops flow vendor message
+     *
      * @param hopsValue the upper bound for hops to receive.
      */
-    public HopsFlowVMsg( int hopsValue )
-    {
-        super( VENDORID_BEAR, SUBSELECTOR_HOPS_FLOW, VERSION, 
-            buildDataBody( hopsValue ) );
+    public HopsFlowVMsg(int hopsValue) {
+        super(VENDORID_BEAR, SUBSELECTOR_HOPS_FLOW, VERSION,
+                buildDataBody(hopsValue));
     }
-    
-    public HopsFlowVMsg( MsgHeader header, byte[] vendorId, 
-        int subSelector, int version, byte[] data )
-        throws InvalidMessageException
-    {
-        super( header, vendorId, subSelector, version, data );
-        if ( version < VERSION )
-        {
+
+    public HopsFlowVMsg(MsgHeader header, byte[] vendorId,
+                        int subSelector, int version, byte[] data)
+            throws InvalidMessageException {
+        super(header, vendorId, subSelector, version, data);
+        if (version < VERSION) {
             throw new InvalidMessageException(
-                "Vendor Message 'HopsFlowVMsg' with deprecated version: " + version );
+                    "Vendor Message 'HopsFlowVMsg' with deprecated version: " + version);
         }
-        if ( version > VERSION )
-        {
+        if (version > VERSION) {
             throw new InvalidMessageException(
-                "Vendor Message 'HopsFlowVMsg' with invalid version: " + version );
+                    "Vendor Message 'HopsFlowVMsg' with invalid version: " + version);
         }
-        if ( data.length != 1 )
-        {
+        if (data.length != 1) {
             throw new InvalidMessageException(
-                "Vendor Message 'HopsFlowVMsg' invalid data length: " + data.length );
+                    "Vendor Message 'HopsFlowVMsg' invalid data length: " + data.length);
         }
-    }
-    
-    public byte getHopsValue()
-    {
-        return getVenderMsgData()[0];
     }
 
     /**
      * @param hopsValue
      * @return
      */
-    private static byte[] buildDataBody( int hopsValue )
-    {
-        byte[] body = { (byte)hopsValue };
+    private static byte[] buildDataBody(int hopsValue) {
+        byte[] body = {(byte) hopsValue};
         return body;
     }
-    
-    
+
+    public byte getHopsValue() {
+        return getVenderMsgData()[0];
+    }
+
+
 }

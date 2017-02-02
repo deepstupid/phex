@@ -36,58 +36,49 @@ import java.util.List;
 /**
  * Filters all files matching the expression.
  */
-public class DMediaTypeCondition implements DCondition
-{
+public class DMediaTypeCondition implements DCondition {
     static public final String ELEMENT_NAME = "mediatype-condition";
     private List<MediaType> types;
-    
+
     /**
      * @param expression
      * @param case1
      */
-    public DMediaTypeCondition( )
-    {
+    public DMediaTypeCondition() {
         types = new ArrayList<MediaType>();
     }
 
-    public List<MediaType> getTypes()
-    {
+    public List<MediaType> getTypes() {
         return types;
     }
 
-    public void setTypes( List<MediaType> types )
-    {
+    public void setTypes(List<MediaType> types) {
         this.types = types;
     }
 
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
-        
-        if ( types != null )
-        {
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
+
+        if (types != null) {
             AttributesImpl attributes = null;
-            for( MediaType type : types )
-            {
+            for (MediaType type : types) {
                 attributes = new AttributesImpl();
-                attributes.addAttribute( "", "", "name", "CDATA", 
-                    String.valueOf( type.getName() ) );
-                
-                writer.startElm( "media", attributes );
-                writer.endElm( "media" );
+                attributes.addAttribute("", "", "name", "CDATA",
+                        String.valueOf(type.getName()));
+
+                writer.startElm("media", attributes);
+                writer.endElm("media");
             }
         }
-        
-        writer.endElm( ELEMENT_NAME );
+
+        writer.endElm(ELEMENT_NAME);
     }
-    
-    public Condition createCondition()
-    {
-        MediaTypeCondition cond = new MediaTypeCondition( );
+
+    public Condition createCondition() {
+        MediaTypeCondition cond = new MediaTypeCondition();
         Iterator iterator = types.iterator();
-        while ( iterator.hasNext() )
-        {
-            cond.addType( (MediaType) iterator.next() );
+        while (iterator.hasNext()) {
+            cond.addType((MediaType) iterator.next());
         }
         return cond;
     }

@@ -39,38 +39,32 @@ import java.util.List;
  * these connection still respond to incoming ping. In case they don't respond
  * the connections are dropped.
  */
-public class ConnectionObserver implements Runnable
-{
+public class ConnectionObserver implements Runnable {
     private static final long SLEEP_TIME = 1000;
     private static final long PING_WAIT_TIME = 2000;
-
-    private List<ConnectionSnapshoot> snapshootList;
-    private List<Host> quiteList;
     private final NetworkHostsContainer networkHostsContainer;
     private final MessageService messageService;
+    private List<ConnectionSnapshoot> snapshootList;
+    private List<Host> quiteList;
 
-    public ConnectionObserver( NetworkHostsContainer networkHostsContainer,
-        MessageService messageService )
-    {
+    public ConnectionObserver(NetworkHostsContainer networkHostsContainer,
+                              MessageService messageService) {
         this.networkHostsContainer = networkHostsContainer;
         this.messageService = messageService;
     }
 
-    public void start()
-    {
-        Thread thread = new Thread( ThreadTracking.rootThreadGroup, this,
-            "ConnectionObserver-" + Integer.toHexString( hashCode() ) );
-        thread.setPriority( Thread.NORM_PRIORITY );
-        thread.setDaemon( true );
+    public void start() {
+        Thread thread = new Thread(ThreadTracking.rootThreadGroup, this,
+                "ConnectionObserver-" + Integer.toHexString(hashCode()));
+        thread.setPriority(Thread.NORM_PRIORITY);
+        thread.setDaemon(true);
         thread.start();
     }
 
-    public void run()
-    {
+    public void run() {
         snapshootList = new ArrayList<>();
         quiteList = new ArrayList<>();
-        while( true )
-        {
+        while (true) {
             snapshootList.clear();
             quiteList.clear();
 
@@ -80,22 +74,18 @@ public class ConnectionObserver implements Runnable
             createSnapshoots(hosts);
 
             //Sleep some time...
-            try
-            {
-                Thread.sleep( SLEEP_TIME );
-            }
-            catch (InterruptedException e)
-            {
+            try {
+                Thread.sleep(SLEEP_TIME);
+            } catch (InterruptedException e) {
             }
 
             // Find connections that where quite in the meantime
             hosts = networkHostsContainer.getUltrapeerConnections();
-            findQuiteHosts( hosts );
+            findQuiteHosts(hosts);
             hosts = networkHostsContainer.getLeafConnections();
-            findQuiteHosts( hosts );
+            findQuiteHosts(hosts);
 
-            if ( quiteList.size() > 0 )
-            {
+            if (quiteList.size() > 0) {
                 // send a ping to each connection in the hope they respond to it.
                 int size = quiteList.size();
                 for (Host host : quiteList) {
@@ -105,12 +95,9 @@ public class ConnectionObserver implements Runnable
                     messageService.pingHost(host);
                 }
                 //Wait some time for the pinged hosts to respond...
-                try
-                {
-                    Thread.sleep( PING_WAIT_TIME );
-                }
-                catch (InterruptedException e)
-                {
+                try {
+                    Thread.sleep(PING_WAIT_TIME);
+                } catch (InterruptedException e) {
                 }
                 for (Host host : quiteList) {
                     // Disconnect connection if it was still quite in the meantime
@@ -127,8 +114,7 @@ public class ConnectionObserver implements Runnable
         }
     }
 
-    private void findQuiteHosts( Host[] hosts )
-    {
+    private void findQuiteHosts(Host[] hosts) {
         for (Host host : hosts) {
             ConnectionSnapshoot shoot = findSnapshoot(host);
             if (shoot == null) {// this is a new host...
@@ -141,15 +127,13 @@ public class ConnectionObserver implements Runnable
         }
     }
 
-    private void createSnapshoots( Host[] hosts )
-    {
+    private void createSnapshoots(Host[] hosts) {
         for (Host host : hosts) {
             snapshootList.add(new ConnectionSnapshoot(host));
         }
     }
 
-    private ConnectionSnapshoot findSnapshoot( Host host )
-    {
+    private ConnectionSnapshoot findSnapshoot(Host host) {
         int size = snapshootList.size();
         for (ConnectionSnapshoot shoot : snapshootList) {
             if (shoot.host == host) {
@@ -159,15 +143,13 @@ public class ConnectionObserver implements Runnable
         return null;
     }
 
-    private static class ConnectionSnapshoot
-    {
+    private static class ConnectionSnapshoot {
         final Host host;
         final int receivedCount;
         final int sentCount;
         final int sendDropCount;
 
-        ConnectionSnapshoot( Host host )
-        {
+        ConnectionSnapshoot(Host host) {
             this.host = host;
             receivedCount = host.getReceivedCount();
             sentCount = host.getSentCount();
@@ -177,16 +159,15 @@ public class ConnectionObserver implements Runnable
         /**
          * Returns true if the data has not changed. This means we have received
          * no new data, or all sent packages have been dropped.
+         *
          * @return true if the host has been quite, false others.
          */
-        public boolean hasBeenQuiet( )
-        {
+        public boolean hasBeenQuiet() {
             int receivedDiff = host.getReceivedCount() - receivedCount;
             int sentDiff = host.getSentCount() - sentCount;
             int sendDropDiff = host.getSentDropCount() - sendDropCount;
 
-            if ( receivedDiff == 0 )
-            {
+            if (receivedDiff == 0) {
                 return true;
             }
 

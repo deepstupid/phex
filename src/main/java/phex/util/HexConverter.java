@@ -30,15 +30,13 @@ import phex.io.buffer.ByteBuffer;
  * Byte.valueOf( String, 16 ). But this code is highly optimized and outperforms
  * the standard J2SE 1.3 algorithem by the factor 4:1.
  */
-public final class HexConverter
-{
+public final class HexConverter {
     /**
      * The shortcut array to convert from decimal to hex value.
      */
     private static final char[] hexValueArray;
 
-    static
-    {
+    static {
         hexValueArray = new char[16];
         hexValueArray[0] = '0';
         hexValueArray[1] = '1';
@@ -57,75 +55,67 @@ public final class HexConverter
         hexValueArray[14] = 'E';
         hexValueArray[15] = 'F';
     }
-    
+
     /**
-     * Converts the bytes in the ByteBuffer into a hex string. 
+     * Converts the bytes in the ByteBuffer into a hex string.
      * No separator is used between hex values.
+     *
      * @param buffer the byte buffer to generate a hex string from.
      * @param length the number of bytes to use.
      * @return a hex representation.
      */
-    public static String toHexString(ByteBuffer buffer, int length )
-    {
-        return toHexString( buffer, length, null );
+    public static String toHexString(ByteBuffer buffer, int length) {
+        return toHexString(buffer, length, null);
     }
-    
+
     /**
-     * Converts the bytes in the ByteBuffer into a hex string. 
+     * Converts the bytes in the ByteBuffer into a hex string.
      * No separator is used between hex values.
-     * @param buffer the byte buffer to generate a hex string from.
-     * @param length the number of bytes to use.
+     *
+     * @param buffer    the byte buffer to generate a hex string from.
+     * @param length    the number of bytes to use.
      * @param separator the separator to use between each hex value.
      * @return a hex representation.
      */
-    public static String toHexString(ByteBuffer buffer, int length, String separator )
-    {
-        if ( length < 1 )
-        {
-            throw new IllegalArgumentException( "Length " + length + " < 1 " );
+    public static String toHexString(ByteBuffer buffer, int length, String separator) {
+        if (length < 1) {
+            throw new IllegalArgumentException("Length " + length + " < 1 ");
         }
 
         boolean isLimited = buffer.remaining() > length;
         int size;
-        if ( isLimited ) 
-        {
+        if (isLimited) {
             size = length;
-        } 
-        else 
-        {
+        } else {
             size = buffer.remaining();
         }
 
-        if( size == 0 )
-        {
+        if (size == 0) {
             return "empty";
         }
 
-        StringBuffer out = new StringBuffer( ( buffer.remaining() * 3 ) - 1 );
+        StringBuffer out = new StringBuffer((buffer.remaining() * 3) - 1);
 
         int mark = buffer.position();
 
         int byteValue = buffer.get() & 0xFF;
-        out.append( (byteValue >> 4) & 0x0F );
-        out.append( byteValue & 0x0F );
-        size --;
+        out.append((byteValue >> 4) & 0x0F);
+        out.append(byteValue & 0x0F);
+        size--;
 
-        while( size > 0 )
-        {
-            if ( separator != null )
-            {
-                out.append( separator );
+        while (size > 0) {
+            if (separator != null) {
+                out.append(separator);
             }
             byteValue = buffer.get();
-            out.append( (byteValue >> 4) & 0x0F );
-            out.append( byteValue & 0x0F );
-            size --;
+            out.append((byteValue >> 4) & 0x0F);
+            out.append(byteValue & 0x0F);
+            size--;
         }
 
-        buffer.position( mark );
-        
-        if ( isLimited ) 
-        {
+        buffer.position(mark);
+
+        if (isLimited) {
             out.append("...");
         }
 
@@ -135,52 +125,44 @@ public final class HexConverter
     /**
      * Converts the data byte array into a hex string.
      */
-    public static String toHexString(byte[] data )
-    {
-        if ( data.length == 0 )
-        {
+    public static String toHexString(byte[] data) {
+        if (data.length == 0) {
             return "";
         }
-        return toHexString( data, 0, data.length );
+        return toHexString(data, 0, data.length);
     }
 
     /**
      * Converts length bytes from the data byte array starting from offset into
      * a hex string. No separator is used between hex values.
      */
-    public static String toHexString(byte[] data, int offset, int length )
-    {
-        return toHexString( data, offset, length, null );
+    public static String toHexString(byte[] data, int offset, int length) {
+        return toHexString(data, offset, length, null);
     }
-    
+
     /**
      * Converts length bytes from the data byte array starting from offset into
      * a hex string. A separator can be provided.
      */
-    public static String toHexString(byte[] data, int offset, int length, String separator )
-    {
-        if ( length < 1 )
-        {
-            throw new IllegalArgumentException( "Length " + length + " < 1 " );
+    public static String toHexString(byte[] data, int offset, int length, String separator) {
+        if (length < 1) {
+            throw new IllegalArgumentException("Length " + length + " < 1 ");
         }
         int end = offset + length;
-        if ( offset > data.length || end > data.length )
-        {
-            throw new IndexOutOfBoundsException( "Data length: " + data.length +
-                " offset: " + offset + " length: " + length );
+        if (offset > data.length || end > data.length) {
+            throw new IndexOutOfBoundsException("Data length: " + data.length +
+                    " offset: " + offset + " length: " + length);
         }
 
-        StringBuffer buffer = new StringBuffer( length * 2 );
-        buffer.append( hexValueArray[ (data[offset] >> 4) & 0x0F ] );
-        buffer.append( hexValueArray[  data[offset] & 0x0F] );
-        for ( int i = offset + 1; i < end; i++ )
-        {
-            if ( separator != null )
-            {
-                buffer.append( separator );
+        StringBuffer buffer = new StringBuffer(length * 2);
+        buffer.append(hexValueArray[(data[offset] >> 4) & 0x0F]);
+        buffer.append(hexValueArray[data[offset] & 0x0F]);
+        for (int i = offset + 1; i < end; i++) {
+            if (separator != null) {
+                buffer.append(separator);
             }
-            buffer.append( hexValueArray[ (data[i] >> 4) & 0x0F ] );
-            buffer.append( hexValueArray[  data[i] & 0x0F] );
+            buffer.append(hexValueArray[(data[i] >> 4) & 0x0F]);
+            buffer.append(hexValueArray[data[i] & 0x0F]);
         }
         return buffer.toString();
     }
@@ -188,71 +170,52 @@ public final class HexConverter
     /**
      * Converts a single byte into a hex string.
      */
-    public static String toHexString(byte data )
-    {
-        StringBuffer buffer = new StringBuffer( 2 );
-        buffer.append( hexValueArray[ (data >> 4) & 0x0F ] );
-        buffer.append( hexValueArray[  data & 0x0F] );
+    public static String toHexString(byte data) {
+        StringBuffer buffer = new StringBuffer(2);
+        buffer.append(hexValueArray[(data >> 4) & 0x0F]);
+        buffer.append(hexValueArray[data & 0x0F]);
         return buffer.toString();
     }
 
     /**
      * Converts hexString into a byte array.
      */
-    public static byte[] toBytes(String hexString )
-    {
-        if ( hexString == null )
-        {
-            throw new NullPointerException( "HexString is null" );
+    public static byte[] toBytes(String hexString) {
+        if (hexString == null) {
+            throw new NullPointerException("HexString is null");
         }
         int length = hexString.length();
-        if ( length % 2 != 0 )
-        {
-            throw new NumberFormatException( "Hex string has odd characters: " + hexString );
+        if (length % 2 != 0) {
+            throw new NumberFormatException("Hex string has odd characters: " + hexString);
         }
 
-        byte[] data = new byte[ length / 2 ];
+        byte[] data = new byte[length / 2];
         char highChar, lowChar;
         byte highNibble, lowNibble;
-        for (int i = 0, offset = 0; i < length; i += 2, offset ++ )
-        {
-            highChar = hexString.charAt( i );
-            if ( highChar >= '0' && highChar <= '9')
-            {
-                highNibble = (byte)(highChar - '0');
-            }
-            else if (highChar >= 'A' && highChar <= 'F')
-            {
-                highNibble = (byte)(10 + highChar - 'A');
-            }
-            else if (highChar >= 'a' && highChar <= 'f')
-            {
-                highNibble = (byte)(10 + highChar - 'a');
-            }
-            else
-            {
-                throw new NumberFormatException( "Invalid hex char: " + highChar );
+        for (int i = 0, offset = 0; i < length; i += 2, offset++) {
+            highChar = hexString.charAt(i);
+            if (highChar >= '0' && highChar <= '9') {
+                highNibble = (byte) (highChar - '0');
+            } else if (highChar >= 'A' && highChar <= 'F') {
+                highNibble = (byte) (10 + highChar - 'A');
+            } else if (highChar >= 'a' && highChar <= 'f') {
+                highNibble = (byte) (10 + highChar - 'a');
+            } else {
+                throw new NumberFormatException("Invalid hex char: " + highChar);
             }
 
-            lowChar = hexString.charAt( i + 1 );
-            if ( lowChar >= '0' && lowChar <= '9')
-            {
-                lowNibble = (byte)(lowChar - '0');
-            }
-            else if (lowChar >= 'A' && lowChar <= 'F')
-            {
-                lowNibble = (byte)(10 + lowChar - 'A');
-            }
-            else if (lowChar >= 'a' && lowChar <= 'f')
-            {
-                lowNibble = (byte)(10 + lowChar - 'a');
-            }
-            else
-            {
-                throw new NumberFormatException( "Invalid hex char: " + lowChar );
+            lowChar = hexString.charAt(i + 1);
+            if (lowChar >= '0' && lowChar <= '9') {
+                lowNibble = (byte) (lowChar - '0');
+            } else if (lowChar >= 'A' && lowChar <= 'F') {
+                lowNibble = (byte) (10 + lowChar - 'A');
+            } else if (lowChar >= 'a' && lowChar <= 'f') {
+                lowNibble = (byte) (10 + lowChar - 'a');
+            } else {
+                throw new NumberFormatException("Invalid hex char: " + lowChar);
             }
 
-            data[ offset ] = (byte)(highNibble << 4 | lowNibble);
+            data[offset] = (byte) (highNibble << 4 | lowNibble);
         }
         return data;
     }

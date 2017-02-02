@@ -21,8 +21,7 @@
  */
 package phex.query;
 
-public enum QHDFlag
-{
+public enum QHDFlag {
     /**
      * The unknown flag status for QHD status.
      */

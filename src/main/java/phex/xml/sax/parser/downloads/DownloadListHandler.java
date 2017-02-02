@@ -32,62 +32,55 @@ import phex.xml.sax.downloads.DDownloadFile;
 import javax.xml.parsers.SAXParser;
 
 /**
- * 
+ *
  */
-public class DownloadListHandler extends DefaultHandler
-{   
+public class DownloadListHandler extends DefaultHandler {
     public static final String THIS_TAG_NAME = "swDownloadList";
-    
+
     private final SAXParser parser;
     private final DSubElementList<DDownloadFile> dDownloadList;
     private final DefaultHandler parent;
-    
-    public DownloadListHandler( DSubElementList<DDownloadFile> dDownloadList, 
-        DefaultHandler parent, SAXParser parser )
-    {
+
+    public DownloadListHandler(DSubElementList<DDownloadFile> dDownloadList,
+                               DefaultHandler parent, SAXParser parser) {
         this.dDownloadList = dDownloadList;
         this.parser = parser;
         this.parent = parent;
     }
-    
+
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
     @Override
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes)
-        throws SAXException
-    {
-        if ( qName.equals( DDownloadFile.ELEMENT_NAME ) )
-        {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes)
+            throws SAXException {
+        if (qName.equals(DDownloadFile.ELEMENT_NAME)) {
             DDownloadFile file = new DDownloadFile();
-            dDownloadList.getSubElementList().add( file );
-            
-            DownloadFileHandler handler = new DownloadFileHandler( file, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
+            dDownloadList.getSubElementList().add(file);
+
+            DownloadFileHandler handler = new DownloadFileHandler(file, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
         }
         return;
     }
-    
+
     @Override
-    public void endElement( String uri, String localName, String qName )
-        throws SAXException
-    {
-        if ( qName.equals( THIS_TAG_NAME ) )
-        {
-            parser.getXMLReader().setContentHandler( parent );
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equals(THIS_TAG_NAME)) {
+            parser.getXMLReader().setContentHandler(parent);
         }
     }
 
     @Override
-    public InputSource resolveEntity( String publicId, String systemId )
-    {
+    public InputSource resolveEntity(String publicId, String systemId) {
         return null;
     }
 }

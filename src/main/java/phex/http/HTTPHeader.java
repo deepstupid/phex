@@ -21,8 +21,7 @@
  */
 package phex.http;
 
-public class HTTPHeader
-{
+public class HTTPHeader {
     /**
      * The http header name.
      */
@@ -35,90 +34,90 @@ public class HTTPHeader
 
     /**
      * Creates a new http header with name and value
-     * @param name the http header name.
+     *
+     * @param name  the http header name.
      * @param value the http header value.
      */
-    public HTTPHeader( String name, String value )
-    {
+    public HTTPHeader(String name, String value) {
         this.name = name;
         this.value = value;
     }
 
     /**
      * Returns the http header name.
+     *
      * @return the http header name.
      */
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
     /**
      * Returns the http header value.
+     *
      * @return the http header value.
      */
-    public String getValue()
-    {
+    public String getValue() {
         return value;
     }
 
     /**
      * Returns true if the value equals the string "true", otherwise false is
      * returned.
+     *
      * @return true if the value equals the string "true", otherwise false is
      * returned.
      */
-    public boolean booleanValue()
-    {
-        return Boolean.valueOf( value ).booleanValue();
+    public boolean booleanValue() {
+        return Boolean.valueOf(value).booleanValue();
     }
-    
+
     /**
      * Returns the float value of the string.
+     *
      * @return the float value of the string.
      * @throws NumberFormatException if the string can not be
-     * parsed into a float.
+     *                               parsed into a float.
      */
     public float floatValue()
-        throws NumberFormatException
-    {
-        return Float.parseFloat( value );
+            throws NumberFormatException {
+        return Float.parseFloat(value);
     }
-    
+
     /**
      * Returns the long value of the string.
+     *
      * @return the long value of the string.
      * @throws NumberFormatException if the string can not be
-     * parsed into a long.
+     *                               parsed into a long.
      */
     public long longValue()
-        throws NumberFormatException
-    {
-        return Long.parseLong( value );
+            throws NumberFormatException {
+        return Long.parseLong(value);
     }
-    
+
     /**
      * Returns the byte value of the string.
+     *
      * @return the byte value of the string.
      * @throws NumberFormatException if the string can not be
-     * parsed into a byte.
+     *                               parsed into a byte.
      */
     public byte byteValue()
-        throws NumberFormatException
-    {
-        return Byte.parseByte( value );
+            throws NumberFormatException {
+        return Byte.parseByte(value);
     }
-    
+
     /**
      * Returns the int value of the string.
+     *
      * @return the int value of the string.
      * @throws NumberFormatException if the string can not be
-     * parsed into a int.
+     *                               parsed into a int.
      */
     public int intValue()
-        throws NumberFormatException
-    {
-        return Integer.parseInt( value );
+            throws NumberFormatException {
+        return Integer.parseInt(value);
     }
 
     /**
@@ -126,29 +125,27 @@ public class HTTPHeader
      *
      * @param obj the reference object with which to compare.
      * @return <code>true</code> if this object is the same as the obj
-     *         argument; <code>false</code> otherwise.
+     * argument; <code>false</code> otherwise.
      */
     @Override
-    public boolean equals( Object obj )
-    {
-        if (obj ==this ) return true;
-        if ( !(obj instanceof HTTPHeader) )
-        {
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof HTTPHeader)) {
             return false;
         }
-        return ((HTTPHeader)obj).name.equals( name );
+        return ((HTTPHeader) obj).name.equals(name);
     }
 
     /**
      * Hash code to equal on hash based collections.
+     *
      * @return a hash code value for this HTTPHeader.
      */
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int h = 0;
-        h = ((127 *h) + (( name != null ) ? name.hashCode() : 0 ));
-        h = ((127 *h) + (( value != null ) ? value.hashCode() : 0 ));
+        h = ((127 * h) + ((name != null) ? name.hashCode() : 0));
+        h = ((127 * h) + ((value != null) ? value.hashCode() : 0));
         return h;
     }
 }

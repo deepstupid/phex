@@ -36,7 +36,7 @@ import java.util.*;
 
 /**
  * This class is intended to provide localized strings.
- * 
+ * <p>
  * <b>How to store localized resource bundles</b>
  * Phex will look for resource bundles in the classpath that includes the
  * directory $PHEX/lang.<br>It will look for a file called 'language.list'
@@ -56,88 +56,74 @@ import java.util.*;
  * are chained for language key lookup in a ResourceBundle. If a locale exists but
  * doesn't have the string required, that string is looked for in the default locale
  * which is en_US.
- * 
+ * <p>
  * To display all available locales in the options menu, Phex will use the file
  * $PHEX/lang/language.list and the internal resource
  * phex/resources/language.list for available locale definitions.
+ *
  * @author Gregork and Tamara Civera
  */
-public class Localizer
-{
-    private static final Logger logger = LoggerFactory.getLogger( Localizer.class );
-    
+public class Localizer {
+    private static final Logger logger = LoggerFactory.getLogger(Localizer.class);
+    private static final String DEFAULT_LOCALE = "en_US";
+    private static final String FILES_PREFIX = "Lang";
+    private static final int MAX_LINE_LENGTH = 4096;
     private static Map<String, String> langKeyMap;
     private static Map<String, String> defaultLangKeyMap;
     private static Locale usedLocale;
     private static List<Locale> availableLocales;
     private static DecimalFormatSymbols decimalFormatSymbols;
     private static NumberFormat integerNumberFormat;
-    private static HashMap<String,String> countryNameCache;
-    private static final String DEFAULT_LOCALE = "en_US";
-    private static final String FILES_PREFIX = "Lang";
+    private static HashMap<String, String> countryNameCache;
 
-    private static final int MAX_LINE_LENGTH = 4096;
-    
-    public static void initialize( String localeStr )
-    {
-        setUsedLocale( Locale.US );
-        
+    public static void initialize(String localeStr) {
+        setUsedLocale(Locale.US);
+
         Locale locale;
-        if ( localeStr == null || localeStr.length() == 0 ||
-            ( localeStr.length() != 2 && localeStr.length() != 5 && localeStr.length() != 8) )            
-        {// default to en_US
+        if (localeStr == null || localeStr.length() == 0 ||
+                (localeStr.length() != 2 && localeStr.length() != 5 && localeStr.length() != 8)) {// default to en_US
             locale = Locale.US;
-        }
-        else
-        {
-	        String lang = localeStr.substring( 0, 2 );
-	        String country = "";
-	        if ( localeStr.length() >= 5 )
-	        {
-	            country = localeStr.substring( 3, 5 );
-	        }
-            String variant = "";
-            if ( localeStr.length() == 8 )
-            {
-                variant = localeStr.substring( 6, 8 );
+        } else {
+            String lang = localeStr.substring(0, 2);
+            String country = "";
+            if (localeStr.length() >= 5) {
+                country = localeStr.substring(3, 5);
             }
-	        locale = new Locale( lang, country, variant );
+            String variant = "";
+            if (localeStr.length() == 8) {
+                variant = localeStr.substring(6, 8);
+            }
+            locale = new Locale(lang, country, variant);
         }
-        setUsedLocale( locale );
+        setUsedLocale(locale);
     }
 
-    public static void setUsedLocale(Locale locale)
-    {
-        usedLocale = locale;
-        buildResourceBundle( locale );
-        decimalFormatSymbols = new DecimalFormatSymbols( usedLocale );
-        integerNumberFormat = NumberFormat.getIntegerInstance( usedLocale );
-        countryNameCache = new HashMap<String, String>();
-    }
-    
-    public static Locale getUsedLocale()
-    {
+    public static Locale getUsedLocale() {
         return usedLocale;
     }
-    
-    public static DecimalFormatSymbols getDecimalFormatSymbols()
-    {
+
+    public static void setUsedLocale(Locale locale) {
+        usedLocale = locale;
+        buildResourceBundle(locale);
+        decimalFormatSymbols = new DecimalFormatSymbols(usedLocale);
+        integerNumberFormat = NumberFormat.getIntegerInstance(usedLocale);
+        countryNameCache = new HashMap<String, String>();
+    }
+
+    public static DecimalFormatSymbols getDecimalFormatSymbols() {
         return decimalFormatSymbols;
     }
-    
-    public static NumberFormat getIntegerNumberFormat()
-    {
+
+    public static NumberFormat getIntegerNumberFormat() {
         return integerNumberFormat;
     }
-    
-    public static String getCountryName( String countryCode )
-    {
-        String countryName = countryNameCache.get( countryCode );
-        if ( countryName == null )
-        {
-            Locale l = new Locale( "", countryCode );
-            countryName = l.getDisplayCountry( usedLocale );
-            countryNameCache.put( countryCode, countryName );
+
+    public static String getCountryName(String countryCode) {
+        String countryName = countryNameCache.get(countryCode);
+        if (countryName == null) {
+            Locale l = new Locale("", countryCode);
+            countryName = l.getDisplayCountry(usedLocale);
+            countryNameCache.put(countryCode, countryName);
         }
         return countryName;
     }
@@ -147,65 +133,57 @@ public class Localizer
      * $PHEX/lang/translations.list and the internal resource
      * phex/resources/translations.list for available locale definitions.
      */
-    public static synchronized List<Locale> getAvailableLocales()
-    {
-        if ( availableLocales != null ) { return availableLocales; }
+    public static synchronized List<Locale> getAvailableLocales() {
+        if (availableLocales != null) {
+            return availableLocales;
+        }
         availableLocales = new ArrayList<Locale>();
-        List<Locale> list = loadLocalList( "/language.list" );
-        availableLocales.addAll( list );
-        list = loadLocalList( "/phex/resources/language.list" );
-        availableLocales.addAll( list );
+        List<Locale> list = loadLocalList("/language.list");
+        availableLocales.addAll(list);
+        list = loadLocalList("/phex/resources/language.list");
+        availableLocales.addAll(list);
         return availableLocales;
     }
 
-    private static List<Locale> loadLocalList(String name)
-    {
-        InputStream stream = Localizer.class.getResourceAsStream( name );
-        if ( stream == null ) { return Collections.emptyList(); }
+    private static List<Locale> loadLocalList(String name) {
+        InputStream stream = Localizer.class.getResourceAsStream(name);
+        if (stream == null) {
+            return Collections.emptyList();
+        }
         // make sure it is buffered
-        try
-        {
-            BufferedReader reader = new BufferedReader( new InputStreamReader(
-                stream, "ISO-8859-1" ) );
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    stream, "ISO-8859-1"));
             ArrayList<Locale> list = new ArrayList<Locale>();
             String line;
             Locale locale;
-            while (true)
-            {
+            while (true) {
                 line = reader.readLine();
-                if ( line == null )
-                {
+                if (line == null) {
                     break;
                 }
                 line = line.trim();
-                if ( line.startsWith( "#" ) 
-                  || ( line.length() != 2 && line.length() != 5 && line.length() != 8 ) )
-                {
+                if (line.startsWith("#")
+                        || (line.length() != 2 && line.length() != 5 && line.length() != 8)) {
                     continue;
                 }
-                String lang = line.substring( 0, 2 );
+                String lang = line.substring(0, 2);
                 String country = "";
-                if ( line.length() >= 5 )
-                {
-                    country = line.substring( 3, 5 );
+                if (line.length() >= 5) {
+                    country = line.substring(3, 5);
                 }
                 String variant = "";
-                if ( line.length() == 8 )
-                {
-                    variant = line.substring( 6, 8 );
+                if (line.length() == 8) {
+                    variant = line.substring(6, 8);
                 }
-                locale = new Locale( lang, country, variant );
-                list.add( locale );
+                locale = new Locale(lang, country, variant);
+                list.add(locale);
             }
             return list;
-        }
-        catch (IOException exp)
-        {
-            logger.error( exp.toString(), exp );
-        }
-        finally
-        {
-            IOUtil.closeQuietly( stream );
+        } catch (IOException exp) {
+            logger.error(exp.toString(), exp);
+        } finally {
+            IOUtil.closeQuietly(stream);
         }
         return Collections.emptyList();
     }
@@ -216,25 +194,23 @@ public class Localizer
      * error message on system.err.
      */
     /*@NonNull*/
-    public static String getString(String key)
-    {
-        String value = langKeyMap.get( key );
-        if ( value == null )
-        {
+    public static String getString(String key) {
+        if (langKeyMap == null)
+            return key;
+
+        String value = langKeyMap.get(key);
+        if (value == null) {
             // If the string is not internationalized, gets the default english value
-            value = defaultLangKeyMap.get( key );
-            if ( value == null )
-            {
-                logger.error( "Missing language key: {}", key );
+            value = defaultLangKeyMap.get(key);
+            if (value == null) {
+                logger.error("Missing language key: {}", key);
                 value = key;
             }
-        } else if ( value.replace(" ","").length() == 0 )
-        {
+        } else if (value.replace(" ", "").length() == 0) {
             // If the string is not internationalized, gets the default english value
-            value = defaultLangKeyMap.get( key );
-            if ( value == null )
-            {
-                logger.error( "Missing language key: {}", key );
+            value = defaultLangKeyMap.get(key);
+            if (value == null) {
+                logger.error("Missing language key: {}", key);
                 value = key;
             }
         }
@@ -247,13 +223,12 @@ public class Localizer
      * If the key is not defined it returns the first char of the key itself and
      * prints an error message on system.err.
      */
-    public static char getChar(String key)
-    {
-        String str = getString( key );
+    public static char getChar(String key) {
+        String str = getString(key);
         if (str.length() > 0) {
-            return str.charAt( 0 );
+            return str.charAt(0);
         } else {
-            logger.error( "Missing language key: {}", key );
+            logger.error("Missing language key: {}", key);
         }
         return '#';
     }
@@ -264,172 +239,143 @@ public class Localizer
      * If the key is not defined it returns the key itself and print an
      * error message on system.err.
      */
-    public static String getFormatedString(String key, Object ... obj)
-    {
+    public static String getFormatedString(String key, Object... obj) {
         String value = null;
-        
-        String lookupValue = langKeyMap.get( key );
-        if ( lookupValue != null )
-        {
-            if (lookupValue.replace(" ","").length() == 0) {
+
+        String lookupValue = langKeyMap.get(key);
+        if (lookupValue != null) {
+            if (lookupValue.replace(" ", "").length() == 0) {
                 // The string is not internationalized
-                lookupValue = defaultLangKeyMap.get( key );
+                lookupValue = defaultLangKeyMap.get(key);
             }
-            if ( lookupValue == null) {
-                logger.error( "Missing language key: {}", key );
+            if (lookupValue == null) {
+                logger.error("Missing language key: {}", key);
                 value = key;
             } else {
-                value = MessageFormat.format( lookupValue, obj );
+                value = MessageFormat.format(lookupValue, obj);
             }
-        }
-        else
-        {
+        } else {
             // The string is not internationalized
-            lookupValue = defaultLangKeyMap.get( key );
-            if ( lookupValue == null) {
-                logger.error( "Missing language key: {}", key );
+            lookupValue = defaultLangKeyMap.get(key);
+            if (lookupValue == null) {
+                logger.error("Missing language key: {}", key);
                 value = key;
             } else {
-                value = MessageFormat.format( lookupValue, obj );
+                value = MessageFormat.format(lookupValue, obj);
             }
         }
         return value;
     }
 
 
-    public static void buildResourceBundle( Locale locale )
-    {
+    public static void buildResourceBundle(Locale locale) {
         ArrayList<String> fileList = new ArrayList<String>();
-        StringBuffer buffer = new StringBuffer( FILES_PREFIX );
-        fileList.add( buffer.toString() );
+        StringBuffer buffer = new StringBuffer(FILES_PREFIX);
+        fileList.add(buffer.toString());
         String language = locale.getLanguage();
-        if ( language.length() > 0 )
-        {
-            buffer.append( '_' );
-            buffer.append( language );
-            fileList.add( buffer.toString() );
+        if (language.length() > 0) {
+            buffer.append('_');
+            buffer.append(language);
+            fileList.add(buffer.toString());
             String country = locale.getCountry();
-            if ( country.length() > 0 )
-            {
-                buffer.append( '_' );
-                buffer.append( country );
-                fileList.add( buffer.toString() );
+            if (country.length() > 0) {
+                buffer.append('_');
+                buffer.append(country);
+                fileList.add(buffer.toString());
                 String variant = locale.getVariant();
-                if ( variant.length() > 0 )
-                {
-                    buffer.append( '_' );
-                    buffer.append( variant );
-                    fileList.add( buffer.toString() );
+                if (variant.length() > 0) {
+                    buffer.append('_');
+                    buffer.append(variant);
+                    fileList.add(buffer.toString());
                 }
             }
         }
-        langKeyMap = loadProperties( buffer.toString() );
-        defaultLangKeyMap = loadProperties( FILES_PREFIX + '_' + DEFAULT_LOCALE );
+        langKeyMap = loadProperties(buffer.toString());
+        defaultLangKeyMap = loadProperties(FILES_PREFIX + '_' + DEFAULT_LOCALE);
     }
 
-    private static HashMap<String, String> loadProperties(String name)
-    {
+    private static HashMap<String, String> loadProperties(String name) {
         HashMap<String, String> langKeyMapTmp = new HashMap<String, String>();
         String extension = ".po";
-        if (name.equals(FILES_PREFIX))
-        {
+        if (name.equals(FILES_PREFIX)) {
             extension = ".pot";
         }
         String fileName = "/phex/resources/" + name + extension;
-        try
-        {
-            InputStream stream = Localizer.class.getResourceAsStream( fileName );
-            BufferedReader reader = new BufferedReader( new InputStreamReader(
-                stream, "UTF-8" ) );
+        try {
+            InputStream stream = Localizer.class.getResourceAsStream(fileName);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    stream, "UTF-8"));
             boolean ok = false;
             String key;
             StringBuilder valueBuilder = new StringBuilder();
             String line = reader.readLine();
-            while (line != null)
-            {
+            while (line != null) {
                 ok = false;
                 key = null;
                 valueBuilder.setLength(0);
-                while (!ok && (line != null))
-                {
-                    if (line.startsWith("msgid"))
-                    {
+                while (!ok && (line != null)) {
+                    if (line.startsWith("msgid")) {
                         key = line.substring(line.indexOf('"') + 1, line.lastIndexOf('"'));
                         ok = true;
                     }
                     line = reader.readLine();
                 }
                 ok = false;
-                while (!ok && (line != null))
-                {
-                    if (line.startsWith("msgstr"))
-                    {
+                while (!ok && (line != null)) {
+                    if (line.startsWith("msgstr")) {
                         ok = true;
-                        appendUnescaped( line.substring(line.indexOf('"') + 1, 
-                            line.lastIndexOf('"')), valueBuilder );
-                        readValueLines( reader, valueBuilder );
-                    }
-                    else
-                    {
+                        appendUnescaped(line.substring(line.indexOf('"') + 1,
+                                line.lastIndexOf('"')), valueBuilder);
+                        readValueLines(reader, valueBuilder);
+                    } else {
                         line = reader.readLine();
                     }
                 }
-                if ((valueBuilder.length() > 0) && (key != null) && (key.replace(" ", "").length() > 0))
-                {
+                if ((valueBuilder.length() > 0) && (key != null) && (key.replace(" ", "").length() > 0)) {
                     langKeyMapTmp.put(key, valueBuilder.toString());
                 }
                 line = reader.readLine();
             }
-        }
-        catch (Exception exp)
-        {
-            logger.error( "An error reading the file {} has ocurred.", fileName );
-            logger.error( exp.toString(), exp );
+        } catch (Exception exp) {
+            logger.error("An error reading the file {} has ocurred.", fileName);
+            logger.error(exp.toString(), exp);
         }
         return langKeyMapTmp;
     }
-    
-    private static void readValueLines(BufferedReader reader, StringBuilder builder) throws IOException
-    {
+
+    private static void readValueLines(BufferedReader reader, StringBuilder builder) throws IOException {
         reader.mark(MAX_LINE_LENGTH);
         String line = reader.readLine();
-        while( line != null && line.trim().startsWith("\"") )
-        {
-            if (   builder.length() > 0 
-                && !Character.isWhitespace( builder.charAt(builder.length()-1) ) )
-            {
+        while (line != null && line.trim().startsWith("\"")) {
+            if (builder.length() > 0
+                    && !Character.isWhitespace(builder.charAt(builder.length() - 1))) {
                 builder.append(' ');
             }
-            appendUnescaped( line.substring(line.indexOf('"') + 1, line.lastIndexOf('"')), 
-                builder );
+            appendUnescaped(line.substring(line.indexOf('"') + 1, line.lastIndexOf('"')),
+                    builder);
             reader.mark(4096);
             line = reader.readLine();
         }
         reader.reset();
     }
-    
-    private static void appendUnescaped( String line, StringBuilder builder )
-    {
+
+    private static void appendUnescaped(String line, StringBuilder builder) {
         char[] charArray = line.toCharArray();
         int offset = 0;
         int len = charArray.length;
-        builder.ensureCapacity( builder.length() + len );
+        builder.ensureCapacity(builder.length() + len);
         char aChar;
-        while ( offset < len )
-        {
+        while (offset < len) {
             aChar = charArray[offset++];
-            if ( aChar == '\\' )
-            {
+            if (aChar == '\\') {
                 aChar = charArray[offset++];
                 if (aChar == 't') aChar = '\t';
                 else if (aChar == 'r') aChar = '\r';
                 else if (aChar == 'n') aChar = '\n';
                 else if (aChar == 'f') aChar = '\f';
-                builder.append( aChar );
-            }
-            else
-            {
-                builder.append( aChar );
+                builder.append(aChar);
+            } else {
+                builder.append(aChar);
             }
         }
     }

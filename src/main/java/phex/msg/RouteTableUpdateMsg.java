@@ -22,50 +22,45 @@
 package phex.msg;
 
 
-public abstract class RouteTableUpdateMsg extends Message
-{
+public abstract class RouteTableUpdateMsg extends Message {
     public static final byte RESET_TABLE_VARIANT = 0x00;
     public static final byte PATCH_TABLE_VARIANT = 0x01;
 
     protected final byte variant;
 
-    public RouteTableUpdateMsg( byte aVariant, int length )
-    {
-        super( new MsgHeader( MsgHeader.ROUTE_TABLE_UPDATE_PAYLOAD, (byte)1, length ) );
+    public RouteTableUpdateMsg(byte aVariant, int length) {
+        super(new MsgHeader(MsgHeader.ROUTE_TABLE_UPDATE_PAYLOAD, (byte) 1, length));
         variant = aVariant;
     }
 
-    public RouteTableUpdateMsg( byte aVariant, MsgHeader aHeader )
-    {
-        super( aHeader );
+    public RouteTableUpdateMsg(byte aVariant, MsgHeader aHeader) {
+        super(aHeader);
         variant = aVariant;
+    }
+
+    public static RouteTableUpdateMsg parseMessage(MsgHeader header, byte[] aBody)
+            throws InvalidMessageException {
+        // read message variant
+        byte variant = aBody[0];
+
+        switch (variant) {
+            case RESET_TABLE_VARIANT:
+                return new QRResetTableMsg(header, aBody);
+            case PATCH_TABLE_VARIANT:
+                return new QRPatchTableMsg(header, aBody);
+            default:
+                throw new InvalidMessageException(
+                        "Unknown RouteTableUpdateMsg variant");
+        }
     }
 
     /**
      * Returns the variant of the RouteTableUpdateMsg. Possible variants are
      * RESET_TABLE_VARIANT, PATH_TABLE_VARIANT.
+     *
      * @return the message variant.
      */
-    public byte getVariant()
-    {
+    public byte getVariant() {
         return variant;
-    }
-    
-    public static RouteTableUpdateMsg parseMessage( MsgHeader header, byte[] aBody )
-        throws InvalidMessageException
-    {
-        // read message variant
-        byte variant = aBody[0];
-
-        switch (variant)
-        {
-            case RESET_TABLE_VARIANT:
-                return new QRResetTableMsg( header, aBody );
-            case PATCH_TABLE_VARIANT:
-                return new QRPatchTableMsg( header, aBody );
-            default:
-                throw new InvalidMessageException(
-                    "Unknown RouteTableUpdateMsg variant");
-        }
     }
 }

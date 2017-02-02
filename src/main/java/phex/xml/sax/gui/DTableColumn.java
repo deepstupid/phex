@@ -26,8 +26,7 @@ import org.xml.sax.SAXException;
 import phex.xml.sax.DElement;
 import phex.xml.sax.PhexXmlSaxWriter;
 
-public class DTableColumn implements DElement
-{
+public class DTableColumn implements DElement {
     public static final String ELEMENT_NAME = "table-column";
 
     private boolean hasColumnID;
@@ -41,85 +40,71 @@ public class DTableColumn implements DElement
 
     private boolean hasWidth;
     private int width;
-    
-    
 
-    public int getColumnID()
-    {
+
+    public int getColumnID() {
         return columnID;
     }
 
-    public void setColumnID( int columnID )
-    {
+    public void setColumnID(int columnID) {
         hasColumnID = true;
         this.columnID = columnID;
     }
 
-    public boolean isVisible()
-    {
+    public boolean isVisible() {
         return isVisible;
     }
 
-    public void setVisible( boolean isVisible )
-    {
+    public void setVisible(boolean isVisible) {
         hasVisible = true;
         this.isVisible = isVisible;
     }
 
-    public int getVisibleIndex()
-    {
+    public int getVisibleIndex() {
         return visibleIndex;
     }
 
-    public void setVisibleIndex( int visibleIndex )
-    {
+    public void setVisibleIndex(int visibleIndex) {
         hasVisibleIndex = true;
         this.visibleIndex = visibleIndex;
     }
 
-    public int getWidth()
-    {
+    public int getWidth() {
         return width;
     }
 
-    public void setWidth( int width )
-    {
+    public void setWidth(int width) {
         hasWidth = true;
         this.width = width;
     }
 
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
 
-        if ( hasColumnID )
-        {
-            writer.startElm( "columnID", null );
-            writer.elmInt( columnID );
-            writer.endElm( "columnID" );
+        if (hasColumnID) {
+            writer.startElm("columnID", null);
+            writer.elmInt(columnID);
+            writer.endElm("columnID");
         }
 
-        if ( hasVisible )
-        {
-            writer.startElm( "isVisible", null );
-            writer.elmBol( isVisible );
-            writer.endElm( "isVisible" );
+        if (hasVisible) {
+            writer.startElm("isVisible", null);
+            writer.elmBol(isVisible);
+            writer.endElm("isVisible");
         }
 
-        if ( hasVisibleIndex )
-        {
-            writer.startElm( "visibleIndex", null );
-            writer.elmInt( visibleIndex );
-            writer.endElm( "visibleIndex" );
+        if (hasVisibleIndex) {
+            writer.startElm("visibleIndex", null);
+            writer.elmInt(visibleIndex);
+            writer.endElm("visibleIndex");
         }
 
-        if ( hasWidth )
-        {
-            writer.startElm( "width", null );
-            writer.elmInt( width );
-            writer.endElm( "width" );
+        if (hasWidth) {
+            writer.startElm("width", null);
+            writer.elmInt(width);
+            writer.endElm("width");
         }
 
-        writer.endElm( ELEMENT_NAME );
+        writer.endElm(ELEMENT_NAME);
     }
 }

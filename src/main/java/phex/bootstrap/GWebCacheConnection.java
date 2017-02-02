@@ -52,14 +52,13 @@ import java.util.List;
 /**
  * This class implements the basic functionality of the Gnutella Web Cache (GWebCache)
  * invented from the Gnucleus Team.
- *
+ * <p>
  * To access a GWebCache you should send a ping request first. To verify if it is
  * working.
- *
+ * <p>
  * Supports Version 1.3 of GWebCache specification.
  */
-public class GWebCacheConnection
-{
+public class GWebCacheConnection {
     private static final String PING_QUERY = "ping=1";
     private static final String HOST_FILE_QUERY = "hostfile=1";
     private static final String URL_FILE_QUERY = "urlfile=1";
@@ -67,9 +66,10 @@ public class GWebCacheConnection
     private static final String URL_QUERY = "url=";
 
     private static final String QUERY_POSTFIX =
-        "&client=PHEX&version=" + PhexVersion.getFullVersion();
-    
-    private static final Logger logger = LoggerFactory.getLogger( GWebCacheConnection.class );
+            "&client=PHEX&version=" + PhexVersion.getFullVersion();
+
+    private static final Logger logger = LoggerFactory.getLogger(GWebCacheConnection.class);
+    public static final int MAX_LENGTH = 100000;
 
     /**
      * The GWebCache base URL.
@@ -96,13 +96,11 @@ public class GWebCacheConnection
      * @param aGWebCache the GWebCache. Must be http protocol.
      * @throws ProtocolNotSupportedException in case a different protocol then http is used
      */
-    public GWebCacheConnection( GWebCacheHost aGWebCache )
-        throws ProtocolNotSupportedException
-    {
-        if ( !aGWebCache.getUrl().getProtocol().equals( "http" ) )
-        {
+    public GWebCacheConnection(GWebCacheHost aGWebCache)
+            throws ProtocolNotSupportedException {
+        if (!aGWebCache.getUrl().getProtocol().equals("http")) {
             throw new ProtocolNotSupportedException(
-                "Only http URLs are supported for a GWebCacheConnection" );
+                    "Only http URLs are supported for a GWebCacheConnection");
         }
         this.gWebCache = aGWebCache;
         isCacheBad = false;
@@ -111,8 +109,7 @@ public class GWebCacheConnection
     /**
      * @return the {@link GWebCacheHost} behind this connection.
      */
-    public GWebCacheHost getGWebCache()
-    {
+    public GWebCacheHost getGWebCache() {
         return gWebCache;
     }
 
@@ -120,44 +117,32 @@ public class GWebCacheConnection
      * Sends a ping request to the GWebCache. The method returns true if a PONG
      * was received otherwise it returns false and set the cache to be a bad cache.
      */
-    public boolean sendPingRequest()
-    {
-        try
-        {
-            URL requestURL = new URL( gWebCache.getUrl(), gWebCache.getUrl().getPath()
-                + '?' + PING_QUERY + QUERY_POSTFIX );
-            if ( requestURL.getHost() == null )
-            {
-                logger.warn( "Host is null" );
+    public boolean sendPingRequest() {
+        try {
+            URL requestURL = new URL(gWebCache.getUrl(), gWebCache.getUrl().getPath()
+                    + '?' + PING_QUERY + QUERY_POSTFIX);
+            if (requestURL.getHost() == null) {
+                logger.warn("Host is null");
                 isCacheBad = true;
                 return false;
             }
-            openConnection( requestURL );
+            openConnection(requestURL);
             String line = reader.readLine();
-            if ( line != null && line.startsWith( "PONG" ) )
-            {
+            if (line != null && line.startsWith("PONG")) {
                 return true;
-            }
-            else
-            {
+            } else {
                 isCacheBad = true;
                 return false;
             }
-        }
-        catch ( UnknownHostException exp )
-        {
-            logger.debug( exp.getMessage(), exp);
+        } catch (UnknownHostException exp) {
+            logger.debug(exp.getMessage(), exp);
             isCacheBad = true;
             return false;
-        }
-        catch ( IOException exp )
-        {
-            logger.debug( exp.getMessage(), exp);
+        } catch (IOException exp) {
+            logger.debug(exp.getMessage(), exp);
             isCacheBad = true;
             return false;
-        }
-        finally
-        {
+        } finally {
             closeConnection();
         }
     }
@@ -167,60 +152,50 @@ public class GWebCacheConnection
      * null if a problem occurred, empty if the GWebCache does not have any hosts
      * stored, or filled with IPs.
      */
-    public DestAddress[] sendHostFileRequest( PhexSecurityManager securityService )
-    {
-        try
-        {
-            URL requestURL = new URL( gWebCache.getUrl(), gWebCache.getUrl().getPath()
-                + '?' + HOST_FILE_QUERY + QUERY_POSTFIX );
-            if ( requestURL.getHost() == null )
-            {
-                logger.warn( "Host is null" );
+    public DestAddress[] sendHostFileRequest(PhexSecurityManager securityService) {
+        URL url = gWebCache.getUrl(), requestURL = null;
+        try {
+            requestURL = new URL(url, url.getPath() + '?' + HOST_FILE_QUERY + QUERY_POSTFIX);
+            /*if (requestURL.getHost() == null) {
+                logger.warn("Host is null");
                 isCacheBad = true;
                 return null;
-            }
-            openConnection( requestURL );
+            }*/
+            openConnection(requestURL);
             String line = reader.readLine();
             // the first line might contain an error
-            if ( line != null && line.startsWith( "ERROR" ) )
-            {
+            if (line != null && line.startsWith("ERROR")) {
                 isCacheBad = true;
                 return null;
             }
-            
+
             DestAddress destAddress;
             boolean falseHostFound = false;
-            List<DestAddress> hostFileList = new ArrayList<DestAddress>( 20 );
+            List<DestAddress> hostFileList = new ArrayList<DestAddress>(20);
             PresentationManager presentationMgr = PresentationManager.getInstance();
-            while ( line != null )
-            {
-                try
-                {
+            while (line != null) {
+                try {
                     // The line requires to have a valid port. If no port could
                     // be found the default port of -1 should ensure the
                     // DestAddress is invalid when no port is given.
-                    destAddress = presentationMgr.createHostAddress( line, -1 );
-                    if ( !destAddress.isIpHostName() || !destAddress.isValidAddress() )
-                    {
-                        throw new MalformedDestAddressException( "Invalid address." );
+                    destAddress = presentationMgr.createHostAddress(line, -1);
+                    if (!destAddress.isIpHostName() || !destAddress.isValidAddress()) {
+                        throw new MalformedDestAddressException("Invalid address.");
                     }
-                    
-                    AccessType access = securityService.controlHostAddressAccess( 
-                        destAddress );
-                    switch ( access )
-                    {
+
+                    AccessType access = securityService.controlHostAddressAccess(
+                            destAddress);
+                    switch (access) {
                         case ACCESS_DENIED:
                         case ACCESS_STRONGLY_DENIED:
                             // skip host address...
                             break;
                         case ACCESS_GRANTED:
-                            hostFileList.add( destAddress );
+                            hostFileList.add(destAddress);
                             break;
                     }
-                }
-                catch (MalformedDestAddressException exp)
-                {
-                    logger.debug( "Invalid host found: {}", line );
+                } catch (MalformedDestAddressException exp) {
+                    logger.debug("Invalid host found: {}", line);
                     falseHostFound = true;
                     line = reader.readLine();
                     continue;
@@ -228,24 +203,19 @@ public class GWebCacheConnection
                 line = reader.readLine();
             }
             // all returned hosts where false, cache is bad.
-            if ( hostFileList.size() == 0 && falseHostFound )
-            {
+            if (hostFileList.size() == 0 && falseHostFound) {
                 isCacheBad = true;
                 return null;
             }
-            DestAddress[] hostFileArr = new DestAddress[ hostFileList.size() ];
-            hostFileList.toArray( hostFileArr );
-            logger.debug( "Hosts found: {}", hostFileArr.length );
+            DestAddress[] hostFileArr = new DestAddress[hostFileList.size()];
+            hostFileList.toArray(hostFileArr);
+            logger.info("found hosts: {}", hostFileArr.length);
             return hostFileArr;
-        }
-        catch ( IOException exp )
-        {
-            logger.debug( exp.toString(), exp);
+        } catch (IOException exp) {
+            logger.debug("request host {}: {}", requestURL !=null ? requestURL : url, exp.getMessage());
             isCacheBad = true;
             return null;
-        }
-        finally
-        {
+        } finally {
             closeConnection();
         }
     }
@@ -255,72 +225,58 @@ public class GWebCacheConnection
      * either null if a problem occurred, empty if the GWebCache does not have any
      * URLs stored, or filled with URLs.
      */
-    public URL[] sendURLFileRequest()
-    {
-        try
-        {
-            URL requestURL = new URL( gWebCache.getUrl(), gWebCache.getUrl().getPath()
-                + '?' + URL_FILE_QUERY + QUERY_POSTFIX );
-            if ( requestURL.getHost() == null )
-            {
-                logger.warn( "Host is null" );
+    public URL[] sendURLFileRequest() {
+        try {
+            URL requestURL = new URL(gWebCache.getUrl(), gWebCache.getUrl().getPath()
+                    + '?' + URL_FILE_QUERY + QUERY_POSTFIX);
+            if (requestURL.getHost() == null) {
+                logger.warn("Host is null");
                 isCacheBad = true;
                 return null;
             }
-            openConnection( requestURL );
+            openConnection(requestURL);
             String line = reader.readLine();
             // the first line might contain an error
-            if ( line != null && line.startsWith( "ERROR" ) )
-            {
+            if (line != null && line.startsWith("ERROR")) {
                 isCacheBad = true;
                 return null;
             }
 
             boolean falseURLFound = false;
-            List<URL> urlFileList = new ArrayList<URL>( 20 );
+            List<URL> urlFileList = new ArrayList<URL>(20);
             int counter = 0;
             // don't apply more then 20 URL
-            while ( line != null && counter < 20 )
-            {
-                try
-                {
-                    NormalizableURL helpUrl = new NormalizableURL( line );
+            while (line != null && counter < 20) {
+                try {
+                    NormalizableURL helpUrl = new NormalizableURL(line);
                     helpUrl.normalize();
-                    URL url = new URL( helpUrl.toExternalForm() );
-                    if ( !url.getProtocol().equals( "http" ) )
-                    {
+                    URL url = new URL(helpUrl.toExternalForm());
+                    if (!url.getProtocol().equals("http")) {
                         throw new ProtocolNotSupportedException(
-                            "Only http URLs are supported for a GWebCacheConnection" );
+                                "Only http URLs are supported for a GWebCacheConnection");
                     }
-                    urlFileList.add( url );
-                }
-                catch ( MalformedURLException exp )
-                {//ignore false url
+                    urlFileList.add(url);
+                } catch (MalformedURLException exp) {//ignore false url
                     falseURLFound = true;
                 }
                 line = reader.readLine();
-                counter ++;
+                counter++;
             }
             // all returned urls where false, cache is bad.
-            if ( urlFileList.size() == 0 && falseURLFound )
-            {
+            if (urlFileList.size() == 0 && falseURLFound) {
                 isCacheBad = true;
                 return null;
             }
 
-            URL[] urlFileArr = new URL[ urlFileList.size() ];
-            urlFileList.toArray( urlFileArr );
-            logger.debug( "URLs found: {}", urlFileArr.length );
+            URL[] urlFileArr = new URL[urlFileList.size()];
+            urlFileList.toArray(urlFileArr);
+            logger.debug("URLs found: {}", urlFileArr.length);
             return urlFileArr;
-        }
-        catch ( IOException exp )
-        {
-            logger.debug( exp.getMessage(), exp);
+        } catch (IOException exp) {
+            logger.debug(exp.getMessage(), exp);
             isCacheBad = true;
             return null;
-        }
-        finally
-        {
+        } finally {
             closeConnection();
         }
     }
@@ -329,76 +285,62 @@ public class GWebCacheConnection
      * Sends a update request to update the GWebCache. You can provide a fullHostName
      * and a cacheURL or only one of them by settings the other one to null.
      */
-    public boolean updateRequest( String fullHostName, String cacheURL )
-    {
-        if ( fullHostName == null && cacheURL == null )
-        {
+    public boolean updateRequest(String fullHostName, String cacheURL) {
+        if (fullHostName == null && cacheURL == null) {
             throw new IllegalArgumentException(
-                "Must provide at least one of hostIP or cacheURL." );
+                    "Must provide at least one of hostIP or cacheURL.");
         }
 
-        try
-        {
+        try {
             StringBuffer queryBuffer = new StringBuffer();
-            if ( fullHostName != null )
-            {
-                queryBuffer.append( IP_QUERY );
-                queryBuffer.append( URLCodecUtils.encodeURL( fullHostName ) );
+            if (fullHostName != null) {
+                queryBuffer.append(IP_QUERY);
+                queryBuffer.append(URLCodecUtils.encodeURL(fullHostName));
             }
-            if ( cacheURL != null )
-            {
-                if ( fullHostName != null )
-                {
-                    queryBuffer.append( '&' );
+            if (cacheURL != null) {
+                if (fullHostName != null) {
+                    queryBuffer.append('&');
                 }
-                queryBuffer.append( URL_QUERY );
-                queryBuffer.append( URLCodecUtils.encodeURL( cacheURL ) );
+                queryBuffer.append(URL_QUERY);
+                queryBuffer.append(URLCodecUtils.encodeURL(cacheURL));
             }
 
-            URL requestURL = new URL( gWebCache.getUrl(), gWebCache.getUrl().getPath()
-                + '?' + queryBuffer.toString() + QUERY_POSTFIX );
-            if ( requestURL.getHost() == null )
-            {
-                logger.warn( "Host is null" );
+            URL requestURL = new URL(gWebCache.getUrl(), gWebCache.getUrl().getPath()
+                    + '?' + queryBuffer.toString() + QUERY_POSTFIX);
+            if (requestURL.getHost() == null) {
+                logger.warn("Host is null");
                 isCacheBad = true;
                 return false;
             }
-            openConnection( requestURL );
+            openConnection(requestURL);
             String line = reader.readLine();
-            if ( line != null && line.startsWith( "OK" ) )
-            {
+            if (line != null && line.startsWith("OK")) {
                 return true;
-            }
-            else
-            {
+            } else {
                 isCacheBad = true;
                 return false;
             }
-        }
-        catch ( IOException exp )
-        {
-            logger.debug( exp.getMessage(), exp);
+        } catch (IOException exp) {
+            logger.debug(exp.getMessage(), exp);
             isCacheBad = true;
             return false;
-        }
-        finally
-        {
+        } finally {
             closeConnection();
         }
     }
 
     /**
      * Returns if a cache is bad.
-     *
+     * <p>
      * Bad caches are those that return:<br>
      * - nothing - those that cannot be accessed at all (timeouts, invalid hostnames, etc.)<br>
      * - HTTP error codes (400-599)<br>
      * - responses that cannot be parsed by a client<br>
      * - ERROR response<p>
+     *
      * @return true if the cache is bad, false otherwise
      */
-    public boolean isCacheBad()
-    {
+    public boolean isCacheBad() {
         return isCacheBad;
     }
 
@@ -406,62 +348,55 @@ public class GWebCacheConnection
      * Opens a connection to the request url and checks the response code.
      * 3xx are automatically redirected.
      * 400 - 599 response codes will throw a ConnectException.
+     *
      * @throws IOException if an IO error occurs
      */
-    private void openConnection( URL requestURL )
-        throws IOException
-    {
+    private void openConnection(URL requestURL)
+            throws IOException {
         HttpClient client = HttpClientFactory.createHttpClient();
-        
-        if ( ProxyPrefs.UseHttp.get().booleanValue()  
-            && !StringUtils.isEmpty( ProxyPrefs.HttpHost.get() ) )
-        {
-            client.getHostConfiguration().setProxy( ProxyPrefs.HttpHost.get(), 
-                ProxyPrefs.HttpPort.get().intValue() );
+
+        if (ProxyPrefs.UseHttp.get().booleanValue()
+                && !StringUtils.isEmpty(ProxyPrefs.HttpHost.get())) {
+            client.getHostConfiguration().setProxy(ProxyPrefs.HttpHost.get(),
+                    ProxyPrefs.HttpPort.get().intValue());
         }
-            
-        method = new GetMethod( requestURL.toExternalForm() );
+
+        method = new GetMethod(requestURL.toExternalForm());
         method.setFollowRedirects(false);
         method.addRequestHeader("Cache-Control", "no-cache");
         // be HTTP/1.1 compliant
-        method.addRequestHeader( HTTPHeaderNames.CONNECTION,
-            "close" );
-        
-        logger.debug( "Open GWebCache connection to {}.", requestURL );
-        int responseCode = client.executeMethod(method);      
-        logger.debug( "GWebCache {} returned response code: {}", requestURL, responseCode );
-        
+        method.addRequestHeader(HTTPHeaderNames.CONNECTION,
+                "close");
+
+        logger.debug("Open GWebCache connection to {}.", requestURL);
+        int responseCode = client.executeMethod(method);
+        logger.debug("GWebCache {} returned response code: {}", requestURL, responseCode);
+
         // we only accept the status codes 2xx all others fail...
-        if ( responseCode < 200 || responseCode > 299 )
-        {
-            throw new ConnectException( "GWebCache service not available, response code: "
-                + responseCode );
+        if (responseCode < 200 || responseCode > 299) {
+            throw new ConnectException("GWebCache service not available, response code: "
+                    + responseCode);
         }
-        
+
         InputStream bodyStream = method.getResponseBodyAsStream();
-        if ( bodyStream != null )
-        {
+        if (bodyStream != null) {
             // ensure we never read a body size larger then 100K to reduce misuse 
-            reader = new BufferedReader( new InputStreamReader(
-                new LengthLimitedInputStream( bodyStream, 100000 ) ) );
-        }
-        else
-        {
-            throw new ConnectException( "Empty response." );
+            reader = new BufferedReader(new InputStreamReader(
+                    new LengthLimitedInputStream(bodyStream, MAX_LENGTH)));
+        } else {
+            throw new ConnectException("Empty response.");
         }
     }
-    
-    private void closeConnection()
-    {
-        IOUtil.closeQuietly( reader );
+
+    private void closeConnection() {
+        IOUtil.closeQuietly(reader);
         reader = null;
-        
-        if ( method != null )
-        {
+
+        if (method != null) {
             method.releaseConnection();
             method = null;
         }
-        
-        logger.debug( "Releasing HTTP method." );
+
+        logger.debug("Releasing HTTP method.");
     }
 }

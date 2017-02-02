@@ -26,7 +26,6 @@ import phex.common.Environment;
 import phex.common.Phex;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
-import phex.download.swarming.PhexEventService;
 import phex.io.buffer.ByteBuffer;
 import phex.net.connection.Connection;
 import phex.net.connection.ConnectionFactory;
@@ -39,30 +38,25 @@ import java.util.Locale;
 /**
  *
  */
-public final class ChatEngine
-{
+public final class ChatEngine {
     private final ChatService chatService;
     private final boolean isOutgoingConnection;
-    
-    private GnutellaInputStream chatReader;
-    private Connection connection;
-    private String chatNick;
-
-    private boolean useEncodedStr;
-    
     /**
      * The host address of the chat connection.
      */
     private final DestAddress hostAddress;
+    private GnutellaInputStream chatReader;
+    private Connection connection;
+    private String chatNick;
+    private boolean useEncodedStr;
 
     /**
      * For incoming chat requests
-     * 
+     *
      * @throws IOException if an IO error occures.
      */
-    ChatEngine( ChatService chatService, Connection connection )
-        throws IOException
-    {
+    ChatEngine(ChatService chatService, Connection connection)
+            throws IOException {
         this.useEncodedStr = true;
         this.chatService = chatService;
         this.connection = connection;
@@ -77,8 +71,7 @@ public final class ChatEngine
     /**
      * For outgoing chat requests. We need to connect to the host address first.
      */
-    ChatEngine( ChatService chatService, DestAddress aHostAddress )
-    {
+    ChatEngine(ChatService chatService, DestAddress aHostAddress) {
         this.useEncodedStr = true;
         this.chatService = chatService;
         hostAddress = aHostAddress;
@@ -86,167 +79,140 @@ public final class ChatEngine
         chatNick = hostAddress.getFullHostName();
     }
 
-    public void startChat()
-    {
-        ChatReadWorker worker = new ChatReadWorker( Phex.getEventService() );
-        Environment.getInstance().executeOnThreadPool( worker,
-            "ChatReadWorker-" + Integer.toHexString(worker.hashCode()));
+    public void startChat() {
+        ChatReadWorker worker = new ChatReadWorker();
+        Environment.getInstance().executeOnThreadPool(worker,
+                "ChatReadWorker-" + Integer.toHexString(worker.hashCode()));
     }
 
-    public void stopChat()
-    {
+    public void stopChat() {
         if (connection != null) {
             connection.disconnect();
             connection = null;
         }
-        chatService.chatClosed( this );
+        chatService.chatClosed(this);
     }
 
-    public boolean isConnected()
-    {
+    public boolean isConnected() {
         return connection != null;
     }
 
     /**
      * Returns the host address the engine is connected to
      */
-    public DestAddress getHostAddress()
-    {
+    public DestAddress getHostAddress() {
         return hostAddress;
     }
 
-    public String getChatNick()
-    {
+    public String getChatNick() {
         return chatNick;
     }
 
     /**
      * Sends a chat message to the connected servent
+     *
      * @param message the message to send
      */
-    public void sendChatMessage( String message )
-    {
-        if ( connection == null )
-        {
-            chatService.fireChatConnectionFailed( ChatEngine.this );
+    public void sendChatMessage(String message) {
+        if (connection == null) {
+            chatService.fireChatConnectionFailed(ChatEngine.this);
         }
-        try
-        {
-            if (useEncodedStr)
-            {
+        try {
+            if (useEncodedStr) {
                 String base64Str = new String(Base64.encode(message.getBytes()));
-                connection.write( ByteBuffer.wrap(  (base64Str + "\n").getBytes() ) );
+                connection.write(ByteBuffer.wrap((base64Str + "\n").getBytes()));
+            } else {
+                connection.write(ByteBuffer.wrap((message + "\n").getBytes()));
             }
-            else
-            {
-                connection.write( ByteBuffer.wrap(  (message + "\n").getBytes() ) );                
-            }
-        }
-        catch ( IOException exp )
-        {
-            NLogger.warn( ChatEngine.class, exp, exp );
+        } catch (IOException exp) {
+            NLogger.warn(ChatEngine.class, exp, exp);
             stopChat();
         }
     }
 
     private void finalizeHandshake()
-        throws IOException
-    {
-        connection.getSocket().setSoTimeout( NetworkPrefs.TcpRWTimeout.get().intValue() );
+            throws IOException {
+        connection.getSocket().setSoTimeout(NetworkPrefs.TcpRWTimeout.get().intValue());
 
         // read the header that have been left in the stream after accepting the
         // connection.
         String line;
         String upLine;
         boolean foundPhexEncoded = false;
-        do
-        {
+        do {
             line = chatReader.readLine();
-            NLogger.debug( ChatEngine.class, "Read Chat header: " + line );
-            if ( line == null )
-            {
-                throw new IOException( "No handshake response from chat partner." );
+            NLogger.debug(ChatEngine.class, "Read Chat header: " + line);
+            if (line == null) {
+                throw new IOException("No handshake response from chat partner.");
             }
-            upLine = line.toUpperCase( Locale.US );
-            if ( upLine.startsWith( "X-NICKNAME:" ) )
-            {
+            upLine = line.toUpperCase(Locale.US);
+            if (upLine.startsWith("X-NICKNAME:")) {
                 chatNick = line.substring(11).trim();
-                NLogger.debug( ChatEngine.class, "Chat Nick: " + chatNick );
+                NLogger.debug(ChatEngine.class, "Chat Nick: " + chatNick);
             }
-            if ( upLine.startsWith("X-PHEX-ENCODED:") )
-            {
+            if (upLine.startsWith("X-PHEX-ENCODED:")) {
                 foundPhexEncoded = true;
-                if ( upLine.equals("X-PHEX-ENCODED: TRUE") )
-                {
+                if (upLine.equals("X-PHEX-ENCODED: TRUE")) {
                     useEncodedStr = true;
-                }
-                else
-                {
+                } else {
                     useEncodedStr = false;
                 }
             }
         }
-        while ( line.length() > 0 );
+        while (line.length() > 0);
 
-        if (!foundPhexEncoded)
-        {
+        if (!foundPhexEncoded) {
             useEncodedStr = false;
         }
-        
+
         // we respond with "CHAT/0.1 200 OK\r\n\r\n" to finish the handshake.
-        NLogger.debug( ChatEngine.class, "Sending: CHAT/0.1 200 OK");
-        if (foundPhexEncoded)
-        {
-            connection.write( ByteBuffer.wrap( ("CHAT/0.1 200 OK\r\n" +
-                "User-Agent: " + Phex.getFullPhexVendor() + "\r\n" +
-                //"X-Nickname: " + StrUtil.getAppNameVersion() + "\r\n" +
-                "X-Phex-Encoded: true" + "\r\n" +
-                "\r\n").getBytes() ) );
-        }
-        else
-        {
-            connection.write( ByteBuffer.wrap( ("CHAT/0.1 200 OK\r\n" +
-                "User-Agent: " + Phex.getFullPhexVendor() + "\r\n" +
-                //"X-Nickname: " + StrUtil.getAppNameVersion() + "\r\n" +
-                "\r\n").getBytes() ) );
+        NLogger.debug(ChatEngine.class, "Sending: CHAT/0.1 200 OK");
+        if (foundPhexEncoded) {
+            connection.write(ByteBuffer.wrap(("CHAT/0.1 200 OK\r\n" +
+                    "User-Agent: " + Phex.getFullPhexVendor() + "\r\n" +
+                    //"X-Nickname: " + StrUtil.getAppNameVersion() + "\r\n" +
+                    "X-Phex-Encoded: true" + "\r\n" +
+                    "\r\n").getBytes()));
+        } else {
+            connection.write(ByteBuffer.wrap(("CHAT/0.1 200 OK\r\n" +
+                    "User-Agent: " + Phex.getFullPhexVendor() + "\r\n" +
+                    //"X-Nickname: " + StrUtil.getAppNameVersion() + "\r\n" +
+                    "\r\n").getBytes()));
         }
 
         // assume we read the final "CHAT/0.1 200 OK" followed by possible headers.
-        do
-        {
+        do {
             line = chatReader.readLine();
-            NLogger.debug( ChatEngine.class, "Read Chat response: " + line );
-            if ( line == null )
-            {
-                throw new IOException( "No handshake response from chat partner." );
+            NLogger.debug(ChatEngine.class, "Read Chat response: " + line);
+            if (line == null) {
+                throw new IOException("No handshake response from chat partner.");
             }
         }
-        while ( line.length() > 0 );
+        while (line.length() > 0);
 
-        connection.getSocket().setSoTimeout( 0 );
+        connection.getSocket().setSoTimeout(0);
         // chat connection open notification will be fired through the chat manager
     }
 
     private void connectOutgoingChat()
-        throws IOException
-    {
+            throws IOException {
         boolean foundPhexEncoded = false;
-        
-        NLogger.debug( ChatEngine.class, "Connect outgoing to: " + hostAddress );
 
-        connection = ConnectionFactory.createConnection( hostAddress,
-            chatService.getChatBandwidthController() );
-        
+        NLogger.debug(ChatEngine.class, "Connect outgoing to: " + hostAddress);
+
+        connection = ConnectionFactory.createConnection(hostAddress,
+                chatService.getChatBandwidthController());
+
         // initialize the chat connection handshake
         // First send "CHAT CONNECT/0.1\r\n" and header data
         // only header currently is user agent.
         String message = "CHAT CONNECT/0.1\r\n" +
-            "User-Agent: " + Phex.getFullPhexVendor() + "\r\n" +
-            //"X-Nickname: " + StrUtil.getAppNameVersion() + "\r\n" +
-            "X-Phex-Encoded: true" + "\r\n" +
-            "\r\n";
-        NLogger.debug( ChatEngine.class, "Sending: " + message );
-        connection.write( ByteBuffer.wrap( message.getBytes() ) );
+                "User-Agent: " + Phex.getFullPhexVendor() + "\r\n" +
+                //"X-Nickname: " + StrUtil.getAppNameVersion() + "\r\n" +
+                "X-Phex-Encoded: true" + "\r\n" +
+                "\r\n";
+        NLogger.debug(ChatEngine.class, "Sending: " + message);
+        connection.write(ByteBuffer.wrap(message.getBytes()));
 
         chatReader = connection.getInputStream();
 
@@ -255,98 +221,71 @@ public final class ChatEngine
         //       change only for "CHAT" and "200"
         String line;
         String upLine;
-        do
-        {
+        do {
             line = chatReader.readLine();
-            NLogger.debug( ChatEngine.class, "Read Chat header: " + line );
-            if ( line == null )
-            {
-                throw new IOException( "No handshake response from chat partner." );
+            NLogger.debug(ChatEngine.class, "Read Chat header: " + line);
+            if (line == null) {
+                throw new IOException("No handshake response from chat partner.");
             }
-            upLine = line.toUpperCase( Locale.US );
-            if ( upLine.startsWith( "X-NICKNAME:" ) )
-            {
+            upLine = line.toUpperCase(Locale.US);
+            if (upLine.startsWith("X-NICKNAME:")) {
                 chatNick = line.substring(11).trim();
             }
-            if ( upLine.startsWith("X-PHEX-ENCODED:") )
-            {
+            if (upLine.startsWith("X-PHEX-ENCODED:")) {
                 foundPhexEncoded = true;
-                if ( upLine.equals("X-PHEX-ENCODED: TRUE") )
-                {
+                if (upLine.equals("X-PHEX-ENCODED: TRUE")) {
                     useEncodedStr = true;
-                }
-                else
-                {
+                } else {
                     useEncodedStr = false;
                 }
             }
         }
-        while ( line.length() > 0 );
+        while (line.length() > 0);
 
-        if (!foundPhexEncoded)
-        {
+        if (!foundPhexEncoded) {
             useEncodedStr = false;
         }
-        
+
         // we respond with "CHAT/0.1 200 OK\r\n\r\n" to finish the handshake.
-        connection.write( ByteBuffer.wrap( ("CHAT/0.1 200 OK\r\n" +
-            "User-Agent: " + Phex.getFullPhexVendor() + "\r\n\r\n" ).getBytes() ) );
-        connection.getSocket().setSoTimeout( 0 );
+        connection.write(ByteBuffer.wrap(("CHAT/0.1 200 OK\r\n" +
+                "User-Agent: " + Phex.getFullPhexVendor() + "\r\n\r\n").getBytes()));
+        connection.getSocket().setSoTimeout(0);
         // chat connection open notification will be fired through the chat manager
     }
 
     /**
      * Hide the reading thread from the engine implementation.
      */
-    private class ChatReadWorker implements Runnable
-    {
-        private final PhexEventService eventService;
-        
-        ChatReadWorker( PhexEventService eventService )
-        {
-            this.eventService = eventService;
-        }
-        
-        public void run()
-        {
-            if ( isOutgoingConnection )
-            {
-                try
-                {
+    private class ChatReadWorker implements Runnable {
+
+        public void run() {
+            if (isOutgoingConnection) {
+                try {
                     connectOutgoingChat();
-                }
-                catch ( IOException exp )
-                {
+                } catch (IOException exp) {
                     stopChat();
                     return;
                 }
             }
             String str;
-            while ( true )
-            {
-                try
-                {
+            while (true) {
+                try {
                     str = chatReader.readLine();
-                    if ( str == null )
-                    {
-                        throw new IOException( "Remote host diconnected chat." );
+                    if (str == null) {
+                        throw new IOException("Remote host diconnected chat.");
                     }
-                    if ( str.length() == 0 )
-                    {
+                    if (str.length() == 0) {
                         continue;
                     }
-                    NLogger.debug( ChatEngine.class, "Reading chat message: " + str );
+                    NLogger.debug(ChatEngine.class, "Reading chat message: " + str);
 
-                    if (useEncodedStr)
-                    {
+                    if (useEncodedStr) {
                         byte[] base64Buf = Base64.decode(str);
                         str = new String(base64Buf);
                     }
 
-                }
-                catch ( IOException exp )
-                {
-                    NLogger.debug( ChatEngine.class, exp, exp);
+                } catch (IOException exp) {
+                    NLogger.debug(ChatEngine.class, exp, exp);
                     stopChat();
                     break;
                 }

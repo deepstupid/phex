@@ -32,8 +32,7 @@ import java.util.Locale;
  * REQUIRED):<br>
  * <URN> ::= "urn:" <NID> ":" <NSS>
  */
-public class URN
-{
+public class URN {
     public static final String SHA1 = "sha1";
     public static final String BITPRINT = "bitprint";
     public static final String URN_PREFIX = "urn:";
@@ -52,138 +51,32 @@ public class URN
      * Parses a string into a URN. If the URN string is not valid a
      * IllegalArgumentException is thrown.
      */
-    public URN( String aURNString )
-    {
+    public URN(String aURNString) {
         // parse and validate urn...
         // this code is copyed and littly modified from isValidURN for
         // better peformance.
 
         // urn must start with 'urn:'
-        if ( aURNString.length() < 4 )
-        {
-            throw new IllegalArgumentException( "URN not valid: " + aURNString );
+        if (aURNString.length() < 4) {
+            throw new IllegalArgumentException("URN not valid: " + aURNString);
         }
-        String prefix = aURNString.substring( 0, 4 ).toLowerCase( Locale.US );
-        if ( !prefix.equals( URN_PREFIX ) )
-        {
-            throw new IllegalArgumentException( "URN not valid: " + aURNString );
+        String prefix = aURNString.substring(0, 4).toLowerCase(Locale.US);
+        if (!prefix.equals(URN_PREFIX)) {
+            throw new IllegalArgumentException("URN not valid: " + aURNString);
         }
-        int colonIdx = aURNString.indexOf( ':', 4 );
-        if ( colonIdx == -1 )
-        {
-            throw new IllegalArgumentException( "URN not valid: " + aURNString );
+        int colonIdx = aURNString.indexOf(':', 4);
+        if (colonIdx == -1) {
+            throw new IllegalArgumentException("URN not valid: " + aURNString);
         }
-        urnNID = aURNString.substring( 4, colonIdx );
-        if ( !isValidNamespaceIdentifier( urnNID ) )
-        {
-            throw new IllegalArgumentException( "URN not valid (NID): " + aURNString );
+        urnNID = aURNString.substring(4, colonIdx);
+        if (!isValidNamespaceIdentifier(urnNID)) {
+            throw new IllegalArgumentException("URN not valid (NID): " + aURNString);
         }
-        urnNSS = aURNString.substring( colonIdx + 1, aURNString.length() );
-        if ( !isValidNamespaceSpecificString( urnNSS ) )
-        {
-            throw new IllegalArgumentException( "URN not valid (NSS): " + aURNString );
+        urnNSS = aURNString.substring(colonIdx + 1, aURNString.length());
+        if (!isValidNamespaceSpecificString(urnNSS)) {
+            throw new IllegalArgumentException("URN not valid (NSS): " + aURNString);
         }
         urnString = aURNString;
-    }
-
-    public boolean isSha1Nid()
-    {
-        return SHA1.equalsIgnoreCase( urnNID );
-    }
-    
-    public boolean isBitprintNid()
-    {
-        return BITPRINT.equalsIgnoreCase( urnNID );
-    }
-
-    public String getNamespaceSpecificString()
-    {
-        return urnNSS;
-    }
-    
-    public String getSHA1Nss()
-    {
-        if ( SHA1.equalsIgnoreCase( urnNID ) )
-        {
-            //urn:sha1:[32-character-SHA1]
-            return urnNSS;
-        }
-        else if ( BITPRINT.equalsIgnoreCase( urnNID ) )
-        {
-            //urn:bitprint:[32-character-SHA1].[39-character-TigerTree]
-            return urnNSS.substring( 0, 32 );
-        }
-        return null;
-    }
-    
-    public String getTigerTreeRootNss()
-    {
-        if ( BITPRINT.equalsIgnoreCase( urnNID ) )
-        {
-            //urn:bitprint:[32-character-SHA1].[39-character-TigerTree]
-            return urnNSS.substring( 33, 72 );
-        }
-        return null;
-    }
-
-    /**
-     * Returns the urn string in the form "urn:" <NID> ":" <NSS>.
-     * @return the urn string in the form "urn:" <NID> ":" <NSS>.
-     */
-    public String getAsString()
-    {
-        return urnString;
-    }
-
-    /**
-     * Override equals() to ensure that two different instances with equal URN
-     * are "equal".
-     */
-    public boolean equals( Object urn )
-    {
-        if ( urn instanceof URN )
-        {
-            return equals( (URN) urn );
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    /**
-     * Override equals() to ensure that two different instances with equal URN
-     * are "equal".
-     */
-    public boolean equals( URN urn )
-    {
-        // when both are same nid directly compare them...
-        if ( urnNID.equalsIgnoreCase( urn.urnNID ) )
-        {
-            return urn.urnString.equalsIgnoreCase( urnString );
-        }
-        
-        // otherwise both nss need to be convertable to sha1
-        String thisSHA1Nss = getSHA1Nss();
-        if ( thisSHA1Nss == null )
-        {// this should not happen sha1 and bitprint are convertable...
-            throw new RuntimeException( "Cant compare URNs" );
-        }
-        return thisSHA1Nss.equals( urn.getSHA1Nss() );
-    }
-
-    /**
-     * Override hashCode() to ensure that two different instances with equal URN
-     * generate the same hashCode. This is necessary to find URNs in Maps.
-     */
-    public int hashCode()
-    {
-        // lazy initialize hash code.
-        if ( hashCode == -1 )
-        {
-            hashCode = 3 * ( urnString.hashCode() + getClass().hashCode() );
-        }
-        return hashCode;
     }
 
     /**
@@ -193,29 +86,24 @@ public class URN
      * REQUIRED):<br>
      * <URN> ::= "urn:" <NID> ":" <NSS>
      */
-    public static boolean isValidURN( String urn )
-    {
+    public static boolean isValidURN(String urn) {
         // urn must start with 'urn:'
-        if ( urn.length() < 4 )
-        {
+        if (urn.length() < 4) {
             return false;
         }
-        String prefix = urn.substring( 0, 4 ).toLowerCase( Locale.US );
-        if ( !prefix.equals( URN_PREFIX ) )
-        {
+        String prefix = urn.substring(0, 4).toLowerCase(Locale.US);
+        if (!prefix.equals(URN_PREFIX)) {
             return false;
         }
-        int colonIdx = urn.indexOf( ':', 4 );
-        if ( colonIdx == -1 )
-        {
+        int colonIdx = urn.indexOf(':', 4);
+        if (colonIdx == -1) {
             return false;
         }
-        String nid = urn.substring( 4, colonIdx );
-        if ( !isValidNamespaceIdentifier( nid ) )
-        {
+        String nid = urn.substring(4, colonIdx);
+        if (!isValidNamespaceIdentifier(nid)) {
             return false;
         }
-        String nss = urn.substring( colonIdx + 1, urn.length() );
+        String nss = urn.substring(colonIdx + 1, urn.length());
         return isValidNamespaceSpecificString(nss);
     }
 
@@ -226,10 +114,9 @@ public class URN
      * and
      * urn:sha1:[32-character-SHA1]
      */
-    public static boolean isValidNamespaceSpecificString( String nss )
-    {
+    public static boolean isValidNamespaceSpecificString(String nss) {
         int length = nss.length();
-             // [32-character-SHA1]
+        // [32-character-SHA1]
         return length == 32 ||
                 // [32-character-SHA1].[39-character-TigerTree]
                 length == 72;
@@ -239,33 +126,108 @@ public class URN
      * Checks if this namespace identifier is supported. Only sha1 is supported
      * currently.
      */
-    public static boolean isValidNamespaceIdentifier( String nid )
-    {
-        String lcNID = nid.toLowerCase( Locale.US );
+    public static boolean isValidNamespaceIdentifier(String nid) {
+        String lcNID = nid.toLowerCase(Locale.US);
         // currently only sh1 is supported
-        if ( lcNID.equals( SHA1 ) )
-        {
+        if (lcNID.equals(SHA1)) {
             return true;
-        }
-        else if ( lcNID.equals( BITPRINT ) )
-        {
+        } else if (lcNID.equals(BITPRINT)) {
             return true;
         }
         return false;
     }
 
-    public static URN parseURNFromUriRes( String uriResLine )
-    {
-        String lowerCaseLine = uriResLine.toLowerCase( Locale.US );
-        if ( lowerCaseLine.startsWith( "/uri-res/n2r?urn:" ) )
-        {
-            String urnStr = URLCodecUtils.decodeURL( uriResLine.substring( 13 ) );
-            if ( isValidURN( urnStr ) )
-            {
-                URN urn = new URN( urnStr );
+    public static URN parseURNFromUriRes(String uriResLine) {
+        String lowerCaseLine = uriResLine.toLowerCase(Locale.US);
+        if (lowerCaseLine.startsWith("/uri-res/n2r?urn:")) {
+            String urnStr = URLCodecUtils.decodeURL(uriResLine.substring(13));
+            if (isValidURN(urnStr)) {
+                URN urn = new URN(urnStr);
                 return urn;
             }
         }
         return null;
+    }
+
+    public boolean isSha1Nid() {
+        return SHA1.equalsIgnoreCase(urnNID);
+    }
+
+    public boolean isBitprintNid() {
+        return BITPRINT.equalsIgnoreCase(urnNID);
+    }
+
+    public String getNamespaceSpecificString() {
+        return urnNSS;
+    }
+
+    public String getSHA1Nss() {
+        if (SHA1.equalsIgnoreCase(urnNID)) {
+            //urn:sha1:[32-character-SHA1]
+            return urnNSS;
+        } else if (BITPRINT.equalsIgnoreCase(urnNID)) {
+            //urn:bitprint:[32-character-SHA1].[39-character-TigerTree]
+            return urnNSS.substring(0, 32);
+        }
+        return null;
+    }
+
+    public String getTigerTreeRootNss() {
+        if (BITPRINT.equalsIgnoreCase(urnNID)) {
+            //urn:bitprint:[32-character-SHA1].[39-character-TigerTree]
+            return urnNSS.substring(33, 72);
+        }
+        return null;
+    }
+
+    /**
+     * Returns the urn string in the form "urn:" <NID> ":" <NSS>.
+     *
+     * @return the urn string in the form "urn:" <NID> ":" <NSS>.
+     */
+    public String getAsString() {
+        return urnString;
+    }
+
+    /**
+     * Override equals() to ensure that two different instances with equal URN
+     * are "equal".
+     */
+    public boolean equals(Object urn) {
+        if (urn instanceof URN) {
+            return equals((URN) urn);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Override equals() to ensure that two different instances with equal URN
+     * are "equal".
+     */
+    public boolean equals(URN urn) {
+        // when both are same nid directly compare them...
+        if (urnNID.equalsIgnoreCase(urn.urnNID)) {
+            return urn.urnString.equalsIgnoreCase(urnString);
+        }
+
+        // otherwise both nss need to be convertable to sha1
+        String thisSHA1Nss = getSHA1Nss();
+        if (thisSHA1Nss == null) {// this should not happen sha1 and bitprint are convertable...
+            throw new RuntimeException("Cant compare URNs");
+        }
+        return thisSHA1Nss.equals(urn.getSHA1Nss());
+    }
+
+    /**
+     * Override hashCode() to ensure that two different instances with equal URN
+     * generate the same hashCode. This is necessary to find URNs in Maps.
+     */
+    public int hashCode() {
+        // lazy initialize hash code.
+        if (hashCode == -1) {
+            hashCode = 3 * (urnString.hashCode() + getClass().hashCode());
+        }
+        return hashCode;
     }
 }

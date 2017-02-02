@@ -21,15 +21,14 @@
  */
 package phex.query;
 
-public interface SearchProgress
-{
+public interface SearchProgress {
     int getDesiredResultsCount();
-    
+
     int getReceivedResultsCount();
-    
+
     int getProgress();
-    
+
     void searchStarted();
-    
+
     boolean isSearchFinished();
 }

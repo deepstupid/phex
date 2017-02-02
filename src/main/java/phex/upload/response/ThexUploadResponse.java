@@ -21,81 +21,75 @@
  */
 package phex.upload.response;
 
-import phex.util.dime.DimeGenerator;
-import phex.util.dime.DimeRecord;
 import phex.http.HTTPResponse;
 import phex.io.buffer.ByteBuffer;
 import phex.share.ShareFile;
 import phex.thex.FileHashCalculationHandler;
 import phex.thex.ShareFileThexData;
 import phex.util.StringUtils;
+import phex.util.dime.DimeGenerator;
+import phex.util.dime.DimeRecord;
 import phex.xml.thex.ThexHashTree;
 import phex.xml.thex.ThexHashTreeCodec;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class ThexUploadResponse extends UploadResponse
-{
+public class ThexUploadResponse extends UploadResponse {
     private byte[] dimeData;
     private int offset;
 
-    public ThexUploadResponse( ShareFile shareFile, FileHashCalculationHandler fileHashCalcQueue ) throws IOException
-    {        
-        super( new HTTPResponse((short) 200, "OK", true) );
-        
+    public ThexUploadResponse(ShareFile shareFile, FileHashCalculationHandler fileHashCalcQueue) throws IOException {
+        super(new HTTPResponse((short) 200, "OK", true));
+
         // I have to select the serialization of this shareFile
-        ShareFileThexData thexData = shareFile.getThexData( fileHashCalcQueue );
+        ShareFileThexData thexData = shareFile.getThexData(fileHashCalcQueue);
         String uuidStr = StringUtils.generateRandomUUIDString();
-        
+
         // We get the THEX metadata
         ThexHashTree hashTree = new ThexHashTree();
-        hashTree.setFileSize( String.valueOf( shareFile.getFileSize() ) );
+        hashTree.setFileSize(String.valueOf(shareFile.getFileSize()));
         hashTree.setFileSegmentSize("1024");
         hashTree.setDigestAlgorithm("http://open-content.net/spec/digest/tiger");
         hashTree.setDigestOutputSize("24");
-        hashTree.setSerializedTreeDepth( String.valueOf( thexData.getTreeDepth() ) );
+        hashTree.setSerializedTreeDepth(String.valueOf(thexData.getTreeDepth()));
         hashTree.setSerializedTreeType("http://open-content.net/spec/thex/breadthfirst");
         hashTree.setSerializedTreeUri("uuid:" + uuidStr);
 
-        String type ="http://open-content.net/spec/thex/breadthfirst";
-        byte[] metadata = ThexHashTreeCodec.generateThexHashTreeXML( hashTree );
+        String type = "http://open-content.net/spec/thex/breadthfirst";
+        byte[] metadata = ThexHashTreeCodec.generateThexHashTreeXML(hashTree);
         byte[] serialization = thexData.getSerializedTreeNodes();
-        
+
         // add 1024 overhead...
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream( 
-            metadata.length + serialization.length + 1024 );
-        DimeGenerator dg = new DimeGenerator( outputStream );
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(
+                metadata.length + serialization.length + 1024);
+        DimeGenerator dg = new DimeGenerator(outputStream);
         DimeRecord dr = new DimeRecord(metadata, DimeRecord.TypeNameFormat.MEDIA_TYPE, type, null);
         dg.addRecord(dr, false);
         DimeRecord dr2 = new DimeRecord(serialization, DimeRecord.TypeNameFormat.URI, type, "uuid:" + uuidStr);
         dg.addRecord(dr2, true);
-        
+
         dimeData = outputStream.toByteArray();
         offset = 0;
     }
-    
-    public int remainingBody()
-    {
+
+    public int remainingBody() {
         return dimeData.length - offset;
     }
-    
+
     @Override
-    public int fillBody( ByteBuffer directBuffer ) 
-        throws IOException
-    {
+    public int fillBody(ByteBuffer directBuffer)
+            throws IOException {
         int remaining = directBuffer.remaining();
-        directBuffer.put( dimeData, offset, remaining );
+        directBuffer.put(dimeData, offset, remaining);
         offset += remaining;
         return remaining;
     }
-    
-    public void countUpload()
-    {
+
+    public void countUpload() {
     }
-    
-    public void close()
-    {
+
+    public void close() {
         dimeData = null;
     }
 }

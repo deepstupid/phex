@@ -33,72 +33,64 @@ import javax.xml.parsers.SAXParser;
 import java.io.CharArrayWriter;
 
 /**
- * 
+ *
  */
-public class SearchRuleListHandler extends DefaultHandler
-{   
+public class SearchRuleListHandler extends DefaultHandler {
     public static final String THIS_TAG_NAME = "search-rule-list";
-    
+
     private final CharArrayWriter text = new CharArrayWriter();
     private final SAXParser parser;
     private final DSubElementList<DSearchRule> dRulesList;
     private final DefaultHandler parent;
-    
-    public SearchRuleListHandler( DSubElementList<DSearchRule> dRulesList, 
-        DefaultHandler parent, SAXParser parser )
-    {
+
+    public SearchRuleListHandler(DSubElementList<DSearchRule> dRulesList,
+                                 DefaultHandler parent, SAXParser parser) {
         this.dRulesList = dRulesList;
         this.parser = parser;
         this.parent = parent;
     }
-    
+
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
     @Override
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes)
-        throws SAXException
-    {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes)
+            throws SAXException {
         text.reset();
-        if ( qName.equals( SearchRuleHandler.ELEMENT_NAME ) )
-        {
+        if (qName.equals(SearchRuleHandler.ELEMENT_NAME)) {
             DSearchRule rule = new DSearchRule();
-            dRulesList.getSubElementList().add( rule );
-            
-            SearchRuleHandler handler = new SearchRuleHandler( rule, attributes,
-                this, parser );
-            parser.getXMLReader().setContentHandler( handler );
+            dRulesList.getSubElementList().add(rule);
+
+            SearchRuleHandler handler = new SearchRuleHandler(rule, attributes,
+                    this, parser);
+            parser.getXMLReader().setContentHandler(handler);
         }
         return;
     }
-    
+
     @Override
-    public void endElement(String uri, String localName, String qName) 
-        throws SAXException
-    {
-        if ( qName.equals( THIS_TAG_NAME ) )
-        {
-            parser.getXMLReader().setContentHandler( parent );
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equals(THIS_TAG_NAME)) {
+            parser.getXMLReader().setContentHandler(parent);
         }
     }
-     
-     @Override
+
+    @Override
     public InputSource resolveEntity(String publicId,
-        String systemId)
-     {
-         return null; 
-     }
-     
-     @Override
-    public void characters(char[] ch, int start, int length)
-     {
-         text.write( ch,start,length );
-     }
+                                     String systemId) {
+        return null;
+    }
+
+    @Override
+    public void characters(char[] ch, int start, int length) {
+        text.write(ch, start, length);
+    }
 }

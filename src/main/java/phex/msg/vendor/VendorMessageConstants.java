@@ -22,28 +22,27 @@
 package phex.msg.vendor;
 
 /**
- * 
+ *
  */
-public interface VendorMessageConstants
-{
+public interface VendorMessageConstants {
     // VENDOR NULL
     public static final int SUBSELECTOR_MESSAGES_SUPPORTED = 0;
     public static final int SUBSELECTOR_CAPABILITIES = 10;
-    
+
     // VENDOR BEAR
     public static final int SUBSELECTOR_HOPS_FLOW = 4;
     public static final int SUBSELECTOR_HORIZON_PING = 5;
     public static final int SUBSELECTOR_TCP_CONNECT_BACK = 7;
-    
+
     //  VENDOR LIME
     public static final int SUBSELECTOR_MESSAGE_ACK = 11;
     public static final int SUBSELECTOR_OOB_REPLY_COUNT = 12;
     public static final int SUBSELECTOR_PUSH_PROXY_REQUEST = 21;
     public static final int SUBSELECTOR_PUSH_PROXY_ACKNOWLEDGEMENT = 22;
     public static final int SUBSELECTOR_UDP_HEAD_PING = 23;
-    
-    
-    public static final byte[] VENDORID_NULL = { 0, 0, 0, 0 };
-    public static final byte[] VENDORID_BEAR = { 'B', 'E', 'A', 'R' };
-    public static final byte[] VENDORID_LIME = { 'L', 'I', 'M', 'E' };
+
+
+    public static final byte[] VENDORID_NULL = {0, 0, 0, 0};
+    public static final byte[] VENDORID_BEAR = {'B', 'E', 'A', 'R'};
+    public static final byte[] VENDORID_LIME = {'L', 'I', 'M', 'E'};
 }

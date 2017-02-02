@@ -23,15 +23,12 @@
 package phex.common.file;
 
 @SuppressWarnings("serial")
-public class ManagedFileException extends Exception
-{
-    public ManagedFileException( String message )
-    {
-        super( message );
+public class ManagedFileException extends Exception {
+    public ManagedFileException(String message) {
+        super(message);
     }
 
-    public ManagedFileException( String message, Exception cause )
-    {
-        super( message, cause );
+    public ManagedFileException(String message, Exception cause) {
+        super(message, cause);
     }
 }

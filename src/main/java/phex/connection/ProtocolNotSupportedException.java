@@ -20,15 +20,12 @@ package phex.connection;
 
 import java.io.IOException;
 
-public class ProtocolNotSupportedException extends IOException
-{
-    public ProtocolNotSupportedException()
-    {
-        super( "The used protocol is not supported." );
+public class ProtocolNotSupportedException extends IOException {
+    public ProtocolNotSupportedException() {
+        super("The used protocol is not supported.");
     }
 
-    public ProtocolNotSupportedException( String msg )
-    {
-        super( msg );
+    public ProtocolNotSupportedException(String msg) {
+        super(msg);
     }
 }

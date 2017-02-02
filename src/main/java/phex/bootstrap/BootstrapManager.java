@@ -32,152 +32,134 @@ import phex.servent.Servent;
 import java.util.TimerTask;
 
 /**
- * 
+ *
  */
-public class BootstrapManager
-{
-    private static final Logger logger = LoggerFactory.getLogger( BootstrapManager.class );
+public class BootstrapManager {
+    private static final Logger logger = LoggerFactory.getLogger(BootstrapManager.class);
     private final Servent servent;
     private final GWebCacheContainer gWebCacheContainer;
-    
+
     /**
      * Lock to make sure not more then one thread request is running in parallel
      * otherwise it could happen that we create thread after thread while each
      * one takes a long time to come back.
      */
     private volatile boolean isThreadRequestRunning = false;
-    
-    public BootstrapManager( Servent servent )
-    {
+
+    public BootstrapManager(Servent servent) {
         this.servent = servent;
-        gWebCacheContainer = new GWebCacheContainer( servent );
+        gWebCacheContainer = new GWebCacheContainer(servent);
     }
-    
+
     /**
      * Starts a query for more hosts in an extra thread.
+     *
      * @param preferPhex indicates if a Phex GWebCache should be preferred
      */
-    public synchronized void invokeQueryMoreHostsRequest( boolean preferPhex )
-    {
+    public synchronized void invokeQueryMoreHostsRequest(boolean preferPhex) {
         // we don't want multiple thread request to run at once. If one thread
         // request is running others are blocked.
-        if ( isThreadRequestRunning )
-        {
+        if (isThreadRequestRunning) {
             return;
         }
         isThreadRequestRunning = true;
-        Runnable runner = new QueryHostsRunner( preferPhex );
-        Environment.getInstance().executeOnThreadPool( runner,
-            "GWebCacheQuery-" + Integer.toHexString(runner.hashCode()) );
+        Runnable runner = new QueryHostsRunner(preferPhex);
+        Environment.getInstance().executeOnThreadPool(runner,
+                "GWebCacheQuery-" + Integer.toHexString(runner.hashCode()));
     }
+
     /**
      * Starts a update of GWebCaches in an extra thread.
+     *
      * @param preferPhex indicates if a Phex GWebCache should be preferred
      */
-    public void invokeUpdateRemoteGWebCache( final DestAddress myHostAddress, boolean preferPhex )
-    {
+    public void invokeUpdateRemoteGWebCache(final DestAddress myHostAddress, boolean preferPhex) {
         Runnable runner = new UpdateGWebCacheRunner(myHostAddress, preferPhex);
-        Environment.getInstance().executeOnThreadPool( runner,
-            "GWebCacheQuery-" + Integer.toHexString(runner.hashCode()) );
+        Environment.getInstance().executeOnThreadPool(runner,
+                "GWebCacheQuery-" + Integer.toHexString(runner.hashCode()));
     }
+
     /**
      * Starts a query for more GWebCaches in an extra thread.
+     *
      * @param preferPhex indicates if a Phex GWebCache should be preferred
      */
-    public synchronized void invokeQueryMoreGWebCachesRequest( boolean preferPhex )
-    {
+    public synchronized void invokeQueryMoreGWebCachesRequest(boolean preferPhex) {
         // we don't want multiple thread request to run at once. If one thread
         // request is running others are blocked.
-        if ( isThreadRequestRunning )
-        {
+        if (isThreadRequestRunning) {
             return;
         }
         isThreadRequestRunning = true;
-        Runnable runner = new QueryGWebCachesRunner( preferPhex );
-        Environment.getInstance().executeOnThreadPool( runner,
-            "GWebCacheQuery-" + Integer.toHexString(runner.hashCode()) );
+        Runnable runner = new QueryGWebCachesRunner(preferPhex);
+        Environment.getInstance().executeOnThreadPool(runner,
+                "GWebCacheQuery-" + Integer.toHexString(runner.hashCode()));
     }
 
     // temporary workaround method for post manager initialization
-    public void postManagerInitRoutine()
-    {
+    public void postManagerInitRoutine() {
         NetworkHostsContainer netCont = servent.getHostService().getNetworkHostsContainer();
 //        Environment.getInstance().scheduleTimerTask( 
 //            new QueryGWebCacheTimer( netCont ), 0,
 //            QueryGWebCacheTimer.TIMER_PERIOD );
-        Environment.getInstance().scheduleTimerTask( 
-            new UpdateGWebCacheTimer( netCont ), UpdateGWebCacheTimer.TIMER_PERIOD,
-            UpdateGWebCacheTimer.TIMER_PERIOD );
+        Environment.getInstance().scheduleTimerTask(
+                new UpdateGWebCacheTimer(netCont), UpdateGWebCacheTimer.TIMER_PERIOD,
+                UpdateGWebCacheTimer.TIMER_PERIOD);
     }
-    
+
     ////////////////////////////////////////////////////////////////////////////
     /// Inner classes
     ////////////////////////////////////////////////////////////////////////////
-    private final class QueryGWebCachesRunner implements Runnable
-    {
+    private final class QueryGWebCachesRunner implements Runnable {
         private final boolean preferPhex;
 
         /**
          * @param preferPhex
          */
-        QueryGWebCachesRunner( boolean preferPhex )
-        {
+        QueryGWebCachesRunner(boolean preferPhex) {
             this.preferPhex = preferPhex;
         }
 
-        public void run()
-        {
-            try
-            {
-                gWebCacheContainer.queryMoreGWebCaches( preferPhex );
-            }
-            finally
-            {
+        public void run() {
+            try {
+                gWebCacheContainer.queryMoreGWebCaches();
+            } finally {
                 isThreadRequestRunning = false;
             }
         }
     }
-    
-    private final class UpdateGWebCacheRunner implements Runnable
-    {
+
+    private final class UpdateGWebCacheRunner implements Runnable {
         private final DestAddress myHostAddress;
         private final boolean preferPhex;
-        
+
         /**
          * @param preferPhex
          */
-        private UpdateGWebCacheRunner(DestAddress myHostAddress, boolean preferPhex)
-        {
+        private UpdateGWebCacheRunner(DestAddress myHostAddress, boolean preferPhex) {
             this.myHostAddress = myHostAddress;
             this.preferPhex = preferPhex;
         }
-        
-        public void run()
-        {
-            gWebCacheContainer.updateRemoteGWebCache( myHostAddress, preferPhex );
+
+        public void run() {
+            gWebCacheContainer.updateRemoteGWebCache(myHostAddress);
         }
     }
-    
-    private final class QueryHostsRunner implements Runnable
-    {
+
+    private final class QueryHostsRunner implements Runnable {
         private final boolean preferPhex;
-        
+
         /**
          * @param preferPhex
          */
-        QueryHostsRunner( boolean preferPhex )
-        {
+        QueryHostsRunner(boolean preferPhex) {
             this.preferPhex = preferPhex;
         }
-        
-        public void run()
-        {
-            try
-            {
-                gWebCacheContainer.queryMoreHosts( preferPhex );
-            }
-            finally
-            {
+
+        public void run() {
+            try {
+                gWebCacheContainer.queryMoreHosts();
+            } finally {
                 isThreadRequestRunning = false;
             }
         }
@@ -216,49 +198,40 @@ public class BootstrapManager
 //            }
 //        }
 //    }
-    
-    private final class UpdateGWebCacheTimer extends TimerTask
-    {
+
+    private final class UpdateGWebCacheTimer extends TimerTask {
         // once per 90 minutes
         public static final long TIMER_PERIOD = 1000L * 60 * 90;
-        
+
         private final NetworkHostsContainer netHostsContainer;
-        
-        UpdateGWebCacheTimer( NetworkHostsContainer netHostsContainer )
-        {
+
+        UpdateGWebCacheTimer(NetworkHostsContainer netHostsContainer) {
             this.netHostsContainer = netHostsContainer;
         }
 
         @Override
-        public void run()
-        {
-            try
-            {
+        public void run() {
+            try {
                 // no gwebcache actions if we have no auto connect and are
                 // not connected to any host
-                if ( servent.getOnlineStatus().isNetworkOnline() ||
-                    netHostsContainer.getTotalConnectionCount() > 0 )
-                {
+                if (servent.getOnlineStatus().isNetworkOnline() ||
+                        netHostsContainer.getTotalConnectionCount() > 0) {
                     DestAddress localAddress = null;
-                    if ( !servent.isFirewalled() )
-                    {
+                    if (!servent.isFirewalled()) {
                         localAddress = servent.getLocalAddress();
                         IpAddress localIp = localAddress.getIpAddress();
-                        if ( localIp != null && localIp.isSiteLocalIP() )
-                        {
+                        if (localIp != null && localIp.isSiteLocalIP()) {
                             localAddress = null;
                         }
                     }
                     // even when localAddress is null update a GWebCache with
                     // a new GWebCache URL.
-                    invokeUpdateRemoteGWebCache( localAddress, true );
-                    
+                    invokeUpdateRemoteGWebCache(localAddress, true);
+
                     //invokeQueryMoreGWebCachesRequest( false );
                 }
-            }
-            catch ( Throwable th )
-            {
-                logger.error( th.toString(), th );
+            } catch (Throwable th) {
+                logger.error(th.toString(), th);
             }
         }
     }

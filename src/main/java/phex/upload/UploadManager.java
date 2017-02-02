@@ -37,145 +37,122 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
 
-public class UploadManager
-{
-    private static final Logger logger = LoggerFactory.getLogger( UploadManager.class );
+public class UploadManager {
+    private static final Logger logger = LoggerFactory.getLogger(UploadManager.class);
     private final Servent servent;
-    
+
     private final AddressCounter uploadIPCounter;
 
     private final List<UploadState> uploadStateList;
 
     private final List<UploadState> queuedStateList;
-    
+
     private LogBuffer uploadStateLogBuffer;
 
-    public UploadManager( Servent servent )
-    {
+    public UploadManager(Servent servent) {
         this.servent = servent;
         uploadStateList = new ArrayList<UploadState>();
         queuedStateList = new ArrayList<UploadState>();
-        uploadIPCounter = new AddressCounter( 
-            UploadPrefs.MaxUploadsPerIP.get().intValue(), false );
-        if ( UploadPrefs.UploadStateLogBufferSize.get().intValue() > 0 )
-        {
-            uploadStateLogBuffer = new LogBuffer( UploadPrefs.UploadStateLogBufferSize.get().intValue() );
+        uploadIPCounter = new AddressCounter(
+                UploadPrefs.MaxUploadsPerIP.get().intValue(), false);
+        if (UploadPrefs.UploadStateLogBufferSize.get().intValue() > 0) {
+            uploadStateLogBuffer = new LogBuffer(UploadPrefs.UploadStateLogBufferSize.get().intValue());
         }
 
         Environment.getInstance().scheduleTimerTask(
-            new CleanUploadStateTimer(), CleanUploadStateTimer.TIMER_PERIOD,
-            CleanUploadStateTimer.TIMER_PERIOD );
+                new CleanUploadStateTimer(), CleanUploadStateTimer.TIMER_PERIOD,
+                CleanUploadStateTimer.TIMER_PERIOD);
     }
-    
-    public BandwidthController getUploadBandwidthController()
-    {
+
+    public BandwidthController getUploadBandwidthController() {
         return servent.getBandwidthService().getUploadBandwidthController();
     }
 
-    public void handleUploadRequest( Connection connection, HTTPRequest httpRequest)
-    {
-        UploadEngine uploadEngine = new UploadEngine( connection, httpRequest, 
-            this, servent.getSharedFilesService() );
+    public void handleUploadRequest(Connection connection, HTTPRequest httpRequest) {
+        UploadEngine uploadEngine = new UploadEngine(connection, httpRequest,
+                this, servent.getSharedFilesService());
         uploadEngine.startUpload();
     }
 
     /**
      * Returns true if all upload slots are filled.
      */
-    public boolean isHostBusy()
-    {
-        if ( getUploadingCount() >= UploadPrefs.MaxParallelUploads.get().intValue() ) 
-        { return true; }
+    public boolean isHostBusy() {
+        if (getUploadingCount() >= UploadPrefs.MaxParallelUploads.get().intValue()) {
+            return true;
+        }
         return false;
     }
 
     /**
      * Returns true if all queue slots are filled.
      */
-    public boolean isQueueLimitReached()
-    {
-        synchronized (queuedStateList)
-        {
-            if ( queuedStateList.size() >= UploadPrefs.MaxQueueSize.get().intValue() ) 
-            { return true; }
+    public boolean isQueueLimitReached() {
+        synchronized (queuedStateList) {
+            if (queuedStateList.size() >= UploadPrefs.MaxQueueSize.get().intValue()) {
+                return true;
+            }
             return false;
         }
     }
 
-    public boolean validateAndCountAddress( DestAddress address )
-    {
-        synchronized (uploadIPCounter)
-        {
+    public boolean validateAndCountAddress(DestAddress address) {
+        synchronized (uploadIPCounter) {
             // update count...
-            uploadIPCounter.setMaxCount( UploadPrefs.MaxUploadsPerIP.get().intValue() );
-            return uploadIPCounter.validateAndCountAddress( address );
+            uploadIPCounter.setMaxCount(UploadPrefs.MaxUploadsPerIP.get().intValue());
+            return uploadIPCounter.validateAndCountAddress(address);
         }
     }
 
-    public void releaseUploadAddress( DestAddress address )
-    {
-        synchronized (uploadIPCounter)
-        {
-            uploadIPCounter.relaseAddress( address );
+    public void releaseUploadAddress(DestAddress address) {
+        synchronized (uploadIPCounter) {
+            uploadIPCounter.relaseAddress(address);
         }
     }
-    
-    public LogBuffer getUploadStateLogBuffer()
-    {
+
+    public LogBuffer getUploadStateLogBuffer() {
         return uploadStateLogBuffer;
     }
 
     ///////////////////// Collection access methods ////////////////////////////
 
-    public void addUploadState(UploadState uploadState)
-    {
-        synchronized (uploadStateList)
-        {
+    public void addUploadState(UploadState uploadState) {
+        synchronized (uploadStateList) {
             int position = uploadStateList.size();
-            uploadStateList.add( uploadState );
-            fireUploadStateAdded( uploadState, position );
+            uploadStateList.add(uploadState);
+            fireUploadStateAdded(uploadState, position);
         }
     }
-    
-    public boolean containsUploadState( UploadState uploadState )
-    {
-        synchronized (uploadStateList)
-        {
+
+    public boolean containsUploadState(UploadState uploadState) {
+        synchronized (uploadStateList) {
             return uploadStateList.contains(uploadState);
         }
     }
 
     /**
-     * This is the only method allowed to set the UploadStatus of a UploadState. 
-     * @param uploadState the state to set the status for.
+     * This is the only method allowed to set the UploadStatus of a UploadState.
+     *
+     * @param uploadState  the state to set the status for.
      * @param uploadStatus the new status to set.
      * @return true if setting the new state was successful, false otherwise.
      */
-    public boolean trySetUploadStatus(UploadState uploadState, UploadStatus uploadStatus)
-    {
+    public boolean trySetUploadStatus(UploadState uploadState, UploadStatus uploadStatus) {
         UploadStatus currentStatus = uploadState.getStatus();
-        if ( currentStatus == uploadStatus )
-        {
+        if (currentStatus == uploadStatus) {
             return true;
         }
-        if ( !currentStatus.isRunningStatus() && uploadStatus.isRunningStatus() )
-        {
-            synchronized (uploadStateList)
-            {
-                if ( isHostBusy() )
-                {
+        if (!currentStatus.isRunningStatus() && uploadStatus.isRunningStatus()) {
+            synchronized (uploadStateList) {
+                if (isHostBusy()) {
                     return false;
-                }
-                else
-                {
+                } else {
                     // keep this extra to ensure sync on uploadStateList
                     uploadState.setStatus(uploadStatus);
                     return true;
                 }
             }
-        }
-        else
-        {
+        } else {
             uploadState.setStatus(uploadStatus);
         }
         return true;
@@ -185,10 +162,8 @@ public class UploadManager
      * Returns the number of all files in the upload list. Also with state
      * completed and aborted.
      */
-    public int getUploadListSize()
-    {
-        synchronized (uploadStateList)
-        {
+    public int getUploadListSize() {
+        synchronized (uploadStateList) {
             return uploadStateList.size();
         }
     }
@@ -197,15 +172,11 @@ public class UploadManager
      * Returns only the number of files that are currently getting uploaded.
      * TODO it's better to maintain the number of files in an attribute...
      */
-    public int getUploadingCount()
-    {
+    public int getUploadingCount() {
         int count = 0;
-        synchronized (uploadStateList)
-        {
-            for ( UploadState state : uploadStateList )
-            {
-                if ( state.isUploadRunning() )
-                {
+        synchronized (uploadStateList) {
+            for (UploadState state : uploadStateList) {
+                if (state.isUploadRunning()) {
                     count++;
                 }
             }
@@ -213,56 +184,45 @@ public class UploadManager
         return count;
     }
 
-    public UploadState getUploadStateAt(int index)
-    {
-        synchronized (uploadStateList)
-        {
-            if ( index < 0 || index >= uploadStateList.size() ) { return null; }
-            return uploadStateList.get( index );
+    public UploadState getUploadStateAt(int index) {
+        synchronized (uploadStateList) {
+            if (index < 0 || index >= uploadStateList.size()) {
+                return null;
+            }
+            return uploadStateList.get(index);
         }
     }
 
-    public UploadState[] getUploadStatesAt(int[] indices)
-    {
-        synchronized (uploadStateList)
-        {
+    public UploadState[] getUploadStatesAt(int[] indices) {
+        synchronized (uploadStateList) {
             int length = indices.length;
             UploadState[] states = new UploadState[length];
             int listSize = uploadStateList.size();
-            for (int i = 0; i < length; i++)
-            {
-                if ( indices[i] < 0 || indices[i] >= listSize )
-                {
+            for (int i = 0; i < length; i++) {
+                if (indices[i] < 0 || indices[i] >= listSize) {
                     states[i] = null;
-                }
-                else
-                {
-                    states[i] = uploadStateList.get( indices[i] );
+                } else {
+                    states[i] = uploadStateList.get(indices[i]);
                 }
             }
             return states;
         }
     }
 
-    public void removeUploadState(UploadState state)
-    {
+    public void removeUploadState(UploadState state) {
         state.stopUpload();
-        synchronized (uploadStateList)
-        {
-            int idx = uploadStateList.indexOf( state );
-            if ( idx != -1 )
-            {
-                uploadStateList.remove( idx );
-                fireUploadStateRemoved( state, idx );
+        synchronized (uploadStateList) {
+            int idx = uploadStateList.indexOf(state);
+            if (idx != -1) {
+                uploadStateList.remove(idx);
+                fireUploadStateRemoved(state, idx);
             }
         }
 
-        synchronized (queuedStateList)
-        {
-            int idx = queuedStateList.indexOf( state );
-            if ( idx != -1 )
-            {
-                queuedStateList.remove( idx );
+        synchronized (queuedStateList) {
+            int idx = queuedStateList.indexOf(state);
+            if (idx != -1) {
+                queuedStateList.remove(idx);
                 //fireQueuedFileRemoved( idx );
             }
         }
@@ -271,88 +231,58 @@ public class UploadManager
     /**
      * Removes uploads that are in a ready for cleanup state.
      */
-    public void cleanUploadStateList()
-    {
-        synchronized (uploadStateList)
-        {
-            for (int i = uploadStateList.size() - 1; i >= 0; i--)
-            {
-                UploadState state = uploadStateList.get( i );
-                if ( state.isReadyForCleanup() )
-                {
-                    uploadStateList.remove( i );
-                    fireUploadStateRemoved( state, i );
+    public void cleanUploadStateList() {
+        synchronized (uploadStateList) {
+            for (int i = uploadStateList.size() - 1; i >= 0; i--) {
+                UploadState state = uploadStateList.get(i);
+                if (state.isReadyForCleanup()) {
+                    uploadStateList.remove(i);
+                    fireUploadStateRemoved(state, i);
                 }
             }
         }
     }
 
-    private class CleanUploadStateTimer extends TimerTask
-    {
-        private static final long TIMER_PERIOD = 1000 * 10;
-
-        @Override
-        public void run()
-        {
-            try
-            {
-                if ( UploadPrefs.AutoRemoveCompleted.get().booleanValue() )
-                {
-                    cleanUploadStateList();
-                }
-            }
-            catch ( Throwable th )
-            {
-                logger.error( th.toString(), th );
-            }
-        }
-    }
-
-    ////////////////////// queue collection methods ////////////////////////////
-
-    public int addQueuedUpload(UploadState uploadState)
-    {
+    public int addQueuedUpload(UploadState uploadState) {
         int position;
-        synchronized (queuedStateList)
-        {
+        synchronized (queuedStateList) {
             position = queuedStateList.size();
-            queuedStateList.add( uploadState );
+            queuedStateList.add(uploadState);
         }
         //dumpQueueInfo();
         return position;
     }
 
-    public void removeQueuedUpload(UploadState uploadState)
-    {
+    ////////////////////// queue collection methods ////////////////////////////
+
+    public void removeQueuedUpload(UploadState uploadState) {
         int position;
-        synchronized (queuedStateList)
-        {
-            position = queuedStateList.indexOf( uploadState );
-            if ( position != -1 )
-            {
-                queuedStateList.remove( position );
+        synchronized (queuedStateList) {
+            position = queuedStateList.indexOf(uploadState);
+            if (position != -1) {
+                queuedStateList.remove(position);
             }
         }
         //dumpQueueInfo();
     }
 
-    public int getQueuedPosition(UploadState state)
-    {
-        synchronized (queuedStateList)
-        {
-            return queuedStateList.indexOf( state );
+    public int getQueuedPosition(UploadState state) {
+        synchronized (queuedStateList) {
+            return queuedStateList.indexOf(state);
         }
     }
 
     /**
      * Returns the number of all files in the upload queue list.
      */
-    public int getUploadQueueSize()
-    {
-        synchronized (queuedStateList)
-        {
+    public int getUploadQueueSize() {
+        synchronized (queuedStateList) {
             return queuedStateList.size();
         }
+    }
+
+    private void fireUploadStateAdded(UploadState uploadState, int position) {
+
     }
 
     /*public void dumpQueueInfo()
@@ -372,14 +302,23 @@ public class UploadManager
 
     ///////////////////// START event handling methods /////////////////////////
 
-    private void fireUploadStateAdded( UploadState uploadState, int position )
-    {
+    private void fireUploadStateRemoved(UploadState uploadState, int position) {
 
     }
 
-    private void fireUploadStateRemoved( UploadState uploadState, int position )
-    {
+    private class CleanUploadStateTimer extends TimerTask {
+        private static final long TIMER_PERIOD = 1000 * 10;
 
+        @Override
+        public void run() {
+            try {
+                if (UploadPrefs.AutoRemoveCompleted.get().booleanValue()) {
+                    cleanUploadStateList();
+                }
+            } catch (Throwable th) {
+                logger.error(th.toString(), th);
+            }
+        }
     }
 
     ///////////////////// END event handling methods ////////////////////////

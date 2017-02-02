@@ -35,163 +35,146 @@ import java.io.IOException;
  * Excess bandwidth is partially available for the
  * next period, exceeded bandwidth is fully unavailable for the next period.
  */
-public class BandwidthController
-{
-    private static final Logger logger = LoggerFactory.getLogger( BandwidthController.class );
-    
+public class BandwidthController {
+    private static final Logger logger = LoggerFactory.getLogger(BandwidthController.class);
+
     private static final int WINDOWS_PER_SECONDS = 5;
 
     private static final int MILLIS_PER_WINDOW = 1000 / WINDOWS_PER_SECONDS;
-    
-    /**
-     * The number of bytes each window has.
-     */
-    private int bytesPerWindow;
-
-    /**
-     * The number of bytes left in the current window
-     */
-    private int bytesRemaining;
-
-    /**
-     * The timestamp of the start of the current window.
-     */
-    private long lastWindowTime;
-
-    /**
-     * The maximal rate in bytes per second.
-     */
-    private volatile long throttlingRate;
-
     /**
      * The name of this BandwidthController.
      */
     private final String controllerName;
-
     /**
      * To measure bandwidth in different levels BandwidthControllers can be
      * chained together so that a throttling would have to pass all controllers
      * and tracking can be done in higher levels too.
      */
     private final BandwidthController nextContollerInChain;
-    
+    /**
+     * The number of bytes each window has.
+     */
+    private int bytesPerWindow;
+    /**
+     * The number of bytes left in the current window
+     */
+    private int bytesRemaining;
+    /**
+     * The timestamp of the start of the current window.
+     */
+    private long lastWindowTime;
+    /**
+     * The maximal rate in bytes per second.
+     */
+    private volatile long throttlingRate;
     private TransferAverage shortTransferAvg;
     private TransferAverage longTransferAvg;
 
     /**
      * Create a new bandwidth controller through acquireController()
+     *
      * @param controllerName the name of this BandwidthController.
      * @param throttlingRate the used throttling rate in bytes per second.
      */
-    public BandwidthController(String controllerName, long throttlingRate )
-    {
-        this( controllerName, throttlingRate, null );
+    public BandwidthController(String controllerName, long throttlingRate) {
+        this(controllerName, throttlingRate, null);
     }
-        
+
     /**
      * Create a new bandwidth controller through acquireController()
+     *
      * @param controllerName the name of this BandwidthController.
      * @param throttlingRate the used throttling rate in bytes per second.
-     * @param parent a parent BandwidthController to chain controller.
+     * @param parent         a parent BandwidthController to chain controller.
      */
-    public BandwidthController(String controllerName, long throttlingRate, BandwidthController parent )
-    {
+    public BandwidthController(String controllerName, long throttlingRate, BandwidthController parent) {
         this.controllerName = controllerName + ' '
-            + Integer.toHexString( hashCode() );
-        
-        setThrottlingRate( throttlingRate );
+                + Integer.toHexString(hashCode());
+
+        setThrottlingRate(throttlingRate);
         nextContollerInChain = parent;
-        
+
         // init the bytes remaining on start to ensure correct stats on start.
         bytesRemaining = bytesPerWindow;
     }
-    
-    public void activateShortTransferAvg( int refreshRate, int period )
-    {
-        shortTransferAvg = new TransferAverage( refreshRate, period );
+
+    public void activateShortTransferAvg(int refreshRate, int period) {
+        shortTransferAvg = new TransferAverage(refreshRate, period);
     }
-    
-    public void activateLongTransferAvg( int refreshRate, int period )
-    {
-        longTransferAvg = new TransferAverage( refreshRate, period );
+
+    public void activateLongTransferAvg(int refreshRate, int period) {
+        longTransferAvg = new TransferAverage(refreshRate, period);
     }
-    
-//    @SuppressWarnings(
+
+    //    @SuppressWarnings(
 //        value= {"IS2_INCONSISTENT_SYNC"},
 //        justification="Synchronization here kills UI performance, getting an outdated value is not critical.")
-    public TransferAverage getShortTransferAvg()
-    {
+    public TransferAverage getShortTransferAvg() {
         return shortTransferAvg;
     }
-    
-    public TransferAverage getLongTransferAvg()
-    {
+
+    public TransferAverage getLongTransferAvg() {
         return longTransferAvg;
     }
 
     /**
-     * Call to set the desired throttling rate.
-     */
-    public synchronized void setThrottlingRate(long bytesPerSecond)
-    {
-        if ( bytesPerSecond == throttlingRate )
-        {
-            return;
-        }
-        throttlingRate = bytesPerSecond;
-        // ensure that bytes per window is at least 1
-        bytesPerWindow = Math.max( (int) ((double) throttlingRate / (double) WINDOWS_PER_SECONDS), 1 ) ;
-        
-        /*if ( logger.isDebugEnabled() )
-        {
-            logger.debug('[' +controllerName + "] Set throttling rate to "
-                + bytesPerSecond + "bps (" + bytesPerWindow + " per window)");
-        }*/
-        
-        // keep the bytes remaining on the current window when bandwidth is dropping down..
-        bytesRemaining = bytesRemaining < bytesPerWindow ? Math.min( bytesRemaining, bytesPerWindow ) : bytesRemaining;
-    }
-    
-    /**
      * Returns the throttling rate in bytes per seconds
+     *
      * @return the throttling rate in bytes per seconds
      */
 //    @SuppressWarnings(
 //        value= {"UG_SYNC_SET_UNSYNC_GET"},
 //        justification="Synchronization here kills UI performance, getting an outdated value is not critical.")
-    public long getThrottlingRate()
-    {
+    public long getThrottlingRate() {
         return throttlingRate;
     }
-    
+
+    /**
+     * Call to set the desired throttling rate.
+     */
+    public synchronized void setThrottlingRate(long bytesPerSecond) {
+        if (bytesPerSecond == throttlingRate) {
+            return;
+        }
+        throttlingRate = bytesPerSecond;
+        // ensure that bytes per window is at least 1
+        bytesPerWindow = Math.max((int) ((double) throttlingRate / (double) WINDOWS_PER_SECONDS), 1);
+
+        /*if ( logger.isDebugEnabled() )
+        {
+            logger.debug('[' +controllerName + "] Set throttling rate to "
+                + bytesPerSecond + "bps (" + bytesPerWindow + " per window)");
+        }*/
+
+        // keep the bytes remaining on the current window when bandwidth is dropping down..
+        bytesRemaining = bytesRemaining < bytesPerWindow ? Math.min(bytesRemaining, bytesPerWindow) : bytesRemaining;
+    }
+
     /**
      * Returns the max number of bytes available through this bandwidth controller
      * and its parents.
+     *
      * @return the max number of bytes available.
-     * @throws IOException 
+     * @throws IOException
      */
-    public synchronized int getAvailableByteCount( int maxToRequest, 
-        boolean blockTillAvailable, boolean markBytesUsed ) throws IOException
-    {
-        updateWindow( blockTillAvailable );
-        int bytesAllowed = Math.max( 0, Math.min( maxToRequest, bytesRemaining ) );
+    public synchronized int getAvailableByteCount(int maxToRequest,
+                                                  boolean blockTillAvailable, boolean markBytesUsed) throws IOException {
+        updateWindow(blockTillAvailable);
+        int bytesAllowed = Math.max(0, Math.min(maxToRequest, bytesRemaining));
         // If there is another controller we are chained to, call it.
-        if( nextContollerInChain != null )
-        {
+        if (nextContollerInChain != null) {
             bytesAllowed = nextContollerInChain.getAvailableByteCount(
-                bytesAllowed, blockTillAvailable, false );
+                    bytesAllowed, blockTillAvailable, false);
         }
-        
-        if ( markBytesUsed )
-        {
-            markBytesUsed( bytesAllowed );
+
+        if (markBytesUsed) {
+            markBytesUsed(bytesAllowed);
         }
-        
-        if ( bytesRemaining < 0 && logger.isErrorEnabled() )
-        {
+
+        if (bytesRemaining < 0 && logger.isErrorEnabled()) {
             logger.error(
-                    '[' +controllerName + "] Available byte count " + bytesAllowed
-                + "bps - Remaining: " + bytesRemaining + '.');
+                    '[' + controllerName + "] Available byte count " + bytesAllowed
+                            + "bps - Remaining: " + bytesRemaining + '.');
         }
         /*else if ( logger.isDebugEnabled() )
         {
@@ -199,77 +182,66 @@ public class BandwidthController
                     '[' +controllerName + "] Available byte count " + bytesAllowed
                 + "bps - Remaining: " + bytesRemaining + '.');
         }*/
-        
+
         return bytesAllowed;
     }
-    
+
     /**
      * Marks bytes as used.
+     *
      * @param byteCount
-     * @throws IOException 
+     * @throws IOException
      */
-    public synchronized void markBytesUsed( int byteCount ) {
+    public synchronized void markBytesUsed(int byteCount) {
         assert byteCount >= 0 : "Cant mark negative byteCount used: " + byteCount;
-        updateWindow( false );
+        updateWindow(false);
         bytesRemaining -= byteCount;
-        if  ( bytesRemaining < 0 )
-        {
+        if (bytesRemaining < 0) {
             // let the remaining byte buffer lack max 15 seconds
             // behind in case it is over used.
-            bytesRemaining = Math.max( bytesRemaining, 
-                -15 * WINDOWS_PER_SECONDS * bytesPerWindow );
-            updateWindow( true );
+            bytesRemaining = Math.max(bytesRemaining,
+                    -15 * WINDOWS_PER_SECONDS * bytesPerWindow);
+            updateWindow(true);
         }
 
-        if ( bytesRemaining < 0 && logger.isErrorEnabled() )
-        {
+        if (bytesRemaining < 0 && logger.isErrorEnabled()) {
             logger.error(
-                    '[' +controllerName + "] !Mark bytes used " + byteCount
-                + " - remaining: " + bytesRemaining + '.');
-        }
-        else /*if ( logger.isDebugEnabled() )
+                    '[' + controllerName + "] !Mark bytes used " + byteCount
+                            + " - remaining: " + bytesRemaining + '.');
+        } else /*if ( logger.isDebugEnabled() )
         {
             logger.debug(
                     '[' +controllerName + "] !Mark bytes used " + byteCount
                 + " - remaining: " + bytesRemaining + '.');
         }*/
-        
-        if ( shortTransferAvg != null )
-        {
-            shortTransferAvg.addValue( byteCount );
-        }
-        if ( longTransferAvg != null )
-        {
-            longTransferAvg.addValue( byteCount );
+
+            if (shortTransferAvg != null) {
+                shortTransferAvg.addValue(byteCount);
+            }
+        if (longTransferAvg != null) {
+            longTransferAvg.addValue(byteCount);
         }
         // If there is another controller we are chained to, call it.
-        if( nextContollerInChain != null )
-        {
-            nextContollerInChain.markBytesUsed( byteCount );
+        if (nextContollerInChain != null) {
+            nextContollerInChain.markBytesUsed(byteCount);
         }
     }
-    
-    private void updateWindow( boolean blockTillAvailable )
-    {
+
+    private void updateWindow(boolean blockTillAvailable) {
         boolean wasInterrupted = false;
         long elapsedWindowMillis;
         long now;
         int updateTries = 0;
-        while ( true )
-        {
+        while (true) {
             now = System.currentTimeMillis();
             elapsedWindowMillis = now - lastWindowTime;
-            if (elapsedWindowMillis >= MILLIS_PER_WINDOW )
-            {
+            if (elapsedWindowMillis >= MILLIS_PER_WINDOW) {
                 // last window used up too many bytes... 
-                if ( bytesRemaining < 0 )
-                {
+                if (bytesRemaining < 0) {
                     bytesRemaining += bytesPerWindow;
+                } else {
+                    bytesRemaining = bytesPerWindow;
                 }
-                else
-                {
-                    bytesRemaining = bytesPerWindow; 
-                }                
                 lastWindowTime = now;
 //                if ( logger.isDebugEnabled( ) )
 //                {
@@ -278,50 +250,44 @@ public class BandwidthController
 //                        + " - Remaining: " + bytesRemaining + '.');
 //                }
             }
-            if ( !blockTillAvailable || bytesRemaining > 0 )
-            {
+            if (!blockTillAvailable || bytesRemaining > 0) {
                 break;
             }
-            updateTries ++;
-            if ( updateTries > WINDOWS_PER_SECONDS * 2 )
-            {
+            updateTries++;
+            if (updateTries > WINDOWS_PER_SECONDS * 2) {
                 break;
             }
-            try
-            {
-                Thread.sleep( Math.max( 
-                    MILLIS_PER_WINDOW - elapsedWindowMillis, 0 ) );
-            }
-            catch (InterruptedException e)
-            {
+            try {
+                Thread.sleep(Math.max(
+                        MILLIS_PER_WINDOW - elapsedWindowMillis, 0));
+            } catch (InterruptedException e) {
                 wasInterrupted = true;
                 break;
             }
         }
-        if ( wasInterrupted )
-        {//reset interrupted
+        if (wasInterrupted) {//reset interrupted
             Thread.currentThread().interrupt();
         }
     }
 
     /**
      * Returns the name of this BandwidthController.
+     *
      * @return the name.
      */
-    public String getName()
-    {
+    public String getName() {
         return controllerName;
     }
 
     /**
      * Returns a debug string of this BandwidthController.
+     *
      * @return a debug string.
      */
-    public String toDebugString()
-    {
-        return "ThrottleController[Name:" + controllerName + 
-            ",bytesPerWindow:" + bytesPerWindow + ",bytesRemaining:" + bytesRemaining 
-            //+ ",Rate:" + getValue() + ",Avg:" + getAverageValue()
-            ;
+    public String toDebugString() {
+        return "ThrottleController[Name:" + controllerName +
+                ",bytesPerWindow:" + bytesPerWindow + ",bytesRemaining:" + bytesRemaining
+                //+ ",Rate:" + getValue() + ",Avg:" + getAverageValue()
+                ;
     }
 }

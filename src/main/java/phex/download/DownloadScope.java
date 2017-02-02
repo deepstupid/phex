@@ -26,112 +26,105 @@ package phex.download;
  * A DownloadScope represents a area inside a download file.
  * Limited by a start and end offset.
  */
-public class DownloadScope
-{
+public class DownloadScope {
     /**
      * The start offset of the download scope, inclusive.
      * Expected: start <= end
      */
     private long start;
-    
+
     /**
      * The end offset of the download scope, inclusive.
      * Expected: start <= end
      */
     private long end;
-    
+
     /**
      * @param startOffset The start offset of the download scope, inclusive.
-     * @param endOffset The end offset of the download scope, inclusive.
+     * @param endOffset   The end offset of the download scope, inclusive.
      */
-    public DownloadScope( long startOffset, long endOffset )
-    {
-        if ( endOffset < startOffset )
-        {
-            throw new IllegalArgumentException("endOffset < startOffset : " 
-                + startOffset + " " + endOffset );
+    public DownloadScope(long startOffset, long endOffset) {
+        if (endOffset < startOffset) {
+            throw new IllegalArgumentException("endOffset < startOffset : "
+                    + startOffset + " " + endOffset);
         }
         this.start = startOffset;
         this.end = endOffset;
     }
-    
+
     /**
      * Returns the end offset of the download scope, inclusive.
      */
-    public long getEnd()
-    {
+    public long getEnd() {
         return end;
     }
 
     /**
      * Returns the start offset of the download scope, inclusive.
      */
-    public long getStart()
-    {
+    public long getStart() {
         return start;
     }
-    
-    public long getLength()
-    {
-        return end-start + 1;
+
+    public long getLength() {
+        return end - start + 1;
     }
 
     /**
      * scope:  |--|    |--|      |--|
      * this: |------|  |----|  |----|
+     *
      * @param scope
      * @return
      */
-    public boolean contains( DownloadScope scope )
-    {
+    public boolean contains(DownloadScope scope) {
         return start <= scope.start && end >= scope.end;
     }
-    
+
     /**
      * scope: |--|      |--|
      * this:    |--|       |--|
      * Determines if the given scope is a neighbor before this segment.
-     * A neighbor either directly precedes this segment or precedes and 
-     * overlapps this segment partially.  
+     * A neighbor either directly precedes this segment or precedes and
+     * overlapps this segment partially.
+     *
      * @param scope
      * @return
      */
-    public boolean isNeighborBefore( DownloadScope scope )
-    {
-        return start <= scope.end+1 && start > scope.start;
+    public boolean isNeighborBefore(DownloadScope scope) {
+        return start <= scope.end + 1 && start > scope.start;
     }
-    
+
     /**
      * scope:   |--|      |--|
      * this:  |--|     |--|
      * Determines if the given scope is a neighbor after this segment.
      * A neighbor either directly follows this segment or overlapps and
-     * follows this segment partially.  
+     * follows this segment partially.
+     *
      * @param scope
      * @return
      */
-    public boolean isNeighborAfter( DownloadScope scope )
-    {
-        return end >= scope.start-1 && end < scope.end;
+    public boolean isNeighborAfter(DownloadScope scope) {
+        return end >= scope.start - 1 && end < scope.end;
     }
-    
+
     /**
      * scope:  |---|        |---|
      * this:      |---|  |---|
+     *
      * @param scope
      * @return
      */
-    public boolean isOverlapping( DownloadScope scope )
-    {
+    public boolean isOverlapping(DownloadScope scope) {
         return end >= scope.start && start <= scope.end;
     }
-    
+
     /**
      * @see java.lang.Object#hashCode()
      */
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         final int PRIME = 31;
         int result = 17;
         result = PRIME * result + (int) (end ^ (end >>> 32));
@@ -143,21 +136,19 @@ public class DownloadScope
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals( Object obj )
-    {
-        if ( this == obj ) return true;
-        if ( obj == null ) return false;
-        if ( getClass() != obj.getClass() ) return false;
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (getClass() != obj.getClass()) return false;
         final DownloadScope other = (DownloadScope) obj;
-        if ( end != other.end ) return false;
-        if ( start != other.start ) return false;
+        if (end != other.end) return false;
+        if (start != other.start) return false;
         return true;
     }
 
     @Override
-    public String toString()
-    {
-        return "[DownloadScope: start:" + start + ",end:" + end 
-            + "@" + Integer.toHexString(hashCode()) + "]";
+    public String toString() {
+        return "[DownloadScope: start:" + start + ",end:" + end
+                + "@" + Integer.toHexString(hashCode()) + "]";
     }
 }

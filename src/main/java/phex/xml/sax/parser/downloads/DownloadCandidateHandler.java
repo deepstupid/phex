@@ -33,10 +33,9 @@ import javax.xml.parsers.SAXParser;
 import java.io.CharArrayWriter;
 
 /**
- * 
+ *
  */
-public class DownloadCandidateHandler extends DefaultHandler
-{
+public class DownloadCandidateHandler extends DefaultHandler {
     private final CharArrayWriter text = new CharArrayWriter();
 
     private final SAXParser parser;
@@ -45,9 +44,8 @@ public class DownloadCandidateHandler extends DefaultHandler
 
     private final DefaultHandler parent;
 
-    public DownloadCandidateHandler( DDownloadCandidate downloadCandidate, 
-        DefaultHandler parent, SAXParser parser )
-    {
+    public DownloadCandidateHandler(DDownloadCandidate downloadCandidate,
+                                    DefaultHandler parent, SAXParser parser) {
         this.downloadCandidate = downloadCandidate;
         this.parser = parser;
         this.parent = parent;
@@ -56,106 +54,68 @@ public class DownloadCandidateHandler extends DefaultHandler
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
     @Override
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes ) throws SAXException
-    {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes) throws SAXException {
         text.reset();
         return;
     }
 
     @Override
-    public void endElement( String uri, String localName, String qName )
-        throws SAXException
-    {
-        if ( qName.equals( "guid" ) )
-        {
-            downloadCandidate.setGuid( text.toString() );
-        }
-        else if ( qName.equals( "fileindex" ) )
-        {
-            try
-            {
-                downloadCandidate.setFileIndex( Long.parseLong( text.toString() ) );
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equals("guid")) {
+            downloadCandidate.setGuid(text.toString());
+        } else if (qName.equals("fileindex")) {
+            try {
+                downloadCandidate.setFileIndex(Long.parseLong(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(DownloadCandidateHandler.class, exp, exp);
             }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( DownloadCandidateHandler.class, exp, exp );
+        } else if (qName.equals("last-connect")) {
+            try {
+                downloadCandidate.setLastConnectionTime(Long.parseLong(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(DownloadCandidateHandler.class, exp, exp);
             }
-        }
-        else if ( qName.equals( "last-connect" ) )
-        {
-            try
-            {
-                downloadCandidate.setLastConnectionTime( Long.parseLong( text.toString() ) );
+        } else if (qName.equals("filename")) {
+            downloadCandidate.setFileName(text.toString());
+        } else if (qName.equals("download-uri")) {
+            downloadCandidate.setDownloadUri(text.toString());
+        } else if (qName.equals("resource-urn")) {
+            downloadCandidate.setResourceUrn(text.toString());
+        } else if (qName.equals("remotehost")) {
+            downloadCandidate.setRemoteHost(text.toString());
+        } else if (qName.equals("connectionFailedRepetition")) {
+            try {
+                downloadCandidate.setConnectionFailedRepetition(Integer.parseInt(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(DownloadCandidateHandler.class, exp, exp);
             }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( DownloadCandidateHandler.class, exp, exp );
-            }
-        }
-        else if ( qName.equals( "filename" ) )
-        {
-            downloadCandidate.setFileName( text.toString() );
-        }
-        else if ( qName.equals( "download-uri" ) )
-        {
-            downloadCandidate.setDownloadUri( text.toString() );
-        }
-        else if ( qName.equals( "resource-urn" ) )
-        {
-            downloadCandidate.setResourceUrn( text.toString() );
-        }
-        else if ( qName.equals( "remotehost" ) )
-        {
-            downloadCandidate.setRemoteHost( text.toString() );
-        }
-        else if ( qName.equals( "connectionFailedRepetition" ) )
-        {
-            try
-            {
-                downloadCandidate.setConnectionFailedRepetition( Integer.parseInt( text.toString() ) );
-            }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( DownloadCandidateHandler.class, exp, exp );
-            }
-        }
-        else if ( qName.equals( "vendor" ) )
-        {
-            downloadCandidate.setVendor( text.toString() );
-        }
-        else if ( qName.equals( "isPushNeeded" ) )
-        {
-            downloadCandidate.setPushNeeded( Boolean.getBoolean( text.toString() ) );
-        }
-        else if ( qName.equals( "isThexSupported" ) )
-        {
-            downloadCandidate.setThexSupported( Boolean.getBoolean( text.toString() ) );
-        }
-        else if ( qName.equals( "isChatSupported" ) )
-        {
-            downloadCandidate.setChatSupported( Boolean.getBoolean( text.toString() ) );
-        }
-        else if ( qName.equals( DDownloadCandidate.ELEMENT_NAME ) )
-        {
-            parser.getXMLReader().setContentHandler( parent );
+        } else if (qName.equals("vendor")) {
+            downloadCandidate.setVendor(text.toString());
+        } else if (qName.equals("isPushNeeded")) {
+            downloadCandidate.setPushNeeded(Boolean.getBoolean(text.toString()));
+        } else if (qName.equals("isThexSupported")) {
+            downloadCandidate.setThexSupported(Boolean.getBoolean(text.toString()));
+        } else if (qName.equals("isChatSupported")) {
+            downloadCandidate.setChatSupported(Boolean.getBoolean(text.toString()));
+        } else if (qName.equals(DDownloadCandidate.ELEMENT_NAME)) {
+            parser.getXMLReader().setContentHandler(parent);
         }
     }
 
-    public InputSource resolveEntity( String publicId, String systemId )
-    {
+    public InputSource resolveEntity(String publicId, String systemId) {
         return null;
     }
 
-    public void characters( char[] ch, int start, int length )
-    {
-        text.write( ch, start, length );
+    public void characters(char[] ch, int start, int length) {
+        text.write(ch, start, length);
     }
 }

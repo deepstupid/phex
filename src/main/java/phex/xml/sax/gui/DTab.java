@@ -27,63 +27,53 @@ import org.xml.sax.helpers.AttributesImpl;
 import phex.xml.sax.DElement;
 import phex.xml.sax.PhexXmlSaxWriter;
 
-public class DTab implements DElement
-{
+public class DTab implements DElement {
     public static final String ELEMENT_NAME = "tab";
-    
+
     private boolean hasTabId;
     private int tabId;
-    
+
     private boolean isSetVisible;
     private boolean isVisible;
-    
-    
-    
-    public boolean isSetVisible()
-    {
+
+
+    public boolean isSetVisible() {
         return isSetVisible;
     }
 
-    public boolean isVisible()
-    {
+    public boolean isVisible() {
         return isVisible;
     }
 
-    public void setVisible( boolean isVisible )
-    {
+    public void setVisible(boolean isVisible) {
         isSetVisible = true;
         this.isVisible = isVisible;
     }
 
-    public int getTabId()
-    {
+    public int getTabId() {
         return tabId;
     }
 
-    public void setTabId( int tabId )
-    {
+    public void setTabId(int tabId) {
         hasTabId = true;
         this.tabId = tabId;
     }
 
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
         AttributesImpl attributes = null;
-        if ( hasTabId )
-        {
+        if (hasTabId) {
             attributes = new AttributesImpl();
-            attributes.addAttribute( "", "", "tabID", "CDATA",
-                String.valueOf( tabId ) );
+            attributes.addAttribute("", "", "tabID", "CDATA",
+                    String.valueOf(tabId));
         }
-        writer.startElm( ELEMENT_NAME, attributes );
+        writer.startElm(ELEMENT_NAME, attributes);
 
-        if ( isSetVisible )
-        {
-            writer.startElm( "isVisible", null );
-            writer.elmBol( isVisible );
-            writer.endElm( "isVisible" );
+        if (isSetVisible) {
+            writer.startElm("isVisible", null);
+            writer.elmBol(isVisible);
+            writer.endElm("isVisible");
         }
 
-        writer.endElm( ELEMENT_NAME );
+        writer.endElm(ELEMENT_NAME);
     }
 }

@@ -34,46 +34,41 @@ import phex.upload.response.UploadResponse;
 
 import java.io.IOException;
 
-public class ThexUploadHandler extends AbstractUploadHandler
-{
-    public ThexUploadHandler(SharedFilesService sharedFilesService)
-    {
-        super( sharedFilesService );
+public class ThexUploadHandler extends AbstractUploadHandler {
+    public ThexUploadHandler(SharedFilesService sharedFilesService) {
+        super(sharedFilesService);
     }
 
 
-    protected UploadResponse determineFailFastResponse( HTTPRequest httpRequest, 
-        UploadState uploadState, ShareFile requestedFile )
-    {
+    protected UploadResponse determineFailFastResponse(HTTPRequest httpRequest,
+                                                       UploadState uploadState, ShareFile requestedFile) {
         return null;
     }
-    
-    
-    public UploadResponse finalizeUploadResponse( HTTPRequest httpRequest, 
-        UploadState uploadState, ShareFile requestedFile ) 
-        throws IOException
-    {
-        uploadState.setFileName( requestedFile.getFileName() );
+
+
+    public UploadResponse finalizeUploadResponse(HTTPRequest httpRequest,
+                                                 UploadState uploadState, ShareFile requestedFile)
+            throws IOException {
+        uploadState.setFileName(requestedFile.getFileName());
 
         // form ok response...
-        
-        ThexUploadResponse response = new ThexUploadResponse( requestedFile, 
-            sharedFilesService );
-        
-        response.addHttpHeader( new HTTPHeader(HTTPHeaderNames.CONTENT_TYPE,
-            "application/dime"));
-        
-        response.addHttpHeader( new HTTPHeader( HTTPHeaderNames.CONTENT_LENGTH, 
-            String.valueOf(response.remainingBody() ) ) );
+
+        ThexUploadResponse response = new ThexUploadResponse(requestedFile,
+                sharedFilesService);
+
+        response.addHttpHeader(new HTTPHeader(HTTPHeaderNames.CONTENT_TYPE,
+                "application/dime"));
+
+        response.addHttpHeader(new HTTPHeader(HTTPHeaderNames.CONTENT_LENGTH,
+                String.valueOf(response.remainingBody())));
 
         URN sharedFileURN = requestedFile.getURN();
-        if ( sharedFileURN != null )
-        {
-            response.addHttpHeader( new HTTPHeader(
-                GnutellaHeaderNames.X_GNUTELLA_CONTENT_URN, sharedFileURN
-                    .getAsString() ) );
+        if (sharedFileURN != null) {
+            response.addHttpHeader(new HTTPHeader(
+                    GnutellaHeaderNames.X_GNUTELLA_CONTENT_URN, sharedFileURN
+                    .getAsString()));
         }
-                
+
         return response;
     }
 }

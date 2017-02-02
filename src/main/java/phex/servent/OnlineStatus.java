@@ -21,8 +21,7 @@
  */
 package phex.servent;
 
-public enum OnlineStatus
-{
+public enum OnlineStatus {
     /**
      * Indicates we are offline, no network and no transfers.
      */
@@ -49,19 +48,16 @@ public enum OnlineStatus
 
     private final boolean isTransfersOnline;
 
-    OnlineStatus(boolean isNetworkConnected, boolean isTransferConnected)
-    {
+    OnlineStatus(boolean isNetworkConnected, boolean isTransferConnected) {
         this.isNetworkOnline = isNetworkConnected;
         this.isTransfersOnline = isTransferConnected;
     }
 
-    public boolean isNetworkOnline()
-    {
+    public boolean isNetworkOnline() {
         return isNetworkOnline;
     }
 
-    public boolean isTransfersOnline()
-    {
+    public boolean isTransfersOnline() {
         return isTransfersOnline;
     }
 }

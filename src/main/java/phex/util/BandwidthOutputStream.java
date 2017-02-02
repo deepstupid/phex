@@ -30,15 +30,13 @@ import java.io.OutputStream;
  *
  *
  */
-public class BandwidthOutputStream extends OutputStream
-{
+public class BandwidthOutputStream extends OutputStream {
     private final OutputStream outStream;
 
     private BandwidthController bandwidthController;
 
     public BandwidthOutputStream(OutputStream outStream,
-        BandwidthController aBandwidthController)
-    {
+                                 BandwidthController aBandwidthController) {
         this.outStream = outStream;
         bandwidthController = aBandwidthController;
     }
@@ -46,41 +44,34 @@ public class BandwidthOutputStream extends OutputStream
     /**
      * @param bandwidthController The bandwidthController to set.
      */
-    public void setBandwidthController(BandwidthController bandwidthController)
-    {
+    public void setBandwidthController(BandwidthController bandwidthController) {
         this.bandwidthController = bandwidthController;
     }
-    
-    public void write(int b) throws IOException
-    {
+
+    public void write(int b) throws IOException {
         // this call will always return at least 1 directly or after blocking.
-        bandwidthController.getAvailableByteCount( 1, true, true );
+        bandwidthController.getAvailableByteCount(1, true, true);
         outStream.write(b);
     }
-    
-    public void write( byte[] b ) throws IOException
-    {
-        this.write( b, 0, b.length );        
+
+    public void write(byte[] b) throws IOException {
+        this.write(b, 0, b.length);
     }
 
-    public void write(byte[] b, int off, int len) throws IOException
-    {
-        while (len > 0)
-        {
-            int available = bandwidthController.getAvailableByteCount( len, true, true );
+    public void write(byte[] b, int off, int len) throws IOException {
+        while (len > 0) {
+            int available = bandwidthController.getAvailableByteCount(len, true, true);
             outStream.write(b, off, available);
             len -= available;
             off += available;
         }
     }
 
-    public void flush() throws IOException
-    {
+    public void flush() throws IOException {
         outStream.flush();
     }
 
-    public void close() throws IOException
-    {
+    public void close() throws IOException {
         outStream.flush();
     }
 }

@@ -25,7 +25,6 @@ package phex.xml.sax.rules;
 import phex.rules.condition.Condition;
 import phex.xml.sax.DElement;
 
-public interface DCondition extends DElement
-{
-    public Condition createCondition( );
+public interface DCondition extends DElement {
+    public Condition createCondition();
 }

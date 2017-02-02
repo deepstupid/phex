@@ -27,64 +27,56 @@ import phex.msg.GUID;
 import phex.msg.QueryFactory;
 import phex.servent.Servent;
 
-public class BackgroundSearchContainer extends SearchContainer
-{
-    public BackgroundSearchContainer( QueryFactory queryFactory, 
-        Servent servent )
-    {
-        super( queryFactory, servent );
+public class BackgroundSearchContainer extends SearchContainer {
+    public BackgroundSearchContainer(QueryFactory queryFactory,
+                                     Servent servent) {
+        super(queryFactory, servent);
     }
 
     /**
      * Method is unsupported.
      */
     @Override
-    public synchronized Search createSearch( String queryStr )
-    {
-        throw new UnsupportedOperationException( );
+    public synchronized Search createSearch(String queryStr) {
+        throw new UnsupportedOperationException();
     }
-    
+
     /**
      * Method is unsupported.
      */
     @Override
-    public synchronized Search createWhatsNewSearch( )
-    {
-        throw new UnsupportedOperationException( );
+    public synchronized Search createWhatsNewSearch() {
+        throw new UnsupportedOperationException();
     }
-    
+
     /**
      * Method is unsupported.
      */
     @Override
     public synchronized BrowseHostResults createBrowseHostSearch(
-        DestAddress hostAddress, GUID hostGUID )
-    {
-        BrowseHostResults search = new BrowseHostResults( servent, hostAddress, hostGUID );
+            DestAddress hostAddress, GUID hostGUID) {
+        BrowseHostResults search = new BrowseHostResults(servent, hostAddress, hostGUID);
         int idx = searchList.size();
-        insertToSearchList( search, idx );
+        insertToSearchList(search, idx);
         return search;
     }
-    
 
-    public synchronized Search createSearch( String queryStr, URN queryURN )
-    {
-        KeywordSearch search = new KeywordSearch( queryStr, queryURN, 
-            queryFactory, servent );
+
+    public synchronized Search createSearch(String queryStr, URN queryURN) {
+        KeywordSearch search = new KeywordSearch(queryStr, queryURN,
+                queryFactory, servent);
         int idx = searchList.size();
-        insertToSearchList( search, idx );
+        insertToSearchList(search, idx);
         return search;
     }
-    
+
     //@EventTopicSubscriber(topic=PhexEventTopics.Search_Data)
-    public void onSearchDataEvent( String topic, SearchDataEvent event )
-    {
-        if ( event.getType() == SearchDataEvent.SEARCH_STOPED )
-        {
+    public void onSearchDataEvent(String topic, SearchDataEvent event) {
+        if (event.getType() == SearchDataEvent.SEARCH_STOPED) {
             // the source not be a background search.. we try to remove
             // it anyway...
             Search source = (Search) event.getSource();
-            removeSearch( source );
+            removeSearch(source);
         }
     }
 }

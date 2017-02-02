@@ -25,17 +25,14 @@ import java.util.*;
 /*
  * Make the properties get written out in order
  */
-public class SortedProperties extends Properties
-{
-    public SortedProperties()
-    {
+public class SortedProperties extends Properties {
+    public SortedProperties() {
         super();
     }
 
-    public Enumeration keys()
-    {
+    public Enumeration keys() {
         ArrayList<String> myList = new ArrayList<>((Set) super.keySet());
-        Collections.sort( myList );
-        return new IteratorEnumeration( myList.iterator() );
+        Collections.sort(myList);
+        return new IteratorEnumeration(myList.iterator());
     }
 }

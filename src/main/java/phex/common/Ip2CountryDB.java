@@ -35,10 +35,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 
+ *
  */
-public class Ip2CountryDB
-{
+public class Ip2CountryDB {
     private static final Logger logger = LoggerFactory.getLogger(Ip2CountryDB.class);
     /**
      * Indicates if the database is fully loaded or not.
@@ -46,189 +45,158 @@ public class Ip2CountryDB
     private boolean isLoaded;
     private List<IpCountryRange> ipCountryRangeList;
 
-    private Ip2CountryDB()
-    {
+    private Ip2CountryDB() {
         isLoaded = false;
         ipCountryRangeList = new ArrayList<>();
-        
+
         Runnable runnable = this::loadIp2CountryDB;
-        
+
         // TODO block job from execution until Phex initialization is finished.
-        Environment.getInstance().executeOnThreadPool( runnable, "IP2CountryLoader" );
+        Environment.getInstance().executeOnThreadPool(runnable, "IP2CountryLoader");
     }
 
-    static private class Holder
-    {
-       static protected final Ip2CountryDB manager = new Ip2CountryDB();
-    }
-    
     /**
      * Returns the country code if found, empty string if not found, and null
      * if DB has not been loaded yet.
+     *
      * @param address
      * @return the country code or null;
      */
-    public static String getCountryCode( IpAddress address )
-    {
-        return Holder.manager.getCountryCodeInt( address );
+    public static String getCountryCode(IpAddress address) {
+        return Holder.manager.getCountryCodeInt(address);
     }
-    
+
     /**
      * Returns the country code if found, empty string if not found, and null
      * if DB has not been loaded yet.
+     *
      * @param address
      * @return the country code or null;
      */
-    private String getCountryCodeInt( IpAddress address )
-    {
-        if ( !isLoaded )
-        {
+    private String getCountryCodeInt(IpAddress address) {
+        if (!isLoaded) {
             return null;
         }
-        IpCountryRange range = binarySearch( address.getHostIP() );
-        if ( range == null )
-        {
+        IpCountryRange range = binarySearch(address.getHostIP());
+        if (range == null) {
             return "";
         }
         return range.countryCode;
     }
-    
-    private void loadIp2CountryDB()
-    {
+
+    private void loadIp2CountryDB() {
         InputStream inStream = ClassLoader.getSystemResourceAsStream(
-            "phex/resources/ip2country.csv" );
-        if ( inStream == null )
-        {
-            logger.debug( "Default GWebCache file not found." );
+                "phex/resources/ip2country.csv");
+        if (inStream == null) {
+            logger.debug("Default GWebCache file not found.");
             return;
         }
-        BufferedReader reader = new BufferedReader( new InputStreamReader( inStream ) );
-        
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
+
         ArrayList<IpCountryRange> initialList = new ArrayList<>(5000);
         IpCountryRange range;
         String line;
-        try
-        {
+        try {
             line = reader.readLine();
-            while( line != null )
-            {
-                range = new IpCountryRange( line );
-                initialList.add( range );
+            while (line != null) {
+                range = new IpCountryRange(line);
+                initialList.add(range);
                 line = reader.readLine();
             }
-        }
-        catch (IOException exp)
-        {
-            logger.error( exp.toString(), exp );
-        }
-        finally
-        {
+        } catch (IOException exp) {
+            logger.error(exp.toString(), exp);
+        } finally {
             IOUtil.closeQuietly(reader);
         }
         initialList.trimToSize();
-        Collections.sort( initialList );
-        ipCountryRangeList = Collections.unmodifiableList( initialList );
+        Collections.sort(initialList);
+        ipCountryRangeList = Collections.unmodifiableList(initialList);
         isLoaded = true;
     }
-    
-    private IpCountryRange binarySearch( byte[] hostIp )
-    {
+
+    private IpCountryRange binarySearch(byte[] hostIp) {
         int low = 0;
         int high = ipCountryRangeList.size() - 1;
-    
-        while (low <= high)
-        {
+
+        while (low <= high) {
             int mid = (low + high) >> 1;
-            IpCountryRange midVal = ipCountryRangeList.get( mid );
-            int cmp = midVal.compareHostAddress( hostIp );
-            if (cmp < 0)
-            {
+            IpCountryRange midVal = ipCountryRangeList.get(mid);
+            int cmp = midVal.compareHostAddress(hostIp);
+            if (cmp < 0) {
                 low = mid + 1;
-            }
-            else if (cmp > 0)
-            {
+            } else if (cmp > 0) {
                 high = mid - 1;
-            }
-            else
-            {
+            } else {
                 return midVal; // key found
             }
         }
         return null;  // key not found
     }
-    
-    private static class IpCountryRange implements Comparable<IpCountryRange>
-    {
+
+    static private class Holder {
+        static protected final Ip2CountryDB manager = new Ip2CountryDB();
+    }
+
+    private static class IpCountryRange implements Comparable<IpCountryRange> {
         final int from;
         final int to;
         final String countryCode;
-        
-        public IpCountryRange( String line )
-        {
+
+        public IpCountryRange(String line) {
             // "33996344","33996351","GB"
             int startIdx, endIdx;
             startIdx = 0;
-            
-            endIdx = line.indexOf( ',', startIdx );
-            from = Integer.parseInt( line.substring( startIdx, endIdx ) );
-            
+
+            endIdx = line.indexOf(',', startIdx);
+            from = Integer.parseInt(line.substring(startIdx, endIdx));
+
             startIdx = endIdx + 1;
-            endIdx = line.indexOf( ',', startIdx );
-            to = Integer.parseInt( line.substring( startIdx, endIdx ) );
-            
+            endIdx = line.indexOf(',', startIdx);
+            to = Integer.parseInt(line.substring(startIdx, endIdx));
+
             startIdx = endIdx + 1;
-            String subCode = line.substring( startIdx );
+            String subCode = line.substring(startIdx);
             // take the internal string representation of the country code to 
             // save memory...
             countryCode = subCode.intern();
         }
-        
-        public int compareHostAddress( byte[] hostIp )
-        {
+
+        public int compareHostAddress(byte[] hostIp) {
             long hostIpL;
             hostIpL = IOUtil.unsignedInt2Long(
-                IOUtil.deserializeInt( hostIp, 0));
-            long fromIpL = IOUtil.unsignedInt2Long( from );
+                    IOUtil.deserializeInt(hostIp, 0));
+            long fromIpL = IOUtil.unsignedInt2Long(from);
             long cmp = hostIpL - fromIpL;
-            if ( cmp == 0 )
-            {
+            if (cmp == 0) {
                 return 0;
             }
-            if ( cmp < 0 )
-            {// host Ip is lower..
+            if (cmp < 0) {// host Ip is lower..
                 return 1;
             }
-            
+
             // validate to range..
-            long toIpL = IOUtil.unsignedInt2Long( to );
+            long toIpL = IOUtil.unsignedInt2Long(to);
             cmp = hostIpL - toIpL;
-            if ( cmp == 0 || cmp < 0)
-            {// we are between from and to
+            if (cmp == 0 || cmp < 0) {// we are between from and to
                 return 0;
-            }
-            else
-            {// host Ip is higher..
+            } else {// host Ip is higher..
                 return -1;
             }
         }
-        
-        public int compareTo( IpCountryRange range )
-        {
-            if ( range == this )
-            {
+
+        public int compareTo(IpCountryRange range) {
+            if (range == this) {
                 return 0;
-            }            
+            }
 
-            long ip1l = IOUtil.unsignedInt2Long( from );
-            long ip2l = IOUtil.unsignedInt2Long( range.from );
+            long ip1l = IOUtil.unsignedInt2Long(from);
+            long ip2l = IOUtil.unsignedInt2Long(range.from);
 
-            if ( ip1l < ip2l )
-            {
+            if (ip1l < ip2l) {
                 return -1;
             }
             // only if rate and object is equal return 0
-            else
-            {
+            else {
                 return 1;
             }
         }

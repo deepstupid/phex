@@ -30,65 +30,57 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-public class DefaultPresentationManager extends PresentationManager
-{
+public class DefaultPresentationManager extends PresentationManager {
     @Override
-    public SocketFacade createSocket( DestAddress address, int connectTimeout )
-        throws IOException
-    {
+    public SocketFacade createSocket(DestAddress address, int connectTimeout)
+            throws IOException {
         Socket socket = new Socket();
-        socket.connect( new InetSocketAddress( 
-            address.getHostName(), address.getPort() ), connectTimeout );
-        return new DefaultSocketFacade( socket );
+        socket.connect(new InetSocketAddress(
+                address.getHostName(), address.getPort()), connectTimeout);
+        return new DefaultSocketFacade(socket);
     }
 
     /**
      * Creates a host address object from a given address representation.
      * The address representation we expect is hostname:port.
-     * 
+     *
      * @param address a address representation.
      * @return a destination address.
      */
-    public DestAddress createHostAddress( String address, int defaultPort ) 
-        throws MalformedDestAddressException
-    {
+    public DestAddress createHostAddress(String address, int defaultPort)
+            throws MalformedDestAddressException {
         int idx = address.indexOf(':');
-        if ( idx == 0 )
-        {
-            throw new MalformedDestAddressException( "No host name: "
-                + address );
+        if (idx == 0) {
+            throw new MalformedDestAddressException("No host name: "
+                    + address);
         }
         String hostName;
         int port;
-        if ( idx < 0 )
-        {
+        if (idx < 0) {
             hostName = address;
             port = DefaultDestAddress.DEFAULT_PORT;
-        }
-        else
-        {
-            hostName = address.substring( 0, idx );
-            port = AddressUtils.parsePort( address );
-            if ( port < 0 )
-            {
-                throw new MalformedDestAddressException( "Invalid port: " +
-                    address );
+        } else {
+            hostName = address.substring(0, idx);
+            port = AddressUtils.parsePort(address);
+            if (port < 0) {
+                throw new MalformedDestAddressException("Invalid port: " +
+                        address);
             }
         }
-        
-        DestAddress hostAddress = new DefaultDestAddress( hostName, port );
+
+        DestAddress hostAddress = new DefaultDestAddress(hostName, port);
         return hostAddress;
     }
-    
+
     /**
      * Creates a DestAddress object from a given IpAddress and port.
+     *
      * @param ipAddress the IpAddress of the new DestAddress.
-     * @param port the port of the new DestAddress.
+     * @param port      the port of the new DestAddress.
      * @return a destination address.
      */
-    public DestAddress createHostAddress( IpAddress ipAddress, int port )
-    {
-        DestAddress destAddress = new DefaultDestAddress( ipAddress, port );
+    public DestAddress createHostAddress(IpAddress ipAddress, int port) {
+        DestAddress destAddress = new DefaultDestAddress(ipAddress, port);
         return destAddress;
     }
 }

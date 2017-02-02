@@ -25,8 +25,7 @@ package phex.common.format;
 import phex.util.Localizer;
 
 
-public class HostSpeedFormatUtils
-{
+public class HostSpeedFormatUtils {
     public static final int SPEED_MODEM = 56;
     public static final int SPEED_ISDN = 64;
     public static final int SPEED_DualISDN = 128;
@@ -42,33 +41,27 @@ public class HostSpeedFormatUtils
     private static final String SPEED_STRING_T1 = Localizer.getString("HostSpeed_T1");
     private static final String SPEED_STRING_T3 = Localizer.getString("HostSpeed_T3");
     private static final String SPEED_KBITSSEC_POSTFIX = Localizer.getString("HostSpeed_KPerSec_Postfix");
-    
+
     /**
      * Format the host speed in kilo bits / sec
+     *
      * @param speedVal in kilo bits / sec
      * @return the string representation
      */
-    public static String formatHostSpeed( long speedVal )
-    {
-        StringBuffer buf = new StringBuffer( 22 );
-        buf.append( NumberFormatUtils.formatDecimal( speedVal, 0 ) );
-        buf.append( SPEED_KBITSSEC_POSTFIX );
-        buf.append( " (" );
-        if ( speedVal <= SPEED_MODEM )
+    public static String formatHostSpeed(long speedVal) {
+        StringBuffer buf = new StringBuffer(22);
+        buf.append(NumberFormatUtils.formatDecimal(speedVal, 0));
+        buf.append(SPEED_KBITSSEC_POSTFIX);
+        buf.append(" (");
+        if (speedVal <= SPEED_MODEM) {
+            buf.append(SPEED_STRING_MODEM);
+        } else if (speedVal <= SPEED_CableDSL3) {
+            buf.append(SPEED_STRING_DSL);
+        } else if (speedVal <= SPEED_T1) {
+            buf.append(SPEED_STRING_T1);
+        } else //if (speedVal <= Integer.MAX_VALUE)
         {
-            buf.append( SPEED_STRING_MODEM );
-        }
-        else if (speedVal <= SPEED_CableDSL3 )
-        {
-            buf.append( SPEED_STRING_DSL );
-        }
-        else if (speedVal <= SPEED_T1 )
-        {
-            buf.append( SPEED_STRING_T1 );
-        }
-        else //if (speedVal <= Integer.MAX_VALUE)
-        {
-            buf.append( SPEED_STRING_T3 );
+            buf.append(SPEED_STRING_T3);
         }
         buf.append(')');
         return buf.toString();

@@ -28,24 +28,18 @@ import phex.share.ShareFile;
 import java.io.IOException;
 
 
-public class ThexCalculationWorker implements Runnable
-{
+public class ThexCalculationWorker implements Runnable {
     private final ShareFile shareFile;
 
-    public ThexCalculationWorker(ShareFile shareFile)
-    {
+    public ThexCalculationWorker(ShareFile shareFile) {
         this.shareFile = shareFile;
     }
 
-    public void run()
-    {
-        try
-        {
-            TTHashCalcUtils.calculateShareFileThexData( shareFile );
-        }
-        catch ( IOException exp )
-        {
-            NLogger.error( ThexCalculationWorker.class, exp, exp );
+    public void run() {
+        try {
+            TTHashCalcUtils.calculateShareFileThexData(shareFile);
+        } catch (IOException exp) {
+            NLogger.error(ThexCalculationWorker.class, exp, exp);
         }
     }
 }

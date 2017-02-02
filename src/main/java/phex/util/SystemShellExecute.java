@@ -33,109 +33,81 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SystemShellExecute
-{
-    public static void exploreFolder( File dir ) throws IOException
-    {
+public class SystemShellExecute {
+    public static void exploreFolder(File dir) throws IOException {
         String path;
-        try 
-        {
+        try {
             path = dir.getCanonicalPath();
-        } 
-        catch(IOException ioe) 
-        {
+        } catch (IOException ioe) {
             path = dir.getPath();
         }
 
         String command = null;
-        if ( SystemUtils.IS_OS_WINDOWS )
-        {
+        if (SystemUtils.IS_OS_WINDOWS) {
             command = "explorer";
-        }
-        else if ( SystemUtils.IS_OS_MAC_OSX )
-        {
+        } else if (SystemUtils.IS_OS_MAC_OSX) {
             command = "open";
         }
-        if ( command == null )
-        {
+        if (command == null) {
             return;
         }
-        String[] cmdArr = new String[]{ command, path };
-        Runtime.getRuntime().exec( cmdArr );
+        String[] cmdArr = new String[]{command, path};
+        Runtime.getRuntime().exec(cmdArr);
     }
-    
-    public static void launchFile( File file ) throws IOException
-    {
+
+    public static void launchFile(File file) throws IOException {
         String path;
-        try 
-        {
+        try {
             path = file.getCanonicalPath();
-        } 
-        catch(IOException ioe) 
-        {
+        } catch (IOException ioe) {
             path = file.getPath();
         }
 
-        if ( SystemUtils.IS_OS_WINDOWS )
-        {
-            WindowsShellExecute.executeViaShell( path );
+        if (SystemUtils.IS_OS_WINDOWS) {
+            WindowsShellExecute.executeViaShell(path);
             return;
-        }
-        else if ( SystemUtils.IS_OS_MAC_OSX )
-        {
+        } else if (SystemUtils.IS_OS_MAC_OSX) {
             String command = "open";
-            String[] cmdArr = new String[]{ command, path };
-            Runtime.getRuntime().exec( cmdArr );
+            String[] cmdArr = new String[]{command, path};
+            Runtime.getRuntime().exec(cmdArr);
             return;
-        }
-        else
-        {
-            launchOtherOsFile( path );
+        } else {
+            launchOtherOsFile(path);
         }
     }
-    
-    private static void launchOtherOsFile( String filepath )
-        throws IOException
-    {
+
+    private static void launchOtherOsFile(String filepath)
+            throws IOException {
         String commandStr;
-        if ( MediaType.getVideoMediaType().isFilenameOf(filepath) )
-        {
+        if (MediaType.getVideoMediaType().isFilenameOf(filepath)) {
             commandStr = SystemToolsPrefs.OpenVideoCmdOtherOS.get();
-        }
-        else if ( MediaType.getImageMediaType().isFilenameOf(filepath) )
-        {
+        } else if (MediaType.getImageMediaType().isFilenameOf(filepath)) {
             commandStr = SystemToolsPrefs.OpenImageCmdOtherOS.get();
-        }
-        else if ( MediaType.getAudioMediaType().isFilenameOf(filepath) )
-        {
+        } else if (MediaType.getAudioMediaType().isFilenameOf(filepath)) {
             commandStr = SystemToolsPrefs.OpenAudioCmdOtherOS.get();
-        }
-        else
-        {
+        } else {
             commandStr = SystemToolsPrefs.OpenBrowserCmdOtherOS.get();
         }
-        
+
         // Define a pattern which will split on spaces but respect quotes
         Pattern p = Pattern.compile("(\".*?\"|\\S+)", Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher( commandStr );
+        Matcher m = p.matcher(commandStr);
         List tokens = new LinkedList();
-        while ( m.find() )
-        {
-            tokens.add( m.group(1) );
+        while (m.find()) {
+            tokens.add(m.group(1));
         }
-        String[] result = new String[ tokens.size() ];
+        String[] result = new String[tokens.size()];
         tokens.toArray(result);
-        
+
         StringBuffer replacedCmd = new StringBuffer();
-        for( int i = 0; i < result.length; i++ )
-        {
+        for (int i = 0; i < result.length; i++) {
             result[i] = StringUtils.replace(result[i], "%filepath%", filepath, -1);
-            
-            replacedCmd.append( result[i] );
+
+            replacedCmd.append(result[i]);
             replacedCmd.append(' ');
         }
         NLogger.debug(SystemShellExecute.class,
-            "Executing " + replacedCmd );
-        Runtime.getRuntime().exec( result );
+                "Executing " + replacedCmd);
+        Runtime.getRuntime().exec(result);
     }
 }

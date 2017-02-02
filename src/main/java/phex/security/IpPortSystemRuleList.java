@@ -22,30 +22,25 @@ package phex.security;
 
 import java.util.HashMap;
 
-public class IpPortSystemRuleList extends IpSystemRuleList
-{
+public class IpPortSystemRuleList extends IpSystemRuleList {
     private final HashMap<IpPortAddress, IpSystemSecurityRule> IpPortMap;
 
-    public IpPortSystemRuleList()
-    {
+    public IpPortSystemRuleList() {
         super();
-        this.IpPortMap = new HashMap<IpPortAddress, IpSystemSecurityRule>(); 
+        this.IpPortMap = new HashMap<IpPortAddress, IpSystemSecurityRule>();
     }
 
-    public void add(IpPortAddress key, IpSystemSecurityRule value)
-    {
+    public void add(IpPortAddress key, IpSystemSecurityRule value) {
         if (!this.IpPortMap.containsKey(key))
             this.IpPortMap.put(key, value);
         this.add(value);
     }
 
-    public void removeAll()
-    {
+    public void removeAll() {
         this.IpPortMap.clear();
     }
-    
-    public boolean containsRuleAndPort(IpCidrPair key1, IpPortAddress key2)
-    {       
+
+    public boolean containsRuleAndPort(IpCidrPair key1, IpPortAddress key2) {
         return (this.contains(key1) && this.IpPortMap.containsKey(key2));
     }
 }

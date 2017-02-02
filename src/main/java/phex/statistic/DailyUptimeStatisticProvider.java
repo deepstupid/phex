@@ -28,98 +28,101 @@ import phex.prefs.core.StatisticPrefs;
 /**
  * The class provides the avg. daily uptime calculation required for Limewires
  * GGEP Pong extension.
- * To follow the same calculation Limewire uses the calculation is mostly based 
- * of Limewire code. 
+ * To follow the same calculation Limewire uses the calculation is mostly based
+ * of Limewire code.
  */
-public class DailyUptimeStatisticProvider implements StatisticProvider
-{
-    /** The number of seconds in a day. */
-    private static final int SECONDS_PER_DAY=24*60*60;
-    /** Controls how much past is remembered in calculateFractionalUptime.
-     *  Default: 7 days, which doesn't quite mean what you might think
-     *  see calculateFractionalUptime. */
-    private static final int WINDOW_MILLISECONDS=7*SECONDS_PER_DAY*1000;
-    
-    /** The time this was initialized. */
+public class DailyUptimeStatisticProvider implements StatisticProvider {
+    /**
+     * The number of seconds in a day.
+     */
+    private static final int SECONDS_PER_DAY = 24 * 60 * 60;
+    /**
+     * Controls how much past is remembered in calculateFractionalUptime.
+     * Default: 7 days, which doesn't quite mean what you might think
+     * see calculateFractionalUptime.
+     */
+    private static final int WINDOW_MILLISECONDS = 7 * SECONDS_PER_DAY * 1000;
+
+    /**
+     * The time this was initialized.
+     */
     private long startTime;
-    
-    public DailyUptimeStatisticProvider()
-    {
+
+    public DailyUptimeStatisticProvider() {
         startUptimeMeasurement();
     }
-    
-    private void startUptimeMeasurement()
-    {
+
+    private void startUptimeMeasurement() {
         startTime = System.currentTimeMillis();
     }
-    
-    
+
+
     /**
      * Returns the current value this provider presents.
      * The return value can be null in case no value is provided.
+     *
      * @return the current value or null.
      */
     @SuppressWarnings("boxing")
-    public Object getValue()
-    {
+    public Object getValue() {
         return calculateDailyUptime();
     }
 
     /**
      * Returns the avarage value this provider presents.
      * The return value can be null in case no value is provided.
+     *
      * @return the avarage value or null.
      */
-    public Object getAverageValue()
-    {
+    public Object getAverageValue() {
         return null;
     }
 
     /**
      * Returns the max value this provider presents.
      * The return value can be null in case no value is provided.
+     *
      * @return the max value or null.
      */
-    public Object getMaxValue()
-    {
+    public Object getMaxValue() {
         return null;
     }
-    
+
     /**
      * Returns the presentation string that should be displayed for the corresponding
      * value.
+     *
      * @param value the value returned from getValue(), getAverageValue() or
-     * getMaxValue()
+     *              getMaxValue()
      * @return the statistic presentation string.
      */
-    public String toStatisticString( Object value )
-    {
+    public String toStatisticString(Object value) {
         return TimeFormatUtils.formatSignificantElapsedTime(
-            ((Integer)value).intValue() );
+                ((Integer) value).intValue());
     }
 
 
     /**
      * Calculates the average number of seconds this host runs per day, i.e.,
      * calculateFractionRunning*24*60*60.
+     *
      * @return uptime in seconds/day.
      * @see #calculateFractionalUptime()
      */
-    private int calculateDailyUptime()
-    {
+    private int calculateDailyUptime() {
         //System.out.println(calculateFractionalUptime()*(float)SECONDS_PER_DAY);
-        return (int)(calculateFractionalUptime() * SECONDS_PER_DAY);
+        return (int) (calculateFractionalUptime() * SECONDS_PER_DAY);
     }
 
-    /** 
+    /**
      * Calculates the fraction of time this is running, a unitless quantity
      * between zero and 1.  Implemented using an exponential moving average
      * (EMA) that discounts the past.  Does not update the FRACTION_RUNNING
      * property; that should only be done once, on shutdown
-     * @see #calculateDailyUptime()  
+     *
+     * @see #calculateDailyUptime()
      */
-    private float calculateFractionalUptime()
-    { 
+    private float calculateFractionalUptime() {
         //Let
         //     P = the last value returned by calculateFractionRunning stored
         //         in the SettingsMangager
@@ -140,26 +143,25 @@ public class DailyUptimeStatisticProvider implements StatisticProvider
         //days ago contributes 1/W * ((W-1)/W)^i part of the average.  The
         //default value of W (7 days) means, for example, that the past 9 days
         //account for 75% of the calculation.
-        
-        final float W=WINDOW_MILLISECONDS;
+
+        final float W = WINDOW_MILLISECONDS;
         float T = Math.min(W, System.currentTimeMillis() -
-            StatisticPrefs.LastShutdownTime.get().longValue() );
-        float t = Math.min(W, System.currentTimeMillis() - startTime );
+                StatisticPrefs.LastShutdownTime.get().longValue());
+        float t = Math.min(W, System.currentTimeMillis() - startTime);
         float P = StatisticPrefs.FractionalUptime.get().floatValue();
-        
+
         //Occasionally clocks can go backwards, e.g., if user adjusts them or
         //from daylight savings time.  In this case, ignore the current session
         //and just return P.
-        if (t<0 || T<0 || t>T)
+        if (t < 0 || T < 0 || t > T)
             return P;
-        return t/W + (W-T)/W*P;
+        return t / W + (W - T) / W * P;
     }
 
-    public void shutdown()
-    {
+    public void shutdown() {
         //Order matters, as calculateFractionalUptime() depends on the
         //LAST_SHUTDOWN_TIME property.
-        StatisticPrefs.FractionalUptime.set( Float.valueOf( calculateFractionalUptime() ) );
-        StatisticPrefs.LastShutdownTime.set( Long.valueOf( System.currentTimeMillis() ) );
+        StatisticPrefs.FractionalUptime.set(Float.valueOf(calculateFractionalUptime()));
+        StatisticPrefs.LastShutdownTime.set(Long.valueOf(System.currentTimeMillis()));
     }
 }

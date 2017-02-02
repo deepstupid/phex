@@ -28,205 +28,164 @@ import java.util.Random;
 import java.util.Set;
 
 
-public final class PreferencesFactory
-{
-    public static Setting<String> createStringSetting( String name, 
-        String defaultValue, Preferences preferences )
-    {
-        String value = preferences.getLoadedProperty( name );
-        if ( value == null )
-        {
+public final class PreferencesFactory {
+    public static Setting<String> createStringSetting(String name,
+                                                      String defaultValue, Preferences preferences) {
+        String value = preferences.getLoadedProperty(name);
+        if (value == null) {
             value = defaultValue;
         }
-        Setting<String> setting = new Setting<String>( name, value, defaultValue, preferences );
-        preferences.registerSetting( name, setting );
+        Setting<String> setting = new Setting<String>(name, value, defaultValue, preferences);
+        preferences.registerSetting(name, setting);
         return setting;
     }
-    
-    public static Setting<Boolean> createBoolSetting( String name, 
-        boolean defaultValue, Preferences preferences )
-    {
-        Boolean defaultBool = Boolean.valueOf( defaultValue );
-        
-        String value = preferences.getLoadedProperty( name );
+
+    public static Setting<Boolean> createBoolSetting(String name,
+                                                     boolean defaultValue, Preferences preferences) {
+        Boolean defaultBool = Boolean.valueOf(defaultValue);
+
+        String value = preferences.getLoadedProperty(name);
         Boolean boolValue;
-        if ( value == null )
-        {
+        if (value == null) {
             boolValue = defaultBool;
-        }
-        else if ( value.equals( "true" ) )
-        {
+        } else if (value.equals("true")) {
             boolValue = Boolean.TRUE;
-        }
-        else if ( value.equals( "false" ) )
-        {
+        } else if (value.equals("false")) {
             boolValue = Boolean.FALSE;
-        }
-        else
-        {
+        } else {
             boolValue = defaultBool;
         }
-        Setting<Boolean> setting = new Setting<Boolean>( name, boolValue, defaultBool, preferences );
-        preferences.registerSetting( name, setting );
+        Setting<Boolean> setting = new Setting<Boolean>(name, boolValue, defaultBool, preferences);
+        preferences.registerSetting(name, setting);
         return setting;
     }
-    
-    public static Setting<Float> createFloatSetting( String name, 
-        float defaultValue, Preferences preferences )
-    {
-        Float defaultFloat = Float.valueOf( defaultValue );
-        
-        String value = preferences.getLoadedProperty( name );
+
+    public static Setting<Float> createFloatSetting(String name,
+                                                    float defaultValue, Preferences preferences) {
+        Float defaultFloat = Float.valueOf(defaultValue);
+
+        String value = preferences.getLoadedProperty(name);
         Float floatValue;
         // compared to Integer number parsing, Float is not handling null as
         // NumberFormatException.
-        if ( StringUtils.isEmpty( value ) )
-        {
+        if (StringUtils.isEmpty(value)) {
             floatValue = defaultFloat;
-        }
-        else
-        {
-            try
-            {
-                floatValue = Float.valueOf( value );
-            }
-            catch ( NumberFormatException exp )
-            {
+        } else {
+            try {
+                floatValue = Float.valueOf(value);
+            } catch (NumberFormatException exp) {
                 floatValue = defaultFloat;
             }
         }
-        Setting<Float> setting = new Setting<Float>( name, floatValue, defaultFloat, preferences );
-        preferences.registerSetting( name, setting );
+        Setting<Float> setting = new Setting<Float>(name, floatValue, defaultFloat, preferences);
+        preferences.registerSetting(name, setting);
         return setting;
     }
-    
-    public static Setting<Long> createLongSetting( String name, 
-        long defaultValue, Preferences preferences )
-    {
-        Long defaultLong = Long.valueOf( defaultValue );
-        
-        String value = preferences.getLoadedProperty( name );
+
+    public static Setting<Long> createLongSetting(String name,
+                                                  long defaultValue, Preferences preferences) {
+        Long defaultLong = Long.valueOf(defaultValue);
+
+        String value = preferences.getLoadedProperty(name);
         Long longValue;
-        try
-        {
-            longValue = Long.valueOf( value );
-        }
-        catch ( NumberFormatException exp )
-        {
+        try {
+            longValue = Long.valueOf(value);
+        } catch (NumberFormatException exp) {
             longValue = defaultLong;
         }
-        Setting<Long> setting = new Setting<Long>( name, longValue, defaultLong, preferences );
-        preferences.registerSetting( name, setting );
+        Setting<Long> setting = new Setting<Long>(name, longValue, defaultLong, preferences);
+        preferences.registerSetting(name, setting);
         return setting;
     }
-    
-    public static Setting<Integer> createIntSetting( String name, 
-        int defaultValue, Preferences preferences )
-    {
-        Integer defaultInt = Integer.valueOf( defaultValue );
-        
-        String value = preferences.getLoadedProperty( name );
+
+    public static Setting<Integer> createIntSetting(String name,
+                                                    int defaultValue, Preferences preferences) {
+        Integer defaultInt = Integer.valueOf(defaultValue);
+
+        String value = preferences.getLoadedProperty(name);
         Integer intValue;
-        try
-        {
-            intValue = Integer.valueOf( value );
-        }
-        catch ( NumberFormatException exp )
-        {
+        try {
+            intValue = Integer.valueOf(value);
+        } catch (NumberFormatException exp) {
             intValue = defaultInt;
         }
-        Setting<Integer> setting = new Setting<Integer>( name, intValue, defaultInt, preferences );
-        preferences.registerSetting( name, setting );
+        Setting<Integer> setting = new Setting<Integer>(name, intValue, defaultInt, preferences);
+        preferences.registerSetting(name, setting);
         return setting;
     }
-    
-    public static RangeSetting<Integer> createIntRangeSetting( String name, 
-        int defaultValue, int minValue, int maxValue, Preferences preferences )
-    {
-        Integer defaultInt = Integer.valueOf( defaultValue );
-        
-        String value = preferences.getLoadedProperty( name );
+
+    public static RangeSetting<Integer> createIntRangeSetting(String name,
+                                                              int defaultValue, int minValue, int maxValue, Preferences preferences) {
+        Integer defaultInt = Integer.valueOf(defaultValue);
+
+        String value = preferences.getLoadedProperty(name);
         Integer intValue;
-        try
-        {
-            intValue = Integer.valueOf( value );
-        }
-        catch ( NumberFormatException exp )
-        {
+        try {
+            intValue = Integer.valueOf(value);
+        } catch (NumberFormatException exp) {
             intValue = defaultInt;
         }
-        RangeSetting<Integer> setting = new RangeSetting<Integer>( name, intValue, defaultInt, 
-            Integer.valueOf( minValue ), Integer.valueOf( maxValue ), preferences );
-        preferences.registerSetting( name, setting );
+        RangeSetting<Integer> setting = new RangeSetting<Integer>(name, intValue, defaultInt,
+                Integer.valueOf(minValue), Integer.valueOf(maxValue), preferences);
+        preferences.registerSetting(name, setting);
         return setting;
     }
-    
-    public static Setting<Short> createShortRangeSetting( String name, 
-        short defaultValue, short minValue, short maxValue, Preferences preferences )
-    {
-        Short defaultShort = Short.valueOf( defaultValue );
-        
-        String value = preferences.getLoadedProperty( name );
+
+    public static Setting<Short> createShortRangeSetting(String name,
+                                                         short defaultValue, short minValue, short maxValue, Preferences preferences) {
+        Short defaultShort = Short.valueOf(defaultValue);
+
+        String value = preferences.getLoadedProperty(name);
         Short shortValue;
-        try
-        {
-            shortValue = Short.valueOf( value );
-        }
-        catch ( NumberFormatException exp )
-        {
+        try {
+            shortValue = Short.valueOf(value);
+        } catch (NumberFormatException exp) {
             shortValue = defaultShort;
         }
-        RangeSetting<Short> setting = new RangeSetting<Short>( name, shortValue, defaultShort, 
-            Short.valueOf( minValue ), Short.valueOf( maxValue ), preferences );
-        preferences.registerSetting( name, setting );
+        RangeSetting<Short> setting = new RangeSetting<Short>(name, shortValue, defaultShort,
+                Short.valueOf(minValue), Short.valueOf(maxValue), preferences);
+        preferences.registerSetting(name, setting);
         return setting;
     }
-    
-    public static Setting<Set<String>> createSetSetting( String name, 
-        Preferences preferences )
-    {
-        Set<String> values = PreferencesCodec.deserializeSet( name, preferences );        
-        Setting<Set<String>> setting = new Setting<Set<String>>( name, values, 
-            null, preferences );
-        preferences.registerSetting( name, setting );
+
+    public static Setting<Set<String>> createSetSetting(String name,
+                                                        Preferences preferences) {
+        Set<String> values = PreferencesCodec.deserializeSet(name, preferences);
+        Setting<Set<String>> setting = new Setting<Set<String>>(name, values,
+                null, preferences);
+        preferences.registerSetting(name, setting);
         return setting;
     }
-    
-    public static Setting<List<String>> createListSetting( String name, 
-        Preferences preferences )
-    {
-        List<String> values = PreferencesCodec.deserializeList( name, preferences );        
-        Setting<List<String>> setting = new Setting<List<String>>( name, values, 
-            null, preferences );
-        preferences.registerSetting( name, setting );
+
+    public static Setting<List<String>> createListSetting(String name,
+                                                          Preferences preferences) {
+        List<String> values = PreferencesCodec.deserializeList(name, preferences);
+        Setting<List<String>> setting = new Setting<List<String>>(name, values,
+                null, preferences);
+        preferences.registerSetting(name, setting);
         return setting;
     }
-    
+
     ///// special purpose factory methods
-    public static Setting<Integer> createListeningPortSetting( String name,
-        Preferences preferences )
-    {
-        String value = preferences.getLoadedProperty( name );
+    public static Setting<Integer> createListeningPortSetting(String name,
+                                                              Preferences preferences) {
+        String value = preferences.getLoadedProperty(name);
         int port;
-        try
-        {
-            port = Integer.parseInt( value );
-        }
-        catch ( NumberFormatException exp )
-        {
+        try {
+            port = Integer.parseInt(value);
+        } catch (NumberFormatException exp) {
             port = -1;
         }
-        
+
         // no valid listening port is set yet. Choose a random port from 4000-49150
-        if ( port < 1 || port > 49150 )
-        {
+        if (port < 1 || port > 49150) {
             Random random = new Random(System.currentTimeMillis());
-            port = random.nextInt( 45150 );
+            port = random.nextInt(45150);
             port += 4000;
         }
-        Setting<Integer> setting = new Setting<Integer>( name, Integer.valueOf( port ), 
-            null, preferences );
-        preferences.registerSetting( name, setting );
+        Setting<Integer> setting = new Setting<Integer>(name, Integer.valueOf(port),
+                null, preferences);
+        preferences.registerSetting(name, setting);
         return setting;
     }
     ///// END special purpose factory methods

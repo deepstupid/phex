@@ -32,10 +32,9 @@ import phex.xml.sax.rules.*;
 import javax.xml.parsers.SAXParser;
 import java.io.CharArrayWriter;
 
-public class NotConditionHandler extends DefaultHandler
-{
+public class NotConditionHandler extends DefaultHandler {
     public static final String ELEMENT_NAME = DNotCondition.ELEMENT_NAME;
-    
+
     private final CharArrayWriter text = new CharArrayWriter();
 
     private final SAXParser parser;
@@ -44,9 +43,8 @@ public class NotConditionHandler extends DefaultHandler
 
     private final DefaultHandler parent;
 
-    public NotConditionHandler( DNotCondition notCondition,
-        Attributes attributes, DefaultHandler parent, SAXParser parser )
-    {
+    public NotConditionHandler(DNotCondition notCondition,
+                               Attributes attributes, DefaultHandler parent, SAXParser parser) {
         this.notCondition = notCondition;
         this.parser = parser;
         this.parent = parent;
@@ -55,93 +53,75 @@ public class NotConditionHandler extends DefaultHandler
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes ) throws SAXException
-    {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes) throws SAXException {
         text.reset();
-        if ( qName.equals( DAndConcatCondition.ELEMENT_NAME ) )
-        {
+        if (qName.equals(DAndConcatCondition.ELEMENT_NAME)) {
             DAndConcatCondition condition = new DAndConcatCondition();
-            notCondition.setDCondition( condition );
+            notCondition.setDCondition(condition);
 
             AndConcatConditionHandler handler = new AndConcatConditionHandler(
-                condition, attributes, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( DNotCondition.ELEMENT_NAME ) )
-        {
+                    condition, attributes, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(DNotCondition.ELEMENT_NAME)) {
             DNotCondition condition = new DNotCondition();
-            notCondition.setDCondition( condition );
+            notCondition.setDCondition(condition);
 
-            NotConditionHandler handler = new NotConditionHandler( condition,
-                attributes, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( DFilenameCondition.ELEMENT_NAME ) )
-        {
+            NotConditionHandler handler = new NotConditionHandler(condition,
+                    attributes, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(DFilenameCondition.ELEMENT_NAME)) {
             DFilenameCondition condition = new DFilenameCondition();
-            notCondition.setDCondition( condition );
+            notCondition.setDCondition(condition);
 
             FilenameConditionHandler handler = new FilenameConditionHandler(
-                condition, attributes, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( DFileSizeCondition.ELEMENT_NAME ) )
-        {
+                    condition, attributes, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(DFileSizeCondition.ELEMENT_NAME)) {
             DFileSizeCondition condition = new DFileSizeCondition();
-            notCondition.setDCondition( condition );
+            notCondition.setDCondition(condition);
 
             FileSizeConditionHandler handler = new FileSizeConditionHandler(
-                condition, attributes, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( DMediaTypeCondition.ELEMENT_NAME ) )
-        {
+                    condition, attributes, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(DMediaTypeCondition.ELEMENT_NAME)) {
             DMediaTypeCondition condition = new DMediaTypeCondition();
-            notCondition.setDCondition( condition );
+            notCondition.setDCondition(condition);
 
             MediaTypeConditionHandler handler = new MediaTypeConditionHandler(
-                condition, attributes, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( DFileUrnCondition.ELEMENT_NAME ) )
-        {
+                    condition, attributes, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(DFileUrnCondition.ELEMENT_NAME)) {
             DFileUrnCondition condition = new DFileUrnCondition();
-            notCondition.setDCondition( condition );
+            notCondition.setDCondition(condition);
 
             FileUrnConditionHandler handler = new FileUrnConditionHandler(
-                condition, attributes, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else
-        {
-          NLogger.error( NotConditionHandler.class, "Missing qName: " + qName );
+                    condition, attributes, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else {
+            NLogger.error(NotConditionHandler.class, "Missing qName: " + qName);
         }
         return;
     }
 
-    public void endElement( String uri, String localName, String qName )
-        throws SAXException
-    {
-        if ( qName.equals( ELEMENT_NAME ) )
-        {
-            parser.getXMLReader().setContentHandler( parent );
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equals(ELEMENT_NAME)) {
+            parser.getXMLReader().setContentHandler(parent);
         }
     }
 
-    public InputSource resolveEntity( String publicId, String systemId )
-    {
+    public InputSource resolveEntity(String publicId, String systemId) {
         return null;
     }
 
-    public void characters( char[] ch, int start, int length )
-    {
-        text.write( ch, start, length );
+    public void characters(char[] ch, int start, int length) {
+        text.write(ch, start, length);
     }
 }

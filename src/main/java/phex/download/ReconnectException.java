@@ -24,10 +24,8 @@ import java.io.IOException;
  * Exception is thrown to indicate a reconnect is requried to start/continue
  * download.
  */
-public class ReconnectException extends IOException
-{
-    public ReconnectException()
-    {
+public class ReconnectException extends IOException {
+    public ReconnectException() {
         super();
     }
 }

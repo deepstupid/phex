@@ -27,31 +27,27 @@ import phex.io.buffer.ByteBuffer;
 /**
  * A Gnutella network message.
  */
-public abstract class Message
-{
+public abstract class Message {
+    private final MsgHeader header;
     private boolean isUdpMsg;
     private long creationTime;
-    private final MsgHeader header;
 
-    protected Message( MsgHeader header )
-    {
+    protected Message(MsgHeader header) {
         this.header = header;
         creationTime = System.currentTimeMillis();
     }
-    
+
     /**
      * @return the isUdpMsg
      */
-    public boolean isUdpMsg()
-    {
+    public boolean isUdpMsg() {
         return isUdpMsg;
     }
 
     /**
      * @param isUdpMsg the isUdpMsg to set
      */
-    public void setUdpMsg(boolean isUdpMsg)
-    {
+    public void setUdpMsg(boolean isUdpMsg) {
         this.isUdpMsg = isUdpMsg;
     }
 
@@ -59,34 +55,31 @@ public abstract class Message
      * Returns this message's header.
      *
      * @return the MsgHeader associated with this message
-     */    
-    public MsgHeader getHeader()
-    {
+     */
+    public MsgHeader getHeader() {
         return header;
     }
 
-    public long getCreationTime( )
-    {
+    public long getCreationTime() {
         return creationTime;
     }
 
     /**
      * This is a dirty workaround for the static myMsgInit of MsgManager
      */
-    public void setCreationTime( long time )
-    {
+    public void setCreationTime(long time) {
         creationTime = time;
     }
 
-    public ByteBuffer createHeaderBuffer()
-    {
+    public ByteBuffer createHeaderBuffer() {
         return header.createHeaderBuffer();
     }
-    
+
     /**
-     * Creates a ByteBuffer containing this message 
+     * Creates a ByteBuffer containing this message
      * body content, without its header.<br>
      * To get the header use createHeaderBuffer()
+     *
      * @return the ByteBuffer of this message.
      * @see #createHeaderBuffer()
      */

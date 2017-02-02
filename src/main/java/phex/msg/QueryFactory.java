@@ -26,66 +26,59 @@ import phex.common.address.DestAddress;
 import phex.prefs.core.MessagePrefs;
 import phex.servent.Servent;
 
-public class QueryFactory
-{
-    private static final String WHAT_IS_NEW_QUERY_STRING = "WhatIsNewXOXO";
-    
+public class QueryFactory {
     /**
      * For outgoing queries, specifies whether we want to receive
      * Limewire-style XML metadata results.  For more info, see MsgQuery.java
      */
     public static final boolean IS_PHEX_CAPABLE_OF_XML_RESULTS = false;
-    
+    private static final String WHAT_IS_NEW_QUERY_STRING = "WhatIsNewXOXO";
     private final Servent servent;
-    
-    public QueryFactory( Servent servent )
-    {
+
+    public QueryFactory(Servent servent) {
         this.servent = servent;
     }
-    
-    public QueryMsg createOOBKeywordQuery( String searchString, URN searchURN )
-    {
+
+    public QueryMsg createOOBKeywordQuery(String searchString, URN searchURN) {
         GUID guid = new GUID();
         DestAddress localAddress = servent.getLocalAddress();
-        GUID.applyOOBQueryMarkings( guid, localAddress.getIpAddress(), localAddress.getPort() );
-        
+        GUID.applyOOBQueryMarkings(guid, localAddress.getIpAddress(), localAddress.getPort());
+
         return new QueryMsg(
-            guid,
-            MessagePrefs.TTL.get().byteValue(),
-            searchString, searchURN, 
-            IS_PHEX_CAPABLE_OF_XML_RESULTS,
-            servent.isFirewalled(),
-            true,
-            QueryMsg.NO_FEATURE_QUERY_SELECTOR );
+                guid,
+                MessagePrefs.TTL.get().byteValue(),
+                searchString, searchURN,
+                IS_PHEX_CAPABLE_OF_XML_RESULTS,
+                servent.isFirewalled(),
+                true,
+                QueryMsg.NO_FEATURE_QUERY_SELECTOR);
     }
-    
+
     /**
      * Creates outgoing keyword query.
      */
-    public QueryMsg createKeywordQuery( String searchString, URN searchURN )
-    {
+    public QueryMsg createKeywordQuery(String searchString, URN searchURN) {
         return new QueryMsg(
-            new GUID(),
-            MessagePrefs.TTL.get().byteValue(),
-            searchString, searchURN, 
-            IS_PHEX_CAPABLE_OF_XML_RESULTS,
-            servent.isFirewalled(),
-            false,
-            QueryMsg.NO_FEATURE_QUERY_SELECTOR );
+                new GUID(),
+                MessagePrefs.TTL.get().byteValue(),
+                searchString, searchURN,
+                IS_PHEX_CAPABLE_OF_XML_RESULTS,
+                servent.isFirewalled(),
+                false,
+                QueryMsg.NO_FEATURE_QUERY_SELECTOR);
     }
-    
+
     /**
      * Creates a outgoing WhatIsNew query.
      */
-    public QueryMsg createWhatsNewQuery( )
-    {
+    public QueryMsg createWhatsNewQuery() {
         return new QueryMsg(
-            new GUID(),
-            MessagePrefs.TTL.get().byteValue(), 
-            WHAT_IS_NEW_QUERY_STRING, null,
-            IS_PHEX_CAPABLE_OF_XML_RESULTS,
-            servent.isFirewalled(),
-            false,
-            QueryMsg.WHAT_IS_NEW_FEATURE_QUERY_SELECTOR );
+                new GUID(),
+                MessagePrefs.TTL.get().byteValue(),
+                WHAT_IS_NEW_QUERY_STRING, null,
+                IS_PHEX_CAPABLE_OF_XML_RESULTS,
+                servent.isFirewalled(),
+                false,
+                QueryMsg.WHAT_IS_NEW_FEATURE_QUERY_SELECTOR);
     }
 }

@@ -31,47 +31,38 @@ import java.util.Properties;
 /**
  *
  */
-public class VendorCodes
-{
+public class VendorCodes {
     public static final String UNKNOWN = "?";
     final private static HashMap<String, String> vendorNames = new HashMap();
-    
-    public static String getVendorName( String vendorCode )
-    {
-        if ( vendorNames == null )
-        {
+
+    public static String getVendorName(String vendorCode) {
+        if (vendorNames == null) {
             initVendorNames();
         }
-        String name = vendorNames.get( vendorCode );
-        if ( name == null )
-        {
+        String name = vendorNames.get(vendorCode);
+        if (name == null) {
             return vendorCode;
         }
         return name;
     }
-    
-    @SuppressWarnings("unchecked")
-    private static synchronized void initVendorNames()
-    {
 
-        synchronized( vendorNames )
-        {
-            InputStream stream = Localizer.class.getResourceAsStream( "/phex/resources/VendorCodes.properties" );
-            if ( stream == null ) { return; }
+    @SuppressWarnings("unchecked")
+    private static synchronized void initVendorNames() {
+
+        synchronized (vendorNames) {
+            InputStream stream = Localizer.class.getResourceAsStream("/phex/resources/VendorCodes.properties");
+            if (stream == null) {
+                return;
+            }
             // make sure it is buffered
-            stream = new BufferedInputStream( stream );
+            stream = new BufferedInputStream(stream);
             Properties props = new Properties();
-            try
-            {
-                props.load( stream );
-                vendorNames.putAll( (Hashtable)props );
-            }
-            catch (IOException exp)
-            {
-            }
-            finally
-            {
-                IOUtil.closeQuietly( stream );
+            try {
+                props.load(stream);
+                vendorNames.putAll((Hashtable) props);
+            } catch (IOException exp) {
+            } finally {
+                IOUtil.closeQuietly(stream);
             }
             return;
         }

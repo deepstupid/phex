@@ -38,9 +38,8 @@ import java.util.TimerTask;
 /**
  * Responsible for managing caught host and the network neighborhood.
  */
-final public class HostManager extends AbstractLifeCycle
-{
-    private static final Logger logger = LoggerFactory.getLogger( HostManager.class );
+final public class HostManager extends AbstractLifeCycle {
+    private static final Logger logger = LoggerFactory.getLogger(HostManager.class);
     private static final int MAX_PARALLEL_CONNECTION_TRIES = 20;
 
     private final Servent servent;
@@ -49,76 +48,65 @@ final public class HostManager extends AbstractLifeCycle
     private final UdpHostCacheContainer udpHostCacheContainer;
     private final FavoritesContainer favoritesContainer;
 
-    public HostManager( Servent servent, boolean useUdpHostCache )
-    {        
+    public HostManager(Servent servent, boolean useUdpHostCache) {
         this.servent = servent;
-        networkHostsContainer = new NetworkHostsContainer( servent );
-        caughtHostsContainer = new CaughtHostsContainer( servent );
-        if ( useUdpHostCache )
-        {
-            udpHostCacheContainer = new UdpHostCacheContainer( servent );
-        }
-        else
-        {
+        networkHostsContainer = new NetworkHostsContainer(servent);
+        caughtHostsContainer = new CaughtHostsContainer(servent);
+        if (useUdpHostCache) {
+            udpHostCacheContainer = new UdpHostCacheContainer(servent);
+        } else {
             udpHostCacheContainer = null;
         }
-        favoritesContainer = new FavoritesContainer( servent );
-        
+        favoritesContainer = new FavoritesContainer(servent);
+
     }
-    
+
     @Override
-    protected void doStart() throws Exception
-    {
+    protected void doStart() throws Exception {
         networkHostsContainer.start();
-        caughtHostsContainer.setHostFetchingStrategy( 
-            servent.getHostFetchingStrategy() );
-        PingWorker pingWorker = new PingWorker( servent );
+        caughtHostsContainer.setHostFetchingStrategy(
+                servent.getHostFetchingStrategy());
+        PingWorker pingWorker = new PingWorker(servent);
         pingWorker.start();
-        Environment.getInstance().scheduleTimerTask( 
-            new HostCheckTimer(), HostCheckTimer.TIMER_PERIOD,
-            HostCheckTimer.TIMER_PERIOD );
+        Environment.getInstance().scheduleTimerTask(
+                new HostCheckTimer(), HostCheckTimer.TIMER_PERIOD,
+                HostCheckTimer.TIMER_PERIOD);
     }
-    
+
     @Override
-    public void doStop()
-    {
-        if ( udpHostCacheContainer != null )
-        {
+    public void doStop() {
+        if (udpHostCacheContainer != null) {
             udpHostCacheContainer.saveCachesToFile();
         }
         caughtHostsContainer.saveHostsContainer();
         favoritesContainer.saveFavoriteHosts();
     }
 
-    public FavoritesContainer getFavoritesContainer()
-    {
+    public FavoritesContainer getFavoritesContainer() {
         return favoritesContainer;
     }
 
-    public CaughtHostsContainer getCaughtHostsContainer()
-    {
+    public CaughtHostsContainer getCaughtHostsContainer() {
         return caughtHostsContainer;
     }
-    
+
     /**
      * Returns the {@link UdpHostCacheContainer} of this HostManager.
      * Value might be null in case no UDP host cache is used.
+     *
      * @return the host cache container or null.
      */
-    public UdpHostCacheContainer getUhcContainer()
-    {
+    public UdpHostCacheContainer getUhcContainer() {
         return udpHostCacheContainer;
     }
 
     /////////////// START NetworkHostsContainer wrapper methods ///////////////////////
 
-    public NetworkHostsContainer getNetworkHostsContainer()
-    {
+    public NetworkHostsContainer getNetworkHostsContainer() {
         return networkHostsContainer;
     }
 
-    public boolean isShieldedLeafNode()
-    {
+    public boolean isShieldedLeafNode() {
         return networkHostsContainer.isShieldedLeafNode();
     }
 
@@ -126,29 +114,28 @@ final public class HostManager extends AbstractLifeCycle
      * Returns true if this node is currently a ultrapeer, false otherwise.
      * This node is currently a ultrapeer if it is forced to be a ultrapeer or
      * is not shielded and has connections.
+     *
      * @return true if the node is currently a ultrapeer, false otherwise.
      */
-    public boolean isUltrapeer()
-    {
+    public boolean isUltrapeer() {
         return (ConnectionPrefs.AllowToBecomeUP.get() &&
                 ConnectionPrefs.ForceToBeUltrapeer.get())
-            || !isShieldedLeafNode() && networkHostsContainer.getTotalConnectionCount() > 0;
+                || !isShieldedLeafNode() && networkHostsContainer.getTotalConnectionCount() > 0;
     }
 
     /**
      * Indicates if the peer advertises through pongs that it has incoming slots
      * available.
+     *
      * @return true if it will advertise incoming slots. False otherwise.
      */
-    public boolean areIncommingSlotsAdvertised()
-    {
-        if ( networkHostsContainer.isShieldedLeafNode() )
-        {   // when shielded leaf we don't like many incoming request therefore
+    public boolean areIncommingSlotsAdvertised() {
+        if (networkHostsContainer.isShieldedLeafNode()) {   // when shielded leaf we don't like many incoming request therefore
             // we claim to not have any slots available...
             return false;
         }
         return networkHostsContainer.hasUltrapeerSlotsAvailable() ||
-            networkHostsContainer.hasLeafSlotsAvailable();
+                networkHostsContainer.hasLeafSlotsAvailable();
     }
 
 
@@ -158,90 +145,73 @@ final public class HostManager extends AbstractLifeCycle
      *
      * @return true if we are able to switch to Leaf state, false otherwise.
      */
-    public boolean allowDowngradeToLeaf()
-    {
+    public boolean allowDowngradeToLeaf() {
         return !isUltrapeer();
     }
 
-    public void addConnectedHost( Host host )
-    {
-        networkHostsContainer.addConnectedHost( host );
+    public void addConnectedHost(Host host) {
+        networkHostsContainer.addConnectedHost(host);
     }
 
-    public void removeNetworkHosts( Host[] hosts )
-    {
-        networkHostsContainer.removeNetworkHosts( hosts );
+    public void removeNetworkHosts(Host[] hosts) {
+        networkHostsContainer.removeNetworkHosts(hosts);
     }
 
-    public void removeNetworkHost( Host host )
-    {
-        networkHostsContainer.removeNetworkHost( host );
+    public void removeNetworkHost(Host host) {
+        networkHostsContainer.removeNetworkHost(host);
     }
-    
-    public Host[] getLeafConnections()
-    {
+
+    public Host[] getLeafConnections() {
         return networkHostsContainer.getLeafConnections();
     }
 
-    public Host[] getUltrapeerConnections()
-    {
+    public Host[] getUltrapeerConnections() {
         return networkHostsContainer.getUltrapeerConnections();
     }
 
     /////////////// END NetworkHostsContainer wrapper methods ///////////////////////
-    
+
 
     /**
      * Reads host informations from the given PongMsg.
+     *
      * @param pongMsg the PongMsg to catch hosts.
      */
-    public boolean catchHosts( PongMsg pongMsg )
-    {
-        boolean isNew = caughtHostsContainer.catchHosts( pongMsg );
-        if ( udpHostCacheContainer != null )
-        {
-            udpHostCacheContainer.catchHosts( pongMsg );
+    public boolean catchHosts(PongMsg pongMsg) {
+        boolean isNew = caughtHostsContainer.catchHosts(pongMsg);
+        if (udpHostCacheContainer != null) {
+            udpHostCacheContainer.catchHosts(pongMsg);
         }
         return isNew;
     }
 
 
-    
-    
-    private class HostCheckTimer extends TimerTask
-    {
+    private class HostCheckTimer extends TimerTask {
 
-        public static final long TIMER_PERIOD = 200;
+        public static final long TIMER_PERIOD = 1000 * 10;
 
         /**
          * @see java.util.TimerTask#run()
          */
         @Override
-        public void run()
-        {
-            try
-            {
+        public void run() {
+            try {
                 doAutoConnectCheck();
                 networkHostsContainer.periodicallyCheckHosts();
-            }
-            catch ( Throwable th )
-            {
-                logger.error( th.toString(), th );
+            } catch (Throwable th) {
+                logger.error(th.toString(), th);
             }
         }
-        
-        public void doAutoConnectCheck()
-        {
-            if ( !servent.getOnlineStatus().isNetworkOnline() )
-            {
+
+        public void doAutoConnectCheck() {
+            if (!servent.getOnlineStatus().isNetworkOnline()) {
                 return;
             }
 
             int hostCount;
             int requiredHostCount;
 
-            if ( servent.isAbleToBecomeUltrapeer() )
-            {
+            if (servent.isAbleToBecomeUltrapeer()) {
                 // as a ultrapeer I'm primary searching for Ultrapeers only...
                 // to make sure I'm well connected...
                 hostCount = networkHostsContainer.getUltrapeerConnectionCount();
@@ -249,8 +219,7 @@ final public class HostManager extends AbstractLifeCycle
             }
             // we don't support legacy peers anymore ( since 3.0 ) therefore we only
             // handle leaf mode here
-            else
-            {
+            else {
                 // as a leaf I'm primary searching for Ultrapeers only...
                 hostCount = networkHostsContainer.getUltrapeerConnectionCount();
                 requiredHostCount = ConnectionPrefs.Leaf2UpConnections.get();
@@ -259,28 +228,27 @@ final public class HostManager extends AbstractLifeCycle
             // count the number of missing connection tries this is the required count
             // minus the available count. The result is multiplied by four to raise the
             // connection try count.
-            int missingCount = ( requiredHostCount - hostCount ) * 4;
-            
+            int missingCount = (requiredHostCount - hostCount) * 4;
+
             // find out the number of hosts where a connection is currently tried...
-            int allHostCount = networkHostsContainer.getNetworkHostCount( );
+            int allHostCount = networkHostsContainer.getNetworkHostCount();
             int errorHostCount = networkHostsContainer.getNetworkHostCount(
-                HostStatus.ERROR);
+                    HostStatus.ERROR);
             // make sure the value is not negative.
             int totalCount = networkHostsContainer.getTotalConnectionCount();
-            int currentTryCount = Math.max( 0, allHostCount - totalCount - errorHostCount);
-            
+            int currentTryCount = Math.max(0, allHostCount - totalCount - errorHostCount);
+
             // we will never try more then a reasonable parallel tries..
-            int upperLimit = Math.min( MAX_PARALLEL_CONNECTION_TRIES,
+            int upperLimit = Math.min(MAX_PARALLEL_CONNECTION_TRIES,
                     NetworkPrefs.MaxConcurrentConnectAttempts.get()) - currentTryCount;
-            
-            int outConnectCount = Math.min( missingCount-currentTryCount, 
-                upperLimit );
-            if ( outConnectCount > 0 )
-            {
-                logger.debug( "Auto-connect to {} new hosts.", outConnectCount);
-                OutgoingConnectionDispatcher.dispatchConnectToNextHosts( 
-                    outConnectCount, servent );
+
+            int outConnectCount = Math.min(missingCount - currentTryCount,
+                    upperLimit);
+            if (outConnectCount > 0) {
+                logger.debug("Auto-connect to {} new hosts.", outConnectCount);
+                OutgoingConnectionDispatcher.dispatchConnectToNextHosts(
+                        outConnectCount, servent);
             }
-        }    
+        }
     }
 }

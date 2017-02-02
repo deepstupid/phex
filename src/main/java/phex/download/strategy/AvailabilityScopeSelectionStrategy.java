@@ -30,22 +30,18 @@ import phex.download.swarming.SWDownloadFile;
  * This scope selection strategy tries to prefer a scope that has the lowest
  * availability among the download candidates.
  */
-public class AvailabilityScopeSelectionStrategy implements ScopeSelectionStrategy
-{
-    public DownloadScope selectDownloadScope( SWDownloadFile downloadFile,
-        DownloadScopeList wantedScopeList, long preferredSize )
-    {
+public class AvailabilityScopeSelectionStrategy implements ScopeSelectionStrategy {
+    public DownloadScope selectDownloadScope(SWDownloadFile downloadFile,
+                                             DownloadScopeList wantedScopeList, long preferredSize) {
         RatedDownloadScopeList ratedScopeList = downloadFile.getRatedScopeList();
-        ratedScopeList.retainAll( wantedScopeList );
+        ratedScopeList.retainAll(wantedScopeList);
         ratedScopeList.prepareRating();
-        
-        if( ratedScopeList.isRatingFruitful() )
-        {
+
+        if (ratedScopeList.isRatingFruitful()) {
             DownloadScope bestScope = ratedScopeList.getBestRated();
-            if ( bestScope.getLength() > preferredSize )
-            {
-                bestScope = new DownloadScope( 
-                    bestScope.getStart(), bestScope.getStart() + preferredSize - 1 );
+            if (bestScope.getLength() > preferredSize) {
+                bestScope = new DownloadScope(
+                        bestScope.getStart(), bestScope.getStart() + preferredSize - 1);
             }
             return bestScope;
         }

@@ -31,23 +31,20 @@ import phex.servent.Servent;
 
 import java.io.IOException;
 
-public class ChatService
-{
+public class ChatService {
     private final Servent servent;
-    
+
     /**
-     * A Set containing all 
+     * A Set containing all
      */
     private final AddressCounter addressCounter;
-    
-    public ChatService( Servent servent )
-    {
+
+    public ChatService(Servent servent) {
         this.servent = servent;
-        addressCounter = new AddressCounter( 1, false );
+        addressCounter = new AddressCounter(1, false);
     }
-    
-    public BandwidthController getChatBandwidthController()
-    {
+
+    public BandwidthController getChatBandwidthController() {
         // chat will use bandwidth from network. 
         return servent.getBandwidthService().getNetworkBandwidthController();
     }
@@ -55,41 +52,37 @@ public class ChatService
     /**
      * Opens a new chat connection to start a instant message chat.
      */
-    public void openChat( DestAddress hostAddress )
-    {
+    public void openChat(DestAddress hostAddress) {
         // initialize the chat engine that reads and send the chat data
         // for a new HostAddress.
-        ChatEngine chatEngine = new ChatEngine( this, hostAddress );
+        ChatEngine chatEngine = new ChatEngine(this, hostAddress);
         chatEngine.startChat();
-        fireChatConnectionOpened( chatEngine );
+        fireChatConnectionOpened(chatEngine);
     }
-    
+
     /**
      * Called from ChatEngine.stopChat() to notify of a closed chat session.
+     *
      * @param chatEngine
      */
-    public void chatClosed( ChatEngine chatEngine )
-    {
-        addressCounter.relaseAddress( chatEngine.getHostAddress() );
-        fireChatConnectionFailed( chatEngine );
+    public void chatClosed(ChatEngine chatEngine) {
+        addressCounter.relaseAddress(chatEngine.getHostAddress());
+        fireChatConnectionFailed(chatEngine);
     }
 
     /**
      * Accepts a connection to start a instant message chat.
      */
-    public void acceptChat( Connection connection )
-    {
-        if ( !NetworkPrefs.AllowChatConnection.get().booleanValue() )
-        {
+    public void acceptChat(Connection connection) {
+        if (!NetworkPrefs.AllowChatConnection.get().booleanValue()) {
             connection.disconnect();
             return;
         }
-        
+
         DestAddress hostAddress = connection.getSocket().getRemoteAddress();
-        
+
         // validate if we already have a chat connection with this host..
-        if ( !addressCounter.validateAndCountAddress( hostAddress ) )
-        {
+        if (!addressCounter.validateAndCountAddress(hostAddress)) {
             // we dont like to have more then one chat connection to a single
             // host...
             connection.disconnect();
@@ -98,15 +91,12 @@ public class ChatService
 
         // initialize the chat engine that reads and send the chat data
         // over the connected socket.
-        try
-        {
-            ChatEngine chatEngine = new ChatEngine( this, connection );
+        try {
+            ChatEngine chatEngine = new ChatEngine(this, connection);
             chatEngine.startChat();
-            fireChatConnectionOpened( chatEngine );
-        }
-        catch ( IOException exp )
-        {
-            NLogger.debug( ChatService.class, exp, exp );
+            fireChatConnectionOpened(chatEngine);
+        } catch (IOException exp) {
+            NLogger.debug(ChatService.class, exp, exp);
             connection.disconnect();
             return;
         }
@@ -117,8 +107,7 @@ public class ChatService
     /**
      * Fires if a new chat connection was opened.
      */
-    public void fireChatConnectionOpened( final ChatEngine chatEngine )
-    {
+    public void fireChatConnectionOpened(final ChatEngine chatEngine) {
 
     }
 
@@ -126,8 +115,7 @@ public class ChatService
      * Fires a event if a chat connection was failed to opened or a opened chat
      * connection was closed.
      */
-    public void fireChatConnectionFailed( final ChatEngine chatEngine )
-    {
+    public void fireChatConnectionFailed(final ChatEngine chatEngine) {
 
     }
     ///////////////////// END event handling methods ////////////////////////

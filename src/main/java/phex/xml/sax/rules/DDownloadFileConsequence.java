@@ -27,22 +27,18 @@ import phex.rules.consequence.Consequence;
 import phex.rules.consequence.DownloadFileConsequence;
 import phex.xml.sax.PhexXmlSaxWriter;
 
-public class DDownloadFileConsequence implements DConsequence
-{
+public class DDownloadFileConsequence implements DConsequence {
     public static final String ELEMENT_NAME = "downloadfile-consequence";
-    
-    public DDownloadFileConsequence()
-    {
+
+    public DDownloadFileConsequence() {
     }
-    
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
-        writer.endElm( ELEMENT_NAME );
+
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
+        writer.endElm(ELEMENT_NAME);
     }
-    
-    public Consequence createConsequence()
-    {
+
+    public Consequence createConsequence() {
         return DownloadFileConsequence.INSTANCE;
     }
 }

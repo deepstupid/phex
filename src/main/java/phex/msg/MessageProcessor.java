@@ -33,87 +33,74 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 
-public class MessageProcessor
-{
-    private MessageProcessor()
-    {
-        
+public class MessageProcessor {
+    private MessageProcessor() {
+
     }
-    
-    public static Message parseMessage( Connection connection, PhexSecurityManager securityService )
-        throws IOException, InvalidMessageException
-    {
-        MsgHeader header = parseMessageHeader( connection, new byte[ MsgHeader.DATA_LENGTH ] );
-        if ( header == null )
-        {
+
+    public static Message parseMessage(Connection connection, PhexSecurityManager securityService)
+            throws IOException, InvalidMessageException {
+        MsgHeader header = parseMessageHeader(connection, new byte[MsgHeader.DATA_LENGTH]);
+        if (header == null) {
             throw new IOException("Connection closed by remote host");
         }
         int length = header.getDataLength();
-        if ( length < 0 )
-        {
-            throw new IOException( "Negative body size. Drop." );
+        if (length < 0) {
+            throw new IOException("Negative body size. Drop.");
+        } else if (length > MessagePrefs.MaxLength.get()) {
+            throw new IOException("Packet too big (" + length + "). Drop.");
         }
-        else if ( length > MessagePrefs.MaxLength.get())
-        {
-            throw new IOException("Packet too big ("+length+"). Drop.");
-        }
-        return parseMessage( header, connection, securityService );
-    }
-    
-    public static Message parseMessage( MsgHeader header, Connection connection,
-        PhexSecurityManager securityService )
-        throws IOException, InvalidMessageException
-    {
-        return parseMessage( header, connection.getInputStream(), securityService );
+        return parseMessage(header, connection, securityService);
     }
 
-    public static Message parseMessage( MsgHeader header, InputStream inStream,
-        PhexSecurityManager securityService )
-        throws IOException, InvalidMessageException
-    {
-        byte[] body = readMessageBody( inStream, header.getDataLength() );
+    public static Message parseMessage(MsgHeader header, Connection connection,
+                                       PhexSecurityManager securityService)
+            throws IOException, InvalidMessageException {
+        return parseMessage(header, connection.getInputStream(), securityService);
+    }
 
-        Message message = createMessageFromBody( header, body, securityService );
+    public static Message parseMessage(MsgHeader header, InputStream inStream,
+                                       PhexSecurityManager securityService)
+            throws IOException, InvalidMessageException {
+        byte[] body = readMessageBody(inStream, header.getDataLength());
+
+        Message message = createMessageFromBody(header, body, securityService);
 
         return message;
     }
 
-    public static Message createMessageFromBody( MsgHeader header, byte[] body, 
-        PhexSecurityManager securityService )
-        throws InvalidMessageException
-    {
-        switch( header.getPayload() )
-        {
+    public static Message createMessageFromBody(MsgHeader header, byte[] body,
+                                                PhexSecurityManager securityService)
+            throws InvalidMessageException {
+        switch (header.getPayload()) {
             case MsgHeader.PING_PAYLOAD:
-                return new PingMsg( header, body );
+                return new PingMsg(header, body);
             case MsgHeader.PONG_PAYLOAD:
-                return new PongMsg( header, body, securityService );
+                return new PongMsg(header, body, securityService);
             case MsgHeader.PUSH_PAYLOAD:
-                return new PushRequestMsg( header, body );
+                return new PushRequestMsg(header, body);
             case MsgHeader.QUERY_HIT_PAYLOAD:
-                return new QueryResponseMsg( header, body, securityService );
+                return new QueryResponseMsg(header, body, securityService);
             case MsgHeader.QUERY_PAYLOAD:
-                return new QueryMsg( header, body );
+                return new QueryMsg(header, body);
             case MsgHeader.ROUTE_TABLE_UPDATE_PAYLOAD:
-                return RouteTableUpdateMsg.parseMessage( header, body );
+                return RouteTableUpdateMsg.parseMessage(header, body);
             case MsgHeader.VENDOR_MESSAGE_PAYLOAD:
             case MsgHeader.STANDARD_VENDOR_MESSAGE_PAYLOAD:
-                return VendorMsg.parseMessage( header, body );
+                return VendorMsg.parseMessage(header, body);
             default:
                 // unknown message type return null...
         }
         return null;
     }
 
-    public static byte[] readMessageBody( Connection connection, int dataLength )
-        throws IOException
-    {
-        return readMessageBody( connection.getInputStream(), dataLength );
+    public static byte[] readMessageBody(Connection connection, int dataLength)
+            throws IOException {
+        return readMessageBody(connection.getInputStream(), dataLength);
     }
 
-    public static byte[] readMessageBody( InputStream inStream, int dataLength )
-        throws IOException
-    {
+    public static byte[] readMessageBody(InputStream inStream, int dataLength)
+            throws IOException {
         final byte[] body = new byte[dataLength];
         inStream.read(body);
         return body;
@@ -136,19 +123,17 @@ public class MessageProcessor
 //        return body;
     }
 
-    public static MsgHeader parseMessageHeader( Connection connection,
-        byte[] buffer )
-        throws IOException
-    {
-        return parseMessageHeader( connection.getInputStream(), buffer);
+    public static MsgHeader parseMessageHeader(Connection connection,
+                                               byte[] buffer)
+            throws IOException {
+        return parseMessageHeader(connection.getInputStream(), buffer);
     }
-    
-    public static MsgHeader parseMessageHeader( InputStream inStream,
-        byte[] buffer )
-        throws IOException
-    {
+
+    public static MsgHeader parseMessageHeader(InputStream inStream,
+                                               byte[] buffer)
+            throws IOException {
         inStream.read(buffer, 0, MsgHeader.DATA_LENGTH);
-        return parseMessageHeader( ByteBuffer.wrap( buffer ) );
+        return parseMessageHeader(ByteBuffer.wrap(buffer));
 
 //        int lenRead = 0;
 //        int len;
@@ -164,47 +149,45 @@ public class MessageProcessor
 //        return parseMessageHeader( ByteBuffer.wrap( buffer ) );
     }
 
-    public static MsgHeader parseMessageHeader( ByteBuffer buffer ) 
-    {
-        byte[] guidArr = new byte[ GUID.DATA_LENGTH ];
-        buffer.get( guidArr );
+    public static MsgHeader parseMessageHeader(ByteBuffer buffer) {
+        byte[] guidArr = new byte[GUID.DATA_LENGTH];
+        buffer.get(guidArr);
 
-        byte payload = buffer.get( );
-        byte ttl = buffer.get( );
-        byte hops = buffer.get( );
+        byte payload = buffer.get();
+        byte ttl = buffer.get();
+        byte hops = buffer.get();
 
         byte[] lenArr = new byte[4];
-        buffer.get( lenArr );
-        int dataLength = IOUtil.deserializeIntLE( lenArr, 0 );
+        buffer.get(lenArr);
+        int dataLength = IOUtil.deserializeIntLE(lenArr, 0);
 
-        MsgHeader header = new MsgHeader( new GUID( guidArr ), payload, ttl, hops,
-            dataLength );
+        MsgHeader header = new MsgHeader(new GUID(guidArr), payload, ttl, hops,
+                dataLength);
 
         return header;
     }
-    
+
     /**
      * creates a body for a message from a byte array given its header
+     *
      * @param MsgHeader
-     * @param data byte array
+     * @param data      byte array
      * @param offset
      * @return body in byte array or null on failure
      * @author Madhu
      */
-    public static byte[] createBody( MsgHeader MsgHdr, byte data[], int offset)
-    {
-        int bodyLength = MsgHdr.getDataLength();  
-        byte[] body = new byte[ bodyLength ];
-        
-        if ( bodyLength > ( data.length - offset ) )
-        {
-            NLogger.warn( MessageProcessor.class, " Message Data length greater" +
-            		" then that of given byte array " + new String( data )
-                    );
+    public static byte[] createBody(MsgHeader MsgHdr, byte data[], int offset) {
+        int bodyLength = MsgHdr.getDataLength();
+        byte[] body = new byte[bodyLength];
+
+        if (bodyLength > (data.length - offset)) {
+            NLogger.warn(MessageProcessor.class, " Message Data length greater" +
+                    " then that of given byte array " + new String(data)
+            );
             return null;
         }
-        
-        System.arraycopy( data, offset, body, 0, bodyLength );  
+
+        System.arraycopy(data, offset, body, 0, bodyLength);
         return body;
     }
 }

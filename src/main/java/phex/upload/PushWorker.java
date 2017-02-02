@@ -40,8 +40,7 @@ import phex.util.URLCodecUtils;
 
 import java.io.IOException;
 
-public class PushWorker implements Runnable
-{
+public class PushWorker implements Runnable {
     private static final int PUSH_TIMEOUT = 45000;
 
     private final UploadManager uploadMgr;
@@ -49,45 +48,36 @@ public class PushWorker implements Runnable
 
     private Connection connection;
 
-    public PushWorker(PushRequestMsg msg, UploadManager uploadMgr )
-    {
+    public PushWorker(PushRequestMsg msg, UploadManager uploadMgr) {
         this.uploadMgr = uploadMgr;
         pushMsg = msg;
-        Environment.getInstance().executeOnThreadPool( this,
-            "PushWorker-" + Integer.toHexString( hashCode() ) );
-        
+        Environment.getInstance().executeOnThreadPool(this,
+                "PushWorker-" + Integer.toHexString(hashCode()));
+
         StatisticsManager statMgr = Servent.getInstance().getStatisticsService();
         ((SimpleStatisticProvider) statMgr.getStatisticProvider(
-            StatisticProviderConstants.PUSH_UPLOAD_ATTEMPTS_PROVIDER)).increment( 1 );
+                StatisticProviderConstants.PUSH_UPLOAD_ATTEMPTS_PROVIDER)).increment(1);
     }
 
-    public void run()
-    {
+    public void run() {
         HTTPRequest httpRequest;
-        try
-        {
+        try {
             httpRequest = connectAndGetRequest();
-            if ( httpRequest == null )
-            {
+            if (httpRequest == null) {
                 StatisticsManager statMgr = Servent.getInstance().getStatisticsService();
                 ((SimpleStatisticProvider) statMgr.getStatisticProvider(
-                    StatisticProviderConstants.PUSH_UPLOAD_FAILURE_PROVIDER)).increment( 1 );
+                        StatisticProviderConstants.PUSH_UPLOAD_FAILURE_PROVIDER)).increment(1);
                 return;
             }
-            handleRequest( httpRequest );
+            handleRequest(httpRequest);
 
-            NLogger.debug( PushWorker.class, 
-                "PushWorker finished" );
-        }
-        catch (Exception exp)
-        {
-            NLogger.error( PushWorker.class, exp, exp );
+            NLogger.debug(PushWorker.class,
+                    "PushWorker finished");
+        } catch (Exception exp) {
+            NLogger.error(PushWorker.class, exp, exp);
             return;
-        }
-        finally
-        {
-            if ( connection != null )
-            {
+        } finally {
+            if (connection != null) {
                 connection.disconnect();
             }
         }
@@ -97,52 +87,42 @@ public class PushWorker implements Runnable
      * @param httpRequest
      * @throws IOException
      */
-    private void handleRequest(HTTPRequest httpRequest)
-    {
-    	NLogger.debug( PushWorker.class, "Handle PUSH request: "
-            + httpRequest.buildHTTPRequestString() );
-    	StatisticsManager statMgr = Servent.getInstance().getStatisticsService();
+    private void handleRequest(HTTPRequest httpRequest) {
+        NLogger.debug(PushWorker.class, "Handle PUSH request: "
+                + httpRequest.buildHTTPRequestString());
+        StatisticsManager statMgr = Servent.getInstance().getStatisticsService();
         ((SimpleStatisticProvider) statMgr.getStatisticProvider(
-            StatisticProviderConstants.PUSH_UPLOAD_SUCESS_PROVIDER)).increment( 1 );
-        if ( httpRequest.isGnutellaRequest() )
-        {
-            uploadMgr.handleUploadRequest( connection, httpRequest );
-        }
-        else
-        {
+                StatisticProviderConstants.PUSH_UPLOAD_SUCESS_PROVIDER)).increment(1);
+        if (httpRequest.isGnutellaRequest()) {
+            uploadMgr.handleUploadRequest(connection, httpRequest);
+        } else {
             // Handle the HTTP GET as a normal HTTP GET to upload file.
             // This is most likely a usual browse host request.
-            new HttpRequestDispatcher().httpRequestHandler( connection,
-                httpRequest );
+            new HttpRequestDispatcher().httpRequestHandler(connection,
+                    httpRequest);
         }
     }
 
     /**
      * @return
      */
-    private HTTPRequest connectAndGetRequest()
-    {
-        try
-        {
+    private HTTPRequest connectAndGetRequest() {
+        try {
             HTTPRequest httpRequest;
-            NLogger.debug( PushWorker.class,
-                "Try PUSH connect to: " + pushMsg.getRequestAddress() );
-            SocketFacade sock = SocketFactory.connect( pushMsg.getRequestAddress(),
-                PUSH_TIMEOUT );
+            NLogger.debug(PushWorker.class,
+                    "Try PUSH connect to: " + pushMsg.getRequestAddress());
+            SocketFacade sock = SocketFactory.connect(pushMsg.getRequestAddress(),
+                    PUSH_TIMEOUT);
             BandwidthController bwController = uploadMgr.getUploadBandwidthController();
-            connection = new Connection( sock, bwController );
-            sendGIV( connection );
-            httpRequest = HTTPProcessor.parseHTTPRequest( connection );
+            connection = new Connection(sock, bwController);
+            sendGIV(connection);
+            httpRequest = HTTPProcessor.parseHTTPRequest(connection);
             return httpRequest;
-        }
-        catch (IOException exp)
-        {
-        	NLogger.debug( PushWorker.class, exp );
+        } catch (IOException exp) {
+            NLogger.debug(PushWorker.class, exp);
             return null;
-        }
-        catch (HTTPMessageException exp)
-        {
-        	NLogger.debug( PushWorker.class, exp );
+        } catch (HTTPMessageException exp) {
+            NLogger.debug(PushWorker.class, exp);
             return null;
         }
     }
@@ -151,35 +131,31 @@ public class PushWorker implements Runnable
      * @param connection
      * @throws IOException
      */
-    private void sendGIV(Connection connection) throws IOException
-    {
+    private void sendGIV(Connection connection) throws IOException {
         Servent servent = Servent.getInstance();
         // I only give out file indexes in the int range
         ShareFile sfile = servent.getSharedFilesService().getFileByIndex(
-            (int) pushMsg.getFileIndex() );
+                (int) pushMsg.getFileIndex());
 
         // Send the push greeting.
         // GIV <file-ref-num>:<ClientID GUID in hexdec>/<filename>\n\n
-        StringBuffer buffer = new StringBuffer( 100 );
-        buffer.append( "GIV " );
-        buffer.append( pushMsg.getFileIndex() );
-        buffer.append( ':' );
-        buffer.append( pushMsg.getClientGUID().toHexString() );
-        buffer.append( '/' );
-        if ( sfile != null )
-        {
-            buffer.append( URLCodecUtils.encodeURL( sfile.getFileName() ) );
+        StringBuffer buffer = new StringBuffer(100);
+        buffer.append("GIV ");
+        buffer.append(pushMsg.getFileIndex());
+        buffer.append(':');
+        buffer.append(pushMsg.getClientGUID().toHexString());
+        buffer.append('/');
+        if (sfile != null) {
+            buffer.append(URLCodecUtils.encodeURL(sfile.getFileName()));
+        } else {
+            buffer.append("file");
         }
-        else
-        {
-            buffer.append( "file" );
-        }
-        buffer.append( "\n\n" );
-        NLogger.debug( PushWorker.class, "Send GIV: "
-            + buffer.toString() );
-        
-        connection.write( ByteBuffer.wrap( 
-            StringUtils.getBytesInUsAscii( buffer.toString() ) ) );
+        buffer.append("\n\n");
+        NLogger.debug(PushWorker.class, "Send GIV: "
+                + buffer.toString());
+
+        connection.write(ByteBuffer.wrap(
+                StringUtils.getBytesInUsAscii(buffer.toString())));
 
         connection.flush();
     }

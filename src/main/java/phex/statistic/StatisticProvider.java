@@ -31,11 +31,11 @@ package phex.statistic;
  * appropriate.
  */
 // TODO2 Add ratio column to provide % data, like message percent or qrt hit ratio
-public interface StatisticProvider
-{
+public interface StatisticProvider {
     /**
      * Returns the current value this provider presents.
      * The return value can be null in case no value is provided.
+     *
      * @return the current value or null.
      */
     public Object getValue();
@@ -43,6 +43,7 @@ public interface StatisticProvider
     /**
      * Returns the avarage value this provider presents.
      * The return value can be null in case no value is provided.
+     *
      * @return the avarage value or null.
      */
     public Object getAverageValue();
@@ -50,6 +51,7 @@ public interface StatisticProvider
     /**
      * Returns the max value this provider presents.
      * The return value can be null in case no value is provided.
+     *
      * @return the max value or null.
      */
     public Object getMaxValue();
@@ -57,10 +59,11 @@ public interface StatisticProvider
     /**
      * Returns the presentation string that should be displayed for the corresponding
      * value.
+     *
      * @param value the value returned from getValue(), getAverageValue() or
-     * getMaxValue()
+     *              getMaxValue()
      * @return the statistic presentation string.
      */
-    public String toStatisticString( Object value );
+    public String toStatisticString(Object value);
 
 }

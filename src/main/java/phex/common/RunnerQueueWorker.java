@@ -30,135 +30,108 @@ import java.util.Vector;
  * get served one after another.
  * A own thread is used for execution.
  */
-public class RunnerQueueWorker
-{
+public class RunnerQueueWorker {
+    private final Vector<Runnable> queue;
     private boolean isInterrupted;
     private boolean isPaused;
-    private final Vector<Runnable> queue;
     private Thread runnerThread;
 
     /**
      * Creates a RunnerQueueWorker with NORM_PRIORITY.
      */
-    public RunnerQueueWorker()
-    {
-        this( Thread.NORM_PRIORITY );
+    public RunnerQueueWorker() {
+        this(Thread.NORM_PRIORITY);
     }
-    
+
     /**
      * Creates a RunnerQueueWorker with custom priority.
      */
-    public RunnerQueueWorker( int threadPriority )
-    {
+    public RunnerQueueWorker(int threadPriority) {
 
         queue = new Vector<>();
         isInterrupted = false;
         isPaused = false;
     }
-    
-    public synchronized int getQueueSize()
-    {
+
+    public synchronized int getQueueSize() {
         return queue.size();
     }
-    
+
     /**
      * Pauses the queue.
      */
-    public synchronized void setPause( boolean state )
-    {
+    public synchronized void setPause(boolean state) {
         isPaused = state;
         notify();
     }
-    
+
     /**
      * Clears the queue.
      */
-    public synchronized void stopAndClear()
-    {
-       queue.clear();
-       if ( runnerThread != null )
-       {
-           runnerThread.interrupt();
-           isInterrupted = true;
-       }
+    public synchronized void stopAndClear() {
+        queue.clear();
+        if (runnerThread != null) {
+            runnerThread.interrupt();
+            isInterrupted = true;
+        }
     }
-    
+
     /**
      * Adds a runnable to be processed.
      */
-    public synchronized void add( Runnable runable )
-    {
-        queue.add( runable );
+    public synchronized void add(Runnable runable) {
+        queue.add(runable);
         notify();
-        if( runnerThread == null )
-        {
+        if (runnerThread == null) {
             createRunner();
         }
     }
 
-    private synchronized void createRunner()
-    {
+    private synchronized void createRunner() {
         isInterrupted = false;
-        runnerThread = new Thread( ThreadTracking.rootThreadGroup, 
-            new QueueWorker() );
+        runnerThread = new Thread(ThreadTracking.rootThreadGroup,
+                new QueueWorker());
         runnerThread.setPriority(Thread.NORM_PRIORITY);
-        runnerThread.setDaemon( true );
+        runnerThread.setDaemon(true);
         runnerThread.start();
     }
-    
-    private class QueueWorker implements Runnable 
-    {
-        public void run() 
-        {
-            try
-            {
-                while( true ) 
-                {
+
+    private class QueueWorker implements Runnable {
+        public void run() {
+            try {
+                while (true) {
                     Runnable next = queue.remove(0);
-                    try
-                    {
+                    try {
                         next.run();
+                    } catch (Throwable th) {
+                        NLogger.error(QueueWorker.class, th, th);
                     }
-                    catch ( Throwable th )
-                    {
-                        NLogger.error( QueueWorker.class, th, th);
-                    }
-                    
-                    synchronized(RunnerQueueWorker.this) 
-                    {
-                        if( !queue.isEmpty() && !isInterrupted && !isPaused)
-                        {
+
+                    synchronized (RunnerQueueWorker.this) {
+                        if (!queue.isEmpty() && !isInterrupted && !isPaused) {
                             continue;
                         }
-                        try 
-                        {
+                        try {
                             // wait a short while for possible notify
-                            while ( isPaused )
-                            {
+                            while (isPaused) {
                                 RunnerQueueWorker.this.wait(5 * 1000);
                             }
-                        } 
-                        catch(InterruptedException exp) 
-                        {// ignore and take next from queue
-                         // if its still full stopAndClear()
+                        } catch (InterruptedException exp) {// ignore and take next from queue
+                            // if its still full stopAndClear()
                         }
-                        if( !queue.isEmpty() && !isInterrupted )
-                        {
+                        if (!queue.isEmpty() && !isInterrupted) {
                             continue;
                         }
                         runnerThread = null;
                         break;
                     }
                 }
-            } 
-            catch ( Throwable th )
-            {
+            } catch (Throwable th) {
                 runnerThread = null;
-                NLogger.error( QueueWorker.class, th, th );
+                NLogger.error(QueueWorker.class, th, th);
             }
             // Safety check
-            if ( !queue.isEmpty() )
-            {// oups... somebody is left we need to restart..
+            if (!queue.isEmpty()) {// oups... somebody is left we need to restart..
                 createRunner();
             }
         }

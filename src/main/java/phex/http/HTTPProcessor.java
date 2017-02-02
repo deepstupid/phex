@@ -26,85 +26,69 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 
-public class HTTPProcessor
-{
+public class HTTPProcessor {
     private static final char SP = ' ';
     private static final char HT = '\t';
-    
+
     /**
-     * 
+     *
      */
-    private HTTPProcessor()
-    {
+    private HTTPProcessor() {
     }
 
     /**
      * Parse the incoming HTTP request and set the corresponding HTTP request
      * properties.
-     *
+     * <p>
      * Code taken and modified from:
      * http://cvs.apache.org/viewcvs.cgi/jakarta-tomcat-4.0/catalina/src/share/org/apache/catalina/connector/http10/HttpProcessor.java?rev=1.9&content-type=text/vnd.viewcvs-markup
-     * @throws IOException when an IO error occurs
+     *
+     * @throws IOException          when an IO error occurs
      * @throws HTTPMessageException when an error occurs while parsing the request.
      */
-    public static HTTPRequest parseHTTPRequest( Connection connection )
-        throws IOException, HTTPMessageException
-    {
+    public static HTTPRequest parseHTTPRequest(Connection connection)
+            throws IOException, HTTPMessageException {
         // Parse the incoming request line
         String line = connection.readLine();
-        if (line == null)
-        {
-            throw new IOException( "Stream unexpectedly ended." );
+        if (line == null) {
+            throw new IOException("Stream unexpectedly ended.");
         }
-        HTTPRequest request = parseHTTPRequest( line );
-        parseHTTPHeaders( request, connection );
+        HTTPRequest request = parseHTTPRequest(line);
+        parseHTTPHeaders(request, connection);
         return request;
     }
 
-    public static HTTPRequest parseHTTPRequest( String requestLine )
-        throws HTTPMessageException
-    {
-        StringTokenizer st = new StringTokenizer( requestLine );
+    public static HTTPRequest parseHTTPRequest(String requestLine)
+            throws HTTPMessageException {
+        StringTokenizer st = new StringTokenizer(requestLine);
 
         String method = null;
-        try
-        {
+        try {
             method = st.nextToken();
-        }
-        catch (NoSuchElementException e)
-        {
+        } catch (NoSuchElementException e) {
             // ignore, evalution is below
         }
 
         String uri = null;
-        try
-        {
+        try {
             uri = st.nextToken();
             // TODO - URL decode the URI?
-        } 
-        catch (NoSuchElementException e)
-        {
+        } catch (NoSuchElementException e) {
             // ignore, evalution is below
         }
 
         String protocol = null;
-        try
-        {
+        try {
             protocol = st.nextToken();
-        }
-        catch (NoSuchElementException e)
-        {
+        } catch (NoSuchElementException e) {
             protocol = "HTTP/0.9";
         }
 
         // Validate the incoming request line
-        if (method == null)
-        {
-            throw new HTTPMessageException( "HTTPRequest has no method." );
-        }
-        else if (uri == null)
-        {
-            throw new HTTPMessageException( "HTTPRequest has no URI." );
+        if (method == null) {
+            throw new HTTPMessageException("HTTPRequest has no method.");
+        } else if (uri == null) {
+            throw new HTTPMessageException("HTTPRequest has no URI.");
         }
 
         // Parse any query parameters out of the request URI
@@ -141,111 +125,85 @@ public class HTTPProcessor
         }*/
 
         // Set the corresponding request properties
-        HTTPRequest request = new HTTPRequest( method, uri, protocol, false );
+        HTTPRequest request = new HTTPRequest(method, uri, protocol, false);
         return request;
     }
 
-    public static HTTPResponse parseHTTPResponse( Connection connection )
-        throws IOException, HTTPMessageException
-    {
+    public static HTTPResponse parseHTTPResponse(Connection connection)
+            throws IOException, HTTPMessageException {
         // Parse the incoming request line
         String line = connection.readLine();
-        if (line == null)
-        {
-            throw new SocketException( "Stream unexpectedly ended." );
+        if (line == null) {
+            throw new SocketException("Stream unexpectedly ended.");
         }
         line = line.trim();
 
-        int firstIdx = line.indexOf( ' ' );
+        int firstIdx = line.indexOf(' ');
         String httpVersion = null;
-        try
-        {
-            httpVersion = line.substring( 0, firstIdx );
-        }
-        catch ( IndexOutOfBoundsException e )
-        {
+        try {
+            httpVersion = line.substring(0, firstIdx);
+        } catch (IndexOutOfBoundsException e) {
             httpVersion = null;
         }
 
         int secondIdx = -1;
         String statusCodeStr = null;
-        try
-        {
-            secondIdx = line.indexOf( ' ', firstIdx + 1 );
-            if ( secondIdx == -1 )
-            {
+        try {
+            secondIdx = line.indexOf(' ', firstIdx + 1);
+            if (secondIdx == -1) {
                 secondIdx = line.length();
             }
-            statusCodeStr = line.substring( firstIdx + 1, secondIdx );
-        }
-        catch ( IndexOutOfBoundsException e )
-        {
+            statusCodeStr = line.substring(firstIdx + 1, secondIdx);
+        } catch (IndexOutOfBoundsException e) {
             statusCodeStr = null;
         }
 
         String statusReason = null;
-        secondIdx ++;
-        if ( secondIdx < line.length() )
-        {
-            try
-            {
-                statusReason = line.substring( secondIdx, line.length() );
-            }
-            catch ( IndexOutOfBoundsException e )
-            {
+        secondIdx++;
+        if (secondIdx < line.length()) {
+            try {
+                statusReason = line.substring(secondIdx, line.length());
+            } catch (IndexOutOfBoundsException e) {
                 statusReason = "";
             }
-        }
-        else
-        {
+        } else {
             statusReason = "";
         }
 
         // Validate the incoming request line
-        if ( httpVersion == null)
-        {
-            throw new HTTPMessageException( "HTTP response has no version: " + line );
-        }
-        else if ( statusCodeStr == null )
-        {
-            throw new HTTPMessageException( "HTTP response has no status code: " + line );
-        }
-        else if ( statusCodeStr.length() != 3 )
-        {
-            throw new HTTPMessageException( "HTTP response status code has invalid lenth: "
-                + statusCodeStr + " Line: " + line);
+        if (httpVersion == null) {
+            throw new HTTPMessageException("HTTP response has no version: " + line);
+        } else if (statusCodeStr == null) {
+            throw new HTTPMessageException("HTTP response has no status code: " + line);
+        } else if (statusCodeStr.length() != 3) {
+            throw new HTTPMessageException("HTTP response status code has invalid lenth: "
+                    + statusCodeStr + " Line: " + line);
         }
 
         short statusCode = -1;
-        try
-        {
-            statusCode = Short.parseShort( statusCodeStr );
-        }
-        catch ( NumberFormatException exp )
-        {
-            throw new HTTPMessageException( "Status code of HTTP response is not valid: "
-                + statusCodeStr );
+        try {
+            statusCode = Short.parseShort(statusCodeStr);
+        } catch (NumberFormatException exp) {
+            throw new HTTPMessageException("Status code of HTTP response is not valid: "
+                    + statusCodeStr);
         }
 
         // Set the corresponding request properties
-        HTTPResponse response = new HTTPResponse( httpVersion, statusCode,
-            statusReason, false );
-        parseHTTPHeaders( response, connection );
+        HTTPResponse response = new HTTPResponse(httpVersion, statusCode,
+                statusReason, false);
+        parseHTTPHeaders(response, connection);
         return response;
     }
 
-    public static HTTPHeaderGroup parseHTTPHeaders( Connection connection )
-        throws IOException
-    {
-        HTTPHeaderGroup headers = new HTTPHeaderGroup( true );
-        while ( true )
-        {
-            HTTPHeader header = parseHTTPHeader( connection );
-            if ( header == null )
-            {
+    public static HTTPHeaderGroup parseHTTPHeaders(Connection connection)
+            throws IOException {
+        HTTPHeaderGroup headers = new HTTPHeaderGroup(true);
+        while (true) {
+            HTTPHeader header = parseHTTPHeader(connection);
+            if (header == null) {
                 break;
             }
-            headers.addHeader( header );
+            headers.addHeader(header);
         }
         return headers;
     }
@@ -253,70 +211,55 @@ public class HTTPProcessor
     /**
      * Parse the incoming HTTP request headers, and set the appropriate
      * request headers.
+     *
      * @throws IOException in case an IO error occurs
      */
-    public static void parseHTTPHeaders( HTTPRequest httpRequest,
-        Connection connection )
-        throws IOException
-    {
+    public static void parseHTTPHeaders(HTTPRequest httpRequest,
+                                        Connection connection)
+            throws IOException {
         // Some code parts taken and modified from:
         // http://cvs.apache.org/viewcvs.cgi/jakarta-tomcat-4.0/catalina/src/share/org/apache/catalina/connector/http10/HttpProcessor.java
 
         String match;
-        while ( true )
-        {
-            HTTPHeader header = parseHTTPHeader( connection );
-            if ( header == null )
-            {
+        while (true) {
+            HTTPHeader header = parseHTTPHeader(connection);
+            if (header == null) {
                 break;
             }
             match = header.getName().toLowerCase();
-            if ( match.equals("content-length") )
-            {
+            if (match.equals("content-length")) {
                 int n = -1;
-                try
-                {
-                    n = Integer.parseInt( header.getValue() );
+                try {
+                    n = Integer.parseInt(header.getValue());
+                } catch (NumberFormatException e) {
+                    throw new IOException("Error parsing content-length: " +
+                            header.getName() + " - " + header.getValue());
                 }
-                catch ( NumberFormatException e )
-                {
-                    throw new IOException( "Error parsing content-length: " +
-                        header.getName() + " - " + header.getValue() );
-                }
-                httpRequest.setContentLength( n, false );
-                httpRequest.addHeader( header );
+                httpRequest.setContentLength(n, false);
+                httpRequest.addHeader(header);
             }
             /*else if ( match.equals( "content-type" ) )
             {
                 httpRequest.setContentType(value);
                 httpRequest.addHeaderField(name, value);
             }*/
-            else if ( match.equals( "host" ) )
-            {
+            else if (match.equals("host")) {
                 int n = header.getValue().indexOf(':');
-                if (n < 0)
-                {
-                    httpRequest.setHost( header.getValue(), -1, false );
-                }
-                else
-                {
+                if (n < 0) {
+                    httpRequest.setHost(header.getValue(), -1, false);
+                } else {
                     int port = -1;
-                    try
-                    {
-                        port = Integer.parseInt( header.getValue().substring(n+1).trim() );
+                    try {
+                        port = Integer.parseInt(header.getValue().substring(n + 1).trim());
+                    } catch (NumberFormatException e) {
+                        throw new IOException("Error parsing host: " +
+                                header.getName() + " - " + header.getValue());
                     }
-                    catch ( NumberFormatException e )
-                    {
-                        throw new IOException( "Error parsing host: " +
-                            header.getName() + " - " + header.getValue() );
-                    }
-                    httpRequest.setHost( header.getValue().substring(0, n).trim(), port, false );
+                    httpRequest.setHost(header.getValue().substring(0, n).trim(), port, false);
                 }
-                httpRequest.addHeader( header );
-            }
-            else
-            {
-                httpRequest.addHeader( header );
+                httpRequest.addHeader(header);
+            } else {
+                httpRequest.addHeader(header);
             }
         }
     }
@@ -324,77 +267,70 @@ public class HTTPProcessor
     /**
      * Parse the incoming HTTP response headers, and set the appropriate
      * request headers.
+     *
      * @throws IOException in case an IO error occurs
      */
     private static void parseHTTPHeaders(HTTPResponse httpRequest,
-        Connection connection )
-        throws IOException
-    {
-        while ( true )
-        {
-            HTTPHeader header = parseHTTPHeader( connection );
-            if ( header == null )
-            {
+                                         Connection connection)
+            throws IOException {
+        while (true) {
+            HTTPHeader header = parseHTTPHeader(connection);
+            if (header == null) {
                 break;
             }
-            httpRequest.addHeader( header );
+            httpRequest.addHeader(header);
         }
     }
 
     /**
      * Returns null if not headers are available...
+     *
      * @throws IOException in case an IO error occurs
      */
-    private static HTTPHeader parseHTTPHeader( Connection connection )
-        throws IOException
-    {
+    private static HTTPHeader parseHTTPHeader(Connection connection)
+            throws IOException {
 
         // Some code parts taken and modified from:
         // http://cvs.apache.org/viewcvs.cgi/jakarta-tomcat-4.0/catalina/src/share/org/apache/catalina/connector/http10/HttpProcessor.java
         // http://cvs.apache.org/viewcvs.cgi/jakarta-tomcat-4.0/catalina/src/share/org/apache/catalina/connector/http/SocketInputStream.java
 
         // Read the next header line
-        String line = connection.readLine( );
-        if ( (line == null) || (line.length() < 1) )
-        {
+        String line = connection.readLine();
+        if ((line == null) || (line.length() < 1)) {
             return null;
         }
 
         // Parse the header name and value
         int colon = line.indexOf(':');
-        if (colon < 0)
-        {
-            throw new IOException( "Invalid HTTP headers: " + line );
+        if (colon < 0) {
+            throw new IOException("Invalid HTTP headers: " + line);
         }
-        String name = line.substring( 0, colon ).trim();
+        String name = line.substring(0, colon).trim();
 
         StringBuffer valueBuffer = new StringBuffer(
-            line.substring( colon + 1 ).trim() );
+                line.substring(colon + 1).trim());
 
         // peek on stream to check if the value might continue on the next line.
         char c = (char) connection.readPeek();
-        while ( ( c == SP ) || ( c == HT) )
-        {// value continues on next line... read next line...
-            line = connection.readLine( );
+        while ((c == SP) || (c == HT)) {// value continues on next line... read next line...
+            line = connection.readLine();
             // trim leading but not trailing SP's and HT's
             int length = line.length();
             int st = 0;
             char[] val = line.toCharArray();
-            while ( (st < length) && ( val[st] == SP || val[st] == HT ) )
-            {
+            while ((st < length) && (val[st] == SP || val[st] == HT)) {
                 st++;
             }
-            if ( st > 0 )
-            {
-                line = line.substring( st, length );
+            if (st > 0) {
+                line = line.substring(st, length);
             }
-            valueBuffer.ensureCapacity( line.length() + 1 );
-            valueBuffer.append( ' ' );
-            valueBuffer.append( line );
+            valueBuffer.ensureCapacity(line.length() + 1);
+            valueBuffer.append(' ');
+            valueBuffer.append(line);
             // peek on stream to check if the value might continue on the next line.
             c = (char) connection.readPeek();
         }
         String value = valueBuffer.toString();
-        return new HTTPHeader( name, value );
+        return new HTTPHeader(name, value);
     }
 }

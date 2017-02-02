@@ -29,31 +29,24 @@ import phex.xml.sax.rules.DCondition;
 /**
  * This is a OR concatenation search filter. When one filter in this filter
  * matches the filter gets triggered.
- *
  */
-public class OrConcatCondition extends ConcatCondition
-{
-    public synchronized boolean isMatched( Search search, RemoteFile remoteFile )
-    {
-        if ( filterList.size() == 0 )
-        {
+public class OrConcatCondition extends ConcatCondition {
+    public synchronized boolean isMatched(Search search, RemoteFile remoteFile) {
+        if (filterList.size() == 0) {
             return true;
         }
-        
+
         boolean isMatched = false;
-        for( Condition filter : filterList )
-        {
-            if ( filter.isMatched( search, remoteFile ) )
-            {
+        for (Condition filter : filterList) {
+            if (filter.isMatched(search, remoteFile)) {
                 isMatched = true;
                 break;
             }
         }
         return isMatched;
     }
-    
-    public synchronized DCondition createDCondition()
-    {
+
+    public synchronized DCondition createDCondition() {
         throw new UnsupportedOperationException("Not yet implemented.");
     }
 }

@@ -23,43 +23,37 @@
 package phex.download;
 
 /**
- * A rated download scope is a download scope with a attached rating of its 
+ * A rated download scope is a download scope with a attached rating of its
  * availability. It is used to determine the scope with the lowest availability
  * of a download file.
  */
-public class RatedDownloadScope extends DownloadScope
-{
+public class RatedDownloadScope extends DownloadScope {
     private long speedRating;
     private int countRating;
 
-    public RatedDownloadScope( long startOffset, long endOffset )
-    {
-        super( startOffset, endOffset );
+    public RatedDownloadScope(long startOffset, long endOffset) {
+        super(startOffset, endOffset);
     }
-    
-    public RatedDownloadScope( long startOffset, long endOffset,
-        int countRating, long speedRating )
-    {
-        super( startOffset, endOffset );
+
+    public RatedDownloadScope(long startOffset, long endOffset,
+                              int countRating, long speedRating) {
+        super(startOffset, endOffset);
         this.countRating = countRating;
         this.speedRating = speedRating;
     }
-    
-    public long getSpeedRating()
-    {
+
+    public long getSpeedRating() {
         return speedRating;
     }
-    
-    public int getCountRating()
-    {
+
+    public int getCountRating() {
         return countRating;
     }
-    
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "[RatedDownloadScope: start:" + getStart() + ",end:" + getEnd()
-            + ",countRating:" + countRating + ",speedRating:" + speedRating 
-            + "@" + Integer.toHexString(hashCode()) + "]";
+                + ",countRating:" + countRating + ",speedRating:" + speedRating
+                + "@" + Integer.toHexString(hashCode()) + "]";
     }
 }

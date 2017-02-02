@@ -30,45 +30,34 @@ import java.nio.channels.FileChannel;
 /**
  * Offers static utility methods for file handling, like creating file path...
  */
-public final class FileUtils
-{
+public final class FileUtils {
     private static final int BUFFER_LENGTH = 256 * 1024;
 
     /**
      * Don't create any instance!
      */
-    private FileUtils()
-    {
+    private FileUtils() {
     }
-    
-    public static String getFileExtension( File file )
-    {
+
+    public static String getFileExtension(File file) {
         String name = file.getName();
         return getFileExtension(name);
     }
-    
-    public static String getFileExtension( String fileName )
-    {
-        int idx = fileName.lastIndexOf( '.' );
-        if ( idx == -1 )
-        {
+
+    public static String getFileExtension(String fileName) {
+        int idx = fileName.lastIndexOf('.');
+        if (idx == -1) {
             return "";
-        }
-        else
-        {
+        } else {
             return fileName.substring(idx + 1);
         }
     }
-    
-    public static String replaceFileExtension( String fileName, String newExtension )
-    {
-        int idx = fileName.lastIndexOf( '.' );
-        if ( idx == -1 )
-        {
+
+    public static String replaceFileExtension(String fileName, String newExtension) {
+        int idx = fileName.lastIndexOf('.');
+        if (idx == -1) {
             return fileName + '.' + newExtension;
-        }
-        else
-        {
+        } else {
             return fileName.substring(0, idx + 1) + newExtension;
         }
     }
@@ -77,21 +66,20 @@ public final class FileUtils
      * Since we are only supporting J2SE 1.2 and J2SE is not available on
      * MACOS 9 and MACOS X is supporting 255 characters we are shorting only
      * for 255 on MAC.
-     *
+     * <p>
      * MACOS X filename: 255
      * Windows pathlength: 260
-     *         filelength: 255
+     * filelength: 255
      */
-    public static String convertToLocalSystemFilename(String filename)
-    {
+    public static String convertToLocalSystemFilename(String filename) {
         // we generally cut of at 255 it will suit everybody and we have no
         // os comparing stuff to do....
         // TODO we need to improve things here to keep up with the window pathlength
         // handling... but for now we just help the mac guys..
-        
+
         // replace all possible invalid filename characters with _
-        filename = StringUtils.replaceChars( filename, "\\/:*?\"<>|", '_' );        
-        return filename.substring( 0, Math.min( 255, filename.length() ) );
+        filename = StringUtils.replaceChars(filename, "\\/:*?\"<>|", '_');
+        return filename.substring(0, Math.min(255, filename.length()));
         /*if ( OS_NAME.indexOf("MAC") != -1)
         {
             return makeShortName(filename, 255);
@@ -105,72 +93,61 @@ public final class FileUtils
     /**
      * Appends the fileToAppend on the destination file. The file that is appended
      * will be removed afterwards.
+     *
      * @throws IOException in case an IO operation fails
      */
-    public static void appendFile( File destination, File fileToAppend )
-        throws IOException
-    {
+    public static void appendFile(File destination, File fileToAppend)
+            throws IOException {
         long destFileLength = destination.length();
         long appendFileLength = fileToAppend.length();
         // open files
-        FileInputStream inStream = new FileInputStream( fileToAppend );
-        try
-        {
-            RandomAccessFile destFile = new RandomAccessFile( destination, "rwd" );
-            try
-            {
+        FileInputStream inStream = new FileInputStream(fileToAppend);
+        try {
+            RandomAccessFile destFile = new RandomAccessFile(destination, "rwd");
+            try {
                 // extend file length... this causes dramatical performance boost since
                 // contents is streamed into already freed space.
-                destFile.setLength( destFileLength + appendFileLength );
-                destFile.seek( destFileLength );
-                byte[] buffer = new byte[ (int)Math.min( BUFFER_LENGTH, appendFileLength ) ];
+                destFile.setLength(destFileLength + appendFileLength);
+                destFile.seek(destFileLength);
+                byte[] buffer = new byte[(int) Math.min(BUFFER_LENGTH, appendFileLength)];
                 int length;
-                while ( -1 != (length = inStream.read(buffer)) )
-                {
+                while (-1 != (length = inStream.read(buffer))) {
                     long start2 = System.currentTimeMillis();
-                    destFile.write( buffer, 0, length );
+                    destFile.write(buffer, 0, length);
                     long end2 = System.currentTimeMillis();
-                    try
-                    {
-                        Thread.sleep( (end2 - start2) * 2 );
-                    }
-                    catch ( InterruptedException exp )
-                    {
+                    try {
+                        Thread.sleep((end2 - start2) * 2);
+                    } catch (InterruptedException exp) {
                         // reset interrupted flag
                         Thread.currentThread().interrupt();
                         return;
                     }
                 }
-            }
-            finally
-            {
+            } finally {
                 destFile.close();
-                IOUtil.closeQuietly( destFile );
+                IOUtil.closeQuietly(destFile);
             }
+        } finally {
+            IOUtil.closeQuietly(inStream);
         }
-        finally
-        {
-            IOUtil.closeQuietly( inStream );
-        }
-        
-        FileUtils.deleteFileMultiFallback( fileToAppend );
+
+        FileUtils.deleteFileMultiFallback(fileToAppend);
     }
-    
+
     /**
      * Copys the source file to the destination file. Old contents of the
      * destination file will be overwritten.
      * This is a optimized version of the org.apache.commons.io.FileUtils.copy
      * source, with larger file buffer for a faster copy process.
+     *
      * @throws IOException in case an IO operation fails
      */
-    public static void copyFile( File source, File destination )
-        throws IOException
-    {
-        copyFile( source, destination, source.length() );
-        if (source.length() != destination.length())
-        {
+    public static void copyFile(File source, File destination)
+            throws IOException {
+        copyFile(source, destination, source.length());
+        if (source.length() != destination.length()) {
             String message = "Failed to copy full contents from " + source
-                + " to " + destination + " - " + source.length() + '/' + destination.length();
+                    + " to " + destination + " - " + source.length() + '/' + destination.length();
             throw new IOException(message);
         }
     }
@@ -180,60 +157,52 @@ public final class FileUtils
      * destination file will be overwritten.
      * This is a optimized version of the org.apache.commons.io.FileUtils.copy
      * source, with larger file buffer for a faster copy process.
+     *
      * @throws IOException in case an IO operation fails
      */
-    public static void copyFile( File source, File destination, long copyLength )
-        throws IOException
-    {   
+    public static void copyFile(File source, File destination, long copyLength)
+            throws IOException {
         // check source exists
-        if (!source.exists())
-        {
+        if (!source.exists()) {
             String message = "File " + source + " does not exist";
             throw new FileNotFoundException(message);
         }
 
         //does destinations directory exist ?
         if (destination.getParentFile() != null
-            && !destination.getParentFile().exists())
-        {
-            forceMkdir( destination.getParentFile() );
+                && !destination.getParentFile().exists()) {
+            forceMkdir(destination.getParentFile());
         }
 
         //make sure we can write to destination
-        if (destination.exists() && !destination.canWrite())
-        {
+        if (destination.exists() && !destination.canWrite()) {
             String message = "Unable to open file " + destination
-                + " for writing.";
+                    + " for writing.";
             throw new IOException(message);
         }
 
         //makes sure it is not the same file
-        if (source.getCanonicalPath().equals(destination.getCanonicalPath()))
-        {
+        if (source.getCanonicalPath().equals(destination.getCanonicalPath())) {
             String message = "Unable to write file " + source + " on itself.";
             throw new IOException(message);
         }
-        
-        if ( copyLength == 0 )
-        {
-            truncateFile( destination, 0 );
+
+        if (copyLength == 0) {
+            truncateFile(destination, 0);
         }
 
         FileInputStream input = null;
         FileOutputStream output = null;
-        try
-        {
+        try {
             input = new FileInputStream(source);
             output = new FileOutputStream(destination);
             long lengthLeft = copyLength;
             byte[] buffer = new byte[(int) Math.min(BUFFER_LENGTH,
-                lengthLeft + 1)];
+                    lengthLeft + 1)];
             int read;
-            while ( lengthLeft > 0 )
-            {
+            while (lengthLeft > 0) {
                 read = input.read(buffer);
-                if ( read == -1 )
-                {
+                if (read == -1) {
                     break;
                 }
                 lengthLeft -= read;
@@ -241,9 +210,7 @@ public final class FileUtils
             }
             output.flush();
             output.getFD().sync();
-        }
-        finally
-        {
+        } finally {
             IOUtil.closeQuietly(input);
             IOUtil.closeQuietly(output);
         }
@@ -251,117 +218,99 @@ public final class FileUtils
         //file copy should preserve file date
         destination.setLastModified(source.lastModified());
     }
-    
+
     /**
      * Splits the source file at the splitpoint into the destination file.
      * The result will be the source file containing data to the split point and
      * the destination file containing the data from the split point to the end
      * of the file.
-     * @param source the source file to split.
+     *
+     * @param source      the source file to split.
      * @param destination the destination file to split into.
-     * @param splitPoint the split point byte position inside the file.
-     * When the file size is 10 and the splitPoint is 3 the source file will contain
-     * the first 3 bytes while the destination file will contain the last 7 bytes.
+     * @param splitPoint  the split point byte position inside the file.
+     *                    When the file size is 10 and the splitPoint is 3 the source file will contain
+     *                    the first 3 bytes while the destination file will contain the last 7 bytes.
      * @throws IOException in case of a IOException during split operation.
      */
-    public static void splitFile( File source, File destination, long splitPoint )
-        throws IOException
-    {
+    public static void splitFile(File source, File destination, long splitPoint)
+            throws IOException {
         // open files
-        RandomAccessFile sourceFile = new RandomAccessFile( source, "rws" );
-        try
-        {
-            FileOutputStream outStream = new FileOutputStream( destination );
-            try
-            {
-                sourceFile.seek( splitPoint );
-                byte[] buffer = new byte[ (int)Math.min( BUFFER_LENGTH, source.length() + 1) ];
+        RandomAccessFile sourceFile = new RandomAccessFile(source, "rws");
+        try {
+            FileOutputStream outStream = new FileOutputStream(destination);
+            try {
+                sourceFile.seek(splitPoint);
+                byte[] buffer = new byte[(int) Math.min(BUFFER_LENGTH, source.length() + 1)];
                 int length;
-                while ( -1 != (length = sourceFile.read(buffer)) )
-                {
-                    outStream.write( buffer, 0, length );
+                while (-1 != (length = sourceFile.read(buffer))) {
+                    outStream.write(buffer, 0, length);
                 }
-                sourceFile.setLength( splitPoint );
-            }
-            finally
-            {
+                sourceFile.setLength(splitPoint);
+            } finally {
                 IOUtil.closeQuietly(outStream);
             }
-        }
-        finally
-        {
+        } finally {
             IOUtil.closeQuietly(sourceFile);
         }
     }
-    
+
     /**
-     * This method performce a multi fallback file rename operation to try to 
+     * This method performce a multi fallback file rename operation to try to
      * work around the Java problems with rename operations.
      * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6213298
-     * @throws FileHandlingException 
-     */ 
-    public static void renameFileMultiFallback( File sourceFile, File destFile )
-        throws FileHandlingException
-    {
-        if ( destFile.exists() )
-        {
+     *
+     * @throws FileHandlingException
+     */
+    public static void renameFileMultiFallback(File sourceFile, File destFile)
+            throws FileHandlingException {
+        if (destFile.exists()) {
             // cant rename to file that already exists
             throw new FileHandlingException(
-                FileHandlingException.FILE_ALREADY_EXISTS );
+                    FileHandlingException.FILE_ALREADY_EXISTS);
         }
-        if ( !sourceFile.exists() )
-        {
+        if (!sourceFile.exists()) {
             return;
         }
-        
-        boolean succ = sourceFile.renameTo( destFile );
-        if ( succ )
-        {
-            NLogger.warn( FileUtils.class, "First renameTo operation worked!" );
+
+        boolean succ = sourceFile.renameTo(destFile);
+        if (succ) {
+            NLogger.warn(FileUtils.class, "First renameTo operation worked!");
             return;
         }
-        NLogger.warn( FileUtils.class, "First renameTo operation failed." );
+        NLogger.warn(FileUtils.class, "First renameTo operation failed.");
         // Try to run garbage collector to make the file rename operation work
         System.gc();
         // Yield thread and to hope GC kicks in...
         Thread.yield();
         // Try rename again...
-        succ = sourceFile.renameTo( destFile );
-        if ( succ )
-        {
+        succ = sourceFile.renameTo(destFile);
+        if (succ) {
             return;
         }
-        NLogger.warn( FileUtils.class, "Second renameTo operation failed." );
+        NLogger.warn(FileUtils.class, "Second renameTo operation failed.");
         // Rename failed again... just perform a slow copy/delete operation
         FileInputStream input = null;
         FileOutputStream output = null;
-        try
-        {
+        try {
             input = new FileInputStream(sourceFile);
             output = new FileOutputStream(destFile);
             long lengthLeft = sourceFile.length();
             byte[] buffer = new byte[(int) Math.min(BUFFER_LENGTH,
-                lengthLeft + 1)];
+                    lengthLeft + 1)];
             int read;
-            while ( lengthLeft > 0 )
-            {
+            while (lengthLeft > 0) {
                 read = input.read(buffer);
-                if ( read == -1 )
-                {
+                if (read == -1) {
                     break;
                 }
                 lengthLeft -= read;
                 output.write(buffer, 0, read);
-            }            
-        }
-        catch ( IOException exp )
-        {
-            NLogger.warn( FileUtils.class, "Third renameTo operation failed." );
+            }
+        } catch (IOException exp) {
+            NLogger.warn(FileUtils.class, "Third renameTo operation failed.");
             throw new FileHandlingException(
-                FileHandlingException.RENAME_FAILED, exp );
-        }
-        finally
-        {
+                    FileHandlingException.RENAME_FAILED, exp);
+        } finally {
             IOUtil.closeQuietly(input);
             IOUtil.closeQuietly(output);
         }
@@ -369,73 +318,62 @@ public final class FileUtils
         destFile.setLastModified(sourceFile.lastModified());
 
         // try to delete file
-        FileUtils.deleteFileMultiFallback( sourceFile );
+        FileUtils.deleteFileMultiFallback(sourceFile);
     }
-    
+
     /**
-     * This method performs a multi fallback file delete operation to try to 
+     * This method performs a multi fallback file delete operation to try to
      * work around the Java problems with delete operations.
      * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6213298
-     * @param file the file to delete. 
-     */ 
-    public static void deleteFileMultiFallback( File file )
-    {
+     *
+     * @param file the file to delete.
+     */
+    public static void deleteFileMultiFallback(File file) {
         boolean succ = file.delete();
-        if ( succ )
-        {
+        if (succ) {
             return;
         }
-        NLogger.warn( FileUtils.class, "First delete operation failed." );
+        NLogger.warn(FileUtils.class, "First delete operation failed.");
         // Try to run garbage collector to make the file delete operation work
         System.gc();
         // Yield thread and to hope GC kicks in...
         Thread.yield();
         // Try again...
-        succ = file.delete( );
-        if ( succ )
-        {
+        succ = file.delete();
+        if (succ) {
             return;
         }
-        NLogger.warn( FileUtils.class, "Second delete operation failed." );
+        NLogger.warn(FileUtils.class, "Second delete operation failed.");
         // Last chance... try to delete on exit...
         file.deleteOnExit();
         // and truncate file to at least free up the space...
-        try
-        {
-            FileUtils.truncateFile( file, 0 );
-        }
-        catch ( IOException exp )
-        {
-            NLogger.warn( FileUtils.class, "Delete/truncate operation failed." );
+        try {
+            FileUtils.truncateFile(file, 0);
+        } catch (IOException exp) {
+            NLogger.warn(FileUtils.class, "Delete/truncate operation failed.");
         }
     }
 
     /**
      * Truncates an input file to the requested size. If the file doesnt exists
      * or is of equal or smaller size noting is done.
-     * 
+     *
      * @param file The file to truncate.
      * @param size The size to truncate to.
      * @throws IOException in case an IO error occures during truncating.
      */
-    public static void truncateFile( File file, long size )
-        throws IOException
-    {
-        if ( size < 0 )
-        {
-            throw new IllegalArgumentException( "File size < 0: " + size );
+    public static void truncateFile(File file, long size)
+            throws IOException {
+        if (size < 0) {
+            throw new IllegalArgumentException("File size < 0: " + size);
         }
-        if ( file.exists()
-          && file.length() > size )
-        {
+        if (file.exists()
+                && file.length() > size) {
             RandomAccessFile raf = null;
-            try
-            {
-                raf = new RandomAccessFile( file, "rws" );
-                raf.setLength( size );
-            }
-            finally
-            {
+            try {
+                raf = new RandomAccessFile(file, "rws");
+                raf.setLength(size);
+            } finally {
                 IOUtil.closeQuietly(raf);
             }
         }
@@ -444,14 +382,12 @@ public final class FileUtils
     /**
      * Checks if subDir is a sub directory of maybeParentDir.
      */
-    public static boolean isChildOfDir( File maybeChild, File maybeParentDir )
-    {
+    public static boolean isChildOfDir(File maybeChild, File maybeParentDir) {
         // it can't be a sub dir if they don't start the same way...
-        if ( !maybeChild.getAbsolutePath().startsWith( maybeParentDir.getAbsolutePath() ) )
-        {
+        if (!maybeChild.getAbsolutePath().startsWith(maybeParentDir.getAbsolutePath())) {
             return false;
         }
-        return isChildOfDirInternal( maybeChild, maybeParentDir );
+        return isChildOfDirInternal(maybeChild, maybeParentDir);
     }
 
     /**
@@ -473,10 +409,10 @@ public final class FileUtils
             maybeChild = parent;
         }
     }
-    
+
     /**
      * From Apache Jakarta Commons IO.
-     * 
+     * <p>
      * Copies a whole directory to a new location.
      * <p>
      * This method copies the contents of the specified source directory
@@ -486,28 +422,27 @@ public final class FileUtils
      * If the destination directory did exist, then this method merges
      * the source with the destination, with the source taking precedence.
      *
-     * @param srcDir  an existing directory to copy, must not be null
-     * @param destDir  the new directory, must not be null
-     * @param preserveFileDate  true if the file date of the copy
-     *  should be the same as the original
-     *
+     * @param srcDir           an existing directory to copy, must not be null
+     * @param destDir          the new directory, must not be null
+     * @param preserveFileDate true if the file date of the copy
+     *                         should be the same as the original
      * @throws NullPointerException if source or destination is null
-     * @throws IOException if source or destination is invalid
-     * @throws IOException if an IO error occurs during copying
+     * @throws IOException          if source or destination is invalid
+     * @throws IOException          if an IO error occurs during copying
      * @since Commons IO 1.1
      */
     public static void copyDirectory(File srcDir, File destDir,
-            boolean preserveFileDate) throws IOException {
+                                     boolean preserveFileDate) throws IOException {
         if (srcDir == null) {
             throw new NullPointerException("Source must not be null");
         }
         if (destDir == null) {
             throw new NullPointerException("Destination must not be null");
         }
-        if ( !srcDir.exists() ) {
+        if (!srcDir.exists()) {
             throw new FileNotFoundException("Source '" + srcDir + "' does not exist");
         }
-        if ( !srcDir.isDirectory() ) {
+        if (!srcDir.isDirectory()) {
             throw new IOException("Source '" + srcDir + "' exists but is not a directory");
         }
         if (srcDir.getCanonicalPath().equals(destDir.getCanonicalPath())) {
@@ -518,111 +453,91 @@ public final class FileUtils
 
     /**
      * From Apache Jakarta Commons IO.
-     * 
+     * <p>
      * Internal copy directory method.
-     * 
-     * @param srcDir  the validated source directory, not null
-     * @param destDir  the validated destination directory, not null
-     * @param preserveFileDate  whether to preserve the file date
+     *
+     * @param srcDir           the validated source directory, not null
+     * @param destDir          the validated destination directory, not null
+     * @param preserveFileDate whether to preserve the file date
      * @throws IOException if an error occurs
      * @since Commons IO 1.1
      */
     private static void doCopyDirectory(File srcDir, File destDir, boolean preserveFileDate)
-        throws IOException 
-    {
-        if (destDir.exists()) 
-        {
-            if ( !destDir.isDirectory() ) 
-            {
+            throws IOException {
+        if (destDir.exists()) {
+            if (!destDir.isDirectory()) {
                 throw new IOException("Destination '" + destDir + "' exists but is not a directory");
             }
-        } 
-        else 
-        {
-            forceMkdir( destDir );
-            if (preserveFileDate) 
-            {
+        } else {
+            forceMkdir(destDir);
+            if (preserveFileDate) {
                 destDir.setLastModified(srcDir.lastModified());
             }
         }
-        if ( !destDir.canWrite() ) 
-        {
+        if (!destDir.canWrite()) {
             throw new IOException("Destination '" + destDir + "' cannot be written to");
         }
         // recurse
         File[] files = srcDir.listFiles();
-        if (files == null) 
-        {  // null if security restricted
+        if (files == null) {  // null if security restricted
             throw new IOException("Failed to list contents of " + srcDir);
         }
-        for (int i = 0; i < files.length; i++) 
-        {
+        for (int i = 0; i < files.length; i++) {
             File copiedFile = new File(destDir, files[i].getName());
-            if (files[i].isDirectory()) 
-            {
+            if (files[i].isDirectory()) {
                 doCopyDirectory(files[i], copiedFile, preserveFileDate);
-            } 
-            else 
-            {
+            } else {
                 doCopyFile(files[i], copiedFile, preserveFileDate);
             }
         }
     }
-    
+
     /**
      * From Apache Jakarta Commons IO.
-     * 
+     * <p>
      * Internal copy file method.
-     * 
-     * @param srcFile  the validated source file, not null
-     * @param destFile  the validated destination file, not null
-     * @param preserveFileDate  whether to preserve the file date
+     *
+     * @param srcFile          the validated source file, not null
+     * @param destFile         the validated destination file, not null
+     * @param preserveFileDate whether to preserve the file date
      * @throws IOException if an error occurs
      */
-    private static void doCopyFile(File srcFile, File destFile, boolean preserveFileDate) 
-        throws IOException
-    {        
-        if ( destFile.exists() && destFile.isDirectory() )
-        {
-            throw new IOException( "Destination '" + destFile
-                + "' exists but is a directory" );
+    private static void doCopyFile(File srcFile, File destFile, boolean preserveFileDate)
+            throws IOException {
+        if (destFile.exists() && destFile.isDirectory()) {
+            throw new IOException("Destination '" + destFile
+                    + "' exists but is a directory");
         }
 
-        FileChannel input = new FileInputStream( srcFile ).getChannel();
-        try
-        {
-            FileChannel output = new FileOutputStream( destFile ).getChannel();
-            try
-            {
-                output.transferFrom( input, 0, input.size() );
-            } finally
-            {
-                IOUtil.closeQuietly( output );
+        FileChannel input = new FileInputStream(srcFile).getChannel();
+        try {
+            FileChannel output = new FileOutputStream(destFile).getChannel();
+            try {
+                output.transferFrom(input, 0, input.size());
+            } finally {
+                IOUtil.closeQuietly(output);
             }
-        } finally
-        {
-            IOUtil.closeQuietly( input );
+        } finally {
+            IOUtil.closeQuietly(input);
         }
 
-        if ( srcFile.length() != destFile.length() )
-        {
-            throw new IOException( "Failed to copy full contents from '"
-                + srcFile + "' to '" + destFile + '\'');
+        if (srcFile.length() != destFile.length()) {
+            throw new IOException("Failed to copy full contents from '"
+                    + srcFile + "' to '" + destFile + '\'');
         }
-        if ( preserveFileDate )
-        {
-            destFile.setLastModified( srcFile.lastModified() );
+        if (preserveFileDate) {
+            destFile.setLastModified(srcFile.lastModified());
         }
     }
-    
+
     /**
      * Recursively delete a directory.
      *
-     * @param directory  directory to delete
+     * @param directory directory to delete
      * @throws IOException in case deletion is unsuccessful
      */
     public static void deleteDirectory(File directory)
-        throws IOException {
+            throws IOException {
         if (!directory.exists()) {
             return;
         }
@@ -630,7 +545,7 @@ public final class FileUtils
         cleanDirectory(directory);
         if (!directory.delete()) {
             String message =
-                "Unable to delete directory " + directory + '.';
+                    "Unable to delete directory " + directory + '.';
             throw new IOException(message);
         }
     }
@@ -671,7 +586,7 @@ public final class FileUtils
             throw exception;
         }
     }
-    
+
     /**
      * Delete a file. If file is a directory, delete it and all sub-directories.
      * <p>
@@ -679,12 +594,12 @@ public final class FileUtils
      * <ul>
      * <li>A directory to be deleted does not have to be empty.</li>
      * <li>You get exceptions when a file or directory cannot be deleted.
-     *      (java.io.File methods returns a boolean)</li>
+     * (java.io.File methods returns a boolean)</li>
      * </ul>
      *
-     * @param file  file or directory to delete, not null
+     * @param file file or directory to delete, not null
      * @throws NullPointerException if the directory is null
-     * @throws IOException in case deletion is unsuccessful
+     * @throws IOException          in case deletion is unsuccessful
      */
     public static void forceDelete(File file) throws IOException {
         if (file.isDirectory()) {
@@ -695,35 +610,35 @@ public final class FileUtils
             }
             if (!file.delete()) {
                 String message =
-                    "Unable to delete file: " + file;
+                        "Unable to delete file: " + file;
                 throw new IOException(message);
             }
         }
     }
-    
+
     /**
      * Makes a directory, including any necessary but nonexistent parent
      * directories. If there already exists a file with specified name or
      * the directory cannot be created then an exception is thrown.
      *
-     * @param directory  directory to create, must not be <code>null</code>
+     * @param directory directory to create, must not be <code>null</code>
      * @throws NullPointerException if the directory is <code>null</code>
-     * @throws IOException if the directory cannot be created
+     * @throws IOException          if the directory cannot be created
      */
     public static void forceMkdir(File directory) throws IOException {
         if (directory.exists()) {
             if (directory.isFile()) {
                 String message =
-                    "File "
-                        + directory
-                        + " exists and is "
-                        + "not a directory. Unable to create directory.";
+                        "File "
+                                + directory
+                                + " exists and is "
+                                + "not a directory. Unable to create directory.";
                 throw new IOException(message);
             }
         } else {
             if (!directory.mkdirs()) {
                 String message =
-                    "Unable to create directory " + directory;
+                        "Unable to create directory " + directory;
                 throw new IOException(message);
             }
         }

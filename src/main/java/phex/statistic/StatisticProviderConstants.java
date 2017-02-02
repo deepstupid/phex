@@ -21,8 +21,7 @@
  */
 package phex.statistic;
 
-public interface StatisticProviderConstants
-{
+public interface StatisticProviderConstants {
     public static final String TOTAL_BANDWIDTH_PROVIDER = "TotalBandwidthProvider";
     public static final String NETWORK_BANDWIDTH_PROVIDER = "NetworkBandwidthProvider";
     public static final String DOWNLOAD_BANDWIDTH_PROVIDER = "DownloadBandwidthProvider";
@@ -53,21 +52,21 @@ public interface StatisticProviderConstants
     public static final String TOTAL_UPLOAD_COUNT_PROVIDER = "TotalUploadCountProvider";
     public static final String SESSION_DOWNLOAD_COUNT_PROVIDER = "SessionDownloadCountProvider";
     public static final String TOTAL_DOWNLOAD_COUNT_PROVIDER = "TotalDownloadCountProvider";
-    
+
     public static final String PUSH_DOWNLOAD_ATTEMPTS_PROVIDER = "PushDownloadAttemptsProvider";
     public static final String PUSH_DOWNLOAD_SUCESS_PROVIDER = "PushDownloadSucessProvider";
     public static final String PUSH_DOWNLOAD_FAILURE_PROVIDER = "PushDownloadFailureProvider";
-    
+
     public static final String PUSH_DLDPUSHPROXY_ATTEMPTS_PROVIDER = "PushDldPushProxyAttemptsProvider";
     public static final String PUSH_DLDPUSHPROXY_SUCESS_PROVIDER = "PushDldPushProxySuccessProvider";
-    
+
     public static final String PUSH_UPLOAD_ATTEMPTS_PROVIDER = "PushUploadAttemptsProvider";
     public static final String PUSH_UPLOAD_SUCESS_PROVIDER = "PushUploadSucessProvider";
     public static final String PUSH_UPLOAD_FAILURE_PROVIDER = "PushUploadFailureProvider";
-    
+
     public static final String HORIZON_HOST_COUNT_PROVIDER = "HorizonHostCountProvider";
     public static final String HORIZON_FILE_COUNT_PROVIDER = "HorizonFileCountProvider";
     public static final String HORIZON_FILE_SIZE_PROVIDER = "HorizonFileSizeProvider";
-    
+
 
 }

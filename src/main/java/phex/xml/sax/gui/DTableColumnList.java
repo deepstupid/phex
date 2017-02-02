@@ -24,12 +24,10 @@ package phex.xml.sax.gui;
 
 import phex.xml.sax.DSubElementList;
 
-public class DTableColumnList extends DSubElementList<DTableColumn>
-{
+public class DTableColumnList extends DSubElementList<DTableColumn> {
     public static final String ELEMENT_NAME = "column-list";
- 
-    public DTableColumnList( )
-    {
-        super( ELEMENT_NAME );
+
+    public DTableColumnList() {
+        super(ELEMENT_NAME);
     }
 }

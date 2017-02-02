@@ -25,8 +25,7 @@ import phex.download.RemoteFile;
 
 import java.util.EventObject;
 
-public class SearchDataEvent extends EventObject
-{
+public class SearchDataEvent extends EventObject {
     public static final short SEARCH_STARTED = 0;
     public static final short SEARCH_HITS_ADDED = 1;
     public static final short SEARCH_FILTERED = 2;
@@ -38,35 +37,31 @@ public class SearchDataEvent extends EventObject
      * SEARCH_STARTED, SEARCH_HITS_ADDED, SEARCH_FILTERED or SEARCH_STOPED.
      */
     private final short type;
-    
+
     /**
      * The search data
      */
     private RemoteFile[] searchData;
 
     /**
-     * 
      * @param source
-     * @param aType The type of the search change event. This can be:
-     * SEARCH_STARTED, SEARCH_HITS_ADDED, SEARCH_FILTERED or SEARCH_STOPED.
+     * @param aType  The type of the search change event. This can be:
+     *               SEARCH_STARTED, SEARCH_HITS_ADDED, SEARCH_FILTERED or SEARCH_STOPED.
      */
-    public SearchDataEvent( Object source, short aType )
-    {
-        super( source );
+    public SearchDataEvent(Object source, short aType) {
+        super(source);
         type = aType;
     }
-    
+
     /**
-     * 
      * @param source
-     * @param aType The type of the search change event. This can be:
-     * SEARCH_STARTED, SEARCH_HITS_ADDED, SEARCH_FILTERED or SEARCH_STOPED.
+     * @param aType     The type of the search change event. This can be:
+     *                  SEARCH_STARTED, SEARCH_HITS_ADDED, SEARCH_FILTERED or SEARCH_STOPED.
      * @param aStartIdx
      * @param aEndIdx
      */
-    public SearchDataEvent( Object source, short aType, RemoteFile[] data )
-    {
-        super( source );
+    public SearchDataEvent(Object source, short aType, RemoteFile[] data) {
+        super(source);
         type = aType;
         searchData = data;
     }
@@ -74,19 +69,19 @@ public class SearchDataEvent extends EventObject
     /**
      * The type of the search change event. This can be:
      * SEARCH_STARTED, SEARCH_HITS_ADDED, SEARCH_FILTERED or SEARCH_STOPED.
+     *
      * @return the type of the search change event.
      */
-    public short getType()
-    {
+    public short getType() {
         return type;
     }
-    
+
     /**
      * The provided search data.
+     *
      * @return
      */
-    public RemoteFile[] getSearchData()
-    {
+    public RemoteFile[] getSearchData() {
         return searchData;
     }
 }

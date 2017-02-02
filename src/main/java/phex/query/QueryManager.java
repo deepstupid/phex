@@ -36,39 +36,37 @@ import phex.servent.Servent;
 import java.io.File;
 import java.util.TimerTask;
 
-public class QueryManager extends AbstractLifeCycle
-{
-    private static final Logger logger = LoggerFactory.getLogger( QueryManager.class );
+public class QueryManager extends AbstractLifeCycle {
+    private static final Logger logger = LoggerFactory.getLogger(QueryManager.class);
     private final Servent servent;
     private final MessageService msgService;
     private final SearchContainer searchContainer;
     private final BackgroundSearchContainer backgroundSearchContainer;
     private final DynamicQueryWorker dynamicQueryWorker;
     private final QueryFactory queryFactory;
-    
+
     /**
      * The last time a query was send.
      */
     private volatile long lastQueryTime;
 
-    public QueryManager( MessageService msgService, Servent servent )
-    {
+    public QueryManager(MessageService msgService, Servent servent) {
         this.servent = servent;
         this.msgService = msgService;
-        queryFactory = new QueryFactory( servent );
-        searchContainer = new SearchContainer( queryFactory, servent );
-        msgService.addMessageSubscriber( QueryResponseMsg.class, 
-            searchContainer );
-        msgService.addUdpMessageSubscriber( OOBReplyCountVMsg.class, 
-            searchContainer );
-        msgService.addUdpMessageSubscriber( QueryResponseMsg.class, 
-            searchContainer );
-        
-        backgroundSearchContainer = new BackgroundSearchContainer( queryFactory, 
-            servent );
-        msgService.addMessageSubscriber( QueryResponseMsg.class, 
-            backgroundSearchContainer );
-        
+        queryFactory = new QueryFactory(servent);
+        searchContainer = new SearchContainer(queryFactory, servent);
+        msgService.addMessageSubscriber(QueryResponseMsg.class,
+                searchContainer);
+        msgService.addUdpMessageSubscriber(OOBReplyCountVMsg.class,
+                searchContainer);
+        msgService.addUdpMessageSubscriber(QueryResponseMsg.class,
+                searchContainer);
+
+        backgroundSearchContainer = new BackgroundSearchContainer(queryFactory,
+                servent);
+        msgService.addMessageSubscriber(QueryResponseMsg.class,
+                backgroundSearchContainer);
+
         File filterFile = servent.getGnutellaNetwork().getSearchFilterFile();
         //researchService = new ResearchService( new ResearchServiceConfig() );
         dynamicQueryWorker = new DynamicQueryWorker();
@@ -76,32 +74,28 @@ public class QueryManager extends AbstractLifeCycle
     }
 
     @Override
-    protected void doStart()
-    {
+    protected void doStart() {
         dynamicQueryWorker.startQueryWorker();
-        Environment.getInstance().scheduleTimerTask( 
-            new ExpiredSearchCheckTimer(), ExpiredSearchCheckTimer.TIMER_PERIOD,
-            ExpiredSearchCheckTimer.TIMER_PERIOD );
+        Environment.getInstance().scheduleTimerTask(
+                new ExpiredSearchCheckTimer(), ExpiredSearchCheckTimer.TIMER_PERIOD,
+                ExpiredSearchCheckTimer.TIMER_PERIOD);
     }
-    
+
     @Override
     public void doStop() {
 
     }
-    
+
     //@EventTopicSubscriber(topic=PhexEventTopics.Host_Disconnect)
-    public void onHostDisconnectEvent( String topic, Host host )
-    {
-        removeHostQueries( host );
+    public void onHostDisconnectEvent(String topic, Host host) {
+        removeHostQueries(host);
     }
 
-    public SearchContainer getSearchContainer()
-    {
+    public SearchContainer getSearchContainer() {
         return searchContainer;
     }
 
-    public BackgroundSearchContainer getBackgroundSearchContainer()
-    {
+    public BackgroundSearchContainer getBackgroundSearchContainer() {
         return backgroundSearchContainer;
     }
 
@@ -110,59 +104,54 @@ public class QueryManager extends AbstractLifeCycle
         return researchService;
     }
 */
-    
+
     /**
      * Removes all running queries for this host.
+     *
      * @param host the host to remove its queries for.
      */
-    public void removeHostQueries( Host host )
-    {
-        if ( host.isUltrapeerLeafConnection() )
-        {
-            dynamicQueryWorker.removeDynamicQuerysForHost( host );
+    public void removeHostQueries(Host host) {
+        if (host.isUltrapeerLeafConnection()) {
+            dynamicQueryWorker.removeDynamicQuerysForHost(host);
         }
     }
-    
+
     /**
      * Sends a dynamic query using the dynamic query engine.
+     *
      * @param query the query to send.
      */
-    public DynamicQueryEngine sendDynamicQuery( QueryMsg query, Host sourceHost,
-        SearchProgress searchProgress )
-    {
-        DynamicQueryEngine engine = new DynamicQueryEngine( query, sourceHost,
-            searchProgress, servent.getHostService().getNetworkHostsContainer(), 
-            msgService );
-        dynamicQueryWorker.addDynamicQueryEngine( engine );
+    public DynamicQueryEngine sendDynamicQuery(QueryMsg query, Host sourceHost,
+                                               SearchProgress searchProgress) {
+        DynamicQueryEngine engine = new DynamicQueryEngine(query, sourceHost,
+                searchProgress, servent.getHostService().getNetworkHostsContainer(),
+                msgService);
+        dynamicQueryWorker.addDynamicQueryEngine(engine);
         return engine;
     }
-    
+
     /**
      * Sends a query for this host, usually initiated by the user.
+     *
      * @param queryMsg the query to send.
      * @return the possible dynamic query engine used, or null if no
-     *         dynamic query is initiated.
+     * dynamic query is initiated.
      */
-    public DynamicQueryEngine sendMyQuery( QueryMsg queryMsg,
-        SearchProgress searchProgress )
-    {
+    public DynamicQueryEngine sendMyQuery(QueryMsg queryMsg,
+                                          SearchProgress searchProgress) {
         lastQueryTime = System.currentTimeMillis();
-        msgService.updateMyQueryRouting( queryMsg );
+        msgService.updateMyQueryRouting(queryMsg);
         searchProgress.searchStarted();
-        
-        if ( servent.isUltrapeer() )
-        {
-            return sendDynamicQuery( queryMsg, Host.LOCAL_HOST, searchProgress );
-        }
-        else
-        {
-            msgService.forwardMyQueryToUltrapeers( queryMsg );
+
+        if (servent.isUltrapeer()) {
+            return sendDynamicQuery(queryMsg, Host.LOCAL_HOST, searchProgress);
+        } else {
+            msgService.forwardMyQueryToUltrapeers(queryMsg);
             return null;
         }
     }
-    
-    public long getLastQueryTime()
-    {
+
+    public long getLastQueryTime() {
         return lastQueryTime;
     }
 
@@ -170,8 +159,7 @@ public class QueryManager extends AbstractLifeCycle
     /**
      * Stops all searches where the timeout has passed.
      */
-    private class ExpiredSearchCheckTimer extends TimerTask
-    {
+    private class ExpiredSearchCheckTimer extends TimerTask {
 
         public static final long TIMER_PERIOD = 5000;
 
@@ -179,18 +167,14 @@ public class QueryManager extends AbstractLifeCycle
          * @see java.util.TimerTask#run()
          */
         @Override
-        public void run()
-        {
-            try
-            {
+        public void run() {
+            try {
                 // Stops all searches where the timeout has passed.
                 long currentTime = System.currentTimeMillis();
-                searchContainer.stopExpiredSearches( currentTime );
-                backgroundSearchContainer.stopExpiredSearches( currentTime );
-            }
-            catch ( Throwable th )
-            {
-                logger.error( th.toString(), th );
+                searchContainer.stopExpiredSearches(currentTime);
+                backgroundSearchContainer.stopExpiredSearches(currentTime);
+            } catch (Throwable th) {
+                logger.error(th.toString(), th);
             }
         }
     }

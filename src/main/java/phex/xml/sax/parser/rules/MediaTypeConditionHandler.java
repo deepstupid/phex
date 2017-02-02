@@ -32,8 +32,7 @@ import phex.xml.sax.rules.DMediaTypeCondition;
 
 import javax.xml.parsers.SAXParser;
 
-public class MediaTypeConditionHandler extends DefaultHandler
-{
+public class MediaTypeConditionHandler extends DefaultHandler {
     public static final String ELEMENT_NAME = DMediaTypeCondition.ELEMENT_NAME;
 
     private final SAXParser parser;
@@ -42,9 +41,8 @@ public class MediaTypeConditionHandler extends DefaultHandler
 
     private final DefaultHandler parent;
 
-    public MediaTypeConditionHandler( DMediaTypeCondition condition, Attributes attributes,
-        DefaultHandler parent, SAXParser parser )
-    {
+    public MediaTypeConditionHandler(DMediaTypeCondition condition, Attributes attributes,
+                                     DefaultHandler parent, SAXParser parser) {
         this.condition = condition;
         this.parser = parser;
         this.parent = parent;
@@ -53,23 +51,19 @@ public class MediaTypeConditionHandler extends DefaultHandler
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes ) throws SAXException
-    {
-        if ( qName.equals( "media" ) )
-        {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes) throws SAXException {
+        if (qName.equals("media")) {
             String name = attributes.getValue("name");
-            if ( !StringUtils.isEmpty(name) )
-            {
-                MediaType type = MediaType.getTypeForName( name );
-                if ( type != null )
-                {
+            if (!StringUtils.isEmpty(name)) {
+                MediaType type = MediaType.getTypeForName(name);
+                if (type != null) {
                     condition.getTypes().add(type);
                 }
             }
@@ -77,17 +71,14 @@ public class MediaTypeConditionHandler extends DefaultHandler
         return;
     }
 
-    public void endElement( String uri, String localName, String qName )
-        throws SAXException
-    {
-        if ( qName.equals( ELEMENT_NAME ) )
-        {
-            parser.getXMLReader().setContentHandler( parent );
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equals(ELEMENT_NAME)) {
+            parser.getXMLReader().setContentHandler(parent);
         }
     }
 
-    public InputSource resolveEntity( String publicId, String systemId )
-    {
+    public InputSource resolveEntity(String publicId, String systemId) {
         return null;
     }
 }

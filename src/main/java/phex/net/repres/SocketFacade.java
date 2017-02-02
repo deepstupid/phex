@@ -29,13 +29,12 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.nio.channels.ByteChannel;
 
-public interface SocketFacade extends Closeable
-{
+public interface SocketFacade extends Closeable {
     void setSoTimeout(int socketRWTimeout) throws SocketException;
-    
+
     ByteChannel getChannel() throws IOException;
-    
+
     void close() throws IOException;
-    
+
     DestAddress getRemoteAddress();
 }

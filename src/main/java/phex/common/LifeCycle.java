@@ -25,19 +25,18 @@ package phex.common;
  * A life cycle interface for classes that like to manage a defined life cycle
  * in the application.
  */
-public interface LifeCycle
-{
+public interface LifeCycle {
     /**
      * Starts the component.
-     * 
+     *
      * @throws Exception if the component fails to start
      */
     void start() throws Exception;
 
     /**
      * Stops the component.
-     * 
-     * @exception Exception If the component fails to stop
+     *
+     * @throws Exception If the component fails to stop
      */
     void stop() throws Exception;
 

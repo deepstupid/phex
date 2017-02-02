@@ -47,54 +47,45 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractUploadHandler implements UploadHandler
-{
+public abstract class AbstractUploadHandler implements UploadHandler {
+    protected final SharedFilesService sharedFilesService;
     /**
      * Indicates whether the connection is persistent or not. Like Keep-Alive
      * connections.
      */
     private boolean isPersistentConnection;
-    
     /**
      * Indicates whether the upload is queued or not.
      */
     private boolean isUploadQueued;
-
     /**
-     * The earliest timestamp the connection is allowed to come back with the  
+     * The earliest timestamp the connection is allowed to come back with the
      * next request attempt.
      */
     private long queueMinNextPollTime;
-    
     /**
-     * The maximum time in millis the connection can wait with the next 
+     * The maximum time in millis the connection can wait with the next
      * request before it times out.
      */
     private int queueMaxNextPollTime;
-    
-    protected final SharedFilesService sharedFilesService;
-    
-    protected AbstractUploadHandler( SharedFilesService sharedFilesService )
-    {
+
+    protected AbstractUploadHandler(SharedFilesService sharedFilesService) {
         this.sharedFilesService = sharedFilesService;
     }
-    
-    public UploadResponse determineUploadResponse( HTTPRequest httpRequest, 
-        UploadState uploadState, UploadManager uploadMgr ) 
-        throws IOException
-    {
+
+    public UploadResponse determineUploadResponse(HTTPRequest httpRequest,
+                                                  UploadState uploadState, UploadManager uploadMgr)
+            throws IOException {
         String logMsg = "HTTP Request: " + httpRequest.buildHTTPRequestString();
-        NLogger.debug( AbstractUploadHandler.class, logMsg);
-        uploadState.addToUploadLog( logMsg );
-        
+        NLogger.debug(AbstractUploadHandler.class, logMsg);
+        uploadState.addToUploadLog(logMsg);
+
         // first thing to do before entering the handshake state is to verify if
         // we have capacity for this upload connection.
-        if ( uploadState.getStatus() == UploadStatus.ACCEPTING_REQUEST )
-        {// this is the first time we handle this UploadState...
-            boolean succ = uploadMgr.validateAndCountAddress( 
-                uploadState.getHostAddress() );
-            if ( !succ )
-            {
+        if (uploadState.getStatus() == UploadStatus.ACCEPTING_REQUEST) {// this is the first time we handle this UploadState...
+            boolean succ = uploadMgr.validateAndCountAddress(
+                    uploadState.getHostAddress());
+            if (!succ) {
                 isPersistentConnection = false;
                 return UploadResponse.get503UploadLimitReachedForIP();
             }
@@ -102,33 +93,30 @@ public abstract class AbstractUploadHandler implements UploadHandler
 
         GnutellaRequest gRequest = httpRequest.getGnutellaRequest();
         assert gRequest != null : "Not a Gnutella file request.";
-        
+
         // ensure the requested file is available...
-        ShareFile requestedFile = findShareFile( gRequest, uploadState );
-        if (requestedFile == null)
-        {
+        ShareFile requestedFile = findShareFile(gRequest, uploadState);
+        if (requestedFile == null) {
             isPersistentConnection = false;
             return UploadResponse.get404FileNotFound();
         }
-        
+
         HTTPHeader header;
-        
+
         // If this is a already queued request or a new request check if we are busy or are 
         // able to queue candidate. But don't let accepted connections get busy again...
         boolean queueRequest = false;
-        if ( (isUploadQueued || uploadState.getStatus() == UploadStatus.ACCEPTING_REQUEST) 
-              && uploadMgr.isHostBusy() )
-        {
-            header = httpRequest.getHeader( GnutellaHeaderNames.X_QUEUE );
+        if ((isUploadQueued || uploadState.getStatus() == UploadStatus.ACCEPTING_REQUEST)
+                && uploadMgr.isHostBusy()) {
+            header = httpRequest.getHeader(GnutellaHeaderNames.X_QUEUE);
             if (header == null || !UploadPrefs.AllowQueuing.get().booleanValue()
-                || uploadMgr.isQueueLimitReached())
-            {// Queuing is not supported
+                    || uploadMgr.isQueueLimitReached()) {// Queuing is not supported
                 isPersistentConnection = false;
-                return UploadResponse.get503UploadLimitReached( requestedFile, uploadState );
+                return UploadResponse.get503UploadLimitReached(requestedFile, uploadState);
             }
             queueRequest = true;
         }
-        
+
         // now after we done all fail fast checks, accept this connection and 
         // enter the handshake status for it...
         boolean succ = uploadMgr.trySetUploadStatus(uploadState, UploadStatus.HANDSHAKE);
@@ -136,77 +124,64 @@ public abstract class AbstractUploadHandler implements UploadHandler
         // though to prevent them to be "counted" as running we can't set them to handshake status and
         // skip status setting here... not very nice... host busy counting should somehow use some
         // other method then by counting the status.. too error prone
-        if ( !succ && !queueRequest)
-        {
+        if (!succ && !queueRequest) {
             isPersistentConnection = false;
-            return UploadResponse.get503UploadLimitReached( requestedFile, uploadState );
+            return UploadResponse.get503UploadLimitReached(requestedFile, uploadState);
         }
-        
+
         // update port information..
         int port = -1;
         header = httpRequest.getHeader(GnutellaHeaderNames.X_NODE);
-        if (header == null)
-        {
+        if (header == null) {
             header = httpRequest.getHeader(GnutellaHeaderNames.X_LISTEN_IP);
         }
-        if (header == null)
-        {
+        if (header == null) {
             header = httpRequest.getHeader(GnutellaHeaderNames.LISTEN_IP);
         }
-        if (header == null)
-        {
+        if (header == null) {
             header = httpRequest.getHeader(GnutellaHeaderNames.X_MY_ADDRESS);
         }
-        if (header != null)
-        {
+        if (header != null) {
             // parse port
-            port = AddressUtils.parsePort(header.getValue());            
+            port = AddressUtils.parsePort(header.getValue());
         }
-        if (port > 0)
-        {
+        if (port > 0) {
             DestAddress addi = uploadState.getHostAddress();
-            uploadState.setHostAddress( new DefaultDestAddress( 
-                addi.getIpAddress(), port ) );
+            uploadState.setHostAddress(new DefaultDestAddress(
+                    addi.getIpAddress(), port));
         }
 
         // check for persistent connection status...
-        handleConnectionHeader( httpRequest );
-        
+        handleConnectionHeader(httpRequest);
+
         // collect vendor infos...
         String vendor = null;
-        header = httpRequest.getHeader( HTTPHeaderNames.USER_AGENT );
-        if (header != null)
-        {
+        header = httpRequest.getHeader(HTTPHeaderNames.USER_AGENT);
+        if (header != null) {
             vendor = header.getValue();
-        }
-        else
-        {
+        } else {
             vendor = "";
         }
-        uploadState.setVendor( vendor );
-        
-        
-        UploadResponse response = determineFailFastResponse( httpRequest, uploadState, requestedFile );
-        if ( response != null )
-        {
+        uploadState.setVendor(vendor);
+
+
+        UploadResponse response = determineFailFastResponse(httpRequest, uploadState, requestedFile);
+        if (response != null) {
             return response;
         }
-        
+
         isUploadQueued = queueRequest;
-        if ( queueRequest )
-        {
+        if (queueRequest) {
             // Queuing is supported
-            int queuePosition = uploadMgr.getQueuedPosition( uploadState );
-            if ( queuePosition < 0 )
-            {// missing in queue list
-                queuePosition = uploadMgr.addQueuedUpload( uploadState );
+            int queuePosition = uploadMgr.getQueuedPosition(uploadState);
+            if (queuePosition < 0) {// missing in queue list
+                queuePosition = uploadMgr.addQueuedUpload(uploadState);
             }
             succ = uploadMgr.trySetUploadStatus(uploadState, UploadStatus.QUEUED);
-            if ( !succ )
-            {
+            if (!succ) {
                 // setting from handshake to queued should never fail.
-                throw new IOException("Status transition from " 
-                    + uploadState.getStatus() + " to " + UploadStatus.QUEUED + " failed.");
+                throw new IOException("Status transition from "
+                        + uploadState.getStatus() + " to " + UploadStatus.QUEUED + " failed.");
             }
 
             int queueLength = uploadMgr.getUploadQueueSize();
@@ -216,79 +191,77 @@ public abstract class AbstractUploadHandler implements UploadHandler
 
             queueMinNextPollTime = System.currentTimeMillis() + pollMin * 1000L;
             queueMaxNextPollTime = pollMax * 1000;
-            return UploadResponse.get503Queued( queuePosition, queueLength, 
-                uploadLimit, pollMin, pollMax, requestedFile, uploadState );
+            return UploadResponse.get503Queued(queuePosition, queueLength,
+                    uploadLimit, pollMin, pollMax, requestedFile, uploadState);
         }
-        
-        if ( !uploadMgr.containsUploadState( uploadState ) )
-        {
+
+        if (!uploadMgr.containsUploadState(uploadState)) {
             uploadMgr.addUploadState(uploadState);
         }
-        
+
         // finalize upload response by sub-class...
 
-        return finalizeUploadResponse( httpRequest, uploadState, requestedFile );
+        return finalizeUploadResponse(httpRequest, uploadState, requestedFile);
     }
-    
+
     /**
      * Allows subclasses to evaluate the HTTPRequest and decide to fail
      * fast before the request goes into possible queue state or evaluates
      * the handshake further.
+     *
      * @return the UploadResponse in case a sub-class decides to fail this
      * request or null in case the handshake can be evaluated further.
      */
-    protected abstract UploadResponse determineFailFastResponse( HTTPRequest httpRequest,
-        UploadState uploadState, ShareFile requestedFile );
-    
+    protected abstract UploadResponse determineFailFastResponse(HTTPRequest httpRequest,
+                                                                UploadState uploadState, ShareFile requestedFile);
+
     /**
-     * Allows the sub-class to finally finish the specific request and form the upload 
-     * response, after all common upload processing is finished. 
+     * Allows the sub-class to finally finish the specific request and form the upload
+     * response, after all common upload processing is finished.
+     *
      * @param httpRequest
      * @param uploadState
      * @param requestedFile
      * @return the upload response
-     * @throws IOException 
+     * @throws IOException
      */
-    protected abstract UploadResponse finalizeUploadResponse( HTTPRequest httpRequest,
-        UploadState uploadState, ShareFile requestedFile ) throws IOException;
-    
-    
+    protected abstract UploadResponse finalizeUploadResponse(HTTPRequest httpRequest,
+                                                             UploadState uploadState, ShareFile requestedFile) throws IOException;
+
+
     /**
      * @param requestedShareFile
      * @param sharedFileURN
      */
-    protected void handleAltLocRequestHeader( HTTPRequest httpRequest, UploadState uploadState,
-        ShareFile requestedShareFile, URN sharedFileURN, PhexSecurityManager securityService )
-    {
+    protected void handleAltLocRequestHeader(HTTPRequest httpRequest, UploadState uploadState,
+                                             ShareFile requestedShareFile, URN sharedFileURN, PhexSecurityManager securityService) {
         // collect alternate locations from request...
         List<AlternateLocation> allAltLocs = new ArrayList<AlternateLocation>();
-        
-        HTTPHeader[] headers = httpRequest.getHeaders( GnutellaHeaderNames.ALT_LOC );
-        List<AlternateLocation> altLocList = AltLocContainer.parseUriResAltLocFromHeaders( 
-            headers, securityService );
+
+        HTTPHeader[] headers = httpRequest.getHeaders(GnutellaHeaderNames.ALT_LOC);
+        List<AlternateLocation> altLocList = AltLocContainer.parseUriResAltLocFromHeaders(
+                headers, securityService);
         allAltLocs.addAll(altLocList);
-        
-        headers = httpRequest.getHeaders( GnutellaHeaderNames.X_ALT_LOC );
-        altLocList = AltLocContainer.parseUriResAltLocFromHeaders( headers, securityService );
+
+        headers = httpRequest.getHeaders(GnutellaHeaderNames.X_ALT_LOC);
+        altLocList = AltLocContainer.parseUriResAltLocFromHeaders(headers, securityService);
         allAltLocs.addAll(altLocList);
-        
-        headers = httpRequest.getHeaders( GnutellaHeaderNames.X_ALT );
-        altLocList = AltLocContainer.parseCompactIpAltLocFromHeaders( headers,
-            sharedFileURN, securityService );
+
+        headers = httpRequest.getHeaders(GnutellaHeaderNames.X_ALT);
+        altLocList = AltLocContainer.parseCompactIpAltLocFromHeaders(headers,
+                sharedFileURN, securityService);
         allAltLocs.addAll(altLocList);
-        
-        if ( allAltLocs.size() == 0 )
-        {
+
+        if (allAltLocs.size() == 0) {
             return;
         }
-        
+
         AltLocContainer altLocContainer = requestedShareFile.getAltLocContainer();
-        for ( AlternateLocation altLoc : allAltLocs )
-        {
+        for (AlternateLocation altLoc : allAltLocs) {
             String logMsg = "Adding AltLoc " + altLoc.getHTTPString();
-            NLogger.debug( UploadEngine.class, logMsg);
-            uploadState.addToUploadLog( logMsg );
-            altLocContainer.addAlternateLocation( altLoc );
+            NLogger.debug(UploadEngine.class, logMsg);
+            uploadState.addToUploadLog(logMsg);
+            altLocContainer.addAlternateLocation(altLoc);
         }
     }
 
@@ -298,125 +271,91 @@ public abstract class AbstractUploadHandler implements UploadHandler
      * with no 'Connection: close' header. Or a HTTP connection with
      * 'Connection: Keep-Alive' header.
      */
-    public void handleConnectionHeader( HTTPRequest httpRequest )
-    {
-        HTTPHeader header = httpRequest.getHeader( HTTPHeaderNames.CONNECTION );
-        if ( HTTPRequest.HTTP_11.equals( httpRequest.getHTTPVersion() ) )
-        {
-            if ( header != null && header.getValue().equalsIgnoreCase("CLOSE") )
-            {
+    public void handleConnectionHeader(HTTPRequest httpRequest) {
+        HTTPHeader header = httpRequest.getHeader(HTTPHeaderNames.CONNECTION);
+        if (HTTPRequest.HTTP_11.equals(httpRequest.getHTTPVersion())) {
+            if (header != null && header.getValue().equalsIgnoreCase("CLOSE")) {
                 isPersistentConnection = false;
-            }
-            else
-            {
+            } else {
                 isPersistentConnection = true;
             }
-        }
-        else
-        {
-            if ( header != null && header.getValue().equalsIgnoreCase("KEEP-ALIVE") )
-            {
+        } else {
+            if (header != null && header.getValue().equalsIgnoreCase("KEEP-ALIVE")) {
                 isPersistentConnection = true;
-            }
-            else
-            {
+            } else {
                 isPersistentConnection = false;
             }
         }
     }
 
-    public boolean isPersistentConnection()
-    {
+    public boolean isPersistentConnection() {
         return isPersistentConnection;
     }
-    
-    public boolean isQueued()
-    {
+
+    public boolean isQueued() {
         return isUploadQueued;
     }
-    
+
     /**
-     * Returns the earliest timestamp the connection is allowed to come back with the  
+     * Returns the earliest timestamp the connection is allowed to come back with the
      * next request attempt.
      */
-    public long getQueueMinNextPollTime()
-    {
+    public long getQueueMinNextPollTime() {
         return queueMinNextPollTime;
     }
-    
+
     /**
-     * Returns he maximum time in millis the connection can wait with the next 
+     * Returns he maximum time in millis the connection can wait with the next
      * request before it times out.
      */
-    public int getQueueMaxNextPollTime()
-    {
+    public int getQueueMaxNextPollTime() {
         return queueMaxNextPollTime;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    protected ShareFile findShareFile( GnutellaRequest gRequest, UploadState uploadState )
-    {
+
+
+    protected ShareFile findShareFile(GnutellaRequest gRequest, UploadState uploadState) {
         ShareFile shareFile = null;
 
         // first check for a URN
         URN requestURN = gRequest.getURN();
-        if (requestURN != null)
-        {// get request contains urn
-            if (!(requestURN.isSha1Nid()))
-            {
+        if (requestURN != null) {// get request contains urn
+            if (!(requestURN.isSha1Nid())) {
                 requestURN = new URN("urn:sha1:" + requestURN.getSHA1Nss());
             }
             shareFile = sharedFilesService.getFileByURN(requestURN);
             // look for partials..
-            if (shareFile == null && UploadPrefs.SharePartialFiles.get().booleanValue() )
-            {
+            if (shareFile == null && UploadPrefs.SharePartialFiles.get().booleanValue()) {
                 SwarmingManager swMgr = Servent.getInstance().getDownloadService();
                 SWDownloadFile dwFile = swMgr.getDownloadFileByURN(requestURN);
-                if (dwFile != null)
-                {
+                if (dwFile != null) {
                     shareFile = new PartialShareFile(dwFile);
                 }
             }
         }
         // file index is -1 when parsing was wrong
-        else if (gRequest.getFileIndex() != -1)
-        {
+        else if (gRequest.getFileIndex() != -1) {
             int index = gRequest.getFileIndex();
             shareFile = sharedFilesService.getFileByIndex(index);
-            if (shareFile != null)
-            {
+            if (shareFile != null) {
                 String shareFileName = shareFile.getFileName();
                 // if filename dosn't match
-                if (!gRequest.getFileName().equalsIgnoreCase(shareFileName))
-                {
-                    String logMsg = "Requested index '" + index 
-                        + "' with filename '" + shareFileName
-                        + "' dosn't match request filename '" 
-                        + gRequest.getFileName() + "'.";
-                    NLogger.debug( UploadEngine.class, logMsg);
-                    uploadState.addToUploadLog( logMsg );
+                if (!gRequest.getFileName().equalsIgnoreCase(shareFileName)) {
+                    String logMsg = "Requested index '" + index
+                            + "' with filename '" + shareFileName
+                            + "' dosn't match request filename '"
+                            + gRequest.getFileName() + "'.";
+                    NLogger.debug(UploadEngine.class, logMsg);
+                    uploadState.addToUploadLog(logMsg);
                     shareFile = null;
                 }
-            }
-            else
-            {
+            } else {
                 // TODO currently this will not work right because the file hash
                 // contains
                 // the full path name informations of the file. But we only look
                 // for the filename.
                 // TODO this should be also used if the index returns a file
                 // with a different filename then the requested filename
-                if (gRequest.getFileName() != null)
-                {
+                if (gRequest.getFileName() != null) {
                     shareFile = sharedFilesService.getFileByName(gRequest.getFileName());
                 }
             }

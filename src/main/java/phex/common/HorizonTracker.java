@@ -35,129 +35,112 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The class tracks the estimated size of the horizon in host count,
- * file count and file size. 
- * Tracking is done by keeping all seen Pongs from hosts up to a 
+ * file count and file size.
+ * Tracking is done by keeping all seen Pongs from hosts up to a
  * maximal count. After a certain time the collection is dropped and
  * recounting starts. The old values are lazy updated on each recount cycle.
  * The numbers are only a very rough estimation of the actual numbers.
  */
-public class HorizonTracker implements MessageSubscriber<PongMsg>
-{
-    private static final Logger logger = LoggerFactory.getLogger( HorizonTracker.class );
-    
+public class HorizonTracker implements MessageSubscriber<PongMsg> {
+    private static final Logger logger = LoggerFactory.getLogger(HorizonTracker.class);
+
     /**
      * The maximal number of PONGS to track
      */
     private static final int MAX_PONG_COUNT = 10000;
-    
     /**
-     * Indicates if the values of the last or current count should 
+     * A set to keep track of the already counted addresses.
+     */
+    private final Set<DestAddress> trackedAddresses;
+    /**
+     * Indicates if the values of the last or current count should
      * be used.
      */
     private boolean useLastCountValues;
-    
-    /**
-     * A set to keep track of the already counted addresses. 
-     */
-    private final Set<DestAddress> trackedAddresses;
-    
     private int currentHostCount;
     private long currentFileCount;
     private long currentFileSize;
-    
+
     private int lastHostCount;
     private long lastFileCount;
     private long lastFileSize;
-    
+
     /**
      * Singleton to make sure there is only one tracker!
      */
-    public HorizonTracker()
-    {
-        Environment.getInstance().scheduleTimerTask( 
+    public HorizonTracker() {
+        Environment.getInstance().scheduleTimerTask(
                 new TrackerRefreshTimer(), TrackerRefreshTimer.TIMER_PERIOD,
-                TrackerRefreshTimer.TIMER_PERIOD );
-        
+                TrackerRefreshTimer.TIMER_PERIOD);
+
         useLastCountValues = false;
-        trackedAddresses = Collections.newSetFromMap( new ConcurrentHashMap<>() );
+        trackedAddresses = Collections.newSetFromMap(new ConcurrentHashMap<>());
     }
-    
+
     /**
      * @return Returns the lastFileCount.
      */
-    public long getTotalFileCount()
-    {
+    public long getTotalFileCount() {
         return useLastCountValues ? lastFileCount : currentFileCount;
     }
 
     /**
      * @return Returns the lastFileSize.
      */
-    public long getTotalFileSize()
-    {
+    public long getTotalFileSize() {
         return useLastCountValues ? lastFileSize : currentFileSize;
     }
-    
+
     /**
      * @return Returns the lastHostCount.
      */
-    public int getTotalHostCount()
-    {
+    public int getTotalHostCount() {
         return useLastCountValues ? lastHostCount : currentHostCount;
     }
-    
-    public void onMessage(PongMsg message, Host sourceHost)
-    {
-        if ( trackedAddresses.size() >= MAX_PONG_COUNT )
-        {
+
+    public void onMessage(PongMsg message, Host sourceHost) {
+        if (trackedAddresses.size() >= MAX_PONG_COUNT) {
             return;
         }
 
-        boolean isAdded = trackedAddresses.add( message.getPongAddress() );
-        if ( isAdded )
-        { 
+        boolean isAdded = trackedAddresses.add(message.getPongAddress());
+        if (isAdded) {
             currentFileCount += message.getFileCount();
             currentFileSize += message.getFileSizeInKB();
-            currentHostCount ++;
+            currentHostCount++;
         }
     }
-    
-    private synchronized void refreshTrackerStats()
-    {
+
+    private synchronized void refreshTrackerStats() {
         lastHostCount = currentHostCount;
         lastFileCount = currentFileCount;
         lastFileSize = currentFileSize;
-        
+
         useLastCountValues = true;
-        
+
         currentFileCount = 0;
         currentFileSize = 0;
         currentHostCount = 0;
-        
+
         trackedAddresses.clear();
     }
-    
-    private class TrackerRefreshTimer extends TimerTask
-    {
+
+    private class TrackerRefreshTimer extends TimerTask {
         /**
          * The time after which the horizon calculation is updated.
          */
-        private static final long TIMER_PERIOD = 15*60*1000;
-        
+        private static final long TIMER_PERIOD = 15 * 60 * 1000;
+
         /**
          * @see java.util.TimerTask#run()
          */
         @Override
-        public void run()
-        {
-            try
-            {
+        public void run() {
+            try {
                 refreshTrackerStats();
-            }
-            catch ( Throwable th )
-            {
-                logger.error( th.toString(), th );
+            } catch (Throwable th) {
+                logger.error(th.toString(), th);
             }
         }
     }
- }
+}

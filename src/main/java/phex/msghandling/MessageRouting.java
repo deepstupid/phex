@@ -27,10 +27,9 @@ import phex.util.GUIDRoutingTable;
 import phex.util.QueryGUIDRoutingPair;
 import phex.util.QueryGUIDRoutingTable;
 
-class MessageRouting
-{
+class MessageRouting {
     private static final int MAX_ROUTED_QUERY_RESULTS = 200;
-    
+
     /**
      * Holds ping GUID routings to Host.
      */
@@ -45,62 +44,57 @@ class MessageRouting
      * Holds query reply GUID routings to Host.
      */
     private final GUIDRoutingTable pushRoutingTable;
-    
-    public MessageRouting()
-    {
+
+    public MessageRouting() {
         // holds from 2-4 minutes of ping GUIDs
-        pingRoutingTable = new GUIDRoutingTable( 2 * 60 * 1000 );
+        pingRoutingTable = new GUIDRoutingTable(2 * 60 * 1000);
         // holds from 5-10 minutes of query GUIDs
-        queryRoutingTable = new QueryGUIDRoutingTable( 5 * 60 * 1000 );
+        queryRoutingTable = new QueryGUIDRoutingTable(5 * 60 * 1000);
         // holds from 7-14 minutes of QueryReply GUIDs for push routes.
-        pushRoutingTable = new GUIDRoutingTable( 7 * 60 * 1000 );
-    }
-    
-    /**
-     * <p>Checks if a route for the GUID is already available. If not associates
-     * the Host with the GUID.</p>
-     *
-     * @param clientID  the GUID to route.
-     * @param sender  the Host sending information
-     */
-    public boolean checkAndAddToPingRoutingTable( GUID pingGUID,
-        Host sender )
-    {
-        return pingRoutingTable.checkAndAddRouting( pingGUID, sender );
+        pushRoutingTable = new GUIDRoutingTable(7 * 60 * 1000);
     }
 
     /**
      * <p>Checks if a route for the GUID is already available. If not associates
      * the Host with the GUID.</p>
      *
-     * @param clientID  the GUID to route.
-     * @param sender  the Host sending information
+     * @param clientID the GUID to route.
+     * @param sender   the Host sending information
      */
-    public boolean checkAndAddToQueryRoutingTable( GUID queryGUID,
-        Host sender )
-    {
-        return queryRoutingTable.checkAndAddRouting( queryGUID, sender );
+    public boolean checkAndAddToPingRoutingTable(GUID pingGUID,
+                                                 Host sender) {
+        return pingRoutingTable.checkAndAddRouting(pingGUID, sender);
+    }
+
+    /**
+     * <p>Checks if a route for the GUID is already available. If not associates
+     * the Host with the GUID.</p>
+     *
+     * @param clientID the GUID to route.
+     * @param sender   the Host sending information
+     */
+    public boolean checkAndAddToQueryRoutingTable(GUID queryGUID,
+                                                  Host sender) {
+        return queryRoutingTable.checkAndAddRouting(queryGUID, sender);
     }
 
     /**
      * <p>Associate a Host with the GUID for the servent serving a file.</p>
      *
-     * @param clientID  the GUID of a servent publishing a file
-     * @param sender  the Host sending information
+     * @param clientID the GUID of a servent publishing a file
+     * @param sender   the Host sending information
      */
-    public void addToPushRoutingTable( GUID clientID, Host sender )
-    {
-        pushRoutingTable.addRouting( clientID, sender );
+    public void addToPushRoutingTable(GUID clientID, Host sender) {
+        pushRoutingTable.addRouting(clientID, sender);
     }
-    
+
     /**
      * Returns the push routing host for the given GUID or null
      * if no push routing is available or the host is not anymore
      * connected.
      */
-    protected Host getPushRouting( GUID clientID )
-    {
-        return pushRoutingTable.findRouting( clientID );
+    protected Host getPushRouting(GUID clientID) {
+        return pushRoutingTable.findRouting(clientID);
     }
 
     /**
@@ -108,22 +102,19 @@ class MessageRouting
      * if no push routing is available or the host is not anymore
      * connected.
      */
-    protected Host getPingRouting( GUID pingGUID )
-    {
-        return pingRoutingTable.findRouting( pingGUID );
+    protected Host getPingRouting(GUID pingGUID) {
+        return pingRoutingTable.findRouting(pingGUID);
     }
-    
-    public boolean routePongMessage( PongMsg pongMessage )
-    {
-        Host host = getPingRouting( pongMessage.getHeader().getMsgID() );
-        if ( host == null || host == Host.LOCAL_HOST )
-        { 
+
+    public boolean routePongMessage(PongMsg pongMessage) {
+        Host host = getPingRouting(pongMessage.getHeader().getMsgID());
+        if (host == null || host == Host.LOCAL_HOST) {
             // The PongMsg was for me or can't be routed.
             return false;
         }
         // I did forward the PingMsg on behalf of host.
         // Route the PongMsg back to pinging host.
-        host.queueMessageToSend( pongMessage );
+        host.queueMessageToSend(pongMessage);
         return true;
     }
 
@@ -131,53 +122,47 @@ class MessageRouting
      * Returns the query routing pair with host for the given GUID or null
      * if no push routing is available or the host is not anymore
      * connected.
-     * 
-     * @param queryGUID the GUID of the query reply route to find.
+     *
+     * @param queryGUID   the GUID of the query reply route to find.
      * @param resultCount the number of results routed together with the query reply of
-     *        this query GUID.
-     * @return the QueryGUIDRoutingPair that contains the host and routed result count to 
-     *      route the reply or null.
+     *                    this query GUID.
+     * @return the QueryGUIDRoutingPair that contains the host and routed result count to
+     * route the reply or null.
      */
-    protected QueryGUIDRoutingPair getQueryRouting( GUID queryGUID, int resultCount )
-    {
-        return queryRoutingTable.findRoutingForQuerys( queryGUID, resultCount );
+    protected QueryGUIDRoutingPair getQueryRouting(GUID queryGUID, int resultCount) {
+        return queryRoutingTable.findRoutingForQuerys(queryGUID, resultCount);
     }
-    
-    public boolean routeQueryResponse( QueryResponseMsg queryResponseMsg, Host sourceHost )
-        throws InvalidMessageException
-    {
+
+    public boolean routeQueryResponse(QueryResponseMsg queryResponseMsg, Host sourceHost)
+            throws InvalidMessageException {
         MsgHeader header = queryResponseMsg.getHeader();
-        
+
         // check if I forwarded a QueryMsg with the same message id as this QueryResponseMsg. 
-        QueryGUIDRoutingPair routingPair = getQueryRouting( header.getMsgID(),
-                queryResponseMsg.getUniqueResultCount() );
-        if ( routingPair == null )
-        {
+        QueryGUIDRoutingPair routingPair = getQueryRouting(header.getMsgID(),
+                queryResponseMsg.getUniqueResultCount());
+        if (routingPair == null) {
             return false;
         }
         Host host = routingPair.getHost();
-        if ( host == Host.LOCAL_HOST )
-        {
+        if (host == Host.LOCAL_HOST) {
             // The QueryResponseMsg was for me..
             return false;
         }
-        if ( routingPair.getRoutedResultCount() >= MAX_ROUTED_QUERY_RESULTS )
-        {
+        if (routingPair.getRoutedResultCount() >= MAX_ROUTED_QUERY_RESULTS) {
             // We have already routed enough results back to the host.
             return false;
         }
-        
+
         // remember push routing
-        addToPushRoutingTable( queryResponseMsg.getRemoteServentID(), sourceHost );
-        
-        host.queueMessageToSend( queryResponseMsg );
+        addToPushRoutingTable(queryResponseMsg.getRemoteServentID(), sourceHost);
+
+        host.queueMessageToSend(queryResponseMsg);
         return true;
     }
-    
-    public void removeRoutings( Host host )
-    {
-        pingRoutingTable.removeHost( host );
-        queryRoutingTable.removeHost( host );
-        pushRoutingTable.removeHost( host );
+
+    public void removeRoutings(Host host) {
+        pingRoutingTable.removeHost(host);
+        queryRoutingTable.removeHost(host);
+        pushRoutingTable.removeHost(host);
     }
 }

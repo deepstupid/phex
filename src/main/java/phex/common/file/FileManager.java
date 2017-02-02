@@ -32,34 +32,30 @@ import java.util.LinkedHashMap;
 /**
  * FileManager should be acquired through Phex.getFileManager()
  */
-public class FileManager
-{    
+public class FileManager {
     /**
      * Maps File objects to ManagedFiles
      * Both references are weak to let them be cleaned by garbage collector when
      * unused anywhere.
      */
     private final ReferenceMap fileManagedFileMap;
-    
+
     /**
      * A set to maintain and count all open files.
      */
     private LinkedHashMap<ManagedFile, ManagedFile> openFileMap;
-    
-    public FileManager()
-    {
-        fileManagedFileMap = new ReferenceMap( ReferenceMap.ReferenceStrength.WEAK, ReferenceMap.ReferenceStrength.WEAK );
+
+    public FileManager() {
+        fileManagedFileMap = new ReferenceMap(ReferenceMap.ReferenceStrength.WEAK, ReferenceMap.ReferenceStrength.WEAK);
     }
 
     /**
      * This method is called in order to cleanly shutdown the manager. It
      * should contain all cleanup operations to ensure a nice shutdown of Phex.
      */
-    public void shutdown()
-    {
+    public void shutdown() {
         // close all open files
-        if ( openFileMap == null )
-        {
+        if (openFileMap == null) {
             return;
         }
 
@@ -82,110 +78,89 @@ public class FileManager
 //            }
 //        }
     }
-    
-    private ManagedFile getManagedFile( File file )
-    {
-        synchronized( fileManagedFileMap )
-        {
+
+    private ManagedFile getManagedFile(File file) {
+        synchronized (fileManagedFileMap) {
             // find if we already have a ManagedFile in cache
             ManagedFile managedFile = (ManagedFile) fileManagedFileMap.get(file);
-            if ( managedFile == null )
-            {
-                managedFile = new ManagedFile( file );
+            if (managedFile == null) {
+                managedFile = new ManagedFile(file);
                 fileManagedFileMap.put(file, managedFile);
             }
             return managedFile;
         }
     }
-    
-    public ManagedFile getReadWriteManagedFile( File file )
-        throws ManagedFileException
-    {
-        ManagedFile managedFile = getManagedFile( file );
-        managedFile.setAccessMode( ManagedFile.AccessMode.READ_WRITE_ACCESS );
+
+    public ManagedFile getReadWriteManagedFile(File file)
+            throws ManagedFileException {
+        ManagedFile managedFile = getManagedFile(file);
+        managedFile.setAccessMode(ManagedFile.AccessMode.READ_WRITE_ACCESS);
         return managedFile;
     }
-    
-    public ReadOnlyManagedFile getReadOnlyManagedFile( File file )
-        throws ManagedFileException
-    {
-        ManagedFile managedFile = getManagedFile( file );
-        managedFile.setAccessMode( ManagedFile.AccessMode.READ_ONLY_ACCESS );
+
+    public ReadOnlyManagedFile getReadOnlyManagedFile(File file)
+            throws ManagedFileException {
+        ManagedFile managedFile = getManagedFile(file);
+        managedFile.setAccessMode(ManagedFile.AccessMode.READ_ONLY_ACCESS);
         return managedFile;
     }
-    
-    private void initOpenFileTracking()
-    {
+
+    private void initOpenFileTracking() {
         // no open file limit set.
-        if (FilePrefs.OpenFilesLimit.get() == 0 )
-        {
+        if (FilePrefs.OpenFilesLimit.get() == 0) {
             openFileMap = null;
             return;
         }
-        
-        synchronized( this )
-        {
-            if ( openFileMap == null )
-            {
+
+        synchronized (this) {
+            if (openFileMap == null) {
                 openFileMap = new LinkedHashMap<>(
                         FilePrefs.OpenFilesLimit.get(), 0.75f, true);
             }
         }
     }
-    
-    protected void trackFileOpen( ManagedFile managedFile ) 
-        throws ManagedFileException
-    {
+
+    protected void trackFileOpen(ManagedFile managedFile)
+            throws ManagedFileException {
         initOpenFileTracking();
-        if ( openFileMap == null )
-        {
+        if (openFileMap == null) {
             return;
         }
         ManagedFile oldestEntry = null;
-        synchronized( openFileMap )
-        {
-            if ( openFileMap.size() >= FilePrefs.OpenFilesLimit.get())
-            {
+        synchronized (openFileMap) {
+            if (openFileMap.size() >= FilePrefs.OpenFilesLimit.get()) {
                 Iterator<ManagedFile> iterator = openFileMap.keySet().iterator();
                 oldestEntry = iterator.next();
                 // remove file from map but wait with closing the file until
                 // we are outside of synchronized block, else we cause a deadlock.
                 iterator.remove();
             }
-            openFileMap.put( managedFile, managedFile );
+            openFileMap.put(managedFile, managedFile);
         }
-        if ( oldestEntry != null )
-        {
+        if (oldestEntry != null) {
             oldestEntry.closeFile();
         }
     }
-    
-    protected void trackFileInUse( ManagedFile managedFile )
-    {
+
+    protected void trackFileInUse(ManagedFile managedFile) {
         initOpenFileTracking();
-        if ( openFileMap == null )
-        {
+        if (openFileMap == null) {
             return;
         }
-        synchronized( openFileMap )
-        {
-            if ( openFileMap.containsKey( managedFile ) )
-            {
-                openFileMap.get( managedFile );
+        synchronized (openFileMap) {
+            if (openFileMap.containsKey(managedFile)) {
+                openFileMap.get(managedFile);
             }
         }
     }
-    
-    protected void trackFileClose( ManagedFile managedFile )
-    {
+
+    protected void trackFileClose(ManagedFile managedFile) {
         initOpenFileTracking();
-        if ( openFileMap == null )
-        {
+        if (openFileMap == null) {
             return;
         }
-        synchronized( openFileMap )
-        {
-            openFileMap.remove( managedFile );
-        } 
+        synchronized (openFileMap) {
+            openFileMap.remove(managedFile);
+        }
     }
 }

@@ -53,43 +53,46 @@ import java.util.NoSuchElementException;
  * <li>Keys and values may not be null.
  * <li>The interface to this is not complete.
  * </ul>
- * 
+ * <p>
  * See <a
  * href="http://www.csse.monash.edu.au/~lloyd/tildeAlgDS/Tree/Trie.html">Tries</a>
  * for a discussion of Tries.
  * <p>
  * This class is not thread-safe.
- * 
  * <p>
- * 
+ * <p>
+ *
  * @modified David Soh (yunharla00@hotmail.com) added getIterator() for enhanced
- *           AutoCompleteTextField use.
- * 
+ * AutoCompleteTextField use.
  */
-public class StringTrie<V>
-{
+public class StringTrie<V> {
+    /**
+     * Indicates whenever search keys are case-sensitive or not. If true, keys
+     * will be canonicalized to lowercase.
+     */
+    private final boolean ignoreCase;
     /**
      * Our representation consists of a tree of nodes whose edges are labelled
      * by strings. The first characters of all labels of all edges of a node
      * must be distinct. Typically the edges are sorted, but this is determined
      * by TrieNode.
      * <p>
-     * 
+     * <p>
      * An abstract TrieNode is a mapping from String keys to values, { <K1, V1>,
      * ..., <KN, VN> }, where all Ki and Kj are distinct for all i != j. For any
      * node N, define KEY(N) to be the concatenation of all labels on the edges
      * from the root to that node. Then the abstraction function is:
      * <p>
-     * 
+     * <p>
      * <blockquote> { <KEY(N), N.getValue() | N is a child of root and
      * N.getValue() != null} </blockquote>
-     * 
+     * <p>
      * An earlier version used character labels on edges. This made
      * implementation simpler but used more memory because one node would be
      * allocated to each character in long strings if that string had no common
      * prefixes with other elements of the Trie.
      * <p>
-     * 
+     * <p>
      * <dl>
      * <dt>INVARIANT:</td>
      * <dd>For any node N, for any edges Ei and Ej from N,<br>
@@ -101,85 +104,41 @@ public class StringTrie<V>
     private TrieNode<V> root;
 
     /**
-     * Indicates whenever search keys are case-sensitive or not. If true, keys
-     * will be canonicalized to lowercase.
-     */
-    private final boolean ignoreCase;
-
-    /**
      * Constructs a new, empty tree.
      */
-    public StringTrie(boolean ignoreCase)
-    {
+    public StringTrie(boolean ignoreCase) {
         this.ignoreCase = ignoreCase;
         clear();
     }
 
     /**
-     * Makes this empty.
-     * 
-     * @modifies this.
-     */
-    public void clear()
-    {
-        this.root = new TrieNode<>();
-    }
-
-    /**
-     * Returns the canonical version of the given string.
-     * <p>
-     * 
-     * In the basic version, strings are added and searched without
-     * modification. So this simply returns its parameter s.
-     * <p>
-     * 
-     * Other overrides may also perform a conversion to the NFC form
-     * (inter-operable across platforms) or to the NFKC form after removal of
-     * accents and diacritics from the NFKD form (ideal for searches using
-     * strings in natural language).
-     * <p>
-     * 
-     * Made public instead of protected, because the public Prefix operations
-     * below may need to use a coherent conversion of search prefixes.
-     */
-    public String canonicalCase(final String s)
-    {
-        if (!ignoreCase)
-            return s;
-        return s.toUpperCase(Locale.US).toLowerCase(Locale.US);
-    }
-
-    /**
      * Matches the pattern <tt>b</tt> against the text
      * <tt>a[startOffset...stopOffset - 1]</tt>.
-     * 
+     *
      * @return the first <tt>j</tt> so that:<br>
-     *         <tt>0 &lt;= i &lt; b.length()</tt> AND<br>
-     *         <tt>a[startOffset + j] != b[j]</tt> [a and b differ]<br>
-     *         OR <tt>stopOffset == startOffset + j</tt> [a is undefined];<br>
-     *         Returns -1 if no such <tt>j</tt> exists, i.e., there is a
-     *         match.<br>
-     *         Examples:
-     *         <ol>
-     *         <li>a = "abcde", startOffset = 0, stopOffset = 5, b = "abc"<br>
-     *         abcde ==&gt; returns -1<br>
-     *         abc
-     *         <li>a = "abcde", startOffset = 1, stopOffset = 5, b = "bXd"<br>
-     *         abcde ==&gt; returns 1 bXd
-     *         <li>a = "abcde", startOffset = 1, stopOffset = 3, b = "bcd"<br>
-     *         abc ==&gt; returns 2<br>
-     *         bcd
-     *         </ol>
-     * 
+     * <tt>0 &lt;= i &lt; b.length()</tt> AND<br>
+     * <tt>a[startOffset + j] != b[j]</tt> [a and b differ]<br>
+     * OR <tt>stopOffset == startOffset + j</tt> [a is undefined];<br>
+     * Returns -1 if no such <tt>j</tt> exists, i.e., there is a
+     * match.<br>
+     * Examples:
+     * <ol>
+     * <li>a = "abcde", startOffset = 0, stopOffset = 5, b = "abc"<br>
+     * abcde ==&gt; returns -1<br>
+     * abc
+     * <li>a = "abcde", startOffset = 1, stopOffset = 5, b = "bXd"<br>
+     * abcde ==&gt; returns 1 bXd
+     * <li>a = "abcde", startOffset = 1, stopOffset = 3, b = "bcd"<br>
+     * abc ==&gt; returns 2<br>
+     * bcd
+     * </ol>
      * @requires 0 &lt;= startOffset &lt;= stopOffset &lt;= a.length()
      */
-    private static int match(String a, int startOffset, int stopOffset, String b)
-    {
+    private static int match(String a, int startOffset, int stopOffset, String b) {
         // j is an index into b
         // i is a parallel index into a
         int i = startOffset;
-        for (int j = 0; j < b.length(); j++)
-        {
+        for (int j = 0; j < b.length(); j++) {
             if (i >= stopOffset)
                 return j;
             if (a.charAt(i) != b.charAt(j))
@@ -190,25 +149,80 @@ public class StringTrie<V>
     }
 
     /**
+     * Prints a description of the sub tree starting with <code>start</code>
+     * to <code>buf</code>. The printing starts with the given indent level.
+     * (internal)
+     */
+    private static void toStringHelper(TrieNode start, StringBuilder buf, int indent) {
+        // Print value of node.
+        if (start.getValue() != null) {
+            buf.append(" -> ");
+            buf.append(start.getValue().toString());
+        }
+        buf.append('\n');
+        // For each child...
+        for (Iterator iter = start.labelsForward(); iter.hasNext(); ) {
+            // Indent child appropriately.
+            for (int i = 0; i < indent; i++)
+                buf.append(' ');
+            // Print edge.
+            String label = (String) iter.next();
+            buf.append(label);
+            // Recurse to print value.
+            TrieNode child = start.get(label.charAt(0)).getChild();
+            toStringHelper(child, buf, indent + 1);
+        }
+    }
+
+    /**
+     * Makes this empty.
+     *
+     * @modifies this.
+     */
+    public void clear() {
+        this.root = new TrieNode<>();
+    }
+
+    /**
+     * Returns the canonical version of the given string.
+     * <p>
+     * <p>
+     * In the basic version, strings are added and searched without
+     * modification. So this simply returns its parameter s.
+     * <p>
+     * <p>
+     * Other overrides may also perform a conversion to the NFC form
+     * (inter-operable across platforms) or to the NFKC form after removal of
+     * accents and diacritics from the NFKD form (ideal for searches using
+     * strings in natural language).
+     * <p>
+     * <p>
+     * Made public instead of protected, because the public Prefix operations
+     * below may need to use a coherent conversion of search prefixes.
+     */
+    public String canonicalCase(final String s) {
+        if (!ignoreCase)
+            return s;
+        return s.toUpperCase(Locale.US).toLowerCase(Locale.US);
+    }
+
+    /**
      * Maps the given key (which may be empty) to the given value.
-     * 
+     *
      * @return the old value associated with key, or <tt>null</tt> if none
      * @requires value != null
      * @modifies this
      */
-    public V add(String key, V value)
-    {
+    public V add(String key, V value) {
         // early conversion of key, for best performance
         key = canonicalCase(key);
         // Find the largest prefix of key, key[0..i - 1], already in this.
         TrieNode<V> node = root;
         int i = 0;
-        while (i < key.length())
-        {
+        while (i < key.length()) {
             // Find the edge whose label starts with key[i].
             TrieEdge<V> edge = node.get(key.charAt(i));
-            if (edge == null)
-            {
+            if (edge == null) {
                 // 1) Additive insert.
                 TrieNode<V> newNode = new TrieNode<>(value);
                 node.put(key.substring(i), newNode);
@@ -218,8 +232,7 @@ public class StringTrie<V>
             String label = edge.getLabel();
             int j = match(key, i, key.length(), label);
             assert j != 0 : "Label didn't start with prefix[0].";
-            if (j >= 0)
-            {
+            if (j >= 0) {
                 // 2) Prefix overlaps perfectly with just part of edge label
                 // Do split insert as follows...
                 //
@@ -238,16 +251,14 @@ public class StringTrie<V>
                 String b = label.substring(j);
                 // Assert.that(canonicalCase(b).equals(b), "Bad edge a");
                 String c = key.substring(i + j);
-                if (c.length() > 0)
-                {
+                if (c.length() > 0) {
                     // Split.
                     TrieNode<V> newNode = new TrieNode<>(value);
                     node.remove(label.charAt(0));
                     node.put(a, intermediate);
                     intermediate.put(b, child);
                     intermediate.put(c, newNode);
-                } else
-                {
+                } else {
                     // Splice.
                     node.remove(label.charAt(0));
                     node.put(a, intermediate);
@@ -272,12 +283,10 @@ public class StringTrie<V>
     /**
      * Returns the node associated with prefix, or null if none. (internal)
      */
-    private TrieNode<V> fetch(String prefix)
-    {
+    private TrieNode<V> fetch(String prefix) {
         // This private method uses prefixes already in canonical form.
         TrieNode<V> node = root;
-        for (int i = 0; i < prefix.length();)
-        {
+        for (int i = 0; i < prefix.length(); ) {
             // Find the edge whose label starts with prefix[i].
             TrieEdge<V> edge = node.get(prefix.charAt(i));
             if (edge == null)
@@ -296,11 +305,10 @@ public class StringTrie<V>
 
     /**
      * Returns the value associated with the given key, or null if none.
-     * 
+     *
      * @return the <tt>Object</tt> value or <tt>null</tt>
      */
-    public V get(String key)
-    {
+    public V get(String key) {
         // early conversion of search key
         key = canonicalCase(key);
         // search the node associated with key, if it exists
@@ -313,12 +321,11 @@ public class StringTrie<V>
 
     /**
      * Ensures no values are associated with the given key.
-     * 
+     *
      * @return <tt>true</tt> if any values were actually removed
      * @modifies this.
      */
-    public boolean remove(String key)
-    {
+    public boolean remove(String key) {
         // early conversion of search key
         key = canonicalCase(key);
         // search the node associated with key, if it exists
@@ -338,11 +345,10 @@ public class StringTrie<V>
      * contains exactly the values v for which there exists a key k so that
      * k.startsWith(prefix) and get(k) == v. The remove() operation on the
      * iterator is unimplemented.
-     * 
+     *
      * @requires this not modified while iterator in use.
      */
-    public Iterator<V> getPrefixedBy(String prefix)
-    {
+    public Iterator<V> getPrefixedBy(String prefix) {
         // Early conversion of search key
         prefix = canonicalCase(prefix);
         // Note that canonicalization MAY have changed the prefix length!
@@ -353,28 +359,25 @@ public class StringTrie<V>
      * Same as getPrefixedBy(prefix.substring(startOffset, stopOffset). This is
      * useful as an optimization in certain applications to avoid allocations.
      * <p>
-     * 
+     * <p>
      * Important: canonicalization of prefix substring is NOT performed here!
      * But it can be performed early on the whole buffer using the public method
      * <tt>canonicalCase(String)</tt> of this.
-     * 
+     *
      * @requires 0 &lt;= startOffset &lt;= stopOffset &lt;= prefix.length
      * @see #canonicalCase(String)
      */
     public Iterator<V> getPrefixedBy(String prefix, int startOffset,
-        int stopOffset)
-    {
+                                     int stopOffset) {
         // Find the first node for which "prefix" prefixes KEY(node). (See the
         // implementation overview for a definition of KEY(node).) This code is
         // similar to fetch(prefix), except that if prefix extends into the
         // middle of an edge label, that edge's child is considered a match.
         TrieNode<V> node = root;
-        for (int i = startOffset; i < stopOffset;)
-        {
+        for (int i = startOffset; i < stopOffset; ) {
             // Find the edge whose label starts with prefix[i].
             TrieEdge<V> edge = node.get(prefix.charAt(i));
-            if (edge == null)
-            {
+            if (edge == null) {
                 return EmptyIterator.INSTANCE;
             }
             // Now check that rest of label matches
@@ -382,17 +385,14 @@ public class StringTrie<V>
             String label = edge.getLabel();
             int j = match(prefix, i, stopOffset, label);
             assert j != 0 : "Label didn't start with prefix[0].";
-            if (i + j == stopOffset)
-            {
+            if (i + j == stopOffset) {
                 // a) prefix overlaps perfectly with just part of edge label
                 break;
-            } else if (j >= 0)
-            {
+            } else if (j >= 0) {
                 // b) prefix and label differ at some point
                 node = null;
                 break;
-            } else
-            {
+            } else {
                 // c) prefix overlaps perfectly with all of edge label.
                 assert j == -1 : "Bad return value from match: " + i;
             }
@@ -408,51 +408,18 @@ public class StringTrie<V>
     /**
      * Returns all values (entire Trie)
      */
-    public Iterator<V> getIterator()
-    {
+    public Iterator<V> getIterator() {
         return new ValueIterator(root);
     }
 
     /**
      * @return the number of values stored in the trie.
      */
-    public int size()
-    {
+    public int size() {
         int ret = 0;
-        for (Iterator<V> iter = getIterator(); iter.hasNext();)
+        for (Iterator<V> iter = getIterator(); iter.hasNext(); )
             ret++;
         return ret;
-    }
-
-    /**
-     * Returns all the (non-null) values associated with a given node and its
-     * children. (internal)
-     */
-    private class ValueIterator implements Iterator<V>
-    {
-        private final NodeIterator delegate;
-
-        ValueIterator(TrieNode<V> start)
-        {
-            delegate = new NodeIterator(start, false);
-        }
-
-        // inherits javadoc comment
-        public V next()
-        {
-            return delegate.next().getValue();
-        }
-
-        public boolean hasNext()
-        {
-            return delegate.hasNext();
-        }
-
-        /** Throws UnsupportedOperationException */
-        public void remove()
-        {
-            throw new UnsupportedOperationException();
-        }
     }
 
     /**
@@ -461,21 +428,18 @@ public class StringTrie<V>
      * valueCompactor.apply(node). Any exceptions thrown by a call to
      * valueCompactor are thrown by this.
      * <p>
-     * 
+     * <p>
      * This method should typically be called after add(..)'ing a number of
      * nodes. Insertions can be done after the call to compact, but they might
      * be slower. Because this method only affects the performance of this,
      * there is no <tt>modifies</tt> clause listed.
      */
     public void trim(Function<V, ? extends V> valueCompactor)
-        throws IllegalArgumentException, ClassCastException
-    {
-        if (valueCompactor != null)
-        {
+            throws IllegalArgumentException, ClassCastException {
+        if (valueCompactor != null) {
             // For each node in this...
             for (Iterator<TrieNode<V>> iter = new NodeIterator(root, true); iter
-                .hasNext();)
-            {
+                    .hasNext(); ) {
                 TrieNode<V> node = iter.next();
                 node.trim();
                 // Apply compactor to value (if any).
@@ -487,47 +451,82 @@ public class StringTrie<V>
     }
 
     /**
+     * Returns a string representation of the tree state of this, i.e., the
+     * concrete state. (The version of toString commented out below returns a
+     * representation of the abstract state of this.
+     */
+    public String toString() {
+        StringBuilder buf = new StringBuilder();
+        buf.append("<root>");
+        toStringHelper(root, buf, 1);
+        return buf.toString();
+    }
+
+    /**
      * Defines the interface for passing a type as an argument to a method, with
      * a return value of a type.
      */
-    public interface Function<K, V>
-    {
+    public interface Function<K, V> {
         /**
          * Applies this function to argument, returning the result.
-         * 
+         *
+         * @throws ClassCastException       the argument is of wrong type
+         * @throws IllegalArgumentException the argument is of right type but violates some other
+         *                                  precondition.
          * @modifies argument (if there there is a side effect).
-         * @exception ClassCastException
-         *                the argument is of wrong type
-         * @exception IllegalArgumentException
-         *                the argument is of right type but violates some other
-         *                precondition.
          */
         V apply(K argument) throws ClassCastException,
-            IllegalArgumentException;
+                IllegalArgumentException;
     }
 
-    public class NodeIterator implements Iterator<TrieNode<V>>
-    {
-        /** Stack for DFS. Push and pop from back. */
+    /**
+     * Returns all the (non-null) values associated with a given node and its
+     * children. (internal)
+     */
+    private class ValueIterator implements Iterator<V> {
+        private final NodeIterator delegate;
+
+        ValueIterator(TrieNode<V> start) {
+            delegate = new NodeIterator(start, false);
+        }
+
+        // inherits javadoc comment
+        public V next() {
+            return delegate.next().getValue();
+        }
+
+        public boolean hasNext() {
+            return delegate.hasNext();
+        }
+
+        /**
+         * Throws UnsupportedOperationException
+         */
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    public class NodeIterator implements Iterator<TrieNode<V>> {
+        /**
+         * Stack for DFS. Push and pop from back.
+         */
         private final ArrayList<Iterator<TrieNode<V>>> stack = new ArrayList<>();
-
-        /** The next node to return. */
-        private TrieNode<V> nextNode;
-
         private final boolean withNulls;
+        /**
+         * The next node to return.
+         */
+        private TrieNode<V> nextNode;
 
         /**
          * Creates a new iterator that yields all the nodes of start and its
          * children that have values (ignoring internal nodes).
          */
-        public NodeIterator(TrieNode<V> start, boolean withNulls)
-        {
+        public NodeIterator(TrieNode<V> start, boolean withNulls) {
             this.withNulls = withNulls;
-            if (withNulls || start.getValue() != null)
-            {
+            if (withNulls || start.getValue() != null) {
                 nextNode = start;
-            } else
-            {
+            } else {
                 nextNode = null;
                 // scan node children to find the next node
                 advance(start);
@@ -535,16 +534,13 @@ public class StringTrie<V>
         }
 
         // inherits javadoc comment
-        public boolean hasNext()
-        {
+        public boolean hasNext() {
             return !stack.isEmpty() || nextNode != null;
         }
 
         // inherits javadoc comment
-        public TrieNode<V> next()
-        {
-            if (nextNode == null)
-            {
+        public TrieNode<V> next() {
+            if (nextNode == null) {
                 throw new NoSuchElementException();
             }
             TrieNode<V> node = nextNode;
@@ -560,22 +556,18 @@ public class StringTrie<V>
          * empty stack, or a stack whose top will be the next node returned by
          * next().
          */
-        private void advance(TrieNode<V> node)
-        {
+        private void advance(TrieNode<V> node) {
             Iterator<TrieNode<V>> children = node.childrenForward();
-            while (true)
-            { // scan siblings and their children
+            while (true) { // scan siblings and their children
                 int size;
-                if (children.hasNext())
-                {
+                if (children.hasNext()) {
                     node = children.next();
                     if (children.hasNext()) // save siblings
                         stack.add(children);
                     // check current node and scan its sibling if necessary
                     if (withNulls || node.getValue() == null)
                         children = node.childrenForward(); // loop from there
-                    else
-                    { // node qualifies for next()
+                    else { // node qualifies for next()
                         nextNode = node;
                         return; // next node exists
                     }
@@ -587,52 +579,11 @@ public class StringTrie<V>
             }
         }
 
-        /** Throws UnsupportedOperationException */
-        public void remove()
-        {
+        /**
+         * Throws UnsupportedOperationException
+         */
+        public void remove() {
             throw new UnsupportedOperationException();
-        }
-    }
-
-    /**
-     * Returns a string representation of the tree state of this, i.e., the
-     * concrete state. (The version of toString commented out below returns a
-     * representation of the abstract state of this.
-     */
-    public String toString()
-    {
-        StringBuilder buf = new StringBuilder();
-        buf.append("<root>");
-        toStringHelper(root, buf, 1);
-        return buf.toString();
-    }
-
-    /**
-     * Prints a description of the sub tree starting with <code>start</code>
-     * to <code>buf</code>. The printing starts with the given indent level.
-     * (internal)
-     */
-    private static void toStringHelper(TrieNode start, StringBuilder buf, int indent)
-    {
-        // Print value of node.
-        if (start.getValue() != null)
-        {
-            buf.append(" -> ");
-            buf.append(start.getValue().toString());
-        }
-        buf.append('\n');
-        // For each child...
-        for (Iterator iter = start.labelsForward(); iter.hasNext();)
-        {
-            // Indent child appropriately.
-            for (int i = 0; i < indent; i++)
-                buf.append(' ');
-            // Print edge.
-            String label = (String) iter.next();
-            buf.append(label);
-            // Recurse to print value.
-            TrieNode child = start.get(label.charAt(0)).getChild();
-            toStringHelper(child, buf, indent + 1);
         }
     }
 }
@@ -644,68 +595,61 @@ public class StringTrie<V>
  * different implementations may trade space for time. Each node also stores an
  * arbitrary Object value.
  * <p>
- * 
+ * <p>
  * Design note: this is a "dumb" class. It is <i>only</i> responsible for
  * managing its value and its children. None of its operations are recursive;
  * that is Trie's job. Nor does it deal with case.
  */
-final class TrieNode<E>
-{
+final class TrieNode<E> {
+    /**
+     * The list of children. Children are stored as a sorted Vector because it
+     * is a more compact than a tree or linked lists. Insertions and deletions
+     * are more expensive, but they are rare compared to searching.
+     * <p>
+     * <p>
+     * INVARIANT: children are sorted by distinct first characters of edges,
+     * i.e., for all i &lt; j,<br>
+     * children[i].edge.charAt(0) &lt; children[j].edge.charAt(0)
+     */
+    private final ArrayList<TrieEdge<E>> children = new ArrayList<>(0);
     /**
      * The value of this node.
      */
     private E value = null;
 
     /**
-     * The list of children. Children are stored as a sorted Vector because it
-     * is a more compact than a tree or linked lists. Insertions and deletions
-     * are more expensive, but they are rare compared to searching.
-     * <p>
-     * 
-     * INVARIANT: children are sorted by distinct first characters of edges,
-     * i.e., for all i &lt; j,<br>
-     * children[i].edge.charAt(0) &lt; children[j].edge.charAt(0)
-     */
-    private final ArrayList<TrieEdge<E>> children = new ArrayList<>(0);
-
-    /**
      * Creates a trie with no children and no value.
      */
-    public TrieNode()
-    {
+    public TrieNode() {
     }
 
     /**
      * Creates a trie with no children and the given value.
      */
-    public TrieNode(E value)
-    {
+    public TrieNode(E value) {
         this.value = value;
     }
 
     /**
      * Gets the value associated with this node, or null if none.
      */
-    public E getValue()
-    {
+    public E getValue() {
         return value;
     }
 
     /**
      * Sets the value associated with this node.
      */
-    public void setValue(E value)
-    {
+    public void setValue(E value) {
         this.value = value;
     }
 
     /**
      * Get the nth child edge of this node.
-     * 
+     *
      * @requires 0 &lt;= i &lt; children.size()
      */
-    private final TrieEdge<E> get(int i)
-    {
+    private final TrieEdge<E> get(int i) {
         return children.get(i);
     }
 
@@ -716,12 +660,12 @@ final class TrieNode<E>
      * &lt;= c<br>
      * In either case, returns -1 if no such i exists.
      * <p>
-     * 
+     * <p>
      * This method uses binary search and runs in O(log N) time, where N =
      * children.size().<br>
      * The standard Java binary search methods could not be used because they
      * only return exact matches. Also, they require allocating a dummy Trie.
-     * 
+     * <p>
      * Example1: Search non exact c == '_' in {[0] => 'a...', [1] => 'c...'};
      * start loop with low = 0, high = 1; middle = 0, cmiddle == 'a', c <
      * cmiddle, high = 0 (low == 0); middle = 0, cmiddle == 'a', c < cmiddle,
@@ -742,13 +686,11 @@ final class TrieNode<E>
      * 'c', cmiddle < c, low = 2 (high == 1); end loop; return high == 1 (no
      * match, insert at 2).
      */
-    private final int search(char c, boolean exact)
-    {
+    private final int search(char c, boolean exact) {
         // This code is stolen from IntSet.search.
         int low = 0;
         int high = children.size() - 1;
-        while (low <= high)
-        {
+        while (low <= high) {
             int middle = (low + high) / 2;
             char cmiddle = get(middle).getLabelStart();
             if (cmiddle < c)
@@ -768,8 +710,7 @@ final class TrieNode<E>
      * Returns the edge (at most one) whose label starts with the given
      * character, or null if no such edge.
      */
-    public TrieEdge<E> get(char labelStart)
-    {
+    public TrieEdge<E> get(char labelStart) {
         int i = search(labelStart, true);
         if (i < 0)
             return null;
@@ -781,14 +722,13 @@ final class TrieNode<E>
     /**
      * Inserts an edge with the given label to the given child to this. Keeps
      * all edges binary sorted by their label start.
-     * 
+     *
      * @requires label not empty.
      * @requires for all edges E in this, label.getLabel[0] != E not already
-     *           mapped to a node.
+     * mapped to a node.
      * @modifies this
      */
-    public void put(String label, TrieNode<E> child)
-    {
+    public void put(String label, TrieNode<E> child) {
         char labelStart;
         int i;
         // If there's a match it is the closest lower or equal one, and
@@ -796,8 +736,7 @@ final class TrieNode<E>
         // it. If there's no match, there are two cases: the Trie is empty,
         // or the closest match returned is the last edge in the list.
         if ((i = search(labelStart = label.charAt(0), // find closest match
-            false)) >= 0)
-        {
+                false)) >= 0) {
             assert get(i).getLabelStart() != labelStart : "Precondition of TrieNode.put violated.";
         }
         children.add(i + 1, new TrieEdge<>(label, child));
@@ -807,8 +746,7 @@ final class TrieNode<E>
      * Removes the edge (at most one) whose label starts with the given
      * character. Returns true if any edges where actually removed.
      */
-    public boolean remove(char labelStart)
-    {
+    public boolean remove(char labelStart) {
         int i;
         if ((i = search(labelStart, true)) < 0)
             return false;
@@ -820,11 +758,10 @@ final class TrieNode<E>
     /**
      * Ensures that this's children take a minimal amount of storage. This
      * should be called after numerous calls to add().
-     * 
+     *
      * @modifies this.
      */
-    public void trim()
-    {
+    public void trim() {
         children.trimToSize();
     }
 
@@ -832,35 +769,16 @@ final class TrieNode<E>
      * Returns the children of this in forward order, as an iterator of
      * TrieNode.
      */
-    public Iterator<TrieNode<E>> childrenForward()
-    {
+    public Iterator<TrieNode<E>> childrenForward() {
         return new ChildrenForwardIterator();
     }
 
     /**
-     * Maps (lambda(edge) edge.getChild) on children.iterator().
+     * Returns the labels of the children of this in forward order, as an
+     * iterator of Strings.
      */
-    private class ChildrenForwardIterator implements Iterator<TrieNode<E>>
-    {
-        int i = 0;
-
-        public boolean hasNext()
-        {
-            return i < children.size();
-        }
-
-        public TrieNode<E> next()
-        {
-            if (i < children.size())
-                return get(i++).getChild();
-            throw new NoSuchElementException();
-        }
-
-        /** Throws UnsupportedOperationException */
-        public void remove()
-        {
-            throw new UnsupportedOperationException();
-        }
+    public Iterator<String> labelsForward() {
+        return new LabelForwardIterator();
     }
 
     /**
@@ -886,36 +804,46 @@ final class TrieNode<E>
      */
 
     /**
-     * Returns the labels of the children of this in forward order, as an
-     * iterator of Strings.
+     * Maps (lambda(edge) edge.getLabel) on children.iteratorBackward()
      */
-    public Iterator<String> labelsForward()
-    {
-        return new LabelForwardIterator();
+    /*
+     * private class LabelBackwardIterator extends UnmodifiableIterator { int i =
+     * children.size() - 1;
+     *
+     * public boolean hasNext() { return i >= 0; }
+     *
+     * public Object next() { if (i >= 0) return get(i--).getLabel(); throw new
+     * NoSuchElementException(); } }
+     */
+
+    // inherits javadoc comment.
+    public String toString() {
+        Object val = getValue();
+        if (val != null)
+            return val.toString();
+        return "NULL";
     }
 
     /**
-     * Maps (lambda(edge) edge.getLabel) on children.iterator()
+     * Maps (lambda(edge) edge.getChild) on children.iterator().
      */
-    private class LabelForwardIterator implements Iterator<String>
-    {
+    private class ChildrenForwardIterator implements Iterator<TrieNode<E>> {
         int i = 0;
 
-        public boolean hasNext()
-        {
+        public boolean hasNext() {
             return i < children.size();
         }
 
-        public String next()
-        {
+        public TrieNode<E> next() {
             if (i < children.size())
-                return get(i++).getLabel();
+                return get(i++).getChild();
             throw new NoSuchElementException();
         }
 
-        /** Throws UnsupportedOperationException */
-        public void remove()
-        {
+        /**
+         * Throws UnsupportedOperationException
+         */
+        public void remove() {
             throw new UnsupportedOperationException();
         }
     }
@@ -929,30 +857,32 @@ final class TrieNode<E>
      */
 
     /**
-     * Maps (lambda(edge) edge.getLabel) on children.iteratorBackward()
+     * Maps (lambda(edge) edge.getLabel) on children.iterator()
      */
-    /*
-     * private class LabelBackwardIterator extends UnmodifiableIterator { int i =
-     * children.size() - 1;
-     * 
-     * public boolean hasNext() { return i >= 0; }
-     * 
-     * public Object next() { if (i >= 0) return get(i--).getLabel(); throw new
-     * NoSuchElementException(); } }
-     */
+    private class LabelForwardIterator implements Iterator<String> {
+        int i = 0;
 
-    // inherits javadoc comment.
-    public String toString()
-    {
-        Object val = getValue();
-        if (val != null)
-            return val.toString();
-        return "NULL";
+        public boolean hasNext() {
+            return i < children.size();
+        }
+
+        public String next() {
+            if (i < children.size())
+                return get(i++).getLabel();
+            throw new NoSuchElementException();
+        }
+
+        /**
+         * Throws UnsupportedOperationException
+         */
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
     }
 
     /**
      * Unit test.
-     * 
+     *
      * @see TrieNodeTest
      */
 }
@@ -960,8 +890,7 @@ final class TrieNode<E>
 /**
  * A labeled edge, i.e., a String label and a TrieNode endpoint.
  */
-final class TrieEdge<E>
-{
+final class TrieEdge<E> {
     private final String label;
 
     private final TrieNode<E> child;
@@ -970,28 +899,24 @@ final class TrieEdge<E>
      * @requires label.size() > 0
      * @requires child != null
      */
-    TrieEdge(String label, TrieNode<E> child)
-    {
+    TrieEdge(String label, TrieNode<E> child) {
         this.label = label;
         this.child = child;
     }
 
-    public String getLabel()
-    {
+    public String getLabel() {
         return label;
     }
 
     /**
      * Returns the first character of the label, i.e., getLabel().charAt(0).
      */
-    public char getLabelStart()
-    {
+    public char getLabelStart() {
         // You could store this char as an optimization if needed.
         return label.charAt(0);
     }
 
-    public TrieNode<E> getChild()
-    {
+    public TrieNode<E> getChild() {
         return child;
     }
 }

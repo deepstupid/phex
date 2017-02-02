@@ -9,8 +9,7 @@ import phex.xml.sax.rules.DSearchRule;
 import phex.xml.sax.security.DSecurity;
 import phex.xml.sax.share.DSharedLibrary;
 
-public class DPhex
-{
+public class DPhex {
     private String phexVersion;
 
     private DUpdateRequest updateRequest;
@@ -22,152 +21,124 @@ public class DPhex
     private DSharedLibrary sharedLibrary;
     private DGuiSettings guiSettings;
 
-    public String getPhexVersion()
-    {
+    public String getPhexVersion() {
         return phexVersion;
     }
 
-    public void setPhexVersion( String value )
-    {
+    public void setPhexVersion(String value) {
         phexVersion = value;
     }
 
-    public DSubElementList<DFavoriteHost> getFavoritesList()
-    {
+    public DSubElementList<DFavoriteHost> getFavoritesList() {
         return favoritesList;
     }
 
-    public void setFavoritesList( DSubElementList<DFavoriteHost> value )
-    {
+    public void setFavoritesList(DSubElementList<DFavoriteHost> value) {
         favoritesList = value;
     }
-    
+
     /**
      * @return the securityList
      */
-    public DSecurity getSecurityList()
-    {
+    public DSecurity getSecurityList() {
         return securityList;
     }
 
     /**
      * @param securityList the securityList to set
      */
-    public void setSecurityList( DSecurity securityList )
-    {
+    public void setSecurityList(DSecurity securityList) {
         this.securityList = securityList;
     }
 
-    public DSharedLibrary getSharedLibrary()
-    {
+    public DSharedLibrary getSharedLibrary() {
         return sharedLibrary;
     }
 
-    public void setSharedLibrary( DSharedLibrary value )
-    {
+    public void setSharedLibrary(DSharedLibrary value) {
         sharedLibrary = value;
     }
 
-    public DUpdateResponse getUpdateResponse()
-    {
+    public DUpdateResponse getUpdateResponse() {
         return updateResponse;
     }
 
-    public void setUpdateResponse( DUpdateResponse value )
-    {
+    public void setUpdateResponse(DUpdateResponse value) {
         updateResponse = value;
     }
 
-    public DUpdateRequest getUpdateRequest()
-    {
+    public DUpdateRequest getUpdateRequest() {
         return updateRequest;
     }
 
-    public void setUpdateRequest( DUpdateRequest value )
-    {
+    public void setUpdateRequest(DUpdateRequest value) {
         updateRequest = value;
     }
 
-    public DSubElementList<DSearchRule> getSearchRuleList()
-    {
+    public DSubElementList<DSearchRule> getSearchRuleList() {
         return searchRuleList;
     }
 
-    public void setSearchRuleList( DSubElementList<DSearchRule> rulesList )
-    {
+    public void setSearchRuleList(DSubElementList<DSearchRule> rulesList) {
         this.searchRuleList = rulesList;
     }
-    
-    public DSubElementList<DDownloadFile> getDownloadList()
-    {
+
+    public DSubElementList<DDownloadFile> getDownloadList() {
         return downloadList;
     }
 
-    public void setDownloadList( DSubElementList<DDownloadFile> downloadList )
-    {
+    public void setDownloadList(DSubElementList<DDownloadFile> downloadList) {
         this.downloadList = downloadList;
     }
 
-    public DGuiSettings getGuiSettings()
-    {
+    public DGuiSettings getGuiSettings() {
         return guiSettings;
     }
 
-    public void setGuiSettings( DGuiSettings guiSettings )
-    {
+    public void setGuiSettings(DGuiSettings guiSettings) {
         this.guiSettings = guiSettings;
     }
-    
-    
 
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
+
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
         AttributesImpl attributes = null;
-        if ( phexVersion != null )
-        {
+        if (phexVersion != null) {
             attributes = new AttributesImpl();
-            attributes.addAttribute( "", "", "phex-version", "CDATA",
-                phexVersion );
+            attributes.addAttribute("", "", "phex-version", "CDATA",
+                    phexVersion);
         }
-        writer.startElm( "phex", attributes );
+        writer.startElm("phex", attributes);
 
-        if ( updateRequest != null )
-        {
-            updateRequest.serialize( writer );
-        }
-
-        if ( favoritesList != null )
-        {
-            favoritesList.serialize( writer );
+        if (updateRequest != null) {
+            updateRequest.serialize(writer);
         }
 
-        if ( searchRuleList != null )
-        {
-            searchRuleList.serialize( writer );
-        }
-        
-        if ( downloadList != null )
-        {
-            downloadList.serialize( writer );
+        if (favoritesList != null) {
+            favoritesList.serialize(writer);
         }
 
-        if ( sharedLibrary != null )
-        {
-            sharedLibrary.serialize( writer );
+        if (searchRuleList != null) {
+            searchRuleList.serialize(writer);
         }
 
-        if ( guiSettings != null )
-        {
-            guiSettings.serialize( writer );
+        if (downloadList != null) {
+            downloadList.serialize(writer);
         }
-        
-        if ( securityList != null )
-        {
-            securityList.serialize( writer );
+
+        if (sharedLibrary != null) {
+            sharedLibrary.serialize(writer);
+        }
+
+        if (guiSettings != null) {
+            guiSettings.serialize(writer);
+        }
+
+        if (securityList != null) {
+            securityList.serialize(writer);
         }
 
         // we dont need to serialize update response
 
-        writer.endElm( "phex" );
+        writer.endElm("phex");
     }
 }

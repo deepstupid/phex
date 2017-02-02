@@ -34,10 +34,8 @@ import java.io.IOException;
 /**
  * This queue handles the flow control algorithm described in the
  * 'SACHRIFC: Simple Flow Control for Gnutella' proposal by Limewire.
- *
  */
-public class MessageQueue
-{
+public class MessageQueue {
     /**
      * The max size of a queue.
      */
@@ -90,156 +88,62 @@ public class MessageQueue
      */
     private int lastPriorityAdded;
 
-    public MessageQueue( Host host )
-    {
+    public MessageQueue(Host host) {
         this.host = host;
         // burst rates are taken from Limewire.
 
-        flowControlQueue = new FlowControlQueue[ PRIORITY_COUNT ];
+        flowControlQueue = new FlowControlQueue[PRIORITY_COUNT];
         // no timeout and lifo queue.
-        flowControlQueue[ PRIORITY_URGENT ] = new FlowControlQueue( 1,
-            Integer.MAX_VALUE, MAX_QUEUE_SIZE, true );
-            
-        // long timeout and lifo queue
-        // TODO could be priority based.
-        flowControlQueue[ PRIORITY_MY_QUERY ] = new FlowControlQueue( 10,
-            LONG_TIMEOUT, MAX_QUEUE_SIZE, true );
+        flowControlQueue[PRIORITY_URGENT] = new FlowControlQueue(1,
+                Integer.MAX_VALUE, MAX_QUEUE_SIZE, true);
 
         // long timeout and lifo queue
         // TODO could be priority based.
-        flowControlQueue[ PRIORITY_PUSH ] = new FlowControlQueue( 6,
-            LONG_TIMEOUT, MAX_QUEUE_SIZE, true );
+        flowControlQueue[PRIORITY_MY_QUERY] = new FlowControlQueue(10,
+                LONG_TIMEOUT, MAX_QUEUE_SIZE, true);
 
         // long timeout and lifo queue
         // TODO could be priority based.
-        flowControlQueue[ PRIORITY_QUERY_HIT ] = new FlowControlQueue( 6,
-            LONG_TIMEOUT, MAX_QUEUE_SIZE, true );
+        flowControlQueue[PRIORITY_PUSH] = new FlowControlQueue(6,
+                LONG_TIMEOUT, MAX_QUEUE_SIZE, true);
+
+        // long timeout and lifo queue
+        // TODO could be priority based.
+        flowControlQueue[PRIORITY_QUERY_HIT] = new FlowControlQueue(6,
+                LONG_TIMEOUT, MAX_QUEUE_SIZE, true);
 
         // short timeout and lifo queue
         // TODO could be priority based.
-        flowControlQueue[ PRIORITY_QUERY ] = new FlowControlQueue( 3,
-            SHORT_TIMEOUT, MAX_QUEUE_SIZE, true );
+        flowControlQueue[PRIORITY_QUERY] = new FlowControlQueue(3,
+                SHORT_TIMEOUT, MAX_QUEUE_SIZE, true);
 
         // short timeout and lifo queue
         // TODO could be priority based.
-        flowControlQueue[ PRIORITY_PONG ] = new FlowControlQueue( 1,
-            SHORT_TIMEOUT, MAX_QUEUE_SIZE, true );
+        flowControlQueue[PRIORITY_PONG] = new FlowControlQueue(1,
+                SHORT_TIMEOUT, MAX_QUEUE_SIZE, true);
 
         // short timeout and lifo queue
         // TODO could be priority based.
-        flowControlQueue[ PRIORITY_PING ] = new FlowControlQueue( 1,
-            SHORT_TIMEOUT, MAX_QUEUE_SIZE, true );
+        flowControlQueue[PRIORITY_PING] = new FlowControlQueue(1,
+                SHORT_TIMEOUT, MAX_QUEUE_SIZE, true);
 
         // no timeout and fifo queue to maintain QRP message order
-        flowControlQueue[ PRIORITY_OTHER ] = new FlowControlQueue( 1,
-            Integer.MAX_VALUE, MAX_QUEUE_SIZE, false );
+        flowControlQueue[PRIORITY_OTHER] = new FlowControlQueue(1,
+                Integer.MAX_VALUE, MAX_QUEUE_SIZE, false);
     }
 
-    public void addMessage( Message msg )
-    {
-        int priority = calculatePriority( msg );
-        synchronized( this )
-        {
-            //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
-            //    "Adding message to queue: " + msg );
-
-            flowControlQueue[ priority ].addMessage( msg );
-            int tmpDropCount = flowControlQueue[ priority ].getAndResetDropCount();
-            // count sent drop
-            host.incSentDropCount( tmpDropCount );
-            
-            StatisticsManager statMgr = Servent.getInstance().getStatisticsService();
-            ((SimpleStatisticProvider) statMgr.getStatisticProvider(
-                StatisticProviderConstants.DROPEDMSG_OUT_PROVIDER)).increment( tmpDropCount );
-            // update queuedCount.
-            queuedCount += 1 - tmpDropCount;
-            lastPriorityAdded = priority;
-        }
-    }
-
-    public void sendQueuedMessages()
-        throws IOException
-    {
-        FlowControlQueue queue;
-        Message msg;
-        boolean isQueueEmpty = false;
-        int i, start;
-        i = start = lastPriorityAdded;
-        do
-        {
-            queue = flowControlQueue[i];
-            queue.initNewMessageBurst();
-            while ( true )
-            {
-                synchronized( this )
-                {
-                    msg = queue.removeMessage();
-                    //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
-                    //    "Getting message from queue: " + msg );
-                    int tmpDropCount = queue.getAndResetDropCount();
-                    // count sent drop
-                    host.incSentDropCount( tmpDropCount );
-
-                    StatisticsManager statMgr = Servent.getInstance().getStatisticsService();
-                    ((SimpleStatisticProvider) statMgr.getStatisticProvider(
-                        StatisticProviderConstants.DROPEDMSG_OUT_PROVIDER)).increment( tmpDropCount );
-                    if ( msg == null )
-                    {
-                        queuedCount -= tmpDropCount;
-                    }
-                    else
-                    {
-                        queuedCount -= 1 + tmpDropCount;
-                    }
-
-                    if ( queuedCount == 0 )
-                    {
-                        isQueueEmpty = true;
-                    }
-
-                    if ( msg == null )
-                    {
-                        break;
-                    }
-                }
-                host.sendMessage( msg );
-            }
-            if ( isQueueEmpty )
-            {// break if queue is empty
-                break;
-            }
-            // go to next queue and cycle if necessary
-            i = ( i + 1 ) % PRIORITY_COUNT;
-        }
-        // stop after going through one message burst.
-        while( i != start );
-        host.flushOutputStream();
-    }
-
-    public int getQueuedMessageCount()
-    {
-        synchronized( this )
-        {
-            return queuedCount;
-        }
-    }
-
-    private static int calculatePriority(Message msg)
-    {
+    private static int calculatePriority(Message msg) {
         MsgHeader header = msg.getHeader();
         int messageCode = header.getPayload();
 
-        switch( messageCode )
-        {
+        switch (messageCode) {
             case MsgHeader.PING_PAYLOAD:
-                if ( header.getHopsTaken() == 0 && header.getTTL() <= 2 )
-                {
+                if (header.getHopsTaken() == 0 && header.getTTL() <= 2) {
                     return PRIORITY_URGENT;
                 }
                 return PRIORITY_PING;
             case MsgHeader.PONG_PAYLOAD:
-                if ( header.getHopsTaken() == 0 && header.getTTL() <= 2 )
-                {
+                if (header.getHopsTaken() == 0 && header.getTTL() <= 2) {
                     return PRIORITY_URGENT;
                 }
                 return PRIORITY_PONG;
@@ -249,14 +153,88 @@ public class MessageQueue
                 return PRIORITY_QUERY_HIT;
             case MsgHeader.QUERY_PAYLOAD:
                 // query send from me...
-                if ( header.getHopsTaken() == 0 )
-                {
+                if (header.getHopsTaken() == 0) {
                     return PRIORITY_MY_QUERY;
                 }
                 return PRIORITY_QUERY;
             default:
                 // like QRP messages.
                 return PRIORITY_OTHER;
+        }
+    }
+
+    public void addMessage(Message msg) {
+        int priority = calculatePriority(msg);
+        synchronized (this) {
+            //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
+            //    "Adding message to queue: " + msg );
+
+            flowControlQueue[priority].addMessage(msg);
+            int tmpDropCount = flowControlQueue[priority].getAndResetDropCount();
+            // count sent drop
+            host.incSentDropCount(tmpDropCount);
+
+            StatisticsManager statMgr = Servent.getInstance().getStatisticsService();
+            ((SimpleStatisticProvider) statMgr.getStatisticProvider(
+                    StatisticProviderConstants.DROPEDMSG_OUT_PROVIDER)).increment(tmpDropCount);
+            // update queuedCount.
+            queuedCount += 1 - tmpDropCount;
+            lastPriorityAdded = priority;
+        }
+    }
+
+    public void sendQueuedMessages()
+            throws IOException {
+        FlowControlQueue queue;
+        Message msg;
+        boolean isQueueEmpty = false;
+        int i, start;
+        i = start = lastPriorityAdded;
+        do {
+            queue = flowControlQueue[i];
+            queue.initNewMessageBurst();
+            while (true) {
+                synchronized (this) {
+                    msg = queue.removeMessage();
+                    //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
+                    //    "Getting message from queue: " + msg );
+                    int tmpDropCount = queue.getAndResetDropCount();
+                    // count sent drop
+                    host.incSentDropCount(tmpDropCount);
+
+                    StatisticsManager statMgr = Servent.getInstance().getStatisticsService();
+                    ((SimpleStatisticProvider) statMgr.getStatisticProvider(
+                            StatisticProviderConstants.DROPEDMSG_OUT_PROVIDER)).increment(tmpDropCount);
+                    if (msg == null) {
+                        queuedCount -= tmpDropCount;
+                    } else {
+                        queuedCount -= 1 + tmpDropCount;
+                    }
+
+                    if (queuedCount == 0) {
+                        isQueueEmpty = true;
+                    }
+
+                    if (msg == null) {
+                        break;
+                    }
+                }
+                host.sendMessage(msg);
+            }
+            if (isQueueEmpty) {// break if queue is empty
+                break;
+            }
+            // go to next queue and cycle if necessary
+            i = (i + 1) % PRIORITY_COUNT;
+        }
+        // stop after going through one message burst.
+        while (i != start);
+        host.flushOutputStream();
+    }
+
+    public int getQueuedMessageCount() {
+        synchronized (this) {
+            return queuedCount;
         }
     }
 }

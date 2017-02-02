@@ -24,16 +24,15 @@ package phex.http;
 /**
  *
  */
-public class HTTPHeaderNames
-{
+public class HTTPHeaderNames {
     ////// request headers
     public static final String ACCEPT = "Accept";
 
-    public static final String ACCEPT_ENCODING ="Accept-Encoding";
+    public static final String ACCEPT_ENCODING = "Accept-Encoding";
 
     public static final String HOST = "Host";
 
-    public static final String RANGE= "Range";
+    public static final String RANGE = "Range";
 
     public static final String USER_AGENT = "User-Agent";
 
@@ -52,6 +51,6 @@ public class HTTPHeaderNames
     public static final String CONTENT_TYPE = "Content-Type";
 
     public static final String RETRY_AFTER = "Retry-After";
-    
+
     public static final String TRANSFER_ENCODING = "Transfer-Encoding";
 }

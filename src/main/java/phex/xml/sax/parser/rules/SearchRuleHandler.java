@@ -34,10 +34,9 @@ import javax.xml.parsers.SAXParser;
 import java.io.CharArrayWriter;
 
 /**
- * 
+ *
  */
-public class SearchRuleHandler extends DefaultHandler
-{
+public class SearchRuleHandler extends DefaultHandler {
     public static final String ELEMENT_NAME = DSearchRule.ELEMENT_NAME;
 
     private final CharArrayWriter text = new CharArrayWriter();
@@ -48,9 +47,8 @@ public class SearchRuleHandler extends DefaultHandler
 
     private final DefaultHandler parent;
 
-    public SearchRuleHandler( DSearchRule searchRule, Attributes attributes,
-        DefaultHandler parent, SAXParser parser )
-    {
+    public SearchRuleHandler(DSearchRule searchRule, Attributes attributes,
+                             DefaultHandler parent, SAXParser parser) {
         this.searchRule = searchRule;
         this.parser = parser;
         this.parent = parent;
@@ -59,73 +57,55 @@ public class SearchRuleHandler extends DefaultHandler
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes ) throws SAXException
-    {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes) throws SAXException {
         text.reset();
-        if ( qName.equals( DAndConcatCondition.ELEMENT_NAME ) )
-        {
+        if (qName.equals(DAndConcatCondition.ELEMENT_NAME)) {
             DAndConcatCondition condition = new DAndConcatCondition();
-            searchRule.setAndConcatCondition( condition );
+            searchRule.setAndConcatCondition(condition);
 
             AndConcatConditionHandler handler = new AndConcatConditionHandler(
-                condition, attributes, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( DConsequencesList.ELEMENT_NAME ) )
-        {
+                    condition, attributes, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(DConsequencesList.ELEMENT_NAME)) {
             DConsequencesList consequencesList = new DConsequencesList();
             searchRule.setConsequencesList(consequencesList);
-            ConsequencesListHandler handler = new ConsequencesListHandler( 
-                consequencesList, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
+            ConsequencesListHandler handler = new ConsequencesListHandler(
+                    consequencesList, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
         }
         return;
     }
 
-    public void endElement( String uri, String localName, String qName )
-        throws SAXException
-    {
-        if ( qName.equals( "name" ) )
-        {
-            searchRule.setName( text.toString() );
-        }
-        else if ( qName.equals( "notes" ) )
-        {
-            searchRule.setNotes( text.toString() );
-        }
-        else if ( qName.equals( "description" ) )
-        {
-            searchRule.setDescription( text.toString() );
-        }
-        else if ( qName.equals( "id" ) )
-        {
-            searchRule.setId( text.toString() );
-        }
-        else if ( qName.equals( "permanently-enabled" ) )
-        {
-            searchRule.setPermanentlyEnabled( Boolean.valueOf( text.toString() )
-                .booleanValue() );
-        }
-        else if ( qName.equals( ELEMENT_NAME ) )
-        {
-            parser.getXMLReader().setContentHandler( parent );
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equals("name")) {
+            searchRule.setName(text.toString());
+        } else if (qName.equals("notes")) {
+            searchRule.setNotes(text.toString());
+        } else if (qName.equals("description")) {
+            searchRule.setDescription(text.toString());
+        } else if (qName.equals("id")) {
+            searchRule.setId(text.toString());
+        } else if (qName.equals("permanently-enabled")) {
+            searchRule.setPermanentlyEnabled(Boolean.valueOf(text.toString())
+                    .booleanValue());
+        } else if (qName.equals(ELEMENT_NAME)) {
+            parser.getXMLReader().setContentHandler(parent);
         }
     }
 
-    public InputSource resolveEntity( String publicId, String systemId )
-    {
+    public InputSource resolveEntity(String publicId, String systemId) {
         return null;
     }
 
-    public void characters( char[] ch, int start, int length )
-    {
-        text.write( ch, start, length );
+    public void characters(char[] ch, int start, int length) {
+        text.write(ch, start, length);
     }
 }

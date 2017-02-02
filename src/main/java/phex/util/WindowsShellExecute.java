@@ -21,8 +21,7 @@
  */
 package phex.util;
 
-public class WindowsShellExecute
-{
+public class WindowsShellExecute {
     private static boolean isNativeLibLoaded;
 
     /**
@@ -30,28 +29,23 @@ public class WindowsShellExecute
      * <br><br>
      * Must be called before images are loaded and instances are created.
      **/
-    static
-    {
+    static {
         // Assume everything works
         isNativeLibLoaded = true;
 
         // Load JNI library
-        try
-        {
-            System.loadLibrary( "Phex" );
-        }
-        catch( UnsatisfiedLinkError x )
-        {
+        try {
+            System.loadLibrary("Phex");
+        } catch (UnsatisfiedLinkError x) {
             // we failed, so unset success flag
             isNativeLibLoaded = false;
         }
     }
 
-    public static void executeViaShell( String shellExec )
-    {
-        int rc = shellExecute( shellExec );
+    public static void executeViaShell(String shellExec) {
+        int rc = shellExecute(shellExec);
     }
 
-    private static native int shellExecute( String shellExec )
-        throws UnsatisfiedLinkError;
+    private static native int shellExecute(String shellExec)
+            throws UnsatisfiedLinkError;
 }

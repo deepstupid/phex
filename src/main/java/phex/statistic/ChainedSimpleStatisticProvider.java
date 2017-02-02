@@ -22,21 +22,18 @@
 package phex.statistic;
 
 /**
- * 
+ *
  */
-public class ChainedSimpleStatisticProvider extends SimpleStatisticProvider
-{
+public class ChainedSimpleStatisticProvider extends SimpleStatisticProvider {
     private final SimpleStatisticProvider parent;
-    
-    public ChainedSimpleStatisticProvider( SimpleStatisticProvider parent )
-    {
+
+    public ChainedSimpleStatisticProvider(SimpleStatisticProvider parent) {
         this.parent = parent;
     }
 
     @Override
-    public void increment( int inc )
-    {
-        super.increment( inc );
-        parent.increment( inc );
+    public void increment(int inc) {
+        super.increment(inc);
+        parent.increment(inc);
     }
 }

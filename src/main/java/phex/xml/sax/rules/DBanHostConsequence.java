@@ -27,22 +27,18 @@ import phex.rules.consequence.BanHostConsequence;
 import phex.rules.consequence.Consequence;
 import phex.xml.sax.PhexXmlSaxWriter;
 
-public class DBanHostConsequence implements DConsequence
-{
+public class DBanHostConsequence implements DConsequence {
     public static final String ELEMENT_NAME = "banhost-consequence";
-    
-    public DBanHostConsequence()
-    {
+
+    public DBanHostConsequence() {
     }
-    
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
-        writer.endElm( ELEMENT_NAME );
+
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
+        writer.endElm(ELEMENT_NAME);
     }
-    
-    public Consequence createConsequence()
-    {
+
+    public Consequence createConsequence() {
         return BanHostConsequence.INSTANCE;
     }
 }

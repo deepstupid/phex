@@ -39,8 +39,7 @@ import java.io.IOException;
 import java.util.*;
 
 
-public class DefaultPhexDriver implements IPhexDriver
-{
+public class DefaultPhexDriver implements IPhexDriver {
     // Query time out in milliseconds.
     private static final long DEFAULT_QUERY_TIMEOUT = DefaultSearchProgress.DEFAULT_QUERY_TIMEOUT;
 
@@ -48,112 +47,83 @@ public class DefaultPhexDriver implements IPhexDriver
     private static final int DESIRED_RESULTS = DefaultSearchProgress.DESIRED_RESULTS;
 
     private static DefaultPhexDriver _singleton = null;
+    private long _nextSearchId = 0;
+    private long _nextHitId = 0;
+    private HashMap<Long, SearchItem> _searches = null;
+    private KeyAllocator<SearchItem> _searchIdAllocator = null;
+    private HashMap<Long, SearchResultItem> _hits = null;
+    private KeyAllocator<SearchResultItem> _hitIdAllocator = null;
+    private QueryManager _phexQueryManager = null;
+    private SwarmingManager _downloadService;
 
-    public static DefaultPhexDriver getInstance()
-    {
-        if (_singleton == null)
-        {
+    private DefaultPhexDriver() {
+        _searchIdAllocator = new KeyAllocator<SearchItem>();
+
+        _hitIdAllocator = new KeyAllocator<SearchResultItem>();
+    }
+
+    public static DefaultPhexDriver getInstance() {
+        if (_singleton == null) {
             _singleton = new DefaultPhexDriver();
         }
 
         return _singleton;
     }
 
-    private DefaultPhexDriver()
-    {
-        _searchIdAllocator = new KeyAllocator<SearchItem>();
-
-        _hitIdAllocator = new KeyAllocator<SearchResultItem>();
-    }
-
-    private long _nextSearchId = 0;
-
-    private long _nextHitId = 0;
-
-    private HashMap<Long, SearchItem> _searches = null;
-
-    private KeyAllocator<SearchItem> _searchIdAllocator = null;
-
-    private HashMap<Long, SearchResultItem> _hits = null;
-
-    private KeyAllocator<SearchResultItem> _hitIdAllocator = null;
-
-    private QueryManager _phexQueryManager = null;
-
-    private SwarmingManager _downloadService;
-
-    public boolean startServent()
-    {
+    public boolean startServent() {
         return performStart();
     }
 
-    public OnlineStatus getServentStatus()
-    {
+    public OnlineStatus getServentStatus() {
         Servent s = Servent.getInstance();
-        if (s != null)
-        {
+        if (s != null) {
             return s.getOnlineStatus();
-        }
-        else
-        {
+        } else {
             return OnlineStatus.OFFLINE;
         }
     }
 
-    public boolean stopServent()
-    {
+    public boolean stopServent() {
         Servent s = Servent.getInstance();
-        if (s == null)
-        {
+        if (s == null) {
             return false;
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 s.stop();
 
                 return true;
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 return false;
             }
         }
     }
 
-    public long startSearch(String searchString)
-    {
+    public long startSearch(String searchString) {
         SearchItem item = createSearch(searchString);
 
         return item == null ? -1 : item.getId();
     }
 
-    public String getSearchString(long searchId)
-    {
+    public String getSearchString(long searchId) {
         SearchItem item = searchForId(searchId);
 
         return item == null ? null : item.getSearchString();
     }
 
-    public short getSearchStatus(long searchId)
-    {
+    public short getSearchStatus(long searchId) {
         SearchItem item = searchForId(searchId);
 
         return item == null ? SearchItem.STATUS_NON_EXISTING : item.getStatus();
     }
 
-    public boolean stopSearch(long searchId)
-    {
+    public boolean stopSearch(long searchId) {
         SearchItem item = searchForId(searchId);
-        if (item == null)
-        {
+        if (item == null) {
             return false;
         }
 
         Search search = item.getSearch();
-        if (search == null)
-        {
+        if (search == null) {
             return false;
         }
 
@@ -162,17 +132,14 @@ public class DefaultPhexDriver implements IPhexDriver
         return true;
     }
 
-    public boolean resumeSearch(long searchId)
-    {
+    public boolean resumeSearch(long searchId) {
         SearchItem item = searchForId(searchId);
-        if (item == null)
-        {
+        if (item == null) {
             return false;
         }
 
         Search search = item.getSearch();
-        if (search == null)
-        {
+        if (search == null) {
             return false;
         }
 
@@ -182,27 +149,22 @@ public class DefaultPhexDriver implements IPhexDriver
         return true;
     }
 
-    public boolean deleteSearch(long searchId)
-    {
+    public boolean deleteSearch(long searchId) {
         final boolean stopOK = stopSearch(searchId);
-        if (stopOK)
-        {
+        if (stopOK) {
             return removeSearch(searchId);
         }
 
         return false;
     }
 
-    public long[] getAllSearches()
-    {
+    public long[] getAllSearches() {
         Collection<SearchItem> searches = getAllSearchItems();
         List<Long> ids = new ArrayList<Long>();
 
-        for (SearchItem search : searches)
-        {
+        for (SearchItem search : searches) {
             // Defensive programming: skip null.
-            if (search != null)
-            {
+            if (search != null) {
                 ids.add(new Long(search.getId()));
             }
         }
@@ -210,22 +172,16 @@ public class DefaultPhexDriver implements IPhexDriver
         return longListToArray(ids);
     }
 
-    public long[] getSearchHits(long searchId)
-    {
+    public long[] getSearchHits(long searchId) {
         SearchItem item = searchForId(searchId);
 
-        if (item == null)
-        {
+        if (item == null) {
             return null;
-        }
-        else
-        {
+        } else {
             List<SearchResultItem> hits = item.getResults();
             List<Long> ids = new ArrayList<Long>();
-            for (SearchResultItem hit : hits)
-            {
-                if (hit != null)
-                {
+            for (SearchResultItem hit : hits) {
+                if (hit != null) {
                     ids.add(new Long(hit.getId()));
                 }
             }
@@ -234,37 +190,29 @@ public class DefaultPhexDriver implements IPhexDriver
         }
     }
 
-    public String getSearchHitFilename(long hitId)
-    {
+    public String getSearchHitFilename(long hitId) {
         SearchResultItem item = hitForId(hitId);
-        if (item == null)
-        {
+        if (item == null) {
             return null;
         }
 
         RemoteFile remoteFile = item.getRemoteFile();
-        if (remoteFile == null)
-        {
+        if (remoteFile == null) {
             return null;
-        }
-        else
-        {
+        } else {
             return remoteFile.getFilename();
         }
     }
 
-    public short getSearchHitStatus(long hitId)
-    {
+    public short getSearchHitStatus(long hitId) {
         SearchResultItem item = hitForId(hitId);
 
         return item == null ? SearchResultItem.STATUS_UNDEF : item.getStatus();
     }
 
-    public boolean startDownload(long hitId)
-    {
+    public boolean startDownload(long hitId) {
         SearchResultItem item = hitForId(hitId);
-        if (item == null)
-        {
+        if (item == null) {
             return false;
         }
 
@@ -278,17 +226,14 @@ public class DefaultPhexDriver implements IPhexDriver
         return true;
     }
 
-    public boolean saveDownloadedFile(long hitId, String localFilepath)
-    {
+    public boolean saveDownloadedFile(long hitId, String localFilepath) {
         SearchResultItem item = hitForId(hitId);
-        if (item == null)
-        {
+        if (item == null) {
             return false;
         }
 
         final short status = item.getStatus();
-        if (status != SearchResultItem.STATUS_TRANSFER_COMPLETED)
-        {
+        if (status != SearchResultItem.STATUS_TRANSFER_COMPLETED) {
             return false;
         }
 
@@ -297,73 +242,57 @@ public class DefaultPhexDriver implements IPhexDriver
         return performMoveDownloadedFile(item);
     }
 
-    public boolean stopDownload(long hitId)
-    {
+    public boolean stopDownload(long hitId) {
         SearchResultItem item = hitForId(hitId);
-        if (item == null)
-        {
+        if (item == null) {
             return false;
         }
 
         SWDownloadFile swFile = item.getSWDownloadFile();
-        if (swFile == null)
-        {
+        if (swFile == null) {
             return false;
         }
 
-        if (swFile.isDownloadInProgress())
-        {
+        if (swFile.isDownloadInProgress()) {
             swFile.stopDownload();
 
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    public boolean resumeDownload(long hitId)
-    {
+    public boolean resumeDownload(long hitId) {
         SearchResultItem item = hitForId(hitId);
-        if (item == null)
-        {
+        if (item == null) {
             return false;
         }
 
         SWDownloadFile swFile = item.getSWDownloadFile();
-        if (swFile == null)
-        {
+        if (swFile == null) {
             return false;
         }
 
-        if (swFile.isDownloadStopped())
-        {
+        if (swFile.isDownloadStopped()) {
             swFile.startDownload();
 
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
-    public boolean cancelDownload(long hitId)
-    {
+    public boolean cancelDownload(long hitId) {
         SearchResultItem item = hitForId(hitId);
-        if (item == null)
-        {
+        if (item == null) {
             return false;
         }
 
         final short downloadStatus = item.getStatus();
         if (downloadStatus == SearchResultItem.STATUS_TRANSFER_RUNNING ||
-            downloadStatus == SearchResultItem.STATUS_TRANSFER_COMPLETED)
-        {
+                downloadStatus == SearchResultItem.STATUS_TRANSFER_COMPLETED) {
             SWDownloadFile file = item.getSWDownloadFile();
-            if (file != null && _downloadService != null)
-            {
+            if (file != null && _downloadService != null) {
                 _downloadService.removeDownloadFile(file);
             }
         }
@@ -371,113 +300,92 @@ public class DefaultPhexDriver implements IPhexDriver
         Long key = new Long(item.getId());
         _hits.remove(key);
         SearchItem searchItem = item.getSearchItem();
-        if (searchItem != null)
-        {
+        if (searchItem != null) {
             searchItem.removeResult(item);
         }
 
         return true;
     }
 
-    public boolean deleteHit(long hitId)
-    {
+    public boolean deleteHit(long hitId) {
         return cancelDownload(hitId);
     }
 
-    public boolean publishFile(String localFilePath)
-    {
-        if (localFilePath == null)
-        {
+    public boolean publishFile(String localFilePath) {
+        if (localFilePath == null) {
             return false;
         }
 
         Setting<Set<String>> sds = LibraryPrefs.SharedDirectoriesSet;
-        if (sds == null)
-        {
+        if (sds == null) {
             return false;
         }
 
         Set<String> dirs = sds.get();
-        if (dirs == null)
-        {
+        if (dirs == null) {
             return false;
         }
 
         String publicFolderPath = null;
-        for (String string : dirs)
-        {
+        for (String string : dirs) {
             publicFolderPath = string;
 
-            if (publicFolderPath != null)
-            {
+            if (publicFolderPath != null) {
                 break;
             }
         }
 
-        if (publicFolderPath == null)
-        {
+        if (publicFolderPath == null) {
             return false;
         }
 
         return copyFileToFolder(localFilePath, publicFolderPath);
     }
 
-    private boolean copyFileToFolder(String inputFilePath, String outputFolderPath)
-    {
-        if (inputFilePath == null || outputFolderPath == null)
-        {
+    private boolean copyFileToFolder(String inputFilePath, String outputFolderPath) {
+        if (inputFilePath == null || outputFolderPath == null) {
             return false;
         }
 
-        try
-        {
+        try {
             File inputFile = new File(inputFilePath);
             File outputFolder = new File(outputFolderPath);
 
-            if (!inputFile.isFile())
-            {
+            if (!inputFile.isFile()) {
                 return false;
             }
 
-            if (!outputFolder.isDirectory())
-            {
+            if (!outputFolder.isDirectory()) {
                 return false;
             }
 
             final String inputFileCanonicalPath = inputFile.getCanonicalPath();
-            final String inputFileName          = inputFile.getName();
-            final String outputFilePath         = outputFolderPath + File.separator + inputFileName;
-            File outputFile                     = new File(outputFilePath);
+            final String inputFileName = inputFile.getName();
+            final String outputFilePath = outputFolderPath + File.separator + inputFileName;
+            File outputFile = new File(outputFilePath);
 
             // We are not allowed to write a file to itself.
-            if (inputFileCanonicalPath.equals(outputFile.getCanonicalPath()))
-            {
+            if (inputFileCanonicalPath.equals(outputFile.getCanonicalPath())) {
                 return false;
             }
 
             return Util.copyFile(inputFilePath, outputFilePath);
-        }
-        catch (Throwable t)
-        {
+        } catch (Throwable t) {
             return false;
         }
     }
 
-    private Collection<SearchItem> getAllSearchItems()
-    {
+    private Collection<SearchItem> getAllSearchItems() {
         return _searches.values();
     }
 
-    private SearchItem createSearch(String searchString)
-    {
+    private SearchItem createSearch(String searchString) {
         // For simplicity, we do not resuse ids. 
-        if (_nextSearchId >= Long.MAX_VALUE)
-        {
+        if (_nextSearchId >= Long.MAX_VALUE) {
             return null;
         }
 
-        if (searchString != null && _phexQueryManager != null)
-        {
+        if (searchString != null && _phexQueryManager != null) {
             SearchContainer searchContainer = _phexQueryManager.getSearchContainer();
             Search newSearch = searchContainer.createSearch(searchString);
             DefaultSearchProgress progress = DefaultSearchProgress.createStandardProgress(DEFAULT_QUERY_TIMEOUT, DESIRED_RESULTS);
@@ -486,39 +394,30 @@ public class DefaultPhexDriver implements IPhexDriver
             NLogger.info(DefaultPhexDriver.class, "Submitted query with search string = " + searchString);
 
             return storeSearch(newSearch);
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
-    private SearchItem storeSearch(Search search)
-    {
-        if (_searches == null)
-        {
+    private SearchItem storeSearch(Search search) {
+        if (_searches == null) {
             _searches = new HashMap<Long, SearchItem>();
         }
 
-        synchronized(_searches)
-        {
-            for (SearchItem item : _searches.values())
-            {
-                if (item == null)
-                {
+        synchronized (_searches) {
+            for (SearchItem item : _searches.values()) {
+                if (item == null) {
                     continue;
                 }
 
                 // If the search is already in the list, do nothing.
-                if (item.getSearch() == search)
-                {
+                if (item.getSearch() == search) {
                     return null;
                 }
             }
 
             List<Long> keys = _searchIdAllocator.allocateKeys(_searches, 1, _nextSearchId);
-            if (keys == null)
-            {
+            if (keys == null) {
                 return null;
             }
 
@@ -533,72 +432,57 @@ public class DefaultPhexDriver implements IPhexDriver
         }
     }
 
-    private boolean removeSearch(long searchHandle)
-    {
-        if (_searches == null)
-        {
+    private boolean removeSearch(long searchHandle) {
+        if (_searches == null) {
             return true;
         }
 
-        synchronized(_searches)
-        {
+        synchronized (_searches) {
             Long key = new Long(searchHandle);
 
             SearchItem item = _searches.get(key);
-            if (item != null)
-            {
+            if (item != null) {
                 _searches.remove(key);
 
                 return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }
     }
 
-    private SearchItem searchForId(long id)
-    {
-        if (_searches == null)
-        {
+    private SearchItem searchForId(long id) {
+        if (_searches == null) {
             return null;
         }
 
-        synchronized(_searches)
-        {
+        synchronized (_searches) {
             return _searches.get(new Long(id));
         }
     }
 
-    private SearchResultItem hitForId(long id)
-    {
-        if (_hits == null)
-        {
+    private SearchResultItem hitForId(long id) {
+        if (_hits == null) {
             _hits = new HashMap<Long, SearchResultItem>();
         }
 
-        synchronized(_hits)
-        {
+        synchronized (_hits) {
             return _hits.get(new Long(id));
         }
     }
 
-    private boolean performStart()
-    {
+    private boolean performStart() {
         PhexRunner r = PhexRunner.getInstance();
 
         final boolean startPhexOK = r.startPhex();
-        if (!startPhexOK)
-        {
+        if (!startPhexOK) {
             NLogger.error(DefaultPhexDriver.class, "Cannot start Phex, exiting.");
 
             return false;
         }
 
         Servent s = Servent.getInstance();
-        if (s != null)
-        {
+        if (s != null) {
             _phexQueryManager = s.getQueryService();
 
             _downloadService = s.getDownloadService();
@@ -610,26 +494,20 @@ public class DefaultPhexDriver implements IPhexDriver
     }
 
     //@EventTopicSubscriber(topic=PhexEventTopics.Search_Data)
-    public void onSearchDataEvent(String topic, SearchDataEvent event)
-    {
+    public void onSearchDataEvent(String topic, SearchDataEvent event) {
         SearchItem item = findSearchForEvent(event);
-        if (item == null)
-        {
+        if (item == null) {
             return;
         }
 
-        if (event.getType() == SearchDataEvent.SEARCH_HITS_ADDED)
-        {
+        if (event.getType() == SearchDataEvent.SEARCH_HITS_ADDED) {
             RemoteFile[] newSearchResults = event.getSearchData();
 
             List<SearchResultItem> results = item.addResults(newSearchResults);
             final boolean hashResultsOK = hashResults(results);
-            if (hashResultsOK)
-            {
+            if (hashResultsOK) {
                 NLogger.info(DefaultPhexDriver.class, "Added search results to hash.");
-            }
-            else
-            {
+            } else {
                 NLogger.error(DefaultPhexDriver.class, "Cannot add search results to hash.");
 
                 // TODO: delete results here.
@@ -637,29 +515,22 @@ public class DefaultPhexDriver implements IPhexDriver
         }
     }
 
-    private SearchItem findSearchForEvent(SearchDataEvent event)
-    {
-        if (event == null)
-        {
+    private SearchItem findSearchForEvent(SearchDataEvent event) {
+        if (event == null) {
             return null;
         }
 
-        if (_searches == null)
-        {
+        if (_searches == null) {
             return null;
         }
 
-        synchronized(_searches)
-        {
-            for (SearchItem item : _searches.values())
-            {
-                if (item == null)
-                {
+        synchronized (_searches) {
+            for (SearchItem item : _searches.values()) {
+                if (item == null) {
                     continue;
                 }
 
-                if (item.getSearch() == event.getSource())
-                {
+                if (item.getSearch() == event.getSource()) {
                     return item;
                 }
             }
@@ -668,19 +539,16 @@ public class DefaultPhexDriver implements IPhexDriver
         return null;
     }
 
-    private long [] longListToArray(List<Long> list)
-    {
-        if (list == null)
-        {
+    private long[] longListToArray(List<Long> list) {
+        if (list == null) {
             return new long[0];
         }
 
         final int sz = list.size();
 
-        long [] longArray = new long[sz];
+        long[] longArray = new long[sz];
 
-        for (int index = 0; index < sz; index++)
-        {
+        for (int index = 0; index < sz; index++) {
             Long el = list.get(index);
 
             longArray[index] = el == null ? 0 : el.longValue();
@@ -689,39 +557,32 @@ public class DefaultPhexDriver implements IPhexDriver
         return longArray;
     }
 
-    private boolean hashResults(List<SearchResultItem> results)
-    {
-        if (_hits == null)
-        {
+    private boolean hashResults(List<SearchResultItem> results) {
+        if (_hits == null) {
             _hits = new HashMap<Long, SearchResultItem>();
         }
 
-        if (results == null)
-        {
+        if (results == null) {
             return false;
         }
 
         final int resultsSize = results.size();
 
-        synchronized(_hits)
-        {
+        synchronized (_hits) {
             List<Long> keys = _hitIdAllocator.allocateKeys(_hits, resultsSize, _nextHitId);
-            if (keys == null)
-            {
+            if (keys == null) {
                 return false;
             }
 
             final int keysSize = keys.size();
-            if (keysSize != resultsSize)
-            {
+            if (keysSize != resultsSize) {
                 return false;
             }
 
             final Long lastKey = keys.get(keysSize - 1);
             final long lastKeyLong = lastKey.longValue();
             _nextHitId = lastKeyLong + 1 < Long.MAX_VALUE ? lastKeyLong + 1 : 0;
-            for (int index = 0; index < keysSize; index++)
-            {
+            for (int index = 0; index < keysSize; index++) {
                 Long key = keys.get(index);
                 SearchResultItem item = results.get(index);
 
@@ -735,40 +596,31 @@ public class DefaultPhexDriver implements IPhexDriver
         }
     }
 
-    private void performStartDownload(SearchResultItem[] searchResultItems)
-    {
+    private void performStartDownload(SearchResultItem[] searchResultItems) {
         // We need a final variable to be passed to the runnable object.
         final SearchResultItem[] hits = searchResultItems;
 
-        Runnable runner = new Runnable()
-        {
-            public void run()
-            {
-                try
-                {
+        Runnable runner = new Runnable() {
+            public void run() {
+                try {
                     final int sz = hits.length;
                     RemoteFile[] rfiles = new RemoteFile[sz];
 
-                    for (int i = 0; i < sz; i++)
-                    {
+                    for (int i = 0; i < sz; i++) {
                         rfiles[i] = hits[i].getRemoteFile();
                     }
 
-                    for (int i = 0; i < sz; i++)
-                    {
+                    for (int i = 0; i < sz; i++) {
                         rfiles[i].setInDownloadQueue(true);
 
                         final long fileSz = rfiles[i].getFileSize();
-                        final URN urn     = rfiles[i].getURN();
+                        final URN urn = rfiles[i].getURN();
                         SWDownloadFile downloadFile = _downloadService.getDownloadFile(fileSz, urn);
 
-                        if (downloadFile != null)
-                        {
+                        if (downloadFile != null) {
                             downloadFile.addDownloadCandidate(rfiles[i]);
                             hits[i].setSWDownloadFile(downloadFile);
-                        }
-                        else
-                        {
+                        } else {
                             RemoteFile dfile = new RemoteFile(rfiles[i]);
                             String searchTerm = StringUtils.createNaturalSearchTerm(dfile.getFilename());
                             final String fileName = dfile.getFilename();
@@ -780,9 +632,7 @@ public class DefaultPhexDriver implements IPhexDriver
                         final String message = "Started download of file " + rfiles[i].getFilename();
                         NLogger.info(DefaultPhexDriver.class, message);
                     }
-                }
-                catch (Throwable th)
-                {
+                } catch (Throwable th) {
                     NLogger.error(DefaultPhexDriver.class, th, th);
                 }
             }
@@ -791,29 +641,23 @@ public class DefaultPhexDriver implements IPhexDriver
         Environment.getInstance().executeOnThreadPool(runner, "QuickDownloadAction");
     }
 
-    private boolean performMoveDownloadedFile(SearchResultItem item)
-    {
-        if (item == null)
-        {
+    private boolean performMoveDownloadedFile(SearchResultItem item) {
+        if (item == null) {
             return false;
         }
 
         SWDownloadFile swFile = item.getSWDownloadFile();
-        if (swFile == null)
-        {
+        if (swFile == null) {
             return false;
         }
 
-        try
-        {
+        try {
             File inputFile = swFile.getDestinationFile();
             final String inputFilePath = inputFile.getCanonicalPath();
             final String outputFilePath = item.getLocalFilepath();
 
             return Util.moveFile(inputFilePath, outputFilePath);
-        }
-        catch (IOException ex)
-        {
+        } catch (IOException ex) {
             return false;
         }
     }

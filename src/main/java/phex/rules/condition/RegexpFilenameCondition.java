@@ -32,60 +32,52 @@ import java.util.regex.Pattern;
 /**
  * Filters all files matching the expression.
  */
-public class RegexpFilenameCondition implements Condition
-{
+public class RegexpFilenameCondition implements Condition {
     // TODO should we extends this from filenamecondition and use some of its logic?
-    
+
     /**
      * The expression to trigger the filter on
      */
     private final String expression;
-    
+
     /**
      * If not null indicates that a regular expression is used to filter.
      */
     private final Pattern filterPattern;
-        
+
     /**
      * @param expression
      * @param case1
      */
-    public RegexpFilenameCondition( String expression, boolean ignoreCase )
-    {
+    public RegexpFilenameCondition(String expression, boolean ignoreCase) {
         this.expression = expression;
         int flags = 0;
-        if ( ignoreCase )
-        {
+        if (ignoreCase) {
             flags = Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE;
         }
-        filterPattern = Pattern.compile( expression, flags );
+        filterPattern = Pattern.compile(expression, flags);
     }
 
-    public boolean isMatched( Search search, RemoteFile remoteFile )
-    {
-        String filename = remoteFile.getFilename();        
-        Matcher m = filterPattern.matcher( filename );
-        if ( m.matches() )
-        {
+    public boolean isMatched(Search search, RemoteFile remoteFile) {
+        String filename = remoteFile.getFilename();
+        Matcher m = filterPattern.matcher(filename);
+        if (m.matches()) {
             return true;
         }
         return false;
     }
 
-    public boolean isComplete()
-    {// TODO implement together with list handling
-        
+    public boolean isComplete() {// TODO implement together with list handling
+
         return true;
     }
-    
+
     @Override
-    public Object clone()
-    {
+    public Object clone() {
         throw new UnsupportedOperationException();
     }
-    
-    public synchronized DCondition createDCondition()
-    {
+
+    public synchronized DCondition createDCondition() {
         throw new UnsupportedOperationException("Not yet implemented.");
     }
 }

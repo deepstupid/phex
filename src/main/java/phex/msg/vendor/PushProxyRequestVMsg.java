@@ -30,37 +30,31 @@ import phex.util.IOUtil;
  *
  *
  */
-public class PushProxyRequestVMsg extends VendorMsg
-{
+public class PushProxyRequestVMsg extends VendorMsg {
     public static final int VERSION = 2;
-    
-    public PushProxyRequestVMsg( GUID serventGuid )
-    {
-        super( VENDORID_LIME, SUBSELECTOR_PUSH_PROXY_REQUEST, VERSION, 
-              IOUtil.EMPTY_BYTE_ARRAY );
-        getHeader().setMsgID( serventGuid );
+
+    public PushProxyRequestVMsg(GUID serventGuid) {
+        super(VENDORID_LIME, SUBSELECTOR_PUSH_PROXY_REQUEST, VERSION,
+                IOUtil.EMPTY_BYTE_ARRAY);
+        getHeader().setMsgID(serventGuid);
     }
-    
-    public PushProxyRequestVMsg( MsgHeader header, byte[] vendorId, 
-        int subSelector, int version, byte[] data )
-        throws InvalidMessageException
-    {
-        super( header, vendorId, subSelector, version, data );
+
+    public PushProxyRequestVMsg(MsgHeader header, byte[] vendorId,
+                                int subSelector, int version, byte[] data)
+            throws InvalidMessageException {
+        super(header, vendorId, subSelector, version, data);
         // we accept version 1 PushProxyRequests since Limewire sends them this way
-        if ( version <= 0 )
-        {
+        if (version <= 0) {
             throw new InvalidMessageException(
-                "Vendor Message 'PushProxyRequest' with deprecated version: " + version );
+                    "Vendor Message 'PushProxyRequest' with deprecated version: " + version);
         }
-        if ( version > VERSION )
-        {
+        if (version > VERSION) {
             throw new InvalidMessageException(
-                "Vendor Message 'PushProxyRequest' with invalid version: " + version );
+                    "Vendor Message 'PushProxyRequest' with invalid version: " + version);
         }
-        if ( data.length != 0 )
-        {
+        if (data.length != 0) {
             throw new InvalidMessageException(
-                "Vendor Message 'PushProxyRequest' invalid data length: " + data.length );
+                    "Vendor Message 'PushProxyRequest' invalid data length: " + data.length);
         }
     }
 }

@@ -34,138 +34,56 @@ import java.net.URL;
 import java.util.StringTokenizer;
 
 
-public class AlternateLocation
-{
+public class AlternateLocation {
     /**
      * pushNeeded | serverBusy | I'm firewalled | useHasUploaded | Rating
-     *         NO |    UNKNOWN |                |              y |      5
-     *
+     * NO |    UNKNOWN |                |              y |      5
+     * <p>
      * hasUploaded == QHD_UNKNOWN_FLAG -> Raiting + 1
      */
     public static final Short DEFAULT_HOST_RATING = (short) 6;
     private final DestAddress hostAddress;
     private final URN urn;
 
-    public AlternateLocation( DestAddress hostAddress, URN urn )
-    {
+    public AlternateLocation(DestAddress hostAddress, URN urn) {
         this.hostAddress = hostAddress;
         this.urn = urn;
     }
-    
-    /**
-     * @return the host address of the AltLoc.
-     */
-    public DestAddress getHostAddress()
-    {
-        return hostAddress;
-    }
-    
-    /**
-     * Returns the urn of the AlternateLocation.
-     * @return the urn of the AlternateLocation.
-     */
-    public URN getURN()
-    {
-        return urn;
-    }
 
-    /**
-     * Returns the alternate location in http format for header values.
-     * @return
-     */
-    public String getHTTPString()
-    {
-        StringBuffer buffer = new StringBuffer( hostAddress.getHostName() );
-
-        int port = hostAddress.getPort();
-        if ( port != 6346 ) {
-            buffer.ensureCapacity(6);
-            buffer.append( ':' );
-            buffer.append( port );
-        }
-        return buffer.toString();
-    }
-
-    /**
-     * Indicates whether some other object is "equal to" this one.
-     *
-     * Note: The class AlternateLocationCollection relies on a equal implementation
-     * that uses hostAddress and urn only!
-     *
-     * @param obj the reference object with which to compare.
-     * @return <code>true</code> if this object is the same as the obj
-     *         argument; <code>false</code> otherwise.
-     */
-    @Override
-    public boolean equals(Object obj)
-    {
-        if( obj == this )             return true;
-        if( !(obj instanceof AlternateLocation) ) {
-            return false;
-        }
-
-        AlternateLocation altLoc = (AlternateLocation)obj;
-        return
-            urn.equals( altLoc.urn ) &&
-            hostAddress.equals( altLoc.hostAddress )
-            ;
-    }
-
-    /**
-     * Hash code to equal on hash based collections.
-     * Note: The class AlternateLocationCollection relies on a hashCode implementation
-     * that uses hostAddress and urn only!
-     * @return a hash code value for this AlternateLocation.
-     */
-    @Override
-    public int hashCode()
-    {
-        int h = 7;
-//        h = ( (31 *h) + ( (hostAddress != null) ? hostAddress.hashCode() : 0 ) );
-//        h = ( (31 *h) + ( (urn != null) ? urn.hashCode() : 0 ) );
-        h = ( (31 * h) + ( hostAddress.hashCode()  ) );
-        h = ( (31 * h) + ( urn.hashCode() ) );
-        return h;
-    }
-    
     /**
      * Parse possible alternate location values. Possible values are:
      * 10.0.0.82
      * 10.0.0.65:8765
+     *
      * @param line
      * @return the parsed AlternateLocation or null if parsing failed.
      */
-    public static AlternateLocation parseCompactIpAltLoc( String line, URN urn, 
-        PhexSecurityManager securityService )
-    {
+    public static AlternateLocation parseCompactIpAltLoc(String line, URN urn,
+                                                         PhexSecurityManager securityService) {
         DestAddress address;
-        try
-        {
-            address = AddressUtils.parseAndValidateAddress( line, 
-                false, securityService );
-        }
-        catch ( MalformedDestAddressException exp )
-        {
-            NLogger.debug( AlternateLocation.class,
-                "Malformed alt-location URL: " + exp.getMessage() );
+        try {
+            address = AddressUtils.parseAndValidateAddress(line,
+                    false, securityService);
+        } catch (MalformedDestAddressException exp) {
+            NLogger.debug(AlternateLocation.class,
+                    "Malformed alt-location URL: " + exp.getMessage());
             return null;
         }
 
-        return new AlternateLocation( address, urn );
+        return new AlternateLocation(address, urn);
     }
-
 
     /**
      * Parse possible alternate location values. Possible values are:
-     *
+     * <p>
      * http://www.clip2.com/GnutellaProtocol04.pdf (not supported)
      * http://10.0.0.10:6346/get/2468/GnutellaProtocol04.pdf (not supported)
      * http://10.0.0.25:6346/uri-res/N2R?urn:sha1:PLSTHIPQGSSZTS5FJUPAKUZWUGYQYPFB
-     *      2002-04-30T08:30Z
-     * 
+     * 2002-04-30T08:30Z
+     * <p>
      * But we currently only support uri-res URLs and IPs since there are too
      * many fakes on the net.
-     * 
+     * <p>
      * Parses and validates the URL more strictly. We currently only like HTTP URLs,
      * (this might be a bit too strict but all right currently), with a valid port
      * and only none private addresses.
@@ -173,97 +91,158 @@ public class AlternateLocation
      * @param line
      * @return the parsed AlternateLocation or null if parsing failes.
      */
-    public static AlternateLocation parseUriResAltLoc( String line, PhexSecurityManager securityService )
-    {
-        StringTokenizer tokenizer = new StringTokenizer( line, " \t\n\r\f\"" );
+    public static AlternateLocation parseUriResAltLoc(String line, PhexSecurityManager securityService) {
+        StringTokenizer tokenizer = new StringTokenizer(line, " \t\n\r\f\"");
 
         String urlStr = null;
-        if ( tokenizer.hasMoreTokens() )
-        {
+        if (tokenizer.hasMoreTokens()) {
             urlStr = tokenizer.nextToken();
         }
-        if ( tokenizer.hasMoreTokens() )
-        {
+        if (tokenizer.hasMoreTokens()) {
             // skip date time string
             tokenizer.nextToken();
             //parseTimestamp( dateTimeStr );
         }
-        try
-        {
-            URL url = new URL( urlStr );
+        try {
+            URL url = new URL(urlStr);
             // verify for HTTP URL
             String protocol = url.getProtocol();
-            if ( !"http".equals( protocol ) )
-            {
-            	NLogger.debug( AlternateLocation.class, 
-                    "Invalid alt-location URL (Not a http URL): " + urlStr );
+            if (!"http".equals(protocol)) {
+                NLogger.debug(AlternateLocation.class,
+                        "Invalid alt-location URL (Not a http URL): " + urlStr);
                 return null;
             }
-            
+
             String host = url.getHost();
             int port = url.getPort();
-            if ( port == -1 )
-            {
-                // Due to the wide confusion on how to handle Alt-Locs without 
+            if (port == -1) {
+                // Due to the wide confusion on how to handle Alt-Locs without
                 // port Phex will ignore all legacy Alt-Locs without a defined
                 // port. Vendors seem not to use same default port (80 or 6346).
-            	NLogger.debug( AlternateLocation.class,
-                    "Invalid legacy alt-loc without specified port." );
+                NLogger.debug(AlternateLocation.class,
+                        "Invalid legacy alt-loc without specified port.");
                 return null;
-                
+
                 // create new url with changed http port
                 //port = 80;
             }
-            
-            DestAddress hostAddress = new DefaultDestAddress( host, port );
-            if ( !hostAddress.isValidAddress() )
-            {
-            	NLogger.debug( AlternateLocation.class,
-                    "Invalid alt-location URL (Invalid address): " + urlStr );
+
+            DestAddress hostAddress = new DefaultDestAddress(host, port);
+            if (!hostAddress.isValidAddress()) {
+                NLogger.debug(AlternateLocation.class,
+                        "Invalid alt-location URL (Invalid address): " + urlStr);
                 return null;
             }
             AccessType access = securityService.controlHostAddressAccess(
-                hostAddress );
-            switch ( access )
-            {
+                    hostAddress);
+            switch (access) {
                 case ACCESS_DENIED:
                 case ACCESS_STRONGLY_DENIED:
-                	NLogger.debug( AlternateLocation.class,
-                    "Alt-Location host denied: " + urlStr );
-                	return null;
+                    NLogger.debug(AlternateLocation.class,
+                            "Alt-Location host denied: " + urlStr);
+                    return null;
             }
-    
-            if ( !hostAddress.getIpAddress().isValidIP() )
-            {
-            	NLogger.debug( AlternateLocation.class,
-                    "Invalid alt-location URL (Invalid IP used): " + urlStr );
+
+            if (!hostAddress.getIpAddress().isValidIP()) {
+                NLogger.debug(AlternateLocation.class,
+                        "Invalid alt-location URL (Invalid IP used): " + urlStr);
                 return null;
             }
-            if ( hostAddress.getIpAddress().isSiteLocalIP() )
-            {
-            	NLogger.debug( AlternateLocation.class,
-                    "Invalid alt-location URL (Private IP used): " + urlStr );
+            if (hostAddress.getIpAddress().isSiteLocalIP()) {
+                NLogger.debug(AlternateLocation.class,
+                        "Invalid alt-location URL (Private IP used): " + urlStr);
                 return null;
             }
-    
-            URN urn = URN.parseURNFromUriRes( url.getFile() );
-            if ( urn == null )
-            {
-            	NLogger.debug( AlternateLocation.class,
-                    "Alt-location path without URN: " + line );
+
+            URN urn = URN.parseURNFromUriRes(url.getFile());
+            if (urn == null) {
+                NLogger.debug(AlternateLocation.class,
+                        "Alt-location path without URN: " + line);
                 return null;
             }
-            
-            AlternateLocation loc = new AlternateLocation( hostAddress, urn );
+
+            AlternateLocation loc = new AlternateLocation(hostAddress, urn);
             return loc;
-        }
-        catch ( MalformedURLException exp )
-        {
-        	NLogger.debug( AlternateLocation.class,
-                "Invalid alt-location URL (Malformed: " + exp.getMessage()
-                + " ): " + urlStr );
+        } catch (MalformedURLException exp) {
+            NLogger.debug(AlternateLocation.class,
+                    "Invalid alt-location URL (Malformed: " + exp.getMessage()
+                            + " ): " + urlStr);
             return null;
         }
 
+    }
+
+    /**
+     * @return the host address of the AltLoc.
+     */
+    public DestAddress getHostAddress() {
+        return hostAddress;
+    }
+
+    /**
+     * Returns the urn of the AlternateLocation.
+     *
+     * @return the urn of the AlternateLocation.
+     */
+    public URN getURN() {
+        return urn;
+    }
+
+    /**
+     * Returns the alternate location in http format for header values.
+     *
+     * @return
+     */
+    public String getHTTPString() {
+        StringBuffer buffer = new StringBuffer(hostAddress.getHostName());
+
+        int port = hostAddress.getPort();
+        if (port != 6346) {
+            buffer.ensureCapacity(6);
+            buffer.append(':');
+            buffer.append(port);
+        }
+        return buffer.toString();
+    }
+
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     * <p>
+     * Note: The class AlternateLocationCollection relies on a equal implementation
+     * that uses hostAddress and urn only!
+     *
+     * @param obj the reference object with which to compare.
+     * @return <code>true</code> if this object is the same as the obj
+     * argument; <code>false</code> otherwise.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof AlternateLocation)) {
+            return false;
+        }
+
+        AlternateLocation altLoc = (AlternateLocation) obj;
+        return
+                urn.equals(altLoc.urn) &&
+                        hostAddress.equals(altLoc.hostAddress)
+                ;
+    }
+
+    /**
+     * Hash code to equal on hash based collections.
+     * Note: The class AlternateLocationCollection relies on a hashCode implementation
+     * that uses hostAddress and urn only!
+     *
+     * @return a hash code value for this AlternateLocation.
+     */
+    @Override
+    public int hashCode() {
+        int h = 7;
+//        h = ( (31 *h) + ( (hostAddress != null) ? hostAddress.hashCode() : 0 ) );
+//        h = ( (31 *h) + ( (urn != null) ? urn.hashCode() : 0 ) );
+        h = ((31 * h) + (hostAddress.hashCode()));
+        h = ((31 * h) + (urn.hashCode()));
+        return h;
     }
 }

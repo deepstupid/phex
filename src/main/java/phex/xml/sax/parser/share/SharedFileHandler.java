@@ -33,10 +33,9 @@ import javax.xml.parsers.SAXParser;
 import java.io.CharArrayWriter;
 
 /**
- * 
+ *
  */
-public class SharedFileHandler extends DefaultHandler
-{
+public class SharedFileHandler extends DefaultHandler {
     public static final String THIS_TAG_NAME = DSharedFile.ELEMENT_NAME;
 
     private final CharArrayWriter text = new CharArrayWriter();
@@ -47,9 +46,8 @@ public class SharedFileHandler extends DefaultHandler
 
     private final DefaultHandler parent;
 
-    public SharedFileHandler( DSharedFile dFile, DefaultHandler parent,
-        SAXParser parser )
-    {
+    public SharedFileHandler(DSharedFile dFile, DefaultHandler parent,
+                             SAXParser parser) {
         this.dFile = dFile;
         this.parser = parser;
         this.parent = parent;
@@ -58,126 +56,82 @@ public class SharedFileHandler extends DefaultHandler
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes ) throws SAXException
-    {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes) throws SAXException {
         text.reset();
-        if ( qName.equals( AlternateLocationHandler.THIS_TAG_NAME ) )
-        {
+        if (qName.equals(AlternateLocationHandler.THIS_TAG_NAME)) {
             DAlternateLocation altloc = new DAlternateLocation();
-            dFile.getAltLocList().add( altloc );
-            
-            AlternateLocationHandler handler = new AlternateLocationHandler( 
-                altloc, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
+            dFile.getAltLocList().add(altloc);
+
+            AlternateLocationHandler handler = new AlternateLocationHandler(
+                    altloc, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
         }
         return;
     }
 
-    public void endElement( String uri, String localName, String qName )
-        throws SAXException
-    {
-        if ( qName.equals( "FID" ) )
-        {
-            dFile.setFileName( text.toString() );
-        }
-        else if ( qName.equals( "SHA1" ) )
-        {
-            dFile.setSha1( text.toString() );
-        }
-        else if ( qName.equals( "TxRH" ) )
-        {
-            dFile.setThexRootHash( text.toString() );
-        }
-        else if ( qName.equals( "TxD" ) )
-        {
-            try
-            {
-                dFile.setThexTreeDepth( Integer.parseInt( text.toString() ) );
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equals("FID")) {
+            dFile.setFileName(text.toString());
+        } else if (qName.equals("SHA1")) {
+            dFile.setSha1(text.toString());
+        } else if (qName.equals("TxRH")) {
+            dFile.setThexRootHash(text.toString());
+        } else if (qName.equals("TxD")) {
+            try {
+                dFile.setThexTreeDepth(Integer.parseInt(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(SharedFileHandler.class, exp, exp);
             }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( SharedFileHandler.class, exp, exp );
+        } else if (qName.equals("TxLLN")) {
+            dFile.setThexLowestLevelNodes(text.toString());
+        } else if (qName.equals("CT")) {
+            try {
+                dFile.setCreationTime(Long.parseLong(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(SharedFileHandler.class, exp, exp);
             }
-        }
-        else if ( qName.equals( "TxLLN" ) )
-        {
-            dFile.setThexLowestLevelNodes( text.toString() );
-        }
-        else if ( qName.equals( "CT" ) )
-        {
-            try
-            {
-                dFile.setCreationTime( Long.parseLong( text.toString() ) );
+        } else if (qName.equals("LM")) {
+            try {
+                dFile.setLastModified(Long.parseLong(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(SharedFileHandler.class, exp, exp);
             }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( SharedFileHandler.class, exp, exp );
+        } else if (qName.equals("LS")) {
+            try {
+                dFile.setLastSeen(Long.parseLong(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(SharedFileHandler.class, exp, exp);
             }
-        }
-        else if ( qName.equals( "LM" ) )
-        {
-            try
-            {
-                dFile.setLastModified( Long.parseLong( text.toString() ) );
+        } else if (qName.equals("HC")) {
+            try {
+                dFile.setHitCount(Integer.parseInt(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(SharedFileHandler.class, exp, exp);
             }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( SharedFileHandler.class, exp, exp );
+        } else if (qName.equals("UC")) {
+            try {
+                dFile.setUploadCount(Integer.parseInt(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(SharedFileHandler.class, exp, exp);
             }
-        }
-        else if ( qName.equals( "LS" ) )
-        {
-            try
-            {
-                dFile.setLastSeen( Long.parseLong( text.toString() ) );
-            }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( SharedFileHandler.class, exp, exp );
-            }
-        }
-        else if ( qName.equals( "HC" ) )
-        {
-            try
-            {
-                dFile.setHitCount( Integer.parseInt( text.toString() ) );
-            }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( SharedFileHandler.class, exp, exp );
-            }
-        }
-        else if ( qName.equals( "UC" ) )
-        {
-            try
-            {
-                dFile.setUploadCount( Integer.parseInt( text.toString() ) );
-            }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( SharedFileHandler.class, exp, exp );
-            }
-        }
-        else if ( qName.equals( THIS_TAG_NAME ) )
-        {
-            parser.getXMLReader().setContentHandler( parent );
+        } else if (qName.equals(THIS_TAG_NAME)) {
+            parser.getXMLReader().setContentHandler(parent);
         }
     }
 
-    public InputSource resolveEntity( String publicId, String systemId )
-    {
+    public InputSource resolveEntity(String publicId, String systemId) {
         return null;
     }
 
-    public void characters( char[] ch, int start, int length )
-    {
-        text.write( ch, start, length );
+    public void characters(char[] ch, int start, int length) {
+        text.write(ch, start, length);
     }
 }

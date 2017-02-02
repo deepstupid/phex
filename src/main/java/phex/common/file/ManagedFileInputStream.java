@@ -27,73 +27,59 @@ import phex.io.buffer.ByteBuffer;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ManagedFileInputStream extends InputStream
-{
-    private ByteBuffer buffer;
+public class ManagedFileInputStream extends InputStream {
     private final ManagedFile managedFile;
+    private ByteBuffer buffer;
     private long inputOffset;
-    
-    public ManagedFileInputStream( ManagedFile managedFile, long inputOffset )
-    {
+
+    public ManagedFileInputStream(ManagedFile managedFile, long inputOffset) {
         this.managedFile = managedFile;
         this.inputOffset = inputOffset;
-        buffer = ByteBuffer.allocate( BufferSize._64K );
+        buffer = ByteBuffer.allocate(BufferSize._64K);
         buffer.flip();// flip buffer to let it appear empty
 //        NLogger.debug(NLoggerNames.GLOBAL, "Created ManagedInputStream: Buffer[" 
 //            + buffer + "] ManagedFile[" + managedFile + "].");
     }
-        
+
     @Override
-	public int read() throws IOException
-    {
-        if ( !buffer.hasRemaining() )
-        {
+    public int read() throws IOException {
+        if (!buffer.hasRemaining()) {
             fill();
         }
-        if ( !buffer.hasRemaining() )
-        {
+        if (!buffer.hasRemaining()) {
             return -1;
         }
-        
+
         byte b = buffer.get();
         return b;
     }
 
     @Override
-	public int read(byte b[]) throws IOException
-    {
+    public int read(byte b[]) throws IOException {
         return this.read(b, 0, b.length);
     }
-    
+
     @Override
-	public int read( byte b[], int offset, int length ) throws IOException
-    {
-        if ((offset | length | (offset + length) | (b.length - (offset + length))) < 0)
-        {
+    public int read(byte b[], int offset, int length) throws IOException {
+        if ((offset | length | (offset + length) | (b.length - (offset + length))) < 0) {
             throw new IndexOutOfBoundsException();
-        } 
-        else if ( length == 0 )
-        {
+        } else if (length == 0) {
             return 0;
         }
-        
-        if ( !buffer.hasRemaining() )
-        {
+
+        if (!buffer.hasRemaining()) {
             fill();
         }
-        if ( !buffer.hasRemaining() )
-        {
+        if (!buffer.hasRemaining()) {
             return -1;
         }
         int read = 0;
-        while ( read < length && buffer.hasRemaining() )
-        {
-            int toRead = Math.min( length-read, buffer.remaining() );
-            buffer.get( b, offset+read, toRead );
+        while (read < length && buffer.hasRemaining()) {
+            int toRead = Math.min(length - read, buffer.remaining());
+            buffer.get(b, offset + read, toRead);
 
             read += toRead;
-            if ( !buffer.hasRemaining() )
-            {
+            if (!buffer.hasRemaining()) {
                 fill();
             }
         }
@@ -101,26 +87,20 @@ public class ManagedFileInputStream extends InputStream
     }
 
     @Override
-	public int available() throws IOException
-    {
-        if ( !buffer.hasRemaining() )
-        {
+    public int available() throws IOException {
+        if (!buffer.hasRemaining()) {
             fill();
         }
         return buffer.remaining();
     }
-    
-    private void fill() throws IOException
-    {
+
+    private void fill() throws IOException {
         assert !buffer.hasRemaining();
         buffer.clear();
-        try
-        {
-            managedFile.read( buffer, inputOffset );
-        }
-        catch ( ManagedFileException exp )
-        {
-            IOException ioExp = new IOException( "Cause: " + exp.getMessage(), exp);
+        try {
+            managedFile.read(buffer, inputOffset);
+        } catch (ManagedFileException exp) {
+            IOException ioExp = new IOException("Cause: " + exp.getMessage(), exp);
             throw ioExp;
         }
         buffer.flip();
@@ -128,8 +108,7 @@ public class ManagedFileInputStream extends InputStream
     }
 
     @Override
-	public void close() throws IOException
-    {
+    public void close() throws IOException {
 //        NLogger.debug(NLoggerNames.GLOBAL, "Releasing ManagedInputStream: Buffer[" 
 //            + buffer + "] ManagedFile[" + managedFile + "].");
         buffer = null;

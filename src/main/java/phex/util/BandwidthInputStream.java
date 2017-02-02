@@ -29,58 +29,49 @@ import java.io.InputStream;
 /**
  *
  */
-public class BandwidthInputStream extends InputStream
-{
+public class BandwidthInputStream extends InputStream {
     private final InputStream inStream;
 
     private BandwidthController bandwidthController;
 
     public BandwidthInputStream(InputStream aInputStream,
-        BandwidthController aBandwidthController)
-    {
+                                BandwidthController aBandwidthController) {
         inStream = aInputStream;
         bandwidthController = aBandwidthController;
     }
-    
+
     /**
      * @param bandwidthController The bandwidthController to set.
      */
-    public void setBandwidthController(BandwidthController bandwidthController)
-    {
+    public void setBandwidthController(BandwidthController bandwidthController) {
         this.bandwidthController = bandwidthController;
     }
 
-    public int read() throws IOException
-    {
-        bandwidthController.getAvailableByteCount( 1, true, true );
+    public int read() throws IOException {
+        bandwidthController.getAvailableByteCount(1, true, true);
         int val = inStream.read();
         return val;
     }
 
-    public int read(byte b[]) throws IOException
-    {
+    public int read(byte b[]) throws IOException {
         return this.read(b, 0, b.length);
     }
-    
-    public int read(byte b[], int off, int len) throws IOException
-    {
-        
-        int available = bandwidthController.getAvailableByteCount( len, true, false );
-        int readLen = inStream.read(b, off, available );
-        if ( readLen >= 0 )
-        {
-            bandwidthController.markBytesUsed( readLen );
+
+    public int read(byte b[], int off, int len) throws IOException {
+
+        int available = bandwidthController.getAvailableByteCount(len, true, false);
+        int readLen = inStream.read(b, off, available);
+        if (readLen >= 0) {
+            bandwidthController.markBytesUsed(readLen);
         }
         return readLen;
     }
 
-    public int available() throws IOException
-    {
+    public int available() throws IOException {
         return inStream.available();
     }
 
-    public void close() throws IOException
-    {
+    public void close() throws IOException {
         inStream.close();
     }
 }

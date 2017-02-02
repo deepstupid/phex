@@ -25,15 +25,14 @@ package phex.prefs.core;
 import phex.prefs.api.PreferencesFactory;
 import phex.prefs.api.Setting;
 
-public class UpdatePrefs extends PhexCorePrefs
-{
-    /** 
+public class UpdatePrefs extends PhexCorePrefs {
+    /**
      * Update-Uris for the various Systems
      */
     public static final String UPDATE_URI_MAC_OSX = "magnet:?xs=http://draketo.de/magma/phex-update/phex_osx.magma&dn=phex_osx.magma";
     public static final String UPDATE_URI_WINDOWS = "magnet:?xs=http://draketo.de/magma/phex-update/phex_win.magma&dn=phex_win.magma";
     public static final String UPDATE_URI_OTHER = "magnet:?xs=http://draketo.de/magma/phex-update/phex_other.magma&dn=phex_other.magma";
-    
+
     /**
      * Contains the version number of the last update check.
      */
@@ -48,12 +47,12 @@ public class UpdatePrefs extends PhexCorePrefs
      * Contains the time in millis of the last update check.
      */
     public static final Setting<Long> LastUpdateCheckTime;
-    
+
     /**
      * The id of the last shown update info from the Phex web server.
      */
     public static final Setting<Integer> LastShownUpdateInfoId;
-    
+
     /**
      * This is introduced to maintain the current version of Phex.
      * After a update of Phex the version in the cfg and the Phex version differs.
@@ -61,7 +60,7 @@ public class UpdatePrefs extends PhexCorePrefs
      * new Phex version
      */
     public static final Setting<String> RunningPhexVersion;
-    
+
     /**
      * This is introduced to maintain the current build number of Phex.
      * After a update of Phex the build number in the cfg and the Phex build number
@@ -69,27 +68,26 @@ public class UpdatePrefs extends PhexCorePrefs
      * also do some other stuff to reach the new Phex version.
      */
     public static final Setting<String> RunningBuildNumber;
-    
-    static
-    {
-        LastUpdateCheckVersion = PreferencesFactory.createStringSetting( 
-            "Update.LastUpdateCheckVersion", "0", instance );
-        
-        LastBetaUpdateCheckVersion = PreferencesFactory.createStringSetting( 
-            "Update.LastBetaUpdateCheckVersion", "0", instance );
-        
-        LastUpdateCheckTime = PreferencesFactory.createLongSetting( 
-            "Update.LastUpdateCheckTime", 0, instance );
-        
-        LastShownUpdateInfoId = PreferencesFactory.createIntSetting( 
-            "Update.LastShownUpdateInfoId", 0, instance );
-        
-        RunningPhexVersion = PreferencesFactory.createStringSetting( 
-            "Update.RunningPhexVersion", "", instance );
-        RunningPhexVersion.setAlwaysSaved( true );
-        
-        RunningBuildNumber = PreferencesFactory.createStringSetting( 
-            "Update.RunningBuildNumber", "", instance );
-        RunningBuildNumber.setAlwaysSaved( true );
+
+    static {
+        LastUpdateCheckVersion = PreferencesFactory.createStringSetting(
+                "Update.LastUpdateCheckVersion", "0", instance);
+
+        LastBetaUpdateCheckVersion = PreferencesFactory.createStringSetting(
+                "Update.LastBetaUpdateCheckVersion", "0", instance);
+
+        LastUpdateCheckTime = PreferencesFactory.createLongSetting(
+                "Update.LastUpdateCheckTime", 0, instance);
+
+        LastShownUpdateInfoId = PreferencesFactory.createIntSetting(
+                "Update.LastShownUpdateInfoId", 0, instance);
+
+        RunningPhexVersion = PreferencesFactory.createStringSetting(
+                "Update.RunningPhexVersion", "", instance);
+        RunningPhexVersion.setAlwaysSaved(true);
+
+        RunningBuildNumber = PreferencesFactory.createStringSetting(
+                "Update.RunningBuildNumber", "", instance);
+        RunningBuildNumber.setAlwaysSaved(true);
     }
 }

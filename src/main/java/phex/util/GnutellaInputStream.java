@@ -32,12 +32,11 @@ import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
 
-public class GnutellaInputStream extends InputStream
-{
+public class GnutellaInputStream extends InputStream {
     private static final char CR = '\r';
     private static final char LF = '\n';
-    
-    private static final Logger logger = LoggerFactory.getLogger( GnutellaInputStream.class );
+
+    private static final Logger logger = LoggerFactory.getLogger(GnutellaInputStream.class);
 
     /**
      * The init length of the buffer.
@@ -50,46 +49,40 @@ public class GnutellaInputStream extends InputStream
     private int count;
 
     private volatile InputStream inStream;
-    private Inflater inflater; 
+    private Inflater inflater;
 
     /**
      * Creates a GnutellaInputStream. The given InputStream will be buffered
      * using a internal buffer.
      */
-    public GnutellaInputStream( InputStream aInputStream )
-    {
+    public GnutellaInputStream(InputStream aInputStream) {
         inStream = aInputStream;
 
-        buffer = new byte[ READ_BUFFER_LENGTH ];
+        buffer = new byte[READ_BUFFER_LENGTH];
     }
-    
+
     public void activateInputInflation()
-        throws IOException
-    {
+            throws IOException {
         // first we need to inflate what is left in out buffer
         Inflater inflater = new Inflater();
         this.inflater = inflater;
 
         int r = count - position;
-        if ( r > 0 )
-        {
+        if (r > 0) {
             byte[] dummy = new byte[r];
 
-            System.arraycopy( buffer, position, dummy, 0, r);
-            inflater.setInput( dummy );
+            System.arraycopy(buffer, position, dummy, 0, r);
+            inflater.setInput(dummy);
 
-            try
-            {
-                inflater.inflate( buffer );
-            }
-            catch ( DataFormatException exp )
-            {
-                logger.error( exp.toString(), exp );
-                throw new IOException( exp.getMessage() );
+            try {
+                inflater.inflate(buffer);
+            } catch (DataFormatException exp) {
+                logger.error(exp.toString(), exp);
+                throw new IOException(exp.getMessage());
             }
         }
-        InflaterInputStream inflaterInStream = new InflaterInputStream( inStream,
-            inflater );
+        InflaterInputStream inflaterInStream = new InflaterInputStream(inStream,
+                inflater);
         inStream = inflaterInStream;
         position = count = 0;
     }
@@ -99,52 +92,38 @@ public class GnutellaInputStream extends InputStream
      * If the stream ended null is returned.
      * Throttle is controlled when using this method.
      */
-    public String readLine( )
-        throws IOException
-    {
-        if ( inStream == null )
-        {
+    public String readLine()
+            throws IOException {
+        if (inStream == null) {
             return null;
         }
         int totalIn = 0;
-        if ( inflater != null )
-        {
+        if (inflater != null) {
             totalIn = inflater.getTotalIn();
         }
 
-        StringBuffer lineBuffer = new StringBuffer( LINE_BUFFER_LENGTH );
+        StringBuffer lineBuffer = new StringBuffer(LINE_BUFFER_LENGTH);
         int c;
         int lengthRead = 0;
-        while ( true )
-        {
+        while (true) {
             c = read();
-            lengthRead ++;
-            if ( c < 0 )
-            {// stream ended... a valid line could not be read... return null
-                if ( lineBuffer.length() == 0 )
-                {
+            lengthRead++;
+            if (c < 0) {// stream ended... a valid line could not be read... return null
+                if (lineBuffer.length() == 0) {
                     return null;
-                }
-                else
-                {
+                } else {
                     break;
                 }
-            }
-            else if ( c == CR )
-            {// skip \r and continue... we only care for \n
+            } else if (c == CR) {// skip \r and continue... we only care for \n
                 continue;
-            }
-            else if ( c == LF )
-            {// found the end of the line... break here
+            } else if (c == LF) {// found the end of the line... break here
                 break;
-            }
-            else
-            {
+            } else {
                 // appending char is much faster then int!
-                lineBuffer.append( (char)c );
+                lineBuffer.append((char) c);
             }
         }
-        
+
 
 //        if ( bandwidthController != null )
 //        {
@@ -161,35 +140,30 @@ public class GnutellaInputStream extends InputStream
 
     /**
      * Reads into a byte array.
+     *
      * @param b
      * @param offset
      * @param length
      * @throws IOException
      */
-    public int read( byte[] b, int offset, int length )
-        throws IOException
-    {
-        if ( inStream == null )
-        {
+    public int read(byte[] b, int offset, int length)
+            throws IOException {
+        if (inStream == null) {
             return -1;
         }
 
-        if ((offset | length | (offset + length) | (b.length - (offset + length))) < 0)
-        {
+        if ((offset | length | (offset + length) | (b.length - (offset + length))) < 0) {
             throw new IndexOutOfBoundsException();
-        }
-        else if (length == 0)
-        {
+        } else if (length == 0) {
             return 0;
         }
 
         int totalIn = 0;
-        if ( inflater != null )
-        {
+        if (inflater != null) {
             totalIn = inflater.getTotalIn();
         }
 
-        int lengthRead = readInternal( b, offset, length );
+        int lengthRead = readInternal(b, offset, length);
         
         
         /*if ( lengthRead <= 0 )
@@ -216,36 +190,30 @@ public class GnutellaInputStream extends InputStream
      * this method.
      */
     private int readInternal(byte[] b, int off, int len)
-        throws IOException
-    {
+            throws IOException {
         int avail = count - position;
-        if (avail <= 0)
-        {
+        if (avail <= 0) {
             /* If the requested length is at least as large as the buffer, and
                if there is no mark/reset activity, do not bother to copy the
                bytes into the local buffer.  In this way buffered streams will
                cascade harmlessly. */
-            if ( len >= buffer.length )
-            {
-                if ( inStream == null )
-                {
+            if (len >= buffer.length) {
+                if (inStream == null) {
                     return -1;
                 }
                 return inStream.read(b, off, len);
             }
             fill();
             avail = count - position;
-            if (avail <= 0)
-            {
+            if (avail <= 0) {
                 return -1;
             }
         }
         int cnt = (avail < len) ? avail : len;
-        if ( inStream == null )
-        {
+        if (inStream == null) {
             return -1;
         }
-    	System.arraycopy(buffer, position, b, off, cnt);
+        System.arraycopy(buffer, position, b, off, cnt);
         position += cnt;
         return cnt;
     }
@@ -255,34 +223,28 @@ public class GnutellaInputStream extends InputStream
      * or read() will return the same byte again.
      */
     public int peek()
-        throws IOException
-    {
-        if ( position >= count)
-        {
+            throws IOException {
+        if (position >= count) {
             fill();
-            if ( position >= count )
-            {
+            if (position >= count) {
                 return -1;
             }
         }
-        return buffer[ position ] & 0xff;
+        return buffer[position] & 0xff;
     }
 
     /**
      * Read byte. Without tracking throttle.
      */
     public int read()
-        throws IOException
-    {
-        if ( position >= count)
-        {
+            throws IOException {
+        if (position >= count) {
             fill();
-            if ( position >= count )
-            {
+            if (position >= count) {
                 return -1;
             }
         }
-        return buffer[ position++ ] & 0xff;
+        return buffer[position++] & 0xff;
     }
 
     /**
@@ -296,12 +258,11 @@ public class GnutellaInputStream extends InputStream
      * and the result of calling the <code>available</code> method of the
      * underlying input stream.
      *
-     * @return     the number of bytes that can be read from this input
-     *             stream without blocking.
-     * @exception  IOException  if an I/O error occurs.
+     * @return the number of bytes that can be read from this input
+     * stream without blocking.
+     * @throws IOException if an I/O error occurs.
      */
-    public synchronized int available() throws IOException
-    {
+    public synchronized int available() throws IOException {
         return (count - position) + inStream.available();
     }
 
@@ -309,9 +270,8 @@ public class GnutellaInputStream extends InputStream
      * Close the input stream.
      */
     @Override
-    public void close()
-    {
-        IOUtil.closeQuietly( inStream );
+    public void close() {
+        IOUtil.closeQuietly(inStream);
         inStream = null;
         count = position = 0;
         buffer = IOUtil.EMPTY_BYTE_ARRAY;
@@ -320,22 +280,17 @@ public class GnutellaInputStream extends InputStream
     /**
      * Fill the internal buffer using data from the underlying input stream.
      */
-    protected void fill() throws IOException
-    {
+    protected void fill() throws IOException {
         position = 0;
         count = 0;
-        try
-        {
-            int nRead = inStream.read( buffer, 0, buffer.length);
-            if ( nRead > 0 && inStream != null )
-            {
+        try {
+            int nRead = inStream.read(buffer, 0, buffer.length);
+            if (nRead > 0 && inStream != null) {
                 count = nRead;
             }
-        }
-        catch ( EOFException exp )
-        {// InflaterInputStream throws EOFException if underlying InputStream
-         // reads data amount of -1. We don't like to forward this exception
-         // instead we just don't fill buffer.
+        } catch (EOFException exp) {// InflaterInputStream throws EOFException if underlying InputStream
+            // reads data amount of -1. We don't like to forward this exception
+            // instead we just don't fill buffer.
             return;
         }
     }

@@ -32,102 +32,94 @@ import phex.statistic.HorizonStatisticProvider.Type;
 
 import java.util.HashMap;
 
-public class StatisticsManager extends AbstractLifeCycle implements StatisticProviderConstants
-{
+public class StatisticsManager extends AbstractLifeCycle implements StatisticProviderConstants {
     private final HashMap<String, StatisticProvider> statisticProviderMap;
 
-    public StatisticsManager()
-    {
+    public StatisticsManager() {
         statisticProviderMap = new HashMap<String, StatisticProvider>();
-        
-        registerStatisticProvider( UPTIME_PROVIDER,
-            new UptimeStatisticProvider() );
-        registerStatisticProvider( DAILY_UPTIME_PROVIDER,
-            new DailyUptimeStatisticProvider() );
-        
-        
-        
+
+        registerStatisticProvider(UPTIME_PROVIDER,
+                new UptimeStatisticProvider());
+        registerStatisticProvider(DAILY_UPTIME_PROVIDER,
+                new DailyUptimeStatisticProvider());
+
+
         initializeMsgCountStats();
         initializeUpDownloadStats();
     }
 
-    public void registerStatisticProvider( String name, StatisticProvider provider )
-    {
-        statisticProviderMap.put( name, provider );
+    public void registerStatisticProvider(String name, StatisticProvider provider) {
+        statisticProviderMap.put(name, provider);
     }
 
-    public StatisticProvider getStatisticProvider( String name )
-    {
-        return statisticProviderMap.get( name );
+    public StatisticProvider getStatisticProvider(String name) {
+        return statisticProviderMap.get(name);
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void doStart()
-    {
+    public void doStart() {
         Servent servent = Servent.getInstance();
         BandwidthManager manager = servent.getBandwidthService();
-        
-        registerStatisticProvider( TOTAL_BANDWIDTH_PROVIDER,
-            new TransferAverageStatisticProvider( manager.getServentBandwidthController() ) );
-        registerStatisticProvider( NETWORK_BANDWIDTH_PROVIDER,
-            new TransferAverageStatisticProvider( manager.getNetworkBandwidthController() ) );
-        registerStatisticProvider( DOWNLOAD_BANDWIDTH_PROVIDER,
-            new TransferAverageStatisticProvider( manager.getDownloadBandwidthController() ) );
-        registerStatisticProvider( UPLOAD_BANDWIDTH_PROVIDER,
-            new TransferAverageStatisticProvider( manager.getUploadBandwidthController() ) );
-        
-        
+
+        registerStatisticProvider(TOTAL_BANDWIDTH_PROVIDER,
+                new TransferAverageStatisticProvider(manager.getServentBandwidthController()));
+        registerStatisticProvider(NETWORK_BANDWIDTH_PROVIDER,
+                new TransferAverageStatisticProvider(manager.getNetworkBandwidthController()));
+        registerStatisticProvider(DOWNLOAD_BANDWIDTH_PROVIDER,
+                new TransferAverageStatisticProvider(manager.getDownloadBandwidthController()));
+        registerStatisticProvider(UPLOAD_BANDWIDTH_PROVIDER,
+                new TransferAverageStatisticProvider(manager.getUploadBandwidthController()));
+
+
         HorizonTracker horizonTracker = new HorizonTracker();
-        servent.getMessageService().addMessageSubscriber( PongMsg.class, horizonTracker );
-        
-        registerStatisticProvider( HORIZON_HOST_COUNT_PROVIDER,
-            new HorizonStatisticProvider( Type.HOST_COUNT, horizonTracker ) );
-        registerStatisticProvider( HORIZON_FILE_COUNT_PROVIDER,
-            new HorizonStatisticProvider( Type.FILE_COUNT, horizonTracker ) );
-        registerStatisticProvider( HORIZON_FILE_SIZE_PROVIDER,
-            new HorizonStatisticProvider( Type.FILE_SIZE, horizonTracker ) );
+        servent.getMessageService().addMessageSubscriber(PongMsg.class, horizonTracker);
+
+        registerStatisticProvider(HORIZON_HOST_COUNT_PROVIDER,
+                new HorizonStatisticProvider(Type.HOST_COUNT, horizonTracker));
+        registerStatisticProvider(HORIZON_FILE_COUNT_PROVIDER,
+                new HorizonStatisticProvider(Type.FILE_COUNT, horizonTracker));
+        registerStatisticProvider(HORIZON_FILE_SIZE_PROVIDER,
+                new HorizonStatisticProvider(Type.FILE_SIZE, horizonTracker));
     }
-   
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void doStop()
-    {
+    public void doStop() {
         UptimeStatisticProvider uptimeProvider = (UptimeStatisticProvider)
-            getStatisticProvider( UPTIME_PROVIDER );
+                getStatisticProvider(UPTIME_PROVIDER);
         uptimeProvider.saveUptimeStats();
-        
+
         DailyUptimeStatisticProvider dailyUptimeProvider =
-            (DailyUptimeStatisticProvider)getStatisticProvider( DAILY_UPTIME_PROVIDER );
+                (DailyUptimeStatisticProvider) getStatisticProvider(DAILY_UPTIME_PROVIDER);
         dailyUptimeProvider.shutdown();
-        
+
         SimpleStatisticProvider totalDownloadCount = (SimpleStatisticProvider) getStatisticProvider(
-            TOTAL_DOWNLOAD_COUNT_PROVIDER);
+                TOTAL_DOWNLOAD_COUNT_PROVIDER);
         SimpleStatisticProvider totalUploadCount = (SimpleStatisticProvider) getStatisticProvider(
-            TOTAL_UPLOAD_COUNT_PROVIDER);
-        StatisticPrefs.TotalDownloadCount.set( Integer.valueOf( 
-            (int)((LongObj)totalDownloadCount.getValue()).value ) );
-        StatisticPrefs.TotalUploadCount.set( Integer.valueOf(
-            (int)((LongObj)totalUploadCount.getValue()).value ) );
+                TOTAL_UPLOAD_COUNT_PROVIDER);
+        StatisticPrefs.TotalDownloadCount.set(Integer.valueOf(
+                (int) ((LongObj) totalDownloadCount.getValue()).value));
+        StatisticPrefs.TotalUploadCount.set(Integer.valueOf(
+                (int) ((LongObj) totalUploadCount.getValue()).value));
     }
-    
-    private void initializeMsgCountStats()
-    {
+
+    private void initializeMsgCountStats() {
         SimpleStatisticProvider totalInMsgCounter = new SimpleStatisticProvider();
         StatisticProvider pingMsgInCounter = new ChainedSimpleStatisticProvider(
-            totalInMsgCounter);
+                totalInMsgCounter);
         StatisticProvider pongMsgInCounter = new ChainedSimpleStatisticProvider(
-            totalInMsgCounter);
+                totalInMsgCounter);
         StatisticProvider pushMsgInCounter = new ChainedSimpleStatisticProvider(
-            totalInMsgCounter);
+                totalInMsgCounter);
         StatisticProvider queryMsgInCounter = new ChainedSimpleStatisticProvider(
-            totalInMsgCounter);
+                totalInMsgCounter);
         StatisticProvider queryHitMsgInCounter = new ChainedSimpleStatisticProvider(
-            totalInMsgCounter);
+                totalInMsgCounter);
 
         registerStatisticProvider(TOTALMSG_IN_PROVIDER, totalInMsgCounter);
         registerStatisticProvider(PINGMSG_IN_PROVIDER, pingMsgInCounter);
@@ -138,15 +130,15 @@ public class StatisticsManager extends AbstractLifeCycle implements StatisticPro
 
         SimpleStatisticProvider totalOutMsgCounter = new SimpleStatisticProvider();
         StatisticProvider pingMsgOutCounter = new ChainedSimpleStatisticProvider(
-            totalOutMsgCounter);
+                totalOutMsgCounter);
         StatisticProvider pongMsgOutCounter = new ChainedSimpleStatisticProvider(
-            totalOutMsgCounter);
+                totalOutMsgCounter);
         StatisticProvider pushMsgOutCounter = new ChainedSimpleStatisticProvider(
-            totalOutMsgCounter);
+                totalOutMsgCounter);
         StatisticProvider queryMsgOutCounter = new ChainedSimpleStatisticProvider(
-            totalOutMsgCounter);
+                totalOutMsgCounter);
         StatisticProvider queryHitMsgOutCounter = new ChainedSimpleStatisticProvider(
-            totalOutMsgCounter);
+                totalOutMsgCounter);
 
         registerStatisticProvider(TOTALMSG_OUT_PROVIDER, totalOutMsgCounter);
         registerStatisticProvider(PINGMSG_OUT_PROVIDER, pingMsgOutCounter);
@@ -154,57 +146,56 @@ public class StatisticsManager extends AbstractLifeCycle implements StatisticPro
         registerStatisticProvider(PUSHMSG_OUT_PROVIDER, pushMsgOutCounter);
         registerStatisticProvider(QUERYMSG_OUT_PROVIDER, queryMsgOutCounter);
         registerStatisticProvider(QUERYHITMSG_OUT_PROVIDER,
-            queryHitMsgOutCounter);
+                queryHitMsgOutCounter);
 
         SimpleStatisticProvider dropedMsgTotalCounter = new SimpleStatisticProvider();
         StatisticProvider dropedMsgInCounter = new ChainedSimpleStatisticProvider(
-            dropedMsgTotalCounter);
+                dropedMsgTotalCounter);
         StatisticProvider dropedMsgOutCounter = new ChainedSimpleStatisticProvider(
-            dropedMsgTotalCounter);
+                dropedMsgTotalCounter);
 
         registerStatisticProvider(DROPEDMSG_TOTAL_PROVIDER,
-            dropedMsgTotalCounter);
+                dropedMsgTotalCounter);
         registerStatisticProvider(DROPEDMSG_IN_PROVIDER, dropedMsgInCounter);
         registerStatisticProvider(DROPEDMSG_OUT_PROVIDER, dropedMsgOutCounter);
-        
+
     }
-    
-    private void initializeUpDownloadStats( )
-    {
+
+    private void initializeUpDownloadStats() {
         SimpleStatisticProvider totalUploadCount = new SimpleStatisticProvider();
-        totalUploadCount.setValue( StatisticPrefs.TotalUploadCount.get().intValue() );
-        StatisticProvider sessionUploadCount = new ChainedSimpleStatisticProvider( 
-            totalUploadCount );
+        totalUploadCount.setValue(StatisticPrefs.TotalUploadCount.get().intValue());
+        StatisticProvider sessionUploadCount = new ChainedSimpleStatisticProvider(
+                totalUploadCount);
         registerStatisticProvider(SESSION_UPLOAD_COUNT_PROVIDER,
-            sessionUploadCount);
+                sessionUploadCount);
         registerStatisticProvider(TOTAL_UPLOAD_COUNT_PROVIDER, totalUploadCount);
-        
+
         SimpleStatisticProvider totalDownloadCount = new SimpleStatisticProvider();
-        totalDownloadCount.setValue( StatisticPrefs.TotalDownloadCount.get().intValue() );
+        totalDownloadCount.setValue(StatisticPrefs.TotalDownloadCount.get().intValue());
         StatisticProvider sessionDownloadCount = new ChainedSimpleStatisticProvider(
-            totalDownloadCount );
+                totalDownloadCount);
         registerStatisticProvider(SESSION_DOWNLOAD_COUNT_PROVIDER,
-            sessionDownloadCount);
+                sessionDownloadCount);
         registerStatisticProvider(TOTAL_DOWNLOAD_COUNT_PROVIDER,
-            totalDownloadCount);
-        
+                totalDownloadCount);
+
         registerStatisticProvider(PUSH_DOWNLOAD_ATTEMPTS_PROVIDER,
-            new SimpleStatisticProvider());
+                new SimpleStatisticProvider());
         registerStatisticProvider(PUSH_DOWNLOAD_SUCESS_PROVIDER,
-            new SimpleStatisticProvider());
+                new SimpleStatisticProvider());
         registerStatisticProvider(PUSH_DOWNLOAD_FAILURE_PROVIDER,
-            new SimpleStatisticProvider());
+                new SimpleStatisticProvider());
 
         registerStatisticProvider(PUSH_DLDPUSHPROXY_ATTEMPTS_PROVIDER,
-            new SimpleStatisticProvider());
+                new SimpleStatisticProvider());
         registerStatisticProvider(PUSH_DLDPUSHPROXY_SUCESS_PROVIDER,
-            new SimpleStatisticProvider());
+                new SimpleStatisticProvider());
 
         registerStatisticProvider(PUSH_UPLOAD_ATTEMPTS_PROVIDER,
-            new SimpleStatisticProvider());
+                new SimpleStatisticProvider());
         registerStatisticProvider(PUSH_UPLOAD_SUCESS_PROVIDER,
-            new SimpleStatisticProvider());
+                new SimpleStatisticProvider());
         registerStatisticProvider(PUSH_UPLOAD_FAILURE_PROVIDER,
-            new SimpleStatisticProvider());
+                new SimpleStatisticProvider());
     }
 }

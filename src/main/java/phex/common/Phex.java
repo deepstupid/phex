@@ -22,7 +22,6 @@
 package phex.common;
 
 import phex.common.file.FileManager;
-import phex.download.swarming.PhexEventService;
 import phex.prefs.core.PrivateNetworkConstants;
 import phex.util.SystemProperties;
 
@@ -31,75 +30,57 @@ import java.io.File;
 /**
  *
  */
-public class Phex
-{
+public class Phex {
     private static FileManager fileManager;
-    private static PhexEventService eventService;
-    
-    public static void initialize()
-    {
+
+    public static void initialize() {
         //LogUtils.initializeLogging();
-        
+
         //eventService = new PhexEventServiceImpl();
-        
-        fileManager = new FileManager();        
+
+        fileManager = new FileManager();
     }
-    
+
     /**
      * Returns the {@link File} representing the complete path to the configuration file
      * with the given configFileName.
+     *
      * @param configFileName the name of the config file to determine the complete
-     *        path for.
+     *                       path for.
      * @return the File representing the complete path to the configuration file
-     *         with the given configFileName.
+     * with the given configFileName.
      */
-    public static File getPhexConfigFile( String configFileName )
-    {
-        return new File( SystemProperties.getPhexConfigRoot(), configFileName );
+    public static File getPhexConfigFile(String configFileName) {
+        return new File(SystemProperties.getPhexConfigRoot(), configFileName);
     }
 
-    /**
-     * Returns the PhexEventService that provides access to
-     * the Phex event bus.
-     * @return the PhexEventService
-     */
-    public static PhexEventService getEventService()
-    {
-        return eventService;
-    }
-
-    public static FileManager getFileManager()
-    {
+    public static FileManager getFileManager() {
         return fileManager;
     }
-    
+
     /**
      * Returns the Phex full vendor string including the version.
+     *
      * @return full vendor string including version.
      */
-    public static String getFullPhexVendor()
-    {
+    public static String getFullPhexVendor() {
         return "Phex " + PrivateNetworkConstants.PRIVATE_BUILD_ID + PhexVersion.getFullVersion();
     }
-    
+
     /**
      * Returns the Phex vendor name.
+     *
      * @return vendor name.
      */
-    public static String getPhexVendorName()
-    {
+    public static String getPhexVendorName() {
         return "Phex";
     }
-    
-    public static boolean isPhexVendor( String vendor )
-    {
-        if ( vendor.length() > 4 )
-        {
-            return vendor.startsWith( "Phex " );
-        }
-        else
-        {
-            return vendor.startsWith( "Phex" );
+
+    public static boolean isPhexVendor(String vendor) {
+        if (vendor.length() > 4) {
+            return vendor.startsWith("Phex ");
+        } else {
+            return vendor.startsWith("Phex");
         }
     }
 }

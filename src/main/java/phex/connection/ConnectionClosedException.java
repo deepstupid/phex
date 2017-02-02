@@ -20,15 +20,12 @@ package phex.connection;
 
 import java.io.IOException;
 
-public class ConnectionClosedException extends IOException
-{
-    public ConnectionClosedException()
-    {
-        super( "Connection is closed." );
+public class ConnectionClosedException extends IOException {
+    public ConnectionClosedException() {
+        super("Connection is closed.");
     }
 
-    public ConnectionClosedException( String msg )
-    {
-        super( msg );
+    public ConnectionClosedException(String msg) {
+        super(msg);
     }
 }

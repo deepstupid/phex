@@ -19,11 +19,9 @@
 package phex.util;
 
 
-
 /**
  * Contains general JDK utils to support different versions..
  * Currently there is nothing necessary.
  */
-public class JDKUtils
-{
+public class JDKUtils {
 }

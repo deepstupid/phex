@@ -46,81 +46,65 @@ import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 
 //// NOT USED YET ////
-public class NIOServer extends Server
-{
+public class NIOServer extends Server {
     private ServerSocketChannel listeningChannel;
     private Selector selector;
 
-    public NIOServer( Servent servent )
-    {
-        super( servent );
+    public NIOServer(Servent servent) {
+        super(servent);
     }
 
     // The listening thread.
-    public void run()
-    {
-        if (NLogger.isDebugEnabled( NIOServer.class ))
-            NLogger.debug( NIOServer.class,
-                "Listener started. Listening on: "
-                    + serverSocket.getInetAddress().getHostAddress() + ':'
-                    + serverSocket.getLocalPort());
+    public void run() {
+        if (NLogger.isDebugEnabled(NIOServer.class))
+            NLogger.debug(NIOServer.class,
+                    "Listener started. Listening on: "
+                            + serverSocket.getInetAddress().getHostAddress() + ':'
+                            + serverSocket.getLocalPort());
 
-        try
-        {
-            while ( selector.isOpen() )
-            {
+        try {
+            while (selector.isOpen()) {
                 selector.select(10 * 1000);
-                if ( !selector.isOpen() )
-                {
+                if (!selector.isOpen()) {
                     break;
                 }
-    
+
                 Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
-                while (iterator.hasNext())
-                {
+                while (iterator.hasNext()) {
                     SelectionKey selKey = iterator.next();
                     // Remove it from the list to indicate that it is being processed
                     iterator.remove();
-    
+
                     // Check if it's a connection request
-                    if ( !selKey.isAcceptable() )
-                    {
+                    if (!selKey.isAcceptable()) {
                         continue;
                     }
-                    
+
                     // Get channel with connection request
-                    ServerSocketChannel ssChannel = (ServerSocketChannel)selKey.channel();
-                    try
-                    {
+                    ServerSocketChannel ssChannel = (ServerSocketChannel) selKey.channel();
+                    try {
                         SocketChannel socketChannel = ssChannel.accept();
                         handleIncomingClientChannel(socketChannel);
-                    }
-                    catch ( PhexSecurityException exp )
-                    {
-                        NLogger.debug( NIOServer.class, exp );
-                    }
-                    catch ( IOException exp )
-                    {
-                        NLogger.debug( NIOServer.class, exp, exp);
+                    } catch (PhexSecurityException exp) {
+                        NLogger.debug(NIOServer.class, exp);
+                    } catch (IOException exp) {
+                        NLogger.debug(NIOServer.class, exp, exp);
                     }
                 }
             }
-        }
-        catch ( Exception exp )
-        {
-            NLogger.error( NIOServer.class, exp, exp );
+        } catch (Exception exp) {
+            NLogger.error(NIOServer.class, exp, exp);
         }
 
         isRunning = false;
-        NLogger.debug( NIOServer.class, "Listener stopped.");
-        
+        NLogger.debug(NIOServer.class, "Listener stopped.");
+
         PresentationManager presentationMgr = PresentationManager.getInstance();
-        DestAddress newAddress = presentationMgr.createHostAddress( 
-            IpAddress.LOCAL_HOST_IP,
+        DestAddress newAddress = presentationMgr.createHostAddress(
+                IpAddress.LOCAL_HOST_IP,
                 NetworkPrefs.ListeningPort.get());
-        localAddress.updateLocalAddress( newAddress );
-        synchronized(this)
-        {
+        localAddress.updateLocalAddress(newAddress);
+        synchronized (this) {
             notifyAll();
         }
     }
@@ -131,27 +115,25 @@ public class NIOServer extends Server
      * @throws SocketException
      */
     private void handleIncomingClientChannel(SocketChannel socketChannel)
-        throws IOException, PhexSecurityException
-    {
+            throws IOException, PhexSecurityException {
         socketChannel.configureBlocking(true);
         Socket clientSocket = socketChannel.socket();
         clientSocket.setSoTimeout(NetworkPrefs.TcpRWTimeout.get());
 
-        IpAddress ip = new IpAddress( clientSocket.getInetAddress().getAddress() );
+        IpAddress ip = new IpAddress(clientSocket.getInetAddress().getAddress());
         PresentationManager presentationMgr = PresentationManager.getInstance();
-        DestAddress address = presentationMgr.createHostAddress(ip, clientSocket.getPort() );
+        DestAddress address = presentationMgr.createHostAddress(ip, clientSocket.getPort());
         NetworkHostsContainer netHostsContainer = servent.getHostService()
-            .getNetworkHostsContainer();
+                .getNetworkHostsContainer();
 
         // if not already connected and connection is not from a private address.
         // TODO we might like to accept more then two connection in some cases!
         if (!netHostsContainer.isConnectedToHost(address)
-            && !address.getIpAddress().isSiteLocalIP())
-        {
+                && !address.getIpAddress().isSiteLocalIP()) {
             hasConnectedIncomming = true;
             lastInConnectionTime = System.currentTimeMillis();
         }
-        
+
         // Set this will defeat the Nagle Algorithm, making short bursts of
         // transmission faster, but will be worse for the overall network.
         // incoming.setTcpNoDelay(true);
@@ -159,30 +141,28 @@ public class NIOServer extends Server
         // Create a Host object for the incoming connection
         // and hand it off to a ReadWorker to handle.
         AccessType access = servent.getSecurityService()
-            .controlHostAddressAccess(address);
-        switch (access)
-        {
-        case ACCESS_DENIED:
-        case ACCESS_STRONGLY_DENIED:
-            throw new PhexSecurityException("Host access denied: "
-                + clientSocket.getInetAddress().getHostAddress());
+                .controlHostAddressAccess(address);
+        switch (access) {
+            case ACCESS_DENIED:
+            case ACCESS_STRONGLY_DENIED:
+                throw new PhexSecurityException("Host access denied: "
+                        + clientSocket.getInetAddress().getHostAddress());
         }
 
-        NLogger.debug( NIOServer.class, 
-            "Accepted incoming connection from: "
-                + address.getFullHostName());
+        NLogger.debug(NIOServer.class,
+                "Accepted incoming connection from: "
+                        + address.getFullHostName());
 
         // facade socket
-        DefaultSocketFacade clientFacade = new DefaultSocketFacade( clientSocket );
+        DefaultSocketFacade clientFacade = new DefaultSocketFacade(clientSocket);
         IncomingConnectionDispatcher dispatcher = new IncomingConnectionDispatcher(
-            clientFacade, servent );
-        Environment.getInstance().executeOnThreadPool( dispatcher,
-            "IncomingConnectionDispatcher-" + Integer.toHexString(hashCode()));
+                clientFacade, servent);
+        Environment.getInstance().executeOnThreadPool(dispatcher,
+                "IncomingConnectionDispatcher-" + Integer.toHexString(hashCode()));
     }
 
     @Override
-    protected synchronized void bind( int initialPort ) throws IOException
-    {
+    protected synchronized void bind(int initialPort) throws IOException {
         assert (listeningChannel == null);
 
         listeningChannel = ServerSocketChannel.open();
@@ -193,20 +173,15 @@ public class NIOServer extends Server
         int tries = 0;
         boolean error;
         // try to find new port if port not valid
-        do
-        {
+        do {
             error = false;
 
-            try
-            {
-                NLogger.debug( NIOServer.class, "Binding to port " + initialPort);
-                serverSocket.bind(new InetSocketAddress( initialPort ));
-            }
-            catch (BindException exp)
-            {
-                NLogger.debug( NIOServer.class, "Binding failed to port " + initialPort );
-                if (tries > 10)
-                {
+            try {
+                NLogger.debug(NIOServer.class, "Binding to port " + initialPort);
+                serverSocket.bind(new InetSocketAddress(initialPort));
+            } catch (BindException exp) {
+                NLogger.debug(NIOServer.class, "Binding failed to port " + initialPort);
+                if (tries > 10) {
                     throw exp;
                 }
                 error = true;
@@ -215,32 +190,28 @@ public class NIOServer extends Server
             }
         }
         while (error == true);
-        
+
         IpAddress hostIP = resolveLocalHostIP();
         initialPort = serverSocket.getLocalPort();
         DestAddress newAddress = PresentationManager.getInstance().createHostAddress(
-            hostIP, initialPort);
-        localAddress.updateLocalAddress( newAddress );
-        
+                hostIP, initialPort);
+        localAddress.updateLocalAddress(newAddress);
+
         selector = Selector.open();
         listeningChannel.register(selector, SelectionKey.OP_ACCEPT);
     }
-    
+
     /**
      * @see phex.net.server.Server#closeServer()
      */
     @Override
-    protected void closeServer()
-    {
-        try
-        {
+    protected void closeServer() {
+        try {
             listeningChannel.close();
             SelectionKey key = listeningChannel.keyFor(selector);
             key.cancel();
             selector.close();
-        }
-        catch (IOException exp)
-        {// ignore
+        } catch (IOException exp) {// ignore
         }
         serverSocket = null;
         listeningChannel = null;

@@ -21,9 +21,9 @@
  */
 package phex.common;
 
-import phex.util.SystemUtils;
 import phex.event.UserMessageListener;
 import phex.util.SystemProperties;
+import phex.util.SystemUtils;
 
 import java.io.File;
 import java.util.Timer;
@@ -34,11 +34,8 @@ import java.util.concurrent.Executor;
  * This class can not be implemented as a manager since manager initialization
  * routines relay on the availability of this class during initialization.
  */
-public class Environment
-{
+public class Environment {
     //private static final Logger logger = LoggerFactory.getLogger( Environment.class );
-    
-    private UserMessageListener userMessageListener;
 
     /**
      * The TimerService is a single thread that will handle multiple TimerTask.
@@ -46,117 +43,106 @@ public class Environment
      * operation.
      */
     private final Timer timerService;
-    
     private final JThreadPool threadPool;
+    private UserMessageListener userMessageListener;
 
-    private Environment()
-    {
-        timerService = new Timer( true );
+    private Environment() {
+        timerService = new Timer(true);
         threadPool = new JThreadPool();
     }
 
-    static private class Holder
-    {
-        static protected final Environment environment = new Environment();
-    }
-
-    static public Environment getInstance()
-    {
+    static public Environment getInstance() {
         return Environment.Holder.environment;
     }
 
     /**
      * Returns the File representing the complete path to the configuration file
      * with the given configFileName.
+     *
      * @param configFileName the name of the config file to determine the complete
-     *        path for.
+     *                       path for.
      * @return the File representing the complete path to the configuration file
-     *         with the given configFileName.
+     * with the given configFileName.
      */
-    public static File getPhexConfigFile(String configFileName)
-    {
-        return new File( SystemProperties.getPhexConfigRoot(), configFileName );
+    public static File getPhexConfigFile(String configFileName) {
+        return new File(SystemProperties.getPhexConfigRoot(), configFileName);
+    }
+
+    /**
+     * Returns true if the system is a ultrapeer os, false otherwise.
+     *
+     * @return true if the system is a ultrapeer os, false otherwise.
+     */
+    public static boolean isUltrapeerOS() {
+        // accept all none windows systems (MacOSX, Unix...) or Windows 2000 or XP.
+        return !SystemUtils.IS_OS_WINDOWS ||
+                SystemUtils.IS_OS_WINDOWS_2000 || SystemUtils.IS_OS_WINDOWS_XP;
     }
 
     /**
      * Schedules the specified task for repeated fixed-delay execution,
      * beginning after the specified delay. Subsequent executions take place at
      * approximately regular intervals separated by the specified period.
-     *
+     * <p>
      * The TimerService is a single thread that will handle multiple TimerTask.
      * Therefore each task has to make sure it is not performing a long blocking
      * operation.
      *
-     * @param task The task to be scheduled.
-     * @param delay The delay in milliseconds before task is to be executed.
+     * @param task   The task to be scheduled.
+     * @param delay  The delay in milliseconds before task is to be executed.
      * @param period The time in milliseconds between successive task executions.
      */
-    public void scheduleTimerTask(TimerTask task, long delay, long period )
-    {
-        timerService.schedule( task, delay, period );
-    }
-    
-    /**
-     * Schedules the specified task for execution after the specified delay.
-     * 
-     * The TimerService is a single thread that will handle multiple TimerTask.
-     * Therefore each task has to make sure it is not performing a long blocking
-     * operation.
-     *
-     * @param task The task to be scheduled.
-     * @param delay The delay in milliseconds before task is to be executed.
-     */
-    public void scheduleTimerTask(TimerTask task, long delay )
-    {
-        timerService.schedule( task, delay );
-    }
-    
-    /**
-     * Executes the Runnable on the shared Phex thread pool
-     * @param runnable the runnable to execute
-     * @param name the name.
-     */
-    public void executeOnThreadPool( Runnable runnable, String name )
-    {
-        threadPool.executeNamed( runnable, name );
-    }
-    
-    public Executor getThreadPool()
-    {
-        return threadPool.getThreadPool();
+    public void scheduleTimerTask(TimerTask task, long delay, long period) {
+        timerService.schedule(task, delay, period);
     }
 
     /**
-     * Returns true if the system is a ultrapeer os, false otherwise.
-     * @return true if the system is a ultrapeer os, false otherwise.
+     * Schedules the specified task for execution after the specified delay.
+     * <p>
+     * The TimerService is a single thread that will handle multiple TimerTask.
+     * Therefore each task has to make sure it is not performing a long blocking
+     * operation.
+     *
+     * @param task  The task to be scheduled.
+     * @param delay The delay in milliseconds before task is to be executed.
      */
-    public static boolean isUltrapeerOS()
-    {
-        // accept all none windows systems (MacOSX, Unix...) or Windows 2000 or XP.
-        return !SystemUtils.IS_OS_WINDOWS || 
-            SystemUtils.IS_OS_WINDOWS_2000 || SystemUtils.IS_OS_WINDOWS_XP;
+    public void scheduleTimerTask(TimerTask task, long delay) {
+        timerService.schedule(task, delay);
     }
-    
-    public void setUserMessageListener( UserMessageListener listener )
-    {
+
+    /**
+     * Executes the Runnable on the shared Phex thread pool
+     *
+     * @param runnable the runnable to execute
+     * @param name     the name.
+     */
+    public void executeOnThreadPool(Runnable runnable, String name) {
+        threadPool.executeNamed(runnable, name);
+    }
+
+    public Executor getThreadPool() {
+        return threadPool.getThreadPool();
+    }
+
+    public void setUserMessageListener(UserMessageListener listener) {
         userMessageListener = listener;
     }
-    
-    public void fireDisplayUserMessage( String userMessageId )
-    {
+
+    public void fireDisplayUserMessage(String userMessageId) {
         // if initialized
-        if ( userMessageListener != null )
-        {
-            userMessageListener.displayUserMessage( userMessageId, null );
+        if (userMessageListener != null) {
+            userMessageListener.displayUserMessage(userMessageId, null);
         }
     }
-    
-    public void fireDisplayUserMessage( String userMessageId, String[] args )
-    {
+
+    public void fireDisplayUserMessage(String userMessageId, String[] args) {
         // if initialized
-        if ( userMessageListener != null )
-        {
-            userMessageListener.displayUserMessage( userMessageId, args );
+        if (userMessageListener != null) {
+            userMessageListener.displayUserMessage(userMessageId, args);
         }
+    }
+
+    static private class Holder {
+        static protected final Environment environment = new Environment();
     }
 }

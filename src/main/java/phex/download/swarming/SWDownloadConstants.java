@@ -18,31 +18,30 @@
  */
 package phex.download.swarming;
 
-public interface SWDownloadConstants
-{
+public interface SWDownloadConstants {
     /**
-     * Indicator for a unknown file size. 
+     * Indicator for a unknown file size.
      */
     public static final int UNKNOWN_FILE_SIZE = -1;
-    
+
     /**
      * The number of failed connection tries after which a candidate is marked
-     * as bad. 
+     * as bad.
      */
     public static final int BAD_CANDIDATE_CONNECTION_TRIES = 3;
-    
+
     /**
-     * This value is given as a rating to a segment which is not restricted. 
+     * This value is given as a rating to a segment which is not restricted.
      * ie: these segments are the last ones you want to download, other things being equal
      */
     public static final int WORST_RATING = 1000000;
 
     /**
      * The number of failed connection tries after which a candidate is marked
-     * as ignored. 
+     * as ignored.
      */
     public static final int IGNORE_CANDIDATE_CONNECTION_TRIES = 12;
-    
+
     /**
      * The in bytes that is used for determine a merge or split of a segment.
      * A segment will tried to be merged when less then RESIZE_BOUNDRY_SIZE
@@ -71,14 +70,14 @@ public interface SWDownloadConstants
      * The timeout after which collected available range set information times out.
      */
     public static final long AVAILABLE_RANGE_SET_TIMEOUT = 10 * 60 * 1000;
-    
+
     /**
      * The timeout after which the bad candidates status times out.
      */
     public static final long BAD_CANDIDATE_STATUS_TIMEOUT = 3 * 60 * 60 * 1000;
-    
+
     /**
-     * The time after which the rated scope list information times out and 
+     * The time after which the rated scope list information times out and
      * should be recalculated.
      */
     public static final long RATED_SCOPE_LIST_TIMEOUT = 2 * 60 * 1000;
@@ -115,12 +114,12 @@ public interface SWDownloadConstants
      * The status of a download file indicating that a download is stopped.
      */
     public static final short STATUS_FILE_STOPPED = 4;
-    
+
     /**
      * The status of a download file indicating that a download is queued.
      */
     public static final short STATUS_FILE_QUEUED = 5;
-    
+
     /**
      * The status of a download file indicating that a download is completed
      * and moved to destination.
@@ -136,111 +135,111 @@ public interface SWDownloadConstants
      * file is queued and waiting to be downloaded.
      */
     public static final String STATUS_FILE_WAITING_KEY =
-        "WaitingForDownload";
+            "WaitingForDownload";
 
     /**
      * The status key for the localized status string indicating that a download
      * file is downloading.
      */
     public static final String STATUS_FILE_DOWNLOADING_KEY =
-        "Downloading";
+            "Downloading";
 
     /**
      * The status key for the localized status string indicating that a download
      * file is downloading.
      */
     public static final String STATUS_FILE_COMPLETED_KEY =
-        "Completed";
+            "Completed";
 
     /**
      * The status key for the localized status string indicating that a download
      * file is stopped.
      */
     public static final String STATUS_FILE_STOPPED_KEY =
-        "Stopped";
-    
+            "Stopped";
+
     /**
      * The status key for the localized status string indicating that a download
      * file is queued.
      */
     public static final String STATUS_FILE_QUEUED_KEY =
-        "FileQueued";
-        
+            "FileQueued";
+
     /**
      * The status key for the localized status string indicating that a download
      * candidate is ignored.
      */
     public static final String STATUS_CANDIDATE_IGNORED_KEY =
-        "CandidateIgnored";
-        
+            "CandidateIgnored";
+
     /**
      * The status key for the localized status string indicating that a download
      * candidate is bad.
      */
     public static final String STATUS_CANDIDATE_BAD_KEY =
-        "CandidateOffline";
+            "CandidateOffline";
 
     /**
      * The status key for the localized status string indicating that a download
      * candidate is queued and waiting to be downloaded.
      */
     public static final String STATUS_CANDIDATE_WAITING_KEY =
-        "WaitingForDownload";
+            "WaitingForDownload";
 
     /**
      * The status key for the localized status string indicating that a download
      * candidate is busy.
      */
     public static final String STATUS_CANDIDATE_BUSY_KEY =
-        "HostBusy";
+            "HostBusy";
 
     /**
      * The status key for the localized status string indicating that a download
      * candidate is connecting.
      */
     public static final String STATUS_CANDIDATE_CONNECTING_KEY =
-        "Connecting";
-    
+            "Connecting";
+
     public static final String STATUS_CANDIDATE_ALLOCATING_SEGMENT_KEY =
-        "AllocatingSegment";
+            "AllocatingSegment";
 
     /**
      * The status key for the localized status string indicating that a connection
      * to a download candidate failed.
      */
     public static final String STATUS_CANDIDATE_CONNECTION_FAILED_KEY =
-        "ConnectionFailed";
+            "ConnectionFailed";
 
     /**
      * The status key for the localized status string indicating that a download
      * candidate is busy.
      */
     public static final String STATUS_CANDIDATE_DOWNLOADING_KEY =
-        "Downloading";
-        
+            "Downloading";
+
     /**
      * The status key for the localized status string indicating that a download
      * candidate is requesting a segment.
      */
     public static final String STATUS_CANDIDATE_REQUESTING_KEY =
-        "Requesting";
+            "Requesting";
 
     /**
      * The status key for the localized status string indicating that a download
      * candidate is busy.
      */
     public static final String STATUS_CANDIDATE_PUSH_REQUEST_KEY =
-        "PushRequest";
+            "PushRequest";
 
     /**
      * The status key for the localized status string indicating that a download
      * range is unavailable.
      */
     public static final String STATUS_CANDIDATE_RANGE_UNAVAILABLE_KEY =
-        "RangeUnavailable";
+            "RangeUnavailable";
 
     public static final String STATUS_CANDIDATE_REMOTLY_QUEUED_KEY =
-        "RemotlyQueued";
+            "RemotlyQueued";
 
     /**
      * The status key for the localized status string indicating that a download

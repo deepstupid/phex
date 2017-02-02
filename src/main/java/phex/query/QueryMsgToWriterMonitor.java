@@ -21,11 +21,11 @@
  */
 package phex.query;
 
-import phex.util.SystemUtils;
 import phex.common.log.NLogger;
 import phex.host.Host;
 import phex.msg.QueryMsg;
 import phex.msghandling.MessageSubscriber;
+import phex.util.SystemUtils;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -38,41 +38,34 @@ import java.io.Writer;
  * <br>
  * Usage Example:
  * <code>
- *     File file = new File( StatisticPrefs.QueryHistoryLogFile.get() );
- *     File parent = file.getParentFile();
- *     if ( parent != null )
- *     {
- *         parent.mkdirs();
- *     }
- *     file.createNewFile();
- *     fileWriter = new FileWriter( file.getAbsolutePath(), true );
- *     new QueryMsgToWriterMonitor( fileWriter );
+ * File file = new File( StatisticPrefs.QueryHistoryLogFile.get() );
+ * File parent = file.getParentFile();
+ * if ( parent != null )
+ * {
+ * parent.mkdirs();
+ * }
+ * file.createNewFile();
+ * fileWriter = new FileWriter( file.getAbsolutePath(), true );
+ * new QueryMsgToWriterMonitor( fileWriter );
  * </code>
  */
-public class QueryMsgToWriterMonitor implements MessageSubscriber<QueryMsg>
-{
+public class QueryMsgToWriterMonitor implements MessageSubscriber<QueryMsg> {
     private Writer outputWriter;
 
-    public QueryMsgToWriterMonitor( /*@NonNull*/ Writer outputWriter )
-    {
-        if ( outputWriter == null )
-        {
-            throw new NullPointerException( "Output writer is null." );
+    public QueryMsgToWriterMonitor( /*@NonNull*/ Writer outputWriter) {
+        if (outputWriter == null) {
+            throw new NullPointerException("Output writer is null.");
         }
         this.outputWriter = outputWriter;
     }
-    
-    public void onMessage(QueryMsg query, Host sourceHost)
-    {
+
+    public void onMessage(QueryMsg query, Host sourceHost) {
         String searchString = query.getSearchString();
-        if ( searchString.length() > 0 && !searchString.equals( "\\" ) 
-             && !searchString.startsWith( "urn:sha1:" ) )
-        {
-            synchronized ( this )
-            {
-                try
-                {
-                    outputWriter.write( query.getSearchString() );
+        if (searchString.length() > 0 && !searchString.equals("\\")
+                && !searchString.startsWith("urn:sha1:")) {
+            synchronized (this) {
+                try {
+                    outputWriter.write(query.getSearchString());
                     /*outputWriter.write( query.getSearchString() + "\t" +
                         query.getHeader().getHopsTaken() + "\t" +
                         query.getHeader().getTTL() + "\t");
@@ -85,12 +78,10 @@ public class QueryMsgToWriterMonitor implements MessageSubscriber<QueryMsg>
                             break;
                         }
                     }*/
-                    outputWriter.write( SystemUtils.LINE_SEPARATOR );
-                }
-                catch ( IOException exp )
-                {
-                    NLogger.error( QueryMsgToWriterMonitor.class, 
-                        exp.getMessage(), exp );
+                    outputWriter.write(SystemUtils.LINE_SEPARATOR);
+                } catch (IOException exp) {
+                    NLogger.error(QueryMsgToWriterMonitor.class,
+                            exp.getMessage(), exp);
                     outputWriter = null;
                 }
             }

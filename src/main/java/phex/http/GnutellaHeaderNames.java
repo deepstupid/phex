@@ -24,8 +24,7 @@ package phex.http;
 /**
  *
  */
-public class GnutellaHeaderNames
-{
+public class GnutellaHeaderNames {
 
     ////// gnutella headers
     public static final String LISTEN_IP = "Listen-IP";
@@ -48,7 +47,7 @@ public class GnutellaHeaderNames
     public static final String X_MY_ADDRESS = "X-My-Address";
 
     public static final String REMOTE_IP = "Remote-IP";
-    
+
     public static final String PONG_CACHING = "Pong-Caching";
 
     public static final String ALT_LOC = "Alt-Location";
@@ -60,10 +59,10 @@ public class GnutellaHeaderNames
     public static final String X_NALT = "X-NAlt";
 
     public static final String X_AVAILABLE_RANGES = "X-Available-Ranges";
-    
+
     /**
      * Gtk-Gnutella header indicating that X-Available-Ranges is not complete.
-     * See PFSP spec. section 5. 
+     * See PFSP spec. section 5.
      */
     public static final String X_AVAILABLE = "X-Available";
 
@@ -94,12 +93,12 @@ public class GnutellaHeaderNames
     public static final String X_DEGREE = "X-Degree";
 
     public static final String X_MAX_TTL = "X-Max-TTL";
-    
+
     public static final String X_THEX_URI = "X-Thex-URI";
-    
+
     public static final String X_NODE = "X-Node";
-    
+
     public static final String X_PUSH_PROXY = "X-Push-Proxy";
-    
+
     public static final String X_REQUERIES = "X-Requeries";
 }

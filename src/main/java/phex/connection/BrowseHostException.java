@@ -18,10 +18,8 @@
  */
 package phex.connection;
 
-public class BrowseHostException extends Exception
-{
-    public BrowseHostException( String msg )
-    {
-        super( msg );
+public class BrowseHostException extends Exception {
+    public BrowseHostException(String msg) {
+        super(msg);
     }
 }

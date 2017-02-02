@@ -24,8 +24,7 @@ package phex.api;
 import phex.download.RemoteFile;
 import phex.download.swarming.SWDownloadFile;
 
-public class SearchResultItem
-{
+public class SearchResultItem {
     public static final short STATUS_UNDEF = -1;
 
     public static final short STATUS_TRANSFER_NOT_RUNNING = SWDownloadFile.TRANSFER_NOT_RUNNING;
@@ -35,90 +34,68 @@ public class SearchResultItem
     public static final short STATUS_TRANSFER_ERROR = SWDownloadFile.TRANSFER_ERROR;
 
     public static final short STATUS_TRANSFER_COMPLETED = SWDownloadFile.TRANSFER_COMPLETED;
-
+    SWDownloadFile _swDownloadFile = null;
     private String _localFilepath = null;
-
     private RemoteFile _remoteFile = null;
-
     private long _id = -1;
-
     private SearchItem _searchItem = null;
 
-    SWDownloadFile _swDownloadFile = null;
-
-    public SearchResultItem()
-    {
+    public SearchResultItem() {
     }
 
-    public SearchResultItem(RemoteFile remoteFile)
-    {
+    public SearchResultItem(RemoteFile remoteFile) {
         _remoteFile = remoteFile;
 
         _localFilepath = null;
     }
 
-    public void setLocalFilepath(String localFilepath)
-    {
-        _localFilepath = localFilepath;
-    }
-
-    public String getLocalFilepath()
-    {
+    public String getLocalFilepath() {
         return _localFilepath;
     }
 
-    public short getStatus()
-    {
-        if (_swDownloadFile != null)
-        {
-            synchronized(_swDownloadFile)
-            {
+    public void setLocalFilepath(String localFilepath) {
+        _localFilepath = localFilepath;
+    }
+
+    public short getStatus() {
+        if (_swDownloadFile != null) {
+            synchronized (_swDownloadFile) {
                 return _swDownloadFile.getDataTransferStatus();
             }
-        }
-        else
-        {
+        } else {
             return STATUS_TRANSFER_NOT_RUNNING;
         }
     }
 
-    public void setRemoteFile(RemoteFile remoteFile)
-    {
-        _remoteFile = remoteFile;
-    }
-
-    public RemoteFile getRemoteFile()
-    {
+    public RemoteFile getRemoteFile() {
         return _remoteFile;
     }
 
-    public void setId(long id)
-    {
-        _id = id;
+    public void setRemoteFile(RemoteFile remoteFile) {
+        _remoteFile = remoteFile;
     }
 
-    public long getId()
-    {
+    public long getId() {
         return _id;
     }
 
-    public void setSWDownloadFile(SWDownloadFile swDownloadFile)
-    {
-        _swDownloadFile = swDownloadFile;
+    public void setId(long id) {
+        _id = id;
     }
 
-    public SWDownloadFile getSWDownloadFile()
-    {
+    public SWDownloadFile getSWDownloadFile() {
         return _swDownloadFile;
     }
 
-    public void setSearchItem(SearchItem searchItem)
-    {
-        _searchItem = searchItem;
+    public void setSWDownloadFile(SWDownloadFile swDownloadFile) {
+        _swDownloadFile = swDownloadFile;
     }
 
-    public SearchItem getSearchItem()
-    {
+    public SearchItem getSearchItem() {
         return _searchItem;
+    }
+
+    public void setSearchItem(SearchItem searchItem) {
+        _searchItem = searchItem;
     }
 }

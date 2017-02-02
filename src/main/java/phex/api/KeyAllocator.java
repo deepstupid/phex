@@ -25,21 +25,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class KeyAllocator<T>
-{
+public class KeyAllocator<T> {
     /**
      * Given a hash map, allocate a certain number of positive long keys starting at
      * a start value.
      *
-     * @param map the map in which we want to allocate the keys
+     * @param map          the map in which we want to allocate the keys
      * @param numberOfKeys number of keys to allocate
-     * @param startValue the start value
+     * @param startValue   the start value
      * @return a list containing the allocated keys on success, null on failure
      */
-    public List<Long> allocateKeys(HashMap<Long, T> map, int numberOfKeys, long startValue)
-    {
-        if (map == null)
-        {
+    public List<Long> allocateKeys(HashMap<Long, T> map, int numberOfKeys, long startValue) {
+        if (map == null) {
             return null;
         }
 
@@ -47,33 +44,25 @@ public class KeyAllocator<T>
         int count = 0;
 
         long currentValue = startValue;
-        while (count < numberOfKeys)
-        {
+        while (count < numberOfKeys) {
             Long key = new Long(currentValue);
-            if (!map.containsKey(key))
-            {
+            if (!map.containsKey(key)) {
                 count++;
 
                 keys.add(key);
             }
 
             currentValue++;
-            if (currentValue >= Long.MAX_VALUE)
-            {
+            if (currentValue >= Long.MAX_VALUE) {
                 currentValue = 0;
-            }
-            else if (currentValue == startValue)
-            {
+            } else if (currentValue == startValue) {
                 break;
             }
         }
 
-        if (count == numberOfKeys)
-        {
+        if (count == numberOfKeys) {
             return keys;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }

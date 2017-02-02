@@ -23,32 +23,27 @@ package phex.download;
 
 import phex.io.buffer.ByteBuffer;
 
-public class DataDownloadScope extends DownloadScope
-{
+public class DataDownloadScope extends DownloadScope {
     private ByteBuffer dataBuffer;
 
     /**
      * @param startOffset The start offset of the download scope, inclusive.
-     * @param endOffset The end offset of the download scope, inclusive.
+     * @param endOffset   The end offset of the download scope, inclusive.
      */
-    public DataDownloadScope( long startOffset, long endOffset, ByteBuffer buffer )
-    {
-        super( startOffset, endOffset );
-        if ( buffer == null )
-        {
-            throw new NullPointerException( "Null DirectByteBuffer given.");
+    public DataDownloadScope(long startOffset, long endOffset, ByteBuffer buffer) {
+        super(startOffset, endOffset);
+        if (buffer == null) {
+            throw new NullPointerException("Null DirectByteBuffer given.");
         }
         dataBuffer = buffer;
     }
 
-    public ByteBuffer getDataBuffer()
-    {
+    public ByteBuffer getDataBuffer() {
         assert dataBuffer != null : "Data buffer already released.";
         return dataBuffer;
     }
 
-    public void releaseDataBuffer()
-    {
+    public void releaseDataBuffer() {
         assert dataBuffer != null : "Data buffer already released.";
         dataBuffer = null;
     }

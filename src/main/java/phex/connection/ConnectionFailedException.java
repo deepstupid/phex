@@ -20,15 +20,12 @@ package phex.connection;
 
 import java.io.IOException;
 
-public class ConnectionFailedException extends IOException
-{
-    public ConnectionFailedException()
-    {
-        super( "Connection failed" );
+public class ConnectionFailedException extends IOException {
+    public ConnectionFailedException() {
+        super("Connection failed");
     }
 
-    public ConnectionFailedException( String msg )
-    {
-        super( msg );
+    public ConnectionFailedException(String msg) {
+        super(msg);
     }
 }

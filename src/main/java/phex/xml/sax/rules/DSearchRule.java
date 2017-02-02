@@ -26,144 +26,120 @@ import org.xml.sax.SAXException;
 import phex.xml.sax.DElement;
 import phex.xml.sax.PhexXmlSaxWriter;
 
-public class DSearchRule implements DElement
-{
+public class DSearchRule implements DElement {
     public static final String ELEMENT_NAME = "search-rule";
     private String name;
     private String description;
     private String notes;
     private String id;
-    
+
     private boolean hasPermanentlyEnabled;
     private boolean isPermanentlyEnabled;
-    
+
     private DAndConcatCondition andConcatCondition;
     private DConsequencesList consequencesList;
 
-    public boolean isPermanentlyEnabled()
-    {
+    public boolean isPermanentlyEnabled() {
         return isPermanentlyEnabled;
     }
 
-    public void setPermanentlyEnabled( boolean isPermanentlyEnabled )
-    {
+    public void setPermanentlyEnabled(boolean isPermanentlyEnabled) {
         this.isPermanentlyEnabled = isPermanentlyEnabled;
         hasPermanentlyEnabled = true;
     }
 
-    public boolean isHasPermanentlyEnabled()
-    {
+    public boolean isHasPermanentlyEnabled() {
         return hasPermanentlyEnabled;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public void setName( String name )
-    {
+    public void setName(String name) {
         this.name = name;
     }
-    
-    public String getDescription()
-    {
+
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription( String description )
-    {
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getNotes() 
-    {
-    	return notes;
+    public String getNotes() {
+        return notes;
     }
-    
-    public void setNotes(String notes) 
-    {
-    	this.notes = notes;
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
-    
-    public String getId()
-    {
+
+    public String getId() {
         return id;
     }
 
-    public void setId( String id )
-    {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public DAndConcatCondition getAndConcatCondition()
-    {
+    public DAndConcatCondition getAndConcatCondition() {
         return andConcatCondition;
     }
 
-    public void setAndConcatCondition( DAndConcatCondition ruleCondition )
-    {
+    public void setAndConcatCondition(DAndConcatCondition ruleCondition) {
         this.andConcatCondition = ruleCondition;
     }
 
-    public DConsequencesList getConsequencesList()
-    {
+    public DConsequencesList getConsequencesList() {
         return consequencesList;
     }
-    
-    public void setConsequencesList( DConsequencesList consequencesList )
-    {
+
+    public void setConsequencesList(DConsequencesList consequencesList) {
         this.consequencesList = consequencesList;
     }
-    
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
-        
-        if( name != null )
-        {
-            writer.startElm( "name", null );
-            writer.elmText( name );
-            writer.endElm( "name" );
-        }
-        
-        if( description != null )
-        {
-            writer.startElm( "description", null );
-            writer.elmText( description );
-            writer.endElm( "description" );
-        }
-        
-        if( id != null )
-        {
-            writer.startElm( "id", null );
-            writer.elmText( id );
-            writer.endElm( "id" );
+
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
+
+        if (name != null) {
+            writer.startElm("name", null);
+            writer.elmText(name);
+            writer.endElm("name");
         }
 
-        if( notes != null )
-        {
-            writer.startElm( "notes", null );
-            writer.elmText( notes );
-            writer.endElm( "notes" );
+        if (description != null) {
+            writer.startElm("description", null);
+            writer.elmText(description);
+            writer.endElm("description");
         }
-        if( hasPermanentlyEnabled )
-        {
-            writer.startElm( "permanently-enabled", null );
-            writer.elmBol( isPermanentlyEnabled );
-            writer.endElm( "permanently-enabled" );
+
+        if (id != null) {
+            writer.startElm("id", null);
+            writer.elmText(id);
+            writer.endElm("id");
         }
-        
-        if ( andConcatCondition != null )
-        {
-            andConcatCondition.serialize( writer );
+
+        if (notes != null) {
+            writer.startElm("notes", null);
+            writer.elmText(notes);
+            writer.endElm("notes");
         }
-        
-        if ( consequencesList != null )
-        {
+        if (hasPermanentlyEnabled) {
+            writer.startElm("permanently-enabled", null);
+            writer.elmBol(isPermanentlyEnabled);
+            writer.endElm("permanently-enabled");
+        }
+
+        if (andConcatCondition != null) {
+            andConcatCondition.serialize(writer);
+        }
+
+        if (consequencesList != null) {
             consequencesList.serialize(writer);
         }
-        
-        writer.endElm( ELEMENT_NAME );
+
+        writer.endElm(ELEMENT_NAME);
     }
 }

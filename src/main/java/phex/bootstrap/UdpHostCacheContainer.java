@@ -39,39 +39,37 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * Container of collected udp host caches.
  */
-public class UdpHostCacheContainer
-{
-    private static final Logger logger = LoggerFactory.getLogger( 
-        UdpHostCacheContainer.class );
-    
-    private static int MIN_UDP_HOST_CACHE_SIZE = 20;
-    
+public class UdpHostCacheContainer {
+    private static final Logger logger = LoggerFactory.getLogger(
+            UdpHostCacheContainer.class);
     /**
      * List of Default udp Host Caches
      */
     private static final List<UdpHostCache> defaultCaches;
-    static 
-    {
+    private static int MIN_UDP_HOST_CACHE_SIZE = 20;
+
+    static {
         defaultCaches = new ArrayList<UdpHostCache>();
         //add a list of default caches to this list
-        defaultCaches.add(  new UdpHostCache(new DefaultDestAddress( "gnutelladev1.udp-host-cache.com", 1234 )) );
-        defaultCaches.add(  new UdpHostCache(new DefaultDestAddress( "gnutelladev2.udp-host-cache.com", 5678 )) );
-        defaultCaches.add(  new UdpHostCache(new DefaultDestAddress( "gwc.ak-electron.eu", 12060 )) );
-        defaultCaches.add(  new UdpHostCache(new DefaultDestAddress( "gwc.chickenkiller.com", 8080 )) );
-        defaultCaches.add(  new UdpHostCache(new DefaultDestAddress( "yang.cloud.bishopston.net", 33558 )) );
-        defaultCaches.add(  new UdpHostCache(new DefaultDestAddress( "yin.cloud.bishopston.net", 33558 )) );
-        Collections.shuffle( defaultCaches );
+        //defaultCaches.add(new UdpHostCache(new DefaultDestAddress("gnutelladev1.udp-host-cache.com", 1234)));
+        //defaultCaches.add(new UdpHostCache(new DefaultDestAddress("gnutelladev2.udp-host-cache.com", 5678)));
+        //defaultCaches.add(new UdpHostCache(new DefaultDestAddress("gwc.ak-electron.eu", 12060)));
+        //defaultCaches.add(new UdpHostCache(new DefaultDestAddress("gwc.chickenkiller.com", 8080)));
+        //defaultCaches.add(new UdpHostCache(new DefaultDestAddress("yang.cloud.bishopston.net", 33558)));
+        //defaultCaches.add(new UdpHostCache(new DefaultDestAddress("yin.cloud.bishopston.net", 33558)));
+
+        Collections.shuffle(defaultCaches);
     }
-    
+
     private final Servent servent;
-    
+
     /**
      * contains all the known functional caches in this session.
      * The list is always sorted in the ascending order of fail count.
      * So remember to sort it if we independently modify the list
      */
     private final List<UdpHostCache> functionalUdpCaches;
-    
+
     /**
      * All the udpHostCaches not in functional udp caches container,
      * it contains all caches to be tried or which have failed.
@@ -79,390 +77,322 @@ public class UdpHostCacheContainer
      * So remember to sort it if we independently modify the list
      */
     private final List<UdpHostCache> generalUdpCaches;
-    
+
     /**
      * Lock to make sure not more then one thread request is running in parallel
      * otherwise it could happen that we create thread after thread while each
      * one takes a long time to come back.
      */
     private final AtomicBoolean isThreadRequestRunning;
-    
 
-    public UdpHostCacheContainer( Servent servent ) 
-    {
+
+    public UdpHostCacheContainer(Servent servent) {
         this.servent = servent;
         functionalUdpCaches = new ArrayList<UdpHostCache>();
         generalUdpCaches = new ArrayList<UdpHostCache>();
-        isThreadRequestRunning = new AtomicBoolean( false );
-        
+        isThreadRequestRunning = new AtomicBoolean(false);
+
         initialize();
 
     }
-    
+
     /**
      * Reacts on gnutella network changes to initialize or save udp caches.
      */
     //@EventTopicSubscriber(topic=PhexEventTopics.Servent_GnutellaNetwork)
-    public void onGnutellaNetworkEvent( String topic, ChangeEvent event )
-    {
+    public void onGnutellaNetworkEvent(String topic, ChangeEvent event) {
         saveCachesToFile();
         initialize();
     }
-    
-    private void initialize()
-    {
+
+    private void initialize() {
         //first clear caches 
         functionalUdpCaches.clear();
         generalUdpCaches.clear();
-        
+
         //first load from file 
         loadCachesFromFile();
-        
+
         //now add missing default caches
-        for ( UdpHostCache cache : defaultCaches )
-        {
-            addCache( cache );
+        for (UdpHostCache cache : defaultCaches) {
+            addCache(cache);
         }
-        
-        logger.debug( "Initialized UdpHostCacheContainer.");
+
+        logger.debug("Initialized UdpHostCacheContainer.");
     }
-    
+
     /**
-     * adds a cache, into the general container 
+     * adds a cache, into the general container
      */
-    public boolean addCache( UdpHostCache cache )
-    {
-        logger.info( "Adding a UDP Host Cache to the GENERAL container.");
-        return addTo( cache, generalUdpCaches );
+    public boolean addCache(UdpHostCache cache) {
+        return addTo(cache, generalUdpCaches);
     }
-    
-    public String createPackedHostCaches()
-    {
+
+    public String createPackedHostCaches() {
         final int PACKED_CACHES_SIZE = 8;
-        
+
         int count = 0;
-        StringBuffer packedCaches = new StringBuffer( PACKED_CACHES_SIZE * 21 );
-        synchronized( functionalUdpCaches )
-        {
-            for ( Iterator<UdpHostCache> udphc = functionalUdpCaches.iterator(); 
-            udphc.hasNext() && count < PACKED_CACHES_SIZE; count++ )
-            {
+        StringBuffer packedCaches = new StringBuffer(PACKED_CACHES_SIZE * 21);
+        synchronized (functionalUdpCaches) {
+            for (Iterator<UdpHostCache> udphc = functionalUdpCaches.iterator();
+                 udphc.hasNext() && count < PACKED_CACHES_SIZE; count++) {
                 UdpHostCache cache = udphc.next();
-                DestAddress address = cache.getHostAddress(); 
-                String ipString  = address.getFullHostName();
+                DestAddress address = cache.getHostAddress();
+                String ipString = address.getFullHostName();
                 // add to the packed cache
-                packedCaches.append( ipString );
-                packedCaches.append( "\n" );
+                packedCaches.append(ipString);
+                packedCaches.append("\n");
             }
         }
         return packedCaches.toString();
     }
-    
+
     /**
      * Adds a caught host based on the information from a pong message.
+     *
      * @param pongMsg the pong message to add the caught host from.
      */
-    public void catchHosts( PongMsg pongMsg )
-    {
+    public void catchHosts(PongMsg pongMsg) {
         // handle udp host caches and add them to the udp host cache.
         Set<UdpHostCache> udpHostCaches = pongMsg.getUdpHostCaches();
-        if ( udpHostCaches != null )
-        {
-            logger.debug( "Catch UDP Host Caches: {}.", udpHostCaches );
-            for ( UdpHostCache cache : udpHostCaches )
-            {
-                addCache( cache );
+        if (udpHostCaches != null) {
+            logger.debug("Catch UDP Host Caches: {}.", udpHostCaches);
+            for (UdpHostCache cache : udpHostCaches) {
+                addCache(cache);
             }
         }
         // handle available udp host cache
         UdpHostCache cache = pongMsg.getUdpHostCache();
-        if ( cache != null )
-        {
-            logger.debug( "Catch UDP Host Cache: {}.", cache );
-            synchronized( generalUdpCaches )
-            {
-                int idx = generalUdpCaches.indexOf( cache );
-                if ( idx >= 0 )
-                {
-                    cache = generalUdpCaches.get( idx );
-                    generalUdpCaches.remove( idx );
+        if (cache != null) {
+            logger.debug("Catch UDP Host Cache: {}.", cache);
+            synchronized (generalUdpCaches) {
+                int idx = generalUdpCaches.indexOf(cache);
+                if (idx >= 0) {
+                    cache = generalUdpCaches.get(idx);
+                    generalUdpCaches.remove(idx);
                 }
             }
             cache.resetFailedInRowCount();
-            addTo( cache, functionalUdpCaches );
+            addTo(cache, functionalUdpCaches);
         }
     }
-    
+
     /**
      * Starts a query for more hosts in an extra thread.
      */
-    public synchronized void invokeQueryCachesRequest()
-    {
+    public synchronized void invokeQueryCachesRequest() {
         // we don't want multiple thread request to run at once. If one thread
         // request is running others are blocked.
-        if ( !isThreadRequestRunning.compareAndSet( false, true ) )
-        {
+        if (!isThreadRequestRunning.compareAndSet(false, true)) {
             return;
         }
         Runnable runner = new QueryCachesRunner();
-        Environment.getInstance().executeOnThreadPool( runner,
-            "UdpHostCacheQuery-" + Integer.toHexString(runner.hashCode()) );
+        Environment.getInstance().executeOnThreadPool(runner,
+                "UdpHostCacheQuery-" + Integer.toHexString(runner.hashCode()));
     }
-    
-    private List<UdpHostCache> getUhcListToQuery( int count )
-    {
-        List<UdpHostCache> list = new ArrayList<UdpHostCache>( count );
+
+    private List<UdpHostCache> getUhcListToQuery(int count) {
+        List<UdpHostCache> list = new ArrayList<UdpHostCache>(count);
         long now = System.currentTimeMillis();
-        synchronized( functionalUdpCaches )
-        {
-            for ( UdpHostCache cache : functionalUdpCaches )
-            {
-                if ( now > cache.getEarliestReConnectTime() )
-                {
-                    list.add( cache );
-                    if ( list.size() >= count )
-                    {
+        synchronized (functionalUdpCaches) {
+            for (UdpHostCache cache : functionalUdpCaches) {
+                if (now > cache.getEarliestReConnectTime()) {
+                    list.add(cache);
+                    if (list.size() >= count) {
                         return list;
                     }
                 }
             }
         }
-        
-        synchronized( generalUdpCaches )
-        {
-            Collections.sort( generalUdpCaches, BootstrapHostComparator.INSTANCE );
-            for ( UdpHostCache cache : generalUdpCaches )
-            {
-                if ( now > cache.getEarliestReConnectTime() )
-                {
-                    list.add( cache );
-                    if ( list.size() >= count )
-                    {
+
+        synchronized (generalUdpCaches) {
+            Collections.sort(generalUdpCaches, BootstrapHostComparator.INSTANCE);
+            for (UdpHostCache cache : generalUdpCaches) {
+                if (now > cache.getEarliestReConnectTime()) {
+                    list.add(cache);
+                    if (list.size() >= count) {
                         return list;
                     }
                 }
             }
         }
-        
+
         return list;
     }
-    
+
     /**
-     *	<p>Queries for hosts from udp host caches</p>
+     * <p>Queries for hosts from udp host caches</p>
      */
-    private void queryMoreHosts()
-    {
+    private void queryMoreHosts() {
         final int NO_OF_CACHES_TO_PING = 3;
-        List<UdpHostCache> uhcListToQuery = getUhcListToQuery( NO_OF_CACHES_TO_PING );
-        
-        for ( UdpHostCache udpHostCache : uhcListToQuery )
-        {
-            queryCache( udpHostCache );
+        List<UdpHostCache> uhcListToQuery = getUhcListToQuery(NO_OF_CACHES_TO_PING);
+
+        for (UdpHostCache udpHostCache : uhcListToQuery) {
+            queryCache(udpHostCache);
         }
     }
-    
-    
-    
+
+
     /**
      * pings cache,
      * increments their failure count( assuming its going to fail )
      */
-    private void queryCache( UdpHostCache cache )
-    {
-        logger.debug( "Pinging UDP Host Cache: {}.", cache );
-        
-        cache.setLastRequestTime( System.currentTimeMillis() );
-        
+    private void queryCache(UdpHostCache cache) {
+        logger.debug("Pinging UDP Host Cache: {}.", cache);
+
+        cache.setLastRequestTime(System.currentTimeMillis());
+
         // ping 
-        servent.getMessageService().sendUdpPing( 
-            cache.getHostAddress() );
-        
+        servent.getMessageService().sendUdpPing(
+                cache.getHostAddress());
+
         //assumed it has failed
         cache.incFailedInRowCount();
-        synchronized( functionalUdpCaches )
-        {
-            functionalUdpCaches.remove( cache );
+        synchronized (functionalUdpCaches) {
+            functionalUdpCaches.remove(cache);
         }
-        addCache( cache );
+        addCache(cache);
     }
-    
-    
+
+
     /**
      * adds a UdpHostcache to a HostCache Container in a thread safe manner
      * checks if already present and adds only if not present
-     * <b>It then sorts the list in ascending order of fail count</b>  
+     * <b>It then sorts the list in ascending order of fail count</b>
+     *
      * @param cache
      * @param cacheContainer
-     * @return
-     * true if added successfully, 
+     * @return true if added successfully,
      * false if not added
      */
-    private boolean addTo( UdpHostCache cache, List<UdpHostCache> cacheContainer )
-    {
-        synchronized ( cacheContainer )
-        {
-            if ( ! ( cacheContainer.contains( cache )) )
-            {
-                cacheContainer.add( cache );
-                Collections.sort( cacheContainer, BootstrapHostComparator.INSTANCE );
-                logger.info( "Added UdpHostCache: {}", cache ); 
+    private boolean addTo(UdpHostCache cache, List<UdpHostCache> cacheContainer) {
+        synchronized (cacheContainer) {
+            if (!(cacheContainer.contains(cache))) {
+                cacheContainer.add(cache);
+                Collections.sort(cacheContainer, BootstrapHostComparator.INSTANCE);
+                logger.info("Added UdpHostCache: {}", cache);
                 return true;
             }
         }
         return false;
     }
-    
-    private void loadCachesFromFile()
-    {
-        try
-        {
+
+    private void loadCachesFromFile() {
+        try {
             File file = servent.getGnutellaNetwork().getUdpHostCacheFile();
-            if ( !file.exists() )
-            {
-                logger.debug( "No UDP host cache file found." );
+            if (!file.exists()) {
+                logger.debug("No UDP host cache file found.");
                 return;
             }
-            BufferedReader br = new BufferedReader( new FileReader(file) );
+            BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
-            synchronized( generalUdpCaches )
-            {
-                while ( (line = br.readLine()) != null)
-                {
-                    if ( line.startsWith("#") )
-                    {
+            synchronized (generalUdpCaches) {
+                while ((line = br.readLine()) != null) {
+                    if (line.startsWith("#")) {
                         continue;
                     }
-                    UdpHostCache cache = parseUhcFromLine( line );
-                    
+                    UdpHostCache cache = parseUhcFromLine(line);
+
                     // no security manager IP check.. because DNS resolve
                     // can make startup very very slow... 
-                    
-                    addCache( cache );
+
+                    addCache(cache);
                 }
             }
             br.close();
-        }
-        catch ( IOException e )
-        {
-            logger.warn( "Loading Udp Host Caches from file FAILED", e );
+        } catch (IOException e) {
+            logger.warn("Loading Udp Host Caches from file FAILED", e);
         }
     }
-    
-    private UdpHostCache parseUhcFromLine( String line ) 
-    {
+
+    private UdpHostCache parseUhcFromLine(String line) {
         // tokenize line
         // line format can be:
         // host         or:
         // host lastRequestTime failedInRowCount
-        StringTokenizer tokenizer = new StringTokenizer( line, " " );
+        StringTokenizer tokenizer = new StringTokenizer(line, " ");
         int tokenCount = tokenizer.countTokens();
-        
+
         String hostStr;
         long lastRequestTime;
         int failedInRowCount;
-        if ( tokenCount == 1 )
-        {
+        if (tokenCount == 1) {
             hostStr = line;
             lastRequestTime = -1;
-            failedInRowCount = -1;                    
-        }
-        else if ( tokenCount == 3 )
-        {
+            failedInRowCount = -1;
+        } else if (tokenCount == 3) {
             hostStr = tokenizer.nextToken();
-            try
-            {
-                lastRequestTime = Long.parseLong( tokenizer.nextToken() );
-            }
-            catch ( NumberFormatException exp )
-            {
+            try {
+                lastRequestTime = Long.parseLong(tokenizer.nextToken());
+            } catch (NumberFormatException exp) {
                 lastRequestTime = -1;
             }
-            try
-            {
-                failedInRowCount = Integer.parseInt( tokenizer.nextToken() );
-            }
-            catch ( NumberFormatException exp )
-            {
+            try {
+                failedInRowCount = Integer.parseInt(tokenizer.nextToken());
+            } catch (NumberFormatException exp) {
                 failedInRowCount = -1;
             }
-        }
-        else
-        {// Unknown format
-            logger.warn( "Unknown HostCache line format: {}", line );
+        } else {// Unknown format
+            logger.warn("Unknown HostCache line format: {}", line);
             return null;
         }
-        
+
         DestAddress hostCacheAdr;
-        try
-        {
+        try {
             hostCacheAdr = PresentationManager.getInstance().createHostAddress(
-                hostStr, DefaultDestAddress.DEFAULT_PORT);
-        }
-        catch ( MalformedDestAddressException e )
-        {
-            logger.warn( "Could not create cache from host string: {}", line, e );
+                    hostStr, DefaultDestAddress.DEFAULT_PORT);
+        } catch (MalformedDestAddressException e) {
+            logger.warn("Could not create cache from host string: {}", line, e);
             return null;
         }
-        
-        UdpHostCache cache = new UdpHostCache( hostCacheAdr );
-        if ( lastRequestTime > 0 )
-        {
-            cache.setLastRequestTime( lastRequestTime );
+
+        UdpHostCache cache = new UdpHostCache(hostCacheAdr);
+        if (lastRequestTime > 0) {
+            cache.setLastRequestTime(lastRequestTime);
         }
-        if ( failedInRowCount > 0 )
-        {
-            cache.setFailedInRowCount( failedInRowCount );
+        if (failedInRowCount > 0) {
+            cache.setFailedInRowCount(failedInRowCount);
         }
-        
+
         return cache;
     }
-    
-    
-    
-    public void saveCachesToFile()
-    {
-        try
-        {
+
+
+    public void saveCachesToFile() {
+        try {
             File file = servent.getGnutellaNetwork().getUdpHostCacheFile();
-            BufferedWriter writer = new BufferedWriter( new FileWriter( file ) );
-            
-            writeCachesToFile( writer, functionalUdpCaches );
-            writeCachesToFile( writer, generalUdpCaches );
-            
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+            writeCachesToFile(writer, functionalUdpCaches);
+            writeCachesToFile(writer, generalUdpCaches);
+
             writer.flush();
             writer.close();
-        }
-        catch ( IOException exp )
-        {
-            logger.warn( "Saving Udp Host Caches to file FAILED ", exp );
+        } catch (IOException exp) {
+            logger.warn("Saving Udp Host Caches to file FAILED ", exp);
         }
     }
-    
-    private void writeCachesToFile(  BufferedWriter writer, List<UdpHostCache> cacheContainer ) 
-        throws IOException
-    {
-        synchronized( cacheContainer )
-        {
-            for ( UdpHostCache cache : cacheContainer )
-            {
-                DestAddress address = cache.getHostAddress(); 
-                String ipString  = address.getFullHostName();
-                writer.write( ipString );
-                writer.write( ' ' );
-                writer.write( String.valueOf( cache.getLastRequestTime() ) );
-                writer.write( ' ' );
-                writer.write( String.valueOf( cache.getFailedInRowCount() ) );
+
+    private void writeCachesToFile(BufferedWriter writer, List<UdpHostCache> cacheContainer)
+            throws IOException {
+        synchronized (cacheContainer) {
+            for (UdpHostCache cache : cacheContainer) {
+                DestAddress address = cache.getHostAddress();
+                String ipString = address.getFullHostName();
+                writer.write(ipString);
+                writer.write(' ');
+                writer.write(String.valueOf(cache.getLastRequestTime()));
+                writer.write(' ');
+                writer.write(String.valueOf(cache.getFailedInRowCount()));
                 writer.newLine();
             }
         }
     }
-        
-    private final class QueryCachesRunner implements Runnable
-    {
-        public void run()
-        {
-            queryMoreHosts( );
-            isThreadRequestRunning.set( false );
+
+    private final class QueryCachesRunner implements Runnable {
+        public void run() {
+            queryMoreHosts();
+            isThreadRequestRunning.set(false);
         }
     }
 }

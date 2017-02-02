@@ -34,118 +34,102 @@ import java.util.*;
 /**
  * Filters all files matching the expression.
  */
-public class FileUrnCondition implements Condition
-{
+public class FileUrnCondition implements Condition {
     private ListOrderedSet/*<URN>*/ urnSet;
-    
+
     /**
      * @param expression
      * @param case1
      */
-    public FileUrnCondition( )
-    {
+    public FileUrnCondition() {
         urnSet = new ListOrderedSet();
     }
-    
+
     /**
      * Deep copy constructor.
+     *
      * @param condition
      */
-    public FileUrnCondition( FileUrnCondition condition )
-    {
+    public FileUrnCondition(FileUrnCondition condition) {
         this();
-        update( condition );
+        update(condition);
     }
-    
-    public synchronized void update( FileUrnCondition condition )
-    {
+
+    public synchronized void update(FileUrnCondition condition) {
         urnSet.clear();
         // we simply add the string.. since they are not mutable. 
         urnSet.addAll(condition.urnSet);
     }
-    
-    
-    public synchronized int getUrnCount()
-    {
+
+
+    public synchronized int getUrnCount() {
         return urnSet.size();
     }
-    
-    public synchronized Set<URN> getUrnSet()
-    {
+
+    public synchronized Set<URN> getUrnSet() {
         return Collections.unmodifiableSet(urnSet);
     }
-    
+
     /**
      * Returns a list of the ranges.
+     *
      * @return
      */
-    public synchronized List<URN> getUrnList()
-    {
+    public synchronized List<URN> getUrnList() {
         return urnSet.asList();
     }
-    
-    public synchronized FileUrnCondition addUrn( URN urn )
-    {
-        urnSet.add( urn );
+
+    public synchronized FileUrnCondition addUrn(URN urn) {
+        urnSet.add(urn);
         return this;
     }
-    
-    public synchronized void removeHash( URN urn )
-    {
-        urnSet.remove( urn );
+
+    public synchronized void removeHash(URN urn) {
+        urnSet.remove(urn);
     }
 
-    public synchronized boolean isMatched( Search search, RemoteFile remoteFile )
-    {
+    public synchronized boolean isMatched(Search search, RemoteFile remoteFile) {
         URN fileUrn = remoteFile.getURN();
 
         Iterator<URN> iterator = urnSet.iterator();
-        while( iterator.hasNext() )
-        {
+        while (iterator.hasNext()) {
             URN urn = iterator.next();
-            if ( fileUrn.equals( urn ) )
-            {
+            if (fileUrn.equals(urn)) {
                 return true;
             }
         }
         return false;
     }
-    
+
     /**
-     * Validates if this condition is completly edited and ready for storage or 
+     * Validates if this condition is completly edited and ready for storage or
      * requires further modifications.
+     *
      * @return true if complet false otherwise.
      */
-    public synchronized boolean isComplete()
-    {
+    public synchronized boolean isComplete() {
         return getUrnCount() > 0;
     }
-    
+
     @Override
-    public synchronized Object clone()
-    {
-        try
-        {
+    public synchronized Object clone() {
+        try {
             FileUrnCondition clone = (FileUrnCondition) super.clone();
             clone.urnSet = new ListOrderedSet();
-            clone.urnSet.addAll( urnSet );
+            clone.urnSet.addAll(urnSet);
             return clone;
-        }
-        catch (CloneNotSupportedException exp)
-        {
+        } catch (CloneNotSupportedException exp) {
             throw new InternalError();
         }
     }
 
-    public synchronized DCondition createDCondition()
-    {
+    public synchronized DCondition createDCondition() {
         DFileUrnCondition dCond = new DFileUrnCondition();
         List<String> newList = new ArrayList<String>();
         Iterator<URN> iterator = urnSet.iterator();
-        while ( iterator.hasNext() )
-        {
+        while (iterator.hasNext()) {
             URN urn = iterator.next();
-            newList.add( urn.getAsString() );
+            newList.add(urn.getAsString());
         }
         dCond.setUrns(newList);
         return dCond;

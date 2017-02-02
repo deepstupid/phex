@@ -23,8 +23,7 @@ package phex.api;
 
 import phex.download.swarming.SWDownloadFile;
 
-public interface ISearchHitHandle
-{
+public interface ISearchHitHandle {
     public static final short STATUS_UNDEF = -1;
 
     public static final short STATUS_TRANSFER_NOT_RUNNING = SWDownloadFile.TRANSFER_NOT_RUNNING;
@@ -61,7 +60,6 @@ public interface ISearchHitHandle
      * Start to download a hit (remote file) and save it to the specified path.
      *
      * @param localFilepath the path where the local file should be saved
-     *
      * @return true if the download could be started successfully, or false otherwise
      */
     public boolean saveDownloadedFile(String localFilepath);
@@ -92,9 +90,9 @@ public interface ISearchHitHandle
 
     /**
      * This method is an alias for cancelDownload: it has the same functionality.
-     * @see cancelDownload
      *
      * @return true if the download could be canceled and deleted successfully, or false otherwise
+     * @see cancelDownload
      */
     public boolean deleteHit();
 }

@@ -27,21 +27,20 @@ import java.util.EventListener;
 /**
  *
  */
-public interface UserMessageListener extends EventListener
-{
+public interface UserMessageListener extends EventListener {
     public static final String SegmentCreateIncompleteFileFailed = "SegmentCreateIncompleteFileFailed";
-    
+
     public static final String GuiSettingsSaveFailed = "GuiSettingsSaveFailed";
     public static final String DownloadSettingsSaveFailed = "DownloadSettingsSaveFailed";
     public static final String FavoritesSettingsSaveFailed = "FavoritesSettingsSaveFailed";
     public static final String SecuritySettingsSaveFailed = "SecuritySettingsSaveFailed";
     public static final String SharedFilesSaveFailed = "SharedFilesSaveFailed";
-    
+
     public static final String GuiSettingsLoadFailed = "GuiSettingsLoadFailed";
     public static final String DownloadSettingsLoadFailed = "DownloadSettingsLoadFailed";
     public static final String FavoritesSettingsLoadFailed = "FavoritesSettingsLoadFailed";
     public static final String SecuritySettingsLoadFailed = "SecuritySettingsLoadFailed";
     public static final String SharedFilesLoadFailed = "SharedFilesLoadFailed";
 
-    public void displayUserMessage( String userMessageId, String[] args );
+    public void displayUserMessage(String userMessageId, String[] args);
 }

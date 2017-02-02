@@ -32,50 +32,43 @@ import phex.util.StringUtils;
 import phex.xml.sax.rules.DConsequence;
 import phex.xml.sax.rules.DDownloadFileConsequence;
 
-public class DownloadFileConsequence implements Consequence
-{
-    public static final DownloadFileConsequence INSTANCE = 
-        new DownloadFileConsequence();
-    private static final DDownloadFileConsequence DELEMENT = 
-        new DDownloadFileConsequence();
+public class DownloadFileConsequence implements Consequence {
+    public static final DownloadFileConsequence INSTANCE =
+            new DownloadFileConsequence();
+    private static final DDownloadFileConsequence DELEMENT =
+            new DDownloadFileConsequence();
 
-    public void invoke( Search search, final RemoteFile remoteFile, Servent servent )
-    {
+    public void invoke(Search search, final RemoteFile remoteFile, Servent servent) {
         URN urn = remoteFile.getURN();
-        if ( urn == null )
-        {
+        if (urn == null) {
             // don't do automated stuff with files without an URN,
             // to dangerous and unsecure.
             return;
         }
         SwarmingManager swarmingMgr = servent.getDownloadService();
-        if ( swarmingMgr.isURNDownloaded(urn) )
-        {
+        if (swarmingMgr.isURNDownloaded(urn)) {
             // file already downloading...
             return;
         }
         SharedFilesService fileService = servent.getSharedFilesService();
-        if ( fileService.isURNShared( urn ) )
-        {
+        if (fileService.isURNShared(urn)) {
             // file already shared... don't download...
             return;
         }
-        
-        remoteFile.setInDownloadQueue( true );
-        RemoteFile dfile = new RemoteFile( remoteFile );
-        String searchTerm = StringUtils.createNaturalSearchTerm( dfile.getFilename() );
-        swarmingMgr.addFileToDownload( dfile, dfile.getFilename(), searchTerm );        
+
+        remoteFile.setInDownloadQueue(true);
+        RemoteFile dfile = new RemoteFile(remoteFile);
+        String searchTerm = StringUtils.createNaturalSearchTerm(dfile.getFilename());
+        swarmingMgr.addFileToDownload(dfile, dfile.getFilename(), searchTerm);
     }
 
     @Override
-    public Object clone()
-    {
+    public Object clone() {
         // there is only one instance...
         return INSTANCE;
     }
 
-    public DConsequence createDConsequence()
-    {
+    public DConsequence createDConsequence() {
         return DELEMENT;
     }
 }

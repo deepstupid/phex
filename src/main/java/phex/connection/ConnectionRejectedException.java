@@ -20,15 +20,12 @@ package phex.connection;
 
 import java.io.IOException;
 
-public class ConnectionRejectedException extends IOException
-{
-    public ConnectionRejectedException()
-    {
-        super( "Connection rejected" );
+public class ConnectionRejectedException extends IOException {
+    public ConnectionRejectedException() {
+        super("Connection rejected");
     }
 
-    public ConnectionRejectedException( String msg )
-    {
-        super( msg );
+    public ConnectionRejectedException(String msg) {
+        super(msg);
     }
 }

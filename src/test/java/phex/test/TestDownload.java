@@ -20,7 +20,6 @@ package phex.test;
 
 import junit.framework.TestCase;
 import phex.common.AddressCounter;
-import phex.common.Phex;
 import phex.common.address.DefaultDestAddress;
 import phex.download.RemoteFile;
 import phex.download.swarming.*;
@@ -53,8 +52,8 @@ public class TestDownload extends TestCase
             (short)1 );
         SWDownloadFile downloadFile = new SWDownloadFile( "test",
             "test", remoteFile.getFileSize(), remoteFile.getURN(), 
-            Servent.getInstance().getDownloadService(), 
-            Phex.getEventService() );
+            Servent.getInstance().getDownloadService()
+        );
         downloadFile.addDownloadCandidate( remoteFile );
         downloadFile.setStatus( SWDownloadConstants.STATUS_FILE_WAITING );
 

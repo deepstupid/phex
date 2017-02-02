@@ -25,8 +25,7 @@ import java.util.HashMap;
  * Currently MIME types are only used when a upload from a web browser is done.
  * Therefore initialization of this class only happens in this case.
  */
-public final class MimeTypeMapping
-{
+public final class MimeTypeMapping {
     private static final String MIMETYPE_TEXT_PLAIN = "text/plain";
     private static final String MIMETYPE_TEXT_RICHTEXT = "text/richtext";
     private static final String MIMETYPE_TEXT_HTML = "text/html";
@@ -56,74 +55,70 @@ public final class MimeTypeMapping
 
     private static final HashMap<String, String> mimeTypeMapping;
 
-    static
-    {
-        mimeTypeMapping = new HashMap<String, String>( 50 );
-        mimeTypeMapping.put("txt", MIMETYPE_TEXT_PLAIN );
-        mimeTypeMapping.put("ini", MIMETYPE_TEXT_PLAIN );
-        mimeTypeMapping.put("c", MIMETYPE_TEXT_PLAIN );
-        mimeTypeMapping.put("h", MIMETYPE_TEXT_PLAIN );
-        mimeTypeMapping.put("cpp", MIMETYPE_TEXT_PLAIN );
-        mimeTypeMapping.put("cxx", MIMETYPE_TEXT_PLAIN );
-        mimeTypeMapping.put("cc", MIMETYPE_TEXT_PLAIN );
-        mimeTypeMapping.put("chh", MIMETYPE_TEXT_PLAIN );
-        mimeTypeMapping.put("java", MIMETYPE_TEXT_PLAIN );
-        mimeTypeMapping.put("csv", MIMETYPE_TEXT_PLAIN );
-        mimeTypeMapping.put("bat", MIMETYPE_TEXT_PLAIN );
-        mimeTypeMapping.put("cmd", MIMETYPE_TEXT_PLAIN );
-        mimeTypeMapping.put("sh", MIMETYPE_TEXT_PLAIN );
-        mimeTypeMapping.put("rtf", MIMETYPE_TEXT_RICHTEXT );
-        mimeTypeMapping.put("rtx", MIMETYPE_TEXT_RICHTEXT );
-        mimeTypeMapping.put("html", MIMETYPE_TEXT_HTML );
-        mimeTypeMapping.put("htm", MIMETYPE_TEXT_HTML );
-        mimeTypeMapping.put("zip", MIMETYPE_APPL_ZIP );
-        mimeTypeMapping.put("rar", MIMETYPE_APPL_RAR );
-        mimeTypeMapping.put("gzip", MIMETYPE_APPL_GZIP );
-        mimeTypeMapping.put("sit", MIMETYPE_APPL_SIT );
-        mimeTypeMapping.put("tgz", MIMETYPE_APPL_TGZ );
-        mimeTypeMapping.put("gz", MIMETYPE_APPL_GZ );
-        mimeTypeMapping.put("tar", MIMETYPE_APPL_TAR );
+    static {
+        mimeTypeMapping = new HashMap<String, String>(50);
+        mimeTypeMapping.put("txt", MIMETYPE_TEXT_PLAIN);
+        mimeTypeMapping.put("ini", MIMETYPE_TEXT_PLAIN);
+        mimeTypeMapping.put("c", MIMETYPE_TEXT_PLAIN);
+        mimeTypeMapping.put("h", MIMETYPE_TEXT_PLAIN);
+        mimeTypeMapping.put("cpp", MIMETYPE_TEXT_PLAIN);
+        mimeTypeMapping.put("cxx", MIMETYPE_TEXT_PLAIN);
+        mimeTypeMapping.put("cc", MIMETYPE_TEXT_PLAIN);
+        mimeTypeMapping.put("chh", MIMETYPE_TEXT_PLAIN);
+        mimeTypeMapping.put("java", MIMETYPE_TEXT_PLAIN);
+        mimeTypeMapping.put("csv", MIMETYPE_TEXT_PLAIN);
+        mimeTypeMapping.put("bat", MIMETYPE_TEXT_PLAIN);
+        mimeTypeMapping.put("cmd", MIMETYPE_TEXT_PLAIN);
+        mimeTypeMapping.put("sh", MIMETYPE_TEXT_PLAIN);
+        mimeTypeMapping.put("rtf", MIMETYPE_TEXT_RICHTEXT);
+        mimeTypeMapping.put("rtx", MIMETYPE_TEXT_RICHTEXT);
+        mimeTypeMapping.put("html", MIMETYPE_TEXT_HTML);
+        mimeTypeMapping.put("htm", MIMETYPE_TEXT_HTML);
+        mimeTypeMapping.put("zip", MIMETYPE_APPL_ZIP);
+        mimeTypeMapping.put("rar", MIMETYPE_APPL_RAR);
+        mimeTypeMapping.put("gzip", MIMETYPE_APPL_GZIP);
+        mimeTypeMapping.put("sit", MIMETYPE_APPL_SIT);
+        mimeTypeMapping.put("tgz", MIMETYPE_APPL_TGZ);
+        mimeTypeMapping.put("gz", MIMETYPE_APPL_GZ);
+        mimeTypeMapping.put("tar", MIMETYPE_APPL_TAR);
         mimeTypeMapping.put("gif", MIMETYPE_IMG_GIF);
         mimeTypeMapping.put("jpeg", MIMETYPE_IMG_JPEG);
         mimeTypeMapping.put("jpg", MIMETYPE_IMG_JPEG);
-        mimeTypeMapping.put("tiff", MIMETYPE_IMG_TIFF );
-        mimeTypeMapping.put("tif", MIMETYPE_IMG_TIFF );
-        mimeTypeMapping.put("png", MIMETYPE_IMG_PNG );
-        mimeTypeMapping.put("aiff", MIMETYPE_AUDIO_AIFF );
-        mimeTypeMapping.put("aif", MIMETYPE_AUDIO_AIFF );
-        mimeTypeMapping.put("au", MIMETYPE_AUDIO_BASIC );
-        mimeTypeMapping.put("wav", MIMETYPE_AUDIO_WAV );
-        mimeTypeMapping.put("mp3", MIMETYPE_AUDIO_MP3 );
-        mimeTypeMapping.put("avi", MIMETYPE_VIDEO_MSVIDEO );
-        mimeTypeMapping.put("mov", MIMETYPE_VIDEO_QUICKTIME );
-        mimeTypeMapping.put("qt", MIMETYPE_VIDEO_QUICKTIME );
-        mimeTypeMapping.put("mpeg", MIMETYPE_VIDEO_MPEG );
-        mimeTypeMapping.put("mpg", MIMETYPE_VIDEO_MPEG );
-        mimeTypeMapping.put("doc", MIMETYPE_APPL_MSWORD );
-        mimeTypeMapping.put("xls", MIMETYPE_APPL_MSEXCEL );
-        mimeTypeMapping.put("ps", MIMETYPE_APPL_PS );
-        mimeTypeMapping.put("pdf", MIMETYPE_APPL_PDF );
+        mimeTypeMapping.put("tiff", MIMETYPE_IMG_TIFF);
+        mimeTypeMapping.put("tif", MIMETYPE_IMG_TIFF);
+        mimeTypeMapping.put("png", MIMETYPE_IMG_PNG);
+        mimeTypeMapping.put("aiff", MIMETYPE_AUDIO_AIFF);
+        mimeTypeMapping.put("aif", MIMETYPE_AUDIO_AIFF);
+        mimeTypeMapping.put("au", MIMETYPE_AUDIO_BASIC);
+        mimeTypeMapping.put("wav", MIMETYPE_AUDIO_WAV);
+        mimeTypeMapping.put("mp3", MIMETYPE_AUDIO_MP3);
+        mimeTypeMapping.put("avi", MIMETYPE_VIDEO_MSVIDEO);
+        mimeTypeMapping.put("mov", MIMETYPE_VIDEO_QUICKTIME);
+        mimeTypeMapping.put("qt", MIMETYPE_VIDEO_QUICKTIME);
+        mimeTypeMapping.put("mpeg", MIMETYPE_VIDEO_MPEG);
+        mimeTypeMapping.put("mpg", MIMETYPE_VIDEO_MPEG);
+        mimeTypeMapping.put("doc", MIMETYPE_APPL_MSWORD);
+        mimeTypeMapping.put("xls", MIMETYPE_APPL_MSEXCEL);
+        mimeTypeMapping.put("ps", MIMETYPE_APPL_PS);
+        mimeTypeMapping.put("pdf", MIMETYPE_APPL_PDF);
         mimeTypeMapping.put("exe", MIMETYPE_APPL_BINARY);
         mimeTypeMapping.put("dll", MIMETYPE_APPL_BINARY);
         mimeTypeMapping.put("class", MIMETYPE_APPL_BINARY);
         mimeTypeMapping.put("jar", MIMETYPE_APPL_BINARY);
     }
 
+    private MimeTypeMapping() {
+    }
+
     /**
      * Returns the corresponding MIME type to the given extension.
      * If no MIME type was found it returns applications/binary.
      */
-    public static String getMimeTypeForExtension( String ext )
-    {
-        String mimeType = mimeTypeMapping.get( ext.toLowerCase() );
-        if ( mimeType == null )
-        {
+    public static String getMimeTypeForExtension(String ext) {
+        String mimeType = mimeTypeMapping.get(ext.toLowerCase());
+        if (mimeType == null) {
             mimeType = MIMETYPE_APPL_BINARY;
         }
         return mimeType;
-    }
-
-    private MimeTypeMapping()
-    {
     }
 }

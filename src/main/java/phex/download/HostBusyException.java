@@ -20,24 +20,20 @@ package phex.download;
 
 import java.io.IOException;
 
-public class HostBusyException extends IOException
-{
+public class HostBusyException extends IOException {
     private final int waitTimeInSeconds;
-    
-    public HostBusyException( )
-    {
-        super( "HostBusyException" );
+
+    public HostBusyException() {
+        super("HostBusyException");
         waitTimeInSeconds = -1;
     }
-    
-    public HostBusyException( int waitTimeInSeconds )
-    {
-        super( "HostBusyException - waiting: " + waitTimeInSeconds );
+
+    public HostBusyException(int waitTimeInSeconds) {
+        super("HostBusyException - waiting: " + waitTimeInSeconds);
         this.waitTimeInSeconds = waitTimeInSeconds;
     }
-    
-    public int getWaitTimeInSeconds()
-    {
+
+    public int getWaitTimeInSeconds() {
         return waitTimeInSeconds;
     }
 }

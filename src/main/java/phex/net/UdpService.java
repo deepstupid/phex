@@ -37,114 +37,97 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketAddress;
 
-public class UdpService implements IDatagramHandler
-{
+public class UdpService implements IDatagramHandler {
     private static final int RECV_SEND_BUFFER_SIZE = 64 * 1024;
-    private static final Logger logger = LoggerFactory.getLogger( UdpService.class );
-    
+    private static final Logger logger = LoggerFactory.getLogger(UdpService.class);
+
     private final InetAddress bindAddress;
     private final int bindPort;
-    
+
     private UdpDataHandler udpDataHandler;
-    
+
     private volatile boolean isRunning;
-    
+
     private IEndpoint endpoint;
-    
-    public UdpService( int bindPort )
-    {
-        this( null, bindPort, null );
+
+    public UdpService(int bindPort) {
+        this(null, bindPort, null);
     }
-    
-    public UdpService( int bindPort, UdpDataHandler udpDataHandler )
-    {
-        this( null, bindPort, udpDataHandler );
+
+    public UdpService(int bindPort, UdpDataHandler udpDataHandler) {
+        this(null, bindPort, udpDataHandler);
     }
-    
-    public UdpService( InetAddress bindAddress, int bindPort )
-    {
-        this( bindAddress, bindPort, null );
+
+    public UdpService(InetAddress bindAddress, int bindPort) {
+        this(bindAddress, bindPort, null);
     }
-    
-    public UdpService( InetAddress bindAddress, int bindPort, UdpDataHandler udpDataHandler )
-    {
+
+    public UdpService(InetAddress bindAddress, int bindPort, UdpDataHandler udpDataHandler) {
         this.bindAddress = bindAddress;
         this.bindPort = bindPort;
         this.udpDataHandler = udpDataHandler;
     }
-    
+
     /**
      * @param udpDataHandler the udpDataHandler to set
      */
-    public void setUdpDataHandler(UdpDataHandler udpDataHandler)
-    {
+    public void setUdpDataHandler(UdpDataHandler udpDataHandler) {
         this.udpDataHandler = udpDataHandler;
     }
 
-    public synchronized void startup() throws IOException
-    {
-        if (isRunning)
-        {
+    public synchronized void startup() throws IOException {
+        if (isRunning) {
             return;
         }
-        
+
         //Map<String, Object> options = new HashMap<String, Object>();
         //options.put( IEndpoint.SO_RCVBUF, RECV_SEND_BUFFER_SIZE );
         //options.put( IEndpoint.SO_SNDBUF, RECV_SEND_BUFFER_SIZE );
-        endpoint = new Endpoint( RECV_SEND_BUFFER_SIZE, this,
-            Environment.getInstance().getThreadPool(),
-            bindAddress, bindPort );
-        
+        endpoint = new Endpoint(RECV_SEND_BUFFER_SIZE, this,
+                Environment.getInstance().getThreadPool(),
+                bindAddress, bindPort);
+
         isRunning = true;
     }
-    
-    public synchronized void shutdown( )
-    {
+
+    public synchronized void shutdown() {
         // not running, already dead or been requested to die.
-        if ( !isRunning )
-        {
+        if (!isRunning) {
             return;
         }
-        IOUtil.closeQuietly( endpoint );
+        IOUtil.closeQuietly(endpoint);
         isRunning = false;
     }
-    
-    public void sendDatagram( byte[] data, DestAddress address ) throws IOException
-    {
-        if ( !isRunning )
-        {
+
+    public void sendDatagram(byte[] data, DestAddress address) throws IOException {
+        if (!isRunning) {
             return;
         }
-        SocketAddress socketAddress = AddressUtils.createSocketAddress( address );
-        UserDatagram datagram = new UserDatagram( socketAddress, data );
-        logger.debug( "Sending Datagram {}", datagram );
-        endpoint.send( datagram );
+        SocketAddress socketAddress = AddressUtils.createSocketAddress(address);
+        UserDatagram datagram = new UserDatagram(socketAddress, data);
+        logger.debug("Sending Datagram {}", datagram);
+        endpoint.send(datagram);
     }
 
     ///////////////////////////////////////////////////////////////////////////
     ////////////////////////// IDatagramHandler ///////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
-    
-    public boolean onDatagram( IEndpoint rcvEndpoint )
-    {
+
+    public boolean onDatagram(IEndpoint rcvEndpoint) {
         // Unfortunately xSocket 2.2 silently catches away all exception.
         // to see errors we need to handle them here...
-        try
-        {
+        try {
             UserDatagram datagram = rcvEndpoint.receive();
-            if ( udpDataHandler != null )
-            {
-                DefaultDestAddress addr = new DefaultDestAddress( 
-                    datagram.getRemoteAddress().getAddress(),
-                    datagram.getRemotePort() );
-                udpDataHandler.handleUdpData( datagram, addr );
+            if (udpDataHandler != null) {
+                DefaultDestAddress addr = new DefaultDestAddress(
+                        datagram.getRemoteAddress().getAddress(),
+                        datagram.getRemotePort());
+                udpDataHandler.handleUdpData(datagram, addr);
             }
             return true;
-        }
-        catch ( Exception exp )
-        {
-            logger.error( exp.toString(), exp );
-            throw new RuntimeException( exp );
+        } catch (Exception exp) {
+            logger.error(exp.toString(), exp);
+            throw new RuntimeException(exp);
         }
     }
 }

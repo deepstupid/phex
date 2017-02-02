@@ -21,9 +21,6 @@
  */
 package phex.download.handler;
 
-import phex.util.bitzi.Base32;
-import phex.util.dime.DimeParser;
-import phex.util.dime.DimeRecord;
 import org.apache.commons.httpclient.ChunkedInputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +39,9 @@ import phex.prefs.core.DownloadPrefs;
 import phex.thex.TTHashCalcUtils;
 import phex.util.IOUtil;
 import phex.util.LengthLimitedInputStream;
+import phex.util.bitzi.Base32;
+import phex.util.dime.DimeParser;
+import phex.util.dime.DimeRecord;
 import phex.xml.thex.ThexHashTree;
 import phex.xml.thex.ThexHashTreeCodec;
 
@@ -53,316 +53,263 @@ import java.net.MalformedURLException;
 import java.util.List;
 import java.util.Locale;
 
-public class HttpThexDownload extends AbstractHttpDownload
-{
-    private static final Logger logger = LoggerFactory.getLogger( 
-        HttpThexDownload.class );
-    
+public class HttpThexDownload extends AbstractHttpDownload {
+    private static final Logger logger = LoggerFactory.getLogger(
+            HttpThexDownload.class);
+
     private ThexVerificationData thexData;
-    
+
     private InputStream inStream;
-    
+
     private long replyContentLength;
-    
+
     private boolean isDownloadSuccessful;
-    
-    public HttpThexDownload( DownloadEngine engine, ThexVerificationData thexData )
-    {
-        super( engine );
-        if ( thexData == null )
-        {
-            throw new NullPointerException( "ThexData is null." );
+
+    public HttpThexDownload(DownloadEngine engine, ThexVerificationData thexData) {
+        super(engine);
+        if (thexData == null) {
+            throw new NullPointerException("ThexData is null.");
         }
         this.thexData = thexData;
     }
-    
-    public void preProcess()
-    {
+
+    public void preProcess() {
     }
-    
-    public void processHandshake() 
-        throws IOException, HTTPMessageException, UnusableHostException
-    {
+
+    public void processHandshake()
+            throws IOException, HTTPMessageException, UnusableHostException {
         isDownloadSuccessful = false;
-        
+
         Connection connection = downloadEngine.getConnection();
         SWDownloadCandidate candidate = downloadEngine.getDownloadSet().getCandidate();
-        
+
 
         OutputStreamWriter writer = new OutputStreamWriter(
-            connection.getOutputStream() );
+                connection.getOutputStream());
         // reset to default input stream
         inStream = connection.getInputStream();
-        
+
         String requestUrl = candidate.getThexUri();
-        HTTPRequest request = new HTTPRequest( "GET", requestUrl, true );
-        request.addHeader( new HTTPHeader( HTTPHeaderNames.HOST,
-            candidate.getHostAddress().getFullHostName() ) );
-        request.addHeader( new HTTPHeader( GnutellaHeaderNames.X_QUEUE,
-            "0.1" ) );
+        HTTPRequest request = new HTTPRequest("GET", requestUrl, true);
+        request.addHeader(new HTTPHeader(HTTPHeaderNames.HOST,
+                candidate.getHostAddress().getFullHostName()));
+        request.addHeader(new HTTPHeader(GnutellaHeaderNames.X_QUEUE,
+                "0.1"));
         // request a HTTP keep alive connection, needed for queuing to work.
-        request.addHeader( new HTTPHeader( HTTPHeaderNames.CONNECTION,
-            "Keep-Alive" ) );
+        request.addHeader(new HTTPHeader(HTTPHeaderNames.CONNECTION,
+                "Keep-Alive"));
 
         String httpRequestStr = request.buildHTTPRequestString();
 
-        logger.debug( "HTTP Request to: {}\n{}", candidate.getHostAddress(), httpRequestStr );
-        candidate.addToCandidateLog( "HTTP Request:\n" + httpRequestStr );
+        logger.debug("HTTP Request to: {}\n{}", candidate.getHostAddress(), httpRequestStr);
+        candidate.addToCandidateLog("HTTP Request:\n" + httpRequestStr);
         // write request...
-        writer.write( httpRequestStr );
+        writer.write(httpRequestStr);
         writer.flush();
 
-        HTTPResponse response = HTTPProcessor.parseHTTPResponse( connection );
-        if ( logger.isDebugEnabled( ) )
-        {
-            logger.debug( "HTTP Response from: " + candidate.getHostAddress() + "\n" 
-                + response.buildHTTPResponseString() );
+        HTTPResponse response = HTTPProcessor.parseHTTPResponse(connection);
+        if (logger.isDebugEnabled()) {
+            logger.debug("HTTP Response from: " + candidate.getHostAddress() + "\n"
+                    + response.buildHTTPResponseString());
         }
-        if ( DownloadPrefs.CandidateLogBufferSize.get().intValue() > 0 )
-        {
-            candidate.addToCandidateLog( "HTTP Response:\n" 
-                + response.buildHTTPResponseString() );
+        if (DownloadPrefs.CandidateLogBufferSize.get().intValue() > 0) {
+            candidate.addToCandidateLog("HTTP Response:\n"
+                    + response.buildHTTPResponseString());
         }
 
-        updateServerHeader( response );
-        
+        updateServerHeader(response);
+
         HTTPHeader header;
-        
-        header = response.getHeader( HTTPHeaderNames.TRANSFER_ENCODING );
-        if ( header != null )
-        {
-            if ( header.getValue().equals("chunked") )
-            {
-                inStream = new ChunkedInputStream( connection.getInputStream() );
+
+        header = response.getHeader(HTTPHeaderNames.TRANSFER_ENCODING);
+        if (header != null) {
+            if (header.getValue().equals("chunked")) {
+                inStream = new ChunkedInputStream(connection.getInputStream());
             }
         }
-        
+
         replyContentLength = -1;
-        header = response.getHeader( HTTPHeaderNames.CONTENT_LENGTH );
-        if ( header != null )
-        {
-            try
-            {
+        header = response.getHeader(HTTPHeaderNames.CONTENT_LENGTH);
+        if (header != null) {
+            try {
                 replyContentLength = header.longValue();
-            }
-            catch ( NumberFormatException exp )
-            { //unknown 
+            } catch (NumberFormatException exp) { //unknown
             }
         }
-        updateKeepAliveSupport( response );
-                
+        updateKeepAliveSupport(response);
+
         int httpCode = response.getStatusCode();
-        if ( httpCode >= 200 && httpCode < 300 )
-        {// code accepted
+        if (httpCode >= 200 && httpCode < 300) {// code accepted
             // connection successfully finished
-            logger.debug( "HTTP Handshake successfull.");
+            logger.debug("HTTP Handshake successfull.");
             return;
         }
         // check error type
-        else if ( httpCode == 503 )
-        {// 503 -> host is busy (this can also be returned when remotely queued)
-            header = response.getHeader( GnutellaHeaderNames.X_QUEUE );
+        else if (httpCode == 503) {// 503 -> host is busy (this can also be returned when remotely queued)
+            header = response.getHeader(GnutellaHeaderNames.X_QUEUE);
             XQueueParameters xQueueParameters = null;
-            if ( header != null )
-            {
-                xQueueParameters = XQueueParameters.parseXQueueParameters( header.getValue() );
+            if (header != null) {
+                xQueueParameters = XQueueParameters.parseXQueueParameters(header.getValue());
             }
             // check for persistent connection (gtk-gnutella uses queuing with 'Connection: close')
-            if ( xQueueParameters != null && isKeepAliveSupported )
-            {
-                throw new RemotelyQueuedException( xQueueParameters );
-            }
-            else
-            {
-                header = response.getHeader( HTTPHeaderNames.RETRY_AFTER );
-                if ( header != null )
-                {
-                    int delta = HTTPRetryAfter.parseDeltaInSeconds( header );
-                    if ( delta > 0 )
-                    {
-                        throw new HostBusyException( delta );
+            if (xQueueParameters != null && isKeepAliveSupported) {
+                throw new RemotelyQueuedException(xQueueParameters);
+            } else {
+                header = response.getHeader(HTTPHeaderNames.RETRY_AFTER);
+                if (header != null) {
+                    int delta = HTTPRetryAfter.parseDeltaInSeconds(header);
+                    if (delta > 0) {
+                        throw new HostBusyException(delta);
                     }
                 }
                 throw new HostBusyException();
             }
-        }
-        else
-        {
-            throw new IOException( "Unknown HTTP code: " + httpCode );
+        } else {
+            throw new IOException("Unknown HTTP code: " + httpCode);
         }
     }
 
-    public void processDownload() throws IOException
-    {
+    public void processDownload() throws IOException {
         SWDownloadSet downloadSet = downloadEngine.getDownloadSet();
         SWDownloadCandidate candidate = downloadSet.getCandidate();
         SWDownloadFile downloadFile = downloadSet.getDownloadFile();
-        
-        logger.debug( "Download Engine starts download." );
+
+        logger.debug("Download Engine starts download.");
         LengthLimitedInputStream downloadStream = null;
-        try
-        {            
-            
+        try {
+
             // determine the length to download, we start with the MAX
             // which would cause a download until the stream ends.
             long downloadLengthLeft = Long.MAX_VALUE;
             // maybe we know a reply content length
-            if ( replyContentLength != -1 )
-            {
-                downloadLengthLeft = Math.min( replyContentLength, downloadLengthLeft );
+            if (replyContentLength != -1) {
+                downloadLengthLeft = Math.min(replyContentLength, downloadLengthLeft);
             }
-            
-            downloadStream = new LengthLimitedInputStream( 
-                inStream, downloadLengthLeft );
-            
-            DimeParser dimeParser = new DimeParser( downloadStream );
-            
+
+            downloadStream = new LengthLimitedInputStream(
+                    inStream, downloadLengthLeft);
+
+            DimeParser dimeParser = new DimeParser(downloadStream);
+
             List<DimeRecord> records = DimeParser.getAllRecords(dimeParser);
-            
-            if ( records.size() < 2 )
-            {
-            	throw new IOException( "Required dime records not found." );
+
+            if (records.size() < 2) {
+                throw new IOException("Required dime records not found.");
             }
-            DimeRecord xmlRecord = records.get( 0 );
-            DimeRecord hashRecord = records.get( 1 );
-                    
+            DimeRecord xmlRecord = records.get(0);
+            DimeRecord hashRecord = records.get(1);
+
             byte[] xmlData = xmlRecord.getData();
-            
+
             // it seems like Bearshare is appending artifacts to the xml dime record entry.
             // try to remove them
-            if ( candidate.getVendor().toLowerCase( Locale.US ).contains( "bearshare" ) )
-            {
-                int idx = xmlData.length-1;
-                while( xmlData[idx] != 0x3e )
-                {
+            if (candidate.getVendor().toLowerCase(Locale.US).contains("bearshare")) {
+                int idx = xmlData.length - 1;
+                while (xmlData[idx] != 0x3e) {
                     idx--;
                 }
-                if ( idx < xmlData.length-1 )
-                {
-                    byte[] newXmlData = new byte[ idx+1 ];
-                    System.arraycopy( xmlData, 0, newXmlData, 0, idx+1 );
+                if (idx < xmlData.length - 1) {
+                    byte[] newXmlData = new byte[idx + 1];
+                    System.arraycopy(xmlData, 0, newXmlData, 0, idx + 1);
                     xmlData = newXmlData;
                 }
             }
-            
+
             ThexHashTree xmlTree;
-            try
-            {
-                xmlTree = ThexHashTreeCodec.parseThexHashTreeXML( 
-            		new ByteArrayInputStream(xmlData) );
-            }
-            catch ( MalformedURLException exp )
-            {// catch this exp for debugging purpose.
-                logger.error( "Failed to parse: '" + 
-                   new String( xmlData, "UTF-8" ) + "' from: " + candidate.getVendor() );
-                candidate.addToCandidateLog( "Failed to parse: '" + new String( xmlData, "UTF-8" ) + "'" );
-                logger.error( exp.toString() );
-                throw new IOException( "Parsing Thex HashTree failed." );
-            }
-            catch ( IOException exp )
-            {
-                logger.error( "Failed to parse: '" + 
-                    new String( xmlData, "UTF-8" ) + "' from: " + candidate.getVendor() );
-                candidate.addToCandidateLog( "Failed to parse: '" + new String( xmlData, "UTF-8" ) + "'" );
+            try {
+                xmlTree = ThexHashTreeCodec.parseThexHashTreeXML(
+                        new ByteArrayInputStream(xmlData));
+            } catch (MalformedURLException exp) {// catch this exp for debugging purpose.
+                logger.error("Failed to parse: '" +
+                        new String(xmlData, "UTF-8") + "' from: " + candidate.getVendor());
+                candidate.addToCandidateLog("Failed to parse: '" + new String(xmlData, "UTF-8") + "'");
+                logger.error(exp.toString());
+                throw new IOException("Parsing Thex HashTree failed.");
+            } catch (IOException exp) {
+                logger.error("Failed to parse: '" +
+                        new String(xmlData, "UTF-8") + "' from: " + candidate.getVendor());
+                candidate.addToCandidateLog("Failed to parse: '" + new String(xmlData, "UTF-8") + "'");
                 throw exp;
             }
-            
+
             long fileSize;
-            try
-            {
-            	fileSize = Long.parseLong( xmlTree.getFileSize() );
+            try {
+                fileSize = Long.parseLong(xmlTree.getFileSize());
+            } catch (NumberFormatException exp) {
+                throw new IOException("Invalid file size: " + xmlTree.getFileSize());
             }
-            catch ( NumberFormatException exp )
-            {
-            	throw new IOException( "Invalid file size: " + xmlTree.getFileSize() );
+            if (fileSize != downloadFile.getTotalDataSize()) {
+                throw new IOException("Invalid file size: " + fileSize + "/"
+                        + downloadFile.getTotalDataSize());
             }
-            if ( fileSize != downloadFile.getTotalDataSize() )
-            {
-            	throw new IOException( "Invalid file size: " + fileSize + "/" 
-            			+ downloadFile.getTotalDataSize() ); 
-            }
-            
+
             byte[] hashData = hashRecord.getData();
-            
+
             // first 24 bytes is the root we can verify...
-            if ( hashData.length < 24 )
-            {
-                throw new IOException( "Invalid hash data size." );
+            if (hashData.length < 24) {
+                throw new IOException("Invalid hash data size.");
             }
             byte[] rootHash = new byte[24];
-            System.arraycopy( hashData, 0, rootHash, 0, 24 );
-            String rootHashB32 = Base32.encode( rootHash );
-            if ( !candidate.getThexRoot().equals( rootHashB32 ) || 
-                 !downloadFile.getThexVerificationData().getRootHash().equals( rootHashB32 ) )
-            {
-                throw new IOException( "Root hash do not match." );
+            System.arraycopy(hashData, 0, rootHash, 0, 24);
+            String rootHashB32 = Base32.encode(rootHash);
+            if (!candidate.getThexRoot().equals(rootHashB32) ||
+                    !downloadFile.getThexVerificationData().getRootHash().equals(rootHashB32)) {
+                throw new IOException("Root hash do not match.");
             }
-            
-            List <List<byte[]>> merkleNodes = TTHashCalcUtils.resolveMerkleNodes( 
-                hashData, fileSize );
-            
-            List<byte[]> lowestLevelNodes = merkleNodes.get( merkleNodes.size()-1 );
-            thexData.setThexData( lowestLevelNodes, merkleNodes.size()-1, fileSize );
-            
+
+            List<List<byte[]>> merkleNodes = TTHashCalcUtils.resolveMerkleNodes(
+                    hashData, fileSize);
+
+            List<byte[]> lowestLevelNodes = merkleNodes.get(merkleNodes.size() - 1);
+            thexData.setThexData(lowestLevelNodes, merkleNodes.size() - 1, fileSize);
+
             isDownloadSuccessful = true;
-        }
-        finally
-        {// don't close managed file since it might be used by parallel threads.
+        } finally {// don't close managed file since it might be used by parallel threads.
             boolean isAcceptingNextSegment = isAcceptingNextRequest();
-            candidate.addToCandidateLog( "Is accepting next segment: " + isAcceptingNextSegment );
+            candidate.addToCandidateLog("Is accepting next segment: " + isAcceptingNextSegment);
             // this is for keep alive support...
-            if ( isAcceptingNextSegment && downloadStream != null )
-            {
+            if (isAcceptingNextSegment && downloadStream != null) {
                 // only need to close and consume left overs if we plan to
                 // continue using this connection.
                 downloadStream.close();
-            }
-            else
-            {
+            } else {
                 stopDownload();
             }
         }
     }
-    
+
     /**
      * Performs thex download cleanup operations. In this case releasing the
-     * running thex request state. 
+     * running thex request state.
      */
-    public void postProcess()
-    {
+    public void postProcess() {
         // check if data is already released... 
-        if ( thexData != null )
-        {
+        if (thexData != null) {
             SWDownloadSet downloadSet = downloadEngine.getDownloadSet();
             SWDownloadCandidate candidate = downloadSet.getCandidate();
-            synchronized( thexData )
-            {
-                if ( isDownloadSuccessful )
-                {
-                    candidate.setThexStatus( ThexStatus.SUCCEDED );
+            synchronized (thexData) {
+                if (isDownloadSuccessful) {
+                    candidate.setThexStatus(ThexStatus.SUCCEDED);
+                } else if (!candidate.isBusyOrQueued()) {
+                    candidate.setThexStatus(ThexStatus.FAILED);
                 }
-                else if ( !candidate.isBusyOrQueued() )
-                {
-                    candidate.setThexStatus( ThexStatus.FAILED );
-                }
-                thexData.setThexRequested( false );
+                thexData.setThexRequested(false);
             }
             thexData = null;
         }
     }
 
-    public void stopDownload()
-    {
-        IOUtil.closeQuietly( inStream );        
+    public void stopDownload() {
+        IOUtil.closeQuietly(inStream);
     }
-    
+
     /**
-     * Indicates whether the connection is kept alive and the next request can 
+     * Indicates whether the connection is kept alive and the next request can
      * be send.
+     *
      * @return true if the next request can be send on this connection
      */
-    public boolean isAcceptingNextRequest()
-    {
+    public boolean isAcceptingNextRequest() {
         return isDownloadSuccessful && isKeepAliveSupported && replyContentLength != -1;
     }
 }

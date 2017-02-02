@@ -15,16 +15,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package phex.util;
 
 /**
  * Thrown when there is a failure condition during the encoding process.  This
  * exception is thrown when an Encoder encounters a encoding specific exception
- * such as invalid data, inability to calculate a checksum, characters outside of the 
+ * such as invalid data, inability to calculate a checksum, characters outside of the
  * expected range.
- * 
+ *
  * @author Apache Software Foundation
  * @version $Id: EncoderException.java 3380 2006-04-14 11:49:41Z gregork $
  */
@@ -32,14 +32,14 @@ public class EncoderException extends Exception {
 
     /**
      * Declares the Serial Version Uid.
-     * 
+     *
      * @see <a href="http://c2.com/cgi/wiki?AlwaysDeclareSerialVersionUid">Always Declare Serial Version Uid</a>
      */
     private static final long serialVersionUID = 1L;
 
     /**
      * Creates a new instance of this exception with an useful message.
-     * 
+     *
      * @param pMessage a useful message relating to the encoder specific error.
      */
     public EncoderException(String pMessage) {

@@ -27,11 +27,11 @@ import phex.msg.InvalidMessageException;
 import phex.msg.Message;
 
 
-public interface MessageSubscriber<T extends Message>
-{
+public interface MessageSubscriber<T extends Message> {
     /**
      * Handles a message.
-     * @throws InvalidMessageException 
+     *
+     * @throws InvalidMessageException
      */
-    public void onMessage( T message, Host sourceHost ) throws InvalidMessageException;
+    public void onMessage(T message, Host sourceHost) throws InvalidMessageException;
 }

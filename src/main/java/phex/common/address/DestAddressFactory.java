@@ -23,25 +23,25 @@
 package phex.common.address;
 
 
-public interface DestAddressFactory
-{
+public interface DestAddressFactory {
     /**
      * Creates a DestAddress object from a given address representation.
      * The implementation can decide if it takes the default port into account.
-     * 
-     * @param address a address representation.
+     *
+     * @param address     a address representation.
      * @param defaultPort the default port to use for the resulting DestAddress.
-     *        If a parsed port is required from the address, a defaultPort can
-     *        be used that causes DestAddress.isValidAddress() to fail (-1).
+     *                    If a parsed port is required from the address, a defaultPort can
+     *                    be used that causes DestAddress.isValidAddress() to fail (-1).
      * @return a destination address.
      */
     DestAddress createHostAddress(String address, int defaultPort)
-        throws MalformedDestAddressException;
-    
+            throws MalformedDestAddressException;
+
     /**
      * Creates a DestAddress object from a given IpAddress and port.
+     *
      * @param ipAddress the IpAddress of the new DestAddress.
-     * @param port the port of the new DestAddress.
+     * @param port      the port of the new DestAddress.
      * @return a destination address.
      */
     DestAddress createHostAddress(IpAddress ipAddress, int port);

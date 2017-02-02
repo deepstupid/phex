@@ -29,93 +29,76 @@ import java.util.HashMap;
 /**
  * The class is able to count connections to addresses. This is useful to track how
  * many parallel uploads or downloads to one address are tried.
- * Since different implementations might use/ignore different parts of the 
- * address (port), it is possible to specify whether the full DestAddress is used or 
- * just the IPAddress. 
+ * Since different implementations might use/ignore different parts of the
+ * address (port), it is possible to specify whether the full DestAddress is used or
+ * just the IPAddress.
  */
-public class AddressCounter
-{
+public class AddressCounter {
     private final HashMap<Object, Integer> addressCountMap;
-
+    private final boolean isFullAddressUsed;
     /**
      * The max number of times a destination address is allowed.
      */
     private int maxCount;
-    
-    private final boolean isFullAddressUsed;
 
     /**
      * Creates an AddressCounter instance allowing the specified number of
      * accesses and specifies if the full address or just the IP should be used
      * for tracking.
-     * @param maxCount the max number of counts allowed per address.
-     * @param isFullAddressUsed if true the full DestAddress is counted, if 
-     *        false only its IPAddress is counted.
+     *
+     * @param maxCount          the max number of counts allowed per address.
+     * @param isFullAddressUsed if true the full DestAddress is counted, if
+     *                          false only its IPAddress is counted.
      */
-    public AddressCounter( int maxCount, boolean isFullAddressUsed )
-    {
+    public AddressCounter(int maxCount, boolean isFullAddressUsed) {
         addressCountMap = new HashMap<>();
         this.maxCount = maxCount;
         this.isFullAddressUsed = isFullAddressUsed;
     }
-    
-    public synchronized int getMaxCount( )
-    {
+
+    public synchronized int getMaxCount() {
         return maxCount;
     }
-    
-    public synchronized void setMaxCount( int val )
-    {
+
+    public synchronized void setMaxCount(int val) {
         maxCount = val;
     }
 
     /**
      * @param address the address to validate and count.
-     * @return true if the address was counted, false if the address was rejected 
+     * @return true if the address was counted, false if the address was rejected
      * because the maxCount for this address was reached.
      */
-    public synchronized boolean validateAndCountAddress( DestAddress address )
-    {
-        Object significantPart = provideSignificantAddressPart( address );
-        Integer count = addressCountMap.get( significantPart );
-        if ( count != null )
-        {
-            if (count == maxCount )
-            {
+    public synchronized boolean validateAndCountAddress(DestAddress address) {
+        Object significantPart = provideSignificantAddressPart(address);
+        Integer count = addressCountMap.get(significantPart);
+        if (count != null) {
+            if (count == maxCount) {
                 return false;
             }
-            addressCountMap.put( significantPart, count + 1);
-        }
-        else
-        {
-            addressCountMap.put( significantPart, 1);
+            addressCountMap.put(significantPart, count + 1);
+        } else {
+            addressCountMap.put(significantPart, 1);
         }
         return true;
     }
 
-    public synchronized void relaseAddress( DestAddress address )
-    {
-        Object significantPart = provideSignificantAddressPart( address );
-        Integer count = addressCountMap.get( significantPart );
-        if ( count != null )
-        {
-            if (count == 1 )
-            {
-                addressCountMap.remove( significantPart );
+    public synchronized void relaseAddress(DestAddress address) {
+        Object significantPart = provideSignificantAddressPart(address);
+        Integer count = addressCountMap.get(significantPart);
+        if (count != null) {
+            if (count == 1) {
+                addressCountMap.remove(significantPart);
                 return;
             }
-            addressCountMap.put( significantPart, count - 1);
+            addressCountMap.put(significantPart, count - 1);
         }
     }
-    
-    protected Object provideSignificantAddressPart( DestAddress address )
-    {
-        if ( isFullAddressUsed )
-        {
+
+    protected Object provideSignificantAddressPart(DestAddress address) {
+        if (isFullAddressUsed) {
             return address;
-        }
-        else
-        {
+        } else {
             return address.getIpAddress();
         }
     }

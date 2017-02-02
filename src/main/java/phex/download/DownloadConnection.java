@@ -35,78 +35,71 @@ import phex.net.repres.SocketFacade;
 import java.io.IOException;
 import java.net.SocketException;
 
-public class DownloadConnection extends Connection
-{
+public class DownloadConnection extends Connection {
     private final SWDownloadCandidate candidate;
-    
-    public DownloadConnection( SWDownloadCandidate candidate )
-    {
+
+    public DownloadConnection(SWDownloadCandidate candidate) {
         this.candidate = candidate;
     }
-    
-    public DownloadConnection( SWDownloadCandidate candidate, SocketFacade socket )
-    {
-        this( candidate );
+
+    public DownloadConnection(SWDownloadCandidate candidate, SocketFacade socket) {
+        this(candidate);
         this.socket = socket;
         BandwidthController bwCont = candidate.getDownloadFile().getBandwidthController();
-        setBandwidthController( bwCont );
-        
-        candidate.addToCandidateLog( "Connected successfully to " 
-            + candidate.getHostAddress() + "." );
-        candidate.setLastConnectionTime( System.currentTimeMillis() );
-        NLogger.debug( DownloadConnection.class, 
-            "Download Engine @" + Integer.toHexString(hashCode()) 
-            + " connected successfully to " + candidate.getHostAddress() + ".");
+        setBandwidthController(bwCont);
+
+        candidate.addToCandidateLog("Connected successfully to "
+                + candidate.getHostAddress() + ".");
+        candidate.setLastConnectionTime(System.currentTimeMillis());
+        NLogger.debug(DownloadConnection.class,
+                "Download Engine @" + Integer.toHexString(hashCode())
+                        + " connected successfully to " + candidate.getHostAddress() + ".");
     }
-    
+
     /**
      * Connects to a download candidate.
+     *
      * @param timeout
      * @throws IOException
      */
-    public void connect( int timeout )
-        throws IOException
-    {
+    public void connect(int timeout)
+            throws IOException {
         assert socket == null;
-        
+
         DestAddress address = candidate.getHostAddress();
-        
-        try
-        {
-            candidate.addToCandidateLog( "Wait for connect slot " + address.getHostName() + ":"
-                + address.getPort() );
-            NLogger.debug( DownloadConnection.class,
-                "Wait for connect slot " + address.getHostName() + ":"
-                + address.getPort() );
-            
+
+        try {
+            candidate.addToCandidateLog("Wait for connect slot " + address.getHostName() + ":"
+                    + address.getPort());
+            NLogger.debug(DownloadConnection.class,
+                    "Wait for connect slot " + address.getHostName() + ":"
+                            + address.getPort());
+
             Runnable acquireCallback = new Runnable() {
-                public void run()
-                {
+                public void run() {
                     DestAddress candAddress = candidate.getHostAddress();
-                    candidate.addToCandidateLog( "Connecting to " + candAddress.getHostName() + ":"
-                        + candAddress.getPort() );
-                    NLogger.debug( DownloadConnection.class,
-                        "Connecting to " + candAddress.getHostName() + ":"
-                        + candAddress.getPort() );
+                    candidate.addToCandidateLog("Connecting to " + candAddress.getHostName() + ":"
+                            + candAddress.getPort());
+                    NLogger.debug(DownloadConnection.class,
+                            "Connecting to " + candAddress.getHostName() + ":"
+                                    + candAddress.getPort());
                     candidate.setStatus(CandidateStatus.CONNECTING);
                 }
             };
-            socket = SocketFactory.connect( address, timeout,
-                acquireCallback );
-        }
-        catch ( SocketException exp )
-        {// indicates a general communication error while connecting
-            throw new ConnectionFailedException( exp.getMessage() );
+            socket = SocketFactory.connect(address, timeout,
+                    acquireCallback);
+        } catch (SocketException exp) {// indicates a general communication error while connecting
+            throw new ConnectionFailedException(exp.getMessage());
         }
 
         BandwidthController bwCont = candidate.getDownloadFile().getBandwidthController();
-        setBandwidthController( bwCont );
-        
-        candidate.addToCandidateLog( "Connected successfully to " 
-            + candidate.getHostAddress() + "." );
-        candidate.setLastConnectionTime( System.currentTimeMillis() );
-        NLogger.debug( DownloadConnection.class, 
-            "Download Engine @" + Integer.toHexString(hashCode()) 
-            + " connected successfully to " + candidate.getHostAddress() + ".");
+        setBandwidthController(bwCont);
+
+        candidate.addToCandidateLog("Connected successfully to "
+                + candidate.getHostAddress() + ".");
+        candidate.setLastConnectionTime(System.currentTimeMillis());
+        NLogger.debug(DownloadConnection.class,
+                "Download Engine @" + Integer.toHexString(hashCode())
+                        + " connected successfully to " + candidate.getHostAddress() + ".");
     }
 }

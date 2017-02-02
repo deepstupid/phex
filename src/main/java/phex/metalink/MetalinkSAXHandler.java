@@ -57,11 +57,10 @@ import org.xml.sax.helpers.DefaultHandler;
 import java.io.CharArrayWriter;
 
 /**
- * 
+ *
  */
 
-public class MetalinkSAXHandler extends DefaultHandler
-{
+public class MetalinkSAXHandler extends DefaultHandler {
     private final CharArrayWriter text = new CharArrayWriter();
     private final DMetalink dMetalink;
     private Attributes atr;
@@ -70,25 +69,20 @@ public class MetalinkSAXHandler extends DefaultHandler
     /**
      * @param dMetalink The metalink data container
      */
-    MetalinkSAXHandler( DMetalink dMetalink )
-    {
+    MetalinkSAXHandler(DMetalink dMetalink) {
         this.dMetalink = dMetalink;
     }
 
     @Override
-    public void startElement(String uri, String localName, String qName, 
-        Attributes attributes)
-    {
-        if ( qName.equals("files") )
-        {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes) {
+        if (qName.equals("files")) {
             inFiles = true;
         }
-        if ( inFiles ) 
-        {
+        if (inFiles) {
             //Set current name and copy attributes
-            if ( qName.equals("file") )
-            {
-                dMetalink.newFile( attributes.getValue("name") );
+            if (qName.equals("file")) {
+                dMetalink.newFile(attributes.getValue("name"));
             }
 
             //copy attributes
@@ -97,31 +91,25 @@ public class MetalinkSAXHandler extends DefaultHandler
     }
 
     @Override
-    public void endElement(String uri, String localName, String qName)
-    {
-        if ( qName.equals("files") )
-        {
+    public void endElement(String uri, String localName, String qName) {
+        if (qName.equals("files")) {
             inFiles = false;
         }
 
-        if ( inFiles )
-        {
-            if( qName.equals("hash") )
-            {
-                dMetalink.addHash( atr.getValue("type"), text.toString().trim() );
+        if (inFiles) {
+            if (qName.equals("hash")) {
+                dMetalink.addHash(atr.getValue("type"), text.toString().trim());
             }
 
-            if( qName.equals("url") )
-            {
-                dMetalink.addURL( atr.getValue("type"), text.toString().trim() );
+            if (qName.equals("url")) {
+                dMetalink.addURL(atr.getValue("type"), text.toString().trim());
             }
             text.reset();
         }
     }
 
     @Override
-    public void characters( char[] ch, int start, int length )
-    {
-        text.write(ch,start,length );
+    public void characters(char[] ch, int start, int length) {
+        text.write(ch, start, length);
     }
 }

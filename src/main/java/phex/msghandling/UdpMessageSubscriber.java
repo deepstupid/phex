@@ -27,11 +27,11 @@ import phex.msg.InvalidMessageException;
 import phex.msg.Message;
 
 
-public interface UdpMessageSubscriber<T extends Message>
-{
+public interface UdpMessageSubscriber<T extends Message> {
     /**
      * Handles a UDP message.
-     * @throws InvalidMessageException 
+     *
+     * @throws InvalidMessageException
      */
-    public void onUdpMessage( T message, DestAddress sourceAddress ) throws InvalidMessageException;
+    public void onUdpMessage(T message, DestAddress sourceAddress) throws InvalidMessageException;
 }

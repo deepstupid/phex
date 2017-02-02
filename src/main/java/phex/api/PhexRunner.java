@@ -26,7 +26,6 @@ import phex.common.Phex;
 import phex.common.ThreadTracking;
 import phex.common.log.NLogger;
 import phex.connection.LoopbackDispatcher;
-import phex.download.swarming.PhexEventService;
 import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
 import phex.util.SystemProperties;
@@ -40,50 +39,86 @@ import java.util.Iterator;
  *
  * @author Giorgio Busatto - 2011
  */
-public class PhexRunner
-{
+public class PhexRunner {
 
-    private static PhexRunner _singleton = null;
+    private static PhexRunner phex = null;
 
-    public static PhexRunner getInstance()
-    {
-        if (_singleton == null)
-        {
-            _singleton = new PhexRunner();
+    private PhexRunner() {
+    }
+
+    public static PhexRunner getInstance() {
+        if (phex == null) {
+            phex = new PhexRunner();
         }
 
-        return _singleton;
-    }
-
-    private PhexRunner()
-    {
-    }
-
-    public boolean startPhex()
-    {
-        return runPhex(new String[0]);
+        return phex;
     }
 
     /**
      * Don't use NLogger before arguments have been read ( -c )
+     *
      * @param args
      */
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
         PhexRunner runner = getInstance();
 
-        if (runner.runPhex(args))
-        {
+        if (runner.runPhex(args)) {
             System.exit(0);
-        }
-        else
-        {
+        } else {
             System.exit(1);
         }
     }
 
-    public boolean runPhex(String args[])
-    {
+    /**
+     * @param iterator
+     * @return
+     */
+    private static String readArgument(Iterator<String> iterator) {
+        if (!iterator.hasNext()) {
+            return null;
+        }
+
+        String value = iterator.next();
+//      if ( value.startsWith( "\"" ))
+//      {
+//          while (iterator.hasNext())
+//          {
+//              String additional = (String)iterator.next();
+//              value += additional;
+//              if ( additional.endsWith("\""))
+//              {
+//                  break;
+//              }
+//          }
+//          if ( !value.endsWith("\"") )
+//          {
+//              throw new IllegalArgumentException( "Unterminated argument" );
+//          }
+//          // cut of starting and ending "
+//          value = value.substring( 1, value.length() - 1 );
+//      }
+        return value;
+    }
+
+    public boolean startPhex() {
+        return runPhex(new String[0]);
+    }
+
+//    private static void showSplash()
+//    {
+//        try
+//        {
+//            _splashScreen = new SplashScreen();
+//            _splashScreen.showSplash();
+//        }
+//        catch (java.awt.HeadlessException ex)
+//        {
+//            // Running in head-less mode so of course the splash
+//            // doesn't work.
+//        }
+//    }
+
+    public boolean runPhex(String args[]) {
         long start = System.currentTimeMillis();
         long end;
 
@@ -97,33 +132,24 @@ public class PhexRunner
 
 
         // Parse args...
-        Iterator<String> iterator = Arrays.asList( args ).iterator();
+        Iterator<String> iterator = Arrays.asList(args).iterator();
 
         String loopbackUri = null;
         String magmaFile = null;
-        String rssFile = null; 
+        String rssFile = null;
         String argument;
 
-        while ((argument = readArgument(iterator)) != null) 
-        {
-            if (argument.equalsIgnoreCase("-c"))
-            {
+        while ((argument = readArgument(iterator)) != null) {
+            if (argument.equalsIgnoreCase("-c")) {
                 String path = readArgument(iterator);
-                if (path != null)
-                {
-                    System.setProperty( SystemProperties.PHEX_CONFIG_PATH_SYSPROP, path);
+                if (path != null) {
+                    System.setProperty(SystemProperties.PHEX_CONFIG_PATH_SYSPROP, path);
                 }
-            }
-            else if (argument.equalsIgnoreCase("-uri"))
-            {
+            } else if (argument.equalsIgnoreCase("-uri")) {
                 loopbackUri = readArgument(iterator);
-            }
-            else if (argument.equalsIgnoreCase("-magma"))
-            {
+            } else if (argument.equalsIgnoreCase("-magma")) {
                 magmaFile = readArgument(iterator);
-            }
-            else if (argument.equalsIgnoreCase("-rss"))
-            {
+            } else if (argument.equalsIgnoreCase("-rss")) {
                 rssFile = readArgument(iterator);
             }
         }
@@ -131,29 +157,25 @@ public class PhexRunner
 
         PhexCorePrefs.init();
 
-        if (loopbackUri != null && LoopbackDispatcher.dispatchUri(loopbackUri))
-        {// correctly dispatched uri
+        if (loopbackUri != null && LoopbackDispatcher.dispatchUri(loopbackUri)) {// correctly dispatched uri
 //          System.exit(0);
 
             return true;
         }
 
-        if (magmaFile != null && LoopbackDispatcher.dispatchMagmaFile(magmaFile))
-        {// correctly dispatched uri
+        if (magmaFile != null && LoopbackDispatcher.dispatchMagmaFile(magmaFile)) {// correctly dispatched uri
 //          System.exit(0);
 
             return true;
         }
 
-        if (rssFile != null && LoopbackDispatcher.dispatchRSSFile(rssFile))
-        {// correctly dispatched uri
+        if (rssFile != null && LoopbackDispatcher.dispatchRSSFile(rssFile)) {// correctly dispatched uri
 //          System.exit(0);
 
             return true;
         }
 
-        try
-        {
+        try {
             // Might be the case when arguments are used to start Phex,
 //            // but there is no Phex running yet.
 //            if (_splashScreen == null)
@@ -197,24 +219,19 @@ public class PhexRunner
             end = System.currentTimeMillis();
             NLogger.debug(Main.class, "Full startup time: " + (end - start));
 
-            PhexEventService eventService = Phex.getEventService();
-            if (loopbackUri != null)
-            {// correctly dispatched uri
+
+            if (loopbackUri != null) {// correctly dispatched uri
 
             }
 
-            if (magmaFile != null)
-            {// correctly dispatched uri
+            if (magmaFile != null) {// correctly dispatched uri
 
             }
 
-            if (rssFile != null)
-            {// correctly dispatched uri
+            if (rssFile != null) {// correctly dispatched uri
 
             }
-        }
-        catch (Throwable th)
-        {
+        } catch (Throwable th) {
             th.printStackTrace();
             NLogger.error(Main.class, th, th);
             // Unhandled application exception... exit,
@@ -235,53 +252,6 @@ public class PhexRunner
 //        }
 
         return true;
-    }
-
-//    private static void showSplash()
-//    {
-//        try
-//        {
-//            _splashScreen = new SplashScreen();
-//            _splashScreen.showSplash();
-//        }
-//        catch (java.awt.HeadlessException ex)
-//        {
-//            // Running in head-less mode so of course the splash
-//            // doesn't work.
-//        }
-//    }
-
-    /**
-     * @param iterator
-     * @return
-     */
-    private static String readArgument(Iterator<String> iterator)
-    {
-        if (!iterator.hasNext())
-        {
-            return null;
-        }
-
-        String value = iterator.next();
-//      if ( value.startsWith( "\"" ))
-//      {
-//          while (iterator.hasNext())
-//          {
-//              String additional = (String)iterator.next();
-//              value += additional;
-//              if ( additional.endsWith("\""))
-//              {
-//                  break;
-//              }
-//          }
-//          if ( !value.endsWith("\"") )
-//          {
-//              throw new IllegalArgumentException( "Unterminated argument" );
-//          }
-//          // cut of starting and ending "
-//          value = value.substring( 1, value.length() - 1 );
-//      }
-        return value;
     }
 
 //    private static void validateJavaVersion()

@@ -21,84 +21,70 @@
  */
 package phex.download.strategy;
 
-public class ScopeSelectionStrategyProvider
-{
-    protected static final AvailabilityScopeSelectionStrategy 
-        AVAILABILITY_SCOPE_SELECTION_STRATEGY = new AvailabilityScopeSelectionStrategy();
-    protected static final RandomScopeSelectionStrategy 
-        RANDOM_SCOPE_SELECTION_STRATEGY = new RandomScopeSelectionStrategy();
-    protected static final PrefereBeginingScopeSelectionStrategy 
-        PREFERE_BEGINING_SCOPE_SELECTION_STRATEGY = new PrefereBeginingScopeSelectionStrategy();
-    protected static final PrefereEndScopeSelectionStrategy 
-        PREFERE_END_SCOPE_SELECTION_STRATEGY = new PrefereEndScopeSelectionStrategy();
-    
-    protected static final AvailRandSelectionStrategy 
-        AVAIL_RAND_SELECTION_STRATEGY;
-    
-    protected static final AvailBeginRandSelectionStrategy 
-        AVAIL_BEGIN_RAND_SELECTION_STRATEGY;
-    protected static final BeginAvailRandSelectionStrategy 
-        BEGIN_AVAIL_RAND_SELECTION_STRATEGY;
-    protected static final BeginEndAvailRandSelectionStrategy 
-        BEGIN_END_AVAIL_RAND_SELECTION_STRATEGY;
-    
-    static
-    {
+public class ScopeSelectionStrategyProvider {
+    protected static final AvailabilityScopeSelectionStrategy
+            AVAILABILITY_SCOPE_SELECTION_STRATEGY = new AvailabilityScopeSelectionStrategy();
+    protected static final RandomScopeSelectionStrategy
+            RANDOM_SCOPE_SELECTION_STRATEGY = new RandomScopeSelectionStrategy();
+    protected static final PrefereBeginingScopeSelectionStrategy
+            PREFERE_BEGINING_SCOPE_SELECTION_STRATEGY = new PrefereBeginingScopeSelectionStrategy();
+    protected static final PrefereEndScopeSelectionStrategy
+            PREFERE_END_SCOPE_SELECTION_STRATEGY = new PrefereEndScopeSelectionStrategy();
+
+    protected static final AvailRandSelectionStrategy
+            AVAIL_RAND_SELECTION_STRATEGY;
+
+    protected static final AvailBeginRandSelectionStrategy
+            AVAIL_BEGIN_RAND_SELECTION_STRATEGY;
+    protected static final BeginAvailRandSelectionStrategy
+            BEGIN_AVAIL_RAND_SELECTION_STRATEGY;
+    protected static final BeginEndAvailRandSelectionStrategy
+            BEGIN_END_AVAIL_RAND_SELECTION_STRATEGY;
+
+    static {
         AVAIL_RAND_SELECTION_STRATEGY = new AvailRandSelectionStrategy(
-            AVAILABILITY_SCOPE_SELECTION_STRATEGY,
-            RANDOM_SCOPE_SELECTION_STRATEGY );
+                AVAILABILITY_SCOPE_SELECTION_STRATEGY,
+                RANDOM_SCOPE_SELECTION_STRATEGY);
         AVAIL_BEGIN_RAND_SELECTION_STRATEGY = new AvailBeginRandSelectionStrategy(
-            AVAILABILITY_SCOPE_SELECTION_STRATEGY,
-            PREFERE_BEGINING_SCOPE_SELECTION_STRATEGY,
-            RANDOM_SCOPE_SELECTION_STRATEGY );
+                AVAILABILITY_SCOPE_SELECTION_STRATEGY,
+                PREFERE_BEGINING_SCOPE_SELECTION_STRATEGY,
+                RANDOM_SCOPE_SELECTION_STRATEGY);
         BEGIN_AVAIL_RAND_SELECTION_STRATEGY = new BeginAvailRandSelectionStrategy(
-            PREFERE_BEGINING_SCOPE_SELECTION_STRATEGY,
-            AVAIL_RAND_SELECTION_STRATEGY );
+                PREFERE_BEGINING_SCOPE_SELECTION_STRATEGY,
+                AVAIL_RAND_SELECTION_STRATEGY);
         BEGIN_END_AVAIL_RAND_SELECTION_STRATEGY = new BeginEndAvailRandSelectionStrategy(
-            PREFERE_BEGINING_SCOPE_SELECTION_STRATEGY, 
-            PREFERE_END_SCOPE_SELECTION_STRATEGY, 
-            AVAIL_RAND_SELECTION_STRATEGY );
+                PREFERE_BEGINING_SCOPE_SELECTION_STRATEGY,
+                PREFERE_END_SCOPE_SELECTION_STRATEGY,
+                AVAIL_RAND_SELECTION_STRATEGY);
     }
-    
-    public static ScopeSelectionStrategy getAvailBeginRandSelectionStrategy()
-    {
+
+    public static ScopeSelectionStrategy getAvailBeginRandSelectionStrategy() {
         return AVAIL_BEGIN_RAND_SELECTION_STRATEGY;
     }
-    
-    public static ScopeSelectionStrategy getBeginAvailRandSelectionStrategy()
-    {
+
+    public static ScopeSelectionStrategy getBeginAvailRandSelectionStrategy() {
         return BEGIN_AVAIL_RAND_SELECTION_STRATEGY;
     }
-    
-    public static ScopeSelectionStrategy getBeginEndAvailRandSelectionStrategy()
-    {
+
+    public static ScopeSelectionStrategy getBeginEndAvailRandSelectionStrategy() {
         return BEGIN_END_AVAIL_RAND_SELECTION_STRATEGY;
     }
-    
-    public static ScopeSelectionStrategy getRandomSelectionStrategy()
-    {
+
+    public static ScopeSelectionStrategy getRandomSelectionStrategy() {
         return RANDOM_SCOPE_SELECTION_STRATEGY;
     }
 
-    public static ScopeSelectionStrategy getByClassName( String scopeSelectionStrategy )
-    {
-        if ( BEGIN_AVAIL_RAND_SELECTION_STRATEGY.getClass().getName().equals(
-            scopeSelectionStrategy) )
-        {
+    public static ScopeSelectionStrategy getByClassName(String scopeSelectionStrategy) {
+        if (BEGIN_AVAIL_RAND_SELECTION_STRATEGY.getClass().getName().equals(
+                scopeSelectionStrategy)) {
             return BEGIN_AVAIL_RAND_SELECTION_STRATEGY;
-        }
-        else if ( BEGIN_END_AVAIL_RAND_SELECTION_STRATEGY.getClass().getName().equals(
-            scopeSelectionStrategy) )
-        {
+        } else if (BEGIN_END_AVAIL_RAND_SELECTION_STRATEGY.getClass().getName().equals(
+                scopeSelectionStrategy)) {
             return BEGIN_END_AVAIL_RAND_SELECTION_STRATEGY;
-        }
-        else if ( RANDOM_SCOPE_SELECTION_STRATEGY.getClass().getName().equals(
-            scopeSelectionStrategy) )
-        {
+        } else if (RANDOM_SCOPE_SELECTION_STRATEGY.getClass().getName().equals(
+                scopeSelectionStrategy)) {
             return RANDOM_SCOPE_SELECTION_STRATEGY;
-        }
-        else
-        {// default
+        } else {// default
             return AVAIL_BEGIN_RAND_SELECTION_STRATEGY;
         }
     }

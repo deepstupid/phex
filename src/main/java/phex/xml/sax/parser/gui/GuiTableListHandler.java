@@ -33,10 +33,9 @@ import javax.xml.parsers.SAXParser;
 import java.io.CharArrayWriter;
 
 /**
- * 
+ *
  */
-public class GuiTableListHandler extends DefaultHandler
-{
+public class GuiTableListHandler extends DefaultHandler {
     public static final String THIS_TAG_NAME = DTableList.ELEMENT_NAME;
 
     private final CharArrayWriter text = new CharArrayWriter();
@@ -47,68 +46,59 @@ public class GuiTableListHandler extends DefaultHandler
 
     private final DefaultHandler parent;
 
-    public GuiTableListHandler( DTableList dList, Attributes attributes,
-        DefaultHandler parent, SAXParser parser )
-    {
+    public GuiTableListHandler(DTableList dList, Attributes attributes,
+                               DefaultHandler parent, SAXParser parser) {
         this.dList = dList;
         this.parser = parser;
         this.parent = parent;
         String hLines = attributes.getValue("showHorizontalLines");
-        if ( hLines != null )
-        {
-            dList.setShowHorizontalLines( Boolean.valueOf( hLines )
-                .booleanValue() );
+        if (hLines != null) {
+            dList.setShowHorizontalLines(Boolean.valueOf(hLines)
+                    .booleanValue());
         }
-        
+
         String vLines = attributes.getValue("showVerticalLines");
-        if ( vLines != null )
-        {
-            dList.setShowVerticalLines( Boolean.valueOf( vLines )
-                .booleanValue() );
+        if (vLines != null) {
+            dList.setShowVerticalLines(Boolean.valueOf(vLines)
+                    .booleanValue());
         }
     }
 
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes ) throws SAXException
-    {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes) throws SAXException {
         text.reset();
-        if ( qName.equals( GuiTableHandler.THIS_TAG_NAME ) )
-        {
+        if (qName.equals(GuiTableHandler.THIS_TAG_NAME)) {
             DTable table = new DTable();
-            dList.getTableList().add( table );
+            dList.getTableList().add(table);
 
-            GuiTableHandler handler = new GuiTableHandler( table, this,
-                parser );
-            parser.getXMLReader().setContentHandler( handler );
+            GuiTableHandler handler = new GuiTableHandler(table, this,
+                    parser);
+            parser.getXMLReader().setContentHandler(handler);
         }
         return;
     }
 
-    public void endElement( String uri, String localName, String qName )
-        throws SAXException
-    {
-        if ( qName.equals( THIS_TAG_NAME ) )
-        {
-            parser.getXMLReader().setContentHandler( parent );
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equals(THIS_TAG_NAME)) {
+            parser.getXMLReader().setContentHandler(parent);
         }
     }
 
-    public InputSource resolveEntity( String publicId, String systemId )
-    {
+    public InputSource resolveEntity(String publicId, String systemId) {
         return null;
     }
 
-    public void characters( char[] ch, int start, int length )
-    {
-        text.write( ch, start, length );
+    public void characters(char[] ch, int start, int length) {
+        text.write(ch, start, length);
     }
 }

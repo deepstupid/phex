@@ -26,14 +26,13 @@ package phex.common;
  * of classes that provide information of transfered data like UploadFile and
  * DownloadFile.
  */
- // TODO integrate common transfer status for transfer files
-public interface TransferDataProvider
-{
+// TODO integrate common transfer status for transfer files
+public interface TransferDataProvider {
     /**
      * 365 days in seconds...
      */
     int INFINITY_ETA_INT = 365 * 24 * 60 * 60;
-    
+
     short TRANSFER_RUNNING = 10;
     short TRANSFER_NOT_RUNNING = 11;
     short TRANSFER_COMPLETED = 12;
@@ -76,21 +75,21 @@ public interface TransferDataProvider
      * on the transfer rate timestamp.
      * An implementing class should provide an implementation like this
      * together with the setTransferRateTimestamp() method:
-     *
+     * <p>
      * <code>
      * public int getShortTermTransferRate()
      * {
-     *    if ( transferRateTimestamp != 0 )
-     *    {
-     *       double sec = (System.currentTimeMillis() - transferRateTimestamp) / 1000;
-     *       // don't drop transfer rate to 0 if we just have a new timestamp and
-     *       // no bytes transfered
-     *       if ( ( transferRateBytes > 0 || sec > 1 ) && sec != 0)
-     *       {
-     *           transferRate = (int) ( transferRateBytes / sec );
-     *       }
-     *    }
-     *    return transferRate;
+     * if ( transferRateTimestamp != 0 )
+     * {
+     * double sec = (System.currentTimeMillis() - transferRateTimestamp) / 1000;
+     * // don't drop transfer rate to 0 if we just have a new timestamp and
+     * // no bytes transfered
+     * if ( ( transferRateBytes > 0 || sec > 1 ) && sec != 0)
+     * {
+     * transferRate = (int) ( transferRateBytes / sec );
+     * }
+     * }
+     * return transferRate;
      * }
      * </code>
      */
@@ -103,22 +102,22 @@ public interface TransferDataProvider
      * your TransferDataProvider at the TransferRateService.
      * An implementing class should provide an implementation like this
      * together with the getDataTransferRate() method:
-     *
+     * <p>
      * <code>
      * /**
-     *  * holds the timestamp.
-     *  *\/
+     * * holds the timestamp.
+     * *\/
      * private long transferRateTimestamp;
      * /**
-     *  * holds the transfered bytes since the last timestamp.
-     *  *\/
+     * * holds the transfered bytes since the last timestamp.
+     * *\/
      * private int transferRateBytes;
      * public void setTransferRateTimestamp( long timestamp )
      * {
-     *    transferRateTimestamp = timestamp;
-     *    transferRateBytes = 0;
+     * transferRateTimestamp = timestamp;
+     * transferRateBytes = 0;
      * }
      * </code>
      */
-    void setTransferRateTimestamp( long timestamp );
+    void setTransferRateTimestamp(long timestamp);
 }

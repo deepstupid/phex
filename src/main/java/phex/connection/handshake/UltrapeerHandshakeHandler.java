@@ -33,142 +33,129 @@ import phex.prefs.core.MessagePrefs;
 import phex.servent.Servent;
 
 public class UltrapeerHandshakeHandler extends HandshakeHandler
-    implements ConnectionConstants
-{
-    public UltrapeerHandshakeHandler( Servent servent, Host connectedHost )
-    {
-        super( servent, connectedHost );
+        implements ConnectionConstants {
+    public UltrapeerHandshakeHandler(Servent servent, Host connectedHost) {
+        super(servent, connectedHost);
+    }
+
+    private static boolean isBearshare(HTTPHeaderGroup headers) {
+        HTTPHeader header = headers.getHeader(HTTPHeaderNames.USER_AGENT);
+        return header != null && header.getValue().startsWith("BearShare");
     }
 
     @Override
-    protected HTTPHeaderGroup createDefaultHandshakeHeaders()
-    {
+    protected HTTPHeaderGroup createDefaultHandshakeHeaders() {
         // create hash map based on common headers
         HTTPHeaderGroup openHeaders = super.createDefaultHandshakeHeaders();
 
         // add ultrapeer headers...
-        openHeaders.addHeader( new HTTPHeader(
-            GnutellaHeaderNames.X_ULTRAPEER, "true" ) );
-        openHeaders.addHeader( new HTTPHeader(
-            GnutellaHeaderNames.X_QUERY_ROUTING, "0.1" ) );
-        openHeaders.addHeader( new HTTPHeader(
-            GnutellaHeaderNames.X_UP_QUERY_ROUTING, "0.1" ) );
-        openHeaders.addHeader( new HTTPHeader(
-            GnutellaHeaderNames.X_DYNAMIC_QUERY, "0.1") );
-        openHeaders.addHeader( new HTTPHeader(
-            GnutellaHeaderNames.X_DEGREE,
-            ConnectionPrefs.Up2UpConnections.get().toString() ) );
-        openHeaders.addHeader( new HTTPHeader(
-            GnutellaHeaderNames.X_MAX_TTL,
-            String.valueOf( MessagePrefs.DEFAULT_DYNAMIC_QUERY_MAX_TTL ) ) );
+        openHeaders.addHeader(new HTTPHeader(
+                GnutellaHeaderNames.X_ULTRAPEER, "true"));
+        openHeaders.addHeader(new HTTPHeader(
+                GnutellaHeaderNames.X_QUERY_ROUTING, "0.1"));
+        openHeaders.addHeader(new HTTPHeader(
+                GnutellaHeaderNames.X_UP_QUERY_ROUTING, "0.1"));
+        openHeaders.addHeader(new HTTPHeader(
+                GnutellaHeaderNames.X_DYNAMIC_QUERY, "0.1"));
+        openHeaders.addHeader(new HTTPHeader(
+                GnutellaHeaderNames.X_DEGREE,
+                ConnectionPrefs.Up2UpConnections.get().toString()));
+        openHeaders.addHeader(new HTTPHeader(
+                GnutellaHeaderNames.X_MAX_TTL,
+                String.valueOf(MessagePrefs.DEFAULT_DYNAMIC_QUERY_MAX_TTL)));
 
         return openHeaders;
     }
 
     @Override
-    public HandshakeStatus createHandshakeResponse( HandshakeStatus hostResponse,
-       boolean isOutgoing )
-    {
-        if ( isOutgoing )
-        {
-            return createOutgoingResponse( hostResponse );
-        }
-        else
-        {
-            return createIncomingResponse( hostResponse );
+    public HandshakeStatus createHandshakeResponse(HandshakeStatus hostResponse,
+                                                   boolean isOutgoing) {
+        if (isOutgoing) {
+            return createOutgoingResponse(hostResponse);
+        } else {
+            return createIncomingResponse(hostResponse);
         }
     }
 
-    private HandshakeStatus createIncomingResponse(HandshakeStatus hostResponse)
-    {
+    private HandshakeStatus createIncomingResponse(HandshakeStatus hostResponse) {
         HTTPHeaderGroup headers = hostResponse.getResponseHeaders();
-        
-        boolean isCrawler = isCrawlerConnection( headers );
-        if ( isCrawler )
-        {
+
+        boolean isCrawler = isCrawlerConnection(headers);
+        if (isCrawler) {
             return createCrawlerHandshakeStatus();
         }
-        
+
         // check ultrapeer header
-        HTTPHeader upHeader = headers.getHeader( GnutellaHeaderNames.X_ULTRAPEER );
-        
-        if ( !isConnectionAccepted( upHeader ) )
-        {
-            return new HandshakeStatus( STATUS_CODE_REJECTED,
-                STATUS_MESSAGE_BUSY, createRejectIncomingHeaders() );
+        HTTPHeader upHeader = headers.getHeader(GnutellaHeaderNames.X_ULTRAPEER);
+
+        if (!isConnectionAccepted(upHeader)) {
+            return new HandshakeStatus(STATUS_CODE_REJECTED,
+                    STATUS_MESSAGE_BUSY, createRejectIncomingHeaders());
         }
         HTTPHeaderGroup myHeaders = createDefaultHandshakeHeaders();
-    
+
         // add ultrapeer needed header for leaf guidance
-        if ( upHeader != null && Boolean.valueOf(upHeader.getValue()))
-        {
+        if (upHeader != null && Boolean.valueOf(upHeader.getValue())) {
             boolean isUltrapeerNeeded = servent.getHostService().
-                getNetworkHostsContainer().hasUltrapeerSlotsAvailable();
+                    getNetworkHostsContainer().hasUltrapeerSlotsAvailable();
             String isUltrapeedNeededStr = isUltrapeerNeeded ? "true" :
-                "false";
-            myHeaders.addHeader( new HTTPHeader(
-                GnutellaHeaderNames.X_ULTRAPEER_NEEDED, isUltrapeedNeededStr ) );
+                    "false";
+            myHeaders.addHeader(new HTTPHeader(
+                    GnutellaHeaderNames.X_ULTRAPEER_NEEDED, isUltrapeedNeededStr));
         }
-        
+
         // support for deflate... if accepted..
-        if ( hostResponse.isDeflateAccepted() )
-        {
-            myHeaders.addHeader( new HTTPHeader(
-                HTTPHeaderNames.CONTENT_ENCODING, "deflate" ) );
+        if (hostResponse.isDeflateAccepted()) {
+            myHeaders.addHeader(new HTTPHeader(
+                    HTTPHeaderNames.CONTENT_ENCODING, "deflate"));
         }
-        
-        return new HandshakeStatus( STATUS_CODE_OK, STATUS_MESSAGE_OK,
-            myHeaders );
+
+        return new HandshakeStatus(STATUS_CODE_OK, STATUS_MESSAGE_OK,
+                myHeaders);
     }
 
     private HandshakeStatus createOutgoingResponse(
-        HandshakeStatus hostResponse )
-    {
+            HandshakeStatus hostResponse) {
         HTTPHeaderGroup headers = hostResponse.getResponseHeaders();
-        
+
         // check ultrapeer header
-        HTTPHeader upHeader = headers.getHeader( GnutellaHeaderNames.X_ULTRAPEER );
-        
+        HTTPHeader upHeader = headers.getHeader(GnutellaHeaderNames.X_ULTRAPEER);
+
         // can we accept the connection??
-        if ( !isConnectionAccepted( upHeader ) )
-        {
-            return new HandshakeStatus( STATUS_CODE_REJECTED,
-                STATUS_MESSAGE_BUSY, createRejectOutgoingHeaders() );
+        if (!isConnectionAccepted(upHeader)) {
+            return new HandshakeStatus(STATUS_CODE_REJECTED,
+                    STATUS_MESSAGE_BUSY, createRejectOutgoingHeaders());
         }
-        
+
         HTTPHeaderGroup myHeaders = new HTTPHeaderGroup(
-            HTTPHeaderGroup.COMMON_HANDSHAKE_GROUP );
-        
+                HTTPHeaderGroup.COMMON_HANDSHAKE_GROUP);
+
         HTTPHeader upNeededHeader = headers.getHeader(
-            GnutellaHeaderNames.X_ULTRAPEER_NEEDED );
+                GnutellaHeaderNames.X_ULTRAPEER_NEEDED);
         // if no ultrapeer is needed and we are able to become a leaf node
         // and we are not talking to a bearshare, since bearshare will not
         // accept us as a leaf.
-        if ( upNeededHeader != null && !upNeededHeader.booleanValue() &&
-            !isBearshare( headers ) && servent.allowDowngradeToLeaf() )
-        {
+        if (upNeededHeader != null && !upNeededHeader.booleanValue() &&
+                !isBearshare(headers) && servent.allowDowngradeToLeaf()) {
             // create new HTTPHeaderGroup since we used empty headers earlier.
-            myHeaders = new HTTPHeaderGroup( false );
-            myHeaders.addHeader( new HTTPHeader(
-               GnutellaHeaderNames.X_ULTRAPEER, "false" ) );
+            myHeaders = new HTTPHeaderGroup(false);
+            myHeaders.addHeader(new HTTPHeader(
+                    GnutellaHeaderNames.X_ULTRAPEER, "false"));
         }
-        
+
         // support for deflate... if accepted..
-        if ( hostResponse.isDeflateAccepted() )
-        {
-            myHeaders.addHeader( new HTTPHeader(
-                HTTPHeaderNames.CONTENT_ENCODING, "deflate" ) );
+        if (hostResponse.isDeflateAccepted()) {
+            myHeaders.addHeader(new HTTPHeader(
+                    HTTPHeaderNames.CONTENT_ENCODING, "deflate"));
         }
-        
-        return new HandshakeStatus( STATUS_CODE_OK, STATUS_MESSAGE_OK,
-            myHeaders );
+
+        return new HandshakeStatus(STATUS_CODE_OK, STATUS_MESSAGE_OK,
+                myHeaders);
     }
 
-    private boolean isConnectionAccepted( HTTPHeader upHeader )
-    {
+    private boolean isConnectionAccepted(HTTPHeader upHeader) {
         // this is a legacy peer connection
-        if ( upHeader == null )
-        {
+        if (upHeader == null) {
             return false;
         }
 
@@ -177,26 +164,18 @@ public class UltrapeerHandshakeHandler extends HandshakeHandler
         // we accept it if we have ultrapeer slots or leaf slots for ultrapeers
         // (for leaf guidance) unfortunately we don't know if leaf guidance is accepted
         // though..
-        if (Boolean.valueOf(upHeader.getValue()))
-        {
-            if ( netHostContainer.hasUltrapeerSlotsAvailable() ||
-                netHostContainer.hasLeafSlotForUltrapeerAvailable() )
-            {
+        if (Boolean.valueOf(upHeader.getValue())) {
+            if (netHostContainer.hasUltrapeerSlotsAvailable() ||
+                    netHostContainer.hasLeafSlotForUltrapeerAvailable()) {
                 return true;
             }
         }
         // this is a Leaf connection
-        else if ( netHostContainer.hasLeafSlotsAvailable() ) // upHeader == false
+        else if (netHostContainer.hasLeafSlotsAvailable()) // upHeader == false
         {
             return true;
         }
 
         return false;
-    }
-
-    private static boolean isBearshare(HTTPHeaderGroup headers)
-    {
-        HTTPHeader header = headers.getHeader( HTTPHeaderNames.USER_AGENT );
-        return header != null && header.getValue().startsWith("BearShare");
     }
 }

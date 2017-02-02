@@ -26,22 +26,19 @@ package phex.security;
 /**
  *
  */
-public class PhexSecurityException extends Exception
-{
+public class PhexSecurityException extends Exception {
 
     /**
-     * 
+     *
      */
-    public PhexSecurityException()
-    {
+    public PhexSecurityException() {
         super();
     }
 
     /**
      * @param message
      */
-    public PhexSecurityException(String message)
-    {
+    public PhexSecurityException(String message) {
         super(message);
     }
 
@@ -49,16 +46,14 @@ public class PhexSecurityException extends Exception
      * @param message
      * @param cause
      */
-    public PhexSecurityException(String message, Throwable cause)
-    {
+    public PhexSecurityException(String message, Throwable cause) {
         super(message, cause);
     }
 
     /**
      * @param cause
      */
-    public PhexSecurityException(Throwable cause)
-    {
+    public PhexSecurityException(Throwable cause) {
         super(cause);
     }
 }

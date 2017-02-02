@@ -25,50 +25,48 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * 
+ *
  */
-public class XMLUtils
-{
+public class XMLUtils {
     /**
      * Writes a string XML encoded to a writer.
      */
-    public static void writeEncoded( Writer out, String str )
-        throws IOException
-    {
-        for (int i = 0; i < str.length(); i++)
-        {
+    public static void writeEncoded(Writer out, String str)
+            throws IOException {
+        for (int i = 0; i < str.length(); i++) {
             char ch = str.charAt(i);
-            switch (ch)
-            {
-                case '<': out.write("&lt;");
+            switch (ch) {
+                case '<':
+                    out.write("&lt;");
                     break;
-                case '>': out.write("&gt;");
+                case '>':
+                    out.write("&gt;");
                     break;
-                case '&': out.write("&amp;");
+                case '&':
+                    out.write("&amp;");
                     break;
-                case '"': out.write("&quot;");
+                case '"':
+                    out.write("&quot;");
                     break;
-                case '\'': out.write("&apos;");
+                case '\'':
+                    out.write("&apos;");
                     break;
                 case '\r':
                 case '\n':
                     out.write(ch);
                     break;
                 default:
-                    if (((int) ch < 32) || ((int) ch > 126))
-                    {
+                    if (((int) ch < 32) || ((int) ch > 126)) {
                         out.write("&#x");
                         out.write(Integer.toString((int) ch, 16));
                         out.write(';');
-                    }
-                    else
-                    {
+                    } else {
                         out.write(ch);
                     }
             }
         }
     }
-    
+
     /**
      * Returns true if the argument, a UCS-4 character code, is valid in
      * XML documents.  Unicode characters fit into the low sixteen
@@ -77,7 +75,7 @@ public class XMLUtils
      * documents containing only Unicode.  (The <code>char</code> datatype
      * in the Java Programming Language represents Unicode characters,
      * including unpaired surrogates.)
-     *
+     * <p>
      * <P> In XML, UCS-4 characters can also be encoded by the use of
      * <em>character references</em> such as <b>&amp;#x12345678;</b>, which
      * happens to refer to a character that is disallowed in XML documents.
@@ -86,17 +84,16 @@ public class XMLUtils
      *
      * @param ucs4char The 32-bit UCS-4 character being tested.
      */
-    static public boolean isXmlChar(int ucs4char)
-    {
-    // [2] Char ::= #x0009 | #x000A | #x000D
-    //          | [#x0020-#xD7FF]
-    //  ... surrogates excluded!
-    //          | [#xE000-#xFFFD]
-    //          | [#x10000-#x10ffff]
-    return ((ucs4char >= 0x0020 && ucs4char <= 0xD7FF)
-        || ucs4char == 0x000A || ucs4char == 0x0009
-        || ucs4char == 0x000D
-        || (ucs4char >= 0xE000 && ucs4char <= 0xFFFD)
-        || (ucs4char >= 0x10000 && ucs4char <= 0x10ffff));
+    static public boolean isXmlChar(int ucs4char) {
+        // [2] Char ::= #x0009 | #x000A | #x000D
+        //          | [#x0020-#xD7FF]
+        //  ... surrogates excluded!
+        //          | [#xE000-#xFFFD]
+        //          | [#x10000-#x10ffff]
+        return ((ucs4char >= 0x0020 && ucs4char <= 0xD7FF)
+                || ucs4char == 0x000A || ucs4char == 0x0009
+                || ucs4char == 0x000D
+                || (ucs4char >= 0xE000 && ucs4char <= 0xFFFD)
+                || (ucs4char >= 0x10000 && ucs4char <= 0x10ffff));
     }
 }

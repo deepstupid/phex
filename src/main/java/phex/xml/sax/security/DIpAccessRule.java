@@ -25,10 +25,9 @@ package phex.xml.sax.security;
 import org.xml.sax.SAXException;
 import phex.xml.sax.PhexXmlSaxWriter;
 
-public class DIpAccessRule extends DSecurityRule
-{
+public class DIpAccessRule extends DSecurityRule {
     public static final String ELEMENT_NAME = "ip-access-rule";
-    
+
     /**
      * @deprecated since build 301 (2007-05-24)
      */
@@ -44,115 +43,106 @@ public class DIpAccessRule extends DSecurityRule
      */
     @Deprecated
     public static final byte NETWORK_RANGE = 3;
-    
+
     private byte[] ip;
-    
+
     private boolean hasCidr;
     private byte cidr;
-    
+
     /**
      * @deprecated since build 301 (2007-05-24)
      */
     @Deprecated
     private int addressType;
-    
+
     /**
      * @deprecated since build 301 (2007-05-24)
      */
     @Deprecated
     private byte[] compareIp;
-    
-    
-    
-    
-    public byte getCidr()
-    {
+
+
+    public byte getCidr() {
         return cidr;
     }
-    public void setCidr(byte cidr)
-    {
+
+    public void setCidr(byte cidr) {
         hasCidr = true;
         this.cidr = cidr;
     }
-    public boolean hasCidr()
-    {
+
+    public boolean hasCidr() {
         return hasCidr;
     }
-    
+
     /**
      * @return the ip
      */
-    public byte[] getIp()
-    {
+    public byte[] getIp() {
         return ip;
     }
+
     /**
      * @param ip the ip to set
      */
-    public void setIp( byte[] ip )
-    {
+    public void setIp(byte[] ip) {
         this.ip = ip;
     }
-    
+
     /**
      * @return the addressType
      * @deprecated since build 301 (2007-05-24)
      */
     @Deprecated
-    public int getAddressType()
-    {
+    public int getAddressType() {
         return addressType;
     }
+
     /**
      * @param addressType the addressType to set
      * @deprecated since build 301 (2007-05-24)
      */
     @Deprecated
-    public void setAddressType( int addressType )
-    {
+    public void setAddressType(int addressType) {
         this.addressType = addressType;
     }
+
     /**
      * @return the compareIp
      * @deprecated since build 301 (2007-05-24)
      */
     @Deprecated
-    public byte[] getCompareIp()
-    {
+    public byte[] getCompareIp() {
         return compareIp;
     }
+
     /**
      * @param compareIp the compareIp to set
      * @deprecated since build 301 (2007-05-24)
      */
     @Deprecated
-    public void setCompareIp( byte[] compareIp )
-    {
+    public void setCompareIp(byte[] compareIp) {
         this.compareIp = compareIp;
     }
-    
-    
-    
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
-        
-        serializeSecurityRuleElements( writer );
-        
-        if( ip != null )
-        {
-            writer.startElm( "ip", null );
-            writer.elmHexBinary( ip );
-            writer.endElm( "ip" );
+
+
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
+
+        serializeSecurityRuleElements(writer);
+
+        if (ip != null) {
+            writer.startElm("ip", null);
+            writer.elmHexBinary(ip);
+            writer.endElm("ip");
         }
-        
-        if( hasCidr )
-        {
-            writer.startElm( "cidr", null );
-            writer.elmByte( cidr );
-            writer.endElm( "cidr" );
+
+        if (hasCidr) {
+            writer.startElm("cidr", null);
+            writer.elmByte(cidr);
+            writer.endElm("cidr");
         }
-        
-        writer.endElm( ELEMENT_NAME );
+
+        writer.endElm(ELEMENT_NAME);
     }
 }

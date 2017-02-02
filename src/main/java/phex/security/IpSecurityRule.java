@@ -21,19 +21,20 @@
  */
 package phex.security;
 
-public interface IpSecurityRule extends SecurityRule
-{
+public interface IpSecurityRule extends SecurityRule {
     /**
      * Returns the int value of the ip of this rule.
+     *
      * @return the ip.
      */
     int getIp();
-    
+
     HittingIpCidrPair getIpCidrPair();
-    
+
     /**
      * Returns a string representation of the address
      * for displaying purposes on a GUI.
+     *
      * @return a string representation of the address.
      */
     String getAddressString();

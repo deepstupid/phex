@@ -24,47 +24,50 @@ package phex.security;
 import phex.common.ExpiryDate;
 import phex.xml.sax.security.DSecurityRule;
 
-public interface SecurityRule
-{
+public interface SecurityRule {
     /**
      * Returns the description of the rule.
+     *
      * @return the description of the rule.
      */
     String getDescription();
-    
+
     /**
      * Returns the expiry date that indicates when this rule expires. It can be a
      * at a time, at the end of the session or never.
+     *
      * @return the expiry date that indicates when this rule expires.
      */
     ExpiryDate getExpiryDate();
-    
+
     /**
      * Returns the number of times the rule was triggered. All checks that
      * match the rule will increment the trigger.
+     *
      * @return the number of times the rule was triggered.
      */
     int getTriggerCount();
-    
+
     /**
      * Sets the number of times the rule was triggered. All checks that
      * match the rule will increment the trigger.
      */
-    void setTriggerCount( int count );
-    
+    void setTriggerCount(int count);
+
     boolean isDeletedOnExpiry();
-    
+
     boolean isSystemRule();
-    
+
     boolean isDisabled();
-    
+
     /**
      * Returns true when checks that match the rule will fail.
      * Returns false when all checks that do not match the rule will fail.
+     *
      * @return true when checks that match the rule will fail,
-     *         false when all checks that do not match the rule will fail.
+     * false when all checks that do not match the rule will fail.
      */
     boolean isDenyingRule();
-    
+
     DSecurityRule createDSecurityRule();
 }

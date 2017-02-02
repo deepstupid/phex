@@ -32,96 +32,95 @@ import phex.util.VendorCodes;
 /**
  * This class holds the available informations of a QueryHit for a host.
  */
-public class QueryHitHost
-{
+public class QueryHitHost {
+    /**
+     * The host address of the query hit host.
+     */
+    private final DestAddress hostAddress;
     /**
      * The unique identifier of the host.
      */
     private GUID hostGUID;
-
     /**
      * The speed of the host in Kbyte/s.
      */
     private int hostSpeed;
     private String cachedHostSpeedFormatted;
-
     /**
      * Defines if a push transfer is needed or not or unknown.
      */
     private QHDFlag pushNeededFlag;
-
     /**
      * Defines if a server is busy currently or unknown.
      */
     private QHDFlag serverBusyFlag;
-
     /**
      * Defines if a the server has already uploaded a file.
      */
     private QHDFlag hasUploadedFlag;
-
     /**
      * Defines if the upload speed of a server is measured.
      */
     private QHDFlag uploadSpeedFlag;
-
     /**
      * The vendor name.
      */
     private String vendor;
-
     /**
      * <p>States wether the servent supportes chat connections.</p>
      */
     private boolean isChatSupported;
-    
     /**
      * <p>States wether the servent supportes browse hosts connections.</p>
      */
     private boolean isBrowseHostSupported;
-
     /**
      * The rating of the host. It is determined from the QHD informations.
      */
     private short hostRating;
-
-    /**
-     * The host address of the query hit host.
-     */
-    private final DestAddress hostAddress;
-    
     //@CheckForNull
     private DestAddress[] pushProxyAddresses;
-    
+
     /**
      * Indicates that the host information is from a udp message.
      */
     private boolean isUdpHost;
 
-    public QueryHitHost( GUID aHostGUID, DestAddress address, int aHostSpeed )
-    {
+    public QueryHitHost(GUID aHostGUID, DestAddress address, int aHostSpeed) {
         hostGUID = aHostGUID;
         hostAddress = address;
-        hostSpeed =  aHostSpeed;
+        hostSpeed = aHostSpeed;
         cachedHostSpeedFormatted = null;
-        setQHDFlags( QHDFlag.QHD_UNKNOWN_FLAG, QHDFlag.QHD_UNKNOWN_FLAG, 
-            QHDFlag.QHD_UNKNOWN_FLAG, QHDFlag.QHD_UNKNOWN_FLAG );
+        setQHDFlags(QHDFlag.QHD_UNKNOWN_FLAG, QHDFlag.QHD_UNKNOWN_FLAG,
+                QHDFlag.QHD_UNKNOWN_FLAG, QHDFlag.QHD_UNKNOWN_FLAG);
         hostRating = -1;
+    }
+
+    public static QueryHitHost createFrom(QueryResponseMsg sourceMsg)
+            throws InvalidMessageException {
+        QueryHitHost qhh = new QueryHitHost(sourceMsg.getRemoteServentID(),
+                sourceMsg.getDestAddress(), sourceMsg.getRemoteHostSpeed());
+        qhh.setQHDFlags(sourceMsg.getPushNeededFlag(), sourceMsg.getServerBusyFlag(),
+                sourceMsg.getHasUploadedFlag(), sourceMsg.getUploadSpeedFlag());
+        qhh.setVendorCode(sourceMsg.getVendorCode());
+        qhh.setChatSupported(sourceMsg.isChatSupported());
+        qhh.setBrowseHostSupported(sourceMsg.isBrowseHostSupported());
+        qhh.setPushProxyAddresses(sourceMsg.getPushProxyAddresses());
+        qhh.setUdpHost(sourceMsg.isUdpMsg());
+        return qhh;
     }
 
     /**
      * @return the isUdpHost
      */
-    public boolean isUdpHost()
-    {
+    public boolean isUdpHost() {
         return isUdpHost;
     }
 
     /**
      * @param isUdpHost the isUdpHost to set
      */
-    public void setUdpHost(boolean isUdpHost)
-    {
+    public void setUdpHost(boolean isUdpHost) {
         this.isUdpHost = isUdpHost;
     }
 
@@ -129,44 +128,31 @@ public class QueryHitHost
      * @return Returns the pushProxyAddresses.
      */
     //@CheckForNull
-    public DestAddress[] getPushProxyAddresses()
-    {
+    public DestAddress[] getPushProxyAddresses() {
         return pushProxyAddresses;
     }
-    
+
     /**
      * @param pushProxyAddresses The pushProxyAddresses to set.
      */
-    public void setPushProxyAddresses(DestAddress[] pushProxyAddresses)
-    {
+    public void setPushProxyAddresses(DestAddress[] pushProxyAddresses) {
         this.pushProxyAddresses = pushProxyAddresses;
     }
-    
+
     /**
      * Sets the vendor code and stores it translated into the vendor name.
      */
-    public void setVendorCode( String aVendorCode )
-    {
-        if ( aVendorCode != null )
-        {
-            vendor = VendorCodes.getVendorName( aVendorCode );
+    public void setVendorCode(String aVendorCode) {
+        if (aVendorCode != null) {
+            vendor = VendorCodes.getVendorName(aVendorCode);
         }
     }
 
     /**
      * Returns the vendor name.
      */
-    public String getVendor()
-    {
+    public String getVendor() {
         return vendor;
-    }
-
-    /**
-     * <p>Sets whether the servent supports a chat connections.</p>
-     */
-    public void setChatSupported( boolean state )
-    {
-        isChatSupported = state;
     }
 
     /**
@@ -174,17 +160,15 @@ public class QueryHitHost
      *
      * @return true if a servent supports chat connections false otherwise.
      */
-    public boolean isChatSupported( )
-    {
+    public boolean isChatSupported() {
         return isChatSupported;
     }
-    
+
     /**
-     * <p>Sets wether the servent supportes a browse host connections.</p>
+     * <p>Sets whether the servent supports a chat connections.</p>
      */
-    public void setBrowseHostSupported( boolean state )
-    {
-        isBrowseHostSupported = state;
+    public void setChatSupported(boolean state) {
+        isChatSupported = state;
     }
 
     /**
@@ -192,24 +176,28 @@ public class QueryHitHost
      *
      * @return true if a servent supports browse hosts connections false otherwise.
      */
-    public boolean isBrowseHostSupported( )
-    {
+    public boolean isBrowseHostSupported() {
         return isBrowseHostSupported;
+    }
+
+    /**
+     * <p>Sets wether the servent supportes a browse host connections.</p>
+     */
+    public void setBrowseHostSupported(boolean state) {
+        isBrowseHostSupported = state;
     }
 
     /**
      * Returns the GUID of the host.
      */
-    public GUID getHostGUID()
-    {
+    public GUID getHostGUID() {
         return hostGUID;
     }
 
     /**
      * @param guid
      */
-    public void setHostGUID(GUID guid)
-    {
+    public void setHostGUID(GUID guid) {
         hostGUID = guid;
     }
 
@@ -218,44 +206,38 @@ public class QueryHitHost
      *
      * @return the host speed
      */
-    public int getHostSpeed()
-    {
+    public int getHostSpeed() {
         return hostSpeed;
     }
-    
-    public String getFormattedHostSpeed()
-    {
-        if ( cachedHostSpeedFormatted == null )
-        {
-            cachedHostSpeedFormatted = HostSpeedFormatUtils.formatHostSpeed( hostSpeed );
-        }
-        return cachedHostSpeedFormatted;
-    }
-    
+
     /**
      * @param i
      */
-    public void setHostSpeed( int speed )
-    {
+    public void setHostSpeed(int speed) {
         hostSpeed = speed;
         cachedHostSpeedFormatted = null;
         calculateHostRating();
     }
 
+    public String getFormattedHostSpeed() {
+        if (cachedHostSpeedFormatted == null) {
+            cachedHostSpeedFormatted = HostSpeedFormatUtils.formatHostSpeed(hostSpeed);
+        }
+        return cachedHostSpeedFormatted;
+    }
+
     /**
      * Returns the host address.
      */
-    public DestAddress getHostAddress()
-    {
+    public DestAddress getHostAddress() {
         return hostAddress;
     }
 
     /**
      * Stores the QHD flags
      */
-    public void setQHDFlags( QHDFlag aPushNeededFlag, QHDFlag aServerBusyFlag,
-        QHDFlag aHasUploadedFlag, QHDFlag aUploadSpeedFlag )
-    {
+    public void setQHDFlags(QHDFlag aPushNeededFlag, QHDFlag aServerBusyFlag,
+                            QHDFlag aHasUploadedFlag, QHDFlag aUploadSpeedFlag) {
         pushNeededFlag = aPushNeededFlag;
         serverBusyFlag = aServerBusyFlag;
         hasUploadedFlag = aHasUploadedFlag;
@@ -267,52 +249,43 @@ public class QueryHitHost
      * then false is returned. The downloader should try a push after failed
      * normal connection.
      */
-    public boolean isPushNeeded()
-    {
+    public boolean isPushNeeded() {
         return pushNeededFlag == QHDFlag.QHD_TRUE_FLAG;
     }
 
     /**
      * @return the pushNeededFlag
      */
-    public QHDFlag getPushNeededFlag()
-    {
+    public QHDFlag getPushNeededFlag() {
         return pushNeededFlag;
     }
 
     /**
      * @return the serverBusyFlag
      */
-    public QHDFlag getServerBusyFlag()
-    {
+    public QHDFlag getServerBusyFlag() {
         return serverBusyFlag;
     }
-    
+
     /**
      * @return the hasUploadedFlag
      */
-    public QHDFlag getHasUploadedFlag()
-    {
+    public QHDFlag getHasUploadedFlag() {
         return hasUploadedFlag;
     }
 
     /**
      * @return the uploadSpeedFlag
      */
-    public QHDFlag getUploadSpeedFlag()
-    {
+    public QHDFlag getUploadSpeedFlag() {
         return uploadSpeedFlag;
     }
-    
-    
 
     /**
      * Returns the from the QHD calculated rating.
      */
-    public short getHostRating()
-    {
-        if ( hostRating == -1 )
-        {
+    public short getHostRating() {
+        if (hostRating == -1) {
             calculateHostRating();
         }
         return hostRating;
@@ -320,23 +293,22 @@ public class QueryHitHost
 
     /**
      * pushNeeded | serverBusy | I'm firewalled | useHasUploaded | Rating
-     *         -1 |         -1 |                |              y |      6
-     *         -1 |          0 |                |              y |      5
-     *          0 |       0/-1 |             -1 |              y |      4
-     *          1 |         -1 |             -1 |              y |      3
-     *          0 |       0/-1 |              1 |              y |      3
-     *          1 |          0 |             -1 |              y |      2
-     *            |          1 |                |              n |      1
-     *          1 |            |              1 |              n |      0
-     *
+     * -1 |         -1 |                |              y |      6
+     * -1 |          0 |                |              y |      5
+     * 0 |       0/-1 |             -1 |              y |      4
+     * 1 |         -1 |             -1 |              y |      3
+     * 0 |       0/-1 |              1 |              y |      3
+     * 1 |          0 |             -1 |              y |      2
+     * |          1 |                |              n |      1
+     * 1 |            |              1 |              n |      0
+     * <p>
      * If useHasUploaded is set to y in this chart then depending on the flag
      * the rating is raised.
      * hasUploaded == QHD_TRUE_FLAG -> Raiting + 2
      * hasUploaded == QHD_UNKNOWN_FLAG -> Raiting + 1
      * hasUploaded == QHD_FALSE_FLAG -> Raiting + 0
      */
-    private void calculateHostRating()
-    {
+    private void calculateHostRating() {
         // TODO use isPushRecommended information to rate.
         // A push is recommended if the pushNeededFlag is set or the host has a
         // private host address and we are in a lan.
@@ -345,14 +317,12 @@ public class QueryHitHost
         // remote host and local host is firewalled... download not possible
         Servent servent = Servent.getInstance();
         if (pushNeededFlag == QHDFlag.QHD_TRUE_FLAG
-            && servent.isFirewalled() )
-        {
+                && servent.isFirewalled()) {
             hostRating = 0;
             return;
         }
         // servent is busy
-        if ( serverBusyFlag == QHDFlag.QHD_TRUE_FLAG )
-        {
+        if (serverBusyFlag == QHDFlag.QHD_TRUE_FLAG) {
             hostRating = 1;
             return;
         }
@@ -360,63 +330,34 @@ public class QueryHitHost
         // complex ratings influenced by hasUploaded
         short tmpHostRating;
         // remote is firewalled i'm not firewalled
-        if ( pushNeededFlag == QHDFlag.QHD_TRUE_FLAG )
-        {
-            if ( serverBusyFlag == QHDFlag.QHD_FALSE_FLAG )
-            {
+        if (pushNeededFlag == QHDFlag.QHD_TRUE_FLAG) {
+            if (serverBusyFlag == QHDFlag.QHD_FALSE_FLAG) {
                 tmpHostRating = 3;
-            }
-            else // serverBusyFlag == QHDFlag.QHD_UNKNOWN_FLAG
+            } else // serverBusyFlag == QHDFlag.QHD_UNKNOWN_FLAG
             {
                 tmpHostRating = 2;
             }
-        }
-        else if ( pushNeededFlag == QHDFlag.QHD_FALSE_FLAG )
-        {
-            if ( serverBusyFlag == QHDFlag.QHD_FALSE_FLAG )
-            {
+        } else if (pushNeededFlag == QHDFlag.QHD_FALSE_FLAG) {
+            if (serverBusyFlag == QHDFlag.QHD_FALSE_FLAG) {
                 tmpHostRating = 6;
-            }
-            else // serverBusyFlag == QHDFlag.QHD_UNKNOWN_FLAG
+            } else // serverBusyFlag == QHDFlag.QHD_UNKNOWN_FLAG
             {
                 tmpHostRating = 5;
             }
-        }
-        else // pushNeededFlag == QHDFlag.QHD_UNKNOWN_FLAG
+        } else // pushNeededFlag == QHDFlag.QHD_UNKNOWN_FLAG
         {// serverBusyFlag != QHDFlag.QHD_TRUE_FLAG
-            if ( servent.isFirewalled() )
-            {// I'm firewalled
+            if (servent.isFirewalled()) {// I'm firewalled
                 tmpHostRating = 3;
-            }
-            else
-            {// I'm not firewalled
+            } else {// I'm not firewalled
                 tmpHostRating = 4;
             }
         }
 
-        if ( hasUploadedFlag == QHDFlag.QHD_TRUE_FLAG )
-        {
+        if (hasUploadedFlag == QHDFlag.QHD_TRUE_FLAG) {
             tmpHostRating += 2;
-        }
-        else if ( hasUploadedFlag == QHDFlag.QHD_UNKNOWN_FLAG )
-        {
+        } else if (hasUploadedFlag == QHDFlag.QHD_UNKNOWN_FLAG) {
             tmpHostRating += 1;
         }
         hostRating = tmpHostRating;
-    }
-    
-    public static QueryHitHost createFrom( QueryResponseMsg sourceMsg ) 
-        throws InvalidMessageException
-    {
-        QueryHitHost qhh = new QueryHitHost( sourceMsg.getRemoteServentID(), 
-            sourceMsg.getDestAddress(), sourceMsg.getRemoteHostSpeed() );
-        qhh.setQHDFlags( sourceMsg.getPushNeededFlag(), sourceMsg.getServerBusyFlag(),
-            sourceMsg.getHasUploadedFlag(), sourceMsg.getUploadSpeedFlag() );
-        qhh.setVendorCode( sourceMsg.getVendorCode() );
-        qhh.setChatSupported( sourceMsg.isChatSupported() );
-        qhh.setBrowseHostSupported( sourceMsg.isBrowseHostSupported() );
-        qhh.setPushProxyAddresses( sourceMsg.getPushProxyAddresses() );
-        qhh.setUdpHost( sourceMsg.isUdpMsg() );
-        return qhh;
     }
 }

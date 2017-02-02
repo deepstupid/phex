@@ -33,8 +33,7 @@ import phex.statistic.StatisticsManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PushHandler
-{
+public class PushHandler {
     /**
      * This is a stand alone global class responsible for push handling.
      */
@@ -47,107 +46,92 @@ public class PushHandler
      */
     private final ArrayList<PushRequestSleeper> pushSleeperList;
 
-    private PushHandler()
-    {
+    private PushHandler() {
         pushSleeperList = new ArrayList<PushRequestSleeper>(5);
     }
 
     public static void handleIncommingGIV(SocketFacade aGivenSocket, GUID givenGUID,
-        String givenFileName)
-    {
+                                          String givenFileName) {
         singleton.internalHandleIncommingGIV(aGivenSocket, givenGUID,
-            givenFileName);
+                givenFileName);
     }
 
-    public static SocketFacade requestSocketViaPush( Servent servent,
-        SWDownloadCandidate downloadCandidate )
-    {
-        if ( downloadCandidate.getGUID() == null ) { return null; }
-        return singleton.internalRequestSocketViaPush( servent,
-            downloadCandidate.getGUID(),
-            downloadCandidate.getFileIndex(), 
-            downloadCandidate.getPushProxyAddresses() );
+    public static SocketFacade requestSocketViaPush(Servent servent,
+                                                    SWDownloadCandidate downloadCandidate) {
+        if (downloadCandidate.getGUID() == null) {
+            return null;
+        }
+        return singleton.internalRequestSocketViaPush(servent,
+                downloadCandidate.getGUID(),
+                downloadCandidate.getFileIndex(),
+                downloadCandidate.getPushProxyAddresses());
     }
 
     /**
-     *
      * @param aClientGUID
      * @param aFileIndex
      * @param aFileName
      * @return Returns null if push request fails.
      */
-    public static SocketFacade requestSocketViaPush( Servent servent, 
-        GUID aClientGUID, long aFileIndex )
-    {
-        return singleton.internalRequestSocketViaPush( servent,
-            aClientGUID, aFileIndex, null);
+    public static SocketFacade requestSocketViaPush(Servent servent,
+                                                    GUID aClientGUID, long aFileIndex) {
+        return singleton.internalRequestSocketViaPush(servent,
+                aClientGUID, aFileIndex, null);
     }
 
-    public static void unregisterPushRequestSleeper(PushRequestSleeper sleeper)
-    {
+    public static void unregisterPushRequestSleeper(PushRequestSleeper sleeper) {
         singleton.internalUnregisterPushRequestSleeper(sleeper);
     }
 
     private void internalHandleIncommingGIV(SocketFacade aGivenSocket,
-        GUID givenGUID, String givenFileName)
-    {
-        NLogger.debug( PushHandler.class, 
-            "Handle incomming GIV response: " + givenFileName);
-        
+                                            GUID givenGUID, String givenFileName) {
+        NLogger.debug(PushHandler.class,
+                "Handle incomming GIV response: " + givenFileName);
+
         // to prevent deadlocks with SWDownloadWorker inside PushRequestSleeper
         // create a copy of the pushSleeperList.
         List<PushRequestSleeper> sleeperList;
-        synchronized (pushSleeperList)
-        {
-            sleeperList = new ArrayList<PushRequestSleeper>( pushSleeperList );
+        synchronized (pushSleeperList) {
+            sleeperList = new ArrayList<PushRequestSleeper>(pushSleeperList);
         }
-        for ( PushRequestSleeper sleeper : sleeperList )
-        {
+        for (PushRequestSleeper sleeper : sleeperList) {
             boolean succ = sleeper.acceptGIVConnection(aGivenSocket, givenGUID);
-            if ( succ )
-            {
-                NLogger.debug( PushHandler.class, 
-                    "Accepted GIV response: " + givenFileName);
+            if (succ) {
+                NLogger.debug(PushHandler.class,
+                        "Accepted GIV response: " + givenFileName);
                 return;
             }
-        }        
-        NLogger.debug( PushHandler.class, 
-            "No Push request for GIV found: " + givenFileName);
+        }
+        NLogger.debug(PushHandler.class,
+                "No Push request for GIV found: " + givenFileName);
     }
 
     private SocketFacade internalRequestSocketViaPush(Servent servent,
-        GUID aClientGUID, long aFileIndex, DestAddress[] pushProxyAddresses )
-    {
-        NLogger.debug( PushHandler.class, "Perform PUSH request..." );
-        
-        ((SimpleStatisticProvider)servent.getStatisticsService().getStatisticProvider(
-            StatisticsManager.PUSH_DOWNLOAD_ATTEMPTS_PROVIDER)).increment(1);
-        PushRequestSleeper pushSleeper = new PushRequestSleeper(servent, 
-            aClientGUID, aFileIndex, pushProxyAddresses );
-        synchronized (pushSleeperList)
-        {
+                                                      GUID aClientGUID, long aFileIndex, DestAddress[] pushProxyAddresses) {
+        NLogger.debug(PushHandler.class, "Perform PUSH request...");
+
+        ((SimpleStatisticProvider) servent.getStatisticsService().getStatisticProvider(
+                StatisticsManager.PUSH_DOWNLOAD_ATTEMPTS_PROVIDER)).increment(1);
+        PushRequestSleeper pushSleeper = new PushRequestSleeper(servent,
+                aClientGUID, aFileIndex, pushProxyAddresses);
+        synchronized (pushSleeperList) {
             pushSleeperList.add(pushSleeper);
         }
         SocketFacade socket = pushSleeper.requestSocketViaPush();
-        if ( socket == null )
-        {
-            NLogger.debug( PushHandler.class, "PUSH request failed." );
-            ((SimpleStatisticProvider)servent.getStatisticsService().getStatisticProvider(
-                StatisticsManager.PUSH_DOWNLOAD_FAILURE_PROVIDER)).increment(1);
-        }
-        else
-        {
-            NLogger.debug( PushHandler.class, "PUSH request successful." );
-            ((SimpleStatisticProvider)servent.getStatisticsService().getStatisticProvider(
-                StatisticsManager.PUSH_DOWNLOAD_SUCESS_PROVIDER)).increment(1);
+        if (socket == null) {
+            NLogger.debug(PushHandler.class, "PUSH request failed.");
+            ((SimpleStatisticProvider) servent.getStatisticsService().getStatisticProvider(
+                    StatisticsManager.PUSH_DOWNLOAD_FAILURE_PROVIDER)).increment(1);
+        } else {
+            NLogger.debug(PushHandler.class, "PUSH request successful.");
+            ((SimpleStatisticProvider) servent.getStatisticsService().getStatisticProvider(
+                    StatisticsManager.PUSH_DOWNLOAD_SUCESS_PROVIDER)).increment(1);
         }
         return socket;
     }
 
-    private void internalUnregisterPushRequestSleeper(PushRequestSleeper sleeper)
-    {
-        synchronized (pushSleeperList)
-        {
+    private void internalUnregisterPushRequestSleeper(PushRequestSleeper sleeper) {
+        synchronized (pushSleeperList) {
             pushSleeperList.remove(sleeper);
         }
     }

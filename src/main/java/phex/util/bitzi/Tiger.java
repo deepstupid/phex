@@ -26,12 +26,12 @@ import java.security.MessageDigest;
  * algorithm, based on the sample C code published by Eli Biham on
  * http://www.cs.technion.ac.il/~biham/Reports/Tiger/
  * in its HTML reference Appendix.
- *
+ * <p>
  * It computes a 192-bit digest that is considered stronger, but faster to
  * compute than 160-bit SHA-1. Its input is a set of 64-bytes blocks.
  * The last block of a digested message must include a required padded byte
  * which must be 0x01, the remaining padded bytes must be set to 0x00.
- *
+ * <p>
  * May be in the future, this class will be part of the standard JCE (Java
  * Cryptography Environment) included in Java 1.5, code named... Tiger!
  * For now Java 1.4, code named Merlin, does not have this digest
@@ -39,547 +39,6 @@ import java.security.MessageDigest;
  * and MD4, MD5 or SHA1 (in javax.crypto.Mac, included in the SUN JCE).
  */
 public final class Tiger extends MessageDigest implements Cloneable {
-    /**
-     * Private Contextual byte count, send in the next block,
-     * after the ending padded block.
-     */
-    private long bytes;
-
-    /**
-     * Private context for incomplete blocks and padded bytes.
-     * INVARIANT: padded must be in 0..63.
-     * When the padded reaches 64, a new block is computed, and
-     * the 56 last bytes are kept in the padded history.
-     */
-    private int padded;
-    private byte[] pad;
-
-    /**
-     * Private context that contains the current digest key.
-     */
-    private long hA, hB, hC;
-
-    /**
-     * Creates a Tiger object with default initial state.
-     */
-    public Tiger() 
-    {
-        super( "Tiger" );
-        pad = new byte[64];
-        init();
-    }
-
-    /**
-     * Clones this object.
-     */
-    public Object clone() throws CloneNotSupportedException {
-        final Tiger that = (Tiger)super.clone();
-        that.pad = (byte[])this.pad.clone();
-        return that;
-    }
-
-    /**
-     * Reset then initialize the digest context.<br/>
-     *
-     * Overrides the protected abstract method of
-     * <code>java.security.MessageDigestSpi</code>.
-     * @modifies  this
-     */
-    public void engineReset() {
-        int i = 60;
-        final byte[] buf = pad;
-        do {
-           buf[i - 4] = (byte)0x00;
-           buf[i - 3] = (byte)0x00;
-           buf[i - 2] = (byte)0x00;
-           buf[i - 1] = (byte)0x00;
-           buf[i    ] = (byte)0x00;
-           buf[i + 1] = (byte)0x00;
-           buf[i + 2] = (byte)0x00;
-           buf[i + 3] = (byte)0x00;
-        } while ((i -= 8) >= 0);
-        padded = 0;
-        bytes = 0L;
-        init();
-    }
-
-    /**
-     * Initialize the digest context.
-     * @modifies  this
-     */
-    protected void init() {
-        hA = 0x0123456789abcdefL;
-        hB = 0xfedcba9876543210L;
-        hC = 0xf096a5b4c3b2e187L;
-    }
-
-    /**
-     * Updates the digest using the specified byte.
-     * Requires internal buffering, and may be slow.<br/>
-     *
-     * Overrides the protected abstract method of
-     * <code>java.security.MessageDigestSpi</code>.
-     * @param input  the byte to use for the update.
-     * @modifies  this
-     */
-    public void engineUpdate(byte input) {
-        bytes++;
-        if (padded < 63) {
-            pad[padded++] = input;
-            return;
-        }
-        pad[63] = input;
-        computeBlock(pad, padded = 0);
-    }
-
-    /**
-     * Updates the digest using the specified array of bytes,
-     * starting at the specified offset.<br/>
-     *
-     * Input length can be any size. May require internal buffering,
-     * if input blocks are not multiple of 64 bytes.<br/>
-     *
-     * Overrides the protected abstract method of
-     * <code>java.security.MessageDigestSpi</code>.
-     * @param input  the array of bytes to use for the update.
-     * @param offset  the offset to start from in the array of bytes.
-     * @param length  the number of bytes to use, starting at offset.
-     * @modifies  this
-     */
-    public void engineUpdate(byte[] input, int offset, int length) {
-        if (offset >= 0 && length >= 0 && offset + length <= input.length) {
-            bytes += length;
-            /* Terminate the previous block. */
-            if (padded > 0 && padded + length >= 64) {
-                int remaining;
-                System.arraycopy(input, offset, pad, padded,
-                    remaining = 64 - padded);
-                computeBlock(pad, padded = 0);
-                offset += remaining;
-                length -= remaining;
-            }
-            /* Loop on large sets of complete blocks. */
-            while (length >= 512) {
-                computeBlock(input, offset);
-                computeBlock(input, offset + 64);
-                computeBlock(input, offset + 128);
-                computeBlock(input, offset + 192);
-                computeBlock(input, offset + 256);
-                computeBlock(input, offset + 320);
-                computeBlock(input, offset + 384);
-                computeBlock(input, offset + 448);
-                offset += 512;
-                length -= 512;
-            }
-            /* Loop on remaining complete blocks. */
-            while (length >= 64) {
-                computeBlock(input, offset);
-                offset += 64;
-                length -= 64;
-            }
-            /* remaining bytes kept for next block. */
-            if (length > 0) {
-                System.arraycopy(input, offset, pad, padded, length);
-                padded += length;
-            }
-            return;
-        }
-        throw new ArrayIndexOutOfBoundsException(offset);
-    }
-
-    /**
-     * Completes the hash computation by performing final operations
-     * such as padding. Computes the final hash and returns the final
-     * value as a byte[24] array. Once engineDigest has been called,
-     * the engine will be automatically reset as specified in the
-     * Java Security MessageDigest specification.<br/>
-     *
-     * For faster operations with multiple digests, allocate your own
-     * array and use engineDigest(byte[], int offset, int len).<br/>
-     *
-     * Overrides the protected abstract method of
-     * <code>java.security.MessageDigestSpi</code>.
-     * @return the length of the digest stored in the output buffer.
-     * @modifies  this
-     */
-    public byte[] engineDigest() {
-        try {
-            final byte hashvalue[] = new byte[24]; /* digest length in bytes */
-            engineDigest(hashvalue, 0, 24); /* digest length in bytes */
-            return hashvalue;
-        } catch (DigestException e) {
-            return null;
-        }
-    }
-
-    /**
-     * Returns the digest length in bytes. Can be used to allocate your own
-     * output buffer when computing multiple digests.<br/>
-     *
-     * Overrides the protected abstract method of
-     * <code>java.security.MessageDigestSpi</code>.
-     * @return  the digest length in bytes.
-     */
-    public int engineGetDigestLength() {
-        return 24; /* digest length in bytes */
-    }
-
-    /**
-     * Completes the hash computation by performing final operations
-     * such as padded. Once engineDigest has been called, the engine
-     * will be automatically reset (see engineReset).
-     *
-     * Overrides the protected abstract method of
-     * java.security.MessageDigestSpi.
-     * @param hashvalue  the output buffer in which to store the digest.
-     * @param offset  offset to start from in the output buffer
-     * @param length  number of bytes within buf allotted for the digest.
-     *                Both this default implementation and the SUN provider
-     *                do not return partial digests.  The presence of this
-     *                parameter is solely for consistency in our API's.
-     *                If the value of this parameter is less than the
-     *                actual digest length, the method will throw a
-     *                DigestException.  This parameter is ignored if its
-     *                value is greater than or equal to the actual digest
-     *                length.
-     * @return  the length of the digest stored in the output buffer.
-     * @modifies  this
-     */
-    public int engineDigest(final byte[] hashvalue, int offset,
-            final int length) throws DigestException {
-        if (length >= 24) { /* digest length in bytes */
-            if (hashvalue.length - offset >= 24) { /* digest length in bytes */
-                /* Flush the trailing bytes, adding padded bytes into last
-                 * blocks. */
-                int i;
-                /* Add padded null bytes but replace the last 8 padded bytes
-                 * by the little-endian 64-bit digested message bit-length. */
-                final byte[] buf;
-                (buf=pad)[i=padded] = (byte)0x01;/* required 1st padded byte */
-                /* Check if 8 bytes are available in pad to store the total
-                 * message size */
-                switch (i) { /* INVARIANT: i must be in [0..63] */
-                case 56: buf[57] = (byte)0x00; /* no break; falls thru */
-                case 57: buf[58] = (byte)0x00; /* no break; falls thru */
-                case 58: buf[59] = (byte)0x00; /* no break; falls thru */
-                case 59: buf[60] = (byte)0x00; /* no break; falls thru */
-                case 60: buf[61] = (byte)0x00; /* no break; falls thru */
-                case 61: buf[62] = (byte)0x00; /* no break; falls thru */
-                case 62: buf[63] = (byte)0x00; /* no break; falls thru */
-                case 63: computeBlock(buf, 0);
-                         i = -1;
-                }
-                /* Clear the rest of the 56 first bytes of pad[]. */
-                switch (i & 7) {
-                case 7:      i-=3;
-                        break;
-                case 6: buf[(i-=2) + 3] = (byte)0x00;
-                        break;
-                case 5: buf[(i-=1) + 2] = (byte)0x00;
-                        buf[i      + 3] = (byte)0x00;
-                        break;
-                case 4: buf[i      + 1] = (byte)0x00;
-                        buf[i      + 2] = (byte)0x00;
-                        buf[i      + 3] = (byte)0x00;
-                        break;
-                case 3: buf[(i+=1)    ] = (byte)0x00;
-                        buf[i      + 1] = (byte)0x00;
-                        buf[i      + 2] = (byte)0x00;
-                        buf[i      + 3] = (byte)0x00;
-                        break;
-                case 2: buf[(i+=2) - 1] = (byte)0x00;
-                        buf[i         ] = (byte)0x00;
-                        buf[i      + 1] = (byte)0x00;
-                        buf[i      + 2] = (byte)0x00;
-                        buf[i      + 3] = (byte)0x00;
-                        break;
-                case 1: buf[(i+=3) - 2] = (byte)0x00;
-                        buf[i      - 1] = (byte)0x00;
-                        buf[i         ] = (byte)0x00;
-                        buf[i      + 1] = (byte)0x00;
-                        buf[i      + 2] = (byte)0x00;
-                        buf[i      + 3] = (byte)0x00;
-                        break;
-                case 0: buf[(i+=4) - 3] = (byte)0x00;
-                        buf[i      - 2] = (byte)0x00;
-                        buf[i      - 1] = (byte)0x00;
-                        buf[i         ] = (byte)0x00;
-                        buf[i      + 1] = (byte)0x00;
-                        buf[i      + 2] = (byte)0x00;
-                        buf[i      + 3] = (byte)0x00;
-                        break;
-                }
-                while ((i += 8) <= 52) {
-                    buf[i - 4] = (byte)0x00;
-                    buf[i - 3] = (byte)0x00;
-                    buf[i - 2] = (byte)0x00;
-                    buf[i - 1] = (byte)0x00;
-                    buf[i    ] = (byte)0x00;
-                    buf[i + 1] = (byte)0x00;
-                    buf[i + 2] = (byte)0x00;
-                    buf[i + 3] = (byte)0x00;
-                }
-                /* Convert the message size from bytes to little-endian bits. */
-                buf[56] = (byte)(i = (int)bytes << 3);
-                buf[57] = (byte)(i >>> 8);
-                buf[58] = (byte)(i >>> 16);
-                buf[59] = (byte)(i >>> 24);
-                buf[60] = (byte)(i = (int)(bytes >>> 29));
-                buf[61] = (byte)(i >>> 8);
-                buf[62] = (byte)(i >>> 16);
-                buf[63] = (byte)(i >>> 24);
-                computeBlock(pad, 0);
-                /* Return the computed digest in little-endian byte order. */
-                hashvalue[ offset         ] = (byte)(i = (int) hA);
-                hashvalue[ offset      + 1] = (byte)(i >>> 8);
-                hashvalue[ offset      + 2] = (byte)(i >>> 16);
-                hashvalue[ offset      + 3] = (byte)(i >>> 24);
-                hashvalue[ offset      + 4] = (byte)(i = (int)(hA >>> 32));
-                hashvalue[ offset      + 5] = (byte)(i >>> 8);
-                hashvalue[(offset+=10) - 4] = (byte)(i >>> 16);
-                hashvalue[ offset      - 3] = (byte)(i >>> 24);
-                hashvalue[ offset      - 2] = (byte)(i = (int) hB);
-                hashvalue[ offset      - 1] = (byte)(i >>> 8);
-                hashvalue[ offset         ] = (byte)(i >>> 16);
-                hashvalue[ offset      + 1] = (byte)(i >>> 24);
-                hashvalue[ offset      + 2] = (byte)(i = (int)(hB >>> 32));
-                hashvalue[ offset      + 3] = (byte)(i >>> 8);
-                hashvalue[ offset      + 4] = (byte)(i >>> 16);
-                hashvalue[ offset      + 5] = (byte)(i >>> 24);
-                hashvalue[(offset+=10) - 4] = (byte)(i = (int) hC);
-                hashvalue[ offset      - 3] = (byte)(i >>> 8);
-                hashvalue[ offset      - 2] = (byte)(i >>> 16);
-                hashvalue[ offset      - 1] = (byte)(i >>> 24);
-                hashvalue[ offset         ] = (byte)(i = (int)(hC >>> 32));
-                hashvalue[ offset      + 1] = (byte)(i >>> 8);
-                hashvalue[ offset      + 2] = (byte)(i >>> 16);
-                hashvalue[ offset      + 3] = (byte)(i >>> 24);
-                engineReset(); /* clear the evidence */
-                return 24; /* digest length in bytes */
-            }
-            throw new DigestException(
-                "insufficient space in output buffer to store the digest");
-        }
-        throw new DigestException("partial digests not returned");
-    }
-
-    /**
-     * Updates the digest using the specified array of bytes,
-     * starting at the specified offset, but an implied length
-     * of exactly 64 bytes.<br/>
-     *
-     * Requires no internal buffering, but assumes a fixed input size,
-     * in which the required padded bytes may have been added.
-     *
-     * @param input  the array of bytes to use for the update.
-     * @param offset  the offset to start from in the array of bytes.
-     * @modifies  this
-     */
-    private void computeBlock(final byte[] input, int offset) {
-        /* Local temporary work variables for intermediate digests. */
-        int lo, hi;
-        long a, b, c;
-        /* Cache the input block into the local working set of 64-bit
-         * values, in little-endian byte order. Be careful when
-         * widening bytes or integers due to sign extension! */
-        long w0, w1, w2, w3, w4, w5, w6, w7;
-        /* First pass on little endian input, with multiplier equal to 5. */
-        c = hC
-          ^ (w0 = ((long)(  (input[ offset         ] & 0xff)
-                         | ((input[ offset      + 1] & 0xff) <<  8)
-                         | ((input[ offset      + 2] & 0xff) << 16)
-                         | ( input[ offset      + 3] << 24)) & 0xffffffffL)
-                | ((long)(  (input[ offset      + 4] & 0xff)
-                         | ((input[ offset      + 5] & 0xff) <<  8)
-                         | ((input[(offset+=10) - 4] & 0xff) << 16)
-                         | ( input[ offset      - 3] << 24)) << 32));
-        a = ( hA
-            - (S0[(lo=(int) c      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(c>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w1 = ((long)(  (input[ offset      - 2] & 0xff)
-                         | ((input[ offset      - 1] & 0xff) <<  8)
-                         | ((input[ offset         ] & 0xff) << 16)
-                         | ( input[ offset      + 1] << 24)) & 0xffffffffL)
-                | ((long)(  (input[ offset      + 2] & 0xff)
-                         | ((input[ offset      + 3] & 0xff) <<  8)
-                         | ((input[ offset      + 4] & 0xff) << 16)
-                         | ( input[ offset      + 5] << 24)) << 32));
-        b = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + hB) * 5
-            - (S0[(lo=(int) a      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(a>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w2 = ((long)(  (input[(offset+=10) - 4] & 0xff)
-                         | ((input[ offset      - 3] & 0xff) <<  8)
-                         | ((input[ offset      - 2] & 0xff) << 16)
-                         | ( input[ offset      - 1] << 24)) & 0xffffffffL)
-                | ((long)(  (input[ offset         ] & 0xff)
-                         | ((input[ offset      + 1] & 0xff) <<  8)
-                         | ((input[ offset      + 2] & 0xff) << 16)
-                         | ( input[ offset      + 3] << 24)) << 32));
-        c = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + c) * 5
-            - (S0[(lo=(int) b      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(b>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w3 = ((long)(  (input[ offset      + 4] & 0xff)
-                         | ((input[ offset      + 5] & 0xff) <<  8)
-                         | ((input[(offset+=10) - 4] & 0xff) << 16)
-                         | ( input[ offset      - 3] << 24)) & 0xffffffffL)
-                | ((long)(  (input[ offset      - 2] & 0xff)
-                         | ((input[ offset      - 1] & 0xff) <<  8)
-                         | ((input[ offset         ] & 0xff) << 16)
-                         | ( input[ offset      + 1] << 24)) << 32));
-        a = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + a) * 5
-            - (S0[(lo=(int) c      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(c>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w4 = ((long)(  (input[ offset      + 2] & 0xff)
-                         | ((input[ offset      + 3] & 0xff) <<  8)
-                         | ((input[ offset      + 4] & 0xff) << 16)
-                         | ( input[ offset      + 5] << 24)) & 0xffffffffL)
-                | ((long)(  (input[(offset+=10) - 4] & 0xff)
-                         | ((input[ offset      - 3] & 0xff) <<  8)
-                         | ((input[ offset      - 2] & 0xff) << 16)
-                         | ( input[ offset      - 1] << 24)) << 32));
-        b = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + b) * 5
-            - (S0[(lo=(int) a      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(a>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w5 = ((long)(  (input[ offset         ] & 0xff)
-                         | ((input[ offset      + 1] & 0xff) <<  8)
-                         | ((input[ offset      + 2] & 0xff) << 16)
-                         | ( input[ offset      + 3] << 24)) & 0xffffffffL)
-                | ((long)(  (input[ offset      + 4] & 0xff)
-                         | ((input[ offset      + 5] & 0xff) <<  8)
-                         | ((input[(offset+=10) - 4] & 0xff) << 16)
-                         | ( input[ offset      - 3] << 24)) << 32));
-        c = (((S3[(lo>>> 8         ) & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8         ) & 0xff] ^ S0[ hi>>>24        ]) + c) * 5
-            - (S0[(lo=(int) b      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(b>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w6 = ((long)(  (input[ offset      - 2] & 0xff)
-                         | ((input[ offset      - 1] & 0xff) <<  8)
-                         | ((input[ offset         ] & 0xff) << 16)
-                         | ( input[ offset      + 1] << 24)) & 0xffffffffL)
-                | ((long)(  (input[ offset      + 2] & 0xff)
-                         | ((input[ offset      + 3] & 0xff) <<  8)
-                         | ((input[ offset      + 4] & 0xff) << 16)
-                         | ( input[ offset      + 5] << 24)) << 32));
-        a = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + a) * 5
-            - (S0[(lo=(int) c      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(c>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w7 = ((long)(  (input[(offset+=10) - 4] & 0xff)
-                         | ((input[ offset      - 3] & 0xff) <<  8)
-                         | ((input[ offset      - 2] & 0xff) << 16)
-                         | ( input[ offset      - 1] << 24)) & 0xffffffffL)
-                | ((long)(  (input[ offset         ] & 0xff)
-                         | ((input[ offset      + 1] & 0xff) <<  8)
-                         | ((input[ offset      + 2] & 0xff) << 16)
-                         | ( input[ offset      + 3] << 24)) << 32));
-        b =  ((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + b) * 5
-            - (S0[(lo=(int) a      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(a>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]);
-        c =  ((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + c) * 5;
-        /* Start scheduling the current input set before next pass. */
-        w7 ^= w6 -= (w5 += w4 ^= w3 -= (w2 += w1 ^= w0 -= w7 
-                                                        ^ 0xa5a5a5a5a5a5a5a5L
-                                       ) ^ ((~w1) << 19)
-                    ) ^ ((~w4) >>> 23);
-        /* Second pass on scheduled input, with multiplier equal to 7. */
-        c = ( c
-            - (S0[(lo=(int)(b ^= w0 += w7)) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(b>>>32)       ) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w1 -= (w0) ^ ((~w7) << 19));
-        a = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + a) * 7
-            - (S0[(lo=(int) c      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(c>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w2 ^= w1);
-        b = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + b) * 7
-            - (S0[(lo=(int) a      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(a>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-         ^ (w3 += w2);
-        c = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + c) * 7
-            - (S0[(lo=(int) b      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(b>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w4 -= w3 ^ ((~w2) >>> 23));
-        a = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + a) * 7
-            - (S0[(lo=(int) c      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(c>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w5 ^= w4);
-        b = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + b) * 7
-            - (S0[(lo=(int) a      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(a>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w6 += w5);
-        c = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + c) * 7
-            - (S0[(lo=(int) b      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(b>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w7 -= w6 ^ 0x0123456789abcdefL);
-        a =  ((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + a) * 7
-            - (S0[(lo=(int) c      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(c>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]);
-        b =  ((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + b) * 7;
-        /* Start scheduling the current input set before next pass. */
-        w7 ^= w6 -= (w5 += w4 ^= w3 -= (w2 += w1 ^= w0 -= w7 
-                                                        ^ 0xa5a5a5a5a5a5a5a5L
-                                       ) ^ ((~w1) << 19)
-                    ) ^ ((~w4) >>> 23);
-        /* Third pass on scheduled input, with multiplier equal to 9.
-         * The standard Tiger algorithm currently perform only
-         * one pass of this type with this schedule. */
-        b = ( b
-            - (S0[(lo=(int)(a ^= w0 += w7)) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(a>>>32)       ) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w1 -= w0 ^ ((~w7) << 19));
-        c = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + c) * 9
-            - (S0[(lo=(int) b      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(b>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w2 ^= w1);
-        a = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + a) * 9
-            - (S0[(lo=(int) c      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(c>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w3 += w2);
-        b = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + b) * 9
-            - (S0[(lo=(int) a      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(a>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w4 -= w3 ^ ((~w2) >>> 23));
-        c = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + c) * 9
-            - (S0[(lo=(int) b      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(b>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w5 ^= w4);
-        a = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + a) * 9
-            - (S0[(lo=(int) c      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(c>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w6 += w5);
-        hB = (
-        b = (((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + b) * 9
-            - (S0[(lo=(int) a      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(a>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]))
-          ^ (w7 - (w6 ^ 0x0123456789abcdefL))
-        ) - hB;
-        hC +=((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + c) * 9
-            - (S0[(lo=(int) b      ) & 0xff] ^ S1[(lo>>>16) & 0xff] ^
-               S2[(hi=(int)(b>>>32)) & 0xff] ^ S3[(hi>>>16) & 0xff]);
-        hA ^=((S3[(lo>>> 8)          & 0xff] ^ S2[ lo>>>24        ] ^
-               S1[(hi>>> 8)          & 0xff] ^ S0[ hi>>>24        ]) + a) * 9;
-    }
-
     /**
      * Precomputed constant Tiger "S-Boxes" in 64-bit format.
      * Each of these four table have 256 elements.
@@ -1100,4 +559,564 @@ public final class Tiger extends MessageDigest implements Cloneable {
         /* 1018 */ 0xcb0c0708705a36a3L, /* 1019 */ 0xe74d14754f986044L,
         /* 1020 */ 0xcd56d9430ea8280eL, /* 1021 */ 0xc12591d7535f5065L,
         /* 1022 */ 0xc83223f1720aef96L, /* 1023 */ 0xc3a0396f7363a51fL};
+    /**
+     * Private Contextual byte count, send in the next block,
+     * after the ending padded block.
+     */
+    private long bytes;
+    /**
+     * Private context for incomplete blocks and padded bytes.
+     * INVARIANT: padded must be in 0..63.
+     * When the padded reaches 64, a new block is computed, and
+     * the 56 last bytes are kept in the padded history.
+     */
+    private int padded;
+    private byte[] pad;
+    /**
+     * Private context that contains the current digest key.
+     */
+    private long hA, hB, hC;
+
+    /**
+     * Creates a Tiger object with default initial state.
+     */
+    public Tiger() {
+        super("Tiger");
+        pad = new byte[64];
+        init();
+    }
+
+    /**
+     * Clones this object.
+     */
+    public Object clone() throws CloneNotSupportedException {
+        final Tiger that = (Tiger) super.clone();
+        that.pad = (byte[]) this.pad.clone();
+        return that;
+    }
+
+    /**
+     * Reset then initialize the digest context.<br/>
+     * <p>
+     * Overrides the protected abstract method of
+     * <code>java.security.MessageDigestSpi</code>.
+     *
+     * @modifies this
+     */
+    public void engineReset() {
+        int i = 60;
+        final byte[] buf = pad;
+        do {
+            buf[i - 4] = (byte) 0x00;
+            buf[i - 3] = (byte) 0x00;
+            buf[i - 2] = (byte) 0x00;
+            buf[i - 1] = (byte) 0x00;
+            buf[i] = (byte) 0x00;
+            buf[i + 1] = (byte) 0x00;
+            buf[i + 2] = (byte) 0x00;
+            buf[i + 3] = (byte) 0x00;
+        } while ((i -= 8) >= 0);
+        padded = 0;
+        bytes = 0L;
+        init();
+    }
+
+    /**
+     * Initialize the digest context.
+     *
+     * @modifies this
+     */
+    protected void init() {
+        hA = 0x0123456789abcdefL;
+        hB = 0xfedcba9876543210L;
+        hC = 0xf096a5b4c3b2e187L;
+    }
+
+    /**
+     * Updates the digest using the specified byte.
+     * Requires internal buffering, and may be slow.<br/>
+     * <p>
+     * Overrides the protected abstract method of
+     * <code>java.security.MessageDigestSpi</code>.
+     *
+     * @param input the byte to use for the update.
+     * @modifies this
+     */
+    public void engineUpdate(byte input) {
+        bytes++;
+        if (padded < 63) {
+            pad[padded++] = input;
+            return;
+        }
+        pad[63] = input;
+        computeBlock(pad, padded = 0);
+    }
+
+    /**
+     * Updates the digest using the specified array of bytes,
+     * starting at the specified offset.<br/>
+     * <p>
+     * Input length can be any size. May require internal buffering,
+     * if input blocks are not multiple of 64 bytes.<br/>
+     * <p>
+     * Overrides the protected abstract method of
+     * <code>java.security.MessageDigestSpi</code>.
+     *
+     * @param input  the array of bytes to use for the update.
+     * @param offset the offset to start from in the array of bytes.
+     * @param length the number of bytes to use, starting at offset.
+     * @modifies this
+     */
+    public void engineUpdate(byte[] input, int offset, int length) {
+        if (offset >= 0 && length >= 0 && offset + length <= input.length) {
+            bytes += length;
+            /* Terminate the previous block. */
+            if (padded > 0 && padded + length >= 64) {
+                int remaining;
+                System.arraycopy(input, offset, pad, padded,
+                        remaining = 64 - padded);
+                computeBlock(pad, padded = 0);
+                offset += remaining;
+                length -= remaining;
+            }
+            /* Loop on large sets of complete blocks. */
+            while (length >= 512) {
+                computeBlock(input, offset);
+                computeBlock(input, offset + 64);
+                computeBlock(input, offset + 128);
+                computeBlock(input, offset + 192);
+                computeBlock(input, offset + 256);
+                computeBlock(input, offset + 320);
+                computeBlock(input, offset + 384);
+                computeBlock(input, offset + 448);
+                offset += 512;
+                length -= 512;
+            }
+            /* Loop on remaining complete blocks. */
+            while (length >= 64) {
+                computeBlock(input, offset);
+                offset += 64;
+                length -= 64;
+            }
+            /* remaining bytes kept for next block. */
+            if (length > 0) {
+                System.arraycopy(input, offset, pad, padded, length);
+                padded += length;
+            }
+            return;
+        }
+        throw new ArrayIndexOutOfBoundsException(offset);
+    }
+
+    /**
+     * Completes the hash computation by performing final operations
+     * such as padding. Computes the final hash and returns the final
+     * value as a byte[24] array. Once engineDigest has been called,
+     * the engine will be automatically reset as specified in the
+     * Java Security MessageDigest specification.<br/>
+     * <p>
+     * For faster operations with multiple digests, allocate your own
+     * array and use engineDigest(byte[], int offset, int len).<br/>
+     * <p>
+     * Overrides the protected abstract method of
+     * <code>java.security.MessageDigestSpi</code>.
+     *
+     * @return the length of the digest stored in the output buffer.
+     * @modifies this
+     */
+    public byte[] engineDigest() {
+        try {
+            final byte hashvalue[] = new byte[24]; /* digest length in bytes */
+            engineDigest(hashvalue, 0, 24); /* digest length in bytes */
+            return hashvalue;
+        } catch (DigestException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the digest length in bytes. Can be used to allocate your own
+     * output buffer when computing multiple digests.<br/>
+     * <p>
+     * Overrides the protected abstract method of
+     * <code>java.security.MessageDigestSpi</code>.
+     *
+     * @return the digest length in bytes.
+     */
+    public int engineGetDigestLength() {
+        return 24; /* digest length in bytes */
+    }
+
+    /**
+     * Completes the hash computation by performing final operations
+     * such as padded. Once engineDigest has been called, the engine
+     * will be automatically reset (see engineReset).
+     * <p>
+     * Overrides the protected abstract method of
+     * java.security.MessageDigestSpi.
+     *
+     * @param hashvalue the output buffer in which to store the digest.
+     * @param offset    offset to start from in the output buffer
+     * @param length    number of bytes within buf allotted for the digest.
+     *                  Both this default implementation and the SUN provider
+     *                  do not return partial digests.  The presence of this
+     *                  parameter is solely for consistency in our API's.
+     *                  If the value of this parameter is less than the
+     *                  actual digest length, the method will throw a
+     *                  DigestException.  This parameter is ignored if its
+     *                  value is greater than or equal to the actual digest
+     *                  length.
+     * @return the length of the digest stored in the output buffer.
+     * @modifies this
+     */
+    public int engineDigest(final byte[] hashvalue, int offset,
+                            final int length) throws DigestException {
+        if (length >= 24) { /* digest length in bytes */
+            if (hashvalue.length - offset >= 24) { /* digest length in bytes */
+                /* Flush the trailing bytes, adding padded bytes into last
+                 * blocks. */
+                int i;
+                /* Add padded null bytes but replace the last 8 padded bytes
+                 * by the little-endian 64-bit digested message bit-length. */
+                final byte[] buf;
+                (buf = pad)[i = padded] = (byte) 0x01;/* required 1st padded byte */
+                /* Check if 8 bytes are available in pad to store the total
+                 * message size */
+                switch (i) { /* INVARIANT: i must be in [0..63] */
+                    case 56:
+                        buf[57] = (byte) 0x00; /* no break; falls thru */
+                    case 57:
+                        buf[58] = (byte) 0x00; /* no break; falls thru */
+                    case 58:
+                        buf[59] = (byte) 0x00; /* no break; falls thru */
+                    case 59:
+                        buf[60] = (byte) 0x00; /* no break; falls thru */
+                    case 60:
+                        buf[61] = (byte) 0x00; /* no break; falls thru */
+                    case 61:
+                        buf[62] = (byte) 0x00; /* no break; falls thru */
+                    case 62:
+                        buf[63] = (byte) 0x00; /* no break; falls thru */
+                    case 63:
+                        computeBlock(buf, 0);
+                        i = -1;
+                }
+                /* Clear the rest of the 56 first bytes of pad[]. */
+                switch (i & 7) {
+                    case 7:
+                        i -= 3;
+                        break;
+                    case 6:
+                        buf[(i -= 2) + 3] = (byte) 0x00;
+                        break;
+                    case 5:
+                        buf[(i -= 1) + 2] = (byte) 0x00;
+                        buf[i + 3] = (byte) 0x00;
+                        break;
+                    case 4:
+                        buf[i + 1] = (byte) 0x00;
+                        buf[i + 2] = (byte) 0x00;
+                        buf[i + 3] = (byte) 0x00;
+                        break;
+                    case 3:
+                        buf[(i += 1)] = (byte) 0x00;
+                        buf[i + 1] = (byte) 0x00;
+                        buf[i + 2] = (byte) 0x00;
+                        buf[i + 3] = (byte) 0x00;
+                        break;
+                    case 2:
+                        buf[(i += 2) - 1] = (byte) 0x00;
+                        buf[i] = (byte) 0x00;
+                        buf[i + 1] = (byte) 0x00;
+                        buf[i + 2] = (byte) 0x00;
+                        buf[i + 3] = (byte) 0x00;
+                        break;
+                    case 1:
+                        buf[(i += 3) - 2] = (byte) 0x00;
+                        buf[i - 1] = (byte) 0x00;
+                        buf[i] = (byte) 0x00;
+                        buf[i + 1] = (byte) 0x00;
+                        buf[i + 2] = (byte) 0x00;
+                        buf[i + 3] = (byte) 0x00;
+                        break;
+                    case 0:
+                        buf[(i += 4) - 3] = (byte) 0x00;
+                        buf[i - 2] = (byte) 0x00;
+                        buf[i - 1] = (byte) 0x00;
+                        buf[i] = (byte) 0x00;
+                        buf[i + 1] = (byte) 0x00;
+                        buf[i + 2] = (byte) 0x00;
+                        buf[i + 3] = (byte) 0x00;
+                        break;
+                }
+                while ((i += 8) <= 52) {
+                    buf[i - 4] = (byte) 0x00;
+                    buf[i - 3] = (byte) 0x00;
+                    buf[i - 2] = (byte) 0x00;
+                    buf[i - 1] = (byte) 0x00;
+                    buf[i] = (byte) 0x00;
+                    buf[i + 1] = (byte) 0x00;
+                    buf[i + 2] = (byte) 0x00;
+                    buf[i + 3] = (byte) 0x00;
+                }
+                /* Convert the message size from bytes to little-endian bits. */
+                buf[56] = (byte) (i = (int) bytes << 3);
+                buf[57] = (byte) (i >>> 8);
+                buf[58] = (byte) (i >>> 16);
+                buf[59] = (byte) (i >>> 24);
+                buf[60] = (byte) (i = (int) (bytes >>> 29));
+                buf[61] = (byte) (i >>> 8);
+                buf[62] = (byte) (i >>> 16);
+                buf[63] = (byte) (i >>> 24);
+                computeBlock(pad, 0);
+                /* Return the computed digest in little-endian byte order. */
+                hashvalue[offset] = (byte) (i = (int) hA);
+                hashvalue[offset + 1] = (byte) (i >>> 8);
+                hashvalue[offset + 2] = (byte) (i >>> 16);
+                hashvalue[offset + 3] = (byte) (i >>> 24);
+                hashvalue[offset + 4] = (byte) (i = (int) (hA >>> 32));
+                hashvalue[offset + 5] = (byte) (i >>> 8);
+                hashvalue[(offset += 10) - 4] = (byte) (i >>> 16);
+                hashvalue[offset - 3] = (byte) (i >>> 24);
+                hashvalue[offset - 2] = (byte) (i = (int) hB);
+                hashvalue[offset - 1] = (byte) (i >>> 8);
+                hashvalue[offset] = (byte) (i >>> 16);
+                hashvalue[offset + 1] = (byte) (i >>> 24);
+                hashvalue[offset + 2] = (byte) (i = (int) (hB >>> 32));
+                hashvalue[offset + 3] = (byte) (i >>> 8);
+                hashvalue[offset + 4] = (byte) (i >>> 16);
+                hashvalue[offset + 5] = (byte) (i >>> 24);
+                hashvalue[(offset += 10) - 4] = (byte) (i = (int) hC);
+                hashvalue[offset - 3] = (byte) (i >>> 8);
+                hashvalue[offset - 2] = (byte) (i >>> 16);
+                hashvalue[offset - 1] = (byte) (i >>> 24);
+                hashvalue[offset] = (byte) (i = (int) (hC >>> 32));
+                hashvalue[offset + 1] = (byte) (i >>> 8);
+                hashvalue[offset + 2] = (byte) (i >>> 16);
+                hashvalue[offset + 3] = (byte) (i >>> 24);
+                engineReset(); /* clear the evidence */
+                return 24; /* digest length in bytes */
+            }
+            throw new DigestException(
+                    "insufficient space in output buffer to store the digest");
+        }
+        throw new DigestException("partial digests not returned");
+    }
+
+    /**
+     * Updates the digest using the specified array of bytes,
+     * starting at the specified offset, but an implied length
+     * of exactly 64 bytes.<br/>
+     * <p>
+     * Requires no internal buffering, but assumes a fixed input size,
+     * in which the required padded bytes may have been added.
+     *
+     * @param input  the array of bytes to use for the update.
+     * @param offset the offset to start from in the array of bytes.
+     * @modifies this
+     */
+    private void computeBlock(final byte[] input, int offset) {
+        /* Local temporary work variables for intermediate digests. */
+        int lo, hi;
+        long a, b, c;
+        /* Cache the input block into the local working set of 64-bit
+         * values, in little-endian byte order. Be careful when
+         * widening bytes or integers due to sign extension! */
+        long w0, w1, w2, w3, w4, w5, w6, w7;
+        /* First pass on little endian input, with multiplier equal to 5. */
+        c = hC
+                ^ (w0 = ((long) ((input[offset] & 0xff)
+                | ((input[offset + 1] & 0xff) << 8)
+                | ((input[offset + 2] & 0xff) << 16)
+                | (input[offset + 3] << 24)) & 0xffffffffL)
+                | ((long) ((input[offset + 4] & 0xff)
+                | ((input[offset + 5] & 0xff) << 8)
+                | ((input[(offset += 10) - 4] & 0xff) << 16)
+                | (input[offset - 3] << 24)) << 32));
+        a = (hA
+                - (S0[(lo = (int) c) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (c >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w1 = ((long) ((input[offset - 2] & 0xff)
+                | ((input[offset - 1] & 0xff) << 8)
+                | ((input[offset] & 0xff) << 16)
+                | (input[offset + 1] << 24)) & 0xffffffffL)
+                | ((long) ((input[offset + 2] & 0xff)
+                | ((input[offset + 3] & 0xff) << 8)
+                | ((input[offset + 4] & 0xff) << 16)
+                | (input[offset + 5] << 24)) << 32));
+        b = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + hB) * 5
+                - (S0[(lo = (int) a) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (a >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w2 = ((long) ((input[(offset += 10) - 4] & 0xff)
+                | ((input[offset - 3] & 0xff) << 8)
+                | ((input[offset - 2] & 0xff) << 16)
+                | (input[offset - 1] << 24)) & 0xffffffffL)
+                | ((long) ((input[offset] & 0xff)
+                | ((input[offset + 1] & 0xff) << 8)
+                | ((input[offset + 2] & 0xff) << 16)
+                | (input[offset + 3] << 24)) << 32));
+        c = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + c) * 5
+                - (S0[(lo = (int) b) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (b >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w3 = ((long) ((input[offset + 4] & 0xff)
+                | ((input[offset + 5] & 0xff) << 8)
+                | ((input[(offset += 10) - 4] & 0xff) << 16)
+                | (input[offset - 3] << 24)) & 0xffffffffL)
+                | ((long) ((input[offset - 2] & 0xff)
+                | ((input[offset - 1] & 0xff) << 8)
+                | ((input[offset] & 0xff) << 16)
+                | (input[offset + 1] << 24)) << 32));
+        a = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + a) * 5
+                - (S0[(lo = (int) c) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (c >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w4 = ((long) ((input[offset + 2] & 0xff)
+                | ((input[offset + 3] & 0xff) << 8)
+                | ((input[offset + 4] & 0xff) << 16)
+                | (input[offset + 5] << 24)) & 0xffffffffL)
+                | ((long) ((input[(offset += 10) - 4] & 0xff)
+                | ((input[offset - 3] & 0xff) << 8)
+                | ((input[offset - 2] & 0xff) << 16)
+                | (input[offset - 1] << 24)) << 32));
+        b = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + b) * 5
+                - (S0[(lo = (int) a) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (a >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w5 = ((long) ((input[offset] & 0xff)
+                | ((input[offset + 1] & 0xff) << 8)
+                | ((input[offset + 2] & 0xff) << 16)
+                | (input[offset + 3] << 24)) & 0xffffffffL)
+                | ((long) ((input[offset + 4] & 0xff)
+                | ((input[offset + 5] & 0xff) << 8)
+                | ((input[(offset += 10) - 4] & 0xff) << 16)
+                | (input[offset - 3] << 24)) << 32));
+        c = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + c) * 5
+                - (S0[(lo = (int) b) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (b >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w6 = ((long) ((input[offset - 2] & 0xff)
+                | ((input[offset - 1] & 0xff) << 8)
+                | ((input[offset] & 0xff) << 16)
+                | (input[offset + 1] << 24)) & 0xffffffffL)
+                | ((long) ((input[offset + 2] & 0xff)
+                | ((input[offset + 3] & 0xff) << 8)
+                | ((input[offset + 4] & 0xff) << 16)
+                | (input[offset + 5] << 24)) << 32));
+        a = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + a) * 5
+                - (S0[(lo = (int) c) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (c >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w7 = ((long) ((input[(offset += 10) - 4] & 0xff)
+                | ((input[offset - 3] & 0xff) << 8)
+                | ((input[offset - 2] & 0xff) << 16)
+                | (input[offset - 1] << 24)) & 0xffffffffL)
+                | ((long) ((input[offset] & 0xff)
+                | ((input[offset + 1] & 0xff) << 8)
+                | ((input[offset + 2] & 0xff) << 16)
+                | (input[offset + 3] << 24)) << 32));
+        b = ((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + b) * 5
+                - (S0[(lo = (int) a) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (a >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]);
+        c = ((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + c) * 5;
+        /* Start scheduling the current input set before next pass. */
+        w7 ^= w6 -= (w5 += w4 ^= w3 -= (w2 += w1 ^= w0 -= w7
+                ^ 0xa5a5a5a5a5a5a5a5L
+        ) ^ ((~w1) << 19)
+        ) ^ ((~w4) >>> 23);
+        /* Second pass on scheduled input, with multiplier equal to 7. */
+        c = (c
+                - (S0[(lo = (int) (b ^= w0 += w7)) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (b >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w1 -= (w0) ^ ((~w7) << 19));
+        a = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + a) * 7
+                - (S0[(lo = (int) c) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (c >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w2 ^= w1);
+        b = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + b) * 7
+                - (S0[(lo = (int) a) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (a >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w3 += w2);
+        c = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + c) * 7
+                - (S0[(lo = (int) b) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (b >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w4 -= w3 ^ ((~w2) >>> 23));
+        a = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + a) * 7
+                - (S0[(lo = (int) c) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (c >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w5 ^= w4);
+        b = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + b) * 7
+                - (S0[(lo = (int) a) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (a >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w6 += w5);
+        c = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + c) * 7
+                - (S0[(lo = (int) b) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (b >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w7 -= w6 ^ 0x0123456789abcdefL);
+        a = ((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + a) * 7
+                - (S0[(lo = (int) c) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (c >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]);
+        b = ((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + b) * 7;
+        /* Start scheduling the current input set before next pass. */
+        w7 ^= w6 -= (w5 += w4 ^= w3 -= (w2 += w1 ^= w0 -= w7
+                ^ 0xa5a5a5a5a5a5a5a5L
+        ) ^ ((~w1) << 19)
+        ) ^ ((~w4) >>> 23);
+        /* Third pass on scheduled input, with multiplier equal to 9.
+         * The standard Tiger algorithm currently perform only
+         * one pass of this type with this schedule. */
+        b = (b
+                - (S0[(lo = (int) (a ^= w0 += w7)) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (a >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w1 -= w0 ^ ((~w7) << 19));
+        c = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + c) * 9
+                - (S0[(lo = (int) b) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (b >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w2 ^= w1);
+        a = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + a) * 9
+                - (S0[(lo = (int) c) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (c >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w3 += w2);
+        b = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + b) * 9
+                - (S0[(lo = (int) a) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (a >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w4 -= w3 ^ ((~w2) >>> 23));
+        c = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + c) * 9
+                - (S0[(lo = (int) b) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (b >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w5 ^= w4);
+        a = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + a) * 9
+                - (S0[(lo = (int) c) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (c >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                ^ (w6 += w5);
+        hB = (
+                b = (((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                        S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + b) * 9
+                        - (S0[(lo = (int) a) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                        S2[(hi = (int) (a >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]))
+                        ^ (w7 - (w6 ^ 0x0123456789abcdefL))
+        ) - hB;
+        hC += ((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + c) * 9
+                - (S0[(lo = (int) b) & 0xff] ^ S1[(lo >>> 16) & 0xff] ^
+                S2[(hi = (int) (b >>> 32)) & 0xff] ^ S3[(hi >>> 16) & 0xff]);
+        hA ^= ((S3[(lo >>> 8) & 0xff] ^ S2[lo >>> 24] ^
+                S1[(hi >>> 8) & 0xff] ^ S0[hi >>> 24]) + a) * 9;
+    }
 }

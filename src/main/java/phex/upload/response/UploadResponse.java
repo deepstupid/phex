@@ -30,157 +30,132 @@ import phex.upload.UploadState;
 
 import java.io.IOException;
 
-public class UploadResponse
-{
+public class UploadResponse {
     protected HTTPResponse httpResponse;
 
-    public UploadResponse( HTTPResponse httpResponse )
-    {
+    public UploadResponse(HTTPResponse httpResponse) {
         this.httpResponse = httpResponse;
     }
-    
-    protected UploadResponse()
-    {
-    }
-    
-    @SuppressWarnings("unused")
-    public int fillBody( ByteBuffer byteBuffer )
-        throws IOException
-    {
-        throw new UnsupportedOperationException( "No Data." );
-    }
-    
-    public int remainingBody()
-    {
-        return 0;
-    }
-    
-    public void countUpload()
-    {
-    }
-    
-    public void close()
-    {        
+
+    protected UploadResponse() {
     }
 
-    
-    /////// Decorated HTTPResponse methods ///////
-    public void addHttpHeader( HTTPHeader header )
-    {
-        httpResponse.addHeader( header );
+    public static final UploadResponse get404FileNotFound() {
+        HTTPResponse response = new HTTPResponse((short) HTTPCodes.HTTP_404_Not_Found,
+                "File not found", true);
+        return new UploadResponse(response);
     }
-    
-    public String buildHTTPResponseString()
-    {
-        return httpResponse.buildHTTPResponseString();
-    }
-    /////////////////////////////////////////////
-    
-    
-    
-    
-    /////// Static factory methods to help create common response headers ///////
 
-    public static final UploadResponse get404FileNotFound()
-    {
-        HTTPResponse response = new HTTPResponse( (short)HTTPCodes.HTTP_404_Not_Found, 
-            "File not found", true );
-        return new UploadResponse( response );
-    }
-    
-    public static final UploadResponse get500RangeNotParseable( 
-        ShareFile shareFile, UploadState uploadState )
-    {
-        HTTPResponse response = new HTTPResponse( (short)HTTPCodes.HTTP_500_Internal_Server_Error,
-            "Requested Range Not Parseable", true);
-        
-        UploadResponse uploadResponse = new UploadResponse( response );
+    public static final UploadResponse get500RangeNotParseable(
+            ShareFile shareFile, UploadState uploadState) {
+        HTTPResponse response = new HTTPResponse((short) HTTPCodes.HTTP_500_Internal_Server_Error,
+                "Requested Range Not Parseable", true);
+
+        UploadResponse uploadResponse = new UploadResponse(response);
 
         // append alt locs
-        appendAltLocs( uploadResponse, shareFile, uploadState );
-        
-        return new UploadResponse( response );
+        appendAltLocs(uploadResponse, shareFile, uploadState);
+
+        return new UploadResponse(response);
     }
-    
-    public static final UploadResponse get503Queued( int queuePosition, int queueLength,
-        int uploadLimit, int pollMin, int pollMax, ShareFile shareFile, 
-        UploadState uploadState )
-    {
-        HTTPResponse response = new HTTPResponse((short)HTTPCodes.HTTP_503_Service_Unavailable,
-            "Remotely Queued", true);
+
+    public static final UploadResponse get503Queued(int queuePosition, int queueLength,
+                                                    int uploadLimit, int pollMin, int pollMax, ShareFile shareFile,
+                                                    UploadState uploadState) {
+        HTTPResponse response = new HTTPResponse((short) HTTPCodes.HTTP_503_Service_Unavailable,
+                "Remotely Queued", true);
         // raise index position by one when used as a http queue parameter
-        XQueueParameters xQueueParas = new XQueueParameters( queuePosition+1,
-            queueLength, uploadLimit, pollMin, pollMax);
+        XQueueParameters xQueueParas = new XQueueParameters(queuePosition + 1,
+                queueLength, uploadLimit, pollMin, pollMax);
         response.addHeader(new HTTPHeader(GnutellaHeaderNames.X_QUEUE,
-            xQueueParas.buildHTTPString()));
+                xQueueParas.buildHTTPString()));
 
-        UploadResponse uploadResponse = new UploadResponse( response );
+        UploadResponse uploadResponse = new UploadResponse(response);
 
         // append alt locs
-        appendAltLocs( uploadResponse, shareFile, uploadState );
-        
-        return new UploadResponse( response );
-    }
-    
-    public static final UploadResponse get503UploadLimitReachedForIP()
-    {
-        HTTPResponse response = new HTTPResponse( (short)HTTPCodes.HTTP_503_Service_Unavailable, 
-            "Upload Limit Reached for IP", true );
-        return new UploadResponse( response );
+        appendAltLocs(uploadResponse, shareFile, uploadState);
+
+        return new UploadResponse(response);
     }
 
-    public static UploadResponse get503UploadLimitReached( ShareFile shareFile, UploadState uploadState )
-    {
-        HTTPResponse response = new HTTPResponse( (short)HTTPCodes.HTTP_503_Service_Unavailable,
-            "Upload Limit Reached", true );
-        
-        UploadResponse uploadResponse = new UploadResponse( response );
-        
+    public static final UploadResponse get503UploadLimitReachedForIP() {
+        HTTPResponse response = new HTTPResponse((short) HTTPCodes.HTTP_503_Service_Unavailable,
+                "Upload Limit Reached for IP", true);
+        return new UploadResponse(response);
+    }
+
+    public static UploadResponse get503UploadLimitReached(ShareFile shareFile, UploadState uploadState) {
+        HTTPResponse response = new HTTPResponse((short) HTTPCodes.HTTP_503_Service_Unavailable,
+                "Upload Limit Reached", true);
+
+        UploadResponse uploadResponse = new UploadResponse(response);
+
         // append alt locs
-        appendAltLocs( uploadResponse, shareFile, uploadState );
-        
+        appendAltLocs(uploadResponse, shareFile, uploadState);
+
         return uploadResponse;
     }
-    
-    public static void appendAltLocs( UploadResponse response, ShareFile shareFile, 
-        UploadState uploadState )
-    {
-        if ( shareFile.getAltLocCount() == 0 )
-        {
+
+    public static void appendAltLocs(UploadResponse response, ShareFile shareFile,
+                                     UploadState uploadState) {
+        if (shareFile.getAltLocCount() == 0) {
             return;
         }
         AltLocContainer altLocContainer = shareFile.getAltLocContainer();
         HTTPHeader header = altLocContainer.getAltLocHTTPHeaderForAddress(
-            GnutellaHeaderNames.X_ALT, uploadState.getHostAddress(),
-            uploadState.getSendAltLocSet() );
-        if (header != null)
-        {
+                GnutellaHeaderNames.X_ALT, uploadState.getHostAddress(),
+                uploadState.getSendAltLocSet());
+        if (header != null) {
             response.addHttpHeader(header);
         }
     }
-    
-    public static void addPushProxyResponseHeader( DestAddress[] pushProxyAddresses,
-        UploadResponse response )
-    {
-        if ( pushProxyAddresses == null )
-        {
+    /////////////////////////////////////////////
+
+
+    /////// Static factory methods to help create common response headers ///////
+
+    public static void addPushProxyResponseHeader(DestAddress[] pushProxyAddresses,
+                                                  UploadResponse response) {
+        if (pushProxyAddresses == null) {
             return;
         }
         StringBuffer headerValue = new StringBuffer();
-        int count = Math.min( 4, pushProxyAddresses.length);
-        for (int i = 0; i < count; i++)
-        {
-            if ( i > 0 )
-            {
-                headerValue.append( "," );
+        int count = Math.min(4, pushProxyAddresses.length);
+        for (int i = 0; i < count; i++) {
+            if (i > 0) {
+                headerValue.append(",");
             }
-            headerValue.append( pushProxyAddresses[i].getFullHostName() );
-        }        
-        if ( headerValue.length() > 0 )
-        {
-            HTTPHeader header = new HTTPHeader( GnutellaHeaderNames.X_PUSH_PROXY,
-                headerValue.toString() );
-            response.addHttpHeader( header );
+            headerValue.append(pushProxyAddresses[i].getFullHostName());
         }
+        if (headerValue.length() > 0) {
+            HTTPHeader header = new HTTPHeader(GnutellaHeaderNames.X_PUSH_PROXY,
+                    headerValue.toString());
+            response.addHttpHeader(header);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public int fillBody(ByteBuffer byteBuffer)
+            throws IOException {
+        throw new UnsupportedOperationException("No Data.");
+    }
+
+    public int remainingBody() {
+        return 0;
+    }
+
+    public void countUpload() {
+    }
+
+    public void close() {
+    }
+
+    /////// Decorated HTTPResponse methods ///////
+    public void addHttpHeader(HTTPHeader header) {
+        httpResponse.addHeader(header);
+    }
+
+    public String buildHTTPResponseString() {
+        return httpResponse.buildHTTPResponseString();
     }
 }

@@ -29,13 +29,11 @@ import phex.xml.sax.rules.DAndConcatCondition;
 import javax.xml.parsers.SAXParser;
 
 /**
- * 
+ *
  */
-public class AndConcatConditionHandler extends ConditionListHolderHandler
-{
-    public AndConcatConditionHandler( DAndConcatCondition andCondition, 
-        Attributes attributes, DefaultHandler parent, SAXParser parser )
-    {
+public class AndConcatConditionHandler extends ConditionListHolderHandler {
+    public AndConcatConditionHandler(DAndConcatCondition andCondition,
+                                     Attributes attributes, DefaultHandler parent, SAXParser parser) {
         super(DAndConcatCondition.ELEMENT_NAME, andCondition, parent, parser);
     }
 }

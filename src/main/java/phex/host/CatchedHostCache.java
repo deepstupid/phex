@@ -33,87 +33,82 @@ import java.util.TreeSet;
  * The CatchedHostCache provides a container with a limited size.
  * The container stores CaughtHosts ordered by successful connection
  * probability. When the container is full, the element with the
- * lowest priority is dropped. 
+ * lowest priority is dropped.
  */
-public class CatchedHostCache
-{
+public class CatchedHostCache {
     private final TreeSet<CaughtHost> sortedHosts;
     private final Map<DestAddress, CaughtHost> addressHostMapping;
-    
-    public CatchedHostCache( )
-    {
+
+    public CatchedHostCache() {
         sortedHosts = new TreeSet<>(new CaughtHostComparator());
         addressHostMapping = new HashMap<>();
     }
-    
+
     /**
      * Returns the cached CaughtHost associated by this HostAddress.
+     *
      * @param address the HostAddress to look up the CaughtHost for.
      * @return the CaughtHost of the given HostAddress or null if not available.
      */
-    public synchronized CaughtHost getCaughHost( DestAddress address )
-    {
-        return addressHostMapping.get( address );
+    public synchronized CaughtHost getCaughHost(DestAddress address) {
+        return addressHostMapping.get(address);
     }
-    
+
     /**
      * Adds the given CaughtHost to the host cache if no already present. If the
      * cache is full the element with the lowest successful connection
      * probability is dropped.
+     *
      * @param host the CaughtHost to add.
      */
-    public synchronized void add( CaughtHost host )
-    {
-        if (addressHostMapping.putIfAbsent( host.getHostAddress(), host )!=null) {
+    public synchronized void add(CaughtHost host) {
+        if (addressHostMapping.putIfAbsent(host.getHostAddress(), host) != null) {
             return;
         }
         sortedHosts.add(host);
 
-        if ( sortedHosts.size() >= NetworkPrefs.MaxHostInHostCache.get()) {
-            addressHostMapping.put( host.getHostAddress(), host );
-            sortedHosts.add( host );
-            if ( sortedHosts.size() >= NetworkPrefs.MaxHostInHostCache.get())
-            {
-                CaughtHost dropObject = sortedHosts.first(); 
-                remove( dropObject );
+        if (sortedHosts.size() >= NetworkPrefs.MaxHostInHostCache.get()) {
+            addressHostMapping.put(host.getHostAddress(), host);
+            sortedHosts.add(host);
+            if (sortedHosts.size() >= NetworkPrefs.MaxHostInHostCache.get()) {
+                CaughtHost dropObject = sortedHosts.first();
+                remove(dropObject);
             }
         }
         assert addressHostMapping.size() == sortedHosts.size() :
-            "CatchedHostCache out of sync. s: " + sortedHosts.toString() + " - m: " + addressHostMapping.toString();
+                "CatchedHostCache out of sync. s: " + sortedHosts.toString() + " - m: " + addressHostMapping.toString();
     }
-    
+
     /**
      * Removes the CaughtHost from the host cache.
+     *
      * @param host the CaughtHost to remove.
      */
-    public synchronized void remove( CaughtHost host )
-    {
+    public synchronized void remove(CaughtHost host) {
         CaughtHost value = addressHostMapping.remove(
-            host.getHostAddress() );
-        if ( value != null )
-        {
-            sortedHosts.remove( value );
+                host.getHostAddress());
+        if (value != null) {
+            sortedHosts.remove(value);
         }
         assert addressHostMapping.size() == sortedHosts.size() :
-            "CatchedHostCache out of sync. s: " + sortedHosts.toString() + " - m: " + addressHostMapping.toString();
+                "CatchedHostCache out of sync. s: " + sortedHosts.toString() + " - m: " + addressHostMapping.toString();
     }
-    
+
     /**
      * Clears the complete host cache.
      */
-    public synchronized void clear()
-    {
+    public synchronized void clear() {
         sortedHosts.clear();
         addressHostMapping.clear();
     }
-    
+
     /**
      * Returns a iterator of all CaughtHost reverse ordered by the successful
      * connection probability.
+     *
      * @return a reverse ordered iterator of all CaughtHost.
      */
-    public synchronized Iterator<CaughtHost> iterator()
-    {
+    public synchronized Iterator<CaughtHost> iterator() {
         return sortedHosts.iterator();
     }
 }

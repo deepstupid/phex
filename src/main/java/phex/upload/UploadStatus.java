@@ -21,58 +21,55 @@
  */
 package phex.upload;
 
-public enum UploadStatus
-{
+public enum UploadStatus {
     /**
-     * The status of a just incomming upload request before it is 
+     * The status of a just incomming upload request before it is
      * processed further.
      */
     ACCEPTING_REQUEST(false),
-    
+
     /**
      * The status of a request in the handshake phase.
      */
     HANDSHAKE(true),
-    
+
     /**
      * The status of a upload indicating that a upload is queued.
      */
     QUEUED(false),
-    
+
     /**
      * The status of a upload indicating that a thex upload is in progress.
      */
     UPLOADING_THEX(true),
-    
+
     /**
      * The status of a upload indicating that a thex upload is in progress.
      */
     UPLOADING_DATA(true),
-    
+
     /**
      * The status of a upload indicating that a upload is completed.
      */
     COMPLETED(true),
-    
+
     /**
      * The status of a upload indicating that a upload is completed.
      */
     FINISHED(false),
-    
+
     /**
      * The status of a upload indicating that a upload is aborted.
      */
     ABORTED(false);
-    
+
     private final boolean isRunningStatus;
-    
-    UploadStatus(boolean isRunningStatus)
-    {
+
+    UploadStatus(boolean isRunningStatus) {
         this.isRunningStatus = isRunningStatus;
     }
-    
-    public boolean isRunningStatus()
-    {
+
+    public boolean isRunningStatus() {
         return isRunningStatus;
     }
 }

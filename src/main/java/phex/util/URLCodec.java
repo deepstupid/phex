@@ -15,7 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package phex.util;
 
@@ -29,39 +29,34 @@ import java.util.BitSet;
 //import org.apache.commons.codec.StringEncoder;
 
 /**
- * <p>Implements the 'www-form-urlencoded' encoding scheme, 
+ * <p>Implements the 'www-form-urlencoded' encoding scheme,
  * also misleadingly known as URL encoding.</p>
- *  
- * <p>For more detailed information please refer to 
+ * <p>
+ * <p>For more detailed information please refer to
  * <a href="http://www.w3.org/TR/html4/interact/forms.html#h-17.13.4.1">
- * Chapter 17.13.4 'Form content types'</a> of the 
+ * Chapter 17.13.4 'Form content types'</a> of the
  * <a href="http://www.w3.org/TR/html4/">HTML 4.01 Specification<a></p>
- * 
- * <p> 
+ * <p>
+ * <p>
  * This codec is meant to be a replacement for standard Java classes
- * {@link java.net.URLEncoder} and {@link java.net.URLDecoder} 
- * on older Java platforms, as these classes in Java versions below 
+ * {@link java.net.URLEncoder} and {@link java.net.URLDecoder}
+ * on older Java platforms, as these classes in Java versions below
  * 1.4 rely on the platform's default charset encoding.
  * </p>
- * 
+ *
  * @author Apache Software Foundation
- * @since 1.2
  * @version $Id: URLCodec.java 3380 2006-04-14 11:49:41Z gregork $
+ * @since 1.2
  */
 public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder, StringDecoder
 {
-    
-    /**
-     * The default charset used for string decoding and encoding.
-     */
-    protected String charset = CharacterEncodingNames.UTF8;
-    
-    protected static byte ESCAPE_CHAR = '%';
+
     /**
      * BitSet of www-form-url safe characters.
      */
     protected static final BitSet WWW_FORM_URL = new BitSet(256);
-    
+    protected static byte ESCAPE_CHAR = '%';
+
     // Static initializer for www_form_url
     static {
         // alpha characters
@@ -84,6 +79,11 @@ public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder,
         WWW_FORM_URL.set(' ');
     }
 
+    /**
+     * The default charset used for string decoding and encoding.
+     */
+    protected String charset = CharacterEncodingNames.UTF8;
+
 
     /**
      * Default constructor.
@@ -94,7 +94,7 @@ public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder,
 
     /**
      * Constructor which allows for the selection of a default charset
-     * 
+     *
      * @param charset the default string charset to use.
      */
     public URLCodec(String charset) {
@@ -103,23 +103,22 @@ public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder,
     }
 
     /**
-     * Encodes an array of bytes into an array of URL safe 7-bit 
+     * Encodes an array of bytes into an array of URL safe 7-bit
      * characters. Unsafe characters are escaped.
      *
      * @param urlsafe bitset of characters deemed URL safe
-     * @param bytes array of bytes to convert to URL safe characters
+     * @param bytes   array of bytes to convert to URL safe characters
      * @return array of bytes containing URL safe characters
      */
-    public static final byte[] encodeUrl(BitSet urlsafe, byte[] bytes) 
-    {
+    public static final byte[] encodeUrl(BitSet urlsafe, byte[] bytes) {
         if (bytes == null) {
             return null;
         }
         if (urlsafe == null) {
             urlsafe = WWW_FORM_URL;
         }
-        
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream(); 
+
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         for (int i = 0; i < bytes.length; i++) {
             int b = bytes[i];
             if (b < 0) {
@@ -133,58 +132,57 @@ public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder,
             } else {
                 buffer.write('%');
                 char hex1 = Character.toUpperCase(
-                  Character.forDigit((b >> 4) & 0xF, 16));
+                        Character.forDigit((b >> 4) & 0xF, 16));
                 char hex2 = Character.toUpperCase(
-                  Character.forDigit(b & 0xF, 16));
+                        Character.forDigit(b & 0xF, 16));
                 buffer.write(hex1);
                 buffer.write(hex2);
             }
         }
-        return buffer.toByteArray(); 
+        return buffer.toByteArray();
     }
 
 
     /**
-     * Decodes an array of URL safe 7-bit characters into an array of 
-     * original bytes. Escaped characters are converted back to their 
+     * Decodes an array of URL safe 7-bit characters into an array of
+     * original bytes. Escaped characters are converted back to their
      * original representation.
      *
      * @param bytes array of URL safe characters
-     * @return array of original bytes 
+     * @return array of original bytes
      * @throws phex.util.DecoderException Thrown if URL decoding is unsuccessful
      */
-    public static final byte[] decodeUrl(byte[] bytes) 
-         throws phex.util.DecoderException
-    {
+    public static final byte[] decodeUrl(byte[] bytes)
+            throws phex.util.DecoderException {
         if (bytes == null) {
             return null;
         }
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream(); 
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         for (int i = 0; i < bytes.length; i++) {
             int b = bytes[i];
             if (b == '+') {
                 buffer.write(' ');
             } else if (b == '%') {
                 try {
-                    int u = Character.digit((char)bytes[++i], 16);
-                    int l = Character.digit((char)bytes[++i], 16);
+                    int u = Character.digit((char) bytes[++i], 16);
+                    int l = Character.digit((char) bytes[++i], 16);
                     if (u == -1 || l == -1) {
                         throw new phex.util.DecoderException("Invalid URL encoding");
                     }
-                    buffer.write((char)((u << 4) + l));
-                } catch(ArrayIndexOutOfBoundsException e) {
+                    buffer.write((char) ((u << 4) + l));
+                } catch (ArrayIndexOutOfBoundsException e) {
                     throw new phex.util.DecoderException("Invalid URL encoding");
                 }
             } else {
                 buffer.write(b);
             }
         }
-        return buffer.toByteArray(); 
+        return buffer.toByteArray();
     }
 
 
     /**
-     * Encodes an array of bytes into an array of URL safe 7-bit 
+     * Encodes an array of bytes into an array of URL safe 7-bit
      * characters. Unsafe characters are escaped.
      *
      * @param bytes array of bytes to convert to URL safe characters
@@ -196,12 +194,12 @@ public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder,
 
 
     /**
-     * Decodes an array of URL safe 7-bit characters into an array of 
-     * original bytes. Escaped characters are converted back to their 
+     * Decodes an array of URL safe 7-bit characters into an array of
+     * original bytes. Escaped characters are converted back to their
      * original representation.
      *
      * @param bytes array of URL safe characters
-     * @return array of original bytes 
+     * @return array of original bytes
      * @throws phex.util.DecoderException Thrown if URL decoding is unsuccessful
      */
     public byte[] decode(byte[] bytes) throws phex.util.DecoderException {
@@ -217,11 +215,10 @@ public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder,
      * @param charset the charset for pString
      * @return URL safe string
      * @throws UnsupportedEncodingException Thrown if charset is not
-     *                                      supported 
+     *                                      supported
      */
-    public String encode(String pString, String charset) 
-        throws UnsupportedEncodingException  
-    {
+    public String encode(String pString, String charset)
+            throws UnsupportedEncodingException {
         if (pString == null) {
             return null;
         }
@@ -230,13 +227,12 @@ public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder,
 
 
     /**
-     * Encodes a string into its URL safe form using the default string 
+     * Encodes a string into its URL safe form using the default string
      * charset. Unsafe characters are escaped.
      *
      * @param pString string to convert to a URL safe form
      * @return URL safe string
      * @throws phex.util.EncoderException Thrown if URL encoding is unsuccessful
-     * 
      * @see #getDefaultCharset()
      */
     public String encode(String pString) throws phex.util.EncoderException {
@@ -245,27 +241,26 @@ public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder,
         }
         try {
             return encode(pString, getDefaultCharset());
-        } catch(UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             throw new phex.util.EncoderException(e.getMessage());
         }
     }
 
 
     /**
-     * Decodes a URL safe string into its original form using the 
-     * specified encoding. Escaped characters are converted back 
+     * Decodes a URL safe string into its original form using the
+     * specified encoding. Escaped characters are converted back
      * to their original representation.
      *
      * @param pString URL safe string to convert into its original form
      * @param charset the original string charset
-     * @return original string 
-     * @throws phex.util.DecoderException Thrown if URL decoding is unsuccessful
+     * @return original string
+     * @throws phex.util.DecoderException   Thrown if URL decoding is unsuccessful
      * @throws UnsupportedEncodingException Thrown if charset is not
-     *                                      supported 
+     *                                      supported
      */
-    public String decode(String pString, String charset) 
-        throws phex.util.DecoderException, UnsupportedEncodingException
-    {
+    public String decode(String pString, String charset)
+            throws phex.util.DecoderException, UnsupportedEncodingException {
         if (pString == null) {
             return null;
         }
@@ -275,13 +270,12 @@ public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder,
 
     /**
      * Decodes a URL safe string into its original form using the default
-     * string charset. Escaped characters are converted back to their 
+     * string charset. Escaped characters are converted back to their
      * original representation.
      *
      * @param pString URL safe string to convert into its original form
-     * @return original string 
+     * @return original string
      * @throws phex.util.DecoderException Thrown if URL decoding is unsuccessful
-     * 
      * @see #getDefaultCharset()
      */
     public String decode(String pString) throws phex.util.DecoderException {
@@ -290,45 +284,43 @@ public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder,
         }
         try {
             return decode(pString, getDefaultCharset());
-        } catch(UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             throw new phex.util.DecoderException(e.getMessage());
         }
     }
 
     /**
-     * Encodes an object into its URL safe form. Unsafe characters are 
+     * Encodes an object into its URL safe form. Unsafe characters are
      * escaped.
      *
      * @param pObject string to convert to a URL safe form
      * @return URL safe object
      * @throws phex.util.EncoderException Thrown if URL encoding is not
-     *                          applicable to objects of this type or
-     *                          if encoding is unsuccessful
+     *                                    applicable to objects of this type or
+     *                                    if encoding is unsuccessful
      */
     public Object encode(Object pObject) throws phex.util.EncoderException {
         if (pObject == null) {
             return null;
         } else if (pObject instanceof byte[]) {
-            return encode((byte[])pObject);
+            return encode((byte[]) pObject);
         } else if (pObject instanceof String) {
-            return encode((String)pObject);
+            return encode((String) pObject);
         } else {
             throw new phex.util.EncoderException("Objects of type " +
-                pObject.getClass().getName() + " cannot be URL encoded"); 
-              
+                    pObject.getClass().getName() + " cannot be URL encoded");
+
         }
     }
 
     /**
      * Decodes a URL safe object into its original form. Escaped characters are converted back to their original
      * representation.
-     * 
-     * @param pObject
-     *                  URL safe object to convert into its original form
+     *
+     * @param pObject URL safe object to convert into its original form
      * @return original object
-     * @throws phex.util.DecoderException
-     *                  Thrown if the argument is not a <code>String</code> or <code>byte[]</code>. Thrown if a failure condition is
-     *                  encountered during the decode process.
+     * @throws phex.util.DecoderException Thrown if the argument is not a <code>String</code> or <code>byte[]</code>. Thrown if a failure condition is
+     *                                    encountered during the decode process.
      */
     public Object decode(Object pObject) throws phex.util.DecoderException {
         if (pObject == null) {
@@ -345,9 +337,8 @@ public class URLCodec // implements BinaryEncoder, BinaryDecoder, StringEncoder,
 
     /**
      * The <code>String</code> encoding used for decoding and encoding.
-     * 
+     *
      * @return Returns the encoding.
-     * 
      * @deprecated use #getDefaultCharset()
      */
     public String getEncoding() {

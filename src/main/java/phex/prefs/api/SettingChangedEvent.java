@@ -24,34 +24,29 @@ package phex.prefs.api;
 /**
  * Generic change event class holding a source, the old value and the new value.
  * To indication what has changed the event topic of the event service should be
- * used. 
+ * used.
  */
-public class SettingChangedEvent<T>
-{
+public class SettingChangedEvent<T> {
     private final Setting<T> source;
     private final T oldValue;
     private final T newValue;
-    
-    public SettingChangedEvent( Setting<T> source, T oldValue, T newValue)
-    {
+
+    public SettingChangedEvent(Setting<T> source, T oldValue, T newValue) {
         super();
         this.source = source;
         this.oldValue = oldValue;
         this.newValue = newValue;
     }
 
-    public Setting<T> getSource()
-    {
+    public Setting<T> getSource() {
         return source;
     }
 
-    public T getOldValue()
-    {
+    public T getOldValue() {
         return oldValue;
     }
 
-    public T getNewValue()
-    {
+    public T getNewValue() {
         return newValue;
     }
 }

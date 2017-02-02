@@ -28,69 +28,54 @@ import phex.common.log.NLogger;
 /**
  *
  */
-public class ClassUtils
-{
+public class ClassUtils {
     /**
      * Null safe getClass().toString() call on an object
+     *
      * @param obj the object to get the string representation from.
      * @return the class string.
      */
-    public static String getClassString( Object obj )
-    {
-        if ( obj == null )
-        {
+    public static String getClassString(Object obj) {
+        if (obj == null) {
             return "null";
-        }
-        else
-        {
+        } else {
             return obj.getClass().toString();
         }
     }
-    
+
     /**
      * Tries to load a class by name without throwing exceptions.
      * If class loading failed null is returned.
+     *
      * @param className
      * @return the class or null.
      */
-    public static Class classForNameQuitly(String className)
-    {
-        if (className == null)
-        {
+    public static Class classForNameQuitly(String className) {
+        if (className == null) {
             return null;
         }
-        try
-        {
+        try {
             Class clazz = Class.forName(className);
             return clazz;
-        }
-        catch (ClassNotFoundException exp)
-        {
-            NLogger.debug( ClassUtils.class, exp, exp);
+        } catch (ClassNotFoundException exp) {
+            NLogger.debug(ClassUtils.class, exp, exp);
         }
         return null;
     }
 
-    public static Object newInstanceQuitly(Class clazz)
-    {
-        if (clazz == null)
-        {
+    public static Object newInstanceQuitly(Class clazz) {
+        if (clazz == null) {
             return null;
         }
 
-        try
-        {
+        try {
             Object instance = clazz.newInstance();
             return instance;
-        }
-        catch (IllegalAccessException exp)
-        {
-            NLogger.debug( ClassUtils.class, exp, exp);
+        } catch (IllegalAccessException exp) {
+            NLogger.debug(ClassUtils.class, exp, exp);
             return null;
-        }
-        catch (InstantiationException exp)
-        {
-            NLogger.debug( ClassUtils.class, exp, exp);
+        } catch (InstantiationException exp) {
+            NLogger.debug(ClassUtils.class, exp, exp);
             return null;
         }
     }

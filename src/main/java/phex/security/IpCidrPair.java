@@ -24,78 +24,64 @@ package phex.security;
 import phex.common.address.AddressUtils;
 
 
-public class IpCidrPair
-{
+public class IpCidrPair {
     // we access the field directly for optimal performance.
     public final int ipAddr;
     public final byte cidr;
-    
-    public IpCidrPair( int ip, byte cidr )
-    {
+
+    public IpCidrPair(int ip, byte cidr) {
         ipAddr = ip;
         this.cidr = cidr;
     }
-    
-    public IpCidrPair( int ip )
-    {
+
+    public IpCidrPair(int ip) {
         ipAddr = ip;
         cidr = 32;
     }
-    
-    public int getNetMask()
-    {
-        return AddressUtils.CIDR2MASK[ this.cidr ];
+
+    public int getNetMask() {
+        return AddressUtils.CIDR2MASK[this.cidr];
     }
 
-    public int getMinIp()
-    {
+    public int getMinIp() {
         return (ipAddr & getNetMask());
     }
 
-    public int getMaxIp()
-    {
-        return (ipAddr & getNetMask()) + (int)Math.pow( 2, 32 - cidr ) - 1;
+    public int getMaxIp() {
+        return (ipAddr & getNetMask()) + (int) Math.pow(2, 32 - cidr) - 1;
     }
 
-    public boolean contains( IpCidrPair ip)
-    {
-        return (ip.ipAddr & getNetMask() ) == this.ipAddr
-            && (ip.getNetMask() & getNetMask() ) == getNetMask();
+    public boolean contains(IpCidrPair ip) {
+        return (ip.ipAddr & getNetMask()) == this.ipAddr
+                && (ip.getNetMask() & getNetMask()) == getNetMask();
     }
-    
-    public boolean contains( int ip, int netMask )
-    {
-        return (ip & getNetMask() ) == this.ipAddr
-            && (netMask & getNetMask() ) == getNetMask();
+
+    public boolean contains(int ip, int netMask) {
+        return (ip & getNetMask()) == this.ipAddr
+                && (netMask & getNetMask()) == getNetMask();
     }
-    
-    public boolean equals(Object obj) 
-    {
-        if ( this == obj ) return true;
-        if ( !(obj instanceof IpCidrPair) ) 
-        {
+
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof IpCidrPair)) {
             return false;
         }
-        
-        IpCidrPair pair = (IpCidrPair)obj;
-        if ( cidr != pair.cidr )
-        {
+
+        IpCidrPair pair = (IpCidrPair) obj;
+        if (cidr != pair.cidr) {
             return false;
         }
-        if ( (ipAddr & getNetMask()) != (pair.ipAddr & pair.getNetMask()) )
-        {
+        if ((ipAddr & getNetMask()) != (pair.ipAddr & pair.getNetMask())) {
             return false;
         }
         return true;
     }
 
-    public int hashCode() 
-    {
-        return ipAddr^getNetMask();
+    public int hashCode() {
+        return ipAddr ^ getNetMask();
     }
-    
-    public String toString()
-    {
-        return AddressUtils.ip2string( ipAddr ) + "/" + cidr;
+
+    public String toString() {
+        return AddressUtils.ip2string(ipAddr) + "/" + cidr;
     }
 }

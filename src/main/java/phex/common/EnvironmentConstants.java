@@ -18,8 +18,7 @@
  */
 package phex.common;
 
-public interface EnvironmentConstants
-{
+public interface EnvironmentConstants {
     String CORE_PREFERENCES_FILE_NAME = "phexCorePrefs.properties";
     String GUI_PREFERENCES_FILE_NAME = "phexGuiPrefs.properties";
     String LOG_FILE_NAME = "phex.log";

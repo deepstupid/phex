@@ -30,7 +30,7 @@ public class HrrnQueuePerformanceTest extends TestCase
     
     // 1024KB -> 2GB
     private static final int FULL_RANDOM_MIN = 1024;
-    private static final int FULL_RANDOM_ADD = 2000000;
+    private static final int FULL_RANDOM_ADD = 1000000;
     
     // 100000 KB/s -> 100MB/s
     private static final int SPEED = 500000;

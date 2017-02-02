@@ -30,8 +30,7 @@ import phex.query.QueryHitHost;
 /**
  * A file existing on a remote gnutella host.
  */
-public class RemoteFile
-{
+public class RemoteFile {
     /**
      * The QueryHitHost containing all information of the host this
      * file belongs to.
@@ -42,43 +41,43 @@ public class RemoteFile
      * The old-style remote file index to identify the file.
      */
     private int fileIndex;
-    
+
     /**
      * The original filename from the query hit.
      */
     private String filename;
-    
+
     /**
      * Possible path info comming from the 'PATH' GGEP extension.
      */
     private String pathInfo;
-    
+
     /**
      * The file display name. Its a possibly cleaned and modified file name to be
      * displayed to the user.
      */
     private String displayName;
-    
+
     private String fileExtension = null;
-    
+
     /**
      * The reported file size. (read-only)
      */
     private Long fileSize;
     private URN urn;
     private String metaData;
-    
+
     /**
      * Indicates if the RemoteFile is in the download queue. This is used
      * for display.
      */
     private boolean isInDownloadQueue;
-    
+
     /**
      * Indicates that this remote file was hidden by a filter.
      */
     private boolean filteredHidden;
-    
+
     /**
      * Indicates that this remote file was flaged to be removed by a filter.
      */
@@ -88,61 +87,58 @@ public class RemoteFile
      * The score defines how well the search term matches the filename.
      */
     private short score;
-    
+
     /**
-     * The bitzi rating 
+     * The bitzi rating
      * or Float.NaN in case not determined
      * or Float.NEGATIVE_INFINITY in case lookup failed.
      */
-    private float bitzRating = Float.NaN; 
+    private float bitzRating = Float.NaN;
 
     /**
      * Create a new RemoteFile with all data initialized.
      *
-     * @param aQhHost the QueryHitHost encapsulating information about the
-     *        query hit
-     * @param fileIndex  the int index of the file
+     * @param aQhHost   the QueryHitHost encapsulating information about the
+     *                  query hit
+     * @param fileIndex the int index of the file
      * @param fileName  the String name of the file
-     * @param pathInfo possible file path information.
+     * @param pathInfo  possible file path information.
      * @param fileSize  the file size as a long
-     * @param aUrn a urn of the remote file.
+     * @param aUrn      a urn of the remote file.
      * @param aMetaData file meta data.
-     * @param aScore - The score defines how well the search term matches the
-     *                 filename.
+     * @param aScore    - The score defines how well the search term matches the
+     *                  filename.
      */
-    public RemoteFile( QueryHitHost aQhHost, int fileIndex, String fileName,
-        String pathInfo, long fileSize, URN aUrn, String aMetaData, short aScore )
-    {
+    public RemoteFile(QueryHitHost aQhHost, int fileIndex, String fileName,
+                      String pathInfo, long fileSize, URN aUrn, String aMetaData, short aScore) {
         qhHost = aQhHost;
         this.fileIndex = fileIndex;
         filename = fileName;
-        this.pathInfo = pathInfo; 
-        this.fileSize = Long.valueOf( fileSize );
+        this.pathInfo = pathInfo;
+        this.fileSize = Long.valueOf(fileSize);
         urn = aUrn;
         metaData = aMetaData;
         isInDownloadQueue = false;
         score = aScore;
-        
+
         buildDisplayName();
     }
 
     /**
      * Create a shallow copy of another RemoteFile instance.
      *
-     * @param b  the RemoteFile to copy
+     * @param b the RemoteFile to copy
      */
-    public RemoteFile(RemoteFile b)
-    {
-        copy( b );
+    public RemoteFile(RemoteFile b) {
+        copy(b);
     }
 
     /**
      * Copy all information from a RemoteFile into this instance.
      *
-     * @param b  the RemoteFile to copy data from
+     * @param b the RemoteFile to copy data from
      */
-    public void copy(RemoteFile b)
-    {
+    public void copy(RemoteFile b) {
         qhHost = b.qhHost;
         fileIndex = b.fileIndex;
         urn = b.urn;
@@ -159,8 +155,7 @@ public class RemoteFile
      *
      * @return the remote client GUID
      */
-    public GUID getRemoteClientID()
-    {
+    public GUID getRemoteClientID() {
         return qhHost.getHostGUID();
     }
 
@@ -169,8 +164,7 @@ public class RemoteFile
      *
      * @return the file index
      */
-    public int getFileIndex()
-    {
+    public int getFileIndex() {
         return fileIndex;
     }
 
@@ -180,28 +174,27 @@ public class RemoteFile
      *
      * @return the file name
      */
-    public String getFilename()
-    {
+    public String getFilename() {
         return filename;
     }
-    
+
     /**
      * Returns possible path info of the remote file coming from the GGEP
      * extension.
+     *
      * @return
      */
-    public String getPathInfo()
-    {
+    public String getPathInfo() {
         return pathInfo;
     }
-    
+
     /**
-     * The display name of the RemoteFile. This is 
+     * The display name of the RemoteFile. This is
      * getPathInfo() + getShortName()
+     *
      * @return
      */
-    public String getDisplayName()
-    {
+    public String getDisplayName() {
         return displayName;
     }
 
@@ -212,19 +205,15 @@ public class RemoteFile
      *
      * @return the file extension
      */
-    public String getFileExt()
-    {
+    public String getFileExt() {
         if (fileExtension != null)
             return fileExtension;
 
         int index = filename.lastIndexOf(".");
 
-        if (index > -1)
-        {
+        if (index > -1) {
             fileExtension = filename.substring(index + 1, filename.length());
-        }
-        else
-        {
+        } else {
             fileExtension = "";
         }
 
@@ -236,8 +225,7 @@ public class RemoteFile
      *
      * @return the file size
      */
-    public long getFileSize()
-    {
+    public long getFileSize() {
         return fileSize.longValue();
     }
 
@@ -246,8 +234,7 @@ public class RemoteFile
      *
      * @return the file size as a Long
      */
-    public Long getFileSizeObject()
-    {
+    public Long getFileSizeObject() {
         return fileSize;
     }
 
@@ -256,33 +243,30 @@ public class RemoteFile
      *
      * @return the query hit host object
      */
-    public QueryHitHost getQueryHitHost()
-    {
+    public QueryHitHost getQueryHitHost() {
         return qhHost;
     }
 
     /**
      * Sets the query hit host.
+     *
      * @param qhHost the new query hit host.
      */
-    public void setQueryHitHost( QueryHitHost qhHost )
-    {
+    public void setQueryHitHost(QueryHitHost qhHost) {
         this.qhHost = qhHost;
     }
-    
+
     /**
      * Updates missing QueryHitHost information
+     *
      * @param qhHost
      */
-    public void updateQueryHitHost( QueryHitHost host )
-    {
-        if ( qhHost.getHostGUID() == null )
-        {
-            qhHost.setHostGUID( host.getHostGUID() );
+    public void updateQueryHitHost(QueryHitHost host) {
+        if (qhHost.getHostGUID() == null) {
+            qhHost.setHostGUID(host.getHostGUID());
         }
-        if ( qhHost.getHostSpeed() == -1 )
-        {
-            qhHost.setHostSpeed( host.getHostSpeed() );
+        if (qhHost.getHostSpeed() == -1) {
+            qhHost.setHostSpeed(host.getHostSpeed());
         }
     }
 
@@ -291,30 +275,24 @@ public class RemoteFile
      *
      * @return a HostAddress for the remote host
      */
-    public DestAddress getHostAddress()
-    {
+    public DestAddress getHostAddress() {
         return qhHost.getHostAddress();
     }
 
-    public String getMetaData()
-    {
+    public String getMetaData() {
         return metaData;
     }
 
-    public void setMetaData( String data )
-    {
+    public void setMetaData(String data) {
         metaData = data;
     }
 
-    public URN getURN()
-    {
+    public URN getURN() {
         return urn;
     }
 
-    public String getSHA1()
-    {
-        if ( urn == null || !urn.isSha1Nid() )
-        {
+    public String getSHA1() {
+        if (urn == null || !urn.isSha1Nid()) {
             return "";
         }
         return urn.getNamespaceSpecificString();
@@ -325,13 +303,11 @@ public class RemoteFile
      *
      * @return the host speed
      */
-    public int getSpeed()
-    {
+    public int getSpeed() {
         return qhHost.getHostSpeed();
     }
-    
-    public String getFormattedSpeed()
-    {
+
+    public String getFormattedSpeed() {
         return qhHost.getFormattedHostSpeed();
     }
 
@@ -340,87 +316,74 @@ public class RemoteFile
      *
      * @return true if this is in a download queue, false otherwise
      */
-    public boolean isInDownloadQueue()
-    {
+    public boolean isInDownloadQueue() {
         return isInDownloadQueue;
     }
 
     /**
      * Set whether this is in a download queue.
      *
-     * @param inDownloadQueue  the new boolean flag stating if this RemoteFile
-     *        is in a download queue
+     * @param inDownloadQueue the new boolean flag stating if this RemoteFile
+     *                        is in a download queue
      */
-    public void setInDownloadQueue(boolean inDownloadQueue)
-    {
+    public void setInDownloadQueue(boolean inDownloadQueue) {
         isInDownloadQueue = inDownloadQueue;
     }
-    
-    public void clearFilterFlags()
-    {
+
+    public void clearFilterFlags() {
         filteredHidden = false;
         filteredRemoved = false;
     }
 
-    public boolean isFilteredHidden()
-    {
+    public boolean isFilteredHidden() {
         return filteredHidden;
     }
 
-    public void setFilteredHidden( boolean filteredHidden )
-    {
+    public void setFilteredHidden(boolean filteredHidden) {
         this.filteredHidden = filteredHidden;
     }
 
-    public boolean isFilteredRemoved()
-    {
+    public boolean isFilteredRemoved() {
         return filteredRemoved;
     }
 
-    public void setFilteredRemoved( boolean filteredRemoved )
-    {
+    public void setFilteredRemoved(boolean filteredRemoved) {
         this.filteredRemoved = filteredRemoved;
     }
 
     /**
      * The score defines how well the search term matches the filename.
      */
-    public short getScore()
-    {
+    public short getScore() {
         return score;
     }
 
     /**
      * @return the bitzRating
      */
-    public float getBitzRating()
-    {
+    public float getBitzRating() {
         return bitzRating;
     }
 
     /**
      * @param bitzRating the bitzRating to set
      */
-    public void setBitzRating(float bitzRating)
-    {
+    public void setBitzRating(float bitzRating) {
         this.bitzRating = bitzRating;
     }
 
     @Override
-    public boolean equals( Object obj )
-    {
-        if ( !(obj instanceof RemoteFile) )
-        {
+    public boolean equals(Object obj) {
+        if (!(obj instanceof RemoteFile)) {
             return false;
         }
         RemoteFile b = (RemoteFile) obj;
-        return qhHost.getHostAddress().equals( b.qhHost.getHostAddress() )
-            && fileIndex == b.fileIndex;
+        return qhHost.getHostAddress().equals(b.qhHost.getHostAddress())
+                && fileIndex == b.fileIndex;
     }
-    
+
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int h = 0;
         h = (31 * h) + qhHost.getHostAddress().hashCode();
         h = (127 * h) + fileIndex;
@@ -428,43 +391,39 @@ public class RemoteFile
     }
 
     @Override
-    public String toString()
-    {
-        StringBuffer buffer = new StringBuffer( super.toString() );
-        buffer.append( "  " );
-        buffer.append( qhHost.getHostAddress() );
-        buffer.append( "  " );
-        buffer.append( filename );
-        buffer.append( "  " );
-        buffer.append( fileIndex );
+    public String toString() {
+        StringBuffer buffer = new StringBuffer(super.toString());
+        buffer.append("  ");
+        buffer.append(qhHost.getHostAddress());
+        buffer.append("  ");
+        buffer.append(filename);
+        buffer.append("  ");
+        buffer.append(fileIndex);
         return buffer.toString();
     }
-    
+
     /**
-     * Creates the display name of the remote file. If we know a 
+     * Creates the display name of the remote file. If we know a
      * path of the file the path is prefixed to the filename,
      * otherwise just the filename is used to define the display
      * name.
      */
-    private void buildDisplayName()
-    {
-        StringBuffer buffer = new StringBuffer( 128 );
-        
-        if ( pathInfo != null && pathInfo.length() > 0 )
-        {
-            String displayPath = pathInfo.replace( '\\', '/' );
-            buffer.append( displayPath );
-            if ( !displayPath.endsWith("/") )
-            {
-                buffer.append( "/" );
+    private void buildDisplayName() {
+        StringBuffer buffer = new StringBuffer(128);
+
+        if (pathInfo != null && pathInfo.length() > 0) {
+            String displayPath = pathInfo.replace('\\', '/');
+            buffer.append(displayPath);
+            if (!displayPath.endsWith("/")) {
+                buffer.append("/");
             }
         }
         // Some servents just return the path along with the filename.
         // Path info is platform-dependent.
-        String displayFileName = filename.replace( '\\', '/' );
+        String displayFileName = filename.replace('\\', '/');
         // we do not cut the path anymore it might be informative.
-        buffer.append( displayFileName );
-        
+        buffer.append(displayFileName);
+
         displayName = buffer.toString();
     }
 }

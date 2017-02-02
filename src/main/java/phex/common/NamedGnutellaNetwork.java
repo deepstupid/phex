@@ -29,73 +29,64 @@ import java.io.File;
 /**
  * The representation of a custom named Gnutella network.
  */
-public class NamedGnutellaNetwork extends GnutellaNetwork
-{
+public class NamedGnutellaNetwork extends GnutellaNetwork {
     private final String networkName;
-    
-    public NamedGnutellaNetwork( String name )
-    {
+
+    public NamedGnutellaNetwork(String name) {
         networkName = name;
     }
-    
-    public String getName()
-    {
+
+    public String getName() {
         return networkName;
     }
-    
+
     /**
      * @see phex.common.GnutellaNetwork#getHostsFile()
      */
-    public File getHostsFile()
-    {
+    public File getHostsFile() {
         String filename = "phex_" + networkName + ".hosts";
         filename = FileUtils.convertToLocalSystemFilename(filename);
-        return Environment.getPhexConfigFile( filename );
+        return Environment.getPhexConfigFile(filename);
     }
-    
+
     /**
      * @see phex.common.GnutellaNetwork#getFavoritesFile()
      */
-    public File getFavoritesFile()
-    {
+    public File getFavoritesFile() {
         String filename = networkName + '_' + EnvironmentConstants.XML_FAVORITES_FILE_NAME;
         filename = FileUtils.convertToLocalSystemFilename(filename);
-        return Environment.getPhexConfigFile( filename );
+        return Environment.getPhexConfigFile(filename);
     }
-    
+
     /**
-     * 
+     *
      */
-    public File getSearchFilterFile()
-    {
+    public File getSearchFilterFile() {
         String filename = networkName + '_'
-            + EnvironmentConstants.XML_SEARCH_FILTER_FILE_NAME;
-        filename = FileUtils.convertToLocalSystemFilename( filename );
-        return Environment.getPhexConfigFile( filename );
+                + EnvironmentConstants.XML_SEARCH_FILTER_FILE_NAME;
+        filename = FileUtils.convertToLocalSystemFilename(filename);
+        return Environment.getPhexConfigFile(filename);
     }
 
     /**
      * @see phex.common.GnutellaNetwork#getGWebCacheFile()
      */
-    public File getGWebCacheFile()
-    {
+    public File getGWebCacheFile() {
         String filename = networkName + '_' + EnvironmentConstants.G_WEB_CACHE_FILE_NAME;
         filename = FileUtils.convertToLocalSystemFilename(filename);
-        return Environment.getPhexConfigFile( filename );
+        return Environment.getPhexConfigFile(filename);
     }
-    
+
     /**
      * @see phex.common.GnutellaNetwork#getUdpHostCacheFile()
      */
-    public File getUdpHostCacheFile()
-    {
+    public File getUdpHostCacheFile() {
         String filename = networkName + '_' + EnvironmentConstants.UDP_HOST_CACHE_FILE_NAME;
         filename = FileUtils.convertToLocalSystemFilename(filename);
-        return Environment.getPhexConfigFile( filename );
+        return Environment.getPhexConfigFile(filename);
     }
-    
-    public String getNetworkGreeting()
-    {
+
+    public String getNetworkGreeting() {
         return ConnectionConstants.GNUTELLA_PHEX_CONNECT + ' ' + networkName;
     }
 }

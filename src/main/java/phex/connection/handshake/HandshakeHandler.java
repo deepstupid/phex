@@ -32,176 +32,155 @@ import phex.http.HTTPHeaderNames;
 import phex.prefs.core.ConnectionPrefs;
 import phex.servent.Servent;
 
-public abstract class HandshakeHandler implements ConnectionConstants
-{
+public abstract class HandshakeHandler implements ConnectionConstants {
     protected final Servent servent;
     protected final Host connectedHost;
-    
 
-    public HandshakeHandler( Servent servent, Host connectedHost )
-    {
+
+    public HandshakeHandler(Servent servent, Host connectedHost) {
         this.servent = servent;
         this.connectedHost = connectedHost;
     }
 
-    /**
-     * The default handshake headers are used for incoming and outgoing
-     * connections. They are usually extended by the specific incoming and
-     * outgoing headers.
-     * @return a default set of handshake headers.
-     */
-    protected HTTPHeaderGroup createDefaultHandshakeHeaders()
-    {
+    protected static HTTPHeaderGroup createRejectOutgoingHeaders() {
         // create hash map based on common headers
         HTTPHeaderGroup openHeaders = new HTTPHeaderGroup(
-            HTTPHeaderGroup.ACCEPT_HANDSHAKE_GROUP );
-
-        // add Listen-IP even though it might be 127.0.0.1 the port is the
-        // most important part...
-        DestAddress myAddress = servent.getLocalAddress();
-        openHeaders.addHeader( new HTTPHeader( GnutellaHeaderNames.LISTEN_IP,
-            myAddress.getFullHostName() ) );
-
-        // add remote-IP
-        DestAddress remoteAddress = connectedHost.getHostAddress();
-        IpAddress ipAddress = remoteAddress.getIpAddress();
-        openHeaders.addHeader( new HTTPHeader( GnutellaHeaderNames.REMOTE_IP,
-            ipAddress.getFormatedString() ) );
-            
-        // accepting deflate encoding
-        if (ConnectionPrefs.AcceptDeflateConnection.get())
-        {
-            openHeaders.addHeader( new HTTPHeader(
-                HTTPHeaderNames.ACCEPT_ENCODING, "deflate" ) );
-        }
-
-        return openHeaders;
-    }
-    
-    public HTTPHeaderGroup createOutgoingHandshakeHeaders()
-    {
-        HTTPHeaderGroup outHeaders = createDefaultHandshakeHeaders();
-        
-        return outHeaders;
-    }
-    
-    protected HandshakeStatus createCrawlerHandshakeStatus( )
-    {
-        // create hash map based on common headers
-        HTTPHeaderGroup crawlerHeaders = new HTTPHeaderGroup( 
-            HTTPHeaderGroup.COMMON_HANDSHAKE_GROUP );
-        
-        boolean isUltrapeer = servent.isUltrapeer();
-        
-        crawlerHeaders.addHeader( new HTTPHeader(
-            GnutellaHeaderNames.X_ULTRAPEER, String.valueOf( isUltrapeer ) ) );
-        
-        if ( isUltrapeer )
-        {
-            // add connected leaves...
-            Host[] leafs = servent.getHostService().getLeafConnections();
-            if ( leafs.length > 0 )
-            {
-                String leafAddressString = buildHostAddressString(leafs, leafs.length );
-                crawlerHeaders.addHeader( new HTTPHeader( GnutellaHeaderNames.LEAVES,
-                    leafAddressString ) );
-            }
-        }
-        
-        // add connected ultrapeers        
-        Host[] ultrapeers = servent.getHostService().getUltrapeerConnections();
-        if ( ultrapeers.length > 0 )
-        {
-            String ultrapeerAddressString = buildHostAddressString(ultrapeers, ultrapeers.length );
-            crawlerHeaders.addHeader( new HTTPHeader( GnutellaHeaderNames.PEERS,
-                ultrapeerAddressString ) );
-        }
-        
-        return new HandshakeStatus( STATUS_CODE_OK,
-            STATUS_MESSAGE_OK, crawlerHeaders );
-    }
-
-    protected static HTTPHeaderGroup createRejectOutgoingHeaders()
-    {
-        // create hash map based on common headers
-        HTTPHeaderGroup openHeaders = new HTTPHeaderGroup(
-            HTTPHeaderGroup.COMMON_HANDSHAKE_GROUP );
-
-        return openHeaders;
-    }
-    
-    // TODO2 add x-try-ultrapeer only with high hop (far) ultrapeers
-    // to initial outgoing connection headers and to incoming accept headers.
-    // currently we have no way to determine these far ultrapeers...
-    protected HTTPHeaderGroup createRejectIncomingHeaders( )
-    {
-        // create hash map based on common headers
-        HTTPHeaderGroup openHeaders = new HTTPHeaderGroup(
-            HTTPHeaderGroup.COMMON_HANDSHAKE_GROUP );
-
-        // add remote-IP
-        openHeaders.addHeader( new HTTPHeader( GnutellaHeaderNames.REMOTE_IP,
-            connectedHost.getHostAddress().getHostName() ) );
-            
-        // add X-Try-Ultrapeer
-        Host[] ultrpeers = servent.getHostService().getUltrapeerConnections();
-        String ultrapeerAddressString = buildHostAddressString(ultrpeers,
-            10 );
-        openHeaders.addHeader( new HTTPHeader( GnutellaHeaderNames.X_TRY_ULTRAPEERS,
-            ultrapeerAddressString ) );
+                HTTPHeaderGroup.COMMON_HANDSHAKE_GROUP);
 
         return openHeaders;
     }
 
-    public abstract HandshakeStatus createHandshakeResponse( HandshakeStatus hostResponse,
-       boolean isOutgoing );
-    
-    public static HandshakeHandler createHandshakeHandler( Servent servent, Host connectedHost )
-    {
-        if ( servent.isAbleToBecomeUltrapeer() )
-        {
-            return new UltrapeerHandshakeHandler( servent, connectedHost );
+    public static HandshakeHandler createHandshakeHandler(Servent servent, Host connectedHost) {
+        if (servent.isAbleToBecomeUltrapeer()) {
+            return new UltrapeerHandshakeHandler(servent, connectedHost);
         }
         // we dont support legacy peers anymore ( since 3.0 ) therefore we only
         // handle leaf mode here
-        else
-        {
-            return new LeafHandshakeHandler( servent, connectedHost );
+        else {
+            return new LeafHandshakeHandler(servent, connectedHost);
         }
     }
-    
-    protected static String buildHostAddressString(Host[] hosts, int max)
-    {
+
+    protected static String buildHostAddressString(Host[] hosts, int max) {
         StringBuffer buffer = new StringBuffer();
-        max = Math.min( max, hosts.length );
-        for ( int i = 0; i < max; i++ )
-        {
+        max = Math.min(max, hosts.length);
+        for (int i = 0; i < max; i++) {
             DestAddress address = hosts[i].getHostAddress();
-            buffer.append( address.getFullHostName() );
-            if( i < hosts.length - 1)
-            {
+            buffer.append(address.getFullHostName());
+            if (i < hosts.length - 1) {
                 buffer.append(',');
             }
         }
         return buffer.toString();
     }
 
-    protected static boolean isCrawlerConnection(HTTPHeaderGroup headers)
-    {
-        HTTPHeader crawlerHeader = headers.getHeader( GnutellaHeaderNames.CRAWLER );
-        if ( crawlerHeader == null )
-        {
+    protected static boolean isCrawlerConnection(HTTPHeaderGroup headers) {
+        HTTPHeader crawlerHeader = headers.getHeader(GnutellaHeaderNames.CRAWLER);
+        if (crawlerHeader == null) {
             return false;
         }
         float crawlerVersion;
-        try
-        {
+        try {
             crawlerVersion = crawlerHeader.floatValue();
             return crawlerVersion >= 0.1f;
-        }
-        catch ( NumberFormatException exp )
-        {
+        } catch (NumberFormatException exp) {
             return false;
         }
     }
+
+    /**
+     * The default handshake headers are used for incoming and outgoing
+     * connections. They are usually extended by the specific incoming and
+     * outgoing headers.
+     *
+     * @return a default set of handshake headers.
+     */
+    protected HTTPHeaderGroup createDefaultHandshakeHeaders() {
+        // create hash map based on common headers
+        HTTPHeaderGroup openHeaders = new HTTPHeaderGroup(
+                HTTPHeaderGroup.ACCEPT_HANDSHAKE_GROUP);
+
+        // add Listen-IP even though it might be 127.0.0.1 the port is the
+        // most important part...
+        DestAddress myAddress = servent.getLocalAddress();
+        openHeaders.addHeader(new HTTPHeader(GnutellaHeaderNames.LISTEN_IP,
+                myAddress.getFullHostName()));
+
+        // add remote-IP
+        DestAddress remoteAddress = connectedHost.getHostAddress();
+        IpAddress ipAddress = remoteAddress.getIpAddress();
+        openHeaders.addHeader(new HTTPHeader(GnutellaHeaderNames.REMOTE_IP,
+                ipAddress.getFormatedString()));
+
+        // accepting deflate encoding
+        if (ConnectionPrefs.AcceptDeflateConnection.get()) {
+            openHeaders.addHeader(new HTTPHeader(
+                    HTTPHeaderNames.ACCEPT_ENCODING, "deflate"));
+        }
+
+        return openHeaders;
+    }
+
+    public HTTPHeaderGroup createOutgoingHandshakeHeaders() {
+        HTTPHeaderGroup outHeaders = createDefaultHandshakeHeaders();
+
+        return outHeaders;
+    }
+
+    protected HandshakeStatus createCrawlerHandshakeStatus() {
+        // create hash map based on common headers
+        HTTPHeaderGroup crawlerHeaders = new HTTPHeaderGroup(
+                HTTPHeaderGroup.COMMON_HANDSHAKE_GROUP);
+
+        boolean isUltrapeer = servent.isUltrapeer();
+
+        crawlerHeaders.addHeader(new HTTPHeader(
+                GnutellaHeaderNames.X_ULTRAPEER, String.valueOf(isUltrapeer)));
+
+        if (isUltrapeer) {
+            // add connected leaves...
+            Host[] leafs = servent.getHostService().getLeafConnections();
+            if (leafs.length > 0) {
+                String leafAddressString = buildHostAddressString(leafs, leafs.length);
+                crawlerHeaders.addHeader(new HTTPHeader(GnutellaHeaderNames.LEAVES,
+                        leafAddressString));
+            }
+        }
+
+        // add connected ultrapeers
+        Host[] ultrapeers = servent.getHostService().getUltrapeerConnections();
+        if (ultrapeers.length > 0) {
+            String ultrapeerAddressString = buildHostAddressString(ultrapeers, ultrapeers.length);
+            crawlerHeaders.addHeader(new HTTPHeader(GnutellaHeaderNames.PEERS,
+                    ultrapeerAddressString));
+        }
+
+        return new HandshakeStatus(STATUS_CODE_OK,
+                STATUS_MESSAGE_OK, crawlerHeaders);
+    }
+
+    // TODO2 add x-try-ultrapeer only with high hop (far) ultrapeers
+    // to initial outgoing connection headers and to incoming accept headers.
+    // currently we have no way to determine these far ultrapeers...
+    protected HTTPHeaderGroup createRejectIncomingHeaders() {
+        // create hash map based on common headers
+        HTTPHeaderGroup openHeaders = new HTTPHeaderGroup(
+                HTTPHeaderGroup.COMMON_HANDSHAKE_GROUP);
+
+        // add remote-IP
+        openHeaders.addHeader(new HTTPHeader(GnutellaHeaderNames.REMOTE_IP,
+                connectedHost.getHostAddress().getHostName()));
+
+        // add X-Try-Ultrapeer
+        Host[] ultrpeers = servent.getHostService().getUltrapeerConnections();
+        String ultrapeerAddressString = buildHostAddressString(ultrpeers,
+                10);
+        openHeaders.addHeader(new HTTPHeader(GnutellaHeaderNames.X_TRY_ULTRAPEERS,
+                ultrapeerAddressString));
+
+        return openHeaders;
+    }
+
+    public abstract HandshakeStatus createHandshakeResponse(HandshakeStatus hostResponse,
+                                                            boolean isOutgoing);
 }

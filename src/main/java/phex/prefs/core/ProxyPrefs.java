@@ -25,58 +25,56 @@ package phex.prefs.core;
 import phex.prefs.api.PreferencesFactory;
 import phex.prefs.api.Setting;
 
-public class ProxyPrefs extends PhexCorePrefs
-{
+public class ProxyPrefs extends PhexCorePrefs {
     public static final int DEFAULT_HTTP_PORT = 80;
     public static final int DEFAULT_SOCKS5_PORT = 1080;
-    
+
     public static final Setting<String> ForcedIp;
-    
+
     public static final Setting<Boolean> UseSocks5;
     public static final Setting<String> Socks5Host;
     public static final Setting<Integer> Socks5Port;
     public static final Setting<Boolean> Socks5Authentication;
     public static final Setting<String> Socks5User;
     public static final Setting<String> Socks5Password;
-    
+
     /**
      * Defines if a http proxy is used for HTTP connections (not Gnutella
      * connections.
      */
     public static final Setting<Boolean> UseHttp;
-    
+
     /**
      * Defines the name of the http proxy host.
      */
     public static final Setting<String> HttpHost;
-    
+
     /**
      * Defines the port of the http proxy host.
      */
     public static final Setting<Integer> HttpPort;
-    
-    static
-    {
-        ForcedIp = PreferencesFactory.createStringSetting( 
-            "Proxy.ForcedIp", "", instance );
+
+    static {
+        ForcedIp = PreferencesFactory.createStringSetting(
+                "Proxy.ForcedIp", "", instance);
         UseSocks5 = PreferencesFactory.createBoolSetting(
-            "Proxy.UseSocks5", false, instance );
+                "Proxy.UseSocks5", false, instance);
         Socks5Host = PreferencesFactory.createStringSetting(
-            "Proxy.Socks5Host", "", instance );
+                "Proxy.Socks5Host", "", instance);
         Socks5Port = PreferencesFactory.createIntSetting(
-            "Proxy.Socks5Port", DEFAULT_SOCKS5_PORT, instance );
+                "Proxy.Socks5Port", DEFAULT_SOCKS5_PORT, instance);
         Socks5Authentication = PreferencesFactory.createBoolSetting(
-            "Proxy.Socks5Authentication", false, instance );
+                "Proxy.Socks5Authentication", false, instance);
         Socks5User = PreferencesFactory.createStringSetting(
-            "Proxy.Socks5User", "", instance );
+                "Proxy.Socks5User", "", instance);
         Socks5Password = PreferencesFactory.createStringSetting(
-            "Proxy.Socks5Password", "", instance );
-        
+                "Proxy.Socks5Password", "", instance);
+
         UseHttp = PreferencesFactory.createBoolSetting(
-            "Proxy.UseHttp", false, instance );
+                "Proxy.UseHttp", false, instance);
         HttpHost = PreferencesFactory.createStringSetting(
-            "Proxy.HttpHost", "", instance );
+                "Proxy.HttpHost", "", instance);
         HttpPort = PreferencesFactory.createIntSetting(
-            "Proxy.HttpPort", DEFAULT_HTTP_PORT, instance );
+                "Proxy.HttpPort", DEFAULT_HTTP_PORT, instance);
     }
 }

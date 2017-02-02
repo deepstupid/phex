@@ -22,108 +22,92 @@
 package phex.prefs.api;
 
 
-public class Setting<T>
-{
+public class Setting<T> {
     protected final Preferences preferences;
-    
+
     /**
      * The name of this setting.
      */
     protected final String name;
-    
-    /**
-     * The value of this setting.
-     */
-    protected T value;
-    
     /**
      * The default value of this setting.
      */
     protected final T defaultValue;
-    
+    /**
+     * The value of this setting.
+     */
+    protected T value;
     protected boolean isAlwaysSaved;
-    
+
     /**
      * @param value
      * @param defaultValue
      */
-    protected Setting( String name, T value, T defaultValue,
-        Preferences preferences )
-    {
+    protected Setting(String name, T value, T defaultValue,
+                      Preferences preferences) {
         this.preferences = preferences;
         this.name = name;
         this.value = value;
         this.defaultValue = defaultValue;
         this.isAlwaysSaved = false;
     }
-    
+
     /**
      * @return the isAlwaysSaved
      */
-    public boolean isAlwaysSaved()
-    {
+    public boolean isAlwaysSaved() {
         return isAlwaysSaved;
     }
 
     /**
      * @param isAlwaysSaved the isAlwaysSaved to set
      */
-    public void setAlwaysSaved( boolean isAlwaysSaved )
-    {
+    public void setAlwaysSaved(boolean isAlwaysSaved) {
         this.isAlwaysSaved = isAlwaysSaved;
     }
 
-    public void set( T newValue )
-    {
-        if ( !(value == null ? newValue == null : value.equals( newValue ) ) )
-        {
+    public void set(T newValue) {
+        if (!(value == null ? newValue == null : value.equals(newValue))) {
             T oldValue = value;
             this.value = newValue;
-            fireChanged( oldValue, newValue );
+            fireChanged(oldValue, newValue);
         }
     }
-    
+
     /**
      * Method to notify that a setting has changed. Old and new value can be
      * provided.
      */
-    protected void fireChanged( T oldValue, T newValue )
-    {
-        preferences.fireSettingChanged( new SettingChangedEvent<T>( this, 
-            oldValue, newValue ) );
+    protected void fireChanged(T oldValue, T newValue) {
+        preferences.fireSettingChanged(new SettingChangedEvent<T>(this,
+                oldValue, newValue));
     }
 
     /**
      * Method to notify that a setting has changed. Can be used in case
      * a setting is changed without calling its set() method i.e. Collections.
      */
-    public void fireChanged(  )
-    {
-        preferences.fireSettingChanged( new SettingChangedEvent<T>( this, 
-            null, null ) );
+    public void fireChanged() {
+        preferences.fireSettingChanged(new SettingChangedEvent<T>(this,
+                null, null));
     }
-    
-    public T get()
-    {
+
+    public T get() {
         return value;
     }
-    
-    public String getName()
-    {
+
+    public String getName() {
         return name;
     }
-    
-    public boolean isDefault()
-    {
+
+    public boolean isDefault() {
         // handles the case of null == null
-        if ( value == defaultValue ) 
-        {
+        if (value == defaultValue) {
             return true;
         }
-        if ( value == null || defaultValue == null ) 
-        {
+        if (value == null || defaultValue == null) {
             return false;
         }
-        return value.equals( defaultValue );
+        return value.equals(defaultValue);
     }
 }

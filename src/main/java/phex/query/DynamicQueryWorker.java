@@ -33,110 +33,85 @@ import java.util.List;
  * The dynamic query worker contains a list of all active dynamic query engines
  * and regularly iterates over them to run through there dynamic query process.
  */
-public class DynamicQueryWorker implements Runnable
-{
-	/**
-	 * The time between iterations.
-	 */
-	private static final int WORKER_SLEEP_TIME = 500;
-	
+public class DynamicQueryWorker implements Runnable {
     /**
-	 * The list of all dynamic query engines.
-	 */
-	private final List<DynamicQueryEngine> queryList;
-	
+     * The time between iterations.
+     */
+    private static final int WORKER_SLEEP_TIME = 500;
+
+    /**
+     * The list of all dynamic query engines.
+     */
+    private final List<DynamicQueryEngine> queryList;
+
     /**
      * Creates a new dynamic query worker.
      */
-    public DynamicQueryWorker()
-    { 
-    	queryList = new ArrayList<DynamicQueryEngine>();
+    public DynamicQueryWorker() {
+        queryList = new ArrayList<DynamicQueryEngine>();
     }
-    
-    public void addDynamicQueryEngine( DynamicQueryEngine engine )
-    {
-        synchronized (queryList)
-        {
-            queryList.add( engine );
+
+    public void addDynamicQueryEngine(DynamicQueryEngine engine) {
+        synchronized (queryList) {
+            queryList.add(engine);
         }
     }
-    
-    public void removeDynamicQuerysForHost( Host host )
-    {
+
+    public void removeDynamicQuerysForHost(Host host) {
         DynamicQueryEngine queryEngine;
-        ArrayList<DynamicQueryEngine> removeList = new ArrayList<DynamicQueryEngine>(); 
-        synchronized( queryList )
-        {
+        ArrayList<DynamicQueryEngine> removeList = new ArrayList<DynamicQueryEngine>();
+        synchronized (queryList) {
             Iterator<DynamicQueryEngine> iterator = queryList.iterator();
-            while( iterator.hasNext() )
-            {
+            while (iterator.hasNext()) {
                 queryEngine = iterator.next();
-                if ( queryEngine.getFromHost() == host )
-                {
-                    removeList.add( queryEngine );
+                if (queryEngine.getFromHost() == host) {
+                    removeList.add(queryEngine);
                 }
             }
-            queryList.removeAll( removeList );
+            queryList.removeAll(removeList);
         }
     }
 
-	public void startQueryWorker()
-	{
-		Thread thread = new Thread( ThreadTracking.rootThreadGroup, this,
-            "DynamicQueryWorker-" + Integer.toHexString( hashCode() ) );
-        thread.setPriority( Thread.NORM_PRIORITY );
-		thread.setDaemon( true );
-		thread.start();
-	}
-	
-	public void run()
-	{
-		while ( true )
-        {
-        	try
-        	{
-				Thread.sleep( WORKER_SLEEP_TIME );
-        	}
-        	catch ( InterruptedException exp )
-        	{// reset interrupted signal of thread...
-        		Thread.currentThread().interrupt();
-        	}
-        	try
-        	{
-            	processQueryList();
-			}
-			catch ( Throwable th )
-			{// make sure thread does not stop due to error...
-                NLogger.error( DynamicQueryWorker.class, th, th );
-			}
-        }
-	}
+    public void startQueryWorker() {
+        Thread thread = new Thread(ThreadTracking.rootThreadGroup, this,
+                "DynamicQueryWorker-" + Integer.toHexString(hashCode()));
+        thread.setPriority(Thread.NORM_PRIORITY);
+        thread.setDaemon(true);
+        thread.start();
+    }
 
-    private void processQueryList()
-    {
+    public void run() {
+        while (true) {
+            try {
+                Thread.sleep(WORKER_SLEEP_TIME);
+            } catch (InterruptedException exp) {// reset interrupted signal of thread...
+                Thread.currentThread().interrupt();
+            }
+            try {
+                processQueryList();
+            } catch (Throwable th) {// make sure thread does not stop due to error...
+                NLogger.error(DynamicQueryWorker.class, th, th);
+            }
+        }
+    }
+
+    private void processQueryList() {
         DynamicQueryEngine[] queryEngines;
-        synchronized (queryList)
-        {
+        synchronized (queryList) {
             int size = queryList.size();
-            if (size == 0)
-            {
+            if (size == 0) {
                 return;
             }
             queryEngines = new DynamicQueryEngine[size];
             queryList.toArray(queryEngines);
         }
-        
-        for (int i = 0; i < queryEngines.length; i++)
-        {
-            if (queryEngines[i].isQueryFinished())
-            {
-                synchronized (queryList)
-                {
+
+        for (int i = 0; i < queryEngines.length; i++) {
+            if (queryEngines[i].isQueryFinished()) {
+                synchronized (queryList) {
                     queryList.remove(queryEngines[i]);
                 }
-            }
-            else
-            {
+            } else {
                 queryEngines[i].processQuery();
             }
         }

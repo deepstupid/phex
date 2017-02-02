@@ -31,7 +31,8 @@ import phex.common.address.DestAddress;
 import phex.common.file.FileManager;
 import phex.common.file.ManagedFile;
 import phex.common.file.ManagedFileException;
-import phex.event.*;
+import phex.event.ChangeEvent;
+import phex.event.UserMessageListener;
 import phex.servent.Servent;
 import phex.xml.sax.DPhex;
 import phex.xml.sax.DSubElementList;
@@ -48,273 +49,231 @@ import java.util.TimerTask;
 /**
  * Holds user favorite hosts.
  */
-public class FavoritesContainer
-{
-    private static final Logger logger = LoggerFactory.getLogger( FavoritesContainer.class );
+public class FavoritesContainer {
+    private static final Logger logger = LoggerFactory.getLogger(FavoritesContainer.class);
     private final Servent servent;
     private final ArrayList<FavoriteHost> favoritesList;
     private boolean hasChangedSinceLastSave;
-    
-    public FavoritesContainer( Servent servent )
-    {
+
+    public FavoritesContainer(Servent servent) {
         this.servent = servent;
         favoritesList = new ArrayList<>();
         hasChangedSinceLastSave = false;
         Environment.getInstance().scheduleTimerTask(
-            new SaveFavoritesTimer(), SaveFavoritesTimer.TIMER_PERIOD,
-            SaveFavoritesTimer.TIMER_PERIOD );
-        
+                new SaveFavoritesTimer(), SaveFavoritesTimer.TIMER_PERIOD,
+                SaveFavoritesTimer.TIMER_PERIOD);
+
         initializeFavorites();
 
     }
-    
+
     /**
      * Clears and initializes favorite hosts.
      */
-    private void initializeFavorites()
-    {
+    private void initializeFavorites() {
         favoritesList.clear();
         loadFromFile();
     }
-    
+
     /**
      * Adds multiple favorite addresses
+     *
      * @param addresses the addresses to add
      */
-    public synchronized void addFavorites(DestAddress[] addresses)
-    {
-        for ( DestAddress address : addresses )
-        {
-            FavoriteHost host = new FavoriteHost( address );
-            insertBookmarkedHost( host, favoritesList.size() );            
+    public synchronized void addFavorites(DestAddress[] addresses) {
+        for (DestAddress address : addresses) {
+            FavoriteHost host = new FavoriteHost(address);
+            insertBookmarkedHost(host, favoritesList.size());
         }
     }
-    
+
     /**
      * Adds a single favorite address
+     *
      * @param address the address to add
      */
-    public synchronized void addFavorite(DestAddress address)
-    {
-        FavoriteHost host = new FavoriteHost( address );
-        insertBookmarkedHost( host, favoritesList.size() );            
+    public synchronized void addFavorite(DestAddress address) {
+        FavoriteHost host = new FavoriteHost(address);
+        insertBookmarkedHost(host, favoritesList.size());
     }
-    
+
     /**
      * Reacts on gnutella network changes to initialize or save favorite hosts.
      */
     //@EventTopicSubscriber(topic=PhexEventTopics.Servent_GnutellaNetwork)
-    public void onGnutellaNetworkEvent( String topic, ChangeEvent event )
-    {
+    public void onGnutellaNetworkEvent(String topic, ChangeEvent event) {
         saveFavoriteHosts();
         initializeFavorites();
     }
-        
+
     /**
      * Loads the hosts file phex.hosts.
      */
-    private void loadFromFile()
-    {
-        logger.debug( "Loading favorites file." );
+    private void loadFromFile() {
+        logger.debug("Loading favorites file.");
 
         DPhex dPhex;
-        try
-        {
+        try {
             File favoritesFile = servent.getGnutellaNetwork().getFavoritesFile();
-            if ( !favoritesFile.exists() )
-            {
+            if (!favoritesFile.exists()) {
                 return;
             }
             FileManager fileMgr = Phex.getFileManager();
-            ManagedFile managedFile = fileMgr.getReadWriteManagedFile( favoritesFile );
-            dPhex = XMLBuilder.loadDPhexFromFile( managedFile );
-            if ( dPhex == null )
-            {
-                logger.debug( "No bookmarked hosts file found." );
+            ManagedFile managedFile = fileMgr.getReadWriteManagedFile(favoritesFile);
+            dPhex = XMLBuilder.loadDPhexFromFile(managedFile);
+            if (dPhex == null) {
+                logger.debug("No bookmarked hosts file found.");
                 return;
             }
             DSubElementList<DFavoriteHost> dHostList = dPhex.getFavoritesList();
-            if ( dHostList == null )
-            {
-                logger.warn( "No DFavoritesList found." );
+            if (dHostList == null) {
+                logger.warn("No DFavoritesList found.");
                 return;
             }
-            
-            for ( DFavoriteHost dHost : dHostList.getSubElementList() )
-            {
+
+            for (DFavoriteHost dHost : dHostList.getSubElementList()) {
                 int port = dHost.getPort();
-                
+
                 DestAddress address = null;
                 String hostName = dHost.getHostName();
                 byte[] ip = dHost.getIp();
-                if ( hostName != null )
-                {
-                    address = new DefaultDestAddress( hostName, port );
+                if (hostName != null) {
+                    address = new DefaultDestAddress(hostName, port);
+                } else if (ip != null) {
+                    address = new DefaultDestAddress(ip, port);
                 }
-                else if ( ip != null )
-                {
-                    address = new DefaultDestAddress( ip, port );
-                }
-                if ( address == null )
-                {// seems to be a bad entry in the favorites file.. skip..
+                if (address == null) {// seems to be a bad entry in the favorites file.. skip..
                     continue;
                 }
-                
-                FavoriteHost bookmarkedHost = new FavoriteHost( address );
-                
+
+                FavoriteHost bookmarkedHost = new FavoriteHost(address);
+
                 // TODO2 no security checking is done here, assuming the user
                 // always wants to have the bookmarked hosts even if faulty
                 // but this concept is week... security is needed.
-                insertBookmarkedHost( bookmarkedHost, favoritesList.size() );
+                insertBookmarkedHost(bookmarkedHost, favoritesList.size());
             }
-        }
-        catch ( IOException | ManagedFileException exp )
-        {
-            logger.error( exp.toString(), exp );
-            Environment.getInstance().fireDisplayUserMessage( 
-                UserMessageListener.FavoritesSettingsLoadFailed, 
-                new String[]{ exp.toString() } );
+        } catch (IOException | ManagedFileException exp) {
+            logger.error(exp.toString(), exp);
+            Environment.getInstance().fireDisplayUserMessage(
+                    UserMessageListener.FavoritesSettingsLoadFailed,
+                    new String[]{exp.toString()});
             return;
         }
-    }    
-    
+    }
+
     /**
      * Blocking operation which saves the bookmarked hosts if they changed since
      * the last save operation.
      */
-    synchronized void saveFavoriteHosts( )
-    {
-        if ( !hasChangedSinceLastSave )
-        {
+    synchronized void saveFavoriteHosts() {
+        if (!hasChangedSinceLastSave) {
             return;
         }
-        
-        try
-        {
+
+        try {
             DPhex dPhex = new DPhex();
-            dPhex.setPhexVersion( PhexVersion.getFullVersion() );
-            
+            dPhex.setPhexVersion(PhexVersion.getFullVersion());
+
             DSubElementList<DFavoriteHost> dList = new DSubElementList<>(
                     FavoritesListHandler.THIS_TAG_NAME);
-            dPhex.setFavoritesList( dList );
-            
+            dPhex.setFavoritesList(dList);
+
             List<DFavoriteHost> list = dList.getSubElementList();
-            for( FavoriteHost host : favoritesList )
-            {
+            for (FavoriteHost host : favoritesList) {
                 DFavoriteHost dHost = new DFavoriteHost();
                 DestAddress address = host.getHostAddress();
-                if ( address.isIpHostName() )
-                {
-                    dHost.setIp( address.getIpAddress().getHostIP() );
+                if (address.isIpHostName()) {
+                    dHost.setIp(address.getIpAddress().getHostIP());
+                } else {
+                    dHost.setHostName(address.getHostName());
                 }
-                else
-                {
-                    dHost.setHostName( address.getHostName() );
-                }
-                dHost.setPort( address.getPort() );
-                
-                list.add( dHost );
+                dHost.setPort(address.getPort());
+
+                list.add(dHost);
             }
-            
+
             File favoritesFile = servent.getGnutellaNetwork().getFavoritesFile();
-            ManagedFile managedFile = Phex.getFileManager().getReadWriteManagedFile( favoritesFile );
-            
-            XMLBuilder.saveToFile( managedFile, dPhex );
+            ManagedFile managedFile = Phex.getFileManager().getReadWriteManagedFile(favoritesFile);
+
+            XMLBuilder.saveToFile(managedFile, dPhex);
             hasChangedSinceLastSave = false;
-        }
-        catch ( IOException | ManagedFileException exp )
-        {
+        } catch (IOException | ManagedFileException exp) {
             // TODO during close this message is never displayed since application
             // will exit too fast. A solution to delay exit process in case 
             // SlideInWindows are open needs to be found.
-            logger.error( exp.toString(), exp );
-            Environment.getInstance().fireDisplayUserMessage( 
-                UserMessageListener.FavoritesSettingsSaveFailed, 
-                new String[]{ exp.toString() } );
+            logger.error(exp.toString(), exp);
+            Environment.getInstance().fireDisplayUserMessage(
+                    UserMessageListener.FavoritesSettingsSaveFailed,
+                    new String[]{exp.toString()});
         }
     }
-    
-    public synchronized int getBookmarkedHostsCount()
-    {
+
+    public synchronized int getBookmarkedHostsCount() {
         return favoritesList.size();
     }
 
-    public synchronized FavoriteHost getBookmarkedHostAt( int index )
-    {
-        if ( index >= favoritesList.size() )
-        {
+    public synchronized FavoriteHost getBookmarkedHostAt(int index) {
+        if (index >= favoritesList.size()) {
             return null;
         }
-        return favoritesList.get( index );
+        return favoritesList.get(index);
     }
 
     /**
      * inserts a auto connect host and fires the add event..
      */
-    private synchronized void insertBookmarkedHost( FavoriteHost host, int position )
-    {
+    private synchronized void insertBookmarkedHost(FavoriteHost host, int position) {
         // if host is not already in the list
-        if ( !favoritesList.contains( host ) )
-        {
-            favoritesList.add( position, host );
+        if (!favoritesList.contains(host)) {
+            favoritesList.add(position, host);
             hasChangedSinceLastSave = true;
-            fireBookmarkedHostAdded( host, position );
+            fireBookmarkedHostAdded(host, position);
         }
     }
 
-    public synchronized void removeBookmarkedHost( FavoriteHost host )
-    {
-        int position = favoritesList.indexOf( host );
-        if ( position >= 0 )
-        {
-            favoritesList.remove( position );
-            fireBookmarkedHostRemoved( host, position );
+    public synchronized void removeBookmarkedHost(FavoriteHost host) {
+        int position = favoritesList.indexOf(host);
+        if (position >= 0) {
+            favoritesList.remove(position);
+            fireBookmarkedHostRemoved(host, position);
             hasChangedSinceLastSave = true;
         }
     }
 
     ////////////////////////END Auto connect host methods //////////////////////
-    
-    
+
+
     ///////////////////// START event handling methods ////////////////////////
-    private void fireBookmarkedHostAdded( FavoriteHost host, int position )
-    {
+    private void fireBookmarkedHostAdded(FavoriteHost host, int position) {
 
     }
 
-    private void fireBookmarkedHostRemoved( FavoriteHost host, int position )
-    {
+    private void fireBookmarkedHostRemoved(FavoriteHost host, int position) {
 
     }
 
     ////////////////////// END event handling methods //////////////////////////
-    
+
     ////////////////////// START inner classes //////////////////////////
-    
-    private class SaveFavoritesRunner implements Runnable
-    {
-        public void run()
-        {
+
+    private class SaveFavoritesRunner implements Runnable {
+        public void run() {
             saveFavoriteHosts();
         }
     }
-    
-    private class SaveFavoritesTimer extends TimerTask
-    {
+
+    private class SaveFavoritesTimer extends TimerTask {
         // once per minute
         public static final long TIMER_PERIOD = 1000 * 60;
-        
+
         @Override
-        public void run()
-        {
-            try
-            {
+        public void run() {
+            try {
                 // trigger the save inside a background job
-                Environment.getInstance().executeOnThreadPool( new SaveFavoritesRunner(),
-                    "SaveBookmarkedHosts" );
-            }
-            catch ( Throwable th )
-            {
+                Environment.getInstance().executeOnThreadPool(new SaveFavoritesRunner(),
+                        "SaveBookmarkedHosts");
+            } catch (Throwable th) {
                 logger.error(th.toString(), th);
             }
         }

@@ -31,8 +31,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class Executer implements Runnable
-{
+public class Executer implements Runnable {
     final File file;
     final URL url;
     final String command;
@@ -42,8 +41,7 @@ public class Executer implements Runnable
      * by first substituting the file into the command.
      * Returns immediately.
      */
-    public Executer ( File file, String command )
-    {
+    public Executer(File file, String command) {
         this.url = null;
         this.file = file;
         this.command = command;
@@ -52,8 +50,7 @@ public class Executer implements Runnable
     /*
      * Invoke this URL using the given command
      */
-    public Executer ( URL url, String command )
-    {
+    public Executer(URL url, String command) {
         this.url = url;
         this.file = null;
         this.command = command;
@@ -62,88 +59,24 @@ public class Executer implements Runnable
     /*
      * Execute the command without any substitution
      */
-    public Executer ( String command )
-    {
+    public Executer(String command) {
         this.url = null;
         this.file = null;
         this.command = command;
     }
-    public void run ()
-    {
-        if ( command == null ) return;
-        // Do this before keyword expansion so that the grouping/splitting is done properly
-        String[] commands = parseCommandLine ( command );
-        System.out.println( commands ); // nxf
 
-        StringBuffer absFilename = null;
-        if ( file != null )
-        {
-            // The replaceAll operator eats backslashes, the stupid thing
-            absFilename = new StringBuffer(file.getAbsolutePath().length() + 20);
-            try {
-                for (int offset=0; offset < file.getAbsolutePath().length() ; offset++)
-                {
-                    char currentChar = file.getAbsolutePath().charAt(offset);
-                    if ( currentChar == '\\' )
-                        absFilename.append("\\\\");
-                    else
-                        absFilename.append( currentChar );
-                }
-            }
-            catch (IndexOutOfBoundsException ex)
-            {
-            }
-        }
-        if ( file != null || url != null ) // this is just an optimisation
-        {
-            for (int i = 0; i < commands.length ; i++)
-            {
-                if ( file != null )
-                {
-                    commands[i] = commands[i].replaceAll( "%s", absFilename.toString() );
-                    try {
-                        commands[i] = commands[i].replaceAll( "%u", file.toURI().toURL().toExternalForm() );
-                    } catch (Exception ex) {} // URL cannot be malformed, nothing to handle
-                } 
-                if ( url != null )
-                {
-                    commands[i] = commands[i].replaceAll( "%u", url.toExternalForm() );
-                }
-            }
-        }
-        try {
-            if ( commands.length > 0 )
-            {
-            	NLogger.error( Executer.class, "About to invoke " + Arrays.asList( commands ) );
-                Runner r = new Runner(commands);
-            }
-        }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
-            NLogger.error( Executer.class, "Cannot invoke previewer." );
-            if ( commands != null )
-            {
-            	NLogger.error( Executer.class,
-                    "Actual command was '" + commands + '\'');
-            }
-        }
+    public static String getViewCommand(String suffix) {
+        return getViewCommand(suffix, true);
     }
 
-    public static String getViewCommand ( String suffix )
-    {
-        return getViewCommand ( suffix , true );
-    }
-
-    public static String getViewCommand ( String suffix, boolean allowFallback)
-    {
+    public static String getViewCommand(String suffix, boolean allowFallback) {
         String cmd = null;
 //        if ( allowFallback )
 //            cmd = ServiceManager.sCfg.fallbackPreviewMethod;
 //        // Cycle through the keys seeing if any is an RE-match for this suffix
 //        Set mySet = ServiceManager.sCfg.previewMethod.keySet();
 //        String key = matches( mySet.iterator() , suffix );
-//        if ( key != null ) 
+//        if ( key != null )
 //        {
 //            cmd = (String) ServiceManager.sCfg.previewMethod.get ( key );
 //        }
@@ -154,13 +87,11 @@ public class Executer implements Runnable
      * Iterate through a group of regexes, and return a
      * matching regex, or null if none match.
      */
-    public static String matches(Iterator regexes, String name)
-    {
+    public static String matches(Iterator regexes, String name) {
         StringBuffer regex;
-        while (regexes.hasNext())
-        {
+        while (regexes.hasNext()) {
             String entry = (String) regexes.next();
-            if ( entry.startsWith("^") && entry.endsWith("$") ) // a 'true' RE
+            if (entry.startsWith("^") && entry.endsWith("$")) // a 'true' RE
             {
                 regex = new StringBuffer(entry);
             } else {
@@ -172,7 +103,7 @@ public class Executer implements Runnable
 
             Pattern p = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE);
             Matcher m = p.matcher(name);
-            if ( m.matches() )
+            if (m.matches())
                 return entry;
         }
         return null;
@@ -182,28 +113,25 @@ public class Executer implements Runnable
      * Splits the given string at whitespace, respecting
      * quoted strings
      */
-    public static String[] parseCommandLine ( String commandLine )
-    {
+    public static String[] parseCommandLine(String commandLine) {
         // Define a pattern which will split on spaces but respect quotes
         Pattern p = Pattern.compile("(\".*?\"|\\S+)", Pattern.CASE_INSENSITIVE);
         Matcher m = p.matcher(commandLine);
         List tokens = new LinkedList();
         String[] result;
         int counter = 0;
-        while ( m.find() )
-        {
-            tokens.add( m.group(1) );
+        while (m.find()) {
+            tokens.add(m.group(1));
             counter++;
         }
         result = new String[counter];
         Iterator it = tokens.iterator();
         String quoteString = "\"";
-        for (int i = 0; i < counter ; i++)
-        {
+        for (int i = 0; i < counter; i++) {
             String field = (String) it.next();
 //            if ( field.startsWith("\"") || true ) // ie: unix
 //            {
-                result[i] = field;
+            result[i] = field;
 //            } else
 //            {
 //                result[i] = new String (quoteString + field + quoteString);
@@ -212,128 +140,155 @@ public class Executer implements Runnable
         return result;
     }
 
+    public void run() {
+        if (command == null) return;
+        // Do this before keyword expansion so that the grouping/splitting is done properly
+        String[] commands = parseCommandLine(command);
+        System.out.println(commands); // nxf
 
-    private static class Runner
-    {
+        StringBuffer absFilename = null;
+        if (file != null) {
+            // The replaceAll operator eats backslashes, the stupid thing
+            absFilename = new StringBuffer(file.getAbsolutePath().length() + 20);
+            try {
+                for (int offset = 0; offset < file.getAbsolutePath().length(); offset++) {
+                    char currentChar = file.getAbsolutePath().charAt(offset);
+                    if (currentChar == '\\')
+                        absFilename.append("\\\\");
+                    else
+                        absFilename.append(currentChar);
+                }
+            } catch (IndexOutOfBoundsException ex) {
+            }
+        }
+        if (file != null || url != null) // this is just an optimisation
+        {
+            for (int i = 0; i < commands.length; i++) {
+                if (file != null) {
+                    commands[i] = commands[i].replaceAll("%s", absFilename.toString());
+                    try {
+                        commands[i] = commands[i].replaceAll("%u", file.toURI().toURL().toExternalForm());
+                    } catch (Exception ex) {
+                    } // URL cannot be malformed, nothing to handle
+                }
+                if (url != null) {
+                    commands[i] = commands[i].replaceAll("%u", url.toExternalForm());
+                }
+            }
+        }
+        try {
+            if (commands.length > 0) {
+                NLogger.error(Executer.class, "About to invoke " + Arrays.asList(commands));
+                Runner r = new Runner(commands);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            NLogger.error(Executer.class, "Cannot invoke previewer.");
+            if (commands != null) {
+                NLogger.error(Executer.class,
+                        "Actual command was '" + commands + '\'');
+            }
+        }
+    }
+
+    private static class Runner {
         public int result;
 
         // Suck all the output from the given process and return when it's complete
-        public Runner ( String commandLine )
-        {
-            go ( parseCommandLine (commandLine) );
+        public Runner(String commandLine) {
+            go(parseCommandLine(commandLine));
         }
 
-        public Runner ( String[] commandLine )
-        {
-            go ( commandLine );
+        public Runner(String[] commandLine) {
+            go(commandLine);
         }
 
-        public void go ( String[] commands )
-        {
+        public void go(String[] commands) {
             Process proc = null;
-            try
-            {
-                proc = java.lang.Runtime.getRuntime().exec( commands );
-            }
-            catch ( IOException ex )
-            {
+            try {
+                proc = java.lang.Runtime.getRuntime().exec(commands);
+            } catch (IOException ex) {
                 ex.printStackTrace();
                 return;
             }
             //prepare buffers for process output and error streams
-            StringBuffer err=new StringBuffer();
-            StringBuffer out=new StringBuffer();    
-            try
-                {
+            StringBuffer err = new StringBuffer();
+            StringBuffer out = new StringBuffer();
+            try {
                 //create thread for reading inputStream (process' stdout)
-                StreamReaderThread outThread=new StreamReaderThread(proc.getInputStream(),out);
+                StreamReaderThread outThread = new StreamReaderThread(proc.getInputStream(), out);
                 //create thread for reading errorStream (process' stderr)
-                StreamReaderThread errThread=new StreamReaderThread(proc.getErrorStream(),err);
+                StreamReaderThread errThread = new StreamReaderThread(proc.getErrorStream(), err);
                 //start both threads
                 outThread.start();
                 errThread.start();
                 //wait for process to end
-                result=proc.waitFor();
+                result = proc.waitFor();
                 //finish reading whatever's left in the buffers
                 outThread.join();
                 errThread.join();
 
-                if (result!=0) 
-                {
-                    System.out.println("Process " +  " returned non-zero value:" + result);
+                if (result != 0) {
+                    System.out.println("Process " + " returned non-zero value:" + result);
                     System.out.println("Process output:\n" + out.toString());
                     System.out.println("Process error:\n" + err.toString());
                 } else {
-                    System.out.println("Process " +  " executed successfully");
+                    System.out.println("Process " + " executed successfully");
                     System.out.println("Process output:\n" + out.toString());
                     System.out.println("Process error:\n" + err.toString());
                 }
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 System.out.println("Error executing. ");
                 e.printStackTrace();
                 //throw e;
             }
         }
 
- 
-        private String[] parseCommandLineOld ( String commandLine )
-        {
-            Reader r = new StringReader ( commandLine );
-            StreamTokenizer t = new StreamTokenizer( r );
-            t.wordChars(0x0000, 0x00FF); 
+
+        private String[] parseCommandLineOld(String commandLine) {
+            Reader r = new StringReader(commandLine);
+            StreamTokenizer t = new StreamTokenizer(r);
+            t.wordChars(0x0000, 0x00FF);
             t.quoteChar('"');
             t.whitespaceChars(' ', ' ');
 
             List tokens = new LinkedList();
             String[] result;
             int counter = 0;
-            try
-            {
-                while ( t.nextToken() != StreamTokenizer.TT_EOF )
-                {
-                    tokens.add( t.sval );
+            try {
+                while (t.nextToken() != StreamTokenizer.TT_EOF) {
+                    tokens.add(t.sval);
                     counter++;
                 }
-            }
-            catch ( IOException ex )
-            {
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
 
             result = new String[counter];
             Iterator it = tokens.iterator();
             String quoteString = "\"";
-            for (int i = 0; i < counter ; i++)
-            {
+            for (int i = 0; i < counter; i++) {
                 result[i] = quoteString + it.next() + quoteString;
             }
             return result;
         }
 
-        public class StreamReaderThread extends Thread
-        {
+        public class StreamReaderThread extends Thread {
             final StringBuffer mOut;
             final InputStreamReader mIn;
-            
-            public StreamReaderThread(InputStream in, StringBuffer out)
-            {
-                super( ThreadTracking.rootThreadGroup, "StreamReaderThread" );
-                mOut=out;
-                mIn=new InputStreamReader(in);
+
+            public StreamReaderThread(InputStream in, StringBuffer out) {
+                super(ThreadTracking.rootThreadGroup, "StreamReaderThread");
+                mOut = out;
+                mIn = new InputStreamReader(in);
             }
-                
-            public void run()
-            {
+
+            public void run() {
                 int ch;
-                try
-                {
-                    while(-1 != (ch=mIn.read()))
-                        mOut.append((char)ch);
-                }
-                catch (Exception e)
-                {
+                try {
+                    while (-1 != (ch = mIn.read()))
+                        mOut.append((char) ch);
+                } catch (Exception e) {
                     mOut.append("\nRead error:" + e.getMessage());
                 }
             }

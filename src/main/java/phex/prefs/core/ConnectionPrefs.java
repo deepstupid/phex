@@ -26,10 +26,9 @@ import phex.prefs.api.PreferencesFactory;
 import phex.prefs.api.RangeSetting;
 import phex.prefs.api.Setting;
 
-public class ConnectionPrefs extends PhexCorePrefs
-{
+public class ConnectionPrefs extends PhexCorePrefs {
     public static final Setting<Boolean> AutoConnectOnStartup;
-    
+
     /**
      * Indicates if this node is allowed to become a Ultrapeer.
      */
@@ -62,52 +61,51 @@ public class ConnectionPrefs extends PhexCorePrefs
      * have open. The max should be 5.
      */
     public static final RangeSetting<Integer> Leaf2UpConnections;
-    
+
     /**
      * Indicates if the peers has connected incoming the last time it was
-     * shutdown. The value is only updated in case of a server shutdown, but  
+     * shutdown. The value is only updated in case of a server shutdown, but
      * the Server maintains and holds the state changes during runtime.
      */
     public static final Setting<Boolean> HasConnectedIncomming;
-    
+
     /**
-     * The number of consecutive failed connection after which the servent 
+     * The number of consecutive failed connection after which the servent
      * is called as offline.
      */
     public static final Setting<Integer> OfflineConnectionFailureCount;
-    
+
     /**
      * Enables QueryHit Snooping.
      */
     public static final Setting<Boolean> EnableQueryHitSnooping;
-    
+
     /**
      * Indicates if we accept deflated connections.
      */
-    public static final Setting<Boolean> AcceptDeflateConnection;    
-    
-    static
-    {
+    public static final Setting<Boolean> AcceptDeflateConnection;
+
+    static {
         AutoConnectOnStartup = PreferencesFactory.createBoolSetting(
-            "Connection.AutoConnectOnStartup", true, instance );
+                "Connection.AutoConnectOnStartup", true, instance);
         AllowToBecomeUP = PreferencesFactory.createBoolSetting(
-            "Connection.AllowToBecomeUP", true, instance );
+                "Connection.AllowToBecomeUP", true, instance);
         ForceToBeUltrapeer = PreferencesFactory.createBoolSetting(
-            "Connection.ForceToBeUltrapeer", 
-            PrivateNetworkConstants.DEFAULT_FORCE_TOBE_ULTRAPEER, instance );
+                "Connection.ForceToBeUltrapeer",
+                PrivateNetworkConstants.DEFAULT_FORCE_TOBE_ULTRAPEER, instance);
         Up2UpConnections = PreferencesFactory.createIntRangeSetting(
-            "Connection.Up2UpConnections", 32, 16, 999, instance );
+                "Connection.Up2UpConnections", 32, 16, 999, instance);
         Up2LeafConnections = PreferencesFactory.createIntRangeSetting(
-            "Connection.Up2LeafConnections", 30, 0, 999, instance );
+                "Connection.Up2LeafConnections", 30, 0, 999, instance);
         Leaf2UpConnections = PreferencesFactory.createIntRangeSetting(
-            "Connection.Leaf2UpConnections", 5, 1, 5, instance );
-        HasConnectedIncomming = PreferencesFactory.createBoolSetting( 
-            "Connection.HasConnectedIncomming", false, instance );
+                "Connection.Leaf2UpConnections", 5, 1, 5, instance);
+        HasConnectedIncomming = PreferencesFactory.createBoolSetting(
+                "Connection.HasConnectedIncomming", false, instance);
         OfflineConnectionFailureCount = PreferencesFactory.createIntSetting(
-            "Connection.OfflineConnectionFailureCount", 61, instance );
+                "Connection.OfflineConnectionFailureCount", 61, instance);
         EnableQueryHitSnooping = PreferencesFactory.createBoolSetting(
-            "Connection.EnableQueryHitSnooping", true, instance );
+                "Connection.EnableQueryHitSnooping", true, instance);
         AcceptDeflateConnection = PreferencesFactory.createBoolSetting(
-            "Connection.AcceptDeflateConnection", true, instance );
+                "Connection.AcceptDeflateConnection", true, instance);
     }
 }

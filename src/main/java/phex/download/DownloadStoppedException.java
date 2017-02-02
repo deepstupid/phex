@@ -23,10 +23,8 @@ import java.io.IOException;
 /**
  * Exception is thrown to indicate a download was stopped usually by user request.
  */
-public class DownloadStoppedException extends IOException
-{
-    public DownloadStoppedException()
-    {
+public class DownloadStoppedException extends IOException {
+    public DownloadStoppedException() {
         super();
     }
 }

@@ -32,153 +32,134 @@ import phex.msg.QueryResponseRecord;
 import phex.security.AccessType;
 import phex.servent.Servent;
 
-public abstract class Search
-{
-    private static final Logger logger = LoggerFactory.getLogger( 
-        Search.class );
-    
+public abstract class Search {
+    private static final Logger logger = LoggerFactory.getLogger(
+            Search.class);
+
     protected final Servent servent;
-    
+    /**
+     * Associated class that is able to hold search results. Access to this
+     * should be locked by holding 'this'.
+     */
+    protected final SearchResultHolder searchResultHolder;
     /**
      * The dynamic query engine that actually runs the search in case
      * a dynamic query is used. This can attribute can be null in case
-     * no dynamic query is used (if we are a leaf). 
+     * no dynamic query is used (if we are a leaf).
      */
     protected DynamicQueryEngine queryEngine;
-
     /**
      * The MsgQuery object that forms the query for this search.
      */
     protected QueryMsg queryMsg;
-    
-    /**
-     * Associated class that is able to hold search results. Access to this
-     * should be locked by holding 'this'. 
-     */
-    protected final SearchResultHolder searchResultHolder;
-    
     protected SearchProgress searchProgress;
-    
+
     protected volatile boolean isSearchFinished;
 
-    protected Search( Servent servent )
-    {
+    protected Search(Servent servent) {
         this.servent = servent;
         searchResultHolder = new SearchResultHolder();
         isSearchFinished = false;
     }
-    
+
     /**
      * Returns the search progress between 0 and 100
+     *
      * @return the progress in percent.
      */
     public abstract int getProgress();
-    
-    public boolean isSearchFinished()
-    {
-        if ( isSearchFinished )
-        {
+
+    public boolean isSearchFinished() {
+        if (isSearchFinished) {
             return true;
         }
-        if ( searchProgress != null && searchProgress.isSearchFinished() )
-        {
+        if (searchProgress != null && searchProgress.isSearchFinished()) {
             stopSearching();
             return true;
         }
-        if ( queryEngine != null && queryEngine.isQueryFinished() )
-        {
+        if (queryEngine != null && queryEngine.isQueryFinished()) {
             stopSearching();
             return true;
         }
         return false;
     }
 
-    public void startSearching( SearchProgress progress )
-    {
+    public void startSearching(SearchProgress progress) {
         searchProgress = progress;
         isSearchFinished = false;
-        
+
         // set the creation time just before we send the query this
         // will prevent the query to timeout before it could be send
-        queryMsg.setCreationTime( System.currentTimeMillis() );
-        logger.debug( "Sending Query '{}'.", queryMsg );
-        queryEngine = servent.getQueryService().sendMyQuery( queryMsg, searchProgress );
-        
+        queryMsg.setCreationTime(System.currentTimeMillis());
+        logger.debug("Sending Query '{}'.", queryMsg);
+        queryEngine = servent.getQueryService().sendMyQuery(queryMsg, searchProgress);
+
         fireSearchStarted();
     }
 
-    public void stopSearching()
-    {
-        if ( isSearchFinished )
-        {// already stopped
+    public void stopSearching() {
+        if (isSearchFinished) {// already stopped
             return;
         }
         isSearchFinished = true;
-        if ( queryEngine != null )
-        {
+        if (queryEngine != null) {
             queryEngine.stopQuery();
         }
         fireSearchStoped();
     }
-    
+
     /**
-     * Used by subclasses to check if the record is valid. In this case a 
+     * Used by subclasses to check if the record is valid. In this case a
      * security check is done on the record URN.
+     *
      * @param record
      * @return true if valid, false otherwise.
      */
-    protected boolean isResponseRecordValid( QueryResponseRecord record )
-    {
+    protected boolean isResponseRecordValid(QueryResponseRecord record) {
         // REWORK maybe we should move the altloc security check
         // from GGEPExtension.parseAltExtensionData to here to?
         // MERGE with FilteredQueryResponseMonitor.isResponseRecordValid()
-        
+
         URN urn = record.getURN();
-        if ( urn != null && servent.getSecurityService().controlUrnAccess( urn ) != AccessType.ACCESS_GRANTED )
-        {
-            logger.debug( "Record contains blocked URN: {}", urn.getAsString() );
+        if (urn != null && servent.getSecurityService().controlUrnAccess(urn) != AccessType.ACCESS_GRANTED) {
+            logger.debug("Record contains blocked URN: {}", urn.getAsString());
             return false;
         }
         return true;
     }
 
-    public abstract void processResponse( QueryResponseMsg msg )
-        throws InvalidMessageException;
-    
+    public abstract void processResponse(QueryResponseMsg msg)
+            throws InvalidMessageException;
+
     ///////////////////// START event handling methods ////////////////////////
 
-    protected void fireSearchStarted()
-    {
+    protected void fireSearchStarted() {
         SearchDataEvent searchChangeEvent =
-            new SearchDataEvent( this, SearchDataEvent.SEARCH_STARTED );
-        fireSearchChangeEvent( searchChangeEvent );
+                new SearchDataEvent(this, SearchDataEvent.SEARCH_STARTED);
+        fireSearchChangeEvent(searchChangeEvent);
     }
 
-    protected void fireSearchStoped()
-    {
+    protected void fireSearchStoped() {
         SearchDataEvent searchChangeEvent =
-            new SearchDataEvent( this, SearchDataEvent.SEARCH_STOPED );
-        fireSearchChangeEvent( searchChangeEvent );
+                new SearchDataEvent(this, SearchDataEvent.SEARCH_STOPED);
+        fireSearchChangeEvent(searchChangeEvent);
     }
 
-    public void fireSearchChanged()
-    {
+    public void fireSearchChanged() {
         SearchDataEvent searchChangeEvent =
-            new SearchDataEvent( this, SearchDataEvent.SEARCH_CHANGED );
-        fireSearchChangeEvent( searchChangeEvent );
+                new SearchDataEvent(this, SearchDataEvent.SEARCH_CHANGED);
+        fireSearchChangeEvent(searchChangeEvent);
     }
 
-    protected void fireSearchHitsAdded( RemoteFile[] newHits )
-    {
-        SearchDataEvent searchChangeEvent = new SearchDataEvent( this,
-            SearchDataEvent.SEARCH_HITS_ADDED, newHits );
-        fireSearchChangeEvent( searchChangeEvent );        
+    protected void fireSearchHitsAdded(RemoteFile[] newHits) {
+        SearchDataEvent searchChangeEvent = new SearchDataEvent(this,
+                SearchDataEvent.SEARCH_HITS_ADDED, newHits);
+        fireSearchChangeEvent(searchChangeEvent);
     }
 
-    private void fireSearchChangeEvent( final SearchDataEvent searchChangeEvent )
-    {
+    private void fireSearchChangeEvent(final SearchDataEvent searchChangeEvent) {
 
     }
-    
+
     ///////////////////// END event handling methods ////////////////////////
 }

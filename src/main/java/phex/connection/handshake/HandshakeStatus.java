@@ -32,98 +32,83 @@ import phex.prefs.core.ConnectionPrefs;
 
 import java.io.IOException;
 
-public class HandshakeStatus implements ConnectionConstants
-{
+public class HandshakeStatus implements ConnectionConstants {
     private final int statusCode;
     private final String statusMessage;
     private final HTTPHeaderGroup responseHeaders;
 
-    public HandshakeStatus( int statusCode, String statusMessage )
-    {
-        this( statusCode, statusMessage, HTTPHeaderGroup.EMPTY_HEADERGROUP );
+    public HandshakeStatus(int statusCode, String statusMessage) {
+        this(statusCode, statusMessage, HTTPHeaderGroup.EMPTY_HEADERGROUP);
     }
 
-    public HandshakeStatus( int statusCode, String statusMessage,
-        HTTPHeaderGroup responseHeaders )
-    {
+    public HandshakeStatus(int statusCode, String statusMessage,
+                           HTTPHeaderGroup responseHeaders) {
         this.statusCode = statusCode;
         this.statusMessage = statusMessage;
         this.responseHeaders = responseHeaders;
     }
 
-    public HandshakeStatus( HTTPHeaderGroup responseHeaders )
-    {
-        this( STATUS_CODE_OK, STATUS_MESSAGE_OK, responseHeaders );
-    }
-
-
-    public int getStatusCode()
-    {
-        return statusCode;
-    }
-
-    public String getStatusMessage()
-    {
-        return statusMessage;
-    }
-
-    public HTTPHeaderGroup getResponseHeaders()
-    {
-        return responseHeaders;
-    }
-    
-    /**
-     * Return true is the we accept deflate connections and the remote host
-     * accepts a deflate encoding.
-     * @return true if deflate is accepted, false otherwise.
-     */
-    public boolean isDeflateAccepted()
-    {
-        return ConnectionPrefs.AcceptDeflateConnection.get().booleanValue() &&
-                responseHeaders.isHeaderValueContaining(
-                        HTTPHeaderNames.ACCEPT_ENCODING, "deflate");
+    public HandshakeStatus(HTTPHeaderGroup responseHeaders) {
+        this(STATUS_CODE_OK, STATUS_MESSAGE_OK, responseHeaders);
     }
 
     public static HandshakeStatus parseHandshakeResponse(
-        Connection connection )
-        throws IOException
-    {
+            Connection connection)
+            throws IOException {
         String response = connection.readLine();
-        if ( response == null )
-        {
+        if (response == null) {
             throw new IOException(
-                "Disconnected from remote host during initial handshake" );
+                    "Disconnected from remote host during initial handshake");
         }
-        if ( !response.startsWith( GNUTELLA_06 ) )
-        {
+        if (!response.startsWith(GNUTELLA_06)) {
             throw new ProtocolNotSupportedException(
-                "Bad protocol response: " + response );
+                    "Bad protocol response: " + response);
         }
 
         // read response headers
-        HTTPHeaderGroup responseHeaders = HTTPProcessor.parseHTTPHeaders( connection );
+        HTTPHeaderGroup responseHeaders = HTTPProcessor.parseHTTPHeaders(connection);
 
         int statusCode;
         String statusMessage;
-        try
-        {
-            String statusString = response.substring( GNUTELLA_06.length() ).trim();
-            int statusMsgIdx = statusString.indexOf( ' ' );
-            if ( statusMsgIdx == -1 )
-            {
+        try {
+            String statusString = response.substring(GNUTELLA_06.length()).trim();
+            int statusMsgIdx = statusString.indexOf(' ');
+            if (statusMsgIdx == -1) {
                 statusMsgIdx = statusString.length();
             }
-            statusCode = Integer.parseInt( statusString.substring( 0, statusMsgIdx ) );
-            statusMessage = statusString.substring( statusMsgIdx ).trim();
-        }
-        catch ( Exception exp )
-        {
+            statusCode = Integer.parseInt(statusString.substring(0, statusMsgIdx));
+            statusMessage = statusString.substring(statusMsgIdx).trim();
+        } catch (Exception exp) {
             NLogger.warn(HandshakeStatus.class, "Error parsing response: '"
-                + response + "'.", exp );
-            throw new IOException( "Error parsing response: '"
-                + response + "': " + exp );
+                    + response + "'.", exp);
+            throw new IOException("Error parsing response: '"
+                    + response + "': " + exp);
         }
 
-        return new HandshakeStatus( statusCode, statusMessage, responseHeaders );
+        return new HandshakeStatus(statusCode, statusMessage, responseHeaders);
+    }
+
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public String getStatusMessage() {
+        return statusMessage;
+    }
+
+    public HTTPHeaderGroup getResponseHeaders() {
+        return responseHeaders;
+    }
+
+    /**
+     * Return true is the we accept deflate connections and the remote host
+     * accepts a deflate encoding.
+     *
+     * @return true if deflate is accepted, false otherwise.
+     */
+    public boolean isDeflateAccepted() {
+        return ConnectionPrefs.AcceptDeflateConnection.get().booleanValue() &&
+                responseHeaders.isHeaderValueContaining(
+                        HTTPHeaderNames.ACCEPT_ENCODING, "deflate");
     }
 }

@@ -37,18 +37,16 @@ import java.util.Arrays;
  *
  * @version 1.0
  */
-public class SearchEngine
-{
+public class SearchEngine {
     private final static int SKIP_TABLE_SIZE = 128;
+    private final int[] skipTable;
     private char[] text;
     private char[] pattern;
-    private final int[] skipTable;
     private int patternLength;
     private int textLength;
 
-    public SearchEngine()
-    {
-        skipTable = new int[ SKIP_TABLE_SIZE ];
+    public SearchEngine() {
+        skipTable = new int[SKIP_TABLE_SIZE];
     }
 
     /**
@@ -56,22 +54,17 @@ public class SearchEngine
      * The isLowerCase option is for optimization to skip the convert to
      * lower case. Lower case conversion must be done by yourself if set to true.
      */
-    public void setText( String aText, boolean isLowerCase )
-    {
+    public void setText(String aText, boolean isLowerCase) {
         // for slight performance reasons
         textLength = aText.length();
 
-        if ( !isLowerCase )
-        {
+        if (!isLowerCase) {
             // conversion to lower case to save performance
-            text = new char[ textLength ];
-            for ( int i = 0; i < textLength; i++ )
-            {
-                text[i] = Character.toLowerCase( aText.charAt( i ) );
+            text = new char[textLength];
+            for (int i = 0; i < textLength; i++) {
+                text[i] = Character.toLowerCase(aText.charAt(i));
             }
-        }
-        else
-        {
+        } else {
             text = aText.toCharArray();
         }
     }
@@ -83,22 +76,17 @@ public class SearchEngine
      * to the setText( String, boolean ) method.
      * The call is not safe to outside changes of the textArr!
      */
-    public void setText( char[] textArr, boolean isLowerCase )
-    {
+    public void setText(char[] textArr, boolean isLowerCase) {
         // for slight performance reasons
         textLength = textArr.length;
 
-        if ( !isLowerCase )
-        {
+        if (!isLowerCase) {
             // conversion to lower case to save performance
-            text = new char[ textLength ];
-            for ( int i = 0; i < textLength; i++ )
-            {
-                text[i] = Character.toLowerCase( textArr[ i ] );
+            text = new char[textLength];
+            for (int i = 0; i < textLength; i++) {
+                text[i] = Character.toLowerCase(textArr[i]);
             }
-        }
-        else
-        {
+        } else {
             text = textArr;
         }
     }
@@ -108,22 +96,17 @@ public class SearchEngine
      * The isLowerCase option is for optimization to skip the convert to
      * lower case. Lower case conversion must be done by yourself if set to true.
      */
-    public void setPattern( String aPattern, boolean isLowerCase )
-    {
+    public void setPattern(String aPattern, boolean isLowerCase) {
         // for slight performance reasons
         patternLength = aPattern.length();
 
-        if ( !isLowerCase )
-        {
+        if (!isLowerCase) {
             // conversion to lower case to save performance
-            pattern = new char[ patternLength ];
-            for ( int i = 0; i < patternLength; i++ )
-            {
-                pattern[i] = Character.toLowerCase( aPattern.charAt( i ) );
+            pattern = new char[patternLength];
+            for (int i = 0; i < patternLength; i++) {
+                pattern[i] = Character.toLowerCase(aPattern.charAt(i));
             }
-        }
-        else
-        {
+        } else {
             pattern = aPattern.toCharArray();
         }
         initSkipTable();
@@ -132,24 +115,22 @@ public class SearchEngine
     /**
      * Initializes the skip table for Boyer-Moore
      */
-    private void initSkipTable()
-    {
+    private void initSkipTable() {
         // init fill table
-        Arrays.fill( skipTable, patternLength );
+        Arrays.fill(skipTable, patternLength);
 
         // map available chars
         int idx;
         int val;
         char patternChar;
-        for (int i = 0; i < patternLength - 1; i++)
-        {
-            patternChar = pattern[ i ];
+        for (int i = 0; i < patternLength - 1; i++) {
+            patternChar = pattern[i];
             val = patternLength - i - 1;
             //idx = ((int)Character.toUpperCase( patternChar ) ) % SKIP_TABLE_SIZE;
             //skipTable[ idx ] = val;
             //idx = ((int)Character.toLowerCase( patternChar ) ) % SKIP_TABLE_SIZE;
-            idx = ((int) patternChar ) % SKIP_TABLE_SIZE;
-            skipTable[ idx ] = val;
+            idx = ((int) patternChar) % SKIP_TABLE_SIZE;
+            skipTable[idx] = val;
         }
     }
 
@@ -157,8 +138,7 @@ public class SearchEngine
      * Perform matching of the pattern in the text using Boyer-Moore
      * algorithm. Returns true if a match was found. False otherwise.
      */
-    public boolean match()
-    {
+    public boolean match() {
         char patternChar;
         char textChar;
         int searchIndex;
@@ -168,32 +148,28 @@ public class SearchEngine
         boolean found = false;
 
         textIndex = searchIndex = patternLength - 1;
-        while ( searchIndex >= 0 && textIndex < textLength )
-        {
+        while (searchIndex >= 0 && textIndex < textLength) {
             searchIndex = patternLength - 1;
             compareIndex = textIndex;
-            while ( true )
-            {
-                if ( searchIndex < 0 )
-                {
+            while (true) {
+                if (searchIndex < 0) {
                     // search string found
                     found = true;
                     break;
                 }
 
-                patternChar = pattern[ searchIndex ];
-                textChar = text[ compareIndex ];
+                patternChar = pattern[searchIndex];
+                textChar = text[compareIndex];
 
-               // Also the algorithm was (not) extended to ignore case differences. This is done by
-               // doing upper and lower case checks because, conversion in a single direction does
-               // not work properly for some alphabets, which have strange rules about case
-               // conversion.
+                // Also the algorithm was (not) extended to ignore case differences. This is done by
+                // doing upper and lower case checks because, conversion in a single direction does
+                // not work properly for some alphabets, which have strange rules about case
+                // conversion.
                 /*if ( /*Character.toUpperCase( patternChar ) != Character.toUpperCase( textChar ) &&
                      Character.toLowerCase( patternChar ) != Character.toLowerCase( textChar ) )*/
-                if ( patternChar != textChar )
-                {
-                    skipTblIndex = ((int)text[ textIndex ]) % SKIP_TABLE_SIZE;
-                    textIndex = textIndex + skipTable[ skipTblIndex ];
+                if (patternChar != textChar) {
+                    skipTblIndex = ((int) text[textIndex]) % SKIP_TABLE_SIZE;
+                    textIndex = textIndex + skipTable[skipTblIndex];
                     break;
                 }
 

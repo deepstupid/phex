@@ -25,17 +25,15 @@ package phex.prefs.core;
 import phex.prefs.api.PreferencesFactory;
 import phex.prefs.api.Setting;
 
-public class FilePrefs extends PhexCorePrefs
-{
+public class FilePrefs extends PhexCorePrefs {
     /**
      * The maximum number of open files the file manager opens.
      * 0 for unlimited.
      */
     public static final Setting<Integer> OpenFilesLimit;
-    
-    static
-    {
-        OpenFilesLimit = PreferencesFactory.createIntSetting( 
-            "File.OpenFilesLimit", 0, instance );
+
+    static {
+        OpenFilesLimit = PreferencesFactory.createIntSetting(
+                "File.OpenFilesLimit", 0, instance);
     }
 }

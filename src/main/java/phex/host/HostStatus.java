@@ -22,12 +22,11 @@
  */
 package phex.host;
 
-public enum HostStatus
-{
-    NOT_CONNECTED, 
+public enum HostStatus {
+    NOT_CONNECTED,
     ERROR,
-    CONNECTING, 
-    ACCEPTING, 
+    CONNECTING,
+    ACCEPTING,
     CONNECTED,
     DISCONNECTED
 }

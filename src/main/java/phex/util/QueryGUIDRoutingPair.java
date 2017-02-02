@@ -24,32 +24,28 @@ package phex.util;
 import phex.host.Host;
 
 /**
- * 
+ *
  */
-public class QueryGUIDRoutingPair
-{
+public class QueryGUIDRoutingPair {
     private final Host host;
     private final int routedResultCount;
-    
-    public QueryGUIDRoutingPair( Host host, int routedResultCount )
-    {
+
+    public QueryGUIDRoutingPair(Host host, int routedResultCount) {
         this.host = host;
         this.routedResultCount = routedResultCount;
     }
-    
+
     /**
      * @return
      */
-    public Host getHost()
-    {
+    public Host getHost() {
         return host;
     }
 
-	/**
-	 * @return Returns the routedResultCount.
-	 */
-	public int getRoutedResultCount()
-	{
-		return routedResultCount;
-	}
+    /**
+     * @return Returns the routedResultCount.
+     */
+    public int getRoutedResultCount() {
+        return routedResultCount;
+    }
 }

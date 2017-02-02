@@ -23,10 +23,8 @@ package phex.host;
  * This is a super class for general IO exceptions that make a host unusable
  * for Phex.
  */
-public class UnusableHostException extends Exception
-{
-    public UnusableHostException( String msg )
-    {
-        super( msg );
+public class UnusableHostException extends Exception {
+    public UnusableHostException(String msg) {
+        super(msg);
     }
 }

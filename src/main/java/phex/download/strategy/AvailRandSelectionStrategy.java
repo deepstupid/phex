@@ -25,28 +25,24 @@ import phex.download.DownloadScope;
 import phex.download.DownloadScopeList;
 import phex.download.swarming.SWDownloadFile;
 
-public class AvailRandSelectionStrategy implements ScopeSelectionStrategy
-{
+public class AvailRandSelectionStrategy implements ScopeSelectionStrategy {
     private final ScopeSelectionStrategy availStrategy;
     private final ScopeSelectionStrategy randStrategy;
-    
+
     protected AvailRandSelectionStrategy(
-        AvailabilityScopeSelectionStrategy availStrategy,
-        RandomScopeSelectionStrategy randStrategy)
-    {
+            AvailabilityScopeSelectionStrategy availStrategy,
+            RandomScopeSelectionStrategy randStrategy) {
         this.availStrategy = availStrategy;
         this.randStrategy = randStrategy;
     }
 
-    public DownloadScope selectDownloadScope( SWDownloadFile downloadFile,
-        DownloadScopeList wantedScopeList, long preferredSize )
-    {
+    public DownloadScope selectDownloadScope(SWDownloadFile downloadFile,
+                                             DownloadScopeList wantedScopeList, long preferredSize) {
         DownloadScope scope = availStrategy.selectDownloadScope(
-            downloadFile, wantedScopeList, preferredSize);
-        if ( scope == null )
-        {
-            scope = randStrategy.selectDownloadScope(
                 downloadFile, wantedScopeList, preferredSize);
+        if (scope == null) {
+            scope = randStrategy.selectDownloadScope(
+                    downloadFile, wantedScopeList, preferredSize);
         }
         return scope;
     }

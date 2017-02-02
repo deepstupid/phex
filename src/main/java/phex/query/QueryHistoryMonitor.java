@@ -27,87 +27,71 @@ import phex.msghandling.MessageSubscriber;
 import phex.prefs.core.StatisticPrefs;
 import phex.util.CircularQueue;
 
-public class QueryHistoryMonitor implements MessageSubscriber<QueryMsg>
-{
+public class QueryHistoryMonitor implements MessageSubscriber<QueryMsg> {
     private boolean isHistoryMonitored;
     private CircularQueue historyQueue;
 
-    public QueryHistoryMonitor()
-    {
+    public QueryHistoryMonitor() {
         isHistoryMonitored = false;
-        historyQueue = new CircularQueue( StatisticPrefs.QueryHistoryEntries.get().intValue(),
-            StatisticPrefs.QueryHistoryEntries.get().intValue() );
-    }
-    
-    public void setHistoryMonitored( boolean state )
-    {
-        isHistoryMonitored = state;
+        historyQueue = new CircularQueue(StatisticPrefs.QueryHistoryEntries.get().intValue(),
+                StatisticPrefs.QueryHistoryEntries.get().intValue());
     }
 
-    public boolean isHistoryMonitored( )
-    {
+    public boolean isHistoryMonitored() {
         return isHistoryMonitored;
     }
 
-    public synchronized void setMaxHistroySize( int size )
-    {
-        if ( size == historyQueue.getCapacity() )
-        {
-            return;
-        }
-        historyQueue = new CircularQueue( size, size );
-        StatisticPrefs.QueryHistoryEntries.set( Integer.valueOf( size ) );
+    public void setHistoryMonitored(boolean state) {
+        isHistoryMonitored = state;
     }
 
-    public synchronized int getMaxHistorySize()
-    {
+    public synchronized void setMaxHistroySize(int size) {
+        if (size == historyQueue.getCapacity()) {
+            return;
+        }
+        historyQueue = new CircularQueue(size, size);
+        StatisticPrefs.QueryHistoryEntries.set(Integer.valueOf(size));
+    }
+
+    public synchronized int getMaxHistorySize() {
         return historyQueue.getCapacity();
     }
 
-    public synchronized int getHistorySize()
-    {
+    public synchronized int getHistorySize() {
         return historyQueue.getSize();
     }
 
-    public synchronized HistoryEntry getSearchQueryAt( int index )
-    {
-        return (HistoryEntry) historyQueue.get( index );
+    public synchronized HistoryEntry getSearchQueryAt(int index) {
+        return (HistoryEntry) historyQueue.get(index);
     }
-    
-    public void onMessage(QueryMsg query, Host sourceHost)
-    {
-        synchronized (this)
-        {
-            if ( !isHistoryMonitored )
-            {
+
+    public void onMessage(QueryMsg query, Host sourceHost) {
+        synchronized (this) {
+            if (!isHistoryMonitored) {
                 return;
             }
             String searchString = query.getSearchString();
-            if ( searchString.length() > 0 && !searchString.equals( "\\" ) 
-                 && !searchString.startsWith( "urn:sha1:" ) )
-            {
-                historyQueue.addToHead( new HistoryEntry( query, sourceHost ) );
-                fireQueryHistoryChanged( );
+            if (searchString.length() > 0 && !searchString.equals("\\")
+                    && !searchString.startsWith("urn:sha1:")) {
+                historyQueue.addToHead(new HistoryEntry(query, sourceHost));
+                fireQueryHistoryChanged();
             }
         }
     }
 
 
     ///////////////////// START event handling methods ////////////////////////
-    private void fireQueryHistoryChanged( )
-    {
+    private void fireQueryHistoryChanged() {
         // empty event..
 
     }
     ///////////////////// END event handling methods //////////////////////////
-    
-    public class HistoryEntry
-    {
+
+    public class HistoryEntry {
         private final Host sourceHost;
         private final QueryMsg queryMsg;
-        
-        public HistoryEntry( QueryMsg queryMsg, Host sourceHost )
-        {
+
+        public HistoryEntry(QueryMsg queryMsg, Host sourceHost) {
             super();
             this.sourceHost = sourceHost;
             this.queryMsg = queryMsg;
@@ -116,16 +100,14 @@ public class QueryHistoryMonitor implements MessageSubscriber<QueryMsg>
         /**
          * @return the sourceHost
          */
-        public Host getSourceHost()
-        {
+        public Host getSourceHost() {
             return sourceHost;
         }
 
         /**
          * @return the queryMsg
          */
-        public QueryMsg getQueryMsg()
-        {
+        public QueryMsg getQueryMsg() {
             return queryMsg;
         }
     }

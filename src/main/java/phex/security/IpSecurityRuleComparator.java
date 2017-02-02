@@ -25,27 +25,22 @@ import phex.util.IOUtil;
 
 import java.util.Comparator;
 
-public class IpSecurityRuleComparator implements Comparator<IpSecurityRule>
-{
+public class IpSecurityRuleComparator implements Comparator<IpSecurityRule> {
     public static final IpSecurityRuleComparator INSTANCE = new IpSecurityRuleComparator();
-    
-    private IpSecurityRuleComparator() {}
-    
-    public int compare( IpSecurityRule rule1, IpSecurityRule rule2 )
-    {
-        if ( rule1 == rule2 || rule1.equals(rule2) )
-        {
+
+    private IpSecurityRuleComparator() {
+    }
+
+    public int compare(IpSecurityRule rule1, IpSecurityRule rule2) {
+        if (rule1 == rule2 || rule1.equals(rule2)) {
             return 0;
         }
-        long ip1l = IOUtil.unsignedInt2Long( rule1.getIp() );
-        long ip2l = IOUtil.unsignedInt2Long( rule2.getIp() );
+        long ip1l = IOUtil.unsignedInt2Long(rule1.getIp());
+        long ip2l = IOUtil.unsignedInt2Long(rule2.getIp());
 
-        if ( ip1l < ip2l )
-        {
+        if (ip1l < ip2l) {
             return -1;
-        }
-        else
-        {
+        } else {
             return 1;
         }
     }

@@ -34,136 +34,95 @@ import phex.xml.sax.security.DIpAccessRule;
 import javax.xml.parsers.SAXParser;
 import java.io.CharArrayWriter;
 
-public class IpAccessRuleHandler extends DefaultHandler
-{
+public class IpAccessRuleHandler extends DefaultHandler {
     public static final String THIS_TAG_NAME = DIpAccessRule.ELEMENT_NAME;
-    
+
     private final CharArrayWriter text = new CharArrayWriter();
     private final SAXParser parser;
     private final DIpAccessRule dIpAccessRule;
     private final DefaultHandler parent;
-    
-    public IpAccessRuleHandler( DIpAccessRule dIpAccessRule, 
-        DefaultHandler parent, SAXParser parser )
-    {
+
+    public IpAccessRuleHandler(DIpAccessRule dIpAccessRule,
+                               DefaultHandler parent, SAXParser parser) {
         this.dIpAccessRule = dIpAccessRule;
         this.parser = parser;
         this.parent = parent;
     }
-    
+
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
     @Override
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes)
-        throws SAXException
-    {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes)
+            throws SAXException {
         text.reset();
         return;
     }
-    
+
     @Override
-    public void endElement(String uri, String localName, String qName) 
-        throws SAXException
-    {
-        if ( qName.equals( "description" ) )
-        {
-            dIpAccessRule.setDescription( text.toString() );
-        }
-        else if ( qName.equals( "isDenyingRule" ) )
-        {
-            dIpAccessRule.setDenyingRule( Boolean.valueOf( text.toString() )
-                .booleanValue() );
-        }
-        else if ( qName.equals( "isDisabled" ) )
-        {
-            dIpAccessRule.setDisabled( Boolean.valueOf( text.toString() )
-                .booleanValue() );
-        }
-        else if ( qName.equals( "isDeletedOnExpiry" ) )
-        {
-            dIpAccessRule.setDeletedOnExpiry( Boolean.valueOf( text.toString() )
-                .booleanValue() );
-        }
-        else if ( qName.equals( "isSystemRule" ) )
-        {
-            dIpAccessRule.setSystemRule( Boolean.valueOf( text.toString() )
-                .booleanValue() );
-        }
-        else if ( qName.equals( "triggerCount" ) )
-        {
-            try
-            {
-                dIpAccessRule.setTriggerCount( Integer.parseInt( text.toString() ) );
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equals("description")) {
+            dIpAccessRule.setDescription(text.toString());
+        } else if (qName.equals("isDenyingRule")) {
+            dIpAccessRule.setDenyingRule(Boolean.valueOf(text.toString())
+                    .booleanValue());
+        } else if (qName.equals("isDisabled")) {
+            dIpAccessRule.setDisabled(Boolean.valueOf(text.toString())
+                    .booleanValue());
+        } else if (qName.equals("isDeletedOnExpiry")) {
+            dIpAccessRule.setDeletedOnExpiry(Boolean.valueOf(text.toString())
+                    .booleanValue());
+        } else if (qName.equals("isSystemRule")) {
+            dIpAccessRule.setSystemRule(Boolean.valueOf(text.toString())
+                    .booleanValue());
+        } else if (qName.equals("triggerCount")) {
+            try {
+                dIpAccessRule.setTriggerCount(Integer.parseInt(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(DownloadFileHandler.class, exp, exp);
             }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( DownloadFileHandler.class, exp, exp );
+        } else if (qName.equals("expiryDate")) {
+            try {
+                dIpAccessRule.setExpiryDate(Long.parseLong(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(DownloadFileHandler.class, exp, exp);
             }
-        }
-        else if ( qName.equals( "expiryDate" ) )
-        {
-            try
-            {
-                dIpAccessRule.setExpiryDate( Long.parseLong( text.toString() ) );
+        } else if (qName.equals("ip")) {
+            dIpAccessRule.setIp(ParserUtils.fromHexBinary(text.toString()));
+        } else if (qName.equals("cidr")) {
+            try {
+                dIpAccessRule.setCidr(Byte.parseByte(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(DownloadFileHandler.class, exp, exp);
             }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( DownloadFileHandler.class, exp, exp );
-            }
-        }
-        else if ( qName.equals( "ip" ) )
-        {
-            dIpAccessRule.setIp( ParserUtils.fromHexBinary( text.toString() ) );
-        }
-        else if ( qName.equals( "cidr" ) )
-        {
-            try
-            {
-                dIpAccessRule.setCidr( Byte.parseByte( text.toString() ) );
-            }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( DownloadFileHandler.class, exp, exp );
-            }
-        }
-        else if ( qName.equals( THIS_TAG_NAME ) )
-        {
-            parser.getXMLReader().setContentHandler( parent );
-        }
-        else if ( qName.equals( "compareIP" ) )
-        {
-            dIpAccessRule.setCompareIp( ParserUtils.fromHexBinary( text.toString() ) );
-        }
-        else if ( qName.equals( "addressType" ) )
-        {
-            try
-            {
-                dIpAccessRule.setAddressType( Integer.parseInt( text.toString() ) );
-            }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( DownloadFileHandler.class, exp, exp );
+        } else if (qName.equals(THIS_TAG_NAME)) {
+            parser.getXMLReader().setContentHandler(parent);
+        } else if (qName.equals("compareIP")) {
+            dIpAccessRule.setCompareIp(ParserUtils.fromHexBinary(text.toString()));
+        } else if (qName.equals("addressType")) {
+            try {
+                dIpAccessRule.setAddressType(Integer.parseInt(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(DownloadFileHandler.class, exp, exp);
             }
         }
     }
-     
+
     @Override
-    public InputSource resolveEntity( String publicId, String systemId )
-    {
+    public InputSource resolveEntity(String publicId, String systemId) {
         return null;
     }
 
     @Override
-    public void characters( char[] ch, int start, int length )
-    {
-        text.write( ch, start, length );
+    public void characters(char[] ch, int start, int length) {
+        text.write(ch, start, length);
     }
 }

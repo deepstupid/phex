@@ -25,10 +25,9 @@ package phex.prefs.core;
 import phex.prefs.api.PreferencesFactory;
 import phex.prefs.api.Setting;
 
-public class BandwidthPrefs extends PhexCorePrefs
-{
+public class BandwidthPrefs extends PhexCorePrefs {
     public static final int UNLIMITED_BANDWIDTH = Integer.MAX_VALUE;
-    
+
     /**
      * The total speed in kilo bits per second of the network connection the
      * user has available. This is not the bandwidth the user has available for
@@ -36,51 +35,50 @@ public class BandwidthPrefs extends PhexCorePrefs
      * The default of 6144 matches a DSL/Cable connection.
      */
     public static final Setting<Integer> NetworkSpeedKbps;
-    
+
     /**
      * This is the maximal bandwidth in bytes per second Phex is allowed to use
      * in total. This means network, download and upload bandwidth combined.
      * The default is UNLIMITED_BANDWIDTH for full bandwidth usage.
      */
     public static final Setting<Integer> MaxTotalBandwidth;
-    
+
     /**
      * This is the maximal bandwidth in bytes per second Phex is allowed to use
      * for Gnutella network connections.
      * The default is UNLIMITED_BANDWIDTH for full bandwidth usage.
      */
     public static final Setting<Integer> MaxNetworkBandwidth;
-    
+
     /**
      * This is the maximal bandwidth in bytes per second Phex is allowed to use
      * for download connections.
      * The default is UNLIMITED_BANDWIDTH for full bandwidth usage.
      */
     public static final Setting<Integer> MaxDownloadBandwidth;
-    
+
     /**
      * This is the maximal bandwidth in bytes per second Phex is allowed to use
      * for upload connections.
      * The default is UNLIMITED_BANDWIDTH for full bandwidth usage.
      */
     public static final Setting<Integer> MaxUploadBandwidth;
-    
-    
-    static
-    {
-        NetworkSpeedKbps = PreferencesFactory.createIntSetting( 
-            "Bandwidth.NetworkSpeedKbps", 6144, instance );
-        
-        MaxTotalBandwidth = PreferencesFactory.createIntSetting( 
-            "Bandwidth.MaxTotalBandwidth", UNLIMITED_BANDWIDTH, instance );
-        
-        MaxNetworkBandwidth = PreferencesFactory.createIntSetting( 
-            "Bandwidth.MaxNetworkBandwidth", UNLIMITED_BANDWIDTH, instance );
-        
-        MaxDownloadBandwidth = PreferencesFactory.createIntSetting( 
-            "Bandwidth.MaxDownloadBandwidth", UNLIMITED_BANDWIDTH, instance );
-        
-        MaxUploadBandwidth = PreferencesFactory.createIntSetting( 
-            "Bandwidth.MaxUploadBandwidth", UNLIMITED_BANDWIDTH, instance );
+
+
+    static {
+        NetworkSpeedKbps = PreferencesFactory.createIntSetting(
+                "Bandwidth.NetworkSpeedKbps", 6144, instance);
+
+        MaxTotalBandwidth = PreferencesFactory.createIntSetting(
+                "Bandwidth.MaxTotalBandwidth", UNLIMITED_BANDWIDTH, instance);
+
+        MaxNetworkBandwidth = PreferencesFactory.createIntSetting(
+                "Bandwidth.MaxNetworkBandwidth", UNLIMITED_BANDWIDTH, instance);
+
+        MaxDownloadBandwidth = PreferencesFactory.createIntSetting(
+                "Bandwidth.MaxDownloadBandwidth", UNLIMITED_BANDWIDTH, instance);
+
+        MaxUploadBandwidth = PreferencesFactory.createIntSetting(
+                "Bandwidth.MaxUploadBandwidth", UNLIMITED_BANDWIDTH, instance);
     }
 }

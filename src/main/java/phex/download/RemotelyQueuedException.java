@@ -22,18 +22,15 @@ import phex.http.XQueueParameters;
 
 import java.io.IOException;
 
-public class RemotelyQueuedException extends IOException
-{
+public class RemotelyQueuedException extends IOException {
     private final XQueueParameters xQueueParameters;
 
-    public RemotelyQueuedException( XQueueParameters xQueueParameters )
-    {
+    public RemotelyQueuedException(XQueueParameters xQueueParameters) {
         super();
         this.xQueueParameters = xQueueParameters;
     }
 
-    public XQueueParameters getXQueueParameters()
-    {
+    public XQueueParameters getXQueueParameters() {
         return xQueueParameters;
     }
 }

@@ -26,10 +26,9 @@ package phex.common.bandwidth;
 /**
  * This class calculates average transfer speed. It tracks the average over
  * a given period with a given refresh time.
- * It is based on a cyclic array of longs to store its values. 
+ * It is based on a cyclic array of longs to store its values.
  */
-public class TransferAverage
-{
+public class TransferAverage {
     /**
      * The refresh time for each slice in the cycle (in ms).
      */
@@ -50,76 +49,69 @@ public class TransferAverage
      */
     private long values[];
 
-    public TransferAverage( int refreshRate, int period )
-    {
-        if ( period * 1000 < refreshRate )
-        {
-            throw new IllegalArgumentException( "Invalid period" );
+    public TransferAverage(int refreshRate, int period) {
+        if (period * 1000 < refreshRate) {
+            throw new IllegalArgumentException("Invalid period");
         }
         this.refreshRate = refreshRate;
         this.period = period;
         updateTimeFactor = System.currentTimeMillis() / refreshRate;
-        
+
         // we have 2 extra elements one for the next value to fill and the other
         // is the currently filled value.
-        int elementCount = (int)Math.ceil((period * 1000f) / refreshRate + 2);
+        int elementCount = (int) Math.ceil((period * 1000f) / refreshRate + 2);
         values = new long[elementCount];
     }
 
     /**
      * Updates and cleans the buffer of values.
      */
-    private synchronized void update( long currentTimeFactor )    {
+    private synchronized void update(long currentTimeFactor) {
 
         long[] values = this.values;
         int len = values.length;
 
         // in case last update is old.. skip to only erase buffer once.
-        long updateTimeFactor = this.updateTimeFactor = ( this.updateTimeFactor < currentTimeFactor - len) ?
+        long updateTimeFactor = this.updateTimeFactor = (this.updateTimeFactor < currentTimeFactor - len) ?
                 currentTimeFactor - len - 1 :
                 this.updateTimeFactor;
 
         // clear all values between last updateTimeFactor and current.
-        for ( long i = updateTimeFactor + 1; i <= currentTimeFactor; i++ )
-        {
+        for (long i = updateTimeFactor + 1; i <= currentTimeFactor; i++) {
             values[(int) (i % len)] = 0;
         }
         // clear next
         values[(int) ((currentTimeFactor + 1) % len)] = 0;
-                
+
         this.updateTimeFactor = currentTimeFactor;
     }
 
     /**
      * Adds a value to the average.
      */
-    public void addValue( long value )
-    {
+    public void addValue(long value) {
         long currentTimeFactor = System.currentTimeMillis() / refreshRate;
-        update( currentTimeFactor );
+        update(currentTimeFactor);
         values[(int) (currentTimeFactor % values.length)] += value;
     }
 
     /**
      * Returns the current average.
      */
-    public long getAverage()
-    {
+    public long getAverage() {
         long currentTimeFactor = System.currentTimeMillis() / refreshRate;
-        update( currentTimeFactor );
+        update(currentTimeFactor);
 
         long sum = 0;
-        
-        for ( long i = currentTimeFactor + 2; i < currentTimeFactor + values.length; i++ )
-        {
+
+        for (long i = currentTimeFactor + 2; i < currentTimeFactor + values.length; i++) {
             sum += values[(int) (i % values.length)];
         }
         return (sum / period);
     }
-    
+
     @Override
-	public String toString()
-    {
+    public String toString() {
         return super.toString() + " Rate: " + refreshRate + " Period: " + period + " Avg: " + getAverage();
     }
 }

@@ -29,43 +29,35 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class UdpMessageSubscriberList<E extends Message> implements UdpMessageSubscriber<E>
-{
+public class UdpMessageSubscriberList<E extends Message> implements UdpMessageSubscriber<E> {
     private final List<UdpMessageSubscriber<E>> subscriberList;
-    
-    UdpMessageSubscriberList()
-    {
-        subscriberList = new CopyOnWriteArrayList<UdpMessageSubscriber<E>>( );
-    }
-    
-    UdpMessageSubscriberList( UdpMessageSubscriber<E> subscriber1,
-        UdpMessageSubscriber<E> subscriber2 )
-    {
-        this( );
-        addSubscribers( subscriber1, subscriber2 );
+
+    UdpMessageSubscriberList() {
+        subscriberList = new CopyOnWriteArrayList<UdpMessageSubscriber<E>>();
     }
 
-    public void onUdpMessage(E message, DestAddress sourceAddress) 
-        throws InvalidMessageException
-    {
-        for ( UdpMessageSubscriber<E> messageSubscriber : subscriberList )
-        {
-            messageSubscriber.onUdpMessage(message, sourceAddress );
+    UdpMessageSubscriberList(UdpMessageSubscriber<E> subscriber1,
+                             UdpMessageSubscriber<E> subscriber2) {
+        this();
+        addSubscribers(subscriber1, subscriber2);
+    }
+
+    public void onUdpMessage(E message, DestAddress sourceAddress)
+            throws InvalidMessageException {
+        for (UdpMessageSubscriber<E> messageSubscriber : subscriberList) {
+            messageSubscriber.onUdpMessage(message, sourceAddress);
         }
     }
-    
-    public void addSubscriber( UdpMessageSubscriber<E> subscriber )
-    {
-        subscriberList.add( subscriber );
+
+    public void addSubscriber(UdpMessageSubscriber<E> subscriber) {
+        subscriberList.add(subscriber);
     }
-    
-    public void addSubscribers( UdpMessageSubscriber<E>... subscriberArr )
-    {
-        subscriberList.addAll( Arrays.asList( subscriberArr ) );
+
+    public void addSubscribers(UdpMessageSubscriber<E>... subscriberArr) {
+        subscriberList.addAll(Arrays.asList(subscriberArr));
     }
-    
-    public void removeSubscriber( UdpMessageSubscriber<E> subscriber )
-    {
-        subscriberList.remove( subscriber );
+
+    public void removeSubscriber(UdpMessageSubscriber<E> subscriber) {
+        subscriberList.remove(subscriber);
     }
 }

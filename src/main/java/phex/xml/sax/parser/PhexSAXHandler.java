@@ -46,127 +46,105 @@ import javax.xml.parsers.SAXParser;
 import java.io.CharArrayWriter;
 
 /**
- * 
+ *
  */
-public class PhexSAXHandler extends DefaultHandler
-{
+public class PhexSAXHandler extends DefaultHandler {
     private static final String PHEX_ELEMENT = "phex";
-    
+
     private final CharArrayWriter text = new CharArrayWriter();
     private final SAXParser parser;
     private final DPhex dPhex;
-    
-    public PhexSAXHandler( DPhex dPhex, SAXParser parser )
-    {
+
+    public PhexSAXHandler(DPhex dPhex, SAXParser parser) {
         this.dPhex = dPhex;
         this.parser = parser;
     }
-    
+
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
     @Override
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes)
-        throws SAXException
-    {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes)
+            throws SAXException {
         text.reset();
         // this
-        if ( PHEX_ELEMENT.equals( qName ) )
-        {
+        if (PHEX_ELEMENT.equals(qName)) {
             String phexVersion = attributes.getValue("phex-version");
             dPhex.setPhexVersion(phexVersion);
         }
         // childs
-        else if ( qName.equals( "update-response" ) )
-        {
+        else if (qName.equals("update-response")) {
             DUpdateResponse dResponse = new DUpdateResponse();
-            dPhex.setUpdateResponse( dResponse );
-            UpdateResponseHandler handler = new UpdateResponseHandler( 
-                dResponse, attributes, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( "update-request" ) )
-        {
+            dPhex.setUpdateResponse(dResponse);
+            UpdateResponseHandler handler = new UpdateResponseHandler(
+                    dResponse, attributes, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals("update-request")) {
             // we dont need to parse these... since we are only sending it.
             assert false : "We should not pare update-request";
-        }
-        else if ( qName.equals( SharedLibraryHandler.THIS_TAG_NAME ) )
-        {
-            DSharedLibrary sharedLib = new DSharedLibrary( );
-            dPhex.setSharedLibrary( sharedLib );
-            SharedLibraryHandler handler = new SharedLibraryHandler( 
-                sharedLib, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( GuiSettingsHandler.THIS_TAG_NAME ) )
-        {
+        } else if (qName.equals(SharedLibraryHandler.THIS_TAG_NAME)) {
+            DSharedLibrary sharedLib = new DSharedLibrary();
+            dPhex.setSharedLibrary(sharedLib);
+            SharedLibraryHandler handler = new SharedLibraryHandler(
+                    sharedLib, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(GuiSettingsHandler.THIS_TAG_NAME)) {
             DGuiSettings dGui = new DGuiSettings();
             dPhex.setGuiSettings(dGui);
-            GuiSettingsHandler handler = new GuiSettingsHandler( dGui, this,
-                parser );
-            parser.getXMLReader().setContentHandler( handler );
+            GuiSettingsHandler handler = new GuiSettingsHandler(dGui, this,
+                    parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(FavoritesListHandler.THIS_TAG_NAME)) {
+            DSubElementList<DFavoriteHost> favoritsList = new DSubElementList<DFavoriteHost>(
+                    FavoritesListHandler.THIS_TAG_NAME);
+            dPhex.setFavoritesList(favoritsList);
+            FavoritesListHandler handler = new FavoritesListHandler(
+                    favoritsList, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(SearchRuleListHandler.THIS_TAG_NAME)) {
+            DSubElementList<DSearchRule> ruleList = new DSubElementList<DSearchRule>(
+                    SearchRuleListHandler.THIS_TAG_NAME);
+            dPhex.setSearchRuleList(ruleList);
+            SearchRuleListHandler handler = new SearchRuleListHandler(
+                    ruleList, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(DownloadListHandler.THIS_TAG_NAME)) {
+            DSubElementList<DDownloadFile> downloadList =
+                    new DSubElementList<DDownloadFile>(DownloadListHandler.THIS_TAG_NAME);
+            dPhex.setDownloadList(downloadList);
+            DownloadListHandler handler = new DownloadListHandler(
+                    downloadList, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(SecurityHandler.THIS_TAG_NAME)) {
+            DSecurity security = new DSecurity();
+            dPhex.setSecurityList(security);
+            SecurityHandler handler = new SecurityHandler(
+                    security, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
         }
-        else if ( qName.equals( FavoritesListHandler.THIS_TAG_NAME ) )
-        {
-            DSubElementList<DFavoriteHost> favoritsList = new DSubElementList<DFavoriteHost>( 
-                FavoritesListHandler.THIS_TAG_NAME );
-            dPhex.setFavoritesList( favoritsList );
-            FavoritesListHandler handler = new FavoritesListHandler( 
-                favoritsList, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( SearchRuleListHandler.THIS_TAG_NAME ) )
-        {
-            DSubElementList<DSearchRule> ruleList = new DSubElementList<DSearchRule>( 
-                SearchRuleListHandler.THIS_TAG_NAME );
-            dPhex.setSearchRuleList( ruleList );
-            SearchRuleListHandler handler = new SearchRuleListHandler( 
-                ruleList, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( DownloadListHandler.THIS_TAG_NAME ) )
-        {
-            DSubElementList<DDownloadFile> downloadList = 
-                new DSubElementList<DDownloadFile>( DownloadListHandler.THIS_TAG_NAME );
-            dPhex.setDownloadList( downloadList );
-            DownloadListHandler handler = new DownloadListHandler( 
-                downloadList, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( SecurityHandler.THIS_TAG_NAME ) )
-        {
-            DSecurity security = new DSecurity( );
-            dPhex.setSecurityList( security );
-            SecurityHandler handler = new SecurityHandler( 
-                security, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        
-        
+
+
         return;
     }
-    
-    public void endElement(String uri, String localName, String qName) 
-        throws SAXException
-    {
+
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
         return;
     }
-     
-     public InputSource resolveEntity(String publicId,
-        String systemId)
-     {
-         return null; 
-     }
-     
-     public void characters(char[] ch, int start, int length)
-     {
-         text.write( ch,start,length );
-     }
+
+    public InputSource resolveEntity(String publicId,
+                                     String systemId) {
+        return null;
+    }
+
+    public void characters(char[] ch, int start, int length) {
+        text.write(ch, start, length);
+    }
 }

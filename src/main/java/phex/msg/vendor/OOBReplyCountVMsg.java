@@ -26,56 +26,48 @@ import phex.msg.InvalidMessageException;
 import phex.msg.MsgHeader;
 import phex.util.IOUtil;
 
-public class OOBReplyCountVMsg extends VendorMsg
-{   
+public class OOBReplyCountVMsg extends VendorMsg {
     public static final int VERSION = 3;
-    
+
     public int resultCount;
-    
-    public OOBReplyCountVMsg( MsgHeader header, byte[] vendorId,
-        int subSelector, int version, byte[] data) 
-        throws InvalidMessageException
-    {
+
+    public OOBReplyCountVMsg(MsgHeader header, byte[] vendorId,
+                             int subSelector, int version, byte[] data)
+            throws InvalidMessageException {
         super(header, vendorId, subSelector, version, data);
-        if ( version != VERSION )
-        {
+        if (version != VERSION) {
             throw new InvalidMessageException("Vendor Message 'OOBReplyCountVMsg' with invalid version: "
-                + version);
+                    + version);
         }
-        
-        if ( data.length < 2 )
-        {
+
+        if (data.length < 2) {
             throw new InvalidMessageException("Vendor Message 'OOBReplyCountVMsg' with invalid data length: "
-                + data.length );
+                    + data.length);
         }
-        
-        resultCount = IOUtil.unsignedByte2int( data[0] );
+
+        resultCount = IOUtil.unsignedByte2int(data[0]);
         // ignore data[1] since we don't support unsocialized results.
     }
-    
-    public int getResultCount()
-    {
-        return resultCount;
-    }
-    
-    public OOBReplyCountVMsg( GUID guid, int resultCount ) 
-    {
-        super( VENDORID_LIME, SUBSELECTOR_OOB_REPLY_COUNT, VERSION,
-            buildDataBody( resultCount ) );
+
+    public OOBReplyCountVMsg(GUID guid, int resultCount) {
+        super(VENDORID_LIME, SUBSELECTOR_OOB_REPLY_COUNT, VERSION,
+                buildDataBody(resultCount));
         this.resultCount = resultCount;
-        getHeader().setMsgID( guid );
+        getHeader().setMsgID(guid);
     }
-    
-    private static byte[] buildDataBody( int resultCount )
-    {
-        if ( resultCount < 1 || resultCount > 255 )
-        {
-            throw new IllegalArgumentException( "Invalid number of results: " + resultCount );
+
+    private static byte[] buildDataBody(int resultCount) {
+        if (resultCount < 1 || resultCount > 255) {
+            throw new IllegalArgumentException("Invalid number of results: " + resultCount);
         }
         byte[] resultBytes = new byte[2];
-        IOUtil.serializeShortLE( (short) resultCount, resultBytes, 0 );
+        IOUtil.serializeShortLE((short) resultCount, resultBytes, 0);
         // don't support unsocialized results
         resultBytes[1] = 0x0;
         return resultBytes;
+    }
+
+    public int getResultCount() {
+        return resultCount;
     }
 }

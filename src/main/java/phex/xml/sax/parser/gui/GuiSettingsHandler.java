@@ -36,10 +36,9 @@ import javax.xml.parsers.SAXParser;
 import java.io.CharArrayWriter;
 
 /**
- * 
+ *
  */
-public class GuiSettingsHandler extends DefaultHandler
-{
+public class GuiSettingsHandler extends DefaultHandler {
     public static final String THIS_TAG_NAME = DGuiSettings.ELEMENT_NAME;
 
     private final CharArrayWriter text = new CharArrayWriter();
@@ -50,9 +49,8 @@ public class GuiSettingsHandler extends DefaultHandler
 
     private final DefaultHandler parent;
 
-    public GuiSettingsHandler( DGuiSettings dGui, DefaultHandler parent, 
-        SAXParser parser )
-    {
+    public GuiSettingsHandler(DGuiSettings dGui, DefaultHandler parent,
+                              SAXParser parser) {
         this.dGui = dGui;
         this.parser = parser;
         this.parent = parent;
@@ -61,145 +59,99 @@ public class GuiSettingsHandler extends DefaultHandler
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
     @Override
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes ) throws SAXException
-    {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes) throws SAXException {
         text.reset();
-        if ( qName.equals( "tab" ) )
-        {
+        if (qName.equals("tab")) {
             DTab tab = new DTab();
-            dGui.getTabList().add( tab );
+            dGui.getTabList().add(tab);
 
-            GuiTabHandler handler = new GuiTabHandler( tab, attributes, this,
-                parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( GuiTableListHandler.THIS_TAG_NAME ) )
-        {
+            GuiTabHandler handler = new GuiTabHandler(tab, attributes, this,
+                    parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(GuiTableListHandler.THIS_TAG_NAME)) {
             DTableList tables = new DTableList();
-            dGui.setTableList( tables );
+            dGui.setTableList(tables);
 
-            GuiTableListHandler handler = new GuiTableListHandler( tables, attributes,
-                this, parser );
-            parser.getXMLReader().setContentHandler( handler );
+            GuiTableListHandler handler = new GuiTableListHandler(tables, attributes,
+                    this, parser);
+            parser.getXMLReader().setContentHandler(handler);
         }
         return;
     }
 
     @Override
-    public void endElement( String uri, String localName, String qName )
-        throws SAXException
-    {
-        if ( qName.equals( "look-and-feel-class" ) )
-        {
-            dGui.setLookAndFeelClass( text.toString() );
-        }
-        else if ( qName.equals( "icon-pack" ) )
-        {
-            dGui.setIconPackName( text.toString() );
-        }
-        else if ( qName.equals( "is-toolbar-visible" ) )
-        {
-            dGui.setToolbarVisible( Boolean.valueOf( text.toString() )
-                .booleanValue() );
-        }
-        else if ( qName.equals( "is-statusbar-visible" ) )
-        {
-            dGui.setStatusbarVisible( Boolean.valueOf( text.toString() )
-                .booleanValue() );
-        }
-        else if ( qName.equals( "is-searchbar-visible" ) )
-        {
-            dGui.setSearchBarVisible( Boolean.valueOf( text.toString() )
-                .booleanValue() );
-        }
-        else if ( qName.equals( "is-searchlist-visible" ) )
-        {
-            dGui.setSearchListVisible( Boolean.valueOf( text.toString() )
-                .booleanValue() );
-        }
-        else if ( qName.equals( "is-searchfilterpanel-visible" ) )
-        {
-            dGui.setSearchFilterPanelVisible( Boolean.valueOf( text.toString() )
-                .booleanValue() );
-        }
-        else if ( qName.equals( "is-log-bandwidth-slider-used" ) )
-        {
-            dGui.setLogBandwidthSliderUsed( Boolean.valueOf( text.toString() )
-                .booleanValue() );
-        }
-        else if ( qName.equals( "show-respect-copyright-notice" ) )
-        {
-            dGui.setShowRespectCopyrightNotice( Boolean.valueOf(
-                text.toString() ).booleanValue() );
-        }
-        else if ( qName.equals( "window-posX" ) )
-        {
-            try
-            {
-                dGui.setWindowPosX( Integer.parseInt( text.toString() ) );
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equals("look-and-feel-class")) {
+            dGui.setLookAndFeelClass(text.toString());
+        } else if (qName.equals("icon-pack")) {
+            dGui.setIconPackName(text.toString());
+        } else if (qName.equals("is-toolbar-visible")) {
+            dGui.setToolbarVisible(Boolean.valueOf(text.toString())
+                    .booleanValue());
+        } else if (qName.equals("is-statusbar-visible")) {
+            dGui.setStatusbarVisible(Boolean.valueOf(text.toString())
+                    .booleanValue());
+        } else if (qName.equals("is-searchbar-visible")) {
+            dGui.setSearchBarVisible(Boolean.valueOf(text.toString())
+                    .booleanValue());
+        } else if (qName.equals("is-searchlist-visible")) {
+            dGui.setSearchListVisible(Boolean.valueOf(text.toString())
+                    .booleanValue());
+        } else if (qName.equals("is-searchfilterpanel-visible")) {
+            dGui.setSearchFilterPanelVisible(Boolean.valueOf(text.toString())
+                    .booleanValue());
+        } else if (qName.equals("is-log-bandwidth-slider-used")) {
+            dGui.setLogBandwidthSliderUsed(Boolean.valueOf(text.toString())
+                    .booleanValue());
+        } else if (qName.equals("show-respect-copyright-notice")) {
+            dGui.setShowRespectCopyrightNotice(Boolean.valueOf(
+                    text.toString()).booleanValue());
+        } else if (qName.equals("window-posX")) {
+            try {
+                dGui.setWindowPosX(Integer.parseInt(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(SharedFileHandler.class, exp, exp);
             }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( SharedFileHandler.class, exp, exp );
+        } else if (qName.equals("window-posY")) {
+            try {
+                dGui.setWindowPosY(Integer.parseInt(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(SharedFileHandler.class, exp, exp);
             }
-        }
-        else if ( qName.equals( "window-posY" ) )
-        {
-            try
-            {
-                dGui.setWindowPosY( Integer.parseInt( text.toString() ) );
-            }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( SharedFileHandler.class, exp, exp );
-            }
-        }
-        else if ( qName.equals( "window-width" ) )
-        {
-            try
-            {
+        } else if (qName.equals("window-width")) {
+            try {
 
-                dGui.setWindowWidth( Integer.parseInt( text.toString() ) );
+                dGui.setWindowWidth(Integer.parseInt(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(SharedFileHandler.class, exp, exp);
             }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( SharedFileHandler.class, exp, exp );
+        } else if (qName.equals("window-height")) {
+            try {
+                dGui.setWindowHeight(Integer.parseInt(text.toString()));
+            } catch (NumberFormatException exp) {
+                NLogger.error(SharedFileHandler.class, exp, exp);
             }
-        }
-        else if ( qName.equals( "window-height" ) )
-        {
-            try
-            {
-                dGui.setWindowHeight( Integer.parseInt( text.toString() ) );
-            }
-            catch (NumberFormatException exp)
-            {
-                NLogger.error( SharedFileHandler.class, exp, exp );
-            }
-        }
-        else if ( qName.equals( THIS_TAG_NAME ) )
-        {
-            parser.getXMLReader().setContentHandler( parent );
+        } else if (qName.equals(THIS_TAG_NAME)) {
+            parser.getXMLReader().setContentHandler(parent);
         }
     }
 
     @Override
-    public InputSource resolveEntity( String publicId, String systemId )
-    {
+    public InputSource resolveEntity(String publicId, String systemId) {
         return null;
     }
 
     @Override
-    public void characters( char[] ch, int start, int length )
-    {
-        text.write( ch, start, length );
+    public void characters(char[] ch, int start, int length) {
+        text.write(ch, start, length);
     }
 }

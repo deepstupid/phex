@@ -31,113 +31,96 @@ import phex.servent.Servent;
  * download. This is the download file, the download segment and the download
  * candidate.
  */
-public class SWDownloadSet
-{
-    private static final Logger logger = LoggerFactory.getLogger( SWDownloadSet.class );
-    
+public class SWDownloadSet {
+    private static final Logger logger = LoggerFactory.getLogger(SWDownloadSet.class);
+
     private final Servent servent;
     private final SWDownloadFile downloadFile;
     private final SWDownloadCandidate downloadCandidate;
     private DownloadScope downloadScope;
     private SWDownloadSegment downloadSegment;
-    
 
-    public SWDownloadSet( Servent servent, SWDownloadFile aDownloadFile,
-        SWDownloadCandidate aDownloadCandidate )
-    {
+
+    public SWDownloadSet(Servent servent, SWDownloadFile aDownloadFile,
+                         SWDownloadCandidate aDownloadCandidate) {
         this.servent = servent;
         downloadFile = aDownloadFile;
         downloadCandidate = aDownloadCandidate;
         downloadScope = null;
     }
-    
-    public Servent getServent()
-    {
+
+    public Servent getServent() {
         return servent;
     }
 
-    public SWDownloadFile getDownloadFile()
-    {
+    public SWDownloadFile getDownloadFile() {
         return downloadFile;
     }
 
-    public SWDownloadCandidate getCandidate()
-    {
+    public SWDownloadCandidate getCandidate() {
         return downloadCandidate;
     }
 
-    public SWDownloadSegment allocateSegment( )
-    {
-        logger.debug( "Allocate segment on set {}", this);
-        if ( downloadScope == null )
-        {
-            downloadScope = downloadFile.allocateDownloadScope( downloadCandidate );
-            
-            if ( downloadScope != null )
-            {
-                if ( downloadScope.getEnd() == Long.MAX_VALUE )
-                {
-                    downloadSegment = new SWDownloadSegment( downloadFile,
-                        downloadScope.getStart(), SWDownloadConstants.UNKNOWN_FILE_SIZE );
+    public SWDownloadSegment allocateSegment() {
+        logger.debug("Allocate segment on set {}", this);
+        if (downloadScope == null) {
+            downloadScope = downloadFile.allocateDownloadScope(downloadCandidate);
+
+            if (downloadScope != null) {
+                if (downloadScope.getEnd() == Long.MAX_VALUE) {
+                    downloadSegment = new SWDownloadSegment(downloadFile,
+                            downloadScope.getStart(), SWDownloadConstants.UNKNOWN_FILE_SIZE);
+                } else {
+                    downloadSegment = new SWDownloadSegment(downloadFile,
+                            downloadScope.getStart(), downloadScope.getLength());
                 }
-                else
-                {
-                    downloadSegment = new SWDownloadSegment( downloadFile,
-                        downloadScope.getStart(), downloadScope.getLength() );
-                }
-                downloadCandidate.associateDownloadSegment( downloadSegment );
+                downloadCandidate.associateDownloadSegment(downloadSegment);
             }
             // sanity check to make sure!
-            logger.debug( "Allocated segment: {} on set {}", downloadSegment, this);
+            logger.debug("Allocated segment: {} on set {}", downloadSegment, this);
         }
-        if ( downloadSegment == null )
-        {
-            logger.debug( "No segment found to allocate" );
+        if (downloadSegment == null) {
+            logger.debug("No segment found to allocate");
             return null;
         }
-        downloadCandidate.addToCandidateLog( "Allocated segment: " + downloadSegment + " - " + downloadScope );
+        downloadCandidate.addToCandidateLog("Allocated segment: " + downloadSegment + " - " + downloadScope);
         return downloadSegment;
     }
-    
-    public SWDownloadSegment getDownloadSegment()
-    {
+
+    public SWDownloadSegment getDownloadSegment() {
         return downloadSegment;
     }
 
     /**
      * Releases a allocated download segment.
      */
-    public void releaseDownloadSegment( )
-    {
-        if ( downloadSegment != null )
-        {
-            logger.debug( "Release file download segment: {} on set {}", downloadSegment, this);
-            downloadFile.releaseDownloadScope( downloadScope, 
-                downloadSegment.getTransferredDataSize(), downloadCandidate );
-            downloadCandidate.addToCandidateLog( "Release segment: " + downloadSegment 
-                + " - " + downloadScope );
+    public void releaseDownloadSegment() {
+        if (downloadSegment != null) {
+            logger.debug("Release file download segment: {} on set {}", downloadSegment, this);
+            downloadFile.releaseDownloadScope(downloadScope,
+                    downloadSegment.getTransferredDataSize(), downloadCandidate);
+            downloadCandidate.addToCandidateLog("Release segment: " + downloadSegment
+                    + " - " + downloadScope);
             downloadSegment = null;
             downloadScope = null;
         }
-        logger.debug( "Release candidate download segment on set {}", this);
-        downloadCandidate.releaseDownloadSegment( );
+        logger.debug("Release candidate download segment on set {}", this);
+        downloadCandidate.releaseDownloadSegment();
     }
 
     /**
      * Releases a allocated download set.
      */
-    public void releaseDownloadSet( )
-    {
-        logger.debug( "Release download set on set {}", this );
+    public void releaseDownloadSet() {
+        logger.debug("Release download set on set {}", this);
         releaseDownloadSegment();
-        downloadFile.releaseDownloadCandidate( downloadCandidate );
+        downloadFile.releaseDownloadCandidate(downloadCandidate);
         downloadFile.decrementWorkerCount();
     }
 
     @Override
-    public String toString()
-    {
-        return "[DownloadSet@" + Integer.toHexString(hashCode()) +": (Segment: " + downloadSegment + " - Candidate: "
-            + downloadCandidate + " - File: " + downloadFile + ")]";
+    public String toString() {
+        return "[DownloadSet@" + Integer.toHexString(hashCode()) + ": (Segment: " + downloadSegment + " - Candidate: "
+                + downloadCandidate + " - File: " + downloadFile + ")]";
     }
 }

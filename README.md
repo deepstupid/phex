@@ -7,3 +7,7 @@ Since listing all those users who tested Phex and all those coders who contribut
 
 Thank you! Thank you all!
 - The Phex Development Group
+
+----
+
+Gnutella Wiki: http://g2.doxu.org

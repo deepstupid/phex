@@ -37,102 +37,85 @@ import java.io.OutputStream;
 import java.nio.channels.Channels;
 
 /**
- * 
+ *
  */
-public class Connection
-{   
+public class Connection {
     protected SocketFacade socket;
-    
-    private BandwidthController bandwidthController;
-    
-    private BandwidthByteChannel bandwidthByteChannel;
-    
     protected GnutellaInputStream inputStream;
+    private BandwidthController bandwidthController;
+    private BandwidthByteChannel bandwidthByteChannel;
     private GnutellaOutputStream outputStream;
-    
-    
+
+
     /**
      * Creates a new Connection object for the given socket.
-     * 
+     * <p>
      * The standard BandwidthController used is the NetworkBandwidthController.
+     *
      * @param socket
      */
-    public Connection( SocketFacade socket, BandwidthController bandwidthController )
-    {
-        if ( socket == null )
-        {
-            throw new IllegalArgumentException( "SocketFacade required.");
+    public Connection(SocketFacade socket, BandwidthController bandwidthController) {
+        if (socket == null) {
+            throw new IllegalArgumentException("SocketFacade required.");
         }
-        if ( bandwidthController == null )
-        {
-            throw new IllegalArgumentException( "Bandwidth controller required.");
+        if (bandwidthController == null) {
+            throw new IllegalArgumentException("Bandwidth controller required.");
         }
         this.socket = socket;
         this.bandwidthController = bandwidthController;
     }
-    
-    protected Connection()
-    {
+
+    protected Connection() {
     }
 
-    public void setBandwidthController( BandwidthController bandwidthController )
-    {
+    public void setBandwidthController(BandwidthController bandwidthController) {
         this.bandwidthController = bandwidthController;
-        if ( bandwidthByteChannel != null )
-        {
-            bandwidthByteChannel.setBandwidthController( bandwidthController );
+        if (bandwidthByteChannel != null) {
+            bandwidthByteChannel.setBandwidthController(bandwidthController);
         }
     }
-    
-    private synchronized void initBandwidthByteChannel() throws IOException
-    {
-        if ( bandwidthByteChannel == null )
-        {
-            bandwidthByteChannel = new BandwidthByteChannel( socket.getChannel(), 
-                bandwidthController );
+
+    private synchronized void initBandwidthByteChannel() throws IOException {
+        if (bandwidthByteChannel == null) {
+            bandwidthByteChannel = new BandwidthByteChannel(socket.getChannel(),
+                    bandwidthController);
         }
     }
-    
-    public SocketFacade getSocket()
-    {
+
+    public SocketFacade getSocket() {
         return socket;
     }
-    
+
     /**
      * @deprecated use read( ByteBuffer ) / write( ByteBuffer );
      */
     @Deprecated
     public GnutellaInputStream getInputStream()
-        throws IOException
-    {
-        if ( inputStream == null )
-        {
-            if ( socket == null )
-            {
-                throw new ConnectionClosedException( "Connection already closed" );
+            throws IOException {
+        if (inputStream == null) {
+            if (socket == null) {
+                throw new ConnectionClosedException("Connection already closed");
             }
             initBandwidthByteChannel();
-            InputStream inStream = Channels.newInputStream( bandwidthByteChannel );
-            inputStream = new GnutellaInputStream( inStream );
+            InputStream inStream = Channels.newInputStream(bandwidthByteChannel);
+            inputStream = new GnutellaInputStream(inStream);
         }
         return inputStream;
     }
-    
+
     /**
      * @deprecated use read( ByteBuffer ) / write( ByteBuffer );
      */
     @Deprecated
-    public int readPeek() throws IOException
-    {
+    public int readPeek() throws IOException {
         return getInputStream().peek();
     }
-    
+
     /**
      * @deprecated use read( ByteBuffer ) / write( ByteBuffer );
      */
     @Deprecated
-    public String readLine() throws IOException
-    {
+    public String readLine() throws IOException {
         return getInputStream().readLine();
     }
 
@@ -141,70 +124,57 @@ public class Connection
      */
     @Deprecated
     public GnutellaOutputStream getOutputStream()
-        throws IOException
-    {
-        if ( outputStream == null )
-        {
-            if ( socket == null )
-            {
-                throw new ConnectionClosedException( "Connection already closed" );
+            throws IOException {
+        if (outputStream == null) {
+            if (socket == null) {
+                throw new ConnectionClosedException("Connection already closed");
             }
             initBandwidthByteChannel();
-            OutputStream outStream = Channels.newOutputStream( bandwidthByteChannel );
-            outputStream = new GnutellaOutputStream( outStream );
+            OutputStream outStream = Channels.newOutputStream(bandwidthByteChannel);
+            outputStream = new GnutellaOutputStream(outStream);
         }
         return outputStream;
     }
-    
-    public void write( ByteBuffer buffer ) throws IOException
-    {
+
+    public void write(ByteBuffer buffer) throws IOException {
         int pos = buffer.position();
         int limit = buffer.limit();
-        if ( buffer.hasArray() )
-        {
+        if (buffer.hasArray()) {
             byte[] bufferSrc = buffer.array();
-            getOutputStream().write( bufferSrc, pos, limit-pos );
-            buffer.position( limit );
-        }
-        else
-        {
-            byte[] buf = new byte[ limit-pos ];
-            buffer.get( buf );
-            getOutputStream().write( buf );
+            getOutputStream().write(bufferSrc, pos, limit - pos);
+            buffer.position(limit);
+        } else {
+            byte[] buf = new byte[limit - pos];
+            buffer.get(buf);
+            getOutputStream().write(buf);
         }
     }
-    
-    public void read( ByteBuffer buffer ) throws IOException
-    {
+
+    public void read(ByteBuffer buffer) throws IOException {
         int pos = buffer.position();
         int limit = buffer.limit();
-        if ( buffer.hasArray() )
-        {
+        if (buffer.hasArray()) {
             byte[] bufferSrc = buffer.array();
-            int length = getInputStream().read( bufferSrc, pos, limit-pos );
-            buffer.skip( length );
-        }
-        else
-        {
-            byte[] buf = new byte[ limit-pos ];
-            int length = getInputStream().read( buf );
-            buffer.put( buf, 0, length );
+            int length = getInputStream().read(bufferSrc, pos, limit - pos);
+            buffer.skip(length);
+        } else {
+            byte[] buf = new byte[limit - pos];
+            int length = getInputStream().read(buf);
+            buffer.put(buf, 0, length);
         }
     }
-    
-    public void flush() throws IOException
-    {
+
+    public void flush() throws IOException {
         getOutputStream().flush();
     }
-    
-    public void disconnect()
-    {
-        NLogger.debug( Connection.class, "Disconnecting socket " + socket );
-        IOUtil.closeQuietly( inputStream );
-        IOUtil.closeQuietly( outputStream );
-        IOUtil.closeQuietly( socket );
+
+    public void disconnect() {
+        NLogger.debug(Connection.class, "Disconnecting socket " + socket);
+        IOUtil.closeQuietly(inputStream);
+        IOUtil.closeQuietly(outputStream);
+        IOUtil.closeQuietly(socket);
         inputStream = null;
         outputStream = null;
-        socket = null;        
+        socket = null;
     }
 }

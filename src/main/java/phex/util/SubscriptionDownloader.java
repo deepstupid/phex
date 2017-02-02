@@ -26,8 +26,6 @@ import org.apache.commons.httpclient.URIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.Environment;
-import phex.common.Phex;
-import phex.download.swarming.PhexEventService;
 import phex.prefs.core.SubscriptionPrefs;
 import phex.servent.Servent;
 import phex.share.FileRescanRunner;
@@ -38,107 +36,85 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 
-public class SubscriptionDownloader extends TimerTask
-{
-    private static final Logger logger = LoggerFactory.getLogger( SubscriptionDownloader.class );
-    public SubscriptionDownloader()
-    {
-        Environment.getInstance().scheduleTimerTask( this, 0, 14 * 24  * 3600 * 1000 );
+public class SubscriptionDownloader extends TimerTask {
+    private static final Logger logger = LoggerFactory.getLogger(SubscriptionDownloader.class);
+
+    public SubscriptionDownloader() {
+        Environment.getInstance().scheduleTimerTask(this, 0, 14 * 24 * 3600 * 1000);
     }
 
-    @Override
-    public void run()
-    {
-        try
-        {
-            List<String> subscriptionMagnets = loadSubscriptionList();
-            String uriStr;
-            Iterator<String> iterator = subscriptionMagnets.iterator();
-            
-            // Sync subscription operation with a possible rescan process, this 
-            // prevents downloads of files already existing but not yet scanned.
-            FileRescanRunner.sync();
-            
-            while ( iterator.hasNext() )
-            {
-                uriStr = iterator.next();
-                if ( SubscriptionPrefs.DownloadSilently.get().booleanValue() )
-                {
-                    try
-                    {
-                        createDownload( uriStr );
-                    } //This donwloads the magma via magnet silently in the background. 
-                    catch (URIException exp)
-                    {
-                        logger.error( exp.getMessage(), exp );
-                    }
-                }
-                else
-                {
-                    PhexEventService eventService = Phex.getEventService();
-
-                }
-            }
-        }
-        catch ( Throwable th )
-        {
-            logger.error( th.toString(), th );
-        }
-    }
-
-    private static List<String> loadSubscriptionList()
-    {
+    private static List<String> loadSubscriptionList() {
         String name = "/subscription.list";
         InputStream stream = SubscriptionDownloader.class
-            .getResourceAsStream( name );
-        
+                .getResourceAsStream(name);
+
         // TODO verify the code inside this if{}... is this really correct what
         // happens here?? looks strange...
-        if ( stream == null )
-        {
+        if (stream == null) {
             List<String> subscriptionMagnets = SubscriptionPrefs.SubscriptionMagnets.get();
             List<String> list = SubscriptionPrefs.SubscriptionMagnets.get();
-            if ( subscriptionMagnets != null
-                && SubscriptionPrefs.default_subscriptionMagnets != null )
-            {
-                subscriptionMagnets.add( SubscriptionPrefs.default_subscriptionMagnets );
+            if (subscriptionMagnets != null
+                    && SubscriptionPrefs.default_subscriptionMagnets != null) {
+                subscriptionMagnets.add(SubscriptionPrefs.default_subscriptionMagnets);
             }
             return list;
         }
-        try
-        {
+        try {
             // make sure it is buffered
-            InputStreamReader input = new InputStreamReader( stream );
-            BufferedReader reader = new BufferedReader( input );
+            InputStreamReader input = new InputStreamReader(stream);
+            BufferedReader reader = new BufferedReader(input);
             List<String> list = new ArrayList<String>();
             String line = reader.readLine();
-            while ( line != null )
-            {
-                list.add( line );
+            while (line != null) {
+                list.add(line);
                 line = reader.readLine();
             }
             List<String> oldSubscriptionMagnets = SubscriptionPrefs.SubscriptionMagnets.get();
-            list.addAll( oldSubscriptionMagnets );
+            list.addAll(oldSubscriptionMagnets);
             return list;
-        }
-        catch (IOException exp)
-        {
-            logger.warn( exp.toString(), exp );
-        }
-        finally
-        {
-            IOUtil.closeQuietly( stream );
+        } catch (IOException exp) {
+            logger.warn(exp.toString(), exp);
+        } finally {
+            IOUtil.closeQuietly(stream);
         }
         return Collections.emptyList();
     }
 
-    public static void createDownload(String uriStr) throws URIException
-    {
-        if (uriStr.length() == 0)
-        {
+    public static void createDownload(String uriStr) throws URIException {
+        if (uriStr.length() == 0) {
             return;
         }
-        URI uri = new URI( uriStr, true );
-        Servent.getInstance().getDownloadService().addFileToDownload( uri, true );
+        URI uri = new URI(uriStr, true);
+        Servent.getInstance().getDownloadService().addFileToDownload(uri, true);
+    }
+
+    @Override
+    public void run() {
+        try {
+            List<String> subscriptionMagnets = loadSubscriptionList();
+            String uriStr;
+            Iterator<String> iterator = subscriptionMagnets.iterator();
+
+            // Sync subscription operation with a possible rescan process, this
+            // prevents downloads of files already existing but not yet scanned.
+            FileRescanRunner.sync();
+
+            while (iterator.hasNext()) {
+                uriStr = iterator.next();
+                if (SubscriptionPrefs.DownloadSilently.get().booleanValue()) {
+                    try {
+                        createDownload(uriStr);
+                    } //This donwloads the magma via magnet silently in the background.
+                    catch (URIException exp) {
+                        logger.error(exp.getMessage(), exp);
+                    }
+                } else {
+
+
+                }
+            }
+        } catch (Throwable th) {
+            logger.error(th.toString(), th);
+        }
     }
 }

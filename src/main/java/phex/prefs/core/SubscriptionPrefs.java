@@ -27,26 +27,24 @@ import phex.prefs.api.Setting;
 
 import java.util.List;
 
-public class SubscriptionPrefs extends PhexCorePrefs
-{
+public class SubscriptionPrefs extends PhexCorePrefs {
     public static final String default_subscriptionMagnets = null; /* new String("magnet:?xs=http://draketo.de/magma/filk-filme.magma&dn=filk-filme.magma"); */
-    
+
     /**
      * Indicates if subscriptions should be downloaded silently.
      */
     public static final Setting<Boolean> DownloadSilently;
-    
-    /** 
+
+    /**
      * Subscription-Uris
-     * These should point to magma-files.  
+     * These should point to magma-files.
      */
     public static final Setting<List<String>> SubscriptionMagnets;
-    
-    static
-    {
+
+    static {
         DownloadSilently = PreferencesFactory.createBoolSetting(
-            "Subscription.DownloadSilently", false, instance );
+                "Subscription.DownloadSilently", false, instance);
         SubscriptionMagnets = PreferencesFactory.createListSetting(
-            "Subscription.SubscriptionMagnets", instance );
+                "Subscription.SubscriptionMagnets", instance);
     }
 }

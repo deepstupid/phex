@@ -20,24 +20,20 @@ package phex.download;
 
 import java.io.IOException;
 
-public class RangeUnavailableException extends IOException
-{
+public class RangeUnavailableException extends IOException {
     private final int waitTimeInSeconds;
 
-    public RangeUnavailableException()
-    {
-        super( "RangeUnavailableException" );
+    public RangeUnavailableException() {
+        super("RangeUnavailableException");
         waitTimeInSeconds = -1;
     }
-    
-    public RangeUnavailableException( int waitTimeInSeconds )
-    {
-        super( "RangeUnavailableException - waiting: " + waitTimeInSeconds );
+
+    public RangeUnavailableException(int waitTimeInSeconds) {
+        super("RangeUnavailableException - waiting: " + waitTimeInSeconds);
         this.waitTimeInSeconds = waitTimeInSeconds;
     }
-    
-    public int getWaitTimeInSeconds()
-    {
+
+    public int getWaitTimeInSeconds() {
         return waitTimeInSeconds;
     }
 }

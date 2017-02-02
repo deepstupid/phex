@@ -26,39 +26,34 @@ import phex.bootstrap.UdpHostCacheContainer;
 import phex.common.log.NLogger;
 import phex.servent.Servent;
 
-public class DefaultHostFetchingStrategy implements HostFetchingStrategy
-{
+public class DefaultHostFetchingStrategy implements HostFetchingStrategy {
     private final BootstrapManager gWebCacheMgr;
     private final UdpHostCacheContainer udpHostCacheContainer;
-    
-    public DefaultHostFetchingStrategy( Servent servent, UdpHostCacheContainer udpHostCacheContainer )
-    {
-        if ( udpHostCacheContainer == null )
-        {
-            throw new IllegalArgumentException( "UHC is null" );
+
+    public DefaultHostFetchingStrategy(Servent servent, UdpHostCacheContainer udpHostCacheContainer) {
+        if (udpHostCacheContainer == null) {
+            throw new IllegalArgumentException("UHC is null");
         }
-        this.gWebCacheMgr = new BootstrapManager( servent );
+        this.gWebCacheMgr = new BootstrapManager(servent);
         this.udpHostCacheContainer = udpHostCacheContainer;
     }
-    
+
     // temporary workaround method for post manager initialization
-    public void postManagerInitRoutine()
-    {
+    public void postManagerInitRoutine() {
         gWebCacheMgr.postManagerInitRoutine();
     }
 
-    public void fetchNewHosts( FetchingReason reason )
-    {
-        NLogger.info( DefaultHostFetchingStrategy.class, "Fetch new Hosts: " +
-            reason.toString() );
-     
+    public void fetchNewHosts(FetchingReason reason) {
+        NLogger.info(DefaultHostFetchingStrategy.class, "Fetch new Hosts: " +
+                reason.toString());
+
         // Query udpHostCache for new hosts
         udpHostCacheContainer.invokeQueryCachesRequest();
-        
+
         //if ( reason == FetchingReason.EnsureMinHosts )
         {
             // connect GWebCache for new hosts...
-            gWebCacheMgr.invokeQueryMoreHostsRequest( true );
+            gWebCacheMgr.invokeQueryMoreHostsRequest(false);
         }
     }
 }

@@ -30,139 +30,97 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MultipleException extends Exception
-{
+public class MultipleException extends Exception {
     private List<Throwable> list;
-    
-    public MultipleException()
-    {
-        super( "Multiple exceptions" );
+
+    public MultipleException() {
+        super("Multiple exceptions");
     }
 
-    public void add( Throwable th )
-    {
-        if ( list == null )
-        {
+    public void add(Throwable th) {
+        if (list == null) {
             list = new ArrayList<>();
         }
-        list.add( th );
+        list.add(th);
     }
 
-    public int size()
-    {
-        if ( list == null )
-        {
+    public int size() {
+        if (list == null) {
             return 0;
         }
         return list.size();
     }
-    
-    public List<Throwable> getThrowables()
-    {
-        if ( list == null )
-        {
+
+    public List<Throwable> getThrowables() {
+        if (list == null) {
             return Collections.emptyList();
         }
         return list;
     }
-    
-    public Throwable getThrowable(int i)
-    {
-        if ( list == null )
-        {
+
+    public Throwable getThrowable(int i) {
+        if (list == null) {
             throw new IndexOutOfBoundsException();
         }
-        return list.get( i );
+        return list.get(i);
     }
 
-    public void throwPossibleExp() throws Exception
-    {
-        if ( list == null )
-        {
+    public void throwPossibleExp() throws Exception {
+        if (list == null) {
             return;
         }
-        if ( list.size() == 1 )
-        {
-            Throwable th = list.get( 0 );
-            if ( th instanceof Error )
-            {
-                throw (Error)th;
+        if (list.size() == 1) {
+            Throwable th = list.get(0);
+            if (th instanceof Error) {
+                throw (Error) th;
             }
-            if ( th instanceof Exception )
-            {
-                throw (Exception)th;
+            if (th instanceof Exception) {
+                throw (Exception) th;
             }
         }
         throw this;
     }
-    
+
     public void throwPossibleExpAsRuntime()
-        throws Error
-    {
-        if ( list == null )
-        {
+            throws Error {
+        if (list == null) {
             return;
         }
-        if ( list.size() == 1 )
-        {
-            Throwable th = list.get( 0 );
-            if ( th instanceof Error )
-            {
-                throw (Error)th;
+        if (list.size() == 1) {
+            Throwable th = list.get(0);
+            if (th instanceof Error) {
+                throw (Error) th;
             }
-            if ( th instanceof RuntimeException )
-            {
-                throw (RuntimeException)th;
+            if (th instanceof RuntimeException) {
+                throw (RuntimeException) th;
             }
-            throw new RuntimeException( th );
+            throw new RuntimeException(th);
         }
-        throw new RuntimeException( this );
+        throw new RuntimeException(this);
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public String toString()
-    {
-        if ( list == null )
-        {
+    public String toString() {
+        if (list == null) {
             return "phex.common.MultipleException[]";
         }
         return "phex.common.MultipleException" + list.toString();
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void printStackTrace()
-    {
+    public void printStackTrace() {
         super.printStackTrace();
-        if ( list == null )
-        {
+        if (list == null) {
             return;
         }
-        for (Throwable th : list )
-        {
+        for (Throwable th : list) {
             th.printStackTrace();
-        }
-    }
-   
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void printStackTrace(PrintStream out)
-    {
-        super.printStackTrace(out);
-        if ( list == null )
-        {
-            return;
-        }
-        for ( Throwable th : list )
-        {
-            th.printStackTrace( out );
         }
     }
 
@@ -170,16 +128,27 @@ public class MultipleException extends Exception
      * {@inheritDoc}
      */
     @Override
-    public void printStackTrace(PrintWriter out)
-    {
+    public void printStackTrace(PrintStream out) {
         super.printStackTrace(out);
-        if ( list == null )
-        {
+        if (list == null) {
             return;
         }
-        for ( Throwable th : list )
-        {
-            th.printStackTrace( out );
+        for (Throwable th : list) {
+            th.printStackTrace(out);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void printStackTrace(PrintWriter out) {
+        super.printStackTrace(out);
+        if (list == null) {
+            return;
+        }
+        for (Throwable th : list) {
+            th.printStackTrace(out);
         }
     }
 }

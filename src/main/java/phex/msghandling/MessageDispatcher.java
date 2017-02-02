@@ -56,11 +56,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class MessageDispatcher
-{
-    private static final Logger logger = LoggerFactory.getLogger( 
-        MessageDispatcher.class );
-    
+class MessageDispatcher {
+    private static final Logger logger = LoggerFactory.getLogger(
+            MessageDispatcher.class);
+
     private final Servent servent;
     private final MessageRouting msgRouting;
     private final Map<Class<? extends Message>, MessageSubscriber<? extends Message>> messageSubscribers;
@@ -69,7 +68,7 @@ class MessageDispatcher
     private final SharedFilesService sharedFilesService;
     private final HostManager hostMgr;
     private final PhexSecurityManager securityService;
-    
+
     // for stats
     private SimpleStatisticProvider pingMsgInCounter;
     private SimpleStatisticProvider pongMsgInCounter;
@@ -79,10 +78,9 @@ class MessageDispatcher
     private SimpleStatisticProvider dropedMsgInCounter;
     private SimpleStatisticProvider totalInMsgCounter;
     private StatisticProvider uptimeStatsProvider;
-    
-    public MessageDispatcher( Servent servent, MessageRouting msgRouting, 
-        PongFactory pongFactory  )
-    {
+
+    public MessageDispatcher(Servent servent, MessageRouting msgRouting,
+                             PongFactory pongFactory) {
         this.servent = servent;
         this.msgRouting = msgRouting;
         this.pongFactory = pongFactory;
@@ -92,29 +90,28 @@ class MessageDispatcher
         sharedFilesService = servent.getSharedFilesService();
         securityService = servent.getSecurityService();
     }
-    
+
     // temporary workaround until stats are reworked.
-    protected void initStats( StatisticsManager statsMgr )
-    {
+    protected void initStats(StatisticsManager statsMgr) {
         // for stats
-        pingMsgInCounter = (SimpleStatisticProvider) statsMgr.getStatisticProvider( 
-            StatisticsManager.PINGMSG_IN_PROVIDER );
-        pongMsgInCounter = (SimpleStatisticProvider) statsMgr.getStatisticProvider( 
-            StatisticsManager.PONGMSG_IN_PROVIDER );
-        queryMsgInCounter = (SimpleStatisticProvider) statsMgr.getStatisticProvider( 
-            StatisticsManager.QUERYMSG_IN_PROVIDER );
-        queryHitMsgInCounter = (SimpleStatisticProvider) statsMgr.getStatisticProvider( 
-            StatisticsManager.QUERYHITMSG_IN_PROVIDER );
-        pushMsgInCounter = (SimpleStatisticProvider) statsMgr.getStatisticProvider( 
-            StatisticsManager.PUSHMSG_IN_PROVIDER );
-        dropedMsgInCounter = (SimpleStatisticProvider) statsMgr.getStatisticProvider( 
-            StatisticsManager.DROPEDMSG_IN_PROVIDER );
-        totalInMsgCounter = (SimpleStatisticProvider) statsMgr.getStatisticProvider( 
-            StatisticsManager.TOTALMSG_IN_PROVIDER );
+        pingMsgInCounter = (SimpleStatisticProvider) statsMgr.getStatisticProvider(
+                StatisticsManager.PINGMSG_IN_PROVIDER);
+        pongMsgInCounter = (SimpleStatisticProvider) statsMgr.getStatisticProvider(
+                StatisticsManager.PONGMSG_IN_PROVIDER);
+        queryMsgInCounter = (SimpleStatisticProvider) statsMgr.getStatisticProvider(
+                StatisticsManager.QUERYMSG_IN_PROVIDER);
+        queryHitMsgInCounter = (SimpleStatisticProvider) statsMgr.getStatisticProvider(
+                StatisticsManager.QUERYHITMSG_IN_PROVIDER);
+        pushMsgInCounter = (SimpleStatisticProvider) statsMgr.getStatisticProvider(
+                StatisticsManager.PUSHMSG_IN_PROVIDER);
+        dropedMsgInCounter = (SimpleStatisticProvider) statsMgr.getStatisticProvider(
+                StatisticsManager.DROPEDMSG_IN_PROVIDER);
+        totalInMsgCounter = (SimpleStatisticProvider) statsMgr.getStatisticProvider(
+                StatisticsManager.TOTALMSG_IN_PROVIDER);
         uptimeStatsProvider = statsMgr.getStatisticProvider(
-            StatisticsManager.DAILY_UPTIME_PROVIDER );
+                StatisticsManager.DAILY_UPTIME_PROVIDER);
     }
-    
+
 //  Messy auto-detecting of generic type... causes to much trouble with 
 //  MessageSubscribers that are capable to handle multiple Message types.
 //    @SuppressWarnings("unchecked")
@@ -149,103 +146,79 @@ class MessageDispatcher
 //            addMessageSubscriber( messageClass, subscriber );
 //        }
 //    }
-        
-    public <T extends Message> void addMessageSubscriber( Class<T> clazz, MessageSubscriber<T> subscriber )
-    {
-        logger.debug( "Adding MessageSubscriber {} for type {}.", subscriber, clazz );
-        MessageSubscriber<T> registeredSubscriber = (MessageSubscriber<T>)messageSubscribers.get( clazz );
-        if ( registeredSubscriber == null )
-        {
-            messageSubscribers.put( clazz, subscriber );
-        }
-        else if ( registeredSubscriber instanceof MessageSubscriberList )
-        {
-            ((MessageSubscriberList<T>)registeredSubscriber).addSubscriber( subscriber );
-        }
-        else
-        {
-            MessageSubscriberList<T> list = new MessageSubscriberList<T>( 
-                registeredSubscriber, subscriber );
-            messageSubscribers.put( clazz, list );
-        }
-    }
-    
-    public <T extends Message> void removeMessageSubscriber( Class<T> clazz, MessageSubscriber<T> subscriber )
-    {
-        logger.debug( "Removing MessageSubscriber {} for type {}.", subscriber, clazz );
-        MessageSubscriber<T> registeredSubscriber = (MessageSubscriber<T>)messageSubscribers.get( clazz );
 
-        if ( registeredSubscriber instanceof MessageSubscriberList )
-        {
-            ((MessageSubscriberList<T>)registeredSubscriber).removeSubscriber( subscriber );
-        }
-        else
-        { 
-            // either we don't have a subscriber or this is the only registered one
-            messageSubscribers.remove( clazz );
+    public <T extends Message> void addMessageSubscriber(Class<T> clazz, MessageSubscriber<T> subscriber) {
+        logger.debug("Adding MessageSubscriber {} for type {}.", subscriber, clazz);
+        MessageSubscriber<T> registeredSubscriber = (MessageSubscriber<T>) messageSubscribers.get(clazz);
+        if (registeredSubscriber == null) {
+            messageSubscribers.put(clazz, subscriber);
+        } else if (registeredSubscriber instanceof MessageSubscriberList) {
+            ((MessageSubscriberList<T>) registeredSubscriber).addSubscriber(subscriber);
+        } else {
+            MessageSubscriberList<T> list = new MessageSubscriberList<T>(
+                    registeredSubscriber, subscriber);
+            messageSubscribers.put(clazz, list);
         }
     }
-    
+
+    public <T extends Message> void removeMessageSubscriber(Class<T> clazz, MessageSubscriber<T> subscriber) {
+        logger.debug("Removing MessageSubscriber {} for type {}.", subscriber, clazz);
+        MessageSubscriber<T> registeredSubscriber = (MessageSubscriber<T>) messageSubscribers.get(clazz);
+
+        if (registeredSubscriber instanceof MessageSubscriberList) {
+            ((MessageSubscriberList<T>) registeredSubscriber).removeSubscriber(subscriber);
+        } else {
+            // either we don't have a subscriber or this is the only registered one
+            messageSubscribers.remove(clazz);
+        }
+    }
+
     @SuppressWarnings("unchecked")
-    private void dispatchToSubscribers( Message message, Host sourceHost )
-        throws InvalidMessageException
-    {
-        MessageSubscriber messageSubscriber = messageSubscribers.get( 
-            message.getClass() );
+    private void dispatchToSubscribers(Message message, Host sourceHost)
+            throws InvalidMessageException {
+        MessageSubscriber messageSubscriber = messageSubscribers.get(
+                message.getClass());
         messageSubscriber.onMessage(message, sourceHost);
     }
-    
-    public <T extends Message> void addUdpMessageSubscriber( Class<? extends Message> clazz, UdpMessageSubscriber<T> subscriber )
-    {
-        logger.debug( "Adding MessageSubscriber {} for type {}.", subscriber, clazz );
-        UdpMessageSubscriber<T> registeredSubscriber = (UdpMessageSubscriber<T>)udpMessageSubscribers.get( clazz );
-        if ( registeredSubscriber == null )
-        {
-            udpMessageSubscribers.put( clazz, subscriber );
-        }
-        else if ( registeredSubscriber instanceof UdpMessageSubscriberList )
-        {
-            ((UdpMessageSubscriberList<T>)registeredSubscriber).addSubscriber( subscriber );
-        }
-        else
-        {
-            UdpMessageSubscriberList<T> list = new UdpMessageSubscriberList<T>( 
-                registeredSubscriber, subscriber );
-            udpMessageSubscribers.put( clazz, list );
-        }
-    }
-    
-    public <T extends Message> void removeUdpMessageSubscriber( Class<T> clazz, UdpMessageSubscriber<T> subscriber )
-    {
-        logger.debug( "Removing MessageSubscriber {} for type {}.", subscriber, clazz );
-        UdpMessageSubscriber<T> registeredSubscriber = (UdpMessageSubscriber<T>)udpMessageSubscribers.get( clazz );
 
-        if ( registeredSubscriber instanceof UdpMessageSubscriberList )
-        {
-            ((UdpMessageSubscriberList<T>)registeredSubscriber).removeSubscriber( subscriber );
+    public <T extends Message> void addUdpMessageSubscriber(Class<? extends Message> clazz, UdpMessageSubscriber<T> subscriber) {
+        logger.debug("Adding MessageSubscriber {} for type {}.", subscriber, clazz);
+        UdpMessageSubscriber<T> registeredSubscriber = (UdpMessageSubscriber<T>) udpMessageSubscribers.get(clazz);
+        if (registeredSubscriber == null) {
+            udpMessageSubscribers.put(clazz, subscriber);
+        } else if (registeredSubscriber instanceof UdpMessageSubscriberList) {
+            ((UdpMessageSubscriberList<T>) registeredSubscriber).addSubscriber(subscriber);
+        } else {
+            UdpMessageSubscriberList<T> list = new UdpMessageSubscriberList<T>(
+                    registeredSubscriber, subscriber);
+            udpMessageSubscribers.put(clazz, list);
         }
-        else
-        { 
+    }
+
+    public <T extends Message> void removeUdpMessageSubscriber(Class<T> clazz, UdpMessageSubscriber<T> subscriber) {
+        logger.debug("Removing MessageSubscriber {} for type {}.", subscriber, clazz);
+        UdpMessageSubscriber<T> registeredSubscriber = (UdpMessageSubscriber<T>) udpMessageSubscribers.get(clazz);
+
+        if (registeredSubscriber instanceof UdpMessageSubscriberList) {
+            ((UdpMessageSubscriberList<T>) registeredSubscriber).removeSubscriber(subscriber);
+        } else {
             // either we don't have a subscriber or this is the only registered one
-            udpMessageSubscribers.remove( clazz );
+            udpMessageSubscribers.remove(clazz);
         }
     }
-    
+
     @SuppressWarnings("unchecked")
-    protected void dispatchToUdpSubscribers( Message message, DestAddress sourceAddress )
-        throws InvalidMessageException
-    {
-        UdpMessageSubscriber messageSubscriber = udpMessageSubscribers.get( 
-            message.getClass() );
-        messageSubscriber.onUdpMessage( message, sourceAddress );
+    protected void dispatchToUdpSubscribers(Message message, DestAddress sourceAddress)
+            throws InvalidMessageException {
+        UdpMessageSubscriber messageSubscriber = udpMessageSubscribers.get(
+                message.getClass());
+        messageSubscriber.onUdpMessage(message, sourceAddress);
     }
-    
-    public void handlePing( PingMsg pingMsg, Host sourceHost )
-    {
-        if ( logger.isDebugEnabled( ) )
-        {
-            logger.debug( "Received Ping: " + pingMsg.toString() + " - " 
-                + pingMsg.getHeader().toString());
+
+    public void handlePing(PingMsg pingMsg, Host sourceHost) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Received Ping: " + pingMsg.toString() + " - "
+                    + pingMsg.getHeader().toString());
         }
 
 
@@ -254,176 +227,154 @@ class MessageDispatcher
         // Bearshare seems to massively send pings with ttl 6 hops 1 and empty 
         // GUID. We currently drop them all since they are duplicates...
         // if ( header.getMsgID().equals(GUID.EMPTY_GUID) )
-        
+
         // See if I have seen this Ping before.  Drop msg if duplicate.
-        if ( !msgRouting.checkAndAddToPingRoutingTable( header.getMsgID(),
-                sourceHost ) )
-        {
-            dropMessage( pingMsg, "Dropping already seen ping", sourceHost );
+        if (!msgRouting.checkAndAddToPingRoutingTable(header.getMsgID(),
+                sourceHost)) {
+            dropMessage(pingMsg, "Dropping already seen ping", sourceHost);
             return;
         } else {
 
             // count ping statistic
-            pingMsgInCounter.increment( 1 );
-            respondToPing( pingMsg, sourceHost );
+            pingMsgInCounter.increment(1);
+            respondToPing(pingMsg, sourceHost);
         }
-        
+
     }
-    
+
     /**
      * Respond to ping using PongCache
+     *
      * @param pingMsg
      * @param sourceHost
      */
-    private void respondToPing( PingMsg pingMsg, Host sourceHost )
-    {
+    private void respondToPing(PingMsg pingMsg, Host sourceHost) {
         MsgHeader header = pingMsg.getHeader();
         // to reduce the incoming connection attempts of other clients
         // only response to ping a when we have free incoming slots or this
         // ping has a original TTL ( current TTL + hops ) of 2.
         byte ttl = header.getTTL();
         byte hops = header.getHopsTaken();
-        if ( ( ttl + hops > 2 ) && !hostMgr.areIncommingSlotsAdvertised() )
-        {
+        if ((ttl + hops > 2) && !hostMgr.areIncommingSlotsAdvertised()) {
             return;
         }
 
         // For crawler pings (hops==1, ttl=1) we have a special treatment...
         // We reply with all our leaf connections... in case we have them as a
         // ultrapeer...
-        if ( hops == 1 && ttl == 1)
-        {// crawler ping
+        if (hops == 1 && ttl == 1) {// crawler ping
             // respond with leaf nodes pongs, already "hoped" one step. (ttl=1,hops=1)
             Host[] leafs = hostMgr.getNetworkHostsContainer().getLeafConnections();
-            for ( int i = 0; i < leafs.length; i++ )
-            {
+            for (int i = 0; i < leafs.length; i++) {
                 DestAddress ha = leafs[i].getHostAddress();
-                PongMsg pong = pongFactory.createOtherLeafsOutgoingPong( header.getMsgID(),
-                    (byte)1, (byte)1, ha );
-                sourceHost.queueMessageToSend( pong );                
+                PongMsg pong = pongFactory.createOtherLeafsOutgoingPong(header.getMsgID(),
+                        (byte) 1, (byte) 1, ha);
+                sourceHost.queueMessageToSend(pong);
             }
         }
 
         // send back my own pong
         byte newTTL = hops++;
-        if ( ( hops + ttl ) <= 2)
-        {
+        if ((hops + ttl) <= 2) {
             newTTL = 1;
         }
-        
-        int avgDailyUptime = ((Integer)uptimeStatsProvider.getValue()).intValue();
+
+        int avgDailyUptime = ((Integer) uptimeStatsProvider.getValue()).intValue();
         int shareFileCount = sharedFilesService.getFileCount();
         int shareFileSize = sharedFilesService.getTotalFileSizeInKb();
-        
+
         // Get my host:port for InitResponse.
-        PongMsg pong = pongFactory.createMyOutgoingPong( header.getMsgID(), 
-            servent.getLocalAddress(), newTTL, shareFileCount, shareFileSize,
-            servent.isUltrapeer(), avgDailyUptime, sourceHost.isGgepSupported() );
-        sourceHost.queueMessageToSend( pong );
-        
+        PongMsg pong = pongFactory.createMyOutgoingPong(header.getMsgID(),
+                servent.getLocalAddress(), newTTL, shareFileCount, shareFileSize,
+                servent.isUltrapeer(), avgDailyUptime, sourceHost.isGgepSupported());
+        sourceHost.queueMessageToSend(pong);
+
         // send pongs from pong cache
         DestAddress orginAddress = sourceHost.getHostAddress();
         IpAddress ip = orginAddress.getIpAddress();
-        if ( ip == null )
-        {
+        if (ip == null) {
             return;
         }
         GUID guid = header.getMsgID();
         List<PongMsg> pongs = servent.getMessageService().getCachedPongs();
-        for( PongMsg pMsg : pongs )
-        {
-            if( ip.equals( pMsg.getPongAddress().getIpAddress() ) )
-            {
+        for (PongMsg pMsg : pongs) {
+            if (ip.equals(pMsg.getPongAddress().getIpAddress())) {
                 continue;
             }
             PongMsg pongCpy = pongFactory.createFromCachePong(
-                guid, newTTL, pMsg, sourceHost.isGgepSupported() );
-            sourceHost.queueMessageToSend( pongCpy );
+                    guid, newTTL, pMsg, sourceHost.isGgepSupported());
+            sourceHost.queueMessageToSend(pongCpy);
         }
     }
-    
+
     /**
-     * 
+     *
      */
-    public void handlePong( PongMsg msg, Host sourceHost )
-    {
-        if ( logger.isDebugEnabled( ) )
-        {
-            logger.debug( "Received Pong: " + msg.getDebugString() 
-                + " - " + msg.getHeader().toString());
+    public void handlePong(PongMsg msg, Host sourceHost) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Received Pong: " + msg.getDebugString()
+                    + " - " + msg.getHeader().toString());
         }
 
         // count pong statistic
-        pongMsgInCounter.increment( 1 );
+        pongMsgInCounter.increment(1);
 
         DestAddress pongAddress = msg.getPongAddress();
-        AccessType access = securityService.controlHostAddressAccess( pongAddress );
-        if ( access == AccessType.ACCESS_STRONGLY_DENIED )
-        {
+        AccessType access = securityService.controlHostAddressAccess(pongAddress);
+        if (access == AccessType.ACCESS_STRONGLY_DENIED) {
             // drop message
-            dropMessage( msg, "IP access strongly denied.", sourceHost );
+            dropMessage(msg, "IP access strongly denied.", sourceHost);
             return;
         }
-        
-        try
-        {
-            dispatchToSubscribers( msg, sourceHost );
-        }
-        catch ( InvalidMessageException exp )
-        {// drop invalid message
-            dropMessage( msg, exp.getMessage(), sourceHost);
+
+        try {
+            dispatchToSubscribers(msg, sourceHost);
+        } catch (InvalidMessageException exp) {// drop invalid message
+            dropMessage(msg, exp.getMessage(), sourceHost);
             return;
         }
 
         // add address to host catcher...
-        if ( access == AccessType.ACCESS_GRANTED )
-        {
-            boolean isNew = hostMgr.catchHosts( msg );
-            if ( isNew )
-            {
-                servent.getMessageService().addPongToCache( msg );
+        if (access == AccessType.ACCESS_GRANTED) {
+            boolean isNew = hostMgr.catchHosts(msg);
+            if (isNew) {
+                servent.getMessageService().addPongToCache(msg);
             }
         }
 
         byte hopsTaken = msg.getHeader().getHopsTaken();
-        
+
         // check if this is the response to my Ping message
-        if ( hopsTaken == 1 )
-        {
+        if (hopsTaken == 1) {
             DestAddress connectedAddress = sourceHost.getHostAddress();
             IpAddress connectedIP = connectedAddress.getIpAddress();
-            if ( connectedIP.equals( pongAddress.getIpAddress() ) )
-            {
-                sourceHost.setFileCount( msg.getFileCount() );
-                sourceHost.setTotalFileSize( msg.getFileSizeInKB() );
+            if (connectedIP.equals(pongAddress.getIpAddress())) {
+                sourceHost.setFileCount(msg.getFileCount());
+                sourceHost.setTotalFileSize(msg.getFileSizeInKB());
                 // I guess that a hops == 1 with equal ip address is a pong from my
                 // direct neighbor, therefore I also update the obviously wrong port.
                 int connectedPort = connectedAddress.getPort();
                 int pongPort = pongAddress.getPort();
-                if ( connectedPort != pongPort )
-                {
-                    sourceHost.setHostAddress( new DefaultDestAddress( 
-                        connectedAddress.getIpAddress(), pongPort ) );
+                if (connectedPort != pongPort) {
+                    sourceHost.setHostAddress(new DefaultDestAddress(
+                            connectedAddress.getIpAddress(), pongPort));
                 }
             }
         }
-        
-        if ( msg.getHeader().getTTL() > 0 )
-        {
-            msgRouting.routePongMessage( msg );
+
+        if (msg.getHeader().getTTL() > 0) {
+            msgRouting.routePongMessage(msg);
         }
     }
-    
-    public void handleQuery( QueryMsg msg, Host sourceHost )
-    {
-        if ( logger.isDebugEnabled( ) )
-        {
-            logger.debug( "Received Query: " + msg.toString() + " - " 
-                + msg.getHeader().toString());
+
+    public void handleQuery(QueryMsg msg, Host sourceHost) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Received Query: " + msg.toString() + " - "
+                    + msg.getHeader().toString());
         }
-        
+
         // count query statistic
-        queryMsgInCounter.increment( 1 );
+        queryMsgInCounter.increment(1);
 
         MsgHeader header = msg.getHeader();
 
@@ -432,104 +383,94 @@ class MessageDispatcher
         // probe query. Only Limewire is doing this extension of a probe
         // query currently and as stated by themselves the efficiency of it
         // is doubtful. 
-        if ( !msgRouting.checkAndAddToQueryRoutingTable( header.getMsgID(),
-                sourceHost ) )
-        {
-            dropMessage( msg, "Drop already seen query", sourceHost );
+        if (!msgRouting.checkAndAddToQueryRoutingTable(header.getMsgID(),
+                sourceHost)) {
+            dropMessage(msg, "Drop already seen query", sourceHost);
             return;
         }
-        
+
         // a leaf is not supposed to forward me queries not coming from itself.
-        if ( sourceHost.isUltrapeerLeafConnection() && header.getHopsTaken() > 2 )
-        {
-            dropMessage( msg, "Drop query from leaf with hops > 2.", sourceHost );
+        if (sourceHost.isUltrapeerLeafConnection() && header.getHopsTaken() > 2) {
+            dropMessage(msg, "Drop query from leaf with hops > 2.", sourceHost);
         }
-        
-        if ( MessagePrefs.DropIndexQueries.get().booleanValue() && 
-             QueryResultSearchEngine.INDEX_QUERY_STRING.equals( msg.getSearchString() ) )
-        {
-            dropMessage( msg, "Drop index query.", sourceHost );
+
+        if (MessagePrefs.DropIndexQueries.get().booleanValue() &&
+                QueryResultSearchEngine.INDEX_QUERY_STRING.equals(msg.getSearchString())) {
+            dropMessage(msg, "Drop index query.", sourceHost);
         }
 
         // logging a msg can be very expensive!
         //mRemoteHost.log( Logger.FINEST, "Received Msg: " + msg + " Hex: " +
         //    HexConverter.toHexString( body ) + " Data: " + new String( body) );
 
-        try
-        {
-            dispatchToSubscribers( msg, sourceHost );
-        }
-        catch ( InvalidMessageException exp )
-        {// drop invalid message
-            dropMessage( msg, exp.getMessage(), sourceHost);
+        try {
+            dispatchToSubscribers(msg, sourceHost);
+        } catch (InvalidMessageException exp) {// drop invalid message
+            dropMessage(msg, exp.getMessage(), sourceHost);
             return;
         }
-        
+
         // Search the shared file database and get groups of shared files.
-        List<ShareFile> resultFiles = sharedFilesService.handleQuery( msg );
-        if ( resultFiles == null || resultFiles.size() == 0)
-        {
+        List<ShareFile> resultFiles = sharedFilesService.handleQuery(msg);
+        if (resultFiles == null || resultFiles.size() == 0) {
             return;
         }
-        respondToQuery( header, resultFiles, sourceHost );
+        respondToQuery(header, resultFiles, sourceHost);
     }
 
-    private void respondToQuery( MsgHeader header, List<ShareFile> resultFiles, 
-        Host sourceHost )
-    {
+    private void respondToQuery(MsgHeader header, List<ShareFile> resultFiles,
+                                Host sourceHost) {
         // Construct QueryResponse msg.  Copy the original Init's GUID.
         // TTL expansion on query hits doesn't matter very much so it doesn't
         // hurt us to give query hits a TTL boost.
         // Bearshare sets QueryHit TTL to 10
         // gtk-gnutella sets QueryHit TTL to (hops + 5)
-        MsgHeader newHeader = new MsgHeader( header.getMsgID(),
-            MsgHeader.QUERY_HIT_PAYLOAD,
-            // Will take as many hops to get back.
-            // hops + 1 decided in gdf 2002-12-04
-            (byte)(header.getHopsTaken() + 1),
-            //(byte)(Math.min( 10, header.getHopsTaken() + 5 ) ),
-            (byte)0, 0 );
+        MsgHeader newHeader = new MsgHeader(header.getMsgID(),
+                MsgHeader.QUERY_HIT_PAYLOAD,
+                // Will take as many hops to get back.
+                // hops + 1 decided in gdf 2002-12-04
+                (byte) (header.getHopsTaken() + 1),
+                //(byte)(Math.min( 10, header.getHopsTaken() + 5 ) ),
+                (byte) 0, 0);
 
         int resultCount = resultFiles.size();
-        if ( resultCount > 255 )
-        {
-            resultFiles.subList( 0, 255 );
+        if (resultCount > 255) {
+            resultFiles.subList(0, 255);
             resultCount = resultFiles.size();
         }
         assert resultCount < 255;
-        
-        QueryResponseRecord[] records = new QueryResponseRecord[ resultCount ];
+
+        QueryResponseRecord[] records = new QueryResponseRecord[resultCount];
         QueryResponseRecord record;
         int recPos = 0;
-        for( ShareFile shareFile : resultFiles )
-        {
-            record = QueryResponseRecord.createFromShareFile( shareFile,
-                servent.getLocalAddress() );
-            records[ recPos ] = record;
-            recPos ++;
+        for (ShareFile shareFile : resultFiles) {
+            record = QueryResponseRecord.createFromShareFile(shareFile,
+                    servent.getLocalAddress());
+            records[recPos] = record;
+            recPos++;
         }
 
         DestAddress hostAddress = servent.getLocalAddress();
         GUID serventGuid = servent.getServentGuid();
-        
-        QueryResponseMsg response = new QueryResponseMsg(
-            newHeader, serventGuid, hostAddress,
-            Math.round( BandwidthPrefs.MaxUploadBandwidth.get().floatValue() / NumberFormatUtils.ONE_KB ),
-            records, hostMgr.getNetworkHostsContainer().getPushProxies(),
-            !servent.isFirewalled(), servent.isUploadLimitReached() );
 
-        sourceHost.queueMessageToSend( response );
+        QueryResponseMsg response = new QueryResponseMsg(
+                newHeader, serventGuid, hostAddress,
+                Math.round(BandwidthPrefs.MaxUploadBandwidth.get().floatValue() / NumberFormatUtils.ONE_KB),
+                records, hostMgr.getNetworkHostsContainer().getPushProxies(),
+                !servent.isFirewalled(), servent.isUploadLimitReached());
+
+        sourceHost.queueMessageToSend(response);
     }
-    
+
     /**
      * Be aware that QueryResponseMsg from BrowseHostConnections are also handle
      * through here. MessageSubscribers should honor this accordingly.
+     *
      * @param queryResponseMsg the QueryResponseMsg to handle
-     * @param sourceHost the source host, can be null in case of BrowseHostConnection 
-     *        results.
+     * @param sourceHost       the source host, can be null in case of BrowseHostConnection
+     *                         results.
      */
-    public void handleQueryResponse( QueryResponseMsg queryResponseMsg, Host sourceHost )
-    {
+    public void handleQueryResponse(QueryResponseMsg queryResponseMsg, Host sourceHost) {
         // Logging is expensive...
 //        if ( Logger.isLevelLogged( Logger.FINEST ) )
 //        {
@@ -537,55 +478,47 @@ class MessageDispatcher
 //                connectedHost, "Received QueryResponse: " + queryResponseMsg + " - " +
 //                queryResponseMsg.toString() );
 //        }
-        
+
         // count query hit statistic
-        queryHitMsgInCounter.increment( 1 );
-        
+        queryHitMsgInCounter.increment(1);
+
         MsgHeader header = queryResponseMsg.getHeader();
-        
+
         // validate remote client id
         GUID respServentId = queryResponseMsg.getRemoteServentID();
-        if ( respServentId.equals( servent.getServentGuid() ) )
-        {
-            dropMessage( queryResponseMsg, "My query response should never reach me.", sourceHost);
+        if (respServentId.equals(servent.getServentGuid())) {
+            dropMessage(queryResponseMsg, "My query response should never reach me.", sourceHost);
             return;
         }
-        if ( respServentId.equals( header.getMsgID() ) )
-        {
-            dropMessage( queryResponseMsg, "Message id equals servent id.", sourceHost);
+        if (respServentId.equals(header.getMsgID())) {
+            dropMessage(queryResponseMsg, "Message id equals servent id.", sourceHost);
             return;
         }
-        if ( respServentId.equals( GUID.EMPTY_GUID ) )
-        {
-            dropMessage( queryResponseMsg, "Servent id is empty.", sourceHost);
+        if (respServentId.equals(GUID.EMPTY_GUID)) {
+            dropMessage(queryResponseMsg, "Servent id is empty.", sourceHost);
             return;
         }
 
         DestAddress queryAddress = queryResponseMsg.getDestAddress();
-        AccessType access = securityService.controlHostAddressAccess( queryAddress );
-        if ( access == AccessType.ACCESS_STRONGLY_DENIED )
-        {
+        AccessType access = securityService.controlHostAddressAccess(queryAddress);
+        if (access == AccessType.ACCESS_STRONGLY_DENIED) {
             // drop message
-            dropMessage( queryResponseMsg, "IP access strongly denied.", sourceHost );
+            dropMessage(queryResponseMsg, "IP access strongly denied.", sourceHost);
             return;
         }
 
-        
-        if ( access == AccessType.ACCESS_GRANTED )
-        {
-            try
-            {
+
+        if (access == AccessType.ACCESS_GRANTED) {
+            try {
                 // MessageSubscribers should honor that QueryResponseMsg from 
                 // BrowseHostConnections are also going through here.
-                dispatchToSubscribers( queryResponseMsg, sourceHost );
-            }
-            catch ( InvalidMessageException exp )
-            {// drop invalid message
+                dispatchToSubscribers(queryResponseMsg, sourceHost);
+            } catch (InvalidMessageException exp) {// drop invalid message
                 dropMessage(queryResponseMsg, exp.getMessage(), sourceHost);
                 return;
             }
         }
-        
+
         // byte hopsTaken = header.getHopsTaken();
         // check if this is from a direct neighbor
         // if ( hopsTaken == 1 )
@@ -603,293 +536,231 @@ class MessageDispatcher
         // }
         //            // these logics can be improved.. see GTKG search.c update_neighbour_info()
         //        }
-        
-        if ( header.getTTL() > 0 )
-        {
-            try
-            {
-                msgRouting.routeQueryResponse( queryResponseMsg, sourceHost );
-            }
-            catch ( InvalidMessageException exp )
-            {// drop invalid message
+
+        if (header.getTTL() > 0) {
+            try {
+                msgRouting.routeQueryResponse(queryResponseMsg, sourceHost);
+            } catch (InvalidMessageException exp) {// drop invalid message
                 dropMessage(queryResponseMsg, exp.getMessage(), sourceHost);
                 return;
             }
         }
     }
-    
-    public void handleRouteTableUpdate( RouteTableUpdateMsg message, Host sourceHost )
-    {
+
+    public void handleRouteTableUpdate(RouteTableUpdateMsg message, Host sourceHost) {
         // no specific stats so count to total
-        totalInMsgCounter.increment( 1 );
-        if ( !(sourceHost.isQueryRoutingSupported() ||
-                sourceHost.isUPQueryRoutingSupported()) )
-        {
-            dropMessage( message, "QRP not supported from host.", sourceHost);
+        totalInMsgCounter.increment(1);
+        if (!(sourceHost.isQueryRoutingSupported() ||
+                sourceHost.isUPQueryRoutingSupported())) {
+            dropMessage(message, "QRP not supported from host.", sourceHost);
             return;
         }
 
         QueryRoutingTable qrTable = sourceHost.getLastReceivedRoutingTable();
-        if ( qrTable == null )
-        {
+        if (qrTable == null) {
             // create new table... TODO3 maybe makes not much sense because we might
             // recreate table. maybe there is a way to initialize the QRT lazy
             qrTable = new QueryRoutingTable();
-            sourceHost.setLastReceivedRoutingTable( qrTable );
+            sourceHost.setLastReceivedRoutingTable(qrTable);
         }
-        try
-        {
-            qrTable.updateRouteTable( message, sourceHost );
-            if ( sourceHost.isUltrapeerLeafConnection() )
-            {// in case this is a leaf connection, we need to update our
-             // local query routing table. This needs to be done since
-             // have our leaves QRT aggregated our QRT and are checking
-             // during a query against our QRT if leaves might have a hit.
+        try {
+            qrTable.updateRouteTable(message, sourceHost);
+            if (sourceHost.isUltrapeerLeafConnection()) {// in case this is a leaf connection, we need to update our
+                // local query routing table. This needs to be done since
+                // have our leaves QRT aggregated our QRT and are checking
+                // during a query against our QRT if leaves might have a hit.
                 servent.getMessageService().triggerQueryRoutingTableUpdate();
             }
-        }
-        catch ( InvalidMessageException exp )
-        {// drop message
-            dropMessage( message, "Invalid QRT update message.", sourceHost );
+        } catch (InvalidMessageException exp) {// drop message
+            dropMessage(message, "Invalid QRT update message.", sourceHost);
         }
     }
-    
-    public void handleVendorMessage( VendorMsg vendorMsg, Host sourceHost )
-    {
-        if ( logger.isDebugEnabled( ) )
-        {
-            logger.debug( "Received VendorMsg: " + vendorMsg.toString() 
-                + " - " + vendorMsg.getHeader().toString());
+
+    public void handleVendorMessage(VendorMsg vendorMsg, Host sourceHost) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("Received VendorMsg: " + vendorMsg.toString()
+                    + " - " + vendorMsg.getHeader().toString());
         }
-        
-        if ( vendorMsg instanceof MessagesSupportedVMsg )
-        {
-            handleMessagesSupportedVMsg( (MessagesSupportedVMsg)vendorMsg, sourceHost );
-        }
-        else if ( vendorMsg instanceof TCPConnectBackVMsg )
-        {
-            handleTCPConnectBackVMsg( (TCPConnectBackVMsg)vendorMsg, sourceHost );
-        }
-        else if ( vendorMsg instanceof TCPConnectBackRedirectVMsg )
-        {
-            handleTCPConnectBackRedirectVMsg((TCPConnectBackRedirectVMsg)vendorMsg, sourceHost );
-        }
-        else if ( vendorMsg instanceof PushProxyRequestVMsg )
-        {
-            handlePushProxyRequestVMsg( (PushProxyRequestVMsg)vendorMsg, sourceHost );
-        }
-        else if ( vendorMsg instanceof PushProxyAcknowledgementVMsg )
-        {
-            handlePushProxyAcknowledgementVMsg( (PushProxyAcknowledgementVMsg)vendorMsg, sourceHost );
-        }
-        else if ( vendorMsg instanceof HopsFlowVMsg )
-        {
-            handleHopsFlowVMsg( (HopsFlowVMsg)vendorMsg, sourceHost );
-        }
-        else if ( vendorMsg instanceof CapabilitiesVMsg )
-        {
-            handleCapabilitiesVMsg( (CapabilitiesVMsg)vendorMsg, sourceHost );
+
+        if (vendorMsg instanceof MessagesSupportedVMsg) {
+            handleMessagesSupportedVMsg((MessagesSupportedVMsg) vendorMsg, sourceHost);
+        } else if (vendorMsg instanceof TCPConnectBackVMsg) {
+            handleTCPConnectBackVMsg((TCPConnectBackVMsg) vendorMsg, sourceHost);
+        } else if (vendorMsg instanceof TCPConnectBackRedirectVMsg) {
+            handleTCPConnectBackRedirectVMsg((TCPConnectBackRedirectVMsg) vendorMsg, sourceHost);
+        } else if (vendorMsg instanceof PushProxyRequestVMsg) {
+            handlePushProxyRequestVMsg((PushProxyRequestVMsg) vendorMsg, sourceHost);
+        } else if (vendorMsg instanceof PushProxyAcknowledgementVMsg) {
+            handlePushProxyAcknowledgementVMsg((PushProxyAcknowledgementVMsg) vendorMsg, sourceHost);
+        } else if (vendorMsg instanceof HopsFlowVMsg) {
+            handleHopsFlowVMsg((HopsFlowVMsg) vendorMsg, sourceHost);
+        } else if (vendorMsg instanceof CapabilitiesVMsg) {
+            handleCapabilitiesVMsg((CapabilitiesVMsg) vendorMsg, sourceHost);
         }
     }
-    
-    private void handleMessagesSupportedVMsg(MessagesSupportedVMsg msg, Host sourceHost )
-    {
-        sourceHost.setSupportedVMsgs( msg );
-        
+
+    private void handleMessagesSupportedVMsg(MessagesSupportedVMsg msg, Host sourceHost) {
+        sourceHost.setSupportedVMsgs(msg);
+
         // if push proxy is supported request it..
         boolean isFirewalled = servent.isFirewalled();
         // if we are a leave or are firewalled and connected to a ultrapeer
         // and the connection supports push proxy.
-        if ( ( sourceHost.isLeafUltrapeerConnection() ||
-             ( isFirewalled && sourceHost.isUltrapeer() ) ) 
-          && sourceHost.isPushProxySupported() )
-        {
+        if ((sourceHost.isLeafUltrapeerConnection() ||
+                (isFirewalled && sourceHost.isUltrapeer()))
+                && sourceHost.isPushProxySupported()) {
             PushProxyRequestVMsg pprmsg = new PushProxyRequestVMsg(
-                servent.getServentGuid() );
+                    servent.getServentGuid());
             // TODO2 remove this once Limewire support PPR v2
-            if ( sourceHost.getVendor() != null &&
-                    sourceHost.getVendor().indexOf( "LimeWire" ) != -1 )
-            {
-                pprmsg.setVersion( 1 );
+            if (sourceHost.getVendor() != null &&
+                    sourceHost.getVendor().indexOf("LimeWire") != -1) {
+                pprmsg.setVersion(1);
             }
-            sourceHost.queueMessageToSend( pprmsg );
+            sourceHost.queueMessageToSend(pprmsg);
         }
-        if ( isFirewalled && 
-             servent.getMessageService().isTCPRedirectAllowed() &&
-             sourceHost.isTCPConnectBackSupported()  )
-        {
+        if (isFirewalled &&
+                servent.getMessageService().isTCPRedirectAllowed() &&
+                sourceHost.isTCPConnectBackSupported()) {
             DestAddress localAddress = servent.getLocalAddress();
-            VendorMsg tcpConnectBack = new TCPConnectBackVMsg( localAddress.getPort() );
-            sourceHost.queueMessageToSend( tcpConnectBack );
+            VendorMsg tcpConnectBack = new TCPConnectBackVMsg(localAddress.getPort());
+            sourceHost.queueMessageToSend(tcpConnectBack);
             servent.getMessageService().incNumberOfTCPRedirectsSent();
         }
     }
-    
-    private void handleCapabilitiesVMsg(CapabilitiesVMsg msg, Host sourceHost )
-    {
-        sourceHost.setCapabilitiesVMsgs( msg );
+
+    private void handleCapabilitiesVMsg(CapabilitiesVMsg msg, Host sourceHost) {
+        sourceHost.setCapabilitiesVMsgs(msg);
     }
 
     /**
      * @param msg
      */
-    private void handleTCPConnectBackVMsg(TCPConnectBackVMsg msg, Host sourceHost )
-    {
+    private void handleTCPConnectBackVMsg(TCPConnectBackVMsg msg, Host sourceHost) {
         int port = msg.getPort();
         DestAddress address = sourceHost.getHostAddress();
-        if ( address.getPort() != port )
-        {
-            address = new DefaultDestAddress( address.getHostName(), port );
+        if (address.getPort() != port) {
+            address = new DefaultDestAddress(address.getHostName(), port);
         }
-        VendorMsg redirectMsg = new TCPConnectBackRedirectVMsg( address );
-        
+        VendorMsg redirectMsg = new TCPConnectBackRedirectVMsg(address);
+
         Host[] hosts = hostMgr.getNetworkHostsContainer().getUltrapeerConnections();
         int sentCount = 0;
-        for ( int i = 0; sentCount <= 5 && i < hosts.length; i++ )
-        {
-            if ( sourceHost == hosts[i] )
-            {
+        for (int i = 0; sentCount <= 5 && i < hosts.length; i++) {
+            if (sourceHost == hosts[i]) {
                 // skip sending redirect to my host.
                 continue;
             }
-            if ( hosts[i].isTCPConnectBackRedirectSupported() )
-            {
-                hosts[i].queueMessageToSend( redirectMsg );
-                sentCount ++;
+            if (hosts[i].isTCPConnectBackRedirectSupported()) {
+                hosts[i].queueMessageToSend(redirectMsg);
+                sentCount++;
             }
         }
     }
-    
-    private void handleTCPConnectBackRedirectVMsg( TCPConnectBackRedirectVMsg msg, Host sourceHost )
-    {
+
+    private void handleTCPConnectBackRedirectVMsg(TCPConnectBackRedirectVMsg msg, Host sourceHost) {
         final DestAddress address = msg.getAddress();
-        Runnable connectBackRunner = new Runnable()
-        {
-            public void run()
-            {
+        Runnable connectBackRunner = new Runnable() {
+            public void run() {
                 Connection connection = null;
-                try
-                {
-                    DestAddress connectBackAddress = new DefaultDestAddress( address.getHostName(),
-                        address.getPort() );
-                    connection = ConnectionFactory.createConnection( 
-                        connectBackAddress, 2000, servent.getBandwidthService().getNetworkBandwidthController() );
-                    connection.write( ByteBuffer.wrap( StringUtils.getBytesInUsAscii( "\n\n" ) ) );
+                try {
+                    DestAddress connectBackAddress = new DefaultDestAddress(address.getHostName(),
+                            address.getPort());
+                    connection = ConnectionFactory.createConnection(
+                            connectBackAddress, 2000, servent.getBandwidthService().getNetworkBandwidthController());
+                    connection.write(ByteBuffer.wrap(StringUtils.getBytesInUsAscii("\n\n")));
                     connection.flush();
-                }
-                catch ( IOException exp )
-                { // failed.. don't care..
-                }
-                finally
-                {
-                    if (connection != null)
-                    {
+                } catch (IOException exp) { // failed.. don't care..
+                } finally {
+                    if (connection != null) {
                         connection.disconnect();
                     }
                 }
             }
         };
-        Environment.getInstance().executeOnThreadPool( connectBackRunner, "TCPConnectBackJob");
+        Environment.getInstance().executeOnThreadPool(connectBackRunner, "TCPConnectBackJob");
     }
-    
-    private void handlePushProxyRequestVMsg( PushProxyRequestVMsg pprvmsg, Host sourceHost )
-    {
-        if ( !sourceHost.isUltrapeerLeafConnection() ) 
-        {
+
+    private void handlePushProxyRequestVMsg(PushProxyRequestVMsg pprvmsg, Host sourceHost) {
+        if (!sourceHost.isUltrapeerLeafConnection()) {
             return;
         }
         DestAddress localAddress = servent.getLocalAddress();
         // PP only works if we have a valid IP to use in the PPAck message.
-        if( localAddress.getIpAddress() == null )
-        {
-            logger.warn( "Local address has no IP to use for PPAck." );
+        if (localAddress.getIpAddress() == null) {
+            logger.warn("Local address has no IP to use for PPAck.");
             return;
         }
-        GUID requestGUID = pprvmsg.getHeader().getMsgID();        
-        PushProxyAcknowledgementVMsg ppavmsg = 
-            new PushProxyAcknowledgementVMsg( localAddress,
-            requestGUID );
-        sourceHost.queueMessageToSend( ppavmsg );
-        
-        msgRouting.addToPushRoutingTable( requestGUID,
-                sourceHost );            
+        GUID requestGUID = pprvmsg.getHeader().getMsgID();
+        PushProxyAcknowledgementVMsg ppavmsg =
+                new PushProxyAcknowledgementVMsg(localAddress,
+                        requestGUID);
+        sourceHost.queueMessageToSend(ppavmsg);
+
+        msgRouting.addToPushRoutingTable(requestGUID,
+                sourceHost);
     }
-    
-    private void handlePushProxyAcknowledgementVMsg( PushProxyAcknowledgementVMsg ppavmsg, Host sourceHost )
-    {
+
+    private void handlePushProxyAcknowledgementVMsg(PushProxyAcknowledgementVMsg ppavmsg, Host sourceHost) {
         // the candidate is able to be a push proxy if the ack contains my guid.
-        if ( servent.getServentGuid().equals( ppavmsg.getHeader().getMsgID() ) )
-        {
-            sourceHost.setPushProxyAddress( ppavmsg.getHostAddress() );
+        if (servent.getServentGuid().equals(ppavmsg.getHeader().getMsgID())) {
+            sourceHost.setPushProxyAddress(ppavmsg.getHostAddress());
         }
     }
-    
-    private void handleHopsFlowVMsg( HopsFlowVMsg hopsFlowVMsg, Host sourceHost )
-    {
+
+    private void handleHopsFlowVMsg(HopsFlowVMsg hopsFlowVMsg, Host sourceHost) {
         byte hopsFlowValue = hopsFlowVMsg.getHopsValue();
         sourceHost.setHopsFlowLimit(hopsFlowValue);
     }
-    
-    public void handlePushRequest( PushRequestMsg msg, Host sourceHost )
-    {
+
+    public void handlePushRequest(PushRequestMsg msg, Host sourceHost) {
         // count push statistic
-        pushMsgInCounter.increment( 1 );
+        pushMsgInCounter.increment(1);
 
         // logging a msg can be very expensive! the toString() calls are bad
         //mRemoteHost.log( Logger.FINEST, "Received Msg: " + msg);
 
         AccessType access = securityService.controlHostAddressAccess(
-            msg.getRequestAddress() );
-        if ( access == AccessType.ACCESS_STRONGLY_DENIED )
-        {
+                msg.getRequestAddress());
+        if (access == AccessType.ACCESS_STRONGLY_DENIED) {
             // drop message
-            dropMessage( msg, "IP access strongly denied.", sourceHost );
+            dropMessage(msg, "IP access strongly denied.", sourceHost);
             return;
         }
 
-        if ( servent.getServentGuid().equals(msg.getClientGUID() ) )
-        {
-            if ( access == AccessType.ACCESS_GRANTED )
-            {
-                new PushWorker( msg, servent.getUploadService() );
+        if (servent.getServentGuid().equals(msg.getClientGUID())) {
+            if (access == AccessType.ACCESS_GRANTED) {
+                new PushWorker(msg, servent.getUploadService());
             }
             return;
         }
-        
-        if ( msg.getHeader().getTTL() > 0 )
-        {
-            servent.getMessageService().routePushMessage( msg );
+
+        if (msg.getHeader().getTTL() > 0) {
+            servent.getMessageService().routePushMessage(msg);
         }
     }
 
-    private void dropMessage( Message msg, String reason, Host sourceHost )
-    {
-        logger.info( "Dropping message: {} from: {}", reason, sourceHost );
-        if ( logger.isDebugEnabled( ) )
-        {
-            logger.debug( "Header: [" + msg.getHeader().toString() + "] - Message: [" +
-                msg.toString() + "].");
+    private void dropMessage(Message msg, String reason, Host sourceHost) {
+        logger.info("Dropping message: {} from: {}", reason, sourceHost);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Header: [" + msg.getHeader().toString() + "] - Message: [" +
+                    msg.toString() + "].");
         }
-        if ( sourceHost != null )
-        {
-          sourceHost.incReceivedDropCount();
+        if (sourceHost != null) {
+            sourceHost.incReceivedDropCount();
         }
-        dropedMsgInCounter.increment( 1 );
+        dropedMsgInCounter.increment(1);
     }
-    
-    public void dropMessage( MsgHeader header, byte[] body, String reason, Host sourceHost )
-    {
 
-        logger.info( "Dropping message: {} from: {}", reason, sourceHost );
-        if ( logger.isDebugEnabled( ) )
-        {
-            logger.debug( "Header: [" + header.toString() + "] - Body: [" +
-                HexConverter.toHexString( body, 0, header.getDataLength() ) + "]." );
+    public void dropMessage(MsgHeader header, byte[] body, String reason, Host sourceHost) {
+
+        logger.info("Dropping message: {} from: {}", reason, sourceHost);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Header: [" + header.toString() + "] - Body: [" +
+                    HexConverter.toHexString(body, 0, header.getDataLength()) + "].");
         }
-        if ( sourceHost != null )
-        {
-          sourceHost.incReceivedDropCount();
+        if (sourceHost != null) {
+            sourceHost.incReceivedDropCount();
         }
-        dropedMsgInCounter.increment( 1 );
+        dropedMsgInCounter.increment(1);
     }
 }

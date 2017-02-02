@@ -23,11 +23,9 @@ package phex.connection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import phex.common.Phex;
 import phex.common.address.DestAddress;
 import phex.common.bandwidth.BandwidthController;
 import phex.download.PushHandler;
-import phex.download.swarming.PhexEventService;
 import phex.host.Host;
 import phex.host.HostStatus;
 import phex.host.NetworkHostsContainer;
@@ -52,11 +50,7 @@ import java.io.IOException;
  * host has connected to obtain data via a GET request or to deliver data in
  * response to a push, then the worker delegates this on.
  */
-public class IncomingConnectionDispatcher implements Runnable
-{
-    private static final Logger logger = LoggerFactory.getLogger( 
-        IncomingConnectionDispatcher.class );
-    
+public class IncomingConnectionDispatcher implements Runnable {
     public static final String GET_REQUEST_PREFIX = "GET ";
     public static final String HEAD_REQUEST_PREFIX = "HEAD ";
     public static final String GIV_REQUEST_PREFIX = "GIV ";
@@ -64,27 +58,25 @@ public class IncomingConnectionDispatcher implements Runnable
     public static final String URI_DOWNLOAD_PREFIX = "PHEX_URI ";
     public static final String MAGMA_DOWNLOAD_PREFIX = "PHEX_MAGMA ";
     public static final String RSS_DOWNLOAD_PREFIX = "PHEX_RSS ";
-
+    private static final Logger logger = LoggerFactory.getLogger(
+            IncomingConnectionDispatcher.class);
     private final Servent servent;
     private final SocketFacade socket;
 
-    public IncomingConnectionDispatcher( SocketFacade socket, Servent servent )
-    {
+    public IncomingConnectionDispatcher(SocketFacade socket, Servent servent) {
         this.socket = socket;
         this.servent = servent;
     }
 
-    public void run()
-    {
+    public void run() {
         GnutellaInputStream gInStream = null;
-        try
-        {
+        try {
             socket.setSoTimeout(NetworkPrefs.TcpRWTimeout.get());
             BandwidthController bwController = servent.getBandwidthService()
-                .getNetworkBandwidthController();
+                    .getNetworkBandwidthController();
             Connection connection = new Connection(socket, bwController);
-            
-            
+
+
 //          ByteBuffer buffer = ByteBuffer.allocate( BufferSize._2K );
 //          connection.read( buffer );
 //          buffer.flip();
@@ -96,136 +88,105 @@ public class IncomingConnectionDispatcher implements Runnable
 //          }
 //          
 //          String requestLine = requestLineBuilder.toString();
-            
+
             String requestLine = connection.readLine();
-            if ( requestLine == null )
-            {
-                throw new IOException( "Disconnected from remote host during handshake" );
+            if (requestLine == null) {
+                throw new IOException("Disconnected from remote host during handshake");
             }
-            logger.debug( "ConnectionRequest " + requestLine );
+            logger.debug("ConnectionRequest " + requestLine);
 
             DestAddress localAddress = servent.getLocalAddress();
             String greeting = servent.getGnutellaNetwork().getNetworkGreeting();
-            if ( requestLine.startsWith( greeting + '/') )
-            {
-                handleGnutellaRequest( connection );
+            if (requestLine.startsWith(greeting + '/')) {
+                handleGnutellaRequest(connection);
             }
             // used from PushWorker
-            else if ( requestLine.startsWith( GET_REQUEST_PREFIX )
-                   || requestLine.startsWith( HEAD_REQUEST_PREFIX ) )
-            {
-                if ( !servent.getOnlineStatus().isTransfersOnline()
-                    && !socket.getRemoteAddress().isLocalHost( localAddress ) )
-                {
-                    throw new IOException( "Transfers not connected." );
+            else if (requestLine.startsWith(GET_REQUEST_PREFIX)
+                    || requestLine.startsWith(HEAD_REQUEST_PREFIX)) {
+                if (!servent.getOnlineStatus().isTransfersOnline()
+                        && !socket.getRemoteAddress().isLocalHost(localAddress)) {
+                    throw new IOException("Transfers not connected.");
                 }
                 // requestLine = GET /get/1/foo doo.txt HTTP/1.1
                 // browse host request = GET / HTTP/1.1
                 // URN requestLine = GET /uri-res/N2R?urn:sha1:PLSTHIPQGSSZTS5FJUPAKUZWUGYQYPFB HTTP/1.0
-                HTTPRequest httpRequest = HTTPProcessor.parseHTTPRequest( requestLine );
-                HTTPProcessor.parseHTTPHeaders( httpRequest, connection );
-                logger.debug( httpRequest.getRequestMethod() + " Request: "
-                    + httpRequest.buildHTTPRequestString() );
-                if ( httpRequest.isGnutellaRequest() )
-                {
+                HTTPRequest httpRequest = HTTPProcessor.parseHTTPRequest(requestLine);
+                HTTPProcessor.parseHTTPHeaders(httpRequest, connection);
+                logger.debug(httpRequest.getRequestMethod() + " Request: "
+                        + httpRequest.buildHTTPRequestString());
+                if (httpRequest.isGnutellaRequest()) {
                     // file upload request
                     servent.getUploadService().handleUploadRequest(
-                        connection, httpRequest );
-                }
-                else
-                {
+                            connection, httpRequest);
+                } else {
                     // other requests like browse host..
                     new HttpRequestDispatcher().httpRequestHandler(
-                        connection, httpRequest );
+                            connection, httpRequest);
                 }
             }
             // used when requesting push transfer
-            else if ( requestLine.startsWith( GIV_REQUEST_PREFIX ) )
-            {
-                if ( !servent.getOnlineStatus().isTransfersOnline()
-                    && !socket.getRemoteAddress().isLocalHost( localAddress ) )
-                {
-                    throw new IOException( "Transfers not connected." );
+            else if (requestLine.startsWith(GIV_REQUEST_PREFIX)) {
+                if (!servent.getOnlineStatus().isTransfersOnline()
+                        && !socket.getRemoteAddress().isLocalHost(localAddress)) {
+                    throw new IOException("Transfers not connected.");
                 }
                 handleIncommingGIV(requestLine);
             }
             // used when requesting chat connection
-            else if (requestLine.startsWith( CHAT_REQUEST_PREFIX ) )
-            {
-                if ( !servent.getOnlineStatus().isNetworkOnline()
-                    && !socket.getRemoteAddress().isLocalHost( localAddress ) )
-                {
-                    throw new IOException( "Network not connected." );
+            else if (requestLine.startsWith(CHAT_REQUEST_PREFIX)) {
+                if (!servent.getOnlineStatus().isNetworkOnline()
+                        && !socket.getRemoteAddress().isLocalHost(localAddress)) {
+                    throw new IOException("Network not connected.");
                 }
                 DestAddress address = socket.getRemoteAddress();
-                logger.debug( "Chat request from: " + address );
-                servent.getChatService().acceptChat( connection );
-            }
-            else if (requestLine.startsWith( URI_DOWNLOAD_PREFIX ) )
-            {
+                logger.debug("Chat request from: " + address);
+                servent.getChatService().acceptChat(connection);
+            } else if (requestLine.startsWith(URI_DOWNLOAD_PREFIX)) {
                 handleIncommingUriDownload(requestLine);
-            }
-            else if (requestLine.startsWith( MAGMA_DOWNLOAD_PREFIX ) )
-            {
+            } else if (requestLine.startsWith(MAGMA_DOWNLOAD_PREFIX)) {
                 handleIncommingMagmaDownload(requestLine);
-            }
-            else if (requestLine.startsWith( RSS_DOWNLOAD_PREFIX ) )
-            {
+            } else if (requestLine.startsWith(RSS_DOWNLOAD_PREFIX)) {
                 handleIncommingRSSDownload(requestLine);
-            }
-            else
-            {
+            } else {
                 throw new IOException("Unknown connection request: "
-                    + requestLine );
+                        + requestLine);
             }
-        }
-        catch ( HTTPMessageException | IOException exp )
-        {
-            logger.debug( exp.toString(), exp );
+        } catch (HTTPMessageException | IOException exp) {
+            logger.debug(exp.toString(), exp);
             IOUtil.closeQuietly(gInStream);
             IOUtil.closeQuietly(socket);
-        } catch ( Exception exp )
-        {// catch all thats left...
-            logger.error( exp.toString(), exp);
+        } catch (Exception exp) {// catch all thats left...
+            logger.error(exp.toString(), exp);
             IOUtil.closeQuietly(gInStream);
             IOUtil.closeQuietly(socket);
         }
     }
-    
-    private void handleGnutellaRequest( Connection connection ) 
-        throws IOException
-    {
+
+    private void handleGnutellaRequest(Connection connection)
+            throws IOException {
         DestAddress localAddress = servent.getLocalAddress();
-        if ( !servent.getOnlineStatus().isNetworkOnline()
-            && !socket.getRemoteAddress().isLocalHost( localAddress ) )
-        {
-            throw new IOException( "Network not connected." );
+        if (!servent.getOnlineStatus().isNetworkOnline()
+                && !socket.getRemoteAddress().isLocalHost(localAddress)) {
+            throw new IOException("Network not connected.");
         }
         DestAddress address = socket.getRemoteAddress();
-        
+
         NetworkHostsContainer netHostsCont = servent.getHostService().getNetworkHostsContainer();
-        Host host = netHostsCont.createIncomingHost( address, connection );
-        host.setStatus( HostStatus.ACCEPTING, "" );
-        try
-        {
-            ConnectionEngine engine = new ConnectionEngine( servent, host );
-            engine.initHostHandshake( );
+        Host host = netHostsCont.createIncomingHost(address, connection);
+        host.setStatus(HostStatus.ACCEPTING, "");
+        try {
+            ConnectionEngine engine = new ConnectionEngine(servent, host);
+            engine.initHostHandshake();
             engine.processIncomingData();
-        }
-        catch ( IOException exp )
-        {
-            if ( host.isConnected() )
-            {
-                host.setStatus( HostStatus.ERROR, exp.getMessage() );
+        } catch (IOException exp) {
+            if (host.isConnected()) {
+                host.setStatus(HostStatus.ERROR, exp.getMessage());
                 host.disconnect();
             }
             throw exp;
-        }
-        finally
-        {
-            if ( host.isConnected() )
-            {
-                host.setStatus( HostStatus.DISCONNECTED, "Unknown" );
+        } finally {
+            if (host.isConnected()) {
+                host.setStatus(HostStatus.DISCONNECTED, "Unknown");
                 host.disconnect();
             }
         }
@@ -235,82 +196,64 @@ public class IncomingConnectionDispatcher implements Runnable
      * @param requestLine
      * @throws IOException
      */
-    private void handleIncommingUriDownload(String requestLine) throws IOException
-    {
-        try
-        {
+    private void handleIncommingUriDownload(String requestLine) throws IOException {
+        try {
             DestAddress localAddress = servent.getLocalAddress();
             // this must be a request from local host
-            if ( !socket.getRemoteAddress().isLocalHost( localAddress ) )
-            {
+            if (!socket.getRemoteAddress().isLocalHost(localAddress)) {
                 return;
             }
-            socket.getChannel().write( BufferCache.OK_BUFFER );
-        }
-        finally
-        {
+            socket.getChannel().write(BufferCache.OK_BUFFER);
+        } finally {
             IOUtil.closeQuietly(socket);
         }
-        String uriToken = requestLine.substring( URI_DOWNLOAD_PREFIX.length() + 1 );
-        
-        PhexEventService eventService = Phex.getEventService();
+        String uriToken = requestLine.substring(URI_DOWNLOAD_PREFIX.length() + 1);
+
 
     }
-    
+
     /**
      * @param requestLine
      * @throws IOException
      */
-    private void handleIncommingMagmaDownload(String requestLine) throws IOException
-    {
-        try
-        {
+    private void handleIncommingMagmaDownload(String requestLine) throws IOException {
+        try {
             DestAddress localAddress = servent.getLocalAddress();
             // this must be a request from local host
-            if ( !socket.getRemoteAddress().isLocalHost( localAddress ) )
-            {
+            if (!socket.getRemoteAddress().isLocalHost(localAddress)) {
                 return;
             }
-            socket.getChannel().write( BufferCache.OK_BUFFER );
-        }
-        finally
-        {
+            socket.getChannel().write(BufferCache.OK_BUFFER);
+        } finally {
             IOUtil.closeQuietly(socket);
         }
-        String fileNameToken = requestLine.substring( MAGMA_DOWNLOAD_PREFIX.length() + 1 );
-        PhexEventService eventService = Phex.getEventService();
+        String fileNameToken = requestLine.substring(MAGMA_DOWNLOAD_PREFIX.length() + 1);
 
-    }
-    
-    private void handleIncommingRSSDownload(String requestLine) throws IOException
-    {
-        try
-        {
-            DestAddress localAddress = servent.getLocalAddress();
-            // this must be a request from local host
-            if ( !socket.getRemoteAddress().isLocalHost( localAddress ) )
-            {
-                return;
-            }
-            socket.getChannel().write( BufferCache.OK_BUFFER );
-        }
-        finally
-        {
-            IOUtil.closeQuietly(socket);
-        }
-        String fileNameToken = requestLine.substring( RSS_DOWNLOAD_PREFIX.length() + 1 );
-        PhexEventService eventService = Phex.getEventService();
 
     }
 
-    private void handleIncommingGIV(String requestLine)
-    {
+    private void handleIncommingRSSDownload(String requestLine) throws IOException {
+        try {
+            DestAddress localAddress = servent.getLocalAddress();
+            // this must be a request from local host
+            if (!socket.getRemoteAddress().isLocalHost(localAddress)) {
+                return;
+            }
+            socket.getChannel().write(BufferCache.OK_BUFFER);
+        } finally {
+            IOUtil.closeQuietly(socket);
+        }
+        String fileNameToken = requestLine.substring(RSS_DOWNLOAD_PREFIX.length() + 1);
+
+
+    }
+
+    private void handleIncommingGIV(String requestLine) {
         // A correct request line should line should be:
         // GIV <file-ref-num>:<ClientID GUID in hexdec>/<filename>\n\n
         String remainder = requestLine.substring(4); // skip GIV
-        
-        try
-        {
+
+        try {
             // get file number index position
             int fileNumIdx = remainder.indexOf(':');
             // this would extract file index, but we don't use it anymore
@@ -327,11 +270,9 @@ public class IncomingConnectionDispatcher implements Runnable
 
             GUID givenGUID = new GUID(guidStr);
             PushHandler.handleIncommingGIV(socket, givenGUID, givenFileName);
-        }
-        catch ( IndexOutOfBoundsException exp )
-        {
+        } catch (IndexOutOfBoundsException exp) {
             // handle possible out of bounds exception for better logging...
-            logger.error( "Failed to parse GIV: " + requestLine, exp);
-        }        
+            logger.error("Failed to parse GIV: " + requestLine, exp);
+        }
     }
 }

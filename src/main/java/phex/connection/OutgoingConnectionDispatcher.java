@@ -21,6 +21,8 @@
  */
 package phex.connection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import phex.common.Environment;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
@@ -33,179 +35,150 @@ import phex.servent.Servent;
 import java.io.IOException;
 
 /**
- * This class is responsible to dispatch an outgoing Gnutella network 
+ * This class is responsible to dispatch an outgoing Gnutella network
  * connection to a specific host or to the next best host from the host catcher.
  */
-public class OutgoingConnectionDispatcher implements Runnable
-{
+public class OutgoingConnectionDispatcher implements Runnable {
+
+    final static Logger logger = LoggerFactory.getLogger(OutgoingConnectionDispatcher.class);
+
+    private final Servent servent;
+    private final DestAddress hostAddress;
+
+    private OutgoingConnectionDispatcher(DestAddress hostAddress, Servent servent) {
+        this.hostAddress = hostAddress;
+        this.servent = servent;
+    }
+
     /**
-     * Dispatches a outgoing Gnutella network connection to the next 
+     * Dispatches a outgoing Gnutella network connection to the next
      * best host from the host catcher.
      */
-    public static void dispatchConnectToNextHost( Servent servent )
-    {
-        dispatchConnectToNextHosts( 1, servent );
+    public static void dispatchConnectToNextHost(Servent servent) {
+        dispatchConnectToNextHosts(1, servent);
     }
-    
+
     /**
-     * Dispatches <tt>count</tt> number of outgoing Gnutella network connection 
+     * Dispatches <tt>count</tt> number of outgoing Gnutella network connection
      * to the next best hosts from the host catcher.
      */
-    public static void dispatchConnectToNextHosts( int count, Servent servent )
-    {        
+    public static void dispatchConnectToNextHosts(int count, Servent servent) {
         // creating OCDs in batches could cause unneeded thread use and heavy
         // HostFetchingStrategy requests in case no hosts are in host catcher.
         // Instead host lookup is now done before creating OCD and dispatching
         // is stopped in case no hosts are available.
-        
+
         HostManager hostService = servent.getHostService();
         CaughtHostsContainer caughtHostsContainer = hostService.getCaughtHostsContainer();
         NetworkHostsContainer networkHostsCont = hostService.getNetworkHostsContainer();
-        for ( int i = 0; i < count; i++ )
-        {
+        for (int i = 0; i < count; i++) {
             DestAddress caughtHost;
-            do
-            {
+            do {
                 caughtHost = caughtHostsContainer.getNextCaughtHost();
-                if ( caughtHost == null )
-                {
+                if (caughtHost == null) {
                     // no host is currently available...
                     // break out of dispatching
                     return;
                 }
             }
-            while ( networkHostsCont.isConnectedToHost( caughtHost ) );
-            
-            dispatchConnectToHost( caughtHost, servent );
+            while (networkHostsCont.isConnectedToHost(caughtHost));
+
+            dispatchConnectToHost(caughtHost, servent);
         }
     }
-    
+
     /**
      * Dispatches a outgoing Gnutella network connection to the specified
      * <tt>hostAddress</tt>
+     *
      * @param hostAddress the hostAddress to connect to.
      */
-    public static void dispatchConnectToHost( DestAddress hostAddress, Servent servent )
-    {
+    public static void dispatchConnectToHost(DestAddress hostAddress, Servent servent) {
         OutgoingConnectionDispatcher dispatcher = new OutgoingConnectionDispatcher(
-            hostAddress, servent );
-        
-        Environment.getInstance().executeOnThreadPool( dispatcher,
-            "OutgoingConnectionDispatcher-" + Integer.toHexString( dispatcher.hashCode() ) );
+                hostAddress, servent);
+
+        Environment.getInstance().executeOnThreadPool(dispatcher,
+                "OutgoingConnectionDispatcher-" + Integer.toHexString(dispatcher.hashCode()));
     }
-    
-    private final Servent servent;
-    private final DestAddress hostAddress;
-    
-    private OutgoingConnectionDispatcher( DestAddress hostAddress, Servent servent )
-    {
-        this.hostAddress = hostAddress;
-        this.servent = servent;
-    }
-    
-    public void run()
-    {
-        try
-        {
+
+    public void run() {
+        try {
             connectToHostAddress();
-        }
-        catch ( Throwable th )
-        {
-            NLogger.error( OutgoingConnectionDispatcher.class, th, th);
+        } catch (Throwable th) {
+            NLogger.error(OutgoingConnectionDispatcher.class, th, th);
         }
     }
-    
-    private void connectToHostAddress()
-    {
+
+    private void connectToHostAddress() {
         NetworkHostsContainer netHostsCont = servent.getHostService().getNetworkHostsContainer();
-        Host host = netHostsCont.createOutgoingHost( hostAddress );
-        host.setStatus( HostStatus.CONNECTING );
-        
+        Host host = netHostsCont.createOutgoingHost(hostAddress);
+        host.setStatus(HostStatus.CONNECTING);
+
         Connection connection;
-        try
-        {
-            connection = ConnectionFactory.createConnection( hostAddress,
-                servent.getBandwidthService().getNetworkBandwidthController() );
-        }
-        catch ( IOException exp )
-        {
-            reportStatus( Status.CONNECTION_FAILED );
-            host.setStatus( HostStatus.ERROR, exp.getMessage() );
-            host.disconnect();
-            NLogger.debug( OutgoingConnectionDispatcher.class, exp);
-            return;
-        }
-        catch (Exception exp)
-        {
-            reportStatus( Status.CONNECTION_FAILED );
+        try {
+            connection = ConnectionFactory.createConnection(hostAddress,
+                    servent.getBandwidthService().getNetworkBandwidthController());
+        } catch (IOException exp) {
+            reportStatus(Status.CONNECTION_FAILED);
             host.setStatus(HostStatus.ERROR, exp.getMessage());
             host.disconnect();
-            NLogger.warn( OutgoingConnectionDispatcher.class, exp, exp);
+            logger.error("connect: {}", exp.getMessage());
+            return;
+        } catch (Exception exp) {
+            reportStatus(Status.CONNECTION_FAILED);
+            host.setStatus(HostStatus.ERROR, exp.getMessage());
+            host.disconnect();
+            NLogger.warn(OutgoingConnectionDispatcher.class, exp, exp);
             return;
         }
-        
+
         // I am connected to the remote host at this point.
-        host.setConnection( connection );
+        host.setConnection(connection);
 
         ConnectionEngine engine;
-        try
-        {
-            engine = new ConnectionEngine( servent, host );
+        try {
+            engine = new ConnectionEngine(servent, host);
             engine.initHostHandshake();
-        }
-        catch ( ConnectionRejectedException exp )
-        {
-            reportStatus( Status.HANDSHAKE_REJECTED );
-            host.setStatus( HostStatus.ERROR, exp.getMessage() );
-            host.disconnect();
-            NLogger.debug( OutgoingConnectionDispatcher.class, exp);
-            return;
-        }
-        catch ( IOException exp )
-        {
-            reportStatus( Status.HANDSHAKE_FAILED );
-            host.setStatus( HostStatus.ERROR, exp.getMessage() );
-            host.disconnect();
-            NLogger.debug( OutgoingConnectionDispatcher.class, exp);
-            return;
-        }
-        catch (Exception exp)
-        {
-            reportStatus( Status.HANDSHAKE_FAILED );
+        } catch (ConnectionRejectedException exp) {
+            reportStatus(Status.HANDSHAKE_REJECTED);
             host.setStatus(HostStatus.ERROR, exp.getMessage());
             host.disconnect();
-            NLogger.warn( OutgoingConnectionDispatcher.class, exp, exp);
+            logger.debug("connect {}", exp.getMessage());
+            return;
+        } catch (IOException exp) {
+            reportStatus(Status.HANDSHAKE_FAILED);
+            host.setStatus(HostStatus.ERROR, exp.getMessage());
+            host.disconnect();
+            logger.debug("connect {}", exp.getMessage());
+            return;
+        } catch (Exception exp) {
+            reportStatus(Status.HANDSHAKE_FAILED);
+            host.setStatus(HostStatus.ERROR, exp.getMessage());
+            host.disconnect();
+            logger.warn("connect {}", exp);
             return;
         }
-        
-        reportStatus( Status.SUCCESSFUL );
-        
-        try
-        {
+
+        reportStatus(Status.SUCCESSFUL);
+
+        try {
             engine.processIncomingData();
-        }
-        catch ( IOException exp )
-        {
-            if ( host.isConnected() )
-            {
-                host.setStatus( HostStatus.ERROR, exp.getMessage() );
-                host.disconnect();
-            }
-            NLogger.debug( OutgoingConnectionDispatcher.class, exp);
-        }
-        catch (Exception exp)
-        {
-            if ( host.isConnected() )
-            {
+        } catch (IOException exp) {
+            if (host.isConnected()) {
                 host.setStatus(HostStatus.ERROR, exp.getMessage());
                 host.disconnect();
             }
-            NLogger.warn( OutgoingConnectionDispatcher.class, exp, exp);
+            logger.debug("process {}", exp.getMessage());
+        } catch (Exception exp) {
+            if (host.isConnected()) {
+                host.setStatus(HostStatus.ERROR, exp.getMessage());
+                host.disconnect();
+            }
+            logger.warn("process {}", exp);
         }
     }
-    
-    private void reportStatus( Status status )
-    {
+
+    private void reportStatus(Status status) {
 
     }
 }

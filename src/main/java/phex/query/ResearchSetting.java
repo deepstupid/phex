@@ -23,7 +23,6 @@ package phex.query;
 
 import phex.common.URN;
 import phex.download.RemoteFile;
-import phex.download.swarming.PhexEventService;
 import phex.download.swarming.SWDownloadFile;
 import phex.rules.Rule;
 import phex.rules.condition.FileSizeCondition;
@@ -31,189 +30,151 @@ import phex.rules.condition.NotCondition;
 import phex.rules.consequence.RemoveFromSearchConsequence;
 import phex.servent.Servent;
 
-public class ResearchSetting
-{
+public class ResearchSetting {
     private final BackgroundSearchContainer searchContainer;
-    
-    private long lastResearchStartTime;
+    // Since currently the only one who uses the research setting is the
+    // download file this solution is ok... later we need to find a different
+    // way
+    private final SWDownloadFile downloadFile;
+    private final Servent servent;
 
+    private long lastResearchStartTime;
     /**
      * The count of research that didn't return any new results.
      */
     private int noNewResultsCount;
     private int totalResearchCount;
-
     /**
      * The term to search for.
      */
     private String searchTerm;
-
     private RuleFilteredSearch ruledSearch;
-
     /**
      * When the search has new results. This flag is true.
      */
     private boolean hasNewSearchResults;
 
-
-    // Since currently the only one who uses the research setting is the
-    // download file this solution is ok... later we need to find a different
-    // way
-    private final SWDownloadFile downloadFile;
-    
-    private final Servent servent;
-    
-    private final PhexEventService eventService;
-
-    public ResearchSetting( SWDownloadFile file, QueryManager queryService, 
-        PhexEventService eventService, Servent servent )
-    {
+    public ResearchSetting(SWDownloadFile file, QueryManager queryService,
+                           Servent servent) {
         this.servent = servent;
-        this.eventService = eventService;
+
         downloadFile = file;
         searchContainer = queryService.getBackgroundSearchContainer();
 
     }
 
-    public long getLastResearchStartTime()
-    {
+    public long getLastResearchStartTime() {
         return lastResearchStartTime;
     }
 
-    public void setLastResearchStartTime( long time )
-    {
+    public void setLastResearchStartTime(long time) {
         lastResearchStartTime = time;
     }
 
-    public int getNoNewResultsCount()
-    {
+    public int getNoNewResultsCount() {
         return noNewResultsCount;
     }
 
-    public String getSearchTerm()
-    {
+    public String getSearchTerm() {
         return searchTerm;
     }
 
-    public void setSearchTerm( String term )
-    {
+    public void setSearchTerm(String term) {
         searchTerm = term;
     }
 
-    public String getSHA1()
-    {
+    public String getSHA1() {
         URN searchURN = downloadFile.getFileURN();
-        if ( searchURN == null || !searchURN.isSha1Nid() )
-        {
+        if (searchURN == null || !searchURN.isSha1Nid()) {
             return "";
         }
         return searchURN.getNamespaceSpecificString();
     }
 
-    public void startSearch( )
-    {
-        if ( ruledSearch != null && !ruledSearch.isSearchFinished() )
-        {
+    public void startSearch() {
+        if (ruledSearch != null && !ruledSearch.isSearchFinished()) {
             return;
         }
 
-        if ( searchTerm.length() < DynamicQueryConstants.MIN_SEARCH_TERM_LENGTH &&
-            downloadFile.getFileURN() == null)
-        {
+        if (searchTerm.length() < DynamicQueryConstants.MIN_SEARCH_TERM_LENGTH &&
+                downloadFile.getFileURN() == null) {
             return;
         }
         hasNewSearchResults = false;
-        
+
         // Since Limewire is not adding urns to QRT anymore URN queries even with
         // string turn out to not work very good.. therefore we are not trying
         // urn queries if we have a decent search term available.
         URN queryURN = null;
-        if ( searchTerm.length() < DynamicQueryConstants.MIN_SEARCH_TERM_LENGTH 
-             && downloadFile.getFileURN() != null )
-        {
+        if (searchTerm.length() < DynamicQueryConstants.MIN_SEARCH_TERM_LENGTH
+                && downloadFile.getFileURN() != null) {
             queryURN = downloadFile.getFileURN();
         }
-        Search search = searchContainer.createSearch( searchTerm, queryURN );
-        
+        Search search = searchContainer.createSearch(searchTerm, queryURN);
+
         Rule rule = new Rule();
         rule.addConsequence(RemoveFromSearchConsequence.INSTANCE);
-        rule.addCondition( new NotCondition( new FileSizeCondition( 
-            downloadFile.getTotalDataSize(), 
-            downloadFile.getTotalDataSize() ) ) );
-        ruledSearch = new RuleFilteredSearch( search, rule, servent, eventService );
-        
-        DefaultSearchProgress searchProgress = DefaultSearchProgress.createForForMeProgress( 
-            queryURN != null );
-        ruledSearch.startSearching( searchProgress );
+        rule.addCondition(new NotCondition(new FileSizeCondition(
+                downloadFile.getTotalDataSize(),
+                downloadFile.getTotalDataSize())));
+        ruledSearch = new RuleFilteredSearch(search, rule, servent);
 
-        totalResearchCount ++;
+        DefaultSearchProgress searchProgress = DefaultSearchProgress.createForForMeProgress(
+                queryURN != null);
+        ruledSearch.startSearching(searchProgress);
+
+        totalResearchCount++;
         long currentTime = System.currentTimeMillis();
         lastResearchStartTime = currentTime;
     }
 
-    public int getTotalResearchCount()
-    {
+    public int getTotalResearchCount() {
         return totalResearchCount;
     }
 
-    public void stopSearch()
-    {
-        if ( ruledSearch == null || ruledSearch.isSearchFinished() )
-        {
+    public void stopSearch() {
+        if (ruledSearch == null || ruledSearch.isSearchFinished()) {
             return;
         }
         ruledSearch.stopSearching();
     }
 
-    public int getSearchHitCount()
-    {
+    public int getSearchHitCount() {
         return ruledSearch.getResultCount();
     }
-    
-    public int getSearchProgress()
-    {
+
+    public int getSearchProgress() {
         return ruledSearch.getProgress();
     }
 
-    public boolean isSearchRunning()
-    {
-        if ( ruledSearch == null )
-        {
+    public boolean isSearchRunning() {
+        if (ruledSearch == null) {
             return false;
         }
         return !ruledSearch.isSearchFinished();
     }
-    
+
     //@EventTopicSubscriber(topic=PhexEventTopics.Search_Data)
-    public void onSearchDataEvent( String topic, final SearchDataEvent event )
-    {
-        if ( ruledSearch != event.getSource() )
-        {
+    public void onSearchDataEvent(String topic, final SearchDataEvent event) {
+        if (ruledSearch != event.getSource()) {
             return;
         }
-        
+
         // after search has stopped check if we found any thing.
-        if ( event.getType() == SearchDataEvent.SEARCH_STOPED )
-        {
-            if ( hasNewSearchResults == false )
-            {   // no new results...
-                noNewResultsCount ++;
-            }
-            else
-            {
+        if (event.getType() == SearchDataEvent.SEARCH_STOPED) {
+            if (hasNewSearchResults == false) {   // no new results...
+                noNewResultsCount++;
+            } else {
                 noNewResultsCount = 0;
             }
         }
-        
-        if ( event.getType() == SearchDataEvent.SEARCH_HITS_ADDED )
-        {
+
+        if (event.getType() == SearchDataEvent.SEARCH_HITS_ADDED) {
             // Adds a file from a background search to the candidates list.
             RemoteFile[] files = event.getSearchData();
-            for ( int i = 0; i < files.length; i++ )
-            {
-                boolean isAdded = downloadFile.addDownloadCandidate( files[i] );
-                if ( isAdded )
-                {
+            for (int i = 0; i < files.length; i++) {
+                boolean isAdded = downloadFile.addDownloadCandidate(files[i]);
+                if (isAdded) {
                     hasNewSearchResults = true;
                 }
             }

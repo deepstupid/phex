@@ -36,8 +36,7 @@ import java.util.List;
 /**
  * Filters all files matching the expression.
  */
-public class DFileSizeCondition implements DCondition
-{
+public class DFileSizeCondition implements DCondition {
     static public final String ELEMENT_NAME = "filesize-condition";
     private List<FileSizeCondition.Range> ranges;
 
@@ -45,54 +44,46 @@ public class DFileSizeCondition implements DCondition
      * @param expression
      * @param case1
      */
-    public DFileSizeCondition( )
-    {
+    public DFileSizeCondition() {
         ranges = new ArrayList<FileSizeCondition.Range>();
     }
-    
-    public List<FileSizeCondition.Range> getRanges()
-    {
+
+    public List<FileSizeCondition.Range> getRanges() {
         return ranges;
     }
 
-    public void setRanges( List<FileSizeCondition.Range> ranges )
-    {
+    public void setRanges(List<FileSizeCondition.Range> ranges) {
         this.ranges = ranges;
     }
 
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
-        
-        if ( ranges != null )
-        {
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
+
+        if (ranges != null) {
             AttributesImpl attributes = null;
             Iterator iterator = ranges.iterator();
-            while ( iterator.hasNext() )
-            {
+            while (iterator.hasNext()) {
                 FileSizeCondition.Range range = (Range) iterator.next();
-                
+
                 attributes = new AttributesImpl();
-                attributes.addAttribute( "", "", "min", "CDATA", 
-                    String.valueOf( range.min ) );
-                attributes.addAttribute( "", "", "max", "CDATA", 
-                    String.valueOf( range.max ) );
-                
-                writer.startElm( "range", attributes );
-                writer.endElm( "range" );
+                attributes.addAttribute("", "", "min", "CDATA",
+                        String.valueOf(range.min));
+                attributes.addAttribute("", "", "max", "CDATA",
+                        String.valueOf(range.max));
+
+                writer.startElm("range", attributes);
+                writer.endElm("range");
             }
         }
-        
-        writer.endElm( ELEMENT_NAME );
+
+        writer.endElm(ELEMENT_NAME);
     }
-    
-    public Condition createCondition()
-    {
-        FileSizeCondition cond = new FileSizeCondition( );
+
+    public Condition createCondition() {
+        FileSizeCondition cond = new FileSizeCondition();
         Iterator iterator = ranges.iterator();
-        while ( iterator.hasNext() )
-        {
-            cond.addRange( (Range) iterator.next() );
+        while (iterator.hasNext()) {
+            cond.addRange((Range) iterator.next());
         }
         return cond;
     }

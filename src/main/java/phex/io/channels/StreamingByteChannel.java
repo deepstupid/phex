@@ -9,80 +9,65 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 import java.nio.channels.ByteChannel;
 
-public class StreamingByteChannel implements ByteChannel
-{
-    private boolean isOpen;
+public class StreamingByteChannel implements ByteChannel {
     private final InputStream inStream;
     private final OutputStream outStream;
-    
-    public StreamingByteChannel( Socket socket ) throws IOException
-    {
-        this( socket.getInputStream(), socket.getOutputStream() );
+    private boolean isOpen;
+
+    public StreamingByteChannel(Socket socket) throws IOException {
+        this(socket.getInputStream(), socket.getOutputStream());
     }
-    
-    public StreamingByteChannel( InputStream inStream, OutputStream outStream )
-    {
+
+    public StreamingByteChannel(InputStream inStream, OutputStream outStream) {
         isOpen = true;
         this.inStream = inStream;
         this.outStream = outStream;
     }
-    
-    public boolean isOpen()
-    {
+
+    public boolean isOpen() {
         return isOpen;
     }
-    
-    public void close() throws IOException
-    {
+
+    public void close() throws IOException {
         isOpen = false;
-        IOUtil.closeQuietly( inStream );
-        IOUtil.closeQuietly( outStream );
+        IOUtil.closeQuietly(inStream);
+        IOUtil.closeQuietly(outStream);
     }
 
-    public int read( ByteBuffer dst ) throws IOException
-    {
+    public int read(ByteBuffer dst) throws IOException {
         int lengthRead;
         int pos = dst.position();
         int limit = dst.limit();
-        if ( dst.hasArray() )
-        {
+        if (dst.hasArray()) {
             byte[] bufferSrc = dst.array();
-            lengthRead = inStream.read( bufferSrc, pos, limit-pos );
-            if ( lengthRead > 0 )
-            {
-                dst.position( dst.position() + lengthRead );
+            lengthRead = inStream.read(bufferSrc, pos, limit - pos);
+            if (lengthRead > 0) {
+                dst.position(dst.position() + lengthRead);
             }
-        }
-        else
-        {
-            byte[] buf = new byte[ limit-pos ];
-            lengthRead = inStream.read( buf );
-            if ( lengthRead > 0 )
-            {
-                dst.put( buf, 0, lengthRead );
+        } else {
+            byte[] buf = new byte[limit - pos];
+            lengthRead = inStream.read(buf);
+            if (lengthRead > 0) {
+                dst.put(buf, 0, lengthRead);
             }
         }
         return lengthRead;
-        
+
     }
 
-    public int write(ByteBuffer src) throws IOException
-    {
+    public int write(ByteBuffer src) throws IOException {
         int pos = src.position();
         int limit = src.limit();
-        if ( src.hasArray() )
-        {
+        if (src.hasArray()) {
             byte[] bufferSrc = src.array();
-            outStream.write( bufferSrc, pos, limit-pos );
-            src.position( limit );
+            outStream.write(bufferSrc, pos, limit - pos);
+            src.position(limit);
+        } else {
+            byte[] buf = new byte[limit - pos];
+            src.get(buf);
+            outStream.write(buf);
         }
-        else
-        {
-            byte[] buf = new byte[ limit-pos ];
-            src.get( buf );
-            outStream.write( buf );
-        }
-        return limit-pos;
+        return limit - pos;
     }
 
 }

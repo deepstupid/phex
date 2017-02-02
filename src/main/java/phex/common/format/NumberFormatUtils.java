@@ -24,109 +24,100 @@ package phex.common.format;
 
 import phex.util.Localizer;
 
-public final class NumberFormatUtils
-{
+public final class NumberFormatUtils {
     public static final DoubleToString doubleToStringFormat = new DoubleToString();
-    
+
     /**
      * Represents 1 Kilo Byte ( 1024 ).
      */
     public static final long ONE_KB = 1024L;
-    
+
     /**
      * Represents 1 Mega Byte ( 1024^2 ).
      */
     public static final long ONE_MB = ONE_KB * 1024L;
-    
+
     /**
      * Represents 1 Giga Byte ( 1024^3 ).
      */
     public static final long ONE_GB = ONE_MB * 1024L;
-    
+
     /**
      * Represents 1 Tera Byte ( 1024^4 ).
      */
     public static final long ONE_TB = ONE_GB * 1024L;
 
     // dont allow instances
-    private NumberFormatUtils() {}
+    private NumberFormatUtils() {
+    }
 
-    public static String formatDecimal( double value, int precision )
-    {
-        if (Double.isNaN(value) || Double.isInfinite(value)) 
-        {
+    public static String formatDecimal(double value, int precision) {
+        if (Double.isNaN(value) || Double.isInfinite(value)) {
             return "\u221E"; // "oo"
         }
-        
-        if ( precision == 0 )
-        {// when no precision is needed integerFormat is doing a slightly faster job
-            return formatNumber( (long)value );
+
+        if (precision == 0) {// when no precision is needed integerFormat is doing a slightly faster job
+            return formatNumber((long) value);
         }
-        
+
         StringBuffer buf = new StringBuffer();
-        doubleToStringFormat.appendFormatted( 
-            buf, value, precision,
-            Localizer.getDecimalFormatSymbols().getDecimalSeparator(),
-            Localizer.getDecimalFormatSymbols().getGroupingSeparator(), 3, // = no grouping
-            Localizer.getDecimalFormatSymbols().getMinusSign(), '\uFFFF' ); // uFFFF = no negative suffix
+        doubleToStringFormat.appendFormatted(
+                buf, value, precision,
+                Localizer.getDecimalFormatSymbols().getDecimalSeparator(),
+                Localizer.getDecimalFormatSymbols().getGroupingSeparator(), 3, // = no grouping
+                Localizer.getDecimalFormatSymbols().getMinusSign(), '\uFFFF'); // uFFFF = no negative suffix
         return buf.toString();
     }
-    
+
     /**
      * Formates a int or long number.
+     *
      * @param size
      * @return
      */
-    public static String formatNumber( long size )
-    {
-        return Localizer.getIntegerNumberFormat().format( size );
+    public static String formatNumber(long size) {
+        return Localizer.getIntegerNumberFormat().format(size);
     }
-    
+
     /**
      * Formats the size with the unit bytes.
+     *
      * @param size
      * @return
      */
-    public static String formatFullByteSize( long size )
-    {
-        return formatNumber( size ) + ' ' + Localizer.getString( "BytesToken" );
+    public static String formatFullByteSize(long size) {
+        return formatNumber(size) + ' ' + Localizer.getString("BytesToken");
     }
 
     /**
      * Formats the the size as a most significant number of bytes.
      */
-    public static String formatSignificantByteSize( double size )
-    {
+    public static String formatSignificantByteSize(double size) {
         String text;
         double divider;
         int precision;
         if (size < 10 * NumberFormatUtils.ONE_KB) // < 10K
         {
-            text = Localizer.getString( "BytesToken" );
+            text = Localizer.getString("BytesToken");
             divider = 1.0;
             precision = 0;
-        }
-        else if (size < 10 * NumberFormatUtils.ONE_MB) // < 10M
+        } else if (size < 10 * NumberFormatUtils.ONE_MB) // < 10M
         {
-            text = Localizer.getString( "KBToken" );
+            text = Localizer.getString("KBToken");
             divider = NumberFormatUtils.ONE_KB;
             precision = 1;
-        }
-        else if (size < 10 * NumberFormatUtils.ONE_GB) // < 10G
+        } else if (size < 10 * NumberFormatUtils.ONE_GB) // < 10G
         {
-            text = Localizer.getString( "MBToken" );
+            text = Localizer.getString("MBToken");
             divider = NumberFormatUtils.ONE_MB;
             precision = 1;
-        }
-        else if (size < 10 * NumberFormatUtils.ONE_TB) // < 10T
+        } else if (size < 10 * NumberFormatUtils.ONE_TB) // < 10T
         {
-            text = Localizer.getString( "GBToken" );
+            text = Localizer.getString("GBToken");
             divider = NumberFormatUtils.ONE_GB;
             precision = 2;
-        }
-        else
-        {
-            text = Localizer.getString( "TBToken" );
+        } else {
+            text = Localizer.getString("TBToken");
             divider = NumberFormatUtils.ONE_TB;
             precision = 3;
         }
@@ -135,8 +126,7 @@ public final class NumberFormatUtils
         return valStr + ' ' + text;
     }
 
-    public static String formatSignificantByteSize( Number number )
-    {
-        return formatSignificantByteSize( number.doubleValue() );
+    public static String formatSignificantByteSize(Number number) {
+        return formatSignificantByteSize(number.doubleValue());
     }
 }

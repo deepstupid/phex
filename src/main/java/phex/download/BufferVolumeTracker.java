@@ -23,104 +23,87 @@ package phex.download;
 
 import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 
-public class BufferVolumeTracker
-{
+public class BufferVolumeTracker {
     private final BufferVolumeTracker parent;
     private final Sync sync;
     private final DownloadDataWriter dataWriter;
-    
+
     // TODO the maxBufferSize is coming from a setting, changes to the setting
     //      during runtime are not reflected in the used Sync.
-    public BufferVolumeTracker( int maxBufferSize, DownloadDataWriter dataWriter )
-    {
-        this( null, maxBufferSize, dataWriter  );
+    public BufferVolumeTracker(int maxBufferSize, DownloadDataWriter dataWriter) {
+        this(null, maxBufferSize, dataWriter);
     }
-    
-    public BufferVolumeTracker( BufferVolumeTracker parent, int maxBufferSize, DownloadDataWriter dataWriter )
-    {
+
+    public BufferVolumeTracker(BufferVolumeTracker parent, int maxBufferSize, DownloadDataWriter dataWriter) {
         this.parent = parent;
         this.dataWriter = dataWriter;
-        sync = new Sync( maxBufferSize );
+        sync = new Sync(maxBufferSize);
     }
-    
-    public int getUsedBufferSize()
-    {
+
+    public int getUsedBufferSize() {
         return sync.getUsedStates();
     }
-    public int getFreeBufferSize()
-    {
+
+    public int getFreeBufferSize() {
         return sync.getFreeStates();
     }
-    
-    public void addBufferedSize( int amount )
-    {
-        if ( parent != null )
-        {
+
+    public void addBufferedSize(int amount) {
+        if (parent != null) {
             parent.addBufferedSize(amount);
         }
         sync.acquireShared(amount);
     }
-    
-    public void reduceBufferedSize( int amount )
-    {
-        if ( parent != null )
-        {
+
+    public void reduceBufferedSize(int amount) {
+        if (parent != null) {
             parent.reduceBufferedSize(amount);
         }
         sync.releaseShared(amount);
     }
-    
-    class Sync extends AbstractQueuedSynchronizer 
-    {
+
+    class Sync extends AbstractQueuedSynchronizer {
         private final int currentMax;
-        
-        Sync( int max )
-        {
+
+        Sync(int max) {
             currentMax = max;
-            setState( max );
+            setState(max);
         }
-        
-        public int getUsedStates()
-        {
+
+        public int getUsedStates() {
             return currentMax - getState();
         }
-        
-        public int getFreeStates()
-        {
+
+        public int getFreeStates() {
             return getState();
         }
-        
+
         /**
          * {@inheritDoc}
          */
         @Override
-        protected final int tryAcquireShared( int acquires ) 
-        {
-            for (;;) 
-            {
+        protected final int tryAcquireShared(int acquires) {
+            for (; ; ) {
                 int available = getState();
                 int remaining = available - acquires;
-                if ( remaining < 0 )
-                {
+                if (remaining < 0) {
                     dataWriter.triggerWriteCycle();
                     return remaining;
                 }
-                if ( compareAndSetState(available, remaining) )
-                {
+                if (compareAndSetState(available, remaining)) {
                     return remaining;
                 }
             }
         }
-        
+
         /**
          * {@inheritDoc}
          */
         @Override
-        protected final boolean tryReleaseShared(int releases)
-        {
-            for (;;) {
+        protected final boolean tryReleaseShared(int releases) {
+            for (; ; ) {
                 int p = getState();
-                if (compareAndSetState(p, p + releases)) 
+                if (compareAndSetState(p, p + releases))
                     return true;
             }
         }

@@ -25,13 +25,12 @@ package phex.prefs.core;
 import phex.prefs.api.PreferencesFactory;
 import phex.prefs.api.Setting;
 
-public class ExamplePrefs extends PhexCorePrefs
-{
-    public static final Setting EXAMPLE_SETTING = 
-        PreferencesFactory.createStringSetting( "ExampleSetting",
-        "blub", instance );
-    
-    public static final Setting EXAMPLE_SETTING_2 = 
-        PreferencesFactory.createIntSetting( "ExampleSetting2",
-        3, instance );
+public class ExamplePrefs extends PhexCorePrefs {
+    public static final Setting EXAMPLE_SETTING =
+            PreferencesFactory.createStringSetting("ExampleSetting",
+                    "blub", instance);
+
+    public static final Setting EXAMPLE_SETTING_2 =
+            PreferencesFactory.createIntSetting("ExampleSetting2",
+                    3, instance);
 }

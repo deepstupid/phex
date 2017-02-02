@@ -30,30 +30,28 @@ import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.params.HttpParams;
 import phex.common.Phex;
 
-public class HttpClientFactory
-{
+public class HttpClientFactory {
     private static final HttpConnectionManager connectionManager;
-    
-    static
-    {
+
+    static {
         HttpParams globalParams = DefaultHttpParams.getDefaultParams();
-        globalParams.setParameter( HttpMethodParams.USER_AGENT,
-            Phex.getFullPhexVendor() );
-        globalParams.setIntParameter( HttpClientParams.MAX_REDIRECTS, 10 );
-        
+        globalParams.setParameter(HttpMethodParams.USER_AGENT,
+                Phex.getFullPhexVendor());
+        globalParams.setIntParameter(HttpClientParams.MAX_REDIRECTS, 10);
+
         connectionManager = new MultiThreadedHttpConnectionManager();
     }
-    
+
     /**
-     * Basically we could have one http client for the whole application, 
+     * Basically we could have one http client for the whole application,
      * but since we have very different configuration, with proxy and without,
      * for GWebCaches and for PushProxies, we decided to create several instances
-     * for different cases. 
+     * for different cases.
+     *
      * @return a new http client.
      */
-    public static HttpClient createHttpClient()
-    {
-        HttpClient client = new HttpClient( connectionManager );
+    public static HttpClient createHttpClient() {
+        HttpClient client = new HttpClient(connectionManager);
         return client;
     }
 }

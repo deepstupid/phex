@@ -26,52 +26,44 @@ import org.xml.sax.SAXException;
 import phex.xml.sax.DElement;
 import phex.xml.sax.PhexXmlSaxWriter;
 
-public class DAlternateLocation implements DElement
-{
+public class DAlternateLocation implements DElement {
     public static final String ELEMENT_NAME = "AltLoc";
-    
+
     private String hostAddress;
-    
+
     private String urn;
 
-    public String getHostAddress()
-    {
+    public String getHostAddress() {
         return hostAddress;
     }
 
-    public void setHostAddress( String hostAddress )
-    {
+    public void setHostAddress(String hostAddress) {
         this.hostAddress = hostAddress;
     }
 
-    public String getUrn()
-    {
+    public String getUrn() {
         return urn;
     }
 
-    public void setUrn( String urn )
-    {
+    public void setUrn(String urn) {
         this.urn = urn;
     }
 
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
-        
-        if( hostAddress != null )
-        {
-            writer.startElm( "host-address", null );
-            writer.elmText( hostAddress );
-            writer.endElm( "host-address" );
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
+
+        if (hostAddress != null) {
+            writer.startElm("host-address", null);
+            writer.elmText(hostAddress);
+            writer.endElm("host-address");
         }
-        
-        if( urn != null )
-        {
-            writer.startElm( "URN", null );
-            writer.elmText( urn );
-            writer.endElm( "URN" );
+
+        if (urn != null) {
+            writer.startElm("URN", null);
+            writer.elmText(urn);
+            writer.endElm("URN");
         }
-        
-        writer.endElm( ELEMENT_NAME );
+
+        writer.endElm(ELEMENT_NAME);
     }
 }

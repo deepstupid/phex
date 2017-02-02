@@ -23,8 +23,7 @@ package phex.api;
 
 import phex.servent.OnlineStatus;
 
-public interface IServentDriver
-{
+public interface IServentDriver {
     /**
      * Start up the local servent (start Phex in head-less mode).
      *
@@ -50,8 +49,7 @@ public interface IServentDriver
      * Start a search.
      *
      * @param searchString the search string
-     *
-     * @return a search handle object on success, or null otherwise 
+     * @return a search handle object on success, or null otherwise
      */
     public ISearchHandle startSearch(String searchString);
 
@@ -61,13 +59,12 @@ public interface IServentDriver
      * @return an array containing the search handles of all existing searches,
      * or null in case of error
      */
-    public ISearchHandle [] getAllSearches();
+    public ISearchHandle[] getAllSearches();
 
     /**
      * Publish a local file, i.e. make it available for others to retrieve.
      *
      * @param localFilePath path to the local file
-     *
      * @return true if the file could be published correctly, or false otherwise
      */
     public boolean publishFile(String localFilePath);

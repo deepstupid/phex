@@ -29,76 +29,62 @@ import java.util.List;
 /**
  * This is a AND concatenation search filter. All filters in this filter
  * must match the filter to get it triggered.
- *
  */
-public abstract class ConcatCondition implements Condition, Cloneable
-{
+public abstract class ConcatCondition implements Condition, Cloneable {
     protected List<Condition> filterList;
-    
-    public ConcatCondition()
-    {
+
+    public ConcatCondition() {
         filterList = new ArrayList<Condition>();
     }
-    
-    public int getConditionCount()
-    {
+
+    public int getConditionCount() {
         return filterList.size();
     }
-    
+
     /**
      * Returns a unmodifiable list of the containing conditions.
+     *
      * @return
      */
-    public List<Condition> getConditions()
-    {
+    public List<Condition> getConditions() {
         return Collections.unmodifiableList(filterList);
     }
-    
-    public synchronized void clearConditions()
-    {
+
+    public synchronized void clearConditions() {
         filterList.clear();
     }
-    
-    public synchronized ConcatCondition addCondition( Condition filter )
-    {
-        filterList.add( filter );
+
+    public synchronized ConcatCondition addCondition(Condition filter) {
+        filterList.add(filter);
         return this;
     }
-    
-    public synchronized void removeCondition( Condition filter )
-    {
-        filterList.remove( filter );
+
+    public synchronized void removeCondition(Condition filter) {
+        filterList.remove(filter);
     }
-    
-    public boolean isComplete()
-    {
+
+    public boolean isComplete() {
         return true;
     }
-    
+
     @Override
-    public Object clone()
-    {
-        try
-        {
-            ConcatCondition clone = (ConcatCondition)super.clone();
+    public Object clone() {
+        try {
+            ConcatCondition clone = (ConcatCondition) super.clone();
             clone.filterList = new ArrayList<Condition>();
-            
-            for ( Condition condition : filterList )
-            {
-                clone.filterList.add( (Condition)condition.clone() );
+
+            for (Condition condition : filterList) {
+                clone.filterList.add((Condition) condition.clone());
             }
             return clone;
-        }
-        catch (CloneNotSupportedException e) 
-        { 
+        } catch (CloneNotSupportedException e) {
             // this shouldn't happen, since we are Cloneable
             throw new InternalError();
         }
     }
-    
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return super.toString() + "[List: " + filterList.toString() + "]";
     }
 }

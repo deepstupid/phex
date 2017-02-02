@@ -27,106 +27,92 @@ import phex.connection.ProtocolNotSupportedException;
 import java.io.IOException;
 import java.net.URL;
 
-public class GWebCacheHost extends BootstrapHost
-{
+public class GWebCacheHost extends BootstrapHost {
     private static final long RECONNECT_PENALTY = 1000 * 60 * 60 * 4; // 4 hours
-    
-    private URL url;
-        
-    public GWebCacheHost( URL url, boolean isPhexCache )
-        throws IOException
-    {
-        super( isPhexCache );
-        
-        if ( url == null )
-        {
-            throw new NullPointerException( "Null url given.");
+
+    private final URL url;
+
+    public GWebCacheHost(String url) throws IOException {
+        this(new URL(url), false);
+    }
+
+    public GWebCacheHost(URL url, boolean isPhexCache)
+            throws IOException {
+        super(isPhexCache);
+
+        if (url == null) {
+            throw new NullPointerException("Null url given.");
         }
-        
+
         // we only support http protocol urls.
-        if ( !url.getProtocol().equals( "http" ) )
-        {
+        if (!url.getProtocol().equals("http")) {
             throw new ProtocolNotSupportedException(
-                "Only http URLs are supported for a GWebCacheConnection" );
+                    "Only http URLs are supported for a GWebCacheConnection");
         }
-        if ( url.getPort() == 80 )
-        {
+        if (url.getPort() == 80) {
             // rebuild url without port
-            url = new URL( url.getProtocol(), url.getHost(), -1, url.getFile() );
+            url = new URL(url.getProtocol(), url.getHost(), -1, url.getFile());
         }
 
         this.url = url;
     }
 
-    public URL getUrl()
-    {
+    public URL getUrl() {
         return url;
     }
-    
-    public String getHostDomain()
-    {
+
+    public String getHostDomain() {
         String host = url.getHost();
-        if ( AddressUtils.isIPHostName(host) )
-        {
+        if (AddressUtils.isIPHostName(host)) {
             return host;
         }
-        int topLevelIdx = host.lastIndexOf( '.' );
-        int domainIdx = host.lastIndexOf('.', topLevelIdx - 1 );
-        if ( domainIdx != -1 )
-        {
-            return host.substring(domainIdx+1);
+        int topLevelIdx = host.lastIndexOf('.');
+        int domainIdx = host.lastIndexOf('.', topLevelIdx - 1);
+        if (domainIdx != -1) {
+            return host.substring(domainIdx + 1);
         }
         return host;
-    }    
-    
-    public void countConnectionAttempt( boolean isFailed )
-    {
+    }
+
+    public void countConnectionAttempt(boolean isFailed) {
         lastRequestTime = System.currentTimeMillis();
-        if ( isFailed )
-        {
+        if (isFailed) {
             incFailedInRowCount();
-        }
-        else
-        {
+        } else {
             resetFailedInRowCount();
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public long getReconnectPenalty()
-    {
+    public long getReconnectPenalty() {
         return RECONNECT_PENALTY;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean equals( Object obj )
-    {
-        if ( this == obj ) 
-        {
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        
-        if ( !(obj instanceof GWebCacheHost) )
-        {
+
+        if (!(obj instanceof GWebCacheHost)) {
             return false;
         }
-        
+
         GWebCacheHost gwc = (GWebCacheHost) obj;
-        return url.getHost().equals( gwc.getUrl().getHost() );
+        return url.getHost().equals(gwc.getUrl().getHost());
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return 17 * 31 + url.getHost().hashCode();
-    }   
+    }
 }

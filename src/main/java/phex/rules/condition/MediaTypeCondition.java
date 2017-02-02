@@ -31,89 +31,72 @@ import phex.xml.sax.rules.DMediaTypeCondition;
 
 import java.util.*;
 
-public class MediaTypeCondition implements Condition
-{
+public class MediaTypeCondition implements Condition {
     private ListOrderedSet types;
-    
-    public MediaTypeCondition( )
-    {
+
+    public MediaTypeCondition() {
         types = new ListOrderedSet();
     }
-    
-    public MediaTypeCondition( MediaType type )
-    {
+
+    public MediaTypeCondition(MediaType type) {
         this();
         addType(type);
     }
-    
-    public MediaTypeCondition( MediaTypeCondition condition )
-    {
+
+    public MediaTypeCondition(MediaTypeCondition condition) {
         this();
-        update( condition );
+        update(condition);
     }
-    
-    public synchronized void update( MediaTypeCondition condition )
-    {
+
+    public synchronized void update(MediaTypeCondition condition) {
         types.clear();
         // we simply add the MediaTypes.. since they are not mutable. 
         types.addAll(condition.types);
     }
-    
-    public synchronized Set<MediaType> getTypes()
-    {
+
+    public synchronized Set<MediaType> getTypes() {
         return Collections.unmodifiableSet(types);
     }
-    
-    public synchronized MediaTypeCondition addType( MediaType type )
-    {
-        types.add( type );
+
+    public synchronized MediaTypeCondition addType(MediaType type) {
+        types.add(type);
         return this;
     }
-    
-    public synchronized void removeType( MediaType type )
-    {
-        types.remove( type );
+
+    public synchronized void removeType(MediaType type) {
+        types.remove(type);
     }
 
-    public synchronized boolean isMatched( Search search, RemoteFile remoteFile )
-    {
+    public synchronized boolean isMatched(Search search, RemoteFile remoteFile) {
         Iterator iterator = types.iterator();
-        while( iterator.hasNext() )
-        {
+        while (iterator.hasNext()) {
             MediaType type = (MediaType) iterator.next();
-            if ( type.isFilenameOf( remoteFile.getFilename() ) )
-            {
+            if (type.isFilenameOf(remoteFile.getFilename())) {
                 return true;
             }
         }
         return false;
     }
-    
-    public synchronized boolean isComplete()
-    {
+
+    public synchronized boolean isComplete() {
         return types.size() > 0;
     }
 
-    public synchronized Object clone()
-    {
-        try
-        {
+    public synchronized Object clone() {
+        try {
             MediaTypeCondition clone = (MediaTypeCondition) super.clone();
             clone.types = new ListOrderedSet();
-            clone.types.addAll( types );
+            clone.types.addAll(types);
             return clone;
-        }
-        catch (CloneNotSupportedException exp)
-        {
+        } catch (CloneNotSupportedException exp) {
             throw new InternalError();
         }
     }
-    
-    public synchronized DCondition createDCondition()
-    {
+
+    public synchronized DCondition createDCondition() {
         DMediaTypeCondition dCond = new DMediaTypeCondition();
-        List newList = new ArrayList( types );
-        dCond.setTypes( newList );
+        List newList = new ArrayList(types);
+        dCond.setTypes(newList);
         return dCond;
     }
 }

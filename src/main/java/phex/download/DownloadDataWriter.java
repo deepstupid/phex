@@ -21,12 +21,12 @@
  */
 package phex.download;
 
-import phex.util.DateUtils;
 import phex.common.ThreadTracking;
 import phex.common.log.NLogger;
 import phex.download.swarming.SWDownloadFile;
 import phex.download.swarming.SwarmingManager;
 import phex.prefs.core.DownloadPrefs;
+import phex.util.DateUtils;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -35,131 +35,108 @@ import java.util.ListIterator;
  * Extra thread that is responsible to write buffered download data to
  * disk regulary.
  */
-public class DownloadDataWriter implements Runnable
-{
+public class DownloadDataWriter implements Runnable {
+    private final SwarmingManager swarmingMgr;
     private Thread thread;
     private boolean isShutingDown;
     private long lastCompleteWrite;
     private boolean isWriteCycleRequested;
-    private final SwarmingManager swarmingMgr;
-    
-    public DownloadDataWriter( SwarmingManager downloadService )
-    {
+
+    public DownloadDataWriter(SwarmingManager downloadService) {
         swarmingMgr = downloadService;
     }
-    
-    public void start()
-    {
+
+    public void start() {
         isShutingDown = false;
-        thread = new Thread( ThreadTracking.rootThreadGroup, this,
-            "DownloadDataWriter" );
-        thread.setDaemon( true );
+        thread = new Thread(ThreadTracking.rootThreadGroup, this,
+                "DownloadDataWriter");
+        thread.setDaemon(true);
         thread.start();
     }
-    
+
     /**
      * This call performs a shutdown of the download data writer thread.
      * The call blocks until the DownloadDataWriter thread died.
      */
-    public void shutdown()
-    {
+    public void shutdown() {
         isShutingDown = true;
         // trigger thread cycle
         triggerWriteCycle();
-        try
-        {
+        try {
             thread.join();
-        }
-        catch ( InterruptedException exp )
-        {
-            NLogger.error( DownloadDataWriter.class, exp, exp );
+        } catch (InterruptedException exp) {
+            NLogger.error(DownloadDataWriter.class, exp, exp);
             Thread.currentThread().interrupt();
         }
-        
+
         // perform a last write operation to ensure all data is on disk
         writeDownloadData();
     }
 
-    public void run()
-    {
-        while ( !isShutingDown )
-        {
-            try
-            {
-                do
-                {
+    public void run() {
+        while (!isShutingDown) {
+            try {
+                do {
                     writeDownloadData();
                 }
-                while ( isWriteCycleRequested );
+                while (isWriteCycleRequested);
                 // loop around write cycles as long as data is filling...
                 // this is necessary for very fast downloads..
                 waitForNotify();
-            }
-            catch (Throwable th)
-            {
-                NLogger.error( DownloadDataWriter.class, th, th );
+            } catch (Throwable th) {
+                NLogger.error(DownloadDataWriter.class, th, th);
             }
         }
     }
-    
-    private synchronized void waitForNotify()
-    {
-        NLogger.debug(DownloadDataWriter.class, "Waiting..." );
-        try
-        {
-            wait( 5000 );
+
+    private synchronized void waitForNotify() {
+        NLogger.debug(DownloadDataWriter.class, "Waiting...");
+        try {
+            wait(5000);
+        } catch (InterruptedException exp) {
+            NLogger.error(DownloadDataWriter.class, exp, exp);
         }
-        catch (InterruptedException exp)
-        {
-            NLogger.error( DownloadDataWriter.class, exp, exp );
-        }
-        NLogger.debug(DownloadDataWriter.class, "Woke..." );
+        NLogger.debug(DownloadDataWriter.class, "Woke...");
     }
-    
-    public synchronized void triggerWriteCycle()
-    {
-        NLogger.debug(DownloadDataWriter.class, "Triggering write cycle." );
+
+    public synchronized void triggerWriteCycle() {
+        NLogger.debug(DownloadDataWriter.class, "Triggering write cycle.");
         isWriteCycleRequested = true;
         notifyAll();
     }
-    
-    private void writeDownloadData()
-    {
-        if ( !swarmingMgr.isDownloadActive() && !isWriteCycleRequested )
-        {
+
+    private void writeDownloadData() {
+        if (!swarmingMgr.isDownloadActive() && !isWriteCycleRequested) {
             return;
         }
-        
+
         long bufferedDataWritten = 0;
         long totalBufferedSize = 0;
         boolean performCompleteWrite = false;
-        if ( isShutingDown || isWriteCycleRequested || 
-             lastCompleteWrite + DateUtils.MILLIS_PER_MINUTE < System.currentTimeMillis() )
-        {
-            NLogger.debug(DownloadDataWriter.class, "Time for complete write cycle." );
+        if (isShutingDown || isWriteCycleRequested ||
+                lastCompleteWrite + DateUtils.MILLIS_PER_MINUTE < System.currentTimeMillis()) {
+            NLogger.debug(DownloadDataWriter.class, "Time for complete write cycle.");
             isWriteCycleRequested = false;
             performCompleteWrite = true;
         }
-        
+
         // write limit is 90% of configured max.
         int maxPerDownloadBuffer = DownloadPrefs.MaxWriteBufferPerDownload.get().intValue();
-        maxPerDownloadBuffer = (int)(maxPerDownloadBuffer * 0.9);
-        
+        maxPerDownloadBuffer = (int) (maxPerDownloadBuffer * 0.9);
+
         List<SWDownloadFile> downloadList = swarmingMgr.getDownloadFileListCopy();
         ListIterator<SWDownloadFile> iterator = downloadList.listIterator();
-        while( iterator.hasNext() )
-        {
+        while (iterator.hasNext()) {
             SWDownloadFile downloadFile = iterator.next();
             MemoryFile memoryFile = downloadFile.getMemoryFile();
             long bufferedSize = memoryFile.getBufferedDataLength();
             totalBufferedSize += bufferedSize;
-            
-            if ( performCompleteWrite || memoryFile.isBufferWritingRequested() ||
-                 bufferedSize >= maxPerDownloadBuffer )
-            {
+
+            if (performCompleteWrite || memoryFile.isBufferWritingRequested() ||
+                    bufferedSize >= maxPerDownloadBuffer) {
                 NLogger.debug(DownloadDataWriter.class,
-                    "Trigger buffer write for " + downloadFile + 
-                    ", amount: " + bufferedSize );
+                        "Trigger buffer write for " + downloadFile +
+                                ", amount: " + bufferedSize);
                 memoryFile.writeBuffersToDisk();
                 bufferedDataWritten += bufferedSize;
                 // remove from buffer since not needed anymore in possible
@@ -167,38 +144,34 @@ public class DownloadDataWriter implements Runnable
                 iterator.remove();
             }
         }
-        
+
         NLogger.debug(DownloadDataWriter.class,
-            "Total buffered data was: " + totalBufferedSize );
-        
+                "Total buffered data was: " + totalBufferedSize);
+
         // write limit is 90% of configured max.
         int maxTotalBuffer = DownloadPrefs.MaxTotalDownloadWriteBuffer.get().intValue();
-        maxTotalBuffer = (int)(maxTotalBuffer * 0.9);
-        
+        maxTotalBuffer = (int) (maxTotalBuffer * 0.9);
+
         // if we have not already written everything but have a high total buffer
         // size, we write down the complete remaining download buffers to disk.
-        if ( !performCompleteWrite && totalBufferedSize >= maxTotalBuffer )
-        {
+        if (!performCompleteWrite && totalBufferedSize >= maxTotalBuffer) {
             performCompleteWrite = true;
             iterator = downloadList.listIterator();
-            while( iterator.hasNext() )
-            {
+            while (iterator.hasNext()) {
                 SWDownloadFile downloadFile = iterator.next();
                 MemoryFile memoryFile = downloadFile.getMemoryFile();
                 long bufferedSize = memoryFile.getBufferedDataLength();
                 NLogger.debug(DownloadDataWriter.class,
-                    "Trigger buffer write for " + downloadFile + 
-                    ", amount: " + bufferedSize );
+                        "Trigger buffer write for " + downloadFile +
+                                ", amount: " + bufferedSize);
                 memoryFile.writeBuffersToDisk();
                 bufferedDataWritten += bufferedSize;
             }
         }
-        if ( performCompleteWrite )
-        {
+        if (performCompleteWrite) {
             lastCompleteWrite = System.currentTimeMillis();
         }
-        if ( bufferedDataWritten > 0 )
-        {
+        if (bufferedDataWritten > 0) {
             swarmingMgr.notifyDownloadListChange();
         }
     }

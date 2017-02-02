@@ -23,129 +23,114 @@
 package phex.xml.thex;
 
 /**
- * 
+ *
  */
-public class ThexHashTree
-{
+public class ThexHashTree {
     private String fileSize;
     private String fileSegmentSize;
-    
+
     private String digestAlgorithm;
     private String digestOutputSize;
-    
+
     private String serializedTreeDepth;
     private String serializedTreeType;
     private String serializedTreeUri;
-    
+
     /**
      * @return
      */
-    public String getDigestAlgorithm()
-    {
+    public String getDigestAlgorithm() {
         return digestAlgorithm;
     }
 
     /**
+     * @param string
+     */
+    public void setDigestAlgorithm(String string) {
+        digestAlgorithm = string;
+    }
+
+    /**
      * @return
      */
-    public String getDigestOutputSize()
-    {
+    public String getDigestOutputSize() {
         return digestOutputSize;
     }
 
     /**
+     * @param string
+     */
+    public void setDigestOutputSize(String string) {
+        digestOutputSize = string;
+    }
+
+    /**
      * @return
      */
-    public String getFileSegmentSize()
-    {
+    public String getFileSegmentSize() {
         return fileSegmentSize;
     }
 
     /**
+     * @param string
+     */
+    public void setFileSegmentSize(String string) {
+        fileSegmentSize = string;
+    }
+
+    /**
      * @return
      */
-    public String getFileSize()
-    {
+    public String getFileSize() {
         return fileSize;
     }
 
     /**
+     * @param string
+     */
+    public void setFileSize(String string) {
+        fileSize = string;
+    }
+
+    /**
      * @return
      */
-    public String getSerializedTreeDepth()
-    {
+    public String getSerializedTreeDepth() {
         return serializedTreeDepth;
     }
 
     /**
-     * @return
+     * @param string
      */
-    public String getSerializedTreeType()
-    {
-        return serializedTreeType;
+    public void setSerializedTreeDepth(String string) {
+        serializedTreeDepth = string;
     }
 
     /**
      * @return
      */
-    public String getSerializedTreeUri()
-    {
+    public String getSerializedTreeType() {
+        return serializedTreeType;
+    }
+
+    /**
+     * @param string
+     */
+    public void setSerializedTreeType(String string) {
+        serializedTreeType = string;
+    }
+
+    /**
+     * @return
+     */
+    public String getSerializedTreeUri() {
         return serializedTreeUri;
     }
 
     /**
      * @param string
      */
-    public void setDigestAlgorithm(String string)
-    {
-        digestAlgorithm = string;
-    }
-
-    /**
-     * @param string
-     */
-    public void setDigestOutputSize(String string)
-    {
-        digestOutputSize = string;
-    }
-
-    /**
-     * @param string
-     */
-    public void setFileSegmentSize(String string)
-    {
-        fileSegmentSize = string;
-    }
-
-    /**
-     * @param string
-     */
-    public void setFileSize(String string)
-    {
-        fileSize = string;
-    }
-
-    /**
-     * @param string
-     */
-    public void setSerializedTreeDepth(String string)
-    {
-        serializedTreeDepth = string;
-    }
-
-    /**
-     * @param string
-     */
-    public void setSerializedTreeType(String string)
-    {
-        serializedTreeType = string;
-    }
-
-    /**
-     * @param string
-     */
-    public void setSerializedTreeUri(String string)
-    {
+    public void setSerializedTreeUri(String string) {
         serializedTreeUri = string;
     }
 

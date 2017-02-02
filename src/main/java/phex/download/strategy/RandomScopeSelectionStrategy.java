@@ -32,38 +32,32 @@ import java.util.Random;
  * This scope selection strategy tries to preferre a scope that has the lowest
  * availability among the download candidates.
  */
-public class RandomScopeSelectionStrategy implements ScopeSelectionStrategy
-{
+public class RandomScopeSelectionStrategy implements ScopeSelectionStrategy {
     private static final Random random = new Random();
-    
-    public DownloadScope selectDownloadScope( SWDownloadFile downloadFile,
-        DownloadScopeList wantedScopeList, long preferredSize )
-    {
+
+    public DownloadScope selectDownloadScope(SWDownloadFile downloadFile,
+                                             DownloadScopeList wantedScopeList, long preferredSize) {
         int size = wantedScopeList.size();
-        int pos = random.nextInt( size );
-        
-        DownloadScope bestScope = wantedScopeList.getScopeAt( pos );
-        if ( bestScope.getLength() > preferredSize )
-        {
-            if ( downloadFile.getMemoryFile().getDownloadedFragmentCount() > 15 )
-            {
+        int pos = random.nextInt(size);
+
+        DownloadScope bestScope = wantedScopeList.getScopeAt(pos);
+        if (bestScope.getLength() > preferredSize) {
+            if (downloadFile.getMemoryFile().getDownloadedFragmentCount() > 15) {
                 // Try to reduce scope fragmenting by selecting the bestScope
                 // beginning when we have more then 15 finished fragments. This 
                 // might not continue a finished fragment because of candidate 
                 // availability but raises the chance.
-                bestScope = new DownloadScope( 
-                    bestScope.getStart(), bestScope.getStart() + preferredSize - 1 );
-            }
-            else
-            {
-                int parts = (int)Math.floor( 
-                    (double)bestScope.getLength() / (double)preferredSize );
-                int startPart = random.nextInt( parts );
-                long startPos = Math.min( 
-                    bestScope.getStart() + startPart*preferredSize, 
-                    bestScope.getEnd() - preferredSize + 1 );
-                bestScope = new DownloadScope( startPos, 
-                    startPos + preferredSize - 1 );
+                bestScope = new DownloadScope(
+                        bestScope.getStart(), bestScope.getStart() + preferredSize - 1);
+            } else {
+                int parts = (int) Math.floor(
+                        (double) bestScope.getLength() / (double) preferredSize);
+                int startPart = random.nextInt(parts);
+                long startPos = Math.min(
+                        bestScope.getStart() + startPart * preferredSize,
+                        bestScope.getEnd() - preferredSize + 1);
+                bestScope = new DownloadScope(startPos,
+                        startPos + preferredSize - 1);
             }
         }
         return bestScope;

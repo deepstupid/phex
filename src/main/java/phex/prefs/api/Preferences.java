@@ -24,115 +24,81 @@ package phex.prefs.api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.collections.SortedProperties;
-import phex.download.swarming.PhexEventService;
 import phex.util.FileUtils;
 import phex.util.IOUtil;
 
 import java.io.*;
 import java.util.*;
 
-public class Preferences
-{
-    private static final Logger logger = LoggerFactory.getLogger( Preferences.class );
-    
-    private PhexEventService eventService;
+public class Preferences {
+    private static final Logger logger = LoggerFactory.getLogger(Preferences.class);
     private final Map<String, Setting<?>> settingMap;
     private final File prefFile;
     private Properties valueProperties;
     private boolean isSaveRequired;
-    
-    public Preferences( File file )
-    {
-        this( file, null );
-    }
-    
-    public Preferences( File file, PhexEventService eventService )
-    {
+
+
+    public Preferences(File file) {
         prefFile = file;
-        this.eventService = eventService;
+
         settingMap = new HashMap<String, Setting<?>>();
         valueProperties = new Properties();
     }
-    
-    public void setEventService( PhexEventService eventService )
-    {
-        this.eventService = eventService;
+
+
+
+    protected String getLoadedProperty(String name) {
+        return valueProperties.getProperty(name);
     }
 
-    protected String getLoadedProperty( String name )
-    {
-        return valueProperties.getProperty( name );
-    }
-    
-    protected List<String> getPrefixedPropertyNames( String prefix )
-    {
+    protected List<String> getPrefixedPropertyNames(String prefix) {
         List<String> found = new ArrayList<String>();
         Set<Object> keys = valueProperties.keySet();
-        for ( Object keyObj : keys )
-        {
-            String key = (String)keyObj;
-            if ( key.startsWith( prefix ) )
-            {
-                found.add( key );
+        for (Object keyObj : keys) {
+            String key = (String) keyObj;
+            if (key.startsWith(prefix)) {
+                found.add(key);
             }
         }
         return found;
     }
-    
-    protected void registerSetting( String name, Setting<?> setting )
-    {
-        settingMap.put( name, setting );
+
+    protected void registerSetting(String name, Setting<?> setting) {
+        settingMap.put(name, setting);
     }
-    
-    public synchronized void saveRequiredNotify()
-    {
+
+    public synchronized void saveRequiredNotify() {
         isSaveRequired = true;
     }
 
-    protected void fireSettingChanged( SettingChangedEvent<?> event )
-    {
+    protected void fireSettingChanged(SettingChangedEvent<?> event) {
         saveRequiredNotify();
-        if ( eventService != null )
-        {
 
-        }
     }
 
-    public synchronized void load()
-    {
+    public synchronized void load() {
         Properties loadProperties = new Properties();
         InputStream inStream = null;
-        try
-        {
-            inStream = new BufferedInputStream( new FileInputStream( prefFile ) );
-            loadProperties.load( inStream );
-        }
-        catch ( IOException exp )
-        {
-            IOUtil.closeQuietly( inStream );
-            if ( !(exp instanceof FileNotFoundException) )
-            {
-                logger.error( exp.toString(), exp );
+        try {
+            inStream = new BufferedInputStream(new FileInputStream(prefFile));
+            loadProperties.load(inStream);
+        } catch (IOException exp) {
+            IOUtil.closeQuietly(inStream);
+            if (!(exp instanceof FileNotFoundException)) {
+                logger.error(exp.toString(), exp);
             }
             // There was a problem loading the properties file.. try to load a
             // possible backup...
-            File bakFile = new File( prefFile.getParentFile(),
-                prefFile.getName() + ".bak" );
-            try
-            {
-                inStream = new BufferedInputStream( new FileInputStream( bakFile ) );
-                loadProperties.load( inStream );
+            File bakFile = new File(prefFile.getParentFile(),
+                    prefFile.getName() + ".bak");
+            try {
+                inStream = new BufferedInputStream(new FileInputStream(bakFile));
+                loadProperties.load(inStream);
+            } catch (FileNotFoundException exp2) {/* ignore */ } catch (IOException exp2) {
+                logger.error(exp.toString(), exp);
             }
-            catch ( FileNotFoundException exp2 )
-            {/* ignore */ }
-            catch ( IOException exp2 )
-            {
-                logger.error( exp.toString(), exp );
-            }
-        }
-        finally
-        {
-            IOUtil.closeQuietly( inStream );
+        } finally {
+            IOUtil.closeQuietly(inStream);
         }
         valueProperties = loadProperties;
         
@@ -164,50 +130,39 @@ public class Preferences
         
         */
     }
-    
-    public synchronized void save()
-    {
-        if ( !isSaveRequired )
-        {
-            logger.debug( "No saving of preferences required." );
+
+    public synchronized void save() {
+        if (!isSaveRequired) {
+            logger.debug("No saving of preferences required.");
             return;
         }
-        logger.debug( "Saving preferences to: " + prefFile.getAbsolutePath() );
+        logger.debug("Saving preferences to: " + prefFile.getAbsolutePath());
         Properties saveProperties = new SortedProperties();
-        
-        for ( Setting<?> setting : settingMap.values() )
-        {
-            if ( setting.isDefault() && !setting.isAlwaysSaved() )
-            {
+
+        for (Setting<?> setting : settingMap.values()) {
+            if (setting.isDefault() && !setting.isAlwaysSaved()) {
                 continue;
             }
-            PreferencesCodec.serializeSetting( setting, saveProperties );
+            PreferencesCodec.serializeSetting(setting, saveProperties);
         }
-        
-        File bakFile = new File( prefFile.getParentFile(), prefFile.getName() + ".bak" );
-        try
-        {
+
+        File bakFile = new File(prefFile.getParentFile(), prefFile.getName() + ".bak");
+        try {
             // make a backup of old pref File.
-            if ( prefFile.exists() )
-            {
-                FileUtils.copyFile( prefFile, bakFile );
+            if (prefFile.exists()) {
+                FileUtils.copyFile(prefFile, bakFile);
             }
-            
+
             // create a new pref file.
             OutputStream os = null;
-            try
-            {
-                os = new BufferedOutputStream( new FileOutputStream( prefFile ) );
-                saveProperties.store( os, "Phex Preferences" );
+            try {
+                os = new BufferedOutputStream(new FileOutputStream(prefFile));
+                saveProperties.store(os, "Phex Preferences");
+            } finally {
+                IOUtil.closeQuietly(os);
             }
-            finally
-            {
-                IOUtil.closeQuietly( os );
-            }
-        }
-        catch (IOException exp )
-        {
-            logger.error( exp.toString(), exp );
+        } catch (IOException exp) {
+            logger.error(exp.toString(), exp);
         }
     }
 }

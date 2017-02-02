@@ -33,10 +33,9 @@ import javax.xml.parsers.SAXParser;
 import java.io.CharArrayWriter;
 
 /**
- * 
+ *
  */
-public abstract class ConditionListHolderHandler extends DefaultHandler
-{
+public abstract class ConditionListHolderHandler extends DefaultHandler {
     private final CharArrayWriter text = new CharArrayWriter();
 
     private final SAXParser parser;
@@ -44,13 +43,12 @@ public abstract class ConditionListHolderHandler extends DefaultHandler
     private final DSubElementList<DCondition> conditionListHolder;
 
     private final DefaultHandler parent;
-    
+
     private final String elementName;
 
-    public ConditionListHolderHandler( String elementName, 
-        DSubElementList<DCondition> conditionListHolder, DefaultHandler parent, 
-        SAXParser parser )
-    {
+    public ConditionListHolderHandler(String elementName,
+                                      DSubElementList<DCondition> conditionListHolder, DefaultHandler parent,
+                                      SAXParser parser) {
         this.elementName = elementName;
         this.conditionListHolder = conditionListHolder;
         this.parser = parser;
@@ -60,89 +58,73 @@ public abstract class ConditionListHolderHandler extends DefaultHandler
     /**
      * Receive notification of the start of an element.
      *
-     * @param name The element type name.
+     * @param name       The element type name.
      * @param attributes The specified or defaulted attributes.
-     * @exception org.xml.sax.SAXException Any SAX exception, possibly
-     *            wrapping another exception.
+     * @throws org.xml.sax.SAXException Any SAX exception, possibly
+     *                                  wrapping another exception.
      * @see org.xml.sax.ContentHandler#startElement
      */
-    public void startElement( String uri, String localName, String qName,
-        Attributes attributes ) throws SAXException
-    {
+    public void startElement(String uri, String localName, String qName,
+                             Attributes attributes) throws SAXException {
         text.reset();
-        if ( qName.equals( DAndConcatCondition.ELEMENT_NAME ) )
-        {
+        if (qName.equals(DAndConcatCondition.ELEMENT_NAME)) {
             DAndConcatCondition condition = new DAndConcatCondition();
-            conditionListHolder.getSubElementList().add( condition );
+            conditionListHolder.getSubElementList().add(condition);
 
             AndConcatConditionHandler handler = new AndConcatConditionHandler(
-                condition, attributes, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( DNotCondition.ELEMENT_NAME ) )
-        {
+                    condition, attributes, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(DNotCondition.ELEMENT_NAME)) {
             DNotCondition condition = new DNotCondition();
-            conditionListHolder.getSubElementList().add( condition );
+            conditionListHolder.getSubElementList().add(condition);
 
             NotConditionHandler handler = new NotConditionHandler(
-                condition, attributes, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( DFilenameCondition.ELEMENT_NAME ) )
-        {
+                    condition, attributes, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(DFilenameCondition.ELEMENT_NAME)) {
             DFilenameCondition condition = new DFilenameCondition();
-            conditionListHolder.getSubElementList().add( condition );
+            conditionListHolder.getSubElementList().add(condition);
 
             FilenameConditionHandler handler = new FilenameConditionHandler(
-                condition, attributes, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( DFileSizeCondition.ELEMENT_NAME ) )
-        {
+                    condition, attributes, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(DFileSizeCondition.ELEMENT_NAME)) {
             DFileSizeCondition condition = new DFileSizeCondition();
-            conditionListHolder.getSubElementList().add( condition );
+            conditionListHolder.getSubElementList().add(condition);
 
             FileSizeConditionHandler handler = new FileSizeConditionHandler(
-                condition, attributes, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( DMediaTypeCondition.ELEMENT_NAME ) )
-        {
+                    condition, attributes, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(DMediaTypeCondition.ELEMENT_NAME)) {
             DMediaTypeCondition condition = new DMediaTypeCondition();
-            conditionListHolder.getSubElementList().add( condition );
+            conditionListHolder.getSubElementList().add(condition);
 
             MediaTypeConditionHandler handler = new MediaTypeConditionHandler(
-                condition, attributes, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
-        }
-        else if ( qName.equals( DFileUrnCondition.ELEMENT_NAME ) )
-        {
+                    condition, attributes, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
+        } else if (qName.equals(DFileUrnCondition.ELEMENT_NAME)) {
             DFileUrnCondition condition = new DFileUrnCondition();
-            conditionListHolder.getSubElementList().add( condition );
+            conditionListHolder.getSubElementList().add(condition);
 
             FileUrnConditionHandler handler = new FileUrnConditionHandler(
-                condition, attributes, this, parser );
-            parser.getXMLReader().setContentHandler( handler );
+                    condition, attributes, this, parser);
+            parser.getXMLReader().setContentHandler(handler);
         }
         return;
     }
 
-    public void endElement( String uri, String localName, String qName )
-        throws SAXException
-    {
-        if ( qName.equals( elementName ) )
-        {
-            parser.getXMLReader().setContentHandler( parent );
+    public void endElement(String uri, String localName, String qName)
+            throws SAXException {
+        if (qName.equals(elementName)) {
+            parser.getXMLReader().setContentHandler(parent);
         }
     }
 
-    public InputSource resolveEntity( String publicId, String systemId )
-    {
+    public InputSource resolveEntity(String publicId, String systemId) {
         return null;
     }
 
-    public void characters( char[] ch, int start, int length )
-    {
-        text.write( ch, start, length );
+    public void characters(char[] ch, int start, int length) {
+        text.write(ch, start, length);
     }
 }

@@ -27,41 +27,39 @@ import phex.prefs.api.Setting;
 
 import java.util.List;
 
-public class SecurityPrefs extends PhexCorePrefs
-{
+public class SecurityPrefs extends PhexCorePrefs {
     /**
      * Indicates if the internal hostile host list should be loaded.
      */
     public static final Setting<Boolean> LoadHostileHostList;
-    
+
     /**
      * Indicates if the internal hostile sha1 urn list should be loaded.
      */
     public static final Setting<Boolean> LoadHostileSha1List;
-    
+
     /**
      * Indicates if nodes with no vendor code are disconnected.
      */
     public static final Setting<Boolean> DisconnectNoVendorHosts;
-    
+
     /**
      * When the HostCatcher finds hosts it will first use the port filter
      * to see if it is allowed to use the host
      */
     public static final Setting<List<String>> FilteredPorts;
-    
-    static
-    {
-        LoadHostileHostList = PreferencesFactory.createBoolSetting(  
-            "Security.LoadHostileHostList", true, instance );
-        
-        LoadHostileSha1List = PreferencesFactory.createBoolSetting(  
-            "Security.LoadHostileSha1List", true, instance );
-        
-        DisconnectNoVendorHosts = PreferencesFactory.createBoolSetting(  
-            "Security.DisconnectNoVendorHosts", true, instance );
-        
+
+    static {
+        LoadHostileHostList = PreferencesFactory.createBoolSetting(
+                "Security.LoadHostileHostList", true, instance);
+
+        LoadHostileSha1List = PreferencesFactory.createBoolSetting(
+                "Security.LoadHostileSha1List", true, instance);
+
+        DisconnectNoVendorHosts = PreferencesFactory.createBoolSetting(
+                "Security.DisconnectNoVendorHosts", true, instance);
+
         FilteredPorts = PreferencesFactory.createListSetting(
-            "Security.FilteredPorts", instance );
+                "Security.FilteredPorts", instance);
     }
 }

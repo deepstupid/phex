@@ -6,8 +6,8 @@
  */
 package phex.util.bitzi;
 
-import phex.util.SystemUtils;
 import phex.common.log.NLogger;
+import phex.util.SystemUtils;
 
 import java.security.*;
 import java.util.ArrayList;
@@ -18,113 +18,105 @@ import java.util.List;
  * Implementation of THEX tree hash algorithm, with Tiger as the internal
  * algorithm (using the approach as revised in December 2002, to add unique
  * prefixes to leaf and node operations)
- * 
+ * <p>
  * For simplicity, calculates one entire generation before starting on the next.
  * A more space-efficient approach would use a stack, and calculate each node as
  * soon as its children ara available.
  */
-public class TigerTree extends MessageDigest
-{
+public class TigerTree extends MessageDigest {
     private static final int BLOCKSIZE = 1024;
 
     private static final int HASHSIZE = 24;
 
     private static final boolean USE_CRYPTIX = SystemUtils
-        .isJavaVersionAtLeast(140)
-        && SystemUtils.IS_OS_MAC_OSX
-        && SystemUtils.OS_VERSION.startsWith("10.2");
+            .isJavaVersionAtLeast(140)
+            && SystemUtils.IS_OS_MAC_OSX
+            && SystemUtils.OS_VERSION.startsWith("10.2");
 
     /**
      * Set up the CryptixCrypto provider if we're on a platform that requires
      * it.
      */
-    static
-    {
-        if (USE_CRYPTIX)
-        {
+    static {
+        if (USE_CRYPTIX) {
             // Use reflection to load the Cryptix Provider.
             // It's safest that way (since we don't want to include
             // the cryptix jar on all installations, and Java
             // may try to load the class otherwise).
-            try
-            {
+            try {
                 Class clazz = Class
-                    .forName("cryptix.jce.provider.CryptixCrypto");
+                        .forName("cryptix.jce.provider.CryptixCrypto");
                 Object o = clazz.newInstance();
                 Security.addProvider((Provider) o);
-            }
-            catch (ClassNotFoundException | ClassCastException | SecurityException | ExceptionInInitializerError | InstantiationException | IllegalAccessException e)
-            {
-                NLogger.error( TigerTree.class, e, e );
+            } catch (ClassNotFoundException | ClassCastException | SecurityException | ExceptionInInitializerError | InstantiationException | IllegalAccessException e) {
+                NLogger.error(TigerTree.class, e, e);
             }
         }
     }
 
-    /** 1024 byte buffer */
+    /**
+     * 1024 byte buffer
+     */
     private final byte[] buffer;
 
-    /** Buffer offset */
+    /**
+     * Buffer offset
+     */
     private int bufferOffset;
 
-    /** Number of bytes hashed until now. */
+    /**
+     * Number of bytes hashed until now.
+     */
     private long byteCount;
 
-    /** Internal Tiger MD instance */
+    /**
+     * Internal Tiger MD instance
+     */
     private MessageDigest tiger;
 
-    /** Interim tree node hash values */
+    /**
+     * Interim tree node hash values
+     */
     private List nodes;
 
     /**
      * Constructor
      */
-    public TigerTree()
-    {
+    public TigerTree() {
         super("tigertree");
         buffer = new byte[BLOCKSIZE];
         bufferOffset = 0;
         byteCount = 0;
         nodes = new ArrayList();
-        if (USE_CRYPTIX)
-        {
-            try
-            {
+        if (USE_CRYPTIX) {
+            try {
                 tiger = MessageDigest.getInstance("Tiger", "CryptixCrypto");
-            }
-            catch (NoSuchAlgorithmException | NoSuchProviderException nsae)
-            {
+            } catch (NoSuchAlgorithmException | NoSuchProviderException nsae) {
                 tiger = new Tiger();
             }
-        }
-        else
-        {
+        } else {
             tiger = new Tiger();
         }
     }
 
-    protected int engineGetDigestLength()
-    {
+    protected int engineGetDigestLength() {
         return HASHSIZE;
     }
 
-    protected void engineUpdate(byte in)
-    {
+    protected void engineUpdate(byte in) {
         byteCount += 1;
         buffer[bufferOffset++] = in;
-        if (bufferOffset == BLOCKSIZE)
-        {
+        if (bufferOffset == BLOCKSIZE) {
             blockUpdate();
             bufferOffset = 0;
         }
     }
 
-    protected void engineUpdate(byte[] in, int offset, int length)
-    {
+    protected void engineUpdate(byte[] in, int offset, int length) {
         byteCount += length;
 
         int remaining;
-        while (length >= (remaining = BLOCKSIZE - bufferOffset))
-        {
+        while (length >= (remaining = BLOCKSIZE - bufferOffset)) {
             System.arraycopy(in, offset, buffer, bufferOffset, remaining);
             bufferOffset += remaining;
             blockUpdate();
@@ -137,47 +129,37 @@ public class TigerTree extends MessageDigest
         bufferOffset += length;
     }
 
-    protected byte[] engineDigest()
-    {
+    protected byte[] engineDigest() {
         byte[] hash = new byte[HASHSIZE];
-        try
-        {
+        try {
             engineDigest(hash, 0, HASHSIZE);
-        }
-        catch (DigestException e)
-        {
+        } catch (DigestException e) {
             return null;
         }
         return hash;
     }
 
     protected int engineDigest(byte[] buf, int offset, int len)
-        throws DigestException
-    {
+            throws DigestException {
         if (len < HASHSIZE) throw new DigestException();
 
         // hash any remaining fragments
         blockUpdate();
 
         // composite neighboring nodes together up to top value
-        while (nodes.size() > 1)
-        {
+        while (nodes.size() > 1) {
             List newNodes = new ArrayList();
             Iterator iter = nodes.iterator();
-            while (iter.hasNext())
-            {
+            while (iter.hasNext()) {
                 byte[] left = (byte[]) iter.next();
-                if (iter.hasNext())
-                {
+                if (iter.hasNext()) {
                     byte[] right = (byte[]) iter.next();
                     tiger.reset();
                     tiger.update((byte) 1); // node prefix
                     tiger.update(left, 0, left.length);
                     tiger.update(right, 0, right.length);
                     newNodes.add(tiger.digest());
-                }
-                else
-                {
+                } else {
                     newNodes.add(left);
                 }
             }
@@ -188,8 +170,7 @@ public class TigerTree extends MessageDigest
         return HASHSIZE;
     }
 
-    protected void engineReset()
-    {
+    protected void engineReset() {
         bufferOffset = 0;
         byteCount = 0;
         nodes = new ArrayList();
@@ -198,11 +179,10 @@ public class TigerTree extends MessageDigest
 
     /**
      * Method overrides MessageDigest.clone()
-     * 
+     *
      * @see java.security.MessageDigest#clone()
      */
-    public Object clone() throws CloneNotSupportedException
-    {
+    public Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException();
     }
 
@@ -210,8 +190,7 @@ public class TigerTree extends MessageDigest
      * Update the internal state with a single block of size 1024 (or less, in
      * final block) from the internal buffer.
      */
-    protected void blockUpdate()
-    {
+    protected void blockUpdate() {
         tiger.reset();
         tiger.update((byte) 0); // leaf prefix
         tiger.update(buffer, 0, bufferOffset);

@@ -26,8 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class SearchFilter
-{
+public class SearchFilter {
     /**
      * The name of the search filter.
      */
@@ -63,152 +62,126 @@ public class SearchFilter
      */
     private long lastTimeUsed;
 
-    public SearchFilter( String aName )
-    {
+    public SearchFilter(String aName) {
         name = aName;
         filterTokens = new ArrayList<String>();
         mediaType = MediaType.getMediaTypeAny();
         minFileSize = -1;
         maxFileSize = -1;
     }
-    
-    public SearchFilter( )
-    {
-        this( null );
+
+    public SearchFilter() {
+        this(null);
     }
-    
-    public void clearFilter()
-    {
+
+    public void clearFilter() {
         filterTokens.clear();
         mediaType = MediaType.getMediaTypeAny();
         minFileSize = -1;
         maxFileSize = -1;
     }
 
-    public String getFilterString()
-    {
+    public String getFilterString() {
         return filterString;
     }
 
-    public List getFilterTokens()
-    {
+    private void setFilterString(String aFilterString) {
+        filterString = aFilterString;
+        StringTokenizer tokenizer = new StringTokenizer(filterString, " ");
+        filterTokens.clear();
+        while (tokenizer.hasMoreTokens()) {
+            filterTokens.add(tokenizer.nextToken().toLowerCase());
+        }
+    }
+
+    public List getFilterTokens() {
         return filterTokens;
     }
 
-    public long getMaxFileSize()
-    {
+    public long getMaxFileSize() {
         return maxFileSize;
     }
 
-    public MediaType getMediaType()
-    {
+    public MediaType getMediaType() {
         return mediaType;
     }
 
-    public long getMinFileSize()
-    {
+    public long getMinFileSize() {
         return minFileSize;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
-    public long getLastTimeUsed()
-    {
+    public long getLastTimeUsed() {
         return lastTimeUsed;
     }
 
-    public void setLastTimeUsed(long lastTimeUsed)
-    {
+    public void setLastTimeUsed(long lastTimeUsed) {
         this.lastTimeUsed = lastTimeUsed;
         //QueryManager.getInstance().getSearchFilterContainer().saveSearchFilters();
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return name;
     }
-    
-    public void updateSearchFilter( String filterString )
-    {
-        setFilterString( filterString );
+
+    public void updateSearchFilter(String filterString) {
+        setFilterString(filterString);
     }
 
-    public void updateSearchFilter( String filterString, MediaType mediaType,
-        long minFileSize, long maxFileSize )
-    {
-        setFilterString( filterString );
+    public void updateSearchFilter(String filterString, MediaType mediaType,
+                                   long minFileSize, long maxFileSize) {
+        setFilterString(filterString);
         this.mediaType = mediaType;
         this.minFileSize = minFileSize;
         this.maxFileSize = maxFileSize;
         //QueryManager.getInstance().getSearchFilterContainer().saveSearchFilters();
     }
 
-    public void updateSearchFilter( long minFileSize, long maxFileSize )
-    {
+    public void updateSearchFilter(long minFileSize, long maxFileSize) {
         this.minFileSize = minFileSize;
         this.maxFileSize = maxFileSize;
         // no saving.. this is only updating a temporary filter...
     }
-    
-    public boolean isFiltered( RemoteFile remoteFile )
-    {
-        return isFiltered( remoteFile.getFileSize(),
-            remoteFile.getFilename(), remoteFile.getSpeed(),
-            remoteFile.getQueryHitHost().getHostRating() );
+
+    public boolean isFiltered(RemoteFile remoteFile) {
+        return isFiltered(remoteFile.getFileSize(),
+                remoteFile.getFilename(), remoteFile.getSpeed(),
+                remoteFile.getQueryHitHost().getHostRating());
     }
 
-    public boolean isFiltered( long fileSize,
-        String fullFileName, long hostSpeed, int hostRating )
-    {
+    public boolean isFiltered(long fileSize,
+                              String fullFileName, long hostSpeed, int hostRating) {
         // check file size.. min/max values should be > 0 to be valid
-        if( ( minFileSize > 0 && fileSize < minFileSize ) ||
-            ( maxFileSize > 0 && fileSize > maxFileSize ) )
-        {
+        if ((minFileSize > 0 && fileSize < minFileSize) ||
+                (maxFileSize > 0 && fileSize > maxFileSize)) {
             return true;
         }
 
         // check media type
-        if ( !mediaType.isFilenameOf( fullFileName ) )
-        {
+        if (!mediaType.isFilenameOf(fullFileName)) {
             return true;
         }
 
-        if ( isFilenameFiltered( fullFileName ) )
-        {
+        if (isFilenameFiltered(fullFileName)) {
             return true;
         }
 
         return false;
-    }    
-
-    private void setFilterString( String aFilterString )
-    {
-        filterString = aFilterString;
-        StringTokenizer tokenizer = new StringTokenizer( filterString, " " );
-        filterTokens.clear();
-        while ( tokenizer.hasMoreTokens() )
-        {
-            filterTokens.add( tokenizer.nextToken().toLowerCase() );
-        }
     }
 
-    private boolean isFilenameFiltered( String filename )
-    {
-        if ( filterTokens == null || filterTokens.size() == 0 )
-        {
+    private boolean isFilenameFiltered(String filename) {
+        if (filterTokens == null || filterTokens.size() == 0) {
             return false;
         }
         filename = filename.toLowerCase();
         Iterator iterator = filterTokens.iterator();
-        while ( iterator.hasNext() )
-        {
-            String token = (String)iterator.next();
-            if ( filename.indexOf( token ) == -1 )
-            {
+        while (iterator.hasNext()) {
+            String token = (String) iterator.next();
+            if (filename.indexOf(token) == -1) {
                 return true;
             }
         }

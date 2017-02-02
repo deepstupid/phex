@@ -19,9 +19,7 @@
 package phex.query;
 
 
-
-public class ResearchServiceConfig
-{
+public class ResearchServiceConfig {
     //private static final int DEFAULT_MIN_REMOTE_CANDIDATES_COUNT = 5;
     private static final long DEFAULT_RESEARCH_TIMEOUT = 2 * 60 * 1000;
 
@@ -37,17 +35,15 @@ public class ResearchServiceConfig
     private static final long DEFAULT_RESEARCH_TIME_PENALTY = 3 * 60 * 1000;
     private static final long DEFAULT_MAX_RESEARCH_INTERVAL_MILLIS = 2 * 60 * 60 * 1000;
     private static final int DEFAULT_CANDIDATE_INTERVAL_THRESHOLD = 2;
-
+    private final boolean isResearchEnabled;
     private long maxResearchIntervalMillis;
     //private int minRemoteCandidatesCount;
     private long researchIntervalMillis;
     private long researchTimeout;
     private int candidatesIntervalThreshold;
     private long researchTimePenalty;
-    private final boolean isResearchEnabled;
 
-    public ResearchServiceConfig()
-    {
+    public ResearchServiceConfig() {
         //loadXMLResearchServiceConfig();
         ensureDefaults();
 
@@ -69,16 +65,14 @@ public class ResearchServiceConfig
      * The interval between two research and the offset after every failed
      * research.
      */
-    public long getResearchIntervalMillis()
-    {
+    public long getResearchIntervalMillis() {
         return researchIntervalMillis;
     }
 
     /**
      * The maximum interval between two researchs.
      */
-    public long getMaxResearchIntervalMillis()
-    {
+    public long getMaxResearchIntervalMillis() {
         return maxResearchIntervalMillis;
     }
 
@@ -88,8 +82,7 @@ public class ResearchServiceConfig
      * TODO not integrated in XML yet. But not necessary as long as we dont have
      * it.
      */
-    public int getCandidatesIntervalThreshold()
-    {
+    public int getCandidatesIntervalThreshold() {
         return candidatesIntervalThreshold;
     }
 
@@ -98,21 +91,18 @@ public class ResearchServiceConfig
      * TODO not integrated in XML yet. But not necessary as long as we dont have
      * it.
      */
-    public long getResearchTimePenalty()
-    {
+    public long getResearchTimePenalty() {
         return researchTimePenalty;
     }
 
     /**
      * The time after which a research times out.
      */
-    public long getResearchTimeout()
-    {
+    public long getResearchTimeout() {
         return researchTimeout;
     }
 
-    public boolean isResearchEnabled()
-    {
+    public boolean isResearchEnabled() {
         return isResearchEnabled;
     }
 
@@ -136,30 +126,24 @@ public class ResearchServiceConfig
         isResearchEnabled = config.getResearchEnabled();
     }*/
 
-    private void ensureDefaults()
-    {
-        if ( maxResearchIntervalMillis == 0 )
-        {
+    private void ensureDefaults() {
+        if (maxResearchIntervalMillis == 0) {
             maxResearchIntervalMillis = DEFAULT_MAX_RESEARCH_INTERVAL_MILLIS;
         }
         //if ( minRemoteCandidatesCount == 0 )
         //{
         //    minRemoteCandidatesCount = DEFAULT_MIN_REMOTE_CANDIDATES_COUNT;
         //}
-        if ( researchIntervalMillis == 0 )
-        {
+        if (researchIntervalMillis == 0) {
             researchIntervalMillis = DEFAULT_RESEARCH_INTERVAL_MILLIS;
         }
-        if ( candidatesIntervalThreshold == 0 )
-        {
+        if (candidatesIntervalThreshold == 0) {
             candidatesIntervalThreshold = DEFAULT_CANDIDATE_INTERVAL_THRESHOLD;
         }
-        if ( researchTimeout == 0 )
-        {
+        if (researchTimeout == 0) {
             researchTimeout = DEFAULT_RESEARCH_TIMEOUT;
         }
-        if ( researchTimePenalty == 0 )
-        {
+        if (researchTimePenalty == 0) {
             researchTimePenalty = DEFAULT_RESEARCH_TIME_PENALTY;
         }
     }

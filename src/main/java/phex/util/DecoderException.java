@@ -15,13 +15,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */ 
+ */
 
 package phex.util;
 
 /**
- * Thrown when a Decoder has encountered a failure condition during a decode. 
- * 
+ * Thrown when a Decoder has encountered a failure condition during a decode.
+ *
  * @author Apache Software Foundation
  * @version $Id: DecoderException.java 3380 2006-04-14 11:49:41Z gregork $
  */
@@ -29,14 +29,14 @@ public class DecoderException extends Exception {
 
     /**
      * Declares the Serial Version Uid.
-     * 
+     *
      * @see <a href="http://c2.com/cgi/wiki?AlwaysDeclareSerialVersionUid">Always Declare Serial Version Uid</a>
      */
     private static final long serialVersionUID = 1L;
 
     /**
      * Creates a DecoderException
-     * 
+     *
      * @param pMessage A message with meaning to a human
      */
     public DecoderException(String pMessage) {

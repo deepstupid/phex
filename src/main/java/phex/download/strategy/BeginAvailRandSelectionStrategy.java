@@ -28,36 +28,31 @@ import phex.download.swarming.SWDownloadFile;
 
 import java.util.Random;
 
-public class BeginAvailRandSelectionStrategy implements ScopeSelectionStrategy
-{
+public class BeginAvailRandSelectionStrategy implements ScopeSelectionStrategy {
     private final Random random;
     private final ScopeSelectionStrategy beginStrategy;
     private final ScopeSelectionStrategy availRandStrategy;
-    
+
     protected BeginAvailRandSelectionStrategy(
-        PrefereBeginingScopeSelectionStrategy beginStrategy,
-        AvailRandSelectionStrategy availRandStrategy)
-    {
+            PrefereBeginingScopeSelectionStrategy beginStrategy,
+            AvailRandSelectionStrategy availRandStrategy) {
         this.random = new Random();
         this.beginStrategy = beginStrategy;
         this.availRandStrategy = availRandStrategy;
     }
 
-    public DownloadScope selectDownloadScope( SWDownloadFile downloadFile,
-        DownloadScopeList wantedScopeList, long preferredSize )
-    {
+    public DownloadScope selectDownloadScope(SWDownloadFile downloadFile,
+                                             DownloadScopeList wantedScopeList, long preferredSize) {
         DownloadScope scope = null;
         // choose beginning by 50%
-        boolean useBegin = random.nextBoolean( );
-        if ( useBegin )
-        {
+        boolean useBegin = random.nextBoolean();
+        if (useBegin) {
             scope = beginStrategy.selectDownloadScope(
-                downloadFile, wantedScopeList, preferredSize );
+                    downloadFile, wantedScopeList, preferredSize);
         }
-        if ( scope == null )
-        {
+        if (scope == null) {
             scope = availRandStrategy.selectDownloadScope(
-                downloadFile, wantedScopeList, preferredSize);
+                    downloadFile, wantedScopeList, preferredSize);
         }
         return scope;
     }

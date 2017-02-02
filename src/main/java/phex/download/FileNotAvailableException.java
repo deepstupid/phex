@@ -20,10 +20,8 @@ package phex.download;
 
 import phex.host.UnusableHostException;
 
-public class FileNotAvailableException extends UnusableHostException
-{
-    public FileNotAvailableException( )
-    {
-        super( "File not available." );
+public class FileNotAvailableException extends UnusableHostException {
+    public FileNotAvailableException() {
+        super("File not available.");
     }
 }

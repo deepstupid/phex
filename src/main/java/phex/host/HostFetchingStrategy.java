@@ -22,19 +22,17 @@
 package phex.host;
 
 /**
- * Interface for providing a strategy how new hosts are fetched 
+ * Interface for providing a strategy how new hosts are fetched
  * for the host catcher.
  */
-public interface HostFetchingStrategy
-{
-    enum FetchingReason
-    {
+public interface HostFetchingStrategy {
+    // temporary workaround method for post manager initialization
+    void postManagerInitRoutine();
+
+    void fetchNewHosts(FetchingReason reason);
+
+    enum FetchingReason {
         EnsureMinHosts,
         UpdateHosts
     }
-    
-    // temporary workaround method for post manager initialization
-    void postManagerInitRoutine();
-    
-    void fetchNewHosts( FetchingReason reason );
 }

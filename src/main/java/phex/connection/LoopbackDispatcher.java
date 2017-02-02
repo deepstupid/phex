@@ -37,114 +37,92 @@ import java.net.Socket;
  * The class is used as a entry point on Phex startup to check if a running
  * Phex instance is available to process command line args.
  */
-public class LoopbackDispatcher
-{
-    public static boolean dispatchMagmaFile( String fileName )
-    {
+public class LoopbackDispatcher {
+    public static boolean dispatchMagmaFile(String fileName) {
         Socket socket = null;
         InputStream inStream = null;
         OutputStream outStream = null;
-        try
-        {
+        try {
             socket = new Socket();
-            socket.connect( new InetSocketAddress( "127.0.0.1",
-                    NetworkPrefs.ListeningPort.get()), 1000 );
-            socket.setSoTimeout( 1000 );
+            socket.connect(new InetSocketAddress("127.0.0.1",
+                    NetworkPrefs.ListeningPort.get()), 1000);
+            socket.setSoTimeout(1000);
             outStream = socket.getOutputStream();
-            
-            outStream.write( (IncomingConnectionDispatcher.MAGMA_DOWNLOAD_PREFIX + ' ' + fileName + "\r\n").getBytes() );
+
+            outStream.write((IncomingConnectionDispatcher.MAGMA_DOWNLOAD_PREFIX + ' ' + fileName + "\r\n").getBytes());
             outStream.flush();
-            
+
             inStream = socket.getInputStream();
-            GnutellaInputStream gInStream = new GnutellaInputStream( inStream );
+            GnutellaInputStream gInStream = new GnutellaInputStream(inStream);
             String responseLine = gInStream.readLine();
-            if ( responseLine != null && responseLine.equals("OK" ) )
-            {
+            if (responseLine != null && responseLine.equals("OK")) {
                 return true;
             }
-        }
-        catch ( IOException exp )
-        {// ignore
-            NLogger.warn( LoopbackDispatcher.class, exp, exp);
-        }
-        finally
-        {
-            IOUtil.closeQuietly( inStream );
-            IOUtil.closeQuietly( outStream );
-            IOUtil.closeQuietly( socket );
+        } catch (IOException exp) {// ignore
+            NLogger.warn(LoopbackDispatcher.class, exp, exp);
+        } finally {
+            IOUtil.closeQuietly(inStream);
+            IOUtil.closeQuietly(outStream);
+            IOUtil.closeQuietly(socket);
         }
         return false;
     }
-    
-    public static boolean dispatchRSSFile( String fileName )
-    {
+
+    public static boolean dispatchRSSFile(String fileName) {
         Socket socket = null;
         InputStream inStream = null;
         OutputStream outStream = null;
-        try
-        {
+        try {
             socket = new Socket();
-            socket.connect( new InetSocketAddress( "127.0.0.1",
-                    NetworkPrefs.ListeningPort.get()), 1000 );
-            socket.setSoTimeout( 1000 );
+            socket.connect(new InetSocketAddress("127.0.0.1",
+                    NetworkPrefs.ListeningPort.get()), 1000);
+            socket.setSoTimeout(1000);
             outStream = socket.getOutputStream();
-            
-            outStream.write( (IncomingConnectionDispatcher.RSS_DOWNLOAD_PREFIX + ' ' + fileName + "\r\n").getBytes() );
+
+            outStream.write((IncomingConnectionDispatcher.RSS_DOWNLOAD_PREFIX + ' ' + fileName + "\r\n").getBytes());
             outStream.flush();
-            
+
             inStream = socket.getInputStream();
-            GnutellaInputStream gInStream = new GnutellaInputStream( inStream );
+            GnutellaInputStream gInStream = new GnutellaInputStream(inStream);
             String responseLine = gInStream.readLine();
-            if ( responseLine != null && responseLine.equals("OK" ) )
-            {
+            if (responseLine != null && responseLine.equals("OK")) {
                 return true;
             }
-        }
-        catch ( IOException exp )
-        {// ignore
-            NLogger.warn( LoopbackDispatcher.class, exp, exp);
-        }
-        finally
-        {
-            IOUtil.closeQuietly( inStream );
-            IOUtil.closeQuietly( outStream );
-            IOUtil.closeQuietly( socket );
+        } catch (IOException exp) {// ignore
+            NLogger.warn(LoopbackDispatcher.class, exp, exp);
+        } finally {
+            IOUtil.closeQuietly(inStream);
+            IOUtil.closeQuietly(outStream);
+            IOUtil.closeQuietly(socket);
         }
         return false;
     }
-    
-    public static boolean dispatchUri( String uri )
-    {
+
+    public static boolean dispatchUri(String uri) {
         Socket socket = null;
         InputStream inStream = null;
         OutputStream outStream = null;
-        try
-        {
+        try {
             socket = new Socket();
-            socket.connect( new InetSocketAddress( "127.0.0.1",
-                    NetworkPrefs.ListeningPort.get()), 1000 );
-            socket.setSoTimeout( 1000 );
+            socket.connect(new InetSocketAddress("127.0.0.1",
+                    NetworkPrefs.ListeningPort.get()), 1000);
+            socket.setSoTimeout(1000);
             outStream = socket.getOutputStream();
-            
-            outStream.write( (IncomingConnectionDispatcher.URI_DOWNLOAD_PREFIX + ' ' + uri + "\r\n").getBytes() );
+
+            outStream.write((IncomingConnectionDispatcher.URI_DOWNLOAD_PREFIX + ' ' + uri + "\r\n").getBytes());
             outStream.flush();
-            
+
             inStream = socket.getInputStream();
-            GnutellaInputStream gInStream = new GnutellaInputStream( inStream );
+            GnutellaInputStream gInStream = new GnutellaInputStream(inStream);
             String responseLine = gInStream.readLine();
-            if ( responseLine != null && responseLine.equals("OK" ) )
-            {
+            if (responseLine != null && responseLine.equals("OK")) {
                 return true;
             }
-        }
-        catch ( IOException exp )
-        {// ignore
-        }
-        finally
-        {
-            IOUtil.closeQuietly( inStream );
-            IOUtil.closeQuietly( outStream );
-            IOUtil.closeQuietly( socket );
+        } catch (IOException exp) {// ignore
+        } finally {
+            IOUtil.closeQuietly(inStream);
+            IOUtil.closeQuietly(outStream);
+            IOUtil.closeQuietly(socket);
         }
         return false;
     }

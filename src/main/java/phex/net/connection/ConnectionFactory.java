@@ -31,48 +31,42 @@ import java.io.IOException;
 /**
  *
  */
-public class ConnectionFactory
-{
-    private ConnectionFactory()
-    {}
-    
-    /**
-     * Creates a connection to the given host and port with Cfg.socketConnectTimeout.
-     * The connection returned will use the given bandwidth controller 
-     * and the Cfg.socketRWTimeout as the read/write timeout.
-     * 
-     * @param address the host address to connect.
-     * @param bwController the bandwidth controller to initialize the connection with.
-     * @return a connection
-     * @throws IOException in case an connection error occurs.
-     */
-    public static Connection createConnection( DestAddress address, BandwidthController bwController )
-        throws IOException
-    {
-        SocketFacade socket = SocketFactory.connect( address );        
-        Connection connection = new Connection( socket, bwController );
-        
-        return connection;
+public class ConnectionFactory {
+    private ConnectionFactory() {
     }
-    
+
     /**
      * Creates a connection to the given host and port with Cfg.socketConnectTimeout.
-     * The connection returned will use the given bandwidth controller 
+     * The connection returned will use the given bandwidth controller
      * and the Cfg.socketRWTimeout as the read/write timeout.
-     * 
-     * @param address the host address to connect.
-     * @param connectTimeout the connect timeout in millis
+     *
+     * @param address      the host address to connect.
      * @param bwController the bandwidth controller to initialize the connection with.
      * @return a connection
      * @throws IOException in case an connection error occurs.
      */
-    public static Connection createConnection( DestAddress address, int connectTimeout, 
-        BandwidthController bwController )
-        throws IOException
-    {
-        SocketFacade socket = SocketFactory.connect( address, connectTimeout );
-        Connection connection = new Connection( socket, bwController );
-        
+    public static Connection createConnection(DestAddress address, BandwidthController bwController)
+            throws IOException {
+        return new Connection( SocketFactory.connect(address), bwController);
+    }
+
+    /**
+     * Creates a connection to the given host and port with Cfg.socketConnectTimeout.
+     * The connection returned will use the given bandwidth controller
+     * and the Cfg.socketRWTimeout as the read/write timeout.
+     *
+     * @param address        the host address to connect.
+     * @param connectTimeout the connect timeout in millis
+     * @param bwController   the bandwidth controller to initialize the connection with.
+     * @return a connection
+     * @throws IOException in case an connection error occurs.
+     */
+    public static Connection createConnection(DestAddress address, int connectTimeout,
+                                              BandwidthController bwController)
+            throws IOException {
+        SocketFacade socket = SocketFactory.connect(address, connectTimeout);
+        Connection connection = new Connection(socket, bwController);
+
         return connection;
     }
 }

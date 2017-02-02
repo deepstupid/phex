@@ -26,49 +26,41 @@ import org.xml.sax.SAXException;
 import phex.xml.sax.DElement;
 import phex.xml.sax.PhexXmlSaxWriter;
 
-public class DTable implements DElement
-{
+public class DTable implements DElement {
     public static final String ELEMENT_NAME = "table";
 
     private String tableIdentifier;
 
     private DTableColumnList tableColumnList;
-    
-    
 
-    public DTableColumnList getTableColumnList()
-    {
+
+    public DTableColumnList getTableColumnList() {
         return tableColumnList;
     }
 
-    public void setTableColumnList( DTableColumnList tableColumnList )
-    {
+    public void setTableColumnList(DTableColumnList tableColumnList) {
         this.tableColumnList = tableColumnList;
     }
 
-    public String getTableIdentifier()
-    {
+    public String getTableIdentifier() {
         return tableIdentifier;
     }
 
-    public void setTableIdentifier( String tableIdentifier )
-    {
+    public void setTableIdentifier(String tableIdentifier) {
         this.tableIdentifier = tableIdentifier;
     }
 
-    public void serialize( PhexXmlSaxWriter writer ) throws SAXException
-    {
-        writer.startElm( ELEMENT_NAME, null );
+    public void serialize(PhexXmlSaxWriter writer) throws SAXException {
+        writer.startElm(ELEMENT_NAME, null);
 
-        if ( tableIdentifier != null )
-        {
-            writer.startElm( "tableIdentifier", null );
-            writer.elmText( tableIdentifier );
-            writer.endElm( "tableIdentifier" );
+        if (tableIdentifier != null) {
+            writer.startElm("tableIdentifier", null);
+            writer.elmText(tableIdentifier);
+            writer.endElm("tableIdentifier");
         }
 
-        tableColumnList.serialize( writer );
+        tableColumnList.serialize(writer);
 
-        writer.endElm( ELEMENT_NAME );
+        writer.endElm(ELEMENT_NAME);
     }
 }

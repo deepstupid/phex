@@ -34,64 +34,56 @@ import java.io.InputStream;
 import java.io.StringWriter;
 
 /**
- * 
+ *
  */
-public class ThexHashTreeCodec
-{
-    public static ThexHashTree parseThexHashTreeXML( InputStream inStream )   
-        throws IOException
-    {
+public class ThexHashTreeCodec {
+    public static ThexHashTree parseThexHashTreeXML(InputStream inStream)
+            throws IOException {
         ThexHashTree hashTree = new ThexHashTree();
-        
+
         SAXParserFactory spf = SAXParserFactory.newInstance();
-        try
-        {
+        try {
             SAXParser saxParser = spf.newSAXParser();
 
-            saxParser.parse( new InputSource( inStream ),
-                new ThexHashTreeSAXHandler(hashTree) );
+            saxParser.parse(new InputSource(inStream),
+                    new ThexHashTreeSAXHandler(hashTree));
             return hashTree;
-        }
-        catch ( ParserConfigurationException exp )
-        {
-            NLogger.error( ThexHashTreeCodec.class, exp, exp );
-            throw new IOException( "Parsing Thex HashTree failed." );
-        }
-        catch ( SAXException exp )
-        {
-            NLogger.error( ThexHashTreeCodec.class, exp, exp );
-            throw new IOException( "Parsing Thex HashTree failed." );
+        } catch (ParserConfigurationException exp) {
+            NLogger.error(ThexHashTreeCodec.class, exp, exp);
+            throw new IOException("Parsing Thex HashTree failed.");
+        } catch (SAXException exp) {
+            NLogger.error(ThexHashTreeCodec.class, exp, exp);
+            throw new IOException("Parsing Thex HashTree failed.");
         }
     }
-    
-    public static byte[] generateThexHashTreeXML( ThexHashTree hashTree )
-        throws IOException
-    {
+
+    public static byte[] generateThexHashTreeXML(ThexHashTree hashTree)
+            throws IOException {
         StringWriter writer = new StringWriter();
-        writer.write( "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" );
-        writer.write( "<!DOCTYPE hashtree SYSTEM \"http://open-content.net/spec/thex/thex.dtd\">" );
-        writer.write( "<hashtree>" );
-        writer.write( "<file size=\"" );
-        writer.write( hashTree.getFileSize() );
-        writer.write( "\" segmentsize=\"" );
-        writer.write( hashTree.getFileSegmentSize() );
-        writer.write( "\"/>" );
-        writer.write( "<digest algorithm=\"" );
-        writer.write( hashTree.getDigestAlgorithm() );
-        writer.write( "\" outputsize=\"" );
-        writer.write( hashTree.getDigestOutputSize() );
-        writer.write( "\"/>" );
-        writer.write( "<serializedtree depth=\"" );
-        writer.write( hashTree.getSerializedTreeDepth() );
-        writer.write( "\" type=\"" );
-        writer.write( hashTree.getSerializedTreeType() );
-        writer.write( "\" uri=\"" );
-        writer.write( hashTree.getSerializedTreeUri() );
-        writer.write( "\"/>" );
-        writer.write( "</hashtree>" );
-        
+        writer.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        writer.write("<!DOCTYPE hashtree SYSTEM \"http://open-content.net/spec/thex/thex.dtd\">");
+        writer.write("<hashtree>");
+        writer.write("<file size=\"");
+        writer.write(hashTree.getFileSize());
+        writer.write("\" segmentsize=\"");
+        writer.write(hashTree.getFileSegmentSize());
+        writer.write("\"/>");
+        writer.write("<digest algorithm=\"");
+        writer.write(hashTree.getDigestAlgorithm());
+        writer.write("\" outputsize=\"");
+        writer.write(hashTree.getDigestOutputSize());
+        writer.write("\"/>");
+        writer.write("<serializedtree depth=\"");
+        writer.write(hashTree.getSerializedTreeDepth());
+        writer.write("\" type=\"");
+        writer.write(hashTree.getSerializedTreeType());
+        writer.write("\" uri=\"");
+        writer.write(hashTree.getSerializedTreeUri());
+        writer.write("\"/>");
+        writer.write("</hashtree>");
+
         String output = writer.toString();
 
-        return output.getBytes( "UTF-8" );
+        return output.getBytes("UTF-8");
     }
 }

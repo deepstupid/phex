@@ -27,20 +27,17 @@ import phex.common.address.DestAddress;
 /**
  * Represents a user bookmarked host instance.
  */
-public class FavoriteHost
-{
+public class FavoriteHost {
     private final DestAddress address;
-    
-    public FavoriteHost( DestAddress address )
-    {
+
+    public FavoriteHost(DestAddress address) {
         this.address = address;
     }
 
     /**
      * @return
      */
-    public DestAddress getHostAddress()
-    {
+    public DestAddress getHostAddress() {
         return address;
     }
 
