@@ -23,12 +23,10 @@ package phex.upload;
 
 import junit.framework.TestCase;
 import phex.common.address.DefaultDestAddress;
-import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
 import phex.share.ShareFile;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class HrrnQueueComparatorTest extends TestCase
@@ -37,8 +35,7 @@ public class HrrnQueueComparatorTest extends TestCase
 
     public void setUp()
     {
-        PhexCorePrefs.init();
-//        PhexGuiPrefs.init();
+        //        PhexGuiPrefs.init();
 //        Localizer.initialize( InterfacePrefs.LocaleName.get() );
         Servent servent = Servent.servent;
         uploadManager = new UploadManager( servent );

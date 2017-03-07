@@ -23,7 +23,7 @@ package phex.host;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import phex.api.Phex;
+import phex.Phex;
 import phex.common.Environment;
 import phex.common.QueryRoutingTable;
 import phex.common.address.DestAddress;
@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * <p>A Gnutella host, or servent together with operating statistics and IO.</p>
@@ -97,7 +98,7 @@ public class Host {
     private final MessageQueue messageQueue;
     private final SendEngine sendEngine = new SendEngine();
     private DestAddress hostAddress;
-    private Connection connection;
+    private final AtomicReference<Connection> connection = new AtomicReference<Connection>();
     private HostStatus status;
     private String lastStatusMsg = "";
     private long statusTime = 0;
@@ -233,7 +234,7 @@ public class Host {
      * Create a new Host with type OUTGOING.
      */
     private Host() {
-        connection = null;
+        connection.set(null);
         status = HostStatus.NOT_CONNECTED;
         type = Type.OUTGOING;
         connectionType = CONNECTION_NORMAL;
@@ -297,12 +298,11 @@ public class Host {
      * @return Returns the connection.
      */
     public Connection getConnection() {
-        return connection;
+        return connection.get();
     }
 
     public void setConnection(Connection connection) {
-        synchronized (this) {
-            this.connection = connection;
+        if (!connection.equals(this.connection.getAndSet(connection))) {
             receivedMsgCount = 0;
             sentMsgCount = 0;
             sentDropMsgCount = 0;
@@ -315,13 +315,11 @@ public class Host {
      */
     @Deprecated
     public GnutellaInputStream getInputStream() throws IOException {
-        synchronized (this) {
-            if (connection == null) {
-                throw new ConnectionClosedException(
-                        "Connection already closed");
-            }
-            return connection.getInputStream();
-        }
+        Connection x = connection.get();
+        if (x!=null)
+            return x.getInputStream();
+        else
+            return null;
     }
 
     /**
@@ -329,13 +327,11 @@ public class Host {
      */
     @Deprecated
     public GnutellaOutputStream getOutputStream() throws IOException {
-        synchronized (this) {
-            if (connection == null) {
-                throw new ConnectionClosedException(
-                        "Connection already closed");
-            }
-            return connection.getOutputStream();
-        }
+        Connection x = connection.get();
+        if (x!=null)
+            return x.getOutputStream();
+        else
+            return null;
     }
 
     public void activateInputInflation() throws IOException {
@@ -662,18 +658,16 @@ public class Host {
     }
 
     public boolean isConnected() {
-        return connection != null;
+        return connection.get() != null;
     }
 
     public void disconnect() {
-        synchronized (this) {
-            if (connection != null) {
-                if (status != HostStatus.ERROR) {
-                    setStatus(HostStatus.DISCONNECTED);
-                }
-                connection.disconnect();
-                connection = null;
+        Connection x = connection.getAndSet(null);
+        if (x!=null) {
+            if (status != HostStatus.ERROR) {
+                setStatus(HostStatus.DISCONNECTED);
             }
+            x.disconnect();
         }
 
     }
@@ -794,37 +788,23 @@ public class Host {
 
         logger.debug("send message {}", message);
 
-        synchronized (this) {
+        Connection c = connection.get();
+        if (c==null)
+            throw new ConnectionClosedException("connection already closed");
 
-            ByteBuffer headerBuf = message.createHeaderBuffer();
-            ByteBuffer messageBuf = message.createMessageBuffer();
+        ByteBuffer headerBuf = message.createHeaderBuffer();
+        ByteBuffer messageBuf = message.createMessageBuffer();
 
-            if (!isConnected()) {
-                throw new ConnectionClosedException(
-                        "Connection is already closed");
-            }
 
-            connection.write(headerBuf);
-
-            if (!isConnected()) {
-                throw new ConnectionClosedException(
-                        "Connection is already closed");
-            }
-
-            connection.write(messageBuf);
-            incSentCount();
-
-        }
+        c.write(headerBuf);
+        c.write(messageBuf);
+        incSentCount();
     }
 
     public void flushOutputStream() throws IOException {
-        synchronized (this) {
-            if (isConnected()) {
-                connection.flush();
-                //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
-                //    "Messages flushed" );
-            }
-        }
+        Connection c = connection.get();
+        if (c!=null)
+            c.flush();
     }
 
     public void queueMessageToSend(Message message) {
@@ -836,10 +816,7 @@ public class Host {
         }
 
         //logger.debug("Queuing message: {}", message);
-        synchronized (messageQueue) {
-            messageQueue.addMessage(message);
-            sendEngine.dispatch();
-        }
+        messageQueue.addMessage(message, sendEngine);
     }
 
 //    /**
@@ -955,7 +932,7 @@ public class Host {
         }
     }
 
-    private class SendEngine implements Runnable {
+    public class SendEngine implements Runnable {
         private final AtomicBoolean isRunning = new AtomicBoolean(false);
 
         public void dispatch() {

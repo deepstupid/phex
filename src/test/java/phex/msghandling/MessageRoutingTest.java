@@ -28,7 +28,6 @@ import phex.host.Host;
 import phex.msg.GUID;
 import phex.net.connection.Connection;
 import phex.net.repres.def.DefaultSocketFacade;
-import phex.prefs.core.PhexCorePrefs;
 import phex.util.QueryGUIDRoutingPair;
 
 import java.net.Socket;
@@ -46,8 +45,7 @@ public class MessageRoutingTest extends TestCase
     @Override
     protected void setUp()
     {
-        PhexCorePrefs.init();
-//        PhexGuiPrefs.init();
+        //        PhexGuiPrefs.init();
 //        Localizer.initialize( InterfacePrefs.LocaleName.get() );
         messageRouting = new MessageRouting( );
     }

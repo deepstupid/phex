@@ -31,12 +31,13 @@ import java.util.Set;
 public final class PreferencesFactory {
     public static Setting<String> createStringSetting(String name,
                                                       String defaultValue, Preferences preferences) {
-        String value = preferences.getLoadedProperty(name);
+        String value = preferences!=null ? preferences.getLoadedProperty(name) : null; //preferences.getLoadedProperty(name);
         if (value == null) {
             value = defaultValue;
         }
         Setting<String> setting = new Setting<String>(name, value, defaultValue, preferences);
-        preferences.registerSetting(name, setting);
+        if (preferences!=null)
+            preferences.registerSetting(name, setting);
         return setting;
     }
 
@@ -44,7 +45,7 @@ public final class PreferencesFactory {
                                                      boolean defaultValue, Preferences preferences) {
         Boolean defaultBool = Boolean.valueOf(defaultValue);
 
-        String value = preferences.getLoadedProperty(name);
+        String value = preferences!=null ? preferences.getLoadedProperty(name) : null; preferences.getLoadedProperty(name);
         Boolean boolValue;
         if (value == null) {
             boolValue = defaultBool;
@@ -56,7 +57,8 @@ public final class PreferencesFactory {
             boolValue = defaultBool;
         }
         Setting<Boolean> setting = new Setting<Boolean>(name, boolValue, defaultBool, preferences);
-        preferences.registerSetting(name, setting);
+        if (preferences!=null)
+            preferences.registerSetting(name, setting);
         return setting;
     }
 
@@ -64,7 +66,7 @@ public final class PreferencesFactory {
                                                     float defaultValue, Preferences preferences) {
         Float defaultFloat = Float.valueOf(defaultValue);
 
-        String value = preferences.getLoadedProperty(name);
+        String value = preferences!=null ? preferences.getLoadedProperty(name) : null;
         Float floatValue;
         // compared to Integer number parsing, Float is not handling null as
         // NumberFormatException.
@@ -78,7 +80,8 @@ public final class PreferencesFactory {
             }
         }
         Setting<Float> setting = new Setting<Float>(name, floatValue, defaultFloat, preferences);
-        preferences.registerSetting(name, setting);
+        if (preferences!=null)
+            preferences.registerSetting(name, setting);
         return setting;
     }
 
@@ -86,7 +89,7 @@ public final class PreferencesFactory {
                                                   long defaultValue, Preferences preferences) {
         Long defaultLong = Long.valueOf(defaultValue);
 
-        String value = preferences.getLoadedProperty(name);
+        String value = preferences!=null ? preferences.getLoadedProperty(name) : null;
         Long longValue;
         try {
             longValue = Long.valueOf(value);
@@ -94,7 +97,8 @@ public final class PreferencesFactory {
             longValue = defaultLong;
         }
         Setting<Long> setting = new Setting<Long>(name, longValue, defaultLong, preferences);
-        preferences.registerSetting(name, setting);
+        if (preferences!=null)
+            preferences.registerSetting(name, setting);
         return setting;
     }
 
@@ -102,7 +106,7 @@ public final class PreferencesFactory {
                                                     int defaultValue, Preferences preferences) {
         Integer defaultInt = Integer.valueOf(defaultValue);
 
-        String value = preferences.getLoadedProperty(name);
+        String value = preferences!=null ? preferences.getLoadedProperty(name) : null; //preferences.getLoadedProperty(name);
         Integer intValue;
         try {
             intValue = Integer.valueOf(value);
@@ -110,7 +114,8 @@ public final class PreferencesFactory {
             intValue = defaultInt;
         }
         Setting<Integer> setting = new Setting<Integer>(name, intValue, defaultInt, preferences);
-        preferences.registerSetting(name, setting);
+        if (preferences!=null)
+            preferences.registerSetting(name, setting);
         return setting;
     }
 
@@ -118,7 +123,7 @@ public final class PreferencesFactory {
                                                               int defaultValue, int minValue, int maxValue, Preferences preferences) {
         Integer defaultInt = Integer.valueOf(defaultValue);
 
-        String value = preferences.getLoadedProperty(name);
+        String value = preferences!=null ? preferences.getLoadedProperty(name) : null;
         Integer intValue;
         try {
             intValue = Integer.valueOf(value);
@@ -127,7 +132,8 @@ public final class PreferencesFactory {
         }
         RangeSetting<Integer> setting = new RangeSetting<Integer>(name, intValue, defaultInt,
                 Integer.valueOf(minValue), Integer.valueOf(maxValue), preferences);
-        preferences.registerSetting(name, setting);
+        if (preferences!=null)
+            preferences.registerSetting(name, setting);
         return setting;
     }
 
@@ -135,7 +141,7 @@ public final class PreferencesFactory {
                                                          short defaultValue, short minValue, short maxValue, Preferences preferences) {
         Short defaultShort = Short.valueOf(defaultValue);
 
-        String value = preferences.getLoadedProperty(name);
+        String value = preferences!=null ? preferences.getLoadedProperty(name) : null;
         Short shortValue;
         try {
             shortValue = Short.valueOf(value);
@@ -144,7 +150,8 @@ public final class PreferencesFactory {
         }
         RangeSetting<Short> setting = new RangeSetting<Short>(name, shortValue, defaultShort,
                 Short.valueOf(minValue), Short.valueOf(maxValue), preferences);
-        preferences.registerSetting(name, setting);
+        if (preferences!=null)
+            preferences.registerSetting(name, setting);
         return setting;
     }
 
@@ -153,7 +160,8 @@ public final class PreferencesFactory {
         Set<String> values = PreferencesCodec.deserializeSet(name, preferences);
         Setting<Set<String>> setting = new Setting<Set<String>>(name, values,
                 null, preferences);
-        preferences.registerSetting(name, setting);
+        if (preferences!=null)
+            preferences.registerSetting(name, setting);
         return setting;
     }
 
@@ -162,14 +170,15 @@ public final class PreferencesFactory {
         List<String> values = PreferencesCodec.deserializeList(name, preferences);
         Setting<List<String>> setting = new Setting<List<String>>(name, values,
                 null, preferences);
-        preferences.registerSetting(name, setting);
+        if (preferences!=null)
+            preferences.registerSetting(name, setting);
         return setting;
     }
 
     ///// special purpose factory methods
     public static Setting<Integer> createListeningPortSetting(String name,
                                                               Preferences preferences) {
-        String value = preferences.getLoadedProperty(name);
+        String value = preferences!=null ? preferences.getLoadedProperty(name) : null;// = null;
         int port;
         try {
             port = Integer.parseInt(value);
@@ -185,7 +194,8 @@ public final class PreferencesFactory {
         }
         Setting<Integer> setting = new Setting<Integer>(name, Integer.valueOf(port),
                 null, preferences);
-        preferences.registerSetting(name, setting);
+        if (preferences!=null)
+            preferences.registerSetting(name, setting);
         return setting;
     }
     ///// END special purpose factory methods

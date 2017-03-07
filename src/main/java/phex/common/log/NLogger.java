@@ -37,60 +37,60 @@ public class NLogger {
      * @param clazz
      * @return a log instance.
      */
-    private static Logger getLogInstance(Class<?> clazz) {
+    private static Logger logger(Class<?> clazz) {
         return LoggerFactory.getLogger(clazz);
     }
 
 
     public static boolean isDebugEnabled(Class<?> clazz) {
-        return getLogInstance(clazz).isDebugEnabled();
+        return logger(clazz).isDebugEnabled();
     }
 
 
     public static boolean isWarnEnabled(Class<?> clazz) {
-        return getLogInstance(clazz).isWarnEnabled();
+        return logger(clazz).isWarnEnabled();
     }
 
     public static void debug(Class<?> clazz, String message) {
-        getLogInstance(clazz).debug(message);
+        logger(clazz).debug(message);
     }
 
     public static void debug(Class<?> clazz, Throwable t) {
-        getLogInstance(clazz).debug(t.toString(), t);
+        logger(clazz).debug(t.toString(), t);
     }
 
 
     public static void debug(Class<?> clazz, Object message, Throwable t) {
-        getLogInstance(clazz).debug(message.toString(), t);
+        logger(clazz).debug(message.toString(), t);
     }
 
 
     public static void info(Class<?> clazz, String message) {
-        getLogInstance(clazz).info(message);
+        logger(clazz).info(message);
     }
 
     public static void warn(Class<?> clazz, Object message, Throwable t) {
-        getLogInstance(clazz).warn(message.toString(), t);
+        logger(clazz).warn(message.toString(), t);
     }
 
 
     public static void warn(Class<?> clazz, String message) {
-        getLogInstance(clazz).warn(message);
+        logger(clazz).warn(message);
     }
 
     public static void warn(Class<?> clazz, Throwable t) {
-        getLogInstance(clazz).warn(t.toString(), t);
+        logger(clazz).warn(t.toString(), t);
     }
 
     public static void error(Class<?> clazz, String message) {
-        getLogInstance(clazz).error(message);
+        logger(clazz).error(message);
     }
 
     public static void error(Class<?> clazz, Throwable t) {
-        getLogInstance(clazz).error(t.toString(), t);
+        logger(clazz).error(t.toString(), t);
     }
 
     public static void error(Class<?> clazz, Object message, Throwable t) {
-        getLogInstance(clazz).error(message.toString(), t);
+        logger(clazz).error(message.toString(), t);
     }
 }

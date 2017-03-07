@@ -24,7 +24,6 @@ package phex.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import phex.common.AltLocContainerTest;
-import phex.prefs.core.PhexCorePrefs;
 import phex.util.IOUtilTest;
 import phex.util.Localizer;
 import phex.util.SystemProperties;
@@ -64,8 +63,7 @@ public class PhexTestSuite extends TestSuite
         Localizer.initialize( "en_US" );
         System.setProperty( SystemProperties.PHEX_CONFIG_PATH_SYSPROP, 
             path.toString() );
-        
-        PhexCorePrefs.init();
+
     }
 
     public static Test suite()

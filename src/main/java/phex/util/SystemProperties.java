@@ -21,7 +21,7 @@
  */
 package phex.util;
 
-import phex.api.Phex;
+import phex.Phex;
 import phex.prefs.core.ProxyPrefs;
 
 import java.io.File;

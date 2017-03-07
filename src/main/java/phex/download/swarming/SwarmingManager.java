@@ -23,7 +23,7 @@ package phex.download.swarming;
 
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
-import phex.api.Phex;
+import phex.Phex;
 import phex.common.*;
 import phex.common.bandwidth.BandwidthController;
 import phex.common.file.FileManager;

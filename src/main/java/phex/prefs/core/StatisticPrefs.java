@@ -22,10 +22,11 @@
  */
 package phex.prefs.core;
 
+import phex.prefs.api.Preferences;
 import phex.prefs.api.PreferencesFactory;
 import phex.prefs.api.Setting;
 
-public class StatisticPrefs extends PhexCorePrefs {
+public class StatisticPrefs  {
     /**
      * The total number of completed downloads tracked.
      */
@@ -42,10 +43,10 @@ public class StatisticPrefs extends PhexCorePrefs {
      */
     public static final Setting<Float> FractionalUptime;
 
-    /**
-     * Counts the total number of Phex startups.
-     */
-    public static final Setting<Integer> TotalStartupCounter;
+//    /**
+//     * Counts the total number of Phex startups.
+//     */
+//    public static final Setting<Integer> TotalStartupCounter;
 
     /**
      * The total uptime of the last movingTotalUptimeCount starts.
@@ -78,14 +79,16 @@ public class StatisticPrefs extends PhexCorePrefs {
     public static final Setting<Integer> QueryHistoryEntries;
 
     static {
+        Preferences instance = null;
+
         TotalDownloadCount = PreferencesFactory.createIntSetting(
                 "Statistic.TotalDownloadCount", 0, instance);
         TotalUploadCount = PreferencesFactory.createIntSetting(
                 "Statistic.TotalUploadCount", 0, instance);
         FractionalUptime = PreferencesFactory.createFloatSetting(
                 "Statistic.FractionalUptime", 0, instance);
-        TotalStartupCounter = PreferencesFactory.createIntSetting(
-                "Statistic.TotalStartupCounter", 0, instance);
+//        TotalStartupCounter = PreferencesFactory.createIntSetting(
+//                "Statistic.TotalStartupCounter", 0, instance);
         MovingTotalUptime = PreferencesFactory.createLongSetting(
                 "Statistic.MovingTotalUptime", 0, instance);
         MovingTotalUptimeCount = PreferencesFactory.createIntSetting(

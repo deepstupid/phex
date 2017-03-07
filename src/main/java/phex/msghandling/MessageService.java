@@ -264,7 +264,7 @@ public class MessageService extends AbstractLifeCycle {
         messageRouting.checkAndAddToPingRoutingTable(pingMsg.getHeader().getMsgID(),
                 Host.LOCAL_HOST);
         if (logger.isDebugEnabled()) {
-            logger.debug("Queueing Ping: {} - {} - Host: {}", pingMsg.toString(), pingMsg.getHeader().toString(), host.toString());
+            logger.debug("Queueing Ping: {} - {} - Host: {}", pingMsg, pingMsg.getHeader(), host);
         }
         host.queueMessageToSend(pingMsg);
     }
@@ -418,9 +418,9 @@ public class MessageService extends AbstractLifeCycle {
     public void sendUdpPing(DestAddress address) {
         PingMsg udpPing = PingMsg.createUdpPingMsg(servent.isUltrapeer());
         udpHandler.sendUdpPing(udpPing, address);
-        logger.debug("Sent Udp Ping to" + address + " : " + udpPing + " with Scp Byte : " +
-                udpPing.getScpByte() != null ? String.valueOf(udpPing.getScpByte()[0]) : "null"
-        );
+//        logger.debug("Sent Udp Ping to" + address + " : " + udpPing + " with Scp Byte : " +
+//                udpPing.getScpByte() != null ? String.valueOf(udpPing.getScpByte()[0]) : "null"
+//        );
     }
 
     public void sendUdpMessageAcknowledgementVMsg(GUID id, int resultCount, byte[] securityToken,
@@ -438,7 +438,7 @@ public class MessageService extends AbstractLifeCycle {
             try {
                 numberOfTCPRedirectsSent = 0;
             } catch (Throwable th) {
-                logger.error(th.toString(), th);
+                logger.error("ResetTCPRedirectCounter {}", th);
             }
         }
     }

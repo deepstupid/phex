@@ -21,7 +21,7 @@
  */
 package phex.share;
 
-import phex.api.Phex;
+import phex.Phex;
 import phex.common.address.DestAddress;
 import phex.common.format.NumberFormatUtils;
 import phex.common.log.NLogger;

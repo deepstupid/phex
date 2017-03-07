@@ -27,7 +27,7 @@ import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import phex.api.Phex;
+import phex.Phex;
 import phex.common.*;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;

@@ -217,7 +217,7 @@ class MessageDispatcher {
 
     public void handlePing(PingMsg pingMsg, Host sourceHost) {
         if (logger.isDebugEnabled()) {
-            logger.debug("Received Ping: {} - {}", pingMsg.toString(), pingMsg.getHeader().toString());
+            logger.debug("Received Ping: {} - {}", pingMsg, pingMsg.getHeader());
         }
 
 
@@ -231,7 +231,6 @@ class MessageDispatcher {
         if (!msgRouting.checkAndAddToPingRoutingTable(header.getMsgID(),
                 sourceHost)) {
             dropMessage(pingMsg, "Dropping already seen ping", sourceHost);
-            return;
         } else {
 
             // count ping statistic
@@ -311,7 +310,7 @@ class MessageDispatcher {
      */
     public void handlePong(PongMsg msg, Host sourceHost) {
         if (logger.isDebugEnabled()) {
-            logger.debug("Received Pong: {} - {}", msg.getDebugString(), msg.getHeader().toString());
+            logger.debug("Received Pong: {} - {}", msg.getDebugString(), msg.getHeader());
         }
 
         // count pong statistic
@@ -367,7 +366,7 @@ class MessageDispatcher {
 
     public void handleQuery(QueryMsg msg, Host sourceHost) {
         if (logger.isDebugEnabled()) {
-            logger.debug("Received Query: {} - {}", msg.toString(), msg.getHeader().toString());
+            logger.debug("Received Query: {} - {}", msg, msg.getHeader());
         }
 
         // count query statistic
@@ -575,7 +574,7 @@ class MessageDispatcher {
 
     public void handleVendorMessage(VendorMsg vendorMsg, Host sourceHost) {
         if (logger.isDebugEnabled()) {
-            logger.debug("Received VendorMsg: {} - {}", vendorMsg.toString(), vendorMsg.getHeader().toString());
+            logger.debug("Received VendorMsg: {} - {}", vendorMsg, vendorMsg.getHeader());
         }
 
         if (vendorMsg instanceof MessagesSupportedVMsg) {
@@ -734,22 +733,22 @@ class MessageDispatcher {
     }
 
     private void dropMessage(Message msg, String reason, Host sourceHost) {
-        logger.info("Dropping message: {} from: {}", reason, sourceHost);
-        if (logger.isDebugEnabled()) {
-            logger.debug("Header: [{}] - Message: [{}].", msg.getHeader().toString(), msg.toString());
-        }
+        logger.debug("Dropping message: {} from: {}", reason, sourceHost);
+        //logger.debug("Header: [{}] - Message: [{}].", msg.getHeader(), msg);
+
+        dropedMsgInCounter.increment(1);
+
         if (sourceHost != null) {
             sourceHost.incReceivedDropCount();
         }
-        dropedMsgInCounter.increment(1);
+
     }
 
     public void dropMessage(MsgHeader header, byte[] body, String reason, Host sourceHost) {
 
-        logger.info("Dropping message: {} from: {}", reason, sourceHost);
-        if (logger.isDebugEnabled()) {
-            logger.debug("Header: [{}] - Body: [{}].", header.toString(), HexConverter.toHexString(body, 0, header.getDataLength()));
-        }
+        logger.debug("Dropping message: {} from: {}", reason, sourceHost);
+        //logger.debug("Header: [{}] - Body: [{}].", header, HexConverter.toHexString(body, 0, header.getDataLength()));
+
         if (sourceHost != null) {
             sourceHost.incReceivedDropCount();
         }

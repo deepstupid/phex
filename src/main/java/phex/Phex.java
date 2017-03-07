@@ -19,10 +19,12 @@
  *  --- SVN Information ---
  *  $Id:$
  */
-package phex.api;
+package phex;
 
+import ch.qos.logback.classic.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import phex.api.*;
 import phex.common.Environment;
 import phex.common.PhexVersion;
 import phex.common.URN;
@@ -46,6 +48,18 @@ import java.util.*;
 
 /** Phex Peer */
 public class Phex implements IPhexDriver {
+
+    static {
+        boolean DEBUG = true;
+        if (!DEBUG) {
+            ((ch.qos.logback.classic.Logger) (LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME)))
+                    .setLevel(Level.INFO);
+        }
+    }
+
+    public static void main(String args[]) throws Exception {
+        Phex.the().start();
+    }
 
     public static final FileManager files = new FileManager();
 

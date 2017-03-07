@@ -23,7 +23,7 @@ package phex.host;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import phex.api.Phex;
+import phex.Phex;
 import phex.common.Environment;
 import phex.common.PhexVersion;
 import phex.common.address.DefaultDestAddress;

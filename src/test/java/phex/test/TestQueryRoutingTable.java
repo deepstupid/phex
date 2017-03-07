@@ -24,7 +24,6 @@ package phex.test;
 import junit.framework.TestCase;
 import phex.common.QueryRoutingTable;
 import phex.msg.*;
-import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
 import phex.share.ShareFile;
 import phex.util.AccessUtils;
@@ -48,8 +47,7 @@ public class TestQueryRoutingTable extends TestCase
     protected void setUp()
     {
         /// should not depend on these
-        PhexCorePrefs.init();
-//        PhexGuiPrefs.init();
+        //        PhexGuiPrefs.init();
 //        Localizer.initialize( InterfacePrefs.LocaleName.get() );
         Servent servent = Servent.servent;
         

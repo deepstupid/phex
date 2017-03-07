@@ -22,7 +22,7 @@
 package phex.chat;
 
 import org.bouncycastle.util.encoders.Base64;
-import phex.api.Phex;
+import phex.Phex;
 import phex.common.Environment;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;

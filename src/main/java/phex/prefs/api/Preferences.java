@@ -43,6 +43,8 @@ public class Preferences {
 
         settingMap = new HashMap<String, Setting<?>>();
         valueProperties = new Properties();
+
+        load();
     }
 
 
@@ -101,8 +103,8 @@ public class Preferences {
             IOUtil.closeQuietly(inStream);
         }
         valueProperties = loadProperties;
-        
-        
+
+
         /*
 
         deserializeSimpleFields();
@@ -118,16 +120,16 @@ public class Preferences {
             mListeningPort += 4000;
         }
         updateSystemSettings();
-        
+
         // count startup...
         totalStartupCounter ++;
-        
+
         // make sure directories exists...
         File dir = new File( mDownloadDir );
         dir.mkdirs();
         dir = new File( incompleteDir );
         dir.mkdirs();
-        
+
         */
     }
 

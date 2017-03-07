@@ -82,21 +82,23 @@ public class DownloadDataWriter implements Runnable {
                 while (isWriteCycleRequested);
                 // loop around write cycles as long as data is filling...
                 // this is necessary for very fast downloads..
-                waitForNotify();
+
+                //NLogger.debug(DownloadDataWriter.class, "Waiting...");
+
+                synchronized (this) {
+                    try {
+                        wait(5000);
+                    } catch (InterruptedException exp) {
+                        NLogger.error(DownloadDataWriter.class, exp, exp);
+                    }
+                }
+
+                //NLogger.debug(DownloadDataWriter.class, "Woke...");
+
             } catch (Throwable th) {
                 NLogger.error(DownloadDataWriter.class, th, th);
             }
         }
-    }
-
-    private synchronized void waitForNotify() {
-        NLogger.debug(DownloadDataWriter.class, "Waiting...");
-        try {
-            wait(5000);
-        } catch (InterruptedException exp) {
-            NLogger.error(DownloadDataWriter.class, exp, exp);
-        }
-        NLogger.debug(DownloadDataWriter.class, "Woke...");
     }
 
     public synchronized void triggerWriteCycle() {

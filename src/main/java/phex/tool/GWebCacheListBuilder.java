@@ -21,7 +21,7 @@
  */
 package phex.tool;
 
-import phex.api.Phex;
+import phex.Phex;
 
 import java.io.*;
 import java.net.MalformedURLException;

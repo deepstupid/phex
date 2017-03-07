@@ -163,24 +163,28 @@ public class MessageQueue {
         }
     }
 
-    public void addMessage(Message msg) {
+    public void addMessage(Message msg, Host.SendEngine sendEngine) {
         int priority = calculatePriority(msg);
         synchronized (this) {
             //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
             //    "Adding message to queue: " + msg );
 
             flowControlQueue[priority].addMessage(msg);
-            int tmpDropCount = flowControlQueue[priority].getAndResetDropCount();
-            // count sent drop
-            host.incSentDropCount(tmpDropCount);
-
-            StatisticsManager statMgr = Servent.servent.getStatisticsService();
-            ((SimpleStatisticProvider) statMgr.getStatisticProvider(
-                    StatisticProviderConstants.DROPEDMSG_OUT_PROVIDER)).increment(tmpDropCount);
-            // update queuedCount.
-            queuedCount += 1 - tmpDropCount;
-            lastPriorityAdded = priority;
         }
+
+        int tmpDropCount = flowControlQueue[priority].getAndResetDropCount();
+        // count sent drop
+        host.incSentDropCount(tmpDropCount);
+
+        StatisticsManager statMgr = Servent.servent.getStatisticsService();
+        ((SimpleStatisticProvider) statMgr.getStatisticProvider(
+                StatisticProviderConstants.DROPEDMSG_OUT_PROVIDER)).increment(tmpDropCount);
+        // update queuedCount.
+        queuedCount += 1 - tmpDropCount;
+        lastPriorityAdded = priority;
+
+
+        sendEngine.dispatch();
     }
 
     public void sendQueuedMessages()
@@ -194,8 +198,10 @@ public class MessageQueue {
             queue = flowControlQueue[i];
             queue.initNewMessageBurst();
             while (true) {
-                synchronized (this) {
+
                     msg = queue.removeMessage();
+
+
                     //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
                     //    "Getting message from queue: " + msg );
                     int tmpDropCount = queue.getAndResetDropCount();
@@ -218,7 +224,7 @@ public class MessageQueue {
                     if (msg == null) {
                         break;
                     }
-                }
+
                 host.sendMessage(msg);
             }
             if (isQueueEmpty) {// break if queue is empty

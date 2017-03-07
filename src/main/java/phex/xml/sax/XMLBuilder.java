@@ -22,7 +22,7 @@
  */
 package phex.xml.sax;
 
-import phex.api.Phex;
+import phex.Phex;
 import phex.common.file.*;
 import phex.common.log.NLogger;
 import phex.util.IOUtil;

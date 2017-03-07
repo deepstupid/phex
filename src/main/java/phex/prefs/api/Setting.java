@@ -79,18 +79,20 @@ public class Setting<T> {
      * provided.
      */
     protected void fireChanged(T oldValue, T newValue) {
-        preferences.fireSettingChanged(new SettingChangedEvent<T>(this,
-                oldValue, newValue));
+        if (preferences!=null)
+            preferences.fireSettingChanged(new SettingChangedEvent<T>(this,
+                    oldValue, newValue));
     }
 
-    /**
-     * Method to notify that a setting has changed. Can be used in case
-     * a setting is changed without calling its set() method i.e. Collections.
-     */
-    public void fireChanged() {
-        preferences.fireSettingChanged(new SettingChangedEvent<T>(this,
-                null, null));
-    }
+//    /**
+//     * Method to notify that a setting has changed. Can be used in case
+//     * a setting is changed without calling its set() method i.e. Collections.
+//     */
+//    public void fireChanged() {
+//        if (preferences!=null)
+//            preferences.fireSettingChanged(new SettingChangedEvent<T>(this,
+//                    null, null));
+//    }
 
     public T get() {
         return value;

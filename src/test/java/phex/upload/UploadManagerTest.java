@@ -7,7 +7,6 @@ import net.sourceforge.groboutils.junit.v1.TestMonitorRunnable;
 import net.sourceforge.groboutils.junit.v1.TestRunnable;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.IpAddress;
-import phex.prefs.core.PhexCorePrefs;
 import phex.prefs.core.UploadPrefs;
 import phex.servent.Servent;
 import phex.util.RandomUtils;
@@ -25,8 +24,7 @@ public class UploadManagerTest extends TestCase
     @Override
     public void setUp()
     {
-        PhexCorePrefs.init();
-//        PhexGuiPrefs.init();
+        //        PhexGuiPrefs.init();
 //        Localizer.initialize( InterfacePrefs.LocaleName.get() );
         Servent servent = Servent.servent;
         uploadManager = new UploadManager( servent );

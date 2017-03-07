@@ -28,7 +28,7 @@ import org.apache.commons.httpclient.params.DefaultHttpParams;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.params.HttpParams;
-import phex.api.Phex;
+import phex.Phex;
 
 public class HttpClientFactory {
     private static final HttpConnectionManager connectionManager;

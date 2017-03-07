@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import phex.common.Environment;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
-import phex.connection.ConnectionStatusEvent.Status;
 import phex.host.*;
 import phex.net.connection.Connection;
 import phex.net.connection.ConnectionFactory;
@@ -118,17 +117,11 @@ public class OutgoingConnectionDispatcher implements Runnable {
         try {
             connection = ConnectionFactory.createConnection(hostAddress,
                     servent.getBandwidthService().getNetworkBandwidthController());
-        } catch (IOException exp) {
-            reportStatus(Status.CONNECTION_FAILED);
-            host.setStatus(HostStatus.ERROR, exp.getMessage());
-            host.disconnect();
-            logger.error("connect: {}", exp.getMessage());
-            return;
         } catch (Exception exp) {
-            reportStatus(Status.CONNECTION_FAILED);
+
             host.setStatus(HostStatus.ERROR, exp.getMessage());
             host.disconnect();
-            NLogger.warn(OutgoingConnectionDispatcher.class, exp, exp);
+            logger.debug("can not connect: {} {}", hostAddress, exp.getMessage());
             return;
         }
 
@@ -140,26 +133,26 @@ public class OutgoingConnectionDispatcher implements Runnable {
             engine = new ConnectionEngine(servent, host);
             engine.initHostHandshake();
         } catch (ConnectionRejectedException exp) {
-            reportStatus(Status.HANDSHAKE_REJECTED);
+
             host.setStatus(HostStatus.ERROR, exp.getMessage());
             host.disconnect();
-            logger.debug("connect {}", exp.getMessage());
+            logger.debug("connect {} {}", host, exp.getMessage());
             return;
         } catch (IOException exp) {
-            reportStatus(Status.HANDSHAKE_FAILED);
+
             host.setStatus(HostStatus.ERROR, exp.getMessage());
             host.disconnect();
-            logger.debug("connect {}", exp.getMessage());
+            logger.debug("connect {} {}", host, exp.getMessage());
             return;
         } catch (Exception exp) {
-            reportStatus(Status.HANDSHAKE_FAILED);
+
             host.setStatus(HostStatus.ERROR, exp.getMessage());
             host.disconnect();
             logger.warn("connect {}", exp);
             return;
         }
 
-        reportStatus(Status.SUCCESSFUL);
+        logger.info("connected {}", host);
 
         try {
             engine.processIncomingData();
@@ -178,7 +171,4 @@ public class OutgoingConnectionDispatcher implements Runnable {
         }
     }
 
-    private void reportStatus(Status status) {
-
-    }
 }

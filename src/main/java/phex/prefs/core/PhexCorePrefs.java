@@ -25,44 +25,22 @@ import phex.common.Environment;
 import phex.common.EnvironmentConstants;
 import phex.common.PhexVersion;
 import phex.prefs.api.Preferences;
-import phex.util.StringUtils;
 
-public class PhexCorePrefs extends Preferences {
-    protected static final PhexCorePrefs instance;
+public class PhexCorePrefs {
+    protected static final Preferences instance;
 
     static {
-        instance = new PhexCorePrefs();
-    }
+        instance = new Preferences(Environment.getPhexConfigFile(EnvironmentConstants.CORE_PREFERENCES_FILE_NAME));
 
-    protected PhexCorePrefs() {
-        super(Environment.getPhexConfigFile(
-                EnvironmentConstants.CORE_PREFERENCES_FILE_NAME));
-    }
-
-    public static void init() {
-        instance.load();
-        PhexCorePrefs.updatePreferences();
-
-        // count startup...
-        StatisticPrefs.TotalStartupCounter.set(Integer.valueOf(
-                StatisticPrefs.TotalStartupCounter.get().intValue() + 1));
-    }
-
-    public static void save(boolean force) {
-        if (force) {
-            instance.saveRequiredNotify();
-        }
-        instance.save();
     }
 
 
-    public static void updatePreferences() {
-        // first find out if this is the first time Phex is running...
-        if (StringUtils.isEmpty(UpdatePrefs.RunningBuildNumber.get())) {
-            // this seems to be the first time phex is running...
-            // in this case we are not updating... we use default values...
-        }
-        UpdatePrefs.RunningBuildNumber.set(PhexVersion.getBuild());
-        UpdatePrefs.RunningPhexVersion.set(PhexVersion.getVersion());
-    }
+    //    public static void save(boolean force) {
+//        if (force) {
+//            instance.saveRequiredNotify();
+//        }
+//        instance.save();
+//    }
+
+
 }

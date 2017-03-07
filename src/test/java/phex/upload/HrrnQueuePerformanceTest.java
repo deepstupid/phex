@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 import phex.common.address.DefaultDestAddress;
 import phex.common.bandwidth.BandwidthController;
 import phex.prefs.core.BandwidthPrefs;
-import phex.prefs.core.PhexCorePrefs;
 import phex.servent.Servent;
 import phex.share.ShareFile;
 
@@ -46,8 +45,7 @@ public class HrrnQueuePerformanceTest extends TestCase
     
     public void setUp()
     {
-        PhexCorePrefs.init();
-//        PhexGuiPrefs.init();
+        //        PhexGuiPrefs.init();
 //        Localizer.initialize( InterfacePrefs.LocaleName.get() );
         Servent servent = Servent.servent;
         uploadManager = new UploadManager( servent );

@@ -22,7 +22,7 @@
 package phex.http;
 
 import org.apache.commons.collections4.map.LinkedMap;
-import phex.api.Phex;
+import phex.Phex;
 
 import java.util.*;
 

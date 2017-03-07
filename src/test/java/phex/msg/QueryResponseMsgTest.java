@@ -29,7 +29,6 @@ import phex.io.buffer.ByteBuffer;
 import phex.net.connection.Connection;
 import phex.prefs.core.LibraryPrefs;
 import phex.prefs.core.NetworkPrefs;
-import phex.prefs.core.PhexCorePrefs;
 import phex.query.QHDFlag;
 import phex.security.PhexSecurityManager;
 import phex.util.DummySocketFacade;
@@ -47,8 +46,7 @@ public class QueryResponseMsgTest extends TestCase
     protected void setUp()
     {
         // should not depend on these
-        PhexCorePrefs.init();
-        
+
         securityService = new PhexSecurityManager();
     }
 

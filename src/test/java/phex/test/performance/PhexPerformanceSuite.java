@@ -23,7 +23,6 @@ package phex.test.performance;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import phex.prefs.core.PhexCorePrefs;
 import phex.util.Localizer;
 import phex.util.SystemProperties;
 
@@ -60,8 +59,6 @@ public class PhexPerformanceSuite extends TestSuite
         Localizer.initialize( "en_US" );
         System.setProperty( SystemProperties.PHEX_CONFIG_PATH_SYSPROP, 
             path.toString() );
-        
-        PhexCorePrefs.init();
 
     }
 

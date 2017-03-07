@@ -39,7 +39,7 @@ public class GUIDRoutingTable {
      * The max number of entries in a single route table. This could lead to have
      * a total of 2 * MAX_ROUTE_TABLE_SIZE entries in total.
      */
-    private static final int MAX_ROUTE_TABLE_SIZE = 50000;
+    private static final int MAX_ROUTE_TABLE_SIZE = 64 * 1024;
     protected final Map<Integer, Host> idToHostMap;
     protected final Map<Host, Integer> hostToIdMap;
     /**
@@ -110,7 +110,7 @@ public class GUIDRoutingTable {
         }
 
 
-        int id = getIdForHost(host);
+        int id = id(host);
 
         // try to find and remove existing entry obj in currentMap and lastMap
         Entry entry = currentMap.remove(guid);
@@ -157,7 +157,7 @@ public class GUIDRoutingTable {
                 if (v != null)
                     return v;
 
-                int id = getIdForHost(host);
+                int id = id(host);
                 Entry entry = createNewEntry();
                 entry.hostId = id;
                 added[0] = true;
@@ -226,21 +226,19 @@ public class GUIDRoutingTable {
      * @param host the host to get the id for.
      * @return the id of the host.
      */
-    protected int getIdForHost(Host host) {
+    protected int id(Host host) {
+        return hostToIdMap.computeIfAbsent(host, (h) -> {
+            int id;
 
-        Integer id = hostToIdMap.get(host);
-        if (id != null) {
-            return id;
-        }
-        synchronized (this) {
             // find free id
             do {
                 id = nextId++;
             } while (idToHostMap.get(id) != null);
-        }
-        idToHostMap.put(id, host);
-        hostToIdMap.put(host, id);
-        return id;
+
+            idToHostMap.put(id, host);
+
+            return id;
+        });
     }
 
     protected Entry createNewEntry() {

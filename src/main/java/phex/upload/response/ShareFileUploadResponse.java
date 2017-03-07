@@ -21,7 +21,7 @@
  */
 package phex.upload.response;
 
-import phex.api.Phex;
+import phex.Phex;
 import phex.common.file.ManagedFileException;
 import phex.common.file.ReadOnlyManagedFile;
 import phex.common.log.NLogger;

@@ -21,7 +21,7 @@
  */
 package phex.common.file;
 
-import phex.api.Phex;
+import phex.Phex;
 import phex.common.log.NLogger;
 import phex.io.buffer.ByteBuffer;
 import phex.util.FileUtils;
@@ -54,11 +54,11 @@ public class ManagedFile implements ReadOnlyManagedFile {
      * is locked foreever.
      */
     public void acquireFileLock() {
-        NLogger.debug(ManagedFile.class, "Acquire file lock " + this);
+        //NLogger.debug(ManagedFile.class, "Acquire file lock " + this);
         try {
             lock.lock();
         } finally {
-            NLogger.debug(ManagedFile.class, "Acquired file lock " + this);
+            //NLogger.debug(ManagedFile.class, "Acquired file lock " + this);
         }
     }
 
@@ -66,7 +66,7 @@ public class ManagedFile implements ReadOnlyManagedFile {
      * Releases a file lock.
      */
     public void releaseFileLock() {
-        NLogger.debug(ManagedFile.class, "Releasing " + this);
+        //NLogger.debug(ManagedFile.class, "Releasing " + this);
         lock.unlock();
     }
 
@@ -127,7 +127,7 @@ public class ManagedFile implements ReadOnlyManagedFile {
         lock.lock();
         try {
             try {
-                NLogger.debug(ManagedFile.class, "Closing file.");
+                //NLogger.debug(ManagedFile.class, "Closing file.");
                 raFile.close();
             } catch (Exception exp) {
                 throw new ManagedFileException("failed to close", exp);

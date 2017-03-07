@@ -21,7 +21,7 @@
  */
 package phex.security;
 
-import phex.api.Phex;
+import phex.Phex;
 import phex.common.*;
 import phex.common.address.AddressUtils;
 import phex.common.address.DestAddress;

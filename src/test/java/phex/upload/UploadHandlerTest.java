@@ -7,7 +7,6 @@ import phex.http.GnutellaHeaderNames;
 import phex.http.GnutellaRequest;
 import phex.http.HTTPHeader;
 import phex.http.HTTPRequest;
-import phex.prefs.core.PhexCorePrefs;
 import phex.prefs.core.UploadPrefs;
 import phex.servent.Servent;
 import phex.share.ShareFile;
@@ -24,8 +23,7 @@ public class UploadHandlerTest extends TestCase
     
     public void setUp()
     {
-        PhexCorePrefs.init();
-//        PhexGuiPrefs.init();
+        //        PhexGuiPrefs.init();
 //        Localizer.initialize( InterfacePrefs.LocaleName.get() );
         Servent servent = Servent.servent;
         uploadManager = new UploadManager( servent );
