@@ -25,7 +25,7 @@ import phex.download.RemoteFile;
 import phex.download.swarming.*;
 import phex.msg.GUID;
 import phex.query.QueryHitHost;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.util.AccessUtils;
 
 public class TestDownload extends TestCase

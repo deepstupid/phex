@@ -30,14 +30,14 @@ import phex.common.bandwidth.BandwidthController;
 import phex.common.log.LogBuffer;
 import phex.http.HTTPRequest;
 import phex.net.connection.Connection;
-import phex.prefs.core.UploadPrefs;
-import phex.servent.Peer;
+import phex.UploadPrefs;
+import phex.peer.Peer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
 
-public class UploadManager {
+public class UploadManager extends UploadPrefs {
     private static final Logger logger = LoggerFactory.getLogger(UploadManager.class);
 
     private final AddressCounter uploadIPCounter;
@@ -50,13 +50,14 @@ public class UploadManager {
     public final Peer peer;
 
     public UploadManager(Peer peer) {
+        super(peer.file(Peer.UPLOAD_PREFS_FILE_NAME));
         this.peer = peer;
         uploadStateList = new ArrayList<UploadState>();
         queuedStateList = new ArrayList<UploadState>();
         uploadIPCounter = new AddressCounter(
-                UploadPrefs.MaxUploadsPerIP.get().intValue(), false);
-        if (UploadPrefs.UploadStateLogBufferSize.get().intValue() > 0) {
-            uploadStateLogBuffer = new LogBuffer(UploadPrefs.UploadStateLogBufferSize.get().intValue());
+                this.MaxUploadsPerIP.get().intValue(), false);
+        if (this.UploadStateLogBufferSize.get().intValue() > 0) {
+            uploadStateLogBuffer = new LogBuffer(this.UploadStateLogBufferSize.get().intValue());
         }
 
         Environment.getInstance().scheduleTimerTask(
@@ -78,7 +79,7 @@ public class UploadManager {
      * Returns true if all upload slots are filled.
      */
     public boolean isHostBusy() {
-        return getUploadingCount() >= UploadPrefs.MaxParallelUploads.get().intValue();
+        return getUploadingCount() >= this.MaxParallelUploads.get().intValue();
     }
 
     /**
@@ -86,14 +87,14 @@ public class UploadManager {
      */
     public boolean isQueueLimitReached() {
         synchronized (queuedStateList) {
-            return queuedStateList.size() >= UploadPrefs.MaxQueueSize.get().intValue();
+            return queuedStateList.size() >= this.MaxQueueSize.get().intValue();
         }
     }
 
     public boolean validateAndCountAddress(DestAddress address) {
         synchronized (uploadIPCounter) {
             // update count...
-            uploadIPCounter.setMaxCount(UploadPrefs.MaxUploadsPerIP.get().intValue());
+            uploadIPCounter.setMaxCount(this.MaxUploadsPerIP.get().intValue());
             return uploadIPCounter.validateAndCountAddress(address);
         }
     }
@@ -306,7 +307,7 @@ public class UploadManager {
         @Override
         public void run() {
             try {
-                if (UploadPrefs.AutoRemoveCompleted.get().booleanValue()) {
+                if (UploadManager.this.AutoRemoveCompleted.get().booleanValue()) {
                     cleanUploadStateList();
                 }
             } catch (Throwable th) {

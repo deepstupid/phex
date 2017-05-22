@@ -28,8 +28,8 @@ import phex.msg.*;
 import phex.msg.vendor.OOBReplyCountVMsg;
 import phex.msghandling.MessageSubscriber;
 import phex.msghandling.UdpMessageSubscriber;
-import phex.servent.OnlineStatus;
-import phex.servent.Peer;
+import phex.peer.OnlineStatus;
+import phex.peer.Peer;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -24,7 +24,7 @@ package phex.connection;
 import phex.host.Host;
 import phex.msg.Message;
 import phex.msg.MsgHeader;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticProviderConstants;
 import phex.statistic.StatisticsManager;

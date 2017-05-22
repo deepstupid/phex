@@ -31,7 +31,6 @@ import phex.io.buffer.BufferSize;
 import phex.io.buffer.ByteBuffer;
 import phex.net.connection.Connection;
 import phex.net.repres.SocketFacade;
-import phex.prefs.core.NetworkPrefs;
 import phex.share.SharedFilesService;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticProviderConstants;
@@ -53,7 +52,7 @@ import java.io.IOException;
  * not count the new upload correctly. But this is a rather rare case...
  */
 public class UploadEngine {
-    private final UploadManager uploadMgr;
+    private final UploadManager uploads;
 
     private final SharedFilesService sharedFilesService;
 
@@ -79,9 +78,9 @@ public class UploadEngine {
                         UploadManager uploadManager, SharedFilesService sharedFilesService) {
         this.sharedFilesService = sharedFilesService;
         this.connection = connection;
-        this.uploadMgr = uploadManager;
+        this.uploads = uploadManager;
         connection.setBandwidthController(
-                uploadMgr.getUploadBandwidthController());
+                uploads.getUploadBandwidthController());
         this.httpRequest = httpRequest;
         isUploadCounted = false;
 
@@ -104,18 +103,18 @@ public class UploadEngine {
                     }
 
                     UploadResponse response = uploadHandler.determineUploadResponse(
-                            httpRequest, uploadState, uploadMgr);
+                            httpRequest, uploadState, uploads);
                     sendHTTPResponse(response.buildHTTPResponseString());
                     if (uploadHandler.isQueued()) {
                         connection.getSocket().setSoTimeout(uploadHandler.getQueueMaxNextPollTime());
                     } else if (response.remainingBody() > 0
                             && !httpRequest.isHeadRequest()) {// when not queued and not head request and body available
                         uploadState.setUploadEngine(this);
-                        connection.getSocket().setSoTimeout(NetworkPrefs.TcpRWTimeout.get().intValue());
+                        connection.getSocket().setSoTimeout(uploads.peer.netPrefs.TcpRWTimeout.get().intValue());
                         sendResponseData(response);
                     }
 
-                    boolean succ = uploadMgr.trySetUploadStatus(uploadState, UploadStatus.COMPLETED);
+                    boolean succ = uploads.trySetUploadStatus(uploadState, UploadStatus.COMPLETED);
                     if (!succ) {
                         // setting to completed should never fail.
                         throw new IOException("Status transition from "
@@ -124,7 +123,7 @@ public class UploadEngine {
                 } catch (IOException exp) {
                     // in the case of sendHTTPResponse() and sendResponseData()
                     // we handle a IOException as a aborted status
-                    boolean succ = uploadMgr.trySetUploadStatus(uploadState, UploadStatus.ABORTED);
+                    boolean succ = uploads.trySetUploadStatus(uploadState, UploadStatus.ABORTED);
                     if (!succ) {
                         // setting to aborted should never fail.
                         throw new IOException("Status transition from "
@@ -148,14 +147,14 @@ public class UploadEngine {
                 }
             }
             while (followUpRequestAvailable);
-            boolean succ = uploadMgr.trySetUploadStatus(uploadState, UploadStatus.FINISHED);
+            boolean succ = uploads.trySetUploadStatus(uploadState, UploadStatus.FINISHED);
             if (!succ) {
                 // setting to finished should never fail.
                 throw new IOException("Status transition from "
                         + uploadState.getStatus() + " to " + UploadStatus.FINISHED + " failed.");
             }
         } catch (Exception exp) {// catch all thats left...
-            boolean succ = uploadMgr.trySetUploadStatus(uploadState, UploadStatus.ABORTED);
+            boolean succ = uploads.trySetUploadStatus(uploadState, UploadStatus.ABORTED);
             if (!succ) {
                 // setting to aborted should never fail.
                 NLogger.error(UploadEngine.class, "Status transition from "
@@ -168,13 +167,13 @@ public class UploadEngine {
                     "Upload state should not be in running status anymore. Request: "
                             + httpRequest.buildHTTPRequestString();
             stopUpload();
-            uploadMgr.releaseUploadAddress(uploadState.getHostAddress());
+            uploads.releaseUploadAddress(uploadState.getHostAddress());
 
             // set to null to give free for gc
             uploadState.setUploadEngine(null);
 
             if (uploadHandler.isQueued()) {
-                uploadMgr.removeQueuedUpload(uploadState);
+                uploads.removeQueuedUpload(uploadState);
             }
         }
     }
@@ -199,14 +198,14 @@ public class UploadEngine {
             response.countUpload();
 
             // Increment the completed uploads count
-            StatisticsManager statMgr = uploadMgr.peer.getStatisticsService();
+            StatisticsManager statMgr = uploads.peer.getStatisticsService();
             SimpleStatisticProvider provider = (SimpleStatisticProvider) statMgr
                     .getStatisticProvider(StatisticProviderConstants.SESSION_UPLOAD_COUNT_PROVIDER);
             provider.increment(1);
             isUploadCounted = true;
         }
 
-        boolean succ = uploadMgr.trySetUploadStatus(uploadState, UploadStatus.UPLOADING_DATA);
+        boolean succ = uploads.trySetUploadStatus(uploadState, UploadStatus.UPLOADING_DATA);
         if (!succ) {
             // setting to uploading should never fail.
             throw new IOException("Status transition from "
@@ -214,7 +213,7 @@ public class UploadEngine {
         }
 
         // open file
-        BandwidthController throttleController = uploadMgr.getUploadBandwidthController();
+        BandwidthController throttleController = uploads.getUploadBandwidthController();
         ByteBuffer byteBuffer = null;
         try {
             byteBuffer = ByteBuffer.allocate(BufferSize._16K);

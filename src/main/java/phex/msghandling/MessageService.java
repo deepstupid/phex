@@ -23,6 +23,7 @@ package phex.msghandling;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import phex.MessagePrefs;
 import phex.bootstrap.UdpHostCacheContainer;
 import phex.common.AbstractLifeCycle;
 import phex.common.Environment;
@@ -35,7 +36,7 @@ import phex.host.NetworkHostsContainer;
 import phex.msg.*;
 import phex.msg.vendor.*;
 import phex.security.PhexSecurityManager;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.share.SharedFilesService;
 
 import java.util.Iterator;
@@ -73,16 +74,16 @@ public class MessageService extends AbstractLifeCycle {
      * The number of TCP redirects sent during the last time frame.
      */
     private int numberOfTCPRedirectsSent;
+    public MessagePrefs prefs;
 
     public MessageService(NetworkHostsContainer netHostsContainer,
                           CaughtHostsContainer caughtHostsContainer, UdpHostCacheContainer uhcContainer,
                           PhexSecurityManager securityService, Peer peer) {
-        if (peer == null) {
-            throw new NullPointerException("Servent missing.");
-        }
 
         this.peer = peer;
         pongCache = new PongCache(peer);
+
+        this.prefs = new MessagePrefs(peer.file(Peer.MESSAGE_PREFS_FILE));
 
         messageRouting = new MessageRouting();
 

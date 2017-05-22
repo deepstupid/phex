@@ -28,7 +28,7 @@ import phex.msg.InvalidMessageException;
 import phex.msg.QueryFactory;
 import phex.msg.QueryResponseMsg;
 import phex.msg.QueryResponseRecord;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.util.SearchEngine;
 
 import java.util.ArrayList;

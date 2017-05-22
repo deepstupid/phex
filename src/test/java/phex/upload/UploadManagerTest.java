@@ -7,8 +7,8 @@ import net.sourceforge.groboutils.junit.v1.TestMonitorRunnable;
 import net.sourceforge.groboutils.junit.v1.TestRunnable;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.IpAddress;
-import phex.prefs.core.UploadPrefs;
-import phex.servent.Peer;
+import phex.UploadPrefs;
+import phex.peer.Peer;
 import phex.util.RandomUtils;
 
 import java.util.HashSet;

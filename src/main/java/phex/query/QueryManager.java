@@ -31,7 +31,7 @@ import phex.msg.QueryMsg;
 import phex.msg.QueryResponseMsg;
 import phex.msg.vendor.OOBReplyCountVMsg;
 import phex.msghandling.MessageService;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 import java.io.File;
 import java.util.TimerTask;

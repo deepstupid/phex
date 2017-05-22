@@ -21,7 +21,7 @@
  */
 package phex.common;
 
-import phex.prefs.core.NetworkPrefs;
+import phex.peer.Peer;
 
 import java.io.File;
 
@@ -32,12 +32,19 @@ import java.io.File;
  * or a named private network the user likes to create or join.
  */
 public abstract class GnutellaNetwork {
-    public static GnutellaNetwork getGnutellaNetworkFromString(String networkName) {
-        if (networkName.equals(NetworkPrefs.GENERAL_GNUTELLA_NETWORK)) {// use general gnutella network.
-            return new GeneralGnutellaNetwork();
+
+    public final Peer peer;
+
+    public static GnutellaNetwork getGnutellaNetworkFromString(Peer peer, String networkName) {
+        if (networkName.equals(peer.netPrefs.GENERAL_GNUTELLA_NETWORK)) {// use general gnutella network.
+            return new GeneralGnutellaNetwork(peer);
         } else {// use named gnutella network.
-            return new NamedGnutellaNetwork(networkName);
+            return new NamedGnutellaNetwork(peer, networkName);
         }
+    }
+
+    protected GnutellaNetwork(Peer peer) {
+        this.peer = peer;
     }
 
     public abstract String getName();

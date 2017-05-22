@@ -24,7 +24,7 @@ package phex.share;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.ThreadTracking;
-import phex.prefs.core.LibraryPrefs;
+import phex.LibraryPrefs;
 import phex.xml.sax.share.DSharedFile;
 import phex.xml.sax.share.DSharedLibrary;
 
@@ -175,7 +175,7 @@ public class FileRescanRunner implements Runnable {
 
     private void buildSharedFilesCache() {
         sharedFilesCache = new HashMap<String, DSharedFile>();
-        DSharedLibrary library = SharedFilesService.loadSharedLibrary(sharing.peer.files);
+        DSharedLibrary library = sharing.loadSharedLibrary();
         if (library == null) {
             // no library found to load...
             return;

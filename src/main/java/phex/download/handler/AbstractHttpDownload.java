@@ -24,7 +24,7 @@ public abstract class AbstractHttpDownload implements DownloadHandler {
             // server headers...
             throw new UnusableHostException("Suspicious response headers.");
         }
-        downloadEngine.getDownloadSet().getCandidate().setVendor(headers[0].getValue());
+        downloadEngine.getDownloadSet().downloadCandidate.setVendor(headers[0].getValue());
     }
 
     protected void updateKeepAliveSupport(HTTPResponse response) {

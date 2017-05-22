@@ -23,7 +23,7 @@
 package phex.common.file;
 
 import org.apache.commons.collections4.map.ReferenceMap;
-import phex.prefs.core.FilePrefs;
+import phex.FilePrefs;
 
 import java.io.File;
 import java.util.Iterator;

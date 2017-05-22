@@ -23,7 +23,7 @@ package phex.msg;
 
 import phex.common.log.NLogger;
 import phex.io.buffer.ByteBuffer;
-import phex.prefs.core.MessagePrefs;
+import phex.MessagePrefs;
 import phex.util.IOUtil;
 
 /**
@@ -98,8 +98,8 @@ public class MsgHeader {
      * @param payload
      * @param dataLength
      */
-    public MsgHeader(byte payload, int dataLength) {
-        this(new GUID(), payload, MessagePrefs.TTL.get().byteValue(), (byte) 0,
+    public MsgHeader(byte payload, int dataLength, byte ttl) {
+        this(new GUID(), payload, ttl, (byte) 0,
                 dataLength);
     }
 
@@ -137,53 +137,53 @@ public class MsgHeader {
         this.dataLength = dataLength;
     }
 
-    /**
-     * creates a message header from a given buffer
-     * sets almost everything, only thing you should set is fromHost
-     *
-     * @param inbuf  buffer array in bytes[]
-     * @param offset from where to start reading
-     * @return MsgHeader
-     * @throws InvalidMessageException
-     */
-    public static MsgHeader createMsgHeader(byte[] inbuf, int offset)
-            throws InvalidMessageException {
-        if ((inbuf.length - offset) < DATA_LENGTH) {
-            throw new InvalidMessageException("The byte array length is less then " +
-                    "the message header length.");
-        }
-
-        // Copy input buffer to my content.
-        byte[] guidBytes = new byte[GUID.DATA_LENGTH];
-        System.arraycopy(inbuf, offset, guidBytes, 0, GUID.DATA_LENGTH);
-        GUID guid = new GUID(guidBytes);
-        offset += GUID.DATA_LENGTH;
-
-        byte payload = inbuf[offset++];
-        byte ttl = inbuf[offset++];
-        byte hopsTaken = inbuf[offset++];
-        int dataLen = IOUtil.deserializeIntLE(inbuf, offset);
-        offset += 4;
-
-        MsgHeader header = new MsgHeader(guid, payload, ttl, hopsTaken,
-                dataLen);
-
-        int length = header.getDataLength();
-
-        if (length < 0) {
-            throw new InvalidMessageException("Negative body size when creating" +
-                    " header from byte array.");
-        } else if (length > MessagePrefs.MaxLength.get()) {
-            NLogger.warn(MsgHeader.class, "Body too big(" + length + "). Header: " +
-                    header + " Byte Array : " + new String(inbuf)
-            );
-            throw new InvalidMessageException("Package too big when creating Message " +
-                    "from byte array: " + header.getDataLength());
-        }
-        header.setArrivalTime(System.currentTimeMillis());
-
-        return header;
-    }
+//    /**
+//     * creates a message header from a given buffer
+//     * sets almost everything, only thing you should set is fromHost
+//     *
+//     * @param inbuf  buffer array in bytes[]
+//     * @param offset from where to start reading
+//     * @return MsgHeader
+//     * @throws InvalidMessageException
+//     */
+//    public static MsgHeader createMsgHeader(byte[] inbuf, int offset)
+//            throws InvalidMessageException {
+//        if ((inbuf.length - offset) < DATA_LENGTH) {
+//            throw new InvalidMessageException("The byte array length is less then " +
+//                    "the message header length.");
+//        }
+//
+//        // Copy input buffer to my content.
+//        byte[] guidBytes = new byte[GUID.DATA_LENGTH];
+//        System.arraycopy(inbuf, offset, guidBytes, 0, GUID.DATA_LENGTH);
+//        GUID guid = new GUID(guidBytes);
+//        offset += GUID.DATA_LENGTH;
+//
+//        byte payload = inbuf[offset++];
+//        byte ttl = inbuf[offset++];
+//        byte hopsTaken = inbuf[offset++];
+//        int dataLen = IOUtil.deserializeIntLE(inbuf, offset);
+//        offset += 4;
+//
+//        MsgHeader header = new MsgHeader(guid, payload, ttl, hopsTaken,
+//                dataLen);
+//
+//        int length = header.getDataLength();
+//
+//        if (length < 0) {
+//            throw new InvalidMessageException("Negative body size when creating" +
+//                    " header from byte array.");
+//        } else if (length > MessagePrefs.MaxLength.get()) {
+//            NLogger.warn(MsgHeader.class, "Body too big(" + length + "). Header: " +
+//                    header + " Byte Array : " + new String(inbuf)
+//            );
+//            throw new InvalidMessageException("Package too big when creating Message " +
+//                    "from byte array: " + header.getDataLength());
+//        }
+//        header.setArrivalTime(System.currentTimeMillis());
+//
+//        return header;
+//    }
 
     /**
      * <p>Get the GUID of this message.</p>

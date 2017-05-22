@@ -26,8 +26,7 @@ import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
 import phex.io.buffer.ByteBuffer;
-import phex.prefs.core.LibraryPrefs;
-import phex.prefs.core.NetworkPrefs;
+import phex.LibraryPrefs;
 import phex.query.QHDFlag;
 import phex.security.PhexSecurityManager;
 import phex.util.HexConverter;
@@ -323,9 +322,9 @@ public class QueryResponseMsg extends Message {
             // private QHD area
             // mark for chat able.
             bodyStream.write(
-                    NetworkPrefs.AllowChatConnection.get() ?
-                            (byte) 0x01 :
-                            (byte) 0x00
+                    //peer.prefs.AllowChatConnection.get() ?
+                            (byte) 0x01
+                            //: (byte) 0x00
             );
 
             //GGEP block

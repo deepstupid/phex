@@ -34,7 +34,7 @@ import phex.download.swarming.SWDownloadCandidate;
 import phex.download.swarming.SWDownloadConstants;
 import phex.download.swarming.SWDownloadFile;
 import phex.download.swarming.SWDownloadSegment;
-import phex.prefs.core.DownloadPrefs;
+import phex.DownloadPrefs;
 import phex.thex.TTHashCalcUtils;
 import phex.xml.sax.downloads.DDownloadFile;
 import phex.xml.sax.downloads.DDownloadScope;

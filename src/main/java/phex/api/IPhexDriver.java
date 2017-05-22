@@ -21,7 +21,7 @@
  */
 package phex.api;
 
-import phex.servent.OnlineStatus;
+import phex.peer.OnlineStatus;
 
 public interface IPhexDriver {
     short SEARCH_STATUS_UNDEFINED = ISearchHandle.STATUS_UNDEFINED;

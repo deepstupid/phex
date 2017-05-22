@@ -23,7 +23,6 @@ package phex.download.swarming;
 
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.URIException;
-import phex.Phex;
 import phex.common.*;
 import phex.common.bandwidth.BandwidthController;
 import phex.common.file.FileManager;
@@ -37,9 +36,9 @@ import phex.event.ChangeEvent;
 import phex.event.ContainerEvent;
 import phex.event.UserMessageListener;
 import phex.msg.QueryResponseMsg;
-import phex.prefs.core.DownloadPrefs;
+import phex.DownloadPrefs;
 import phex.query.DownloadCandidateSnoop;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.share.SharedFilesService;
 import phex.util.FileUtils;
 import phex.util.SubscriptionDownloader;
@@ -154,13 +153,13 @@ public class SwarmingManager extends AbstractLifeCycle {
         downloadList = new ArrayList<SWDownloadFile>(5);
         urnToDownloadMap = new HashMap<URN, SWDownloadFile>();
         ipDownloadCounter = new AddressCounter(
-                DownloadPrefs.MaxDownloadsPerIP.get().intValue(), false);
+                peer.downloadPrefs.MaxDownloadsPerIP.get().intValue(), false);
         dataWriter = new DownloadDataWriter(this);
         downloadVerifyRunner = new RunnerQueueWorker(Thread.NORM_PRIORITY - 1);
         downloadWriteBufferTracker = new BufferVolumeTracker(
-                DownloadPrefs.MaxTotalDownloadWriteBuffer.get().intValue(), dataWriter);
-        if (DownloadPrefs.CandidateLogBufferSize.get().intValue() > 0) {
-            candidateLogBuffer = new LogBuffer(DownloadPrefs.CandidateLogBufferSize.get().intValue());
+                peer.downloadPrefs.MaxTotalDownloadWriteBuffer.get().intValue(), dataWriter);
+        if (peer.downloadPrefs.CandidateLogBufferSize.get().intValue() > 0) {
+            candidateLogBuffer = new LogBuffer(peer.downloadPrefs.CandidateLogBufferSize.get().intValue());
         }
     }
 
@@ -376,7 +375,7 @@ public class SwarmingManager extends AbstractLifeCycle {
         } else {
             // Change the download dir. 
             // First get the default dir. 
-            destDir = DownloadPrefs.DestinationDirectory.get();
+            destDir = peer.downloadPrefs.DestinationDirectory.get();
         }
         // Now Add the relative dir to the destDir 
         File destinationDirectory = new File(destDir, relativeDownloadDir);
@@ -738,7 +737,7 @@ public class SwarmingManager extends AbstractLifeCycle {
 
                 // make sure we don't download more than X times from
                 // the same host
-                ipDownloadCounter.setMaxCount(DownloadPrefs.MaxDownloadsPerIP.get().intValue());
+                ipDownloadCounter.setMaxCount(peer.downloadPrefs.MaxDownloadsPerIP.get().intValue());
 
                 downloadCandidate = downloadFile.allocateDownloadCandidate(worker,
                         ipDownloadCounter);
@@ -889,8 +888,8 @@ public class SwarmingManager extends AbstractLifeCycle {
 
     private int getRequiredDownloadWorkerCount() {
         return Math.min(
-                getActiveDownloadFileCount() * DownloadPrefs.MaxWorkerPerDownload.get().intValue(),
-                DownloadPrefs.MaxTotalDownloadWorker.get().intValue());
+                getActiveDownloadFileCount() * peer.downloadPrefs.MaxWorkerPerDownload.get().intValue(),
+                peer.downloadPrefs.MaxTotalDownloadWorker.get().intValue());
     }
 
     /**
@@ -947,19 +946,19 @@ public class SwarmingManager extends AbstractLifeCycle {
 //        // Interprets a downloaded magma-list in Phex automatically.
 //        // TODO should we honor the content type?
 //        final File destFile = file.getDestinationFile();
-//        if (DownloadPrefs.AutoReadoutMagmaFiles.get().booleanValue()
+//        if (peer.downloadPrefs.AutoReadoutMagmaFiles.get().booleanValue()
 //                && destFile.getName().endsWith(".magma")) {
 //            Environment.getInstance().executeOnThreadPool(() -> InternalFileHandler.magmaReadout(destFile), "Readout Magma");
 //        }
 //
-//        if (DownloadPrefs.AutoReadoutMetalinkFiles.get().booleanValue()
+//        if (peer.downloadPrefs.AutoReadoutMetalinkFiles.get().booleanValue()
 //                && destFile.getName().endsWith(".metalink")) {
 //            Environment.getInstance().executeOnThreadPool(() -> InternalFileHandler.metalinkReadout(destFile), "Readout Metalink");
 //        }
 //
 //        // Interprets a downloaded rss-feed in Phex automatically.
 //        // TODO should we honor the content type?
-//        if (DownloadPrefs.AutoReadoutRSSFiles.get().booleanValue()
+//        if (peer.downloadPrefs.AutoReadoutRSSFiles.get().booleanValue()
 //                && destFile.getName().endsWith(".rss.xml")) {
 //            Environment.getInstance().executeOnThreadPool(() -> InternalFileHandler.rssReadout(destFile), "Readout RSS");
 //        }
@@ -1079,8 +1078,7 @@ public class SwarmingManager extends AbstractLifeCycle {
             NLogger.debug(SwarmingManager.class,
                     "Loading download list...");
 
-            File downloadFile = Environment.getPhexConfigFile(
-                    EnvironmentConstants.XML_DOWNLOAD_FILE_NAME);
+            File downloadFile = peer.file(Peer.XML_DOWNLOAD_FILE_NAME);
             File downloadFileBak = new File(downloadFile.getAbsolutePath() + ".bak");
 
             if (!downloadFile.exists() && !downloadFileBak.exists()) {
@@ -1204,8 +1202,7 @@ public class SwarmingManager extends AbstractLifeCycle {
                     DSubElementList<DDownloadFile> dList = createDDownloadList();
                     dPhex.setDownloadList(dList);
 
-                    File downloadFile = Environment.getPhexConfigFile(
-                            EnvironmentConstants.XML_DOWNLOAD_FILE_NAME);
+                    File downloadFile = peer.file(Peer.XML_DOWNLOAD_FILE_NAME);
                     File downloadFileBak = new File(downloadFile.getAbsolutePath() + ".bak");
 
                     ManagedFile managedFile = peer.files.getReadWriteManagedFile(downloadFileBak);

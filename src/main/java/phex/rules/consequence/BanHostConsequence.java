@@ -26,7 +26,7 @@ import phex.common.ExpiryDate;
 import phex.download.RemoteFile;
 import phex.query.Search;
 import phex.security.BanHostBatch;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.util.DateUtils;
 import phex.xml.sax.rules.DBanHostConsequence;
 import phex.xml.sax.rules.DConsequence;

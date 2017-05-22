@@ -20,31 +20,32 @@
  *  --- CVS Information ---
  *  $Id: SubscriptionPrefs.java 3807 2007-05-19 17:06:46Z gregork $
  */
-package phex.prefs.core;
+package phex;
 
-import phex.prefs.api.PreferencesFactory;
-import phex.prefs.api.Setting;
+import phex.prefs.Preferences;
+import phex.prefs.Setting;
 
+import java.io.File;
 import java.util.List;
 
-public class SubscriptionPrefs extends PhexCorePrefs {
-    public static final String default_subscriptionMagnets = null; /* new String("magnet:?xs=http://draketo.de/magma/filk-filme.magma&dn=filk-filme.magma"); */
+public class SubscriptionPrefs extends Preferences {
+    public final String default_subscriptionMagnets = null; /* new String("magnet:?xs=http://draketo.de/magma/filk-filme.magma&dn=filk-filme.magma"); */
 
     /**
      * Indicates if subscriptions should be downloaded silently.
      */
-    public static final Setting<Boolean> DownloadSilently;
+    public final Setting<Boolean> DownloadSilently;
 
     /**
      * Subscription-Uris
      * These should point to magma-files.
      */
-    public static final Setting<List<String>> SubscriptionMagnets;
+    public final Setting<List<String>> SubscriptionMagnets;
 
-    static {
-        DownloadSilently = PreferencesFactory.createBoolSetting(
-                "Subscription.DownloadSilently", false, instance);
-        SubscriptionMagnets = PreferencesFactory.createListSetting(
-                "Subscription.SubscriptionMagnets", instance);
+    public SubscriptionPrefs(File file) { super(file);
+        DownloadSilently = createBoolSetting(
+                "Subscription.DownloadSilently", false);
+        SubscriptionMagnets = createListSetting(
+                "Subscription.SubscriptionMagnets");
     }
 }

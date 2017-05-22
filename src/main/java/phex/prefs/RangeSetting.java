@@ -20,7 +20,7 @@
  *  --- CVS Information ---
  *  $Id: RangeSetting.java 3807 2007-05-19 17:06:46Z gregork $
  */
-package phex.prefs.api;
+package phex.prefs;
 
 public class RangeSetting<T extends Comparable<T>> extends Setting<T> {
     protected final T minValue;

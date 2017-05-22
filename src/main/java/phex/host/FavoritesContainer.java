@@ -23,7 +23,6 @@ package phex.host;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import phex.Phex;
 import phex.common.Environment;
 import phex.common.PhexVersion;
 import phex.common.address.DefaultDestAddress;
@@ -33,7 +32,7 @@ import phex.common.file.ManagedFile;
 import phex.common.file.ManagedFileException;
 import phex.event.ChangeEvent;
 import phex.event.UserMessageListener;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.xml.sax.DPhex;
 import phex.xml.sax.DSubElementList;
 import phex.xml.sax.XMLBuilder;

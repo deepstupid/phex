@@ -26,8 +26,8 @@ import phex.common.HorizonTracker;
 import phex.common.LongObj;
 import phex.common.bandwidth.BandwidthManager;
 import phex.msg.PongMsg;
-import phex.prefs.core.StatisticPrefs;
-import phex.servent.Peer;
+import phex.StatisticPrefs;
+import phex.peer.Peer;
 import phex.statistic.HorizonStatisticProvider.Type;
 
 import java.util.HashMap;

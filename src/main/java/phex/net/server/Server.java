@@ -33,10 +33,7 @@ import phex.event.ChangeEvent;
 import phex.host.NetworkHostsContainer;
 import phex.msghandling.MessageService;
 import phex.net.UPnPMapper;
-import phex.prefs.core.ConnectionPrefs;
-import phex.prefs.core.NetworkPrefs;
-import phex.prefs.core.ProxyPrefs;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -73,14 +70,14 @@ public abstract class Server implements Runnable {
 
     public Server(Peer peer) {
         this.peer = peer;
-        hasConnectedIncomming = ConnectionPrefs.HasConnectedIncomming.get();
+        hasConnectedIncomming = peer.connectionPrefs.HasConnectedIncomming.get();
         lastInConnectionTime = -1;
         isRunning = false;
 
         localAddress = new LocalServentAddress(this);
-        if (ProxyPrefs.ForcedIp.get().length() > 0) {
+        if (peer.proxyPrefs.ForcedIp.get().length() > 0) {
             IpAddress ip = new IpAddress(
-                    AddressUtils.parseIP(ProxyPrefs.ForcedIp.get()));
+                    AddressUtils.parseIP(peer.proxyPrefs.ForcedIp.get()));
             localAddress.setForcedHostIP(ip);
         }
 
@@ -101,7 +98,7 @@ public abstract class Server implements Runnable {
                 FirewallCheckTimer.TIMER_PERIOD,
                 FirewallCheckTimer.TIMER_PERIOD);
 
-        bind(NetworkPrefs.ListeningPort.get());
+        bind(peer.netPrefs.ListeningPort.get());
 
         try {
             upnpMapper.initialize();
@@ -134,7 +131,7 @@ public abstract class Server implements Runnable {
         firewallCheckTimer.cancel();
         firewallCheckTimer = null;
 
-        ConnectionPrefs.HasConnectedIncomming.set(hasConnectedIncomming);
+        peer.connectionPrefs.HasConnectedIncomming.set(hasConnectedIncomming);
 
         closeServer();
 
@@ -189,7 +186,7 @@ public abstract class Server implements Runnable {
         if (serverSocket != null) {
             return serverSocket.getLocalPort();
         } else {
-            return NetworkPrefs.ListeningPort.get();
+            return peer.netPrefs.ListeningPort.get();
         }
     }
 

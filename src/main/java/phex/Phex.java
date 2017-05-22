@@ -34,12 +34,10 @@ import phex.common.log.NLogger;
 import phex.download.RemoteFile;
 import phex.download.swarming.SWDownloadFile;
 import phex.download.swarming.SwarmingManager;
-import phex.prefs.api.Setting;
-import phex.prefs.core.LibraryPrefs;
-import phex.prefs.core.PrivateNetworkConstants;
+import phex.prefs.Setting;
 import phex.query.*;
-import phex.servent.OnlineStatus;
-import phex.servent.Peer;
+import phex.peer.OnlineStatus;
+import phex.peer.Peer;
 import phex.util.StringUtils;
 
 import java.io.File;

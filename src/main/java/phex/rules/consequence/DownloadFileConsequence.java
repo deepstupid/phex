@@ -26,7 +26,7 @@ import phex.common.URN;
 import phex.download.RemoteFile;
 import phex.download.swarming.SwarmingManager;
 import phex.query.Search;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.share.SharedFilesService;
 import phex.util.StringUtils;
 import phex.xml.sax.rules.DConsequence;

@@ -33,7 +33,7 @@ import phex.connection.ProtocolNotSupportedException;
 import phex.http.HTTPHeaderNames;
 import phex.http.HttpClientFactory;
 import phex.net.repres.PresentationManager;
-import phex.prefs.core.ProxyPrefs;
+import phex.ProxyPrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
 import phex.util.*;
@@ -45,7 +45,6 @@ import java.io.InputStreamReader;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 

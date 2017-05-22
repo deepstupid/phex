@@ -30,7 +30,7 @@ import phex.common.address.DestAddress;
 import phex.connection.ProtocolNotSupportedException;
 import phex.event.ChangeEvent;
 import phex.host.CaughtHostsContainer;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.util.IOUtil;
 import phex.util.NormalizableURL;
 import phex.util.StringUtils;

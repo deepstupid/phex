@@ -41,7 +41,7 @@ import phex.http.Range;
 import phex.http.XQueueParameters;
 import phex.msg.GUID;
 import phex.net.repres.PresentationManager;
-import phex.prefs.core.DownloadPrefs;
+import phex.DownloadPrefs;
 import phex.query.QueryHitHost;
 import phex.util.URLCodecUtils;
 import phex.util.URLUtil;

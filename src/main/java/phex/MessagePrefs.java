@@ -20,57 +20,60 @@
  *  --- CVS Information ---
  *  $Id: MessagePrefs.java 4163 2008-04-07 20:54:35Z mariosk $
  */
-package phex.prefs.core;
+package phex;
 
-import phex.prefs.api.PreferencesFactory;
-import phex.prefs.api.Setting;
+import phex.prefs.Preferences;
+import phex.prefs.Setting;
 
-public class MessagePrefs extends PhexCorePrefs {
+import java.io.File;
+
+public class MessagePrefs extends Preferences {
     /**
      * The default value of the X-Max-TTL header for dynamic queries.
      */
-    public static final int DEFAULT_DYNAMIC_QUERY_MAX_TTL = 4;
+    public final int DEFAULT_DYNAMIC_QUERY_MAX_TTL = 4;
 
     /**
      * The number of consecutive failed connection after which the servent
      * is called as offline.
      */
-    public static final Setting<Integer> MaxLength;
+    public final Setting<Integer> MaxLength;
 
     /**
      * The TTL Phex uses for messages.
      */
-    public static final Setting<Integer> TTL;
+    public final Setting<Integer> TTL;
 
     /**
      * The maximum number of hops allowed to be seen in messages otherwise a
      * message is dropped. Also the highest ttl allowed to be seen in messages
      * otherwise the ttl is limited to Cfg.maxNetworkTTL - hops.
      */
-    public static final Setting<Integer> MaxNetworkTTL;
+    public final Setting<Integer> MaxNetworkTTL;
 
     /**
      * Indicates if outdated Clip2 index queries should be dropped.
      *
      * @since 3.0.2.103
      */
-    public static final Setting<Boolean> DropIndexQueries;
+    public final Setting<Boolean> DropIndexQueries;
 
     /**
      *
      */
-    public static final Setting<Boolean> UseExtendedOriginIpAddress;
+    public final Setting<Boolean> UseExtendedOriginIpAddress;
 
-    static {
-        MaxLength = PreferencesFactory.createIntSetting(
-                "Message.MaxLength", 65536, instance);
-        TTL = PreferencesFactory.createIntSetting(
-                "Message.TTL", 7, instance);
-        MaxNetworkTTL = PreferencesFactory.createIntSetting(
-                "Message.MaxNetworkTTL", 7, instance);
-        DropIndexQueries = PreferencesFactory.createBoolSetting(
-                "Message.DropIndexQueries", true, instance);
-        UseExtendedOriginIpAddress = PreferencesFactory.createBoolSetting(
-                "Message.UseExtendedOriginIpAddress", false, instance);
+    public MessagePrefs(File file) {
+        super(file);
+        MaxLength = createIntSetting(
+                "Message.MaxLength", 65536);
+        TTL = createIntSetting(
+                "Message.TTL", 7);
+        MaxNetworkTTL = createIntSetting(
+                "Message.MaxNetworkTTL", 7);
+        DropIndexQueries = createBoolSetting(
+                "Message.DropIndexQueries", true);
+        UseExtendedOriginIpAddress = createBoolSetting(
+                "Message.UseExtendedOriginIpAddress", false);
     }
 }

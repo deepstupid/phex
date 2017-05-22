@@ -29,7 +29,7 @@ import phex.common.log.NLogger;
 import phex.host.*;
 import phex.net.connection.Connection;
 import phex.net.connection.ConnectionFactory;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 import java.io.IOException;
 

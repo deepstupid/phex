@@ -23,7 +23,7 @@ package phex.common.address;
 
 import phex.net.repres.PresentationManager;
 import phex.net.server.Server;
-import phex.prefs.core.ProxyPrefs;
+import phex.ProxyPrefs;
 
 public class LocalServentAddress implements DestAddress {
     /**

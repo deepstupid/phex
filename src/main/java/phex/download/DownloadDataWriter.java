@@ -25,7 +25,7 @@ import phex.common.ThreadTracking;
 import phex.common.log.NLogger;
 import phex.download.swarming.SWDownloadFile;
 import phex.download.swarming.SwarmingManager;
-import phex.prefs.core.DownloadPrefs;
+import phex.DownloadPrefs;
 import phex.util.DateUtils;
 
 import java.util.List;
@@ -36,14 +36,14 @@ import java.util.ListIterator;
  * disk regulary.
  */
 public class DownloadDataWriter implements Runnable {
-    private final SwarmingManager swarmingMgr;
+    private final SwarmingManager swarm;
     private Thread thread;
     private boolean isShutingDown;
     private long lastCompleteWrite;
     private boolean isWriteCycleRequested;
 
     public DownloadDataWriter(SwarmingManager downloadService) {
-        swarmingMgr = downloadService;
+        swarm = downloadService;
     }
 
     public void start() {
@@ -108,7 +108,7 @@ public class DownloadDataWriter implements Runnable {
     }
 
     private void writeDownloadData() {
-        if (!swarmingMgr.isDownloadActive() && !isWriteCycleRequested) {
+        if (!swarm.isDownloadActive() && !isWriteCycleRequested) {
             return;
         }
 
@@ -123,10 +123,11 @@ public class DownloadDataWriter implements Runnable {
         }
 
         // write limit is 90% of configured max.
-        int maxPerDownloadBuffer = DownloadPrefs.MaxWriteBufferPerDownload.get().intValue();
+        
+        int maxPerDownloadBuffer = swarm.peer.downloadPrefs.MaxWriteBufferPerDownload.get().intValue();
         maxPerDownloadBuffer = (int) (maxPerDownloadBuffer * 0.9);
 
-        List<SWDownloadFile> downloadList = swarmingMgr.getDownloadFileListCopy();
+        List<SWDownloadFile> downloadList = swarm.getDownloadFileListCopy();
         ListIterator<SWDownloadFile> iterator = downloadList.listIterator();
         while (iterator.hasNext()) {
             SWDownloadFile downloadFile = iterator.next();
@@ -151,7 +152,7 @@ public class DownloadDataWriter implements Runnable {
                 "Total buffered data was: " + totalBufferedSize);
 
         // write limit is 90% of configured max.
-        int maxTotalBuffer = DownloadPrefs.MaxTotalDownloadWriteBuffer.get().intValue();
+        int maxTotalBuffer = swarm.peer.downloadPrefs.MaxTotalDownloadWriteBuffer.get().intValue();
         maxTotalBuffer = (int) (maxTotalBuffer * 0.9);
 
         // if we have not already written everything but have a high total buffer
@@ -174,7 +175,7 @@ public class DownloadDataWriter implements Runnable {
             lastCompleteWrite = System.currentTimeMillis();
         }
         if (bufferedDataWritten > 0) {
-            swarmingMgr.notifyDownloadListChange();
+            swarm.notifyDownloadListChange();
         }
     }
 }

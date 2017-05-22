@@ -24,7 +24,8 @@ package phex.msg;
 import phex.common.log.NLogger;
 import phex.msg.vendor.VendorMsg;
 import phex.net.connection.Connection;
-import phex.prefs.core.MessagePrefs;
+import phex.MessagePrefs;
+import phex.peer.Peer;
 import phex.security.PhexSecurityManager;
 import phex.util.IOUtil;
 
@@ -34,11 +35,14 @@ import java.nio.ByteBuffer;
 
 
 public class MessageProcessor {
-    private MessageProcessor() {
 
+    private final Peer peer;
+
+    private MessageProcessor(Peer peer) {
+        this.peer = peer;
     }
 
-    public static Message parseMessage(Connection connection, PhexSecurityManager securityService)
+    public Message parseMessage(Connection connection, PhexSecurityManager securityService)
             throws IOException, InvalidMessageException {
         MsgHeader header = parseMessageHeader(connection, new byte[MsgHeader.DATA_LENGTH]);
         if (header == null) {
@@ -47,19 +51,19 @@ public class MessageProcessor {
         int length = header.getDataLength();
         if (length < 0) {
             throw new IOException("Negative body size. Drop.");
-        } else if (length > MessagePrefs.MaxLength.get()) {
+        } else if (length > peer.messagePrefs.MaxLength.get()) {
             throw new IOException("Packet too big (" + length + "). Drop.");
         }
         return parseMessage(header, connection, securityService);
     }
 
-    public static Message parseMessage(MsgHeader header, Connection connection,
+    public Message parseMessage(MsgHeader header, Connection connection,
                                        PhexSecurityManager securityService)
             throws IOException, InvalidMessageException {
         return parseMessage(header, connection.getInputStream(), securityService);
     }
 
-    public static Message parseMessage(MsgHeader header, InputStream inStream,
+    public Message parseMessage(MsgHeader header, InputStream inStream,
                                        PhexSecurityManager securityService)
             throws IOException, InvalidMessageException {
         byte[] body = readMessageBody(inStream, header.getDataLength());
@@ -69,7 +73,7 @@ public class MessageProcessor {
         return message;
     }
 
-    public static Message createMessageFromBody(MsgHeader header, byte[] body,
+    public Message createMessageFromBody(MsgHeader header, byte[] body,
                                                 PhexSecurityManager securityService)
             throws InvalidMessageException {
         switch (header.getPayload()) {
@@ -82,7 +86,7 @@ public class MessageProcessor {
             case MsgHeader.QUERY_HIT_PAYLOAD:
                 return new QueryResponseMsg(header, body, securityService);
             case MsgHeader.QUERY_PAYLOAD:
-                return new QueryMsg(header, body);
+                return new QueryMsg(peer, header, body);
             case MsgHeader.ROUTE_TABLE_UPDATE_PAYLOAD:
                 return RouteTableUpdateMsg.parseMessage(header, body);
             case MsgHeader.VENDOR_MESSAGE_PAYLOAD:

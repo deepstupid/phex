@@ -31,7 +31,7 @@ import phex.msg.InvalidMessageException;
 import phex.msg.QueryResponseMsg;
 import phex.msg.QueryResponseRecord;
 import phex.msghandling.MessageSubscriber;
-import phex.prefs.core.ConnectionPrefs;
+import phex.ConnectionPrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
 
@@ -53,9 +53,9 @@ public class DownloadCandidateSnoop implements MessageSubscriber<QueryResponseMs
      * to find possible candidates.
      */
     public void onMessage(QueryResponseMsg message, Host sourceHost) {
-        if (!ConnectionPrefs.EnableQueryHitSnooping.get().booleanValue()) {
-            return;
-        }
+//        if (!ConnectionPrefs.EnableQueryHitSnooping.get().booleanValue()) {
+//            return;
+//        }
 
         try {
             QueryHitHost qhHost = null;

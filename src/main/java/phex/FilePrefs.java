@@ -20,20 +20,22 @@
  *  --- CVS Information ---
  *  $Id: FilePrefs.java 3807 2007-05-19 17:06:46Z gregork $
  */
-package phex.prefs.core;
+package phex;
 
-import phex.prefs.api.PreferencesFactory;
-import phex.prefs.api.Setting;
+import phex.prefs.Preferences;
+import phex.prefs.Setting;
 
-public class FilePrefs extends PhexCorePrefs {
+import java.io.File;
+
+public class FilePrefs extends Preferences {
     /**
      * The maximum number of open files the file manager opens.
      * 0 for unlimited.
      */
-    public static final Setting<Integer> OpenFilesLimit;
+    public final Setting<Integer> OpenFilesLimit;
 
-    static {
-        OpenFilesLimit = PreferencesFactory.createIntSetting(
-                "File.OpenFilesLimit", 0, instance);
+    public FilePrefs(File file) { super(file);
+        OpenFilesLimit = createIntSetting(
+                "File.OpenFilesLimit", 0);
     }
 }

@@ -66,8 +66,8 @@ public class PushRequestMsg extends Message {
      * @param aAddress    the HostAddress of the servent that the data should
      *                    be pushed to
      */
-    public PushRequestMsg(GUID aClientGUID, long aFileIndex, DestAddress aAddress) {
-        super(new MsgHeader(MsgHeader.PUSH_PAYLOAD, 0));
+    public PushRequestMsg(GUID aClientGUID, long aFileIndex, DestAddress aAddress, byte ttl) {
+        super(new MsgHeader(MsgHeader.PUSH_PAYLOAD, 0, ttl));
         if (aAddress.getIpAddress() == null) {
             throw new IllegalArgumentException("Push request address must have IP.");
         }

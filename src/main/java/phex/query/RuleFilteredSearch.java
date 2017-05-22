@@ -23,7 +23,7 @@ package phex.query;
 
 import phex.download.RemoteFile;
 import phex.rules.Rule;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 import java.util.ArrayList;
 

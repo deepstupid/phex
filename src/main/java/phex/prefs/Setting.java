@@ -19,7 +19,7 @@
  *  --- SVN Information ---
  *  $Id: Setting.java 4524 2011-06-27 10:04:38Z gregork $
  */
-package phex.prefs.api;
+package phex.prefs;
 
 
 public class Setting<T> {

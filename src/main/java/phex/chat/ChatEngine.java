@@ -29,7 +29,6 @@ import phex.common.log.NLogger;
 import phex.io.buffer.ByteBuffer;
 import phex.net.connection.Connection;
 import phex.net.connection.ConnectionFactory;
-import phex.prefs.core.NetworkPrefs;
 import phex.util.GnutellaInputStream;
 
 import java.io.IOException;
@@ -45,6 +44,7 @@ public final class ChatEngine {
      * The host address of the chat connection.
      */
     private final DestAddress hostAddress;
+
     private GnutellaInputStream chatReader;
     private Connection connection;
     private String chatNick;
@@ -72,6 +72,7 @@ public final class ChatEngine {
      * For outgoing chat requests. We need to connect to the host address first.
      */
     ChatEngine(ChatService chatService, DestAddress aHostAddress) {
+
         this.useEncodedStr = true;
         this.chatService = chatService;
         hostAddress = aHostAddress;
@@ -132,7 +133,7 @@ public final class ChatEngine {
 
     private void finalizeHandshake()
             throws IOException {
-        connection.getSocket().setSoTimeout(NetworkPrefs.TcpRWTimeout.get().intValue());
+        connection.getSocket().setSoTimeout(chatService.peer.netPrefs.TcpRWTimeout.get().intValue());
 
         // read the header that have been left in the stream after accepting the
         // connection.

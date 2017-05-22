@@ -25,6 +25,7 @@ import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.HeadMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
+import phex.MessagePrefs;
 import phex.common.address.DestAddress;
 import phex.common.log.NLogger;
 import phex.http.GnutellaHeaderNames;
@@ -34,8 +35,8 @@ import phex.msg.GUID;
 import phex.msg.PushRequestMsg;
 import phex.msghandling.MessageService;
 import phex.net.repres.SocketFacade;
-import phex.prefs.core.DownloadPrefs;
-import phex.servent.Peer;
+import phex.DownloadPrefs;
+import phex.peer.Peer;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticsManager;
 
@@ -104,7 +105,7 @@ public class PushRequestSleeper {
      * the request times out or the requested host answers.
      * Null is returned if the connection can't be made.
      */
-    public synchronized SocketFacade requestSocketViaPush() {
+    public synchronized SocketFacade requestSocketViaPush(byte ttl, int timeOutMS) {
         boolean succ = false;
         try {
             if (pushProxyAddresses != null && pushProxyAddresses.length > 0) {
@@ -112,7 +113,7 @@ public class PushRequestSleeper {
             }
 
             if (!succ) {
-                succ = requestViaPushRoute();
+                succ = requestViaPushRoute(ttl);
             }
 
             if (!succ) {
@@ -121,7 +122,7 @@ public class PushRequestSleeper {
 
             try {
                 // wait until the host connects to us or the timeout is reached
-                wait(DownloadPrefs.PushRequestTimeout.get().intValue());
+                wait(timeOutMS);
             } catch (InterruptedException exp) {// reset interruption
                 Thread.currentThread().interrupt();
             }
@@ -193,7 +194,7 @@ public class PushRequestSleeper {
      * a query hit that needs push to fetch the file. This is used to help obtain
      * a socket to download a file from.</p>
      */
-    private boolean requestViaPushRoute() {
+    private boolean requestViaPushRoute(byte ttl) {
         // pushing only works if we have a valid IP to use in the push message.
         if (serventAddress.getIpAddress() == null) {
             NLogger.warn(PushRequestSleeper.class, "Local address has no IP to use for PUSH.");
@@ -203,7 +204,7 @@ public class PushRequestSleeper {
         // local address
         // http://groups.yahoo.com/group/the_gdf/message/14305
         PushRequestMsg push = new PushRequestMsg(clientGUID, fileIndex,
-                serventAddress);
+                serventAddress, ttl);
 
         // Route the PushRequestMsg.
         return msgService.routePushMessage(push);

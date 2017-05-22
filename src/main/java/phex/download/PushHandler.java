@@ -26,7 +26,7 @@ import phex.common.log.NLogger;
 import phex.download.swarming.SWDownloadCandidate;
 import phex.msg.GUID;
 import phex.net.repres.SocketFacade;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticsManager;
 
@@ -117,7 +117,7 @@ public class PushHandler {
         synchronized (pushSleeperList) {
             pushSleeperList.add(pushSleeper);
         }
-        SocketFacade socket = pushSleeper.requestSocketViaPush();
+        SocketFacade socket = pushSleeper.requestSocketViaPush(peer.getMessageService().prefs.TTL.get().byteValue(), peer.downloadPrefs.PushRequestTimeout.get().intValue());
         if (socket == null) {
             NLogger.debug(PushHandler.class, "PUSH request failed.");
             ((SimpleStatisticProvider) peer.getStatisticsService().getStatisticProvider(

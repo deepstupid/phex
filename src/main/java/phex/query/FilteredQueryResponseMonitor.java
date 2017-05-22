@@ -32,7 +32,7 @@ import phex.msg.QueryResponseMsg;
 import phex.msg.QueryResponseRecord;
 import phex.msghandling.MessageSubscriber;
 import phex.security.AccessType;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 import java.util.ArrayList;
 

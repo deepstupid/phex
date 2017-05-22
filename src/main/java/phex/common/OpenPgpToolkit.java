@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.http.HTTPHeaderNames;
 import phex.http.HttpClientFactory;
-import phex.prefs.core.ProxyPrefs;
+import phex.ProxyPrefs;
 import phex.util.HexConverter;
 import phex.util.IOUtil;
 import phex.util.RandomUtils;

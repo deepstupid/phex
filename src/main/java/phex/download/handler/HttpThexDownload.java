@@ -35,7 +35,7 @@ import phex.download.swarming.SWDownloadSet;
 import phex.host.UnusableHostException;
 import phex.http.*;
 import phex.net.connection.Connection;
-import phex.prefs.core.DownloadPrefs;
+import phex.DownloadPrefs;
 import phex.thex.TTHashCalcUtils;
 import phex.util.IOUtil;
 import phex.util.LengthLimitedInputStream;
@@ -81,7 +81,7 @@ public class HttpThexDownload extends AbstractHttpDownload {
         isDownloadSuccessful = false;
 
         Connection connection = downloadEngine.getConnection();
-        SWDownloadCandidate candidate = downloadEngine.getDownloadSet().getCandidate();
+        SWDownloadCandidate candidate = downloadEngine.getDownloadSet().downloadCandidate;
 
 
         OutputStreamWriter writer = new OutputStreamWriter(
@@ -170,8 +170,8 @@ public class HttpThexDownload extends AbstractHttpDownload {
 
     public void processDownload() throws IOException {
         SWDownloadSet downloadSet = downloadEngine.getDownloadSet();
-        SWDownloadCandidate candidate = downloadSet.getCandidate();
-        SWDownloadFile downloadFile = downloadSet.getDownloadFile();
+        SWDownloadCandidate candidate = downloadSet.downloadCandidate;
+        SWDownloadFile downloadFile = downloadSet.downloadFile;
 
         logger.debug("Download Engine starts download.");
         LengthLimitedInputStream downloadStream = null;
@@ -283,7 +283,7 @@ public class HttpThexDownload extends AbstractHttpDownload {
         // check if data is already released... 
         if (thexData != null) {
             SWDownloadSet downloadSet = downloadEngine.getDownloadSet();
-            SWDownloadCandidate candidate = downloadSet.getCandidate();
+            SWDownloadCandidate candidate = downloadSet.downloadCandidate;
             synchronized (thexData) {
                 if (isDownloadSuccessful) {
                     candidate.setThexStatus(ThexStatus.SUCCEDED);

@@ -19,7 +19,7 @@
 package phex.util;
 
 import phex.common.address.DestAddress;
-import phex.prefs.core.SecurityPrefs;
+import phex.SecurityPrefs;
 
 public final class IPUtils {
     private IPUtils() {

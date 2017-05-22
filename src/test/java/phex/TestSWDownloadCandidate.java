@@ -28,7 +28,7 @@ import phex.download.swarming.SWDownloadCandidate;
 import phex.download.swarming.SWDownloadFile;
 import phex.msg.GUID;
 import phex.query.QueryHitHost;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 /**
  * 

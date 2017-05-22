@@ -23,19 +23,22 @@ package phex.statistic;
 
 import phex.common.LongObj;
 import phex.common.format.TimeFormatUtils;
-import phex.prefs.core.StatisticPrefs;
+import phex.StatisticPrefs;
+import phex.peer.Peer;
 
 public class UptimeStatisticProvider implements StatisticProvider {
     private final LongObj valueObj;
     private final LongObj avgObj;
     private final LongObj maxObj;
+    private final Peer peer;
     private long startTime;
 
 
-    public UptimeStatisticProvider() {
+    public UptimeStatisticProvider(Peer peer) {
+        this.peer = peer;
         valueObj = new LongObj();
         avgObj = new LongObj();
-        maxObj = new LongObj(StatisticPrefs.MaximalUptime.get().longValue());
+        maxObj = new LongObj(peer.statPrefs.MaximalUptime.get().longValue());
         startUptimeMeasurement();
     }
 
@@ -67,8 +70,8 @@ public class UptimeStatisticProvider implements StatisticProvider {
         // current uptime might be negative...
         currentUptime = Math.max(currentUptime, 0);
         long avgUptime = (currentUptime +
-                StatisticPrefs.MovingTotalUptime.get().longValue())
-                / (StatisticPrefs.MovingTotalUptimeCount.get().intValue() + 1);
+                peer.statPrefs.MovingTotalUptime.get().longValue())
+                / (peer.statPrefs.MovingTotalUptimeCount.get().intValue() + 1);
         avgObj.setValue(avgUptime);
         return avgObj;
     }
@@ -102,16 +105,16 @@ public class UptimeStatisticProvider implements StatisticProvider {
 
     public void saveUptimeStats() {
         LongObj obj = (LongObj) getMaxValue();
-        StatisticPrefs.MaximalUptime.set(Long.valueOf(obj.getValue()));
+        peer.statPrefs.MaximalUptime.set(Long.valueOf(obj.getValue()));
 
-        long mtu = StatisticPrefs.MovingTotalUptime.get().intValue();
-        int mtuCount = StatisticPrefs.MovingTotalUptimeCount.get().intValue();
+        long mtu = peer.statPrefs.MovingTotalUptime.get().intValue();
+        int mtuCount = peer.statPrefs.MovingTotalUptimeCount.get().intValue();
         if (mtuCount >= 25) {
             // substract one average uptime...
             mtu -= (mtu / mtuCount);
-            StatisticPrefs.MovingTotalUptime.set(Long.valueOf(mtu));
+            peer.statPrefs.MovingTotalUptime.set(Long.valueOf(mtu));
             mtuCount--;
-            StatisticPrefs.MovingTotalUptimeCount.set(Integer.valueOf(mtuCount));
+            peer.statPrefs.MovingTotalUptimeCount.set(Integer.valueOf(mtuCount));
         }
 
         obj = (LongObj) getValue();
@@ -119,9 +122,9 @@ public class UptimeStatisticProvider implements StatisticProvider {
         // due to DST adjustments. In this case ignore the uptime value.
         if (obj.longValue() > 0) {
             mtu += obj.longValue();
-            StatisticPrefs.MovingTotalUptime.set(Long.valueOf(mtu));
+            peer.statPrefs.MovingTotalUptime.set(Long.valueOf(mtu));
             mtuCount++;
-            StatisticPrefs.MovingTotalUptimeCount.set(Integer.valueOf(mtuCount));
+            peer.statPrefs.MovingTotalUptimeCount.set(Integer.valueOf(mtuCount));
         }
     }
 }

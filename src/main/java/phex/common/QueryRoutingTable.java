@@ -27,7 +27,7 @@ import phex.common.log.NLogger;
 import phex.host.Host;
 import phex.msg.*;
 import phex.query.DynamicQueryConstants;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.share.ShareFile;
 import phex.util.IOUtil;
 import phex.util.StringUtils;

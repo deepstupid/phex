@@ -1,4 +1,4 @@
-package phex.prefs.api;
+package phex.prefs;
 
 import phex.common.log.NLogger;
 import phex.util.ClassUtils;

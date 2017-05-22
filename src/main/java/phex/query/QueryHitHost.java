@@ -26,7 +26,7 @@ import phex.common.format.HostSpeedFormatUtils;
 import phex.msg.GUID;
 import phex.msg.InvalidMessageException;
 import phex.msg.QueryResponseMsg;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.util.VendorCodes;
 
 /**

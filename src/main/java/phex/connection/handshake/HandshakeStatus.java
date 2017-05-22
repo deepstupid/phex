@@ -28,7 +28,7 @@ import phex.http.HTTPHeaderGroup;
 import phex.http.HTTPHeaderNames;
 import phex.http.HTTPProcessor;
 import phex.net.connection.Connection;
-import phex.prefs.core.ConnectionPrefs;
+import phex.ConnectionPrefs;
 
 import java.io.IOException;
 

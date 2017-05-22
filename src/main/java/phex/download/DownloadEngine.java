@@ -36,6 +36,7 @@ import phex.download.swarming.SWDownloadSet;
 import phex.host.UnusableHostException;
 import phex.http.HTTPMessageException;
 import phex.net.connection.Connection;
+import phex.peer.Peer;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -66,6 +67,10 @@ public class DownloadEngine {
         status = Status.RUNNING;
     }
 
+    public Peer peer() {
+        return downloadSet.peer;
+    }
+
     public Connection getConnection() {
         return connection;
     }
@@ -85,7 +90,7 @@ public class DownloadEngine {
      */
     public void abortDownload() {
         status = Status.ABORTED;
-        SWDownloadCandidate candidate = downloadSet.getCandidate();
+        SWDownloadCandidate candidate = downloadSet.downloadCandidate;
         candidate.addToCandidateLog("Download aborted.");
         stopInternalDownload();
     }
@@ -95,15 +100,15 @@ public class DownloadEngine {
      */
     private void failDownload() {
         status = Status.FAILED;
-        SWDownloadCandidate candidate = downloadSet.getCandidate();
+        SWDownloadCandidate candidate = downloadSet.downloadCandidate;
         candidate.addToCandidateLog("Download failed.");
         stopInternalDownload();
     }
 
     public void runEngine() {
         try {
-            SWDownloadCandidate candidate = downloadSet.getCandidate();
-            SWDownloadFile downloadFile = downloadSet.getDownloadFile();
+            SWDownloadCandidate candidate = downloadSet.downloadCandidate;
+            SWDownloadFile downloadFile = downloadSet.downloadFile;
             do {
                 processRequest();
             }
@@ -125,8 +130,8 @@ public class DownloadEngine {
     }
 
     private void processRequest() {
-        SWDownloadCandidate candidate = downloadSet.getCandidate();
-        SWDownloadFile downloadFile = downloadSet.getDownloadFile();
+        SWDownloadCandidate candidate = downloadSet.downloadCandidate;
+        SWDownloadFile downloadFile = downloadSet.downloadFile;
         try {
             do {
                 // init and preprocess handler.
@@ -189,7 +194,7 @@ public class DownloadEngine {
         try {
             downloadHandler.preProcess();
         } catch (DownloadHandlerException exp) {
-            SWDownloadCandidate candidate = downloadSet.getCandidate();
+            SWDownloadCandidate candidate = downloadSet.downloadCandidate;
             candidate.addToCandidateLog("No segment to allocate.");
             failDownload();
         }
@@ -197,7 +202,7 @@ public class DownloadEngine {
 
     private void processDownloadHandlerHandshake() {
         logger.debug("process handshake with: {} - {}", downloadSet, this);
-        SWDownloadCandidate downloadCandidate = downloadSet.getCandidate();
+        SWDownloadCandidate downloadCandidate = downloadSet.downloadCandidate;
         try {
             downloadCandidate.setStatus(CandidateStatus.REQUESTING);
             downloadHandler.processHandshake();
@@ -214,7 +219,7 @@ public class DownloadEngine {
             failDownload();
             downloadCandidate.setStatus(CandidateStatus.WAITING);
         } catch (RangeUnavailableException exp) {
-            SWDownloadFile downloadFile = downloadSet.getDownloadFile();
+            SWDownloadFile downloadFile = downloadSet.downloadFile;
             downloadCandidate.addToCandidateLog(exp.toString());
             logger.debug("{} :: {}", exp.toString(), downloadCandidate);
 
@@ -246,7 +251,7 @@ public class DownloadEngine {
             logger.debug(exp.toString(), exp);
             logger.debug("Removing download candidate: {}", downloadCandidate);
 
-            SWDownloadFile downloadFile = downloadSet.getDownloadFile();
+            SWDownloadFile downloadFile = downloadSet.downloadFile;
             if (exp instanceof FileNotAvailableException) {
                 downloadFile.markCandidateIgnored(downloadCandidate,
                         "CandidateStatusReason_FileNotFound");
@@ -262,7 +267,7 @@ public class DownloadEngine {
             // wrong http header.
             logger.warn(exp.toString(), exp);
 
-            SWDownloadFile downloadFile = downloadSet.getDownloadFile();
+            SWDownloadFile downloadFile = downloadSet.downloadFile;
             downloadFile.markCandidateIgnored(downloadCandidate,
                     "CandidateStatusReason_HTTPError");
             downloadFile.addBadAltLoc(downloadCandidate);
@@ -285,12 +290,12 @@ public class DownloadEngine {
     }
 
     private DownloadHandler possiblyInitThexHandler() {
-        SWDownloadFile downloadFile = downloadSet.getDownloadFile();
+        SWDownloadFile downloadFile = downloadSet.downloadFile;
         if (downloadFile.getFileURN() == null) {
             return null;
         }
 
-        if (!downloadSet.getCandidate().isThexSupported()) {
+        if (!downloadSet.downloadCandidate.isThexSupported()) {
             return null;
         }
 
@@ -315,13 +320,13 @@ public class DownloadEngine {
      * Stops the download engine if the queue position breaks.
      */
     private void holdPossibleQueueState() {
-        SWDownloadCandidate candidate = downloadSet.getCandidate();
+        SWDownloadCandidate candidate = downloadSet.downloadCandidate;
 
         if (!candidate.isRemotlyQueued()) {
             return;
         }
 
-        SWDownloadFile downloadFile = downloadSet.getDownloadFile();
+        SWDownloadFile downloadFile = downloadSet.downloadFile;
 
         boolean succ = downloadFile.addAndValidateQueuedCandidate(candidate);
         if (!succ) {

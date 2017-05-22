@@ -21,7 +21,8 @@
  */
 package phex.common.bandwidth;
 
-import phex.prefs.core.BandwidthPrefs;
+import phex.BandwidthPrefs;
+import phex.peer.Peer;
 
 /**
  * Manages all bandwidth controllers.
@@ -31,49 +32,52 @@ public class BandwidthManager {
     private final BandwidthController networkBandwidthController;
     private final BandwidthController downloadBandwidthController;
     private final BandwidthController uploadBandwidthController;
+    private final Peer peer;
 
-    public BandwidthManager() {
+    public BandwidthManager(Peer peer) {
+        this.peer = peer;
+        
         serventBandwidthController = new BandwidthController("ServentThrottle",
-                BandwidthPrefs.MaxTotalBandwidth.get());
+                peer.bandwidthPrefs.MaxTotalBandwidth.get());
         serventBandwidthController.activateShortTransferAvg(1000, 5);
         serventBandwidthController.activateLongTransferAvg(2000, 90);
 
         networkBandwidthController = new BandwidthController("NetworkThrottle",
-                BandwidthPrefs.MaxNetworkBandwidth.get(),
+                peer.bandwidthPrefs.MaxNetworkBandwidth.get(),
                 serventBandwidthController);
         networkBandwidthController.activateShortTransferAvg(1000, 5);
         networkBandwidthController.activateLongTransferAvg(2000, 90);
 
         downloadBandwidthController = new BandwidthController("DownloadThrottle",
-                BandwidthPrefs.MaxDownloadBandwidth.get(),
+                peer.bandwidthPrefs.MaxDownloadBandwidth.get(),
                 serventBandwidthController);
         downloadBandwidthController.activateShortTransferAvg(1000, 5);
         downloadBandwidthController.activateLongTransferAvg(2000, 90);
 
         uploadBandwidthController = new BandwidthController("UploadThrottle",
-                BandwidthPrefs.MaxUploadBandwidth.get(),
+                peer.bandwidthPrefs.MaxUploadBandwidth.get(),
                 serventBandwidthController);
         uploadBandwidthController.activateShortTransferAvg(1000, 5);
         uploadBandwidthController.activateLongTransferAvg(2000, 90);
     }
 
     public void setDownloadBandwidth(int newDownloadBwInBytes) {
-        BandwidthPrefs.MaxDownloadBandwidth.set(newDownloadBwInBytes);
+        peer.bandwidthPrefs.MaxDownloadBandwidth.set(newDownloadBwInBytes);
         downloadBandwidthController.setThrottlingRate(newDownloadBwInBytes);
     }
 
     public void setNetworkBandwidth(int newNetworkBwInBytes) {
-        BandwidthPrefs.MaxNetworkBandwidth.set(newNetworkBwInBytes);
+        peer.bandwidthPrefs.MaxNetworkBandwidth.set(newNetworkBwInBytes);
         networkBandwidthController.setThrottlingRate(newNetworkBwInBytes);
     }
 
     public void setServentBandwidth(int newPhexBwInBytes) {
-        BandwidthPrefs.MaxTotalBandwidth.set(newPhexBwInBytes);
+        peer.bandwidthPrefs.MaxTotalBandwidth.set(newPhexBwInBytes);
         serventBandwidthController.setThrottlingRate(newPhexBwInBytes);
     }
 
     public void setUploadBandwidth(int newUploadBwInBytes) {
-        BandwidthPrefs.MaxUploadBandwidth.set(newUploadBwInBytes);
+        peer.bandwidthPrefs.MaxUploadBandwidth.set(newUploadBwInBytes);
         uploadBandwidthController.setThrottlingRate(newUploadBwInBytes);
     }
 

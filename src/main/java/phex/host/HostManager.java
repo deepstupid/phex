@@ -29,9 +29,7 @@ import phex.common.Environment;
 import phex.connection.OutgoingConnectionDispatcher;
 import phex.connection.PingWorker;
 import phex.msg.PongMsg;
-import phex.prefs.core.ConnectionPrefs;
-import phex.prefs.core.NetworkPrefs;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 import java.util.TimerTask;
 
@@ -118,8 +116,8 @@ final public class HostManager extends AbstractLifeCycle {
      * @return true if the node is currently a ultrapeer, false otherwise.
      */
     public boolean isUltrapeer() {
-        return (ConnectionPrefs.AllowToBecomeUP.get() &&
-                ConnectionPrefs.ForceToBeUltrapeer.get())
+        return (peer.connectionPrefs.AllowToBecomeUP.get() &&
+                peer.connectionPrefs.ForceToBeUltrapeer.get())
                 || !isShieldedLeafNode() && networkHostsContainer.getTotalConnectionCount() > 0;
     }
 
@@ -215,14 +213,14 @@ final public class HostManager extends AbstractLifeCycle {
                 // as a ultrapeer I'm primary searching for Ultrapeers only...
                 // to make sure I'm well connected...
                 hostCount = networkHostsContainer.getUltrapeerConnectionCount();
-                requiredHostCount = ConnectionPrefs.Up2UpConnections.get();
+                requiredHostCount = peer.connectionPrefs.Up2UpConnections.get();
             }
             // we don't support legacy peers anymore ( since 3.0 ) therefore we only
             // handle leaf mode here
             else {
                 // as a leaf I'm primary searching for Ultrapeers only...
                 hostCount = networkHostsContainer.getUltrapeerConnectionCount();
-                requiredHostCount = ConnectionPrefs.Leaf2UpConnections.get();
+                requiredHostCount = peer.connectionPrefs.Leaf2UpConnections.get();
             }
 
             // count the number of missing connection tries this is the required count
@@ -240,7 +238,7 @@ final public class HostManager extends AbstractLifeCycle {
 
             // we will never try more then a reasonable parallel tries..
             int upperLimit = Math.min(MAX_PARALLEL_CONNECTION_TRIES,
-                    NetworkPrefs.MaxConcurrentConnectAttempts.get()) - currentTryCount;
+                    peer.netPrefs.MaxConcurrentConnectAttempts.get()) - currentTryCount;
 
             int outConnectCount = Math.min(missingCount - currentTryCount,
                     upperLimit);

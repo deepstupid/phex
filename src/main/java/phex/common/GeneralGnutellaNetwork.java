@@ -22,7 +22,7 @@
 package phex.common;
 
 import phex.connection.ConnectionConstants;
-import phex.prefs.core.NetworkPrefs;
+import phex.peer.Peer;
 
 import java.io.File;
 
@@ -30,9 +30,14 @@ import java.io.File;
  * The representation of the general Gnutella network.
  */
 public class GeneralGnutellaNetwork extends GnutellaNetwork {
+
+    public GeneralGnutellaNetwork(Peer peer) {
+        super(peer);
+    }
+
     @Override
     public String getName() {
-        return NetworkPrefs.GENERAL_GNUTELLA_NETWORK;
+        return peer.netPrefs.GENERAL_GNUTELLA_NETWORK;
     }
 
     /**
@@ -40,8 +45,8 @@ public class GeneralGnutellaNetwork extends GnutellaNetwork {
      */
     @Override
     public File getHostsFile() {
-        return Environment.getPhexConfigFile(
-                EnvironmentConstants.HOSTS_FILE_NAME);
+        return peer.file(
+                Peer.HOSTS_FILE_NAME);
     }
 
     /**
@@ -49,8 +54,8 @@ public class GeneralGnutellaNetwork extends GnutellaNetwork {
      */
     @Override
     public File getFavoritesFile() {
-        return Environment.getPhexConfigFile(
-                EnvironmentConstants.XML_FAVORITES_FILE_NAME);
+        return peer.file(
+                Peer.XML_FAVORITES_FILE_NAME);
     }
 
     /**
@@ -58,8 +63,8 @@ public class GeneralGnutellaNetwork extends GnutellaNetwork {
      */
     @Override
     public File getSearchFilterFile() {
-        return Environment.getPhexConfigFile(
-                EnvironmentConstants.XML_SEARCH_FILTER_FILE_NAME);
+        return peer.file(
+                Peer.XML_SEARCH_FILTER_FILE_NAME);
     }
 
     /**
@@ -67,8 +72,8 @@ public class GeneralGnutellaNetwork extends GnutellaNetwork {
      */
     @Override
     public File getGWebCacheFile() {
-        return Environment.getPhexConfigFile(
-                EnvironmentConstants.G_WEB_CACHE_FILE_NAME);
+        return peer.file(
+                Peer.G_WEB_CACHE_FILE_NAME);
     }
 
     /**
@@ -76,8 +81,8 @@ public class GeneralGnutellaNetwork extends GnutellaNetwork {
      */
     @Override
     public File getUdpHostCacheFile() {
-        return Environment.getPhexConfigFile(
-                EnvironmentConstants.UDP_HOST_CACHE_FILE_NAME);
+        return peer.file(
+                Peer.UDP_HOST_CACHE_FILE_NAME);
     }
 
     @Override

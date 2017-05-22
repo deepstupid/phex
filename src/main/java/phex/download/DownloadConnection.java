@@ -31,20 +31,25 @@ import phex.download.swarming.SWDownloadCandidate.CandidateStatus;
 import phex.net.connection.Connection;
 import phex.net.connection.SocketFactory;
 import phex.net.repres.SocketFacade;
+import phex.peer.Peer;
 
 import java.io.IOException;
 import java.net.SocketException;
 
 public class DownloadConnection extends Connection {
     private final SWDownloadCandidate candidate;
+    private final SocketFactory socketFactory;
 
-    public DownloadConnection(SWDownloadCandidate candidate) {
+    public DownloadConnection(SWDownloadCandidate candidate, Peer peer) {
         this.candidate = candidate;
+        this.socketFactory = new SocketFactory(peer);
     }
 
-    public DownloadConnection(SWDownloadCandidate candidate, SocketFacade socket) {
-        this(candidate);
+    public DownloadConnection(SWDownloadCandidate candidate, SocketFacade socket, Peer peer) {
+        super();
+        this.candidate = candidate;
         this.socket = socket;
+        this.socketFactory = new SocketFactory(peer);
         BandwidthController bwCont = candidate.getDownloadFile().getBandwidthController();
         setBandwidthController(bwCont);
 
@@ -84,7 +89,7 @@ public class DownloadConnection extends Connection {
                                 + candAddress.getPort());
                 candidate.setStatus(CandidateStatus.CONNECTING);
             };
-            socket = SocketFactory.connect(address, timeout,
+            socket = socketFactory.connect(address, timeout,
                     acquireCallback);
         } catch (SocketException exp) {// indicates a general communication error while connecting
             throw new ConnectionFailedException(exp.getMessage());

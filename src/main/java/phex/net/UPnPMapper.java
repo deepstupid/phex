@@ -19,7 +19,7 @@ import org.teleal.cling.registry.RegistryListener;
 import org.teleal.cling.support.igd.callback.PortMappingAdd;
 import org.teleal.cling.support.igd.callback.PortMappingDelete;
 import org.teleal.cling.support.model.PortMapping;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 import java.util.HashMap;
 import java.util.Iterator;

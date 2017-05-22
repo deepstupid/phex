@@ -18,17 +18,18 @@
  * 
  *  Created on 17.08.2006
  *  --- CVS Information ---
- *  $Id: NetworkPrefs.java 4562 2012-11-21 11:14:19Z gregork $
+ *  $Id: peer.prefs.java 4562 2012-11-21 11:14:19Z gregork $
  */
-package phex.prefs.core;
+package phex;
 
-import phex.prefs.api.PreferencesFactory;
-import phex.prefs.api.Setting;
+import phex.prefs.Preferences;
+import phex.prefs.Setting;
 import phex.util.SystemUtils;
 
+import java.io.File;
 import java.util.List;
 
-public class NetworkPrefs extends PhexCorePrefs {
+public class NetworkPrefs extends Preferences {
     /**
      * Settings which have to be defined, before you can define your own ones...
      * DON'T CHANGE THESE!
@@ -40,83 +41,85 @@ public class NetworkPrefs extends PhexCorePrefs {
     /**
      * The GUID of the servent.
      */
-    public static final Setting<String> ServentGuid;
+    public final  Setting<String> ServentGuid;
     /**
      * The listening port the server binds to.
      */
-    public static final Setting<Integer> ListeningPort;
+    public final  Setting<Integer> ListeningPort;
     /**
      * The name of the used gnutella network.
      */
-    public static final Setting<String> CurrentNetwork;
+    public final  Setting<String> CurrentNetwork;
     /**
      * The history of networks.
      */
-    public static final Setting<List<String>> NetworkHistory;
+    public final  Setting<List<String>> NetworkHistory;
     /**
      * Indicates if the node is connected to a Local Area Network (LAN). This
      * is used to indicate if there is a chance to access a local IP when
      * firewalled.
      */
-    public static final Setting<Boolean> ConnectedToLAN;
+    public final  Setting<Boolean> ConnectedToLAN;
     /**
      * The create socket default connect timeout.
      */
-    public static final Setting<Integer> TcpConnectTimeout;
+    public final  Setting<Integer> TcpConnectTimeout;
     /**
      * The sockets default read/write timeout.
      */
-    public static final Setting<Integer> TcpRWTimeout;
+    public final  Setting<Integer> TcpRWTimeout;
     /**
      * The number of maximum concurrent connection attempts allowed.
      * (XP limits this to 10)
      */
-    public static final Setting<Integer> MaxConcurrentConnectAttempts;
+    public final  Setting<Integer> MaxConcurrentConnectAttempts;
     /**
      * The max number of host that should be hold in HostCache.
      */
-    public static final Setting<Integer> MaxHostInHostCache;
+    public final  Setting<Integer> MaxHostInHostCache;
     /**
      * Automatically removes bad hosts from the connection container.
      */
-    public static final Setting<Boolean> AutoRemoveBadHosts;
+    public final  Setting<Boolean> AutoRemoveBadHosts;
     /**
      * Indicates if the chat feature is enabled.
      */
-    public static final Setting<Boolean> AllowChatConnection;
+    public final  Setting<Boolean> AllowChatConnection;
     /**
      * The default number of maximum concurrent connection attempts allowed on
      * a XP system. (XP limits this to 10, leave 2 for other process)
      */
-    private static final int DEFAULT_MAX_CONCURRENT_CONNECT_ATTEMPTS_XP = 8;
+    private final  int DEFAULT_MAX_CONCURRENT_CONNECT_ATTEMPTS_XP = 8;
     /**
      * The default number of maximum concurrent connection attempts allowed on
      * a other systems then XP. (XP limits this to 10, leave 2 for other process)
      */
-    private static final int DEFAULT_MAX_CONCURRENT_CONNECT_ATTEMPTS_OTHERS = 15;
+    private final  int DEFAULT_MAX_CONCURRENT_CONNECT_ATTEMPTS_OTHERS = 15;
 
-    static {
-        ServentGuid = PreferencesFactory.createStringSetting(
-                "Network.ServentGuid", "", instance);
+    public NetworkPrefs(String network, File file) {
+        super(file);
 
-        ListeningPort = PreferencesFactory.createListeningPortSetting(
-                "Network.ListeningPort", instance);
+        ServentGuid = createStringSetting(
+                "Network.ServentGuid", "");
 
-        CurrentNetwork = PreferencesFactory.createStringSetting(
+        ListeningPort = createListeningPortSetting(
+                "Network.ListeningPort");
+
+        CurrentNetwork = createStringSetting(
                 "Network.CurrentNetwork",
-                PrivateNetworkConstants.DEFAULT_NETWORK_TO_USE, instance);
+                network);
 
-        NetworkHistory = PreferencesFactory.createListSetting(
-                "Network.NetworkHistory", instance);
+        NetworkHistory = createListSetting(
+                "Network.NetworkHistory");
 
-        ConnectedToLAN = PreferencesFactory.createBoolSetting(
-                "Network.ConnectedToLAN", true, instance);
+        ConnectedToLAN = createBoolSetting(
+                "Network.ConnectedToLAN", true);
 
-        TcpConnectTimeout = PreferencesFactory.createIntSetting(
-                "Network.TcpConnectTimeout", 30 * 1000, instance);
+        TcpConnectTimeout = createIntSetting(
+                "Network.TcpConnectTimeout", 30 * 1000);
 
-        TcpRWTimeout = PreferencesFactory.createIntSetting(
-                "Network.TcpRWTimeout", 60 * 1000, instance);
+        TcpRWTimeout = createIntSetting(
+                "Network.TcpRWTimeout", 60 * 1000);
 
         int maxConcConnectAtt;
         if (SystemUtils.IS_OS_WINDOWS_XP) {
@@ -124,16 +127,16 @@ public class NetworkPrefs extends PhexCorePrefs {
         } else {
             maxConcConnectAtt = DEFAULT_MAX_CONCURRENT_CONNECT_ATTEMPTS_OTHERS;
         }
-        MaxConcurrentConnectAttempts = PreferencesFactory.createIntSetting(
-                "Network.MaxConcurrentConnectAttempts", maxConcConnectAtt, instance);
+        MaxConcurrentConnectAttempts = createIntSetting(
+                "Network.MaxConcurrentConnectAttempts", maxConcConnectAtt);
 
-        MaxHostInHostCache = PreferencesFactory.createIntSetting(
-                "Network.MaxHostInHostCache", 2000, instance);
+        MaxHostInHostCache = createIntSetting(
+                "Network.MaxHostInHostCache", 2000);
 
-        AutoRemoveBadHosts = PreferencesFactory.createBoolSetting(
-                "Network.AutoRemoveBadHosts", true, instance);
+        AutoRemoveBadHosts = createBoolSetting(
+                "Network.AutoRemoveBadHosts", true);
 
-        AllowChatConnection = PreferencesFactory.createBoolSetting(
-                "Network.AllowChatConnection", true, instance);
+        AllowChatConnection = createBoolSetting(
+                "Network.AllowChatConnection", true);
     }
 }

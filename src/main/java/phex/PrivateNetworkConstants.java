@@ -20,7 +20,7 @@
  *  --- CVS Information ---
  *  $Id: PrivateNetworkConstants.java 4231 2008-07-15 16:01:10Z gregork $
  */
-package phex.prefs.core;
+package phex;
 
 public interface PrivateNetworkConstants {
     /**
@@ -33,7 +33,6 @@ public interface PrivateNetworkConstants {
      * For better appearance, put a space in front of it
      * and write it in lowercase. (Your privateversion.number will be appended)
      */
-    String PRIVATE_NETWORK = null;
     String PRIVATE_BUILD_ID = "";
 
     /**
@@ -42,12 +41,5 @@ public interface PrivateNetworkConstants {
      */
     boolean DEFAULT_FORCE_TOBE_ULTRAPEER = false;
 
-    /**
-     * Assign here the default network to use. This can be the
-     * GENERAL_GNUTELLA_NETWORK or the self defined PRIVATE_NETWORK.
-     * If you want to change something, do so above.
-     */
-    String DEFAULT_NETWORK_TO_USE = PRIVATE_NETWORK == null ?
-            NetworkPrefs.GENERAL_GNUTELLA_NETWORK : PRIVATE_NETWORK;
 
 }

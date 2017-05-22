@@ -30,9 +30,9 @@ import phex.event.ChangeEvent;
 import phex.host.HostFetchingStrategy;
 import phex.host.HostFetchingStrategy.FetchingReason;
 import phex.host.NetworkHostsContainer;
-import phex.prefs.core.ConnectionPrefs;
-import phex.servent.OnlineStatus;
-import phex.servent.Peer;
+import phex.ConnectionPrefs;
+import phex.peer.OnlineStatus;
+import phex.peer.Peer;
 import phex.util.DateUtils;
 
 import java.util.TimerTask;

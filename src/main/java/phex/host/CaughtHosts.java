@@ -22,7 +22,7 @@
 package phex.host;
 
 import phex.common.address.DestAddress;
-import phex.prefs.core.NetworkPrefs;
+import phex.peer.Peer;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,11 +35,13 @@ import java.util.TreeSet;
  * probability. When the container is full, the element with the
  * lowest priority is dropped.
  */
-public class CatchedHostCache {
+public class CaughtHosts {
     private final TreeSet<CaughtHost> sortedHosts;
     private final Map<DestAddress, CaughtHost> addressHostMapping;
+    private final Peer peer;
 
-    public CatchedHostCache() {
+    public CaughtHosts(Peer peer) {
+        this.peer = peer;
         sortedHosts = new TreeSet<>(new CaughtHostComparator());
         addressHostMapping = new HashMap<>();
     }
@@ -67,10 +69,10 @@ public class CatchedHostCache {
         }
         sortedHosts.add(host);
 
-        if (sortedHosts.size() >= NetworkPrefs.MaxHostInHostCache.get()) {
+        if (sortedHosts.size() >= peer.netPrefs.MaxHostInHostCache.get()) {
             addressHostMapping.put(host.getHostAddress(), host);
             sortedHosts.add(host);
-            if (sortedHosts.size() >= NetworkPrefs.MaxHostInHostCache.get()) {
+            if (sortedHosts.size() >= peer.netPrefs.MaxHostInHostCache.get()) {
                 CaughtHost dropObject = sortedHosts.first();
                 remove(dropObject);
             }

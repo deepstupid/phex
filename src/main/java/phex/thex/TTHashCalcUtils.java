@@ -27,7 +27,7 @@ import phex.common.file.ManagedFileInputStream;
 import phex.common.format.NumberFormatUtils;
 import phex.common.log.NLogger;
 import phex.download.ThexVerificationData.ThexData;
-import phex.prefs.core.LibraryPrefs;
+import phex.LibraryPrefs;
 import phex.share.ShareFile;
 import phex.util.IOUtil;
 import phex.util.bitzi.Tiger;

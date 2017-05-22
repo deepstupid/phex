@@ -24,7 +24,7 @@ package phex.host;
 import phex.bootstrap.BootstrapManager;
 import phex.bootstrap.UdpHostCacheContainer;
 import phex.common.log.NLogger;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 public class DefaultHostFetchingStrategy implements HostFetchingStrategy {
     private final BootstrapManager gWebCacheMgr;

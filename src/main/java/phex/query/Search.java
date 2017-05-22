@@ -30,7 +30,7 @@ import phex.msg.QueryMsg;
 import phex.msg.QueryResponseMsg;
 import phex.msg.QueryResponseRecord;
 import phex.security.AccessType;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 public abstract class Search {
     private static final Logger logger = LoggerFactory.getLogger(

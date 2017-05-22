@@ -28,7 +28,8 @@ import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
 import phex.common.address.IpAddress;
 import phex.io.buffer.ByteBuffer;
-import phex.prefs.core.MessagePrefs;
+import phex.MessagePrefs;
+import phex.peer.Peer;
 import phex.util.IOUtil;
 import phex.util.StringUtils;
 
@@ -138,7 +139,7 @@ public class QueryMsg extends Message {
      * <p>The header will be modified so that its function property becomes
      * MsgHeader.sQuery. The header argument is owned by this object.</p>
      */
-    public QueryMsg(DestAddress localAddress, GUID guid, byte ttl, String aSearchString, URN queryURN,
+    public QueryMsg(Peer peer, GUID guid, byte ttl, String aSearchString, URN queryURN,
                     boolean isRequesterCapableOfXmlResults, boolean isRequesterBehindFirewall,
                     boolean isOOBReplyAllowed, int featureQuerySelector) {// TODO3 extend query to dispatch a couple of URNs, this can be used
         // for researching multiple candidates for multiple files. But verify
@@ -161,7 +162,7 @@ public class QueryMsg extends Message {
         requesterIsXmlResultsCapable = isRequesterCapableOfXmlResults;
         this.requestSecureOOBReplies = isOOBReplyAllowed;
         try {
-            buildBody(localAddress);
+            buildBody(peer);
         } catch (IOException e) {// should never happen
             logger.error(e.toString(), e);
         }
@@ -182,19 +183,19 @@ public class QueryMsg extends Message {
      * @param header the MsgHeader to associate with the new message
      * @param aBody  the message body
      */
-    public QueryMsg(MsgHeader header, byte[] aBody) {
+    public QueryMsg(Peer peer, MsgHeader header, byte[] aBody) {
         super(header);
         getHeader().setPayloadType(MsgHeader.QUERY_PAYLOAD);
         body = aBody;
         requestSecureOOBReplies = false;
         // parse the body
-        parseBody();
+        parseBody(peer);
     }
 
     public QueryMsg(QueryMsg query, byte ttl) {
-        super(new MsgHeader(MsgHeader.QUERY_PAYLOAD, 0));
+        super(new MsgHeader(MsgHeader.QUERY_PAYLOAD, 0, ttl));
         getHeader().copy(query.getHeader());
-        getHeader().setTTL(ttl);
+        getHeader().setTTL(ttl); //<- redundant?
         this.body = query.body;
         this.searchString = query.searchString;
         this.featureQuerySelector = query.featureQuerySelector;
@@ -405,7 +406,7 @@ public class QueryMsg extends Message {
         return this.originIpAddress;
     }
 
-    private void buildBody(DestAddress localAddress)
+    private void buildBody(Peer peer)
             throws IOException {
         ByteArrayOutputStream bodyStream = new ByteArrayOutputStream();
         short complexMinSpeed = buildComplexMinSpeed();
@@ -441,8 +442,8 @@ public class QueryMsg extends Message {
             ggepBlock.addExtension(GGEPBlock.SECURE_OOB_ID);
         }
 
-        if (MessagePrefs.UseExtendedOriginIpAddress.get()) {
-            addPhexExtendedOriginGGEP(localAddress, ggepBlock);
+        if (peer.messagePrefs.UseExtendedOriginIpAddress.get()) {
+            addPhexExtendedOriginGGEP(peer.getLocalAddress(), ggepBlock);
         }
 
         byte[] ggepData = ggepBlock.getBytes();
@@ -460,7 +461,7 @@ public class QueryMsg extends Message {
         body = bodyStream.toByteArray();
     }
 
-    private void parseBody() {
+    private void parseBody(Peer peer) {
         try {
             ByteArrayInputStream inStream = new ByteArrayInputStream(body);
             // Get & parse the MinSpeed field
@@ -496,7 +497,7 @@ public class QueryMsg extends Message {
                         GGEPBlock.SECURE_OOB_ID)) {
                     requestSecureOOBReplies = true;
                 }
-                if (MessagePrefs.UseExtendedOriginIpAddress.get()) {
+                if (peer.messagePrefs.UseExtendedOriginIpAddress.get()) {
                     try {
                         byte[] value = GGEPBlock.getExtensionDataInBlocks(ggepBlocks, GGEPBlock.PHEX_EXTENDED_ORIGIN);
                         originIpAddress = new IpAddress(value).getHostIP();

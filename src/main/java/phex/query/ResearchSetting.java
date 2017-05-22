@@ -28,7 +28,7 @@ import phex.rules.Rule;
 import phex.rules.condition.FileSizeCondition;
 import phex.rules.condition.NotCondition;
 import phex.rules.consequence.RemoveFromSearchConsequence;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 public class ResearchSetting {
     private final BackgroundSearchContainer searchContainer;

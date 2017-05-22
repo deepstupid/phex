@@ -27,7 +27,7 @@ import phex.common.Environment;
 import phex.common.address.DestAddress;
 import phex.common.address.IpAddress;
 import phex.host.NetworkHostsContainer;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 import java.util.TimerTask;
 

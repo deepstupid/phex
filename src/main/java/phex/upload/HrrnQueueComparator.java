@@ -1,6 +1,6 @@
 package phex.upload;
 
-import phex.prefs.core.BandwidthPrefs;
+import phex.BandwidthPrefs;
 
 import java.util.Comparator;
 
@@ -17,7 +17,7 @@ public class HrrnQueueComparator implements Comparator<UploadQueueState> {
 
     public static double calcRatio(UploadQueueState state, long baseTime) {
         long fileSize = state.getLastRequestedFile().getFileSize();
-        float uploadSpeed = BandwidthPrefs.MaxUploadBandwidth.get().floatValue();
+        float uploadSpeed = BandwidthPrefs.UNLIMITED_BANDWIDTH;
         double estimatedTimeSec = fileSize / uploadSpeed;
         double waitTimeSec = Math.max((baseTime - state.getFirstQueueTime()) / 1000.0, 1);
         double ratio = 1.0 + Math.max(1, waitTimeSec) / estimatedTimeSec;

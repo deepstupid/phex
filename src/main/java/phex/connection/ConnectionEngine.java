@@ -40,11 +40,11 @@ import phex.msg.vendor.MessagesSupportedVMsg;
 import phex.msghandling.MessageService;
 import phex.net.connection.Connection;
 import phex.net.repres.PresentationManager;
-import phex.prefs.core.MessagePrefs;
+import phex.MessagePrefs;
 import phex.query.DynamicQueryConstants;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.util.Localizer;
 
 import java.io.IOException;

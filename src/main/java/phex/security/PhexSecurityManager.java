@@ -21,23 +21,15 @@
  */
 package phex.security;
 
-import phex.Phex;
 import phex.common.*;
 import phex.common.address.AddressUtils;
 import phex.common.address.DestAddress;
 import phex.common.address.IpAddress;
-import phex.common.file.FileManager;
-import phex.common.file.ManagedFile;
-import phex.common.file.ManagedFileException;
 import phex.common.log.NLogger;
-import phex.event.UserMessageListener;
-import phex.prefs.core.SecurityPrefs;
+import phex.SecurityPrefs;
 import phex.share.SharedResource;
 import phex.util.StringUtils;
-import phex.xml.sax.DPhex;
-import phex.xml.sax.XMLBuilder;
 import phex.xml.sax.security.DIpAccessRule;
-import phex.xml.sax.security.DSecurity;
 import phex.xml.sax.security.DSecurityRule;
 
 import java.io.*;
@@ -149,7 +141,7 @@ public class PhexSecurityManager extends AbstractLifeCycle {
     }
 
     private void loadHostileSha1List() {
-        if (!SecurityPrefs.LoadHostileSha1List.get().booleanValue()) {
+        if (!SecurityPrefs.LoadHostileSha1List.get()) {
             return;
         }
         try {
@@ -301,7 +293,7 @@ public class PhexSecurityManager extends AbstractLifeCycle {
     }
 
     private void loadHostileHostList(Map<String, DIpAccessRule> systemRuleMap) {
-        if (!SecurityPrefs.LoadHostileHostList.get().booleanValue()) {
+        if (!SecurityPrefs.LoadHostileHostList.get()) {
             return;
         }
         try {

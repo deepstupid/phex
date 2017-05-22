@@ -27,7 +27,7 @@ import phex.host.NetworkHostsContainer;
 import phex.msg.QueryMsg;
 import phex.query.LeafGuidedSearchProgress;
 import phex.query.SearchProgress;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.util.QueryGUIDRoutingPair;
 
 

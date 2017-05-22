@@ -33,10 +33,9 @@ import phex.connection.ConnectionStatusEvent.Status;
 import phex.event.ChangeEvent;
 import phex.host.HostFetchingStrategy.FetchingReason;
 import phex.msg.PongMsg;
-import phex.prefs.core.NetworkPrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.util.DateUtils;
 import phex.util.IPUtils;
 
@@ -64,7 +63,7 @@ public class CaughtHostsContainer {
      * lowest priority is dropped.
      * Access needs to be synchronized on this object.
      */
-    private final CatchedHostCache catchedHostCache;
+    private final CaughtHosts caughtHostsCache;
 
     /**
      * All Hosts with free Leaf slots
@@ -85,16 +84,16 @@ public class CaughtHostsContainer {
         this.peer = peer;
 
         int[] capacities = new int[3];
-        capacities[HIGH_PRIORITY] = (int) Math.round(NetworkPrefs.MaxHostInHostCache.get().doubleValue()
+        capacities[HIGH_PRIORITY] = (int) Math.round(peer.netPrefs.MaxHostInHostCache.get().doubleValue()
                 * 2.0 / 3.0);
-        capacities[NORMAL_PRIORITY] = (int) Math.round((NetworkPrefs.MaxHostInHostCache.get().doubleValue()
+        capacities[NORMAL_PRIORITY] = (int) Math.round((peer.netPrefs.MaxHostInHostCache.get().doubleValue()
                 - capacities[HIGH_PRIORITY]) * 2.0 / 3.0);
-        capacities[LOW_PRIORITY] = NetworkPrefs.MaxHostInHostCache.get()
+        capacities[LOW_PRIORITY] = peer.netPrefs.MaxHostInHostCache.get()
                 - capacities[HIGH_PRIORITY] - capacities[NORMAL_PRIORITY];
         caughtHosts = new phex.common.collections.PriorityQueue(capacities);
 
         uniqueCaughtHosts = new HashSet<>();
-        catchedHostCache = new CatchedHostCache();
+        caughtHostsCache = new CaughtHosts(peer);
 
         Environment.getInstance().scheduleTimerTask(
                 new SaveHostsContainerTimer(), SaveHostsContainerTimer.TIMER_PERIOD,
@@ -212,8 +211,8 @@ public class CaughtHostsContainer {
      * Clears and reloads caught hosts
      */
     private void initializeCaughtHostsContainer() {
-        caughtHosts.clear();
-        catchedHostCache.clear();
+        caughtHostsCache.clear();
+        caughtHostsCache.clear();
         hasChangedSinceLastSave = false;
         loadHostsFromFile();
     }
@@ -319,21 +318,21 @@ public class CaughtHostsContainer {
      * @param caughtHost the caught host to add or update with.
      */
     private void addPersistentCaughtHost(CaughtHost caughtHost) {
-        synchronized (catchedHostCache) {
+        synchronized (caughtHostsCache) {
             DestAddress address = caughtHost.getHostAddress();
-            CaughtHost existingHost = catchedHostCache.getCaughHost(address);
+            CaughtHost existingHost = caughtHostsCache.getCaughHost(address);
             if (existingHost == null) {
-                catchedHostCache.add(caughtHost);
+                caughtHostsCache.add(caughtHost);
             } else {
                 // update daily uptime..
                 // to maintain correct order first remove...
-                catchedHostCache.remove(existingHost);
+                caughtHostsCache.remove(existingHost);
                 // then modify...
                 if (caughtHost.getDailyUptime() > 0) {
                     existingHost.setDailyUptime(caughtHost.getDailyUptime());
                 }
                 // then add...
-                catchedHostCache.add(existingHost);
+                caughtHostsCache.add(existingHost);
             }
             hasChangedSinceLastSave = true;
         }
@@ -383,13 +382,13 @@ public class CaughtHostsContainer {
         if (!valid) {
             return;
         }
-        synchronized (catchedHostCache) {
-            CaughtHost existingHost = catchedHostCache.getCaughHost(hostAddress);
+        synchronized (caughtHostsCache) {
+            CaughtHost existingHost = caughtHostsCache.getCaughHost(hostAddress);
             if (existingHost == null) {
                 existingHost = new CaughtHost(hostAddress);
             } else {
                 // to maintain correct order first remove...
-                catchedHostCache.remove(existingHost);
+                caughtHostsCache.remove(existingHost);
             }
 
             // then modify...
@@ -401,7 +400,7 @@ public class CaughtHostsContainer {
             }
 
             // then add...
-            catchedHostCache.add(existingHost);
+            caughtHostsCache.add(existingHost);
             hasChangedSinceLastSave = true;
         }
     }
@@ -421,7 +420,7 @@ public class CaughtHostsContainer {
      */
     private void ensureMinCaughHosts() {
         int minCount = (int) Math.ceil(
-                NetworkPrefs.MaxHostInHostCache.get().doubleValue() / 100.0);
+                peer.netPrefs.MaxHostInHostCache.get().doubleValue() / 100.0);
         if (caughtHosts.getSize() < minCount && hostFetchingStrategy != null) {
             hostFetchingStrategy.fetchNewHosts(FetchingReason.EnsureMinHosts);
         }
@@ -586,8 +585,8 @@ public class CaughtHostsContainer {
             File file = peer.getGnutellaNetwork().getHostsFile();
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
-            synchronized (catchedHostCache) {
-                Iterator<CaughtHost> iterator = catchedHostCache.iterator();
+            synchronized (caughtHostsCache) {
+                Iterator<CaughtHost> iterator = caughtHostsCache.iterator();
                 while (iterator.hasNext()) {
                     CaughtHost host = iterator.next();
                     DestAddress hostAddress = host.getHostAddress();

@@ -33,10 +33,10 @@ import phex.msg.vendor.UdpHeadPingVMsg;
 import phex.msg.vendor.VendorMsg;
 import phex.net.UdpDataHandler;
 import phex.net.UdpService;
-import phex.prefs.core.MessagePrefs;
+import phex.MessagePrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.share.SharedFilesService;
 import phex.statistic.StatisticProvider;
 import phex.statistic.StatisticsManager;
@@ -94,7 +94,7 @@ public class UdpMessageDataHandler implements UdpDataHandler {
             int length = msgHeader.getDataLength();
             if (length < 0) {
                 throw new IOException("Negative body size. Drop.");
-            } else if (length > MessagePrefs.MaxLength.get().intValue()) {
+            } else if (length > peer.messagePrefs.MaxLength.get().intValue()) {
                 throw new IOException("Packet too big (" + length + "). Drop.");
             }
 

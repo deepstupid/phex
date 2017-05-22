@@ -23,7 +23,7 @@ package phex.connection;
 
 import phex.common.ThreadTracking;
 import phex.host.Host;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 /**
  * This class is responsible to ping the neighborhood and find new hosts for the

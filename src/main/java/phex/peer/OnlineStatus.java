@@ -19,7 +19,7 @@
  *  --- SVN Information ---
  *  $Id$
  */
-package phex.servent;
+package phex.peer;
 
 public enum OnlineStatus {
     /**

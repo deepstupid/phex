@@ -24,7 +24,7 @@ package phex.download.swarming;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.download.DownloadScope;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 /**
  * The download set is used to hold everything that is needed for a doing a swarm
@@ -34,9 +34,9 @@ import phex.servent.Peer;
 public class SWDownloadSet {
     private static final Logger logger = LoggerFactory.getLogger(SWDownloadSet.class);
 
-    private final Peer peer;
-    private final SWDownloadFile downloadFile;
-    private final SWDownloadCandidate downloadCandidate;
+    public final Peer peer;
+    public final SWDownloadFile downloadFile;
+    public final SWDownloadCandidate downloadCandidate;
     private DownloadScope downloadScope;
     private SWDownloadSegment downloadSegment;
 
@@ -47,18 +47,6 @@ public class SWDownloadSet {
         downloadFile = aDownloadFile;
         downloadCandidate = aDownloadCandidate;
         downloadScope = null;
-    }
-
-    public Peer getPeer() {
-        return peer;
-    }
-
-    public SWDownloadFile getDownloadFile() {
-        return downloadFile;
-    }
-
-    public SWDownloadCandidate getCandidate() {
-        return downloadCandidate;
     }
 
     public SWDownloadSegment allocateSegment() {

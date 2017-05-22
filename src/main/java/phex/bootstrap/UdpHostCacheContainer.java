@@ -30,7 +30,7 @@ import phex.common.address.MalformedDestAddressException;
 import phex.event.ChangeEvent;
 import phex.msg.PongMsg;
 import phex.net.repres.PresentationManager;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 import java.io.*;
 import java.util.*;

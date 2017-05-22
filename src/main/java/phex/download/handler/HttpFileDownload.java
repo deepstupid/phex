@@ -40,11 +40,9 @@ import phex.http.*;
 import phex.io.buffer.ByteBuffer;
 import phex.net.connection.Connection;
 import phex.net.repres.PresentationManager;
-import phex.prefs.core.DownloadPrefs;
-import phex.prefs.core.NetworkPrefs;
-import phex.prefs.core.UploadPrefs;
+import phex.DownloadPrefs;
 import phex.security.PhexSecurityManager;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.util.IOUtil;
 import phex.util.LengthLimitedInputStream;
 
@@ -179,7 +177,7 @@ public class HttpFileDownload extends AbstractHttpDownload {
         candidate.setThexUriRoot(thexUri, root);
     }
 
-    private static void buildAltLocRequestHeader(SWDownloadFile downloadFile,
+    private void buildAltLocRequestHeader(SWDownloadFile downloadFile,
                                                  SWDownloadCandidate candidate, HTTPRequest request,
                                                  DestAddress serventAddress, boolean isFirewalled) {
         URN downloadFileURN = downloadFile.getFileURN();
@@ -197,7 +195,7 @@ public class HttpFileDownload extends AbstractHttpDownload {
 
         // create a temp copy of the container and add local alt location
         // if partial file sharing is active and we are not covered by a firewall
-        if (!isFirewalled && UploadPrefs.SharePartialFiles.get().booleanValue()) {
+        if (!isFirewalled && downloadEngine.peer().getUploadService().SharePartialFiles.get().booleanValue()) {
             // add the local peer to the alt loc on creation, but only if its
             // not a site local address.
             if (!serventAddress.isSiteLocalAddress()) {
@@ -266,7 +264,7 @@ public class HttpFileDownload extends AbstractHttpDownload {
      */
     public void preProcess() throws DownloadHandlerException {
         SWDownloadSet downloadSet = downloadEngine.getDownloadSet();
-        SWDownloadCandidate candidate = downloadSet.getCandidate();
+        SWDownloadCandidate candidate = downloadSet.downloadCandidate;
         candidate.setStatus(CandidateStatus.ALLOCATING_SEGMENT);
         SWDownloadSegment segment = downloadSet.allocateSegment();
         int allocationAttempts = 1;
@@ -284,13 +282,13 @@ public class HttpFileDownload extends AbstractHttpDownload {
         }
         if (segment == null) {// no more segments found...
             logger.debug("No segment to allocate found.");
-            downloadSet.getCandidate().addToCandidateLog(
+            downloadSet.downloadCandidate.addToCandidateLog(
                     "No segment to allocate found.");
 
             // wait some time... and try again...
 
 
-            downloadSet.getCandidate().setStatus(CandidateStatus.WAITING);
+            downloadSet.downloadCandidate.setStatus(CandidateStatus.WAITING);
             throw new DownloadHandlerException("No segment found to allocate.");
         }
     }
@@ -301,10 +299,10 @@ public class HttpFileDownload extends AbstractHttpDownload {
 
         Connection connection = downloadEngine.getConnection();
         SWDownloadSet downloadSet = downloadEngine.getDownloadSet();
-        Peer peer = downloadSet.getPeer();
+        Peer peer = downloadSet.peer;
         PhexSecurityManager securityService = peer.getSecurityService();
-        SWDownloadCandidate candidate = downloadSet.getCandidate();
-        SWDownloadFile downloadFile = downloadSet.getDownloadFile();
+        SWDownloadCandidate candidate = downloadSet.downloadCandidate;
+        SWDownloadFile downloadFile = downloadSet.downloadFile;
         SWDownloadSegment segment = downloadSet.getDownloadSegment();
 
         long downloadOffset = segment.getTransferStartPosition();
@@ -346,7 +344,7 @@ public class HttpFileDownload extends AbstractHttpDownload {
         if (!peer.isFirewalled() && (myIp == null || !myIp.isSiteLocalIP())) {
             request.addHeader(new HTTPHeader(GnutellaHeaderNames.X_NODE,
                     localAdress.getFullHostName()));
-            if (NetworkPrefs.AllowChatConnection.get().booleanValue()) {
+            if (peer.netPrefs.AllowChatConnection.get().booleanValue()) {
                 request.addHeader(new HTTPHeader("Chat", localAdress.getFullHostName()));
             }
         }
@@ -570,8 +568,8 @@ public class HttpFileDownload extends AbstractHttpDownload {
 
     public void processDownload() throws IOException {
         SWDownloadSet downloadSet = downloadEngine.getDownloadSet();
-        SWDownloadCandidate candidate = downloadSet.getCandidate();
-        SWDownloadFile downloadFile = downloadSet.getDownloadFile();
+        SWDownloadCandidate candidate = downloadSet.downloadCandidate;
+        SWDownloadFile downloadFile = downloadSet.downloadFile;
         SWDownloadSegment segment = downloadSet.getDownloadSegment();
 
         String snapshotOfSegment;
@@ -681,7 +679,7 @@ public class HttpFileDownload extends AbstractHttpDownload {
         // segment download completed, release segment
         SWDownloadSet downloadSet = downloadEngine.getDownloadSet();
         SWDownloadSegment downloadSegment = downloadSet.getDownloadSegment();
-        SWDownloadCandidate candidate = downloadSet.getCandidate();
+        SWDownloadCandidate candidate = downloadSet.downloadCandidate;
 
         if (downloadSegment == null) {
             candidate.addToCandidateLog("No download segment available.");

@@ -26,9 +26,9 @@ import phex.common.address.DestAddress;
 import phex.connection.ConnectionObserver;
 import phex.event.ChangeEvent;
 import phex.net.connection.Connection;
-import phex.prefs.core.ConnectionPrefs;
-import phex.servent.OnlineStatus;
-import phex.servent.Peer;
+import phex.ConnectionPrefs;
+import phex.peer.OnlineStatus;
+import phex.peer.Peer;
 import phex.util.Localizer;
 
 import java.util.ArrayList;

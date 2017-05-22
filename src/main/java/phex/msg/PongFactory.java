@@ -129,19 +129,19 @@ public class PongFactory {
         return data;
     }
 
-    /**
-     * Creates a udp pong message from a given byte array.
-     *
-     * @param bytesMsg the binary message.
-     * @param fromHost the host the message was received from.
-     * @return the created {@link PongMsg}.
-     * @throws InvalidMessageException
-     */
-    public PongMsg createUdpPongMsg(byte[] bytesMsg, Host fromHost)
-            throws InvalidMessageException {
-        MsgHeader msgHdr = MsgHeader.createMsgHeader(bytesMsg, 0);
-        return createUdpPongMsg(msgHdr, bytesMsg, MsgHeader.DATA_LENGTH, fromHost);
-    }
+//    /**
+//     * Creates a udp pong message from a given byte array.
+//     *
+//     * @param bytesMsg the binary message.
+//     * @param fromHost the host the message was received from.
+//     * @return the created {@link PongMsg}.
+//     * @throws InvalidMessageException
+//     */
+//    public PongMsg createUdpPongMsg(byte[] bytesMsg, Host fromHost)
+//            throws InvalidMessageException {
+//        MsgHeader msgHdr = MsgHeader.createMsgHeader(bytesMsg, 0);
+//        return createUdpPongMsg(msgHdr, bytesMsg, MsgHeader.DATA_LENGTH, fromHost);
+//    }
 
     public PongMsg createUdpPongMsg(MsgHeader msgHdr, byte[] data, int offset, Host fromHost)
             throws InvalidMessageException {

@@ -27,8 +27,7 @@ import phex.common.address.DefaultDestAddress;
 import phex.common.bandwidth.BandwidthController;
 import phex.io.buffer.ByteBuffer;
 import phex.net.connection.Connection;
-import phex.prefs.core.LibraryPrefs;
-import phex.prefs.core.NetworkPrefs;
+import phex.LibraryPrefs;
 import phex.query.QHDFlag;
 import phex.security.PhexSecurityManager;
 import phex.util.DummySocketFacade;
@@ -103,7 +102,7 @@ public class QueryResponseMsgTest extends TestCase
         assertEquals( QHDFlag.QHD_UNKNOWN_FLAG, respOut.getHasUploadedFlag() );
         assertEquals( "PHEX", respOut.getVendorCode() );
         assertEquals( true, respOut.isChatSupported() );
-        assertEquals( NetworkPrefs.AllowChatConnection.get().booleanValue(), respOut.isChatSupported() );
+        assertEquals( peer.prefs.AllowChatConnection.get().booleanValue(), respOut.isChatSupported() );
 
         assertEquals( QHDFlag.QHD_TRUE_FLAG, respOut.getServerBusyFlag() );
     }

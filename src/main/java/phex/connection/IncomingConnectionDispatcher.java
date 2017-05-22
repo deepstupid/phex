@@ -36,8 +36,7 @@ import phex.io.buffer.BufferCache;
 import phex.msg.GUID;
 import phex.net.connection.Connection;
 import phex.net.repres.SocketFacade;
-import phex.prefs.core.NetworkPrefs;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.share.HttpRequestDispatcher;
 import phex.util.GnutellaInputStream;
 import phex.util.IOUtil;
@@ -71,7 +70,7 @@ public class IncomingConnectionDispatcher implements Runnable {
     public void run() {
         GnutellaInputStream gInStream = null;
         try {
-            socket.setSoTimeout(NetworkPrefs.TcpRWTimeout.get());
+            socket.setSoTimeout(peer.netPrefs.TcpRWTimeout.get());
             BandwidthController bwController = peer.getBandwidthService()
                     .getNetworkBandwidthController();
             Connection connection = new Connection(socket, bwController);

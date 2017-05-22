@@ -23,7 +23,7 @@ package phex.upload;
 
 import junit.framework.TestCase;
 import phex.common.address.DefaultDestAddress;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.share.ShareFile;
 
 import java.util.ArrayList;

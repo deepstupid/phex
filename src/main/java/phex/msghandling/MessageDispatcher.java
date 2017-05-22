@@ -36,11 +36,11 @@ import phex.msg.*;
 import phex.msg.vendor.*;
 import phex.net.connection.Connection;
 import phex.net.connection.ConnectionFactory;
-import phex.prefs.core.BandwidthPrefs;
-import phex.prefs.core.MessagePrefs;
+import phex.BandwidthPrefs;
+import phex.MessagePrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.share.QueryResultSearchEngine;
 import phex.share.ShareFile;
 import phex.share.SharedFilesService;
@@ -389,7 +389,7 @@ class MessageDispatcher {
             dropMessage(msg, "Drop query from leaf with hops > 2.", sourceHost);
         }
 
-        if (MessagePrefs.DropIndexQueries.get().booleanValue() &&
+        if (peer.messagePrefs.DropIndexQueries.get().booleanValue() &&
                 QueryResultSearchEngine.INDEX_QUERY_STRING.equals(msg.getSearchString())) {
             dropMessage(msg, "Drop index query.", sourceHost);
         }
@@ -450,7 +450,7 @@ class MessageDispatcher {
 
         QueryResponseMsg response = new QueryResponseMsg(
                 newHeader, serventGuid, hostAddress,
-                Math.round(BandwidthPrefs.MaxUploadBandwidth.get().floatValue() / NumberFormatUtils.ONE_KB),
+                Math.round(peer.bandwidthPrefs.MaxUploadBandwidth.get().floatValue() / NumberFormatUtils.ONE_KB),
                 records, hostMgr.getNetworkHostsContainer().getPushProxies(),
                 !peer.isFirewalled(), peer.isUploadLimitReached());
 

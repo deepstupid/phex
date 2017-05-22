@@ -23,8 +23,8 @@ package phex.msg;
 
 import phex.common.URN;
 import phex.common.address.DestAddress;
-import phex.prefs.core.MessagePrefs;
-import phex.servent.Peer;
+import phex.MessagePrefs;
+import phex.peer.Peer;
 
 public class QueryFactory {
     /**

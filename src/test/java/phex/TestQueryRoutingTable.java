@@ -24,7 +24,7 @@ package phex;
 import junit.framework.TestCase;
 import phex.common.QueryRoutingTable;
 import phex.msg.*;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.share.ShareFile;
 import phex.util.AccessUtils;
 
@@ -229,7 +229,7 @@ public class TestQueryRoutingTable extends TestCase
     
     private QueryMsg createDummyMsg(String searchStr)
     {
-        return new QueryMsg( peer.getLocalAddress(), new GUID(), (byte)7, searchStr, null, false,
+        return new QueryMsg( peer, new GUID(), (byte)7, searchStr, null, false,
             false, false, QueryMsg.NO_FEATURE_QUERY_SELECTOR );
     }
 }

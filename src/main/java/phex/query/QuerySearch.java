@@ -27,7 +27,7 @@ import phex.common.address.DestAddress;
 import phex.msg.InvalidMessageException;
 import phex.msg.QueryResponseMsg;
 import phex.msg.vendor.OOBReplyCountVMsg;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.util.IOUtil;
 import phex.util.RandomUtils;
 

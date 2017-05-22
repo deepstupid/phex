@@ -22,7 +22,7 @@
 package phex.util;
 
 import phex.Phex;
-import phex.prefs.core.ProxyPrefs;
+import phex.ProxyPrefs;
 
 import java.io.File;
 import java.io.IOException;

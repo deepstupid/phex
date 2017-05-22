@@ -31,9 +31,8 @@ import phex.common.log.NLogger;
 import phex.download.swarming.SWDownloadFile;
 import phex.download.swarming.SwarmingManager;
 import phex.http.*;
-import phex.prefs.core.UploadPrefs;
+import phex.UploadPrefs;
 import phex.security.PhexSecurityManager;
-import phex.servent.Peer;
 import phex.share.PartialShareFile;
 import phex.share.ShareFile;
 import phex.share.SharedFilesService;
@@ -95,7 +94,7 @@ public abstract class AbstractUploadHandler implements UploadHandler {
         assert gRequest != null : "Not a Gnutella file request.";
 
         // ensure the requested file is available...
-        ShareFile requestedFile = findShareFile(gRequest, uploadState);
+        ShareFile requestedFile = findShareFile(gRequest, uploadState, uploadMgr);
         if (requestedFile == null) {
             isPersistentConnection = false;
             return UploadResponse.get404FileNotFound();
@@ -109,7 +108,7 @@ public abstract class AbstractUploadHandler implements UploadHandler {
         if ((isUploadQueued || uploadState.getStatus() == UploadStatus.ACCEPTING_REQUEST)
                 && uploadMgr.isHostBusy()) {
             header = httpRequest.getHeader(GnutellaHeaderNames.X_QUEUE);
-            if (header == null || !UploadPrefs.AllowQueuing.get().booleanValue()
+            if (header == null || !uploadMgr.peer.uploadPrefs.AllowQueuing.get().booleanValue()
                     || uploadMgr.isQueueLimitReached()) {// Queuing is not supported
                 isPersistentConnection = false;
                 return UploadResponse.get503UploadLimitReached(requestedFile, uploadState);
@@ -185,9 +184,9 @@ public abstract class AbstractUploadHandler implements UploadHandler {
             }
 
             int queueLength = uploadMgr.getUploadQueueSize();
-            int uploadLimit = UploadPrefs.MaxParallelUploads.get().intValue();
-            int pollMin = UploadPrefs.MinQueuePollTime.get().intValue();
-            int pollMax = UploadPrefs.MaxQueuePollTime.get().intValue();
+            int uploadLimit = uploadMgr.peer.uploadPrefs.MaxParallelUploads.get().intValue();
+            int pollMin = uploadMgr.peer.uploadPrefs.MinQueuePollTime.get().intValue();
+            int pollMax = uploadMgr.peer.uploadPrefs.MaxQueuePollTime.get().intValue();
 
             queueMinNextPollTime = System.currentTimeMillis() + pollMin * 1000L;
             queueMaxNextPollTime = pollMax * 1000;
@@ -305,7 +304,7 @@ public abstract class AbstractUploadHandler implements UploadHandler {
     }
 
 
-    protected ShareFile findShareFile(GnutellaRequest gRequest, UploadState uploadState) {
+    protected ShareFile findShareFile(GnutellaRequest gRequest, UploadState uploadState, UploadManager uploadMgr) {
         ShareFile shareFile = null;
 
         // first check for a URN
@@ -316,7 +315,7 @@ public abstract class AbstractUploadHandler implements UploadHandler {
             }
             shareFile = sharing.getFileByURN(requestURN);
             // look for partials..
-            if (shareFile == null && UploadPrefs.SharePartialFiles.get().booleanValue()) {
+            if (shareFile == null && uploadMgr.peer.uploadPrefs.SharePartialFiles.get().booleanValue()) {
                 SwarmingManager swMgr = sharing.peer.getDownloadService();
                 SWDownloadFile dwFile = swMgr.getDownloadFileByURN(requestURN);
                 if (dwFile != null) {

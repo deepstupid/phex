@@ -23,7 +23,7 @@ package phex.common;
 
 import phex.common.collections.PriorityQueue;
 import phex.msg.PongMsg;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 import java.util.Arrays;
 import java.util.Iterator;

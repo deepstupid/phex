@@ -26,9 +26,9 @@ import phex.common.collections.IntSet;
 import phex.common.collections.IntSet.IntSetIterator;
 import phex.common.log.NLogger;
 import phex.msg.QueryMsg;
-import phex.prefs.core.LibraryPrefs;
+import phex.LibraryPrefs;
 import phex.security.PhexSecurityManager;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.util.StringUtils;
 
 import java.util.ArrayList;
@@ -92,7 +92,9 @@ public class QueryResultSearchEngine {
             urnMatches = sharedFilesService.getFilesByURNs(urns);
             if (urnMatches.size() == urns.length) {// we found all requested files by URN.
                 // return results and be happy that we are already finished.
-                return provideResultData(urnMatches, null, queryMsg.getOriginIpAddress());
+                return provideResultData(urnMatches, null, queryMsg.getOriginIpAddress(),
+                        peer.libPrefs.MaxResultsPerQuery.get().intValue()
+                        );
             }
         }
 
@@ -100,7 +102,7 @@ public class QueryResultSearchEngine {
         // keyword matches...
         IntSet keyWordMatches = handleKeywordSearch(searchStr);
 
-        return provideResultData(urnMatches, keyWordMatches, queryMsg.getOriginIpAddress());
+        return provideResultData(urnMatches, keyWordMatches, queryMsg.getOriginIpAddress(),peer.libPrefs.MaxResultsPerQuery.get().intValue());
     }
 
     /**
@@ -163,7 +165,9 @@ public class QueryResultSearchEngine {
     }
 
     private List<ShareFile> provideResultData(List<ShareFile> urnMatches,
-                                              IntSet keywordMatches, byte[] originIpAddress) {
+                                              IntSet keywordMatches, byte[] originIpAddress,
+                                                int maxResults
+    ) {
         int count = 0;
         if (urnMatches != null) {
             count += urnMatches.size();
@@ -177,7 +181,6 @@ public class QueryResultSearchEngine {
 
         PhexSecurityManager securityService = peer.getSecurityService();
         List<ShareFile> resultList = new ArrayList<ShareFile>();
-        final int maxResults = LibraryPrefs.MaxResultsPerQuery.get().intValue();
         int resultListSize = 0;
         if (urnMatches != null && urnMatches.size() > 0) {
             for (ShareFile shareFile : urnMatches) {

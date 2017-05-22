@@ -3,8 +3,8 @@ package phex.upload;
 import junit.framework.TestCase;
 import phex.common.address.DefaultDestAddress;
 import phex.common.bandwidth.BandwidthController;
-import phex.prefs.core.BandwidthPrefs;
-import phex.servent.Peer;
+import phex.BandwidthPrefs;
+import phex.peer.Peer;
 import phex.share.ShareFile;
 
 import java.io.CharArrayWriter;

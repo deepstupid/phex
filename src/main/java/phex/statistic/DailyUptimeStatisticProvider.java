@@ -23,7 +23,7 @@ package phex.statistic;
 
 
 import phex.common.format.TimeFormatUtils;
-import phex.prefs.core.StatisticPrefs;
+import phex.StatisticPrefs;
 
 /**
  * The class provides the avg. daily uptime calculation required for Limewires

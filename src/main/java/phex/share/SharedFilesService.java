@@ -23,7 +23,6 @@ package phex.share;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import phex.Phex;
 import phex.common.*;
 import phex.common.collections.IntSet;
 import phex.common.collections.StringTrie;
@@ -32,8 +31,8 @@ import phex.common.file.ManagedFile;
 import phex.common.file.ManagedFileException;
 import phex.event.UserMessageListener;
 import phex.msg.QueryMsg;
-import phex.prefs.core.LibraryPrefs;
-import phex.servent.Peer;
+import phex.LibraryPrefs;
+import phex.peer.Peer;
 import phex.thex.FileHashCalculationHandler;
 import phex.thex.ThexCalculationWorker;
 import phex.util.FileUtils;
@@ -162,15 +161,14 @@ public class SharedFilesService extends AbstractLifeCycle
         localQRTNeedsUpdate = true;
     }
 
-    public static DSharedLibrary loadSharedLibrary(FileManager files) {
+    public DSharedLibrary loadSharedLibrary() {
         logger.debug("Load shared library configuration file.");
 
-        File file = Environment.getPhexConfigFile(
-                EnvironmentConstants.XML_SHARED_LIBRARY_FILE_NAME);
+        File file = peer.file(Peer.XML_SHARED_LIBRARY_FILE_NAME);
 
         DPhex dPhex;
         try {
-            ManagedFile managedFile = files.getReadWriteManagedFile(file);
+            ManagedFile managedFile = peer.files.getReadWriteManagedFile(file);
             dPhex = XMLBuilder.loadDPhexFromFile(managedFile);
             if (dPhex == null) {
                 logger.debug("No shared library configuration file found.");
@@ -825,10 +823,10 @@ public class SharedFilesService extends AbstractLifeCycle
          */
         @Override
         public void run() {
-            File libraryFile = Environment.getPhexConfigFile(
-                    EnvironmentConstants.XML_SHARED_LIBRARY_FILE_NAME);
-            File tmpFile = Environment.getPhexConfigFile(
-                    EnvironmentConstants.XML_SHARED_LIBRARY_FILE_NAME
+            File libraryFile = peer.file(
+                    Peer.XML_SHARED_LIBRARY_FILE_NAME);
+            File tmpFile = peer.file(
+                    Peer.XML_SHARED_LIBRARY_FILE_NAME
                             + ".tmp");
             do {
                 logger.debug("Saving shared library.");

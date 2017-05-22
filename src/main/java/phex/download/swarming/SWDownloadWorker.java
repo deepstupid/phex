@@ -30,7 +30,7 @@ import phex.download.DownloadEngine;
 import phex.download.PushHandler;
 import phex.download.swarming.SWDownloadCandidate.CandidateStatus;
 import phex.net.repres.SocketFacade;
-import phex.prefs.core.NetworkPrefs;
+import phex.NetworkPrefs;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -38,7 +38,7 @@ import java.net.UnknownHostException;
 
 public class SWDownloadWorker implements Runnable {
     private final Object workerThreadLock = new Object();
-    private final SwarmingManager downloadService;
+    private final SwarmingManager swarm;
     /**
      * A temporary worker indicates a worker that is used to wait for a valid
      * download set. Only one temporary worker should be in the system. Once
@@ -67,8 +67,8 @@ public class SWDownloadWorker implements Runnable {
      */
     private volatile Thread workerThread;
 
-    public SWDownloadWorker(SwarmingManager downloadService) {
-        this.downloadService = downloadService;
+    public SWDownloadWorker(SwarmingManager swarm) {
+        this.swarm = swarm;
     }
 
     /**
@@ -113,7 +113,7 @@ public class SWDownloadWorker implements Runnable {
             SWDownloadSet downloadSet;
 
             while (isRunning) {
-                boolean isStopped = downloadService.checkToStopWorker(this);
+                boolean isStopped = swarm.checkToStopWorker(this);
                 if (isStopped) {
                     break;
                 }
@@ -121,11 +121,11 @@ public class SWDownloadWorker implements Runnable {
                 isDownloadStopped = false;
                 NLogger.debug(SWDownloadWorker.class,
                         " - Allocating DownloadSet - " + this);
-                downloadSet = downloadService.allocateDownloadSet(this);
+                downloadSet = swarm.allocateDownloadSet(this);
                 if (downloadSet == null) {
                     if (isTemporaryWorker) {
                         try {
-                            downloadService.waitForNotify();
+                            swarm.waitForNotify();
                         } catch (InterruptedException e) {
                             Thread.currentThread().interrupt();
                             break;
@@ -152,7 +152,7 @@ public class SWDownloadWorker implements Runnable {
             }
         } finally {
             // if the worker should run... give notice about crash
-            downloadService.notifyWorkerShoutdown(this, !isRunning);
+            swarm.notifyWorkerShoutdown(this, !isRunning);
 
             NLogger.debug(SWDownloadWorker.class,
                     "Download worker finished: " + this);
@@ -212,9 +212,8 @@ public class SWDownloadWorker implements Runnable {
     private void handleDownload(SWDownloadSet downloadSet) {
         NLogger.debug(SWDownloadWorker.class,
                 "handleDownload() with: " + downloadSet + " - " + this);
-        SWDownloadFile downloadFile = downloadSet.getDownloadFile();
-        SWDownloadCandidate downloadCandidate = downloadSet
-                .getCandidate();
+        SWDownloadFile downloadFile = downloadSet.downloadFile;
+        SWDownloadCandidate downloadCandidate = downloadSet.downloadCandidate;
 
         if (!isRunning || isDownloadStopped) {
             return;
@@ -260,16 +259,15 @@ public class SWDownloadWorker implements Runnable {
 
         NLogger.debug(SWDownloadWorker.class,
                 "connectDownloadEngine with: " + downloadSet + " - " + this);
-        SWDownloadCandidate downloadCandidate = downloadSet.getCandidate();
+        SWDownloadCandidate downloadCandidate = downloadSet.downloadCandidate;
 
         // invalidate the download engine
         downloadEngine = null;
         try {
-            DownloadConnection connection = new DownloadConnection(
-                    downloadCandidate);
+            DownloadConnection connection = new DownloadConnection(downloadCandidate, swarm.peer);
             // this call sets the CONNECTING status when it is
             // performing the connect operation.
-            connection.connect(NetworkPrefs.TcpConnectTimeout.get().intValue());
+            connection.connect(prefs().TcpConnectTimeout.get().intValue());
 
             if (!isRunning || isDownloadStopped) {
                 return;
@@ -304,6 +302,10 @@ public class SWDownloadWorker implements Runnable {
         }
     }
 
+    private NetworkPrefs prefs() {
+        return swarm.peer.netPrefs;
+    }
+
     /**
      * Connects the download engine via a push request.
      *
@@ -320,15 +322,15 @@ public class SWDownloadWorker implements Runnable {
 
         NLogger.debug(SWDownloadWorker.class,
                 "connectDownloadEngineViaPush with: " + downloadSet + " - " + this);
-        SWDownloadCandidate downloadCandidate = downloadSet.getCandidate();
-        SWDownloadFile downloadFile = downloadSet.getDownloadFile();
+        SWDownloadCandidate downloadCandidate = downloadSet.downloadCandidate;
+        SWDownloadFile downloadFile = downloadSet.downloadFile;
 
         // invalidate the download engine
         downloadEngine = null;
 
         IpAddress ipAddress = downloadCandidate.getHostAddress().getIpAddress();
         // indicate if the candidate might be reachable through LAN
-        boolean isLANReachable = NetworkPrefs.ConnectedToLAN.get().booleanValue()
+        boolean isLANReachable = prefs().ConnectedToLAN.get().booleanValue()
                 && ipAddress != null && ipAddress.isSiteLocalIP();
 
         // force a status switch to ensure a possible failed status setting is 
@@ -339,7 +341,7 @@ public class SWDownloadWorker implements Runnable {
 
         // if we are behind a firewall there is no chance to successfully push
         // if the candidate is not reachable through LAN.
-        if (downloadSet.getPeer().isFirewalled() && !isLANReachable) {
+        if (downloadSet.peer.isFirewalled() && !isLANReachable) {
             NLogger.debug(SWDownloadWorker.class,
                     this.toString() + downloadCandidate.toString()
                             + " Cant PUSH -> I'm firewalled and candidate not reachable by LAN");
@@ -376,7 +378,7 @@ public class SWDownloadWorker implements Runnable {
         downloadCandidate.setStatus(
                 CandidateStatus.PUSH_REQUEST);
         SocketFacade socket = PushHandler.requestSocketViaPush(
-                downloadSet.getPeer(), downloadCandidate);
+                downloadSet.peer, downloadCandidate);
         if (socket == null) {
             downloadCandidate.setStatus(
                     CandidateStatus.CONNECTION_FAILED);
@@ -397,7 +399,7 @@ public class SWDownloadWorker implements Runnable {
         }
 
         DownloadConnection connection = new DownloadConnection(
-                downloadCandidate, socket);
+                downloadCandidate, socket, downloadSet.peer);
 
         downloadEngine = new DownloadEngine(downloadSet);
         downloadEngine.setConnection(connection);
@@ -409,9 +411,8 @@ public class SWDownloadWorker implements Runnable {
     private void startDownload(SWDownloadSet downloadSet) {
         NLogger.debug(SWDownloadWorker.class,
                 "startDownload with: " + downloadSet + " - " + this);
-        SWDownloadFile downloadFile = downloadSet.getDownloadFile();
-        SWDownloadCandidate downloadCandidate = downloadSet
-                .getCandidate();
+        SWDownloadFile downloadFile = downloadSet.downloadFile;
+        SWDownloadCandidate downloadCandidate = downloadSet.downloadCandidate;
 
         downloadCandidate.addToCandidateLog("Start download.");
 

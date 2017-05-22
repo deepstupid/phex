@@ -29,10 +29,9 @@ import phex.connection.IncomingConnectionDispatcher;
 import phex.host.NetworkHostsContainer;
 import phex.net.repres.PresentationManager;
 import phex.net.repres.def.DefaultSocketFacade;
-import phex.prefs.core.NetworkPrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityException;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 import java.io.IOException;
 import java.net.BindException;
@@ -102,7 +101,7 @@ public class NIOServer extends Server {
         PresentationManager presentationMgr = PresentationManager.getInstance();
         DestAddress newAddress = presentationMgr.createHostAddress(
                 IpAddress.LOCAL_HOST_IP,
-                NetworkPrefs.ListeningPort.get());
+                peer.netPrefs.ListeningPort.get());
         localAddress.updateLocalAddress(newAddress);
         synchronized (this) {
             notifyAll();
@@ -118,7 +117,7 @@ public class NIOServer extends Server {
             throws IOException, PhexSecurityException {
         socketChannel.configureBlocking(true);
         Socket clientSocket = socketChannel.socket();
-        clientSocket.setSoTimeout(NetworkPrefs.TcpRWTimeout.get());
+        clientSocket.setSoTimeout(peer.netPrefs.TcpRWTimeout.get());
 
         IpAddress ip = new IpAddress(clientSocket.getInetAddress().getAddress());
         PresentationManager presentationMgr = PresentationManager.getInstance();

@@ -23,24 +23,24 @@ package phex;
 
 import junit.framework.TestCase;
 import phex.common.address.DefaultDestAddress;
-import phex.host.CatchedHostCache;
+import phex.host.CaughtHosts;
 import phex.host.CaughtHost;
 
 /**
  * 
  */
-public class TestCatchedHostCache extends TestCase
+public class TestCaughtHosts extends TestCase
 {
-    private CatchedHostCache cache;
+    private CaughtHosts cache;
     
-    public TestCatchedHostCache(String s)
+    public TestCaughtHosts(String s)
     {
         super(s);
     }
     
     protected void setUp()
     {
-        cache = new CatchedHostCache( );        
+        cache = new CaughtHosts( );
     }
     
     public void testPutAndGet() 

@@ -23,8 +23,8 @@ import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
 import phex.net.repres.PresentationManager;
 import phex.net.repres.SocketFacade;
-import phex.prefs.core.NetworkPrefs;
-import phex.prefs.core.ProxyPrefs;
+import phex.peer.Peer;
+import phex.ProxyPrefs;
 import phex.util.IOUtil;
 
 import java.io.IOException;
@@ -37,8 +37,10 @@ import java.nio.channels.Channels;
 public final class SocketFactory {
     private static final Object LOCK = new Object();
     private static int concurrentConnectAttempts = 0;
+    private final Peer peer;
 
-    private SocketFactory() {// dont allow instances
+    public SocketFactory(Peer peer) {// dont allow instances
+        this.peer = peer;
     }
 
     /**
@@ -46,9 +48,9 @@ public final class SocketFactory {
      * @return
      * @throws IOException
      */
-    public static SocketFacade connect(DestAddress address)
+    public SocketFacade connect(DestAddress address)
             throws IOException {
-        return connect(address, NetworkPrefs.TcpConnectTimeout.get(),
+        return connect(address, peer.netPrefs.TcpConnectTimeout.get(),
                 null);
     }
 
@@ -59,7 +61,7 @@ public final class SocketFactory {
 //     */
 //    public static SocketFacade connect(DestAddress address, Runnable acquireCallback)
 //            throws IOException {
-//        return connect(address, NetworkPrefs.TcpConnectTimeout.get(),
+//        return connect(address, peer.prefs.TcpConnectTimeout.get(),
 //                acquireCallback);
 //    }
 
@@ -73,25 +75,25 @@ public final class SocketFactory {
      * @throws IOException
      * @throws InterruptedException
      */
-    public static SocketFacade connect(DestAddress address, int timeout)
+    public SocketFacade connect(DestAddress address, int timeout)
             throws IOException {
         return connect(address, timeout, null);
     }
 
-    public static SocketFacade connect(DestAddress address, int timeout,
+    public SocketFacade connect(DestAddress address, int timeout,
                                        Runnable acquireCallback)
             throws IOException {
         if (!address.isValidAddress()) {
             throw new IOException("Invalid DestAddress: "
                     + address);
         }
-        if (ProxyPrefs.UseSocks5.get()) {
+        if (peer.proxyPrefs.UseSocks5.get()) {
             return connectSock5(address, acquireCallback);
         }
         return createSocket(address, timeout, acquireCallback);
     }
 
-    private static SocketFacade connectSock5(DestAddress address,
+    private SocketFacade connectSock5(DestAddress address,
                                              Runnable acquireCallback)
             throws IOException {
         SocketFacade socket = null;
@@ -99,15 +101,15 @@ public final class SocketFactory {
         OutputStream os = null;
 
         try {
-            socket = createSocket(new DefaultDestAddress(ProxyPrefs.Socks5Host.get(),
-                            ProxyPrefs.Socks5Port.get()),
-                    NetworkPrefs.TcpConnectTimeout.get(), acquireCallback);
+            socket = createSocket(new DefaultDestAddress(peer.proxyPrefs.Socks5Host.get(),
+                            peer.proxyPrefs.Socks5Port.get()),
+                    peer.netPrefs.TcpConnectTimeout.get(), acquireCallback);
             is = Channels.newInputStream(socket.getChannel());
             os = Channels.newOutputStream(socket.getChannel());
 
             byte[] header;
-            if (ProxyPrefs.Socks5Authentication.get()
-                    && ProxyPrefs.Socks5User.get().length() > 0) {
+            if (peer.proxyPrefs.Socks5Authentication.get()
+                    && peer.proxyPrefs.Socks5User.get().length() > 0) {
                 header = new byte[4];
                 header[0] = (byte) 0x05; // version
                 header[1] = (byte) 0x02; // method counts
@@ -227,10 +229,10 @@ public final class SocketFactory {
     }
 
 
-    private static void authenticateUserPassword(InputStream is, OutputStream os)
+    private void authenticateUserPassword(InputStream is, OutputStream os)
             throws IOException {
-        String userName = ProxyPrefs.Socks5User.get();
-        String password = ProxyPrefs.Socks5Password.get();
+        String userName = peer.proxyPrefs.Socks5User.get();
+        String password = peer.proxyPrefs.Socks5Password.get();
         byte[] buffer = new byte[3 + userName.length() + password.length()];
 
         int pos = 0;
@@ -257,11 +259,11 @@ public final class SocketFactory {
      * @throws SocketException
      * @throws InterruptedException
      */
-    private static SocketFacade createSocket(DestAddress address, int connectTimeout,
+    private SocketFacade createSocket(DestAddress address, int connectTimeout,
                                              Runnable acquireCallback)
             throws IOException {
         synchronized (LOCK) {
-            while (concurrentConnectAttempts >= NetworkPrefs.MaxConcurrentConnectAttempts.get()) {
+            while (concurrentConnectAttempts >= peer.netPrefs.MaxConcurrentConnectAttempts.get()) {
                 try {
                     LOCK.wait();
                 } catch (InterruptedException exp) {// instead continue to throw interrupted exception we use
@@ -278,7 +280,7 @@ public final class SocketFactory {
 
             SocketFacade socket = PresentationManager.getInstance().createSocket(
                     address, connectTimeout);
-            socket.setSoTimeout(NetworkPrefs.TcpRWTimeout.get());
+            socket.setSoTimeout(peer.netPrefs.TcpRWTimeout.get());
             return socket;
         } finally {
             synchronized (LOCK) {

@@ -86,7 +86,7 @@ public class PhexTestSuite extends TestSuite
         suite.addTestSuite(TestAlternateLocation.class);
         suite.addTestSuite(AltLocContainerTest.class);
         suite.addTestSuite(TestSWDownloadCandidate.class);
-        suite.addTestSuite(TestCatchedHostCache.class);
+        suite.addTestSuite(TestCaughtHosts.class);
         suite.addTestSuite(TestGGEPBlock.class);
         suite.addTestSuite(TestURN.class);
         suite.addTestSuite(phex.msg.PongMsgTest.class);

@@ -26,9 +26,9 @@ import org.slf4j.LoggerFactory;
 import phex.common.Environment;
 import phex.common.LongObj;
 import phex.common.bandwidth.BandwidthController;
-import phex.prefs.core.BandwidthPrefs;
-import phex.prefs.core.ConnectionPrefs;
-import phex.servent.Peer;
+import phex.BandwidthPrefs;
+import phex.ConnectionPrefs;
+import phex.peer.Peer;
 import phex.statistic.StatisticProviderConstants;
 import phex.statistic.StatisticsManager;
 import phex.statistic.UptimeStatisticProvider;
@@ -93,21 +93,22 @@ public class UltrapeerCapabilityChecker extends TimerTask {
             return;
         }
 
+        
         boolean isCapable =
                 // the first check if we are allowed to become a ultrapeer at all...
                 // if not we don't need to continue checking...
-                ConnectionPrefs.AllowToBecomeUP.get() &&
+                peer.connectionPrefs.AllowToBecomeUP.get() &&
                         // host should not be firewalled.
                         !peer.isFirewalled() &&
                         // host should provide a Ultrapeer capable OS
                         isUltrapeerOS &&
                         // the connection speed should be more then single ISDN
-                        BandwidthPrefs.NetworkSpeedKbps.get() > 64 &&
+                        peer.bandwidthPrefs.NetworkSpeedKbps.get() > 64 &&
                         // also we should provide at least 10KB network bandwidth
-                        BandwidthPrefs.MaxNetworkBandwidth.get() > 10 * 1024 &&
+                        peer.bandwidthPrefs.MaxNetworkBandwidth.get() > 10 * 1024 &&
                         // and at least 14KB total bandwidth (because network bandwidth might
                         // be set to unlimited)
-                        BandwidthPrefs.MaxTotalBandwidth.get() > 14 * 1024 &&
+                        peer.bandwidthPrefs.MaxTotalBandwidth.get() > 14 * 1024 &&
                         // the current uptime should be at least 60 minutes or 30 minutes in avg.
                         (((LongObj) uptimeProvider.getValue()).getValue() > ONE_HOUR ||
                                 ((LongObj) uptimeProvider.getAverageValue()).getValue() > HALF_HOUR);
@@ -140,7 +141,7 @@ public class UltrapeerCapabilityChecker extends TimerTask {
     }
 
     private void logTraceUltrapeerCapable(UptimeStatisticProvider uptimeProvider) {
-        if (!ConnectionPrefs.AllowToBecomeUP.get()) {
+        if (!peer.connectionPrefs.AllowToBecomeUP.get()) {
             logger.trace("Not allowed to become UP.");
         }
         if (peer.isFirewalled()) {
@@ -149,13 +150,13 @@ public class UltrapeerCapabilityChecker extends TimerTask {
         if (!isUltrapeerOS) {
             logger.trace("No ultrapeer OS.");
         }
-        if (BandwidthPrefs.NetworkSpeedKbps.get() <= 64) {
+        if (peer.bandwidthPrefs.NetworkSpeedKbps.get() <= 64) {
             logger.trace("Not enough network speed");
         }
-        if (BandwidthPrefs.MaxNetworkBandwidth.get() <= 10 * 1024) {
+        if (peer.bandwidthPrefs.MaxNetworkBandwidth.get() <= 10 * 1024) {
             logger.trace("Not enough max network bandwidth");
         }
-        if (BandwidthPrefs.MaxTotalBandwidth.get() <= 14 * 1024) {
+        if (peer.bandwidthPrefs.MaxTotalBandwidth.get() <= 14 * 1024) {
             logger.trace("Not enough max total bandwidth");
         }
         if (((LongObj) uptimeProvider.getValue()).getValue() <= ONE_HOUR ||

@@ -20,12 +20,14 @@
  *  --- CVS Information ---
  *  $Id: BandwidthPrefs.java 3807 2007-05-19 17:06:46Z gregork $
  */
-package phex.prefs.core;
+package phex;
 
-import phex.prefs.api.PreferencesFactory;
-import phex.prefs.api.Setting;
+import phex.prefs.Preferences;
+import phex.prefs.Setting;
 
-public class BandwidthPrefs extends PhexCorePrefs {
+import java.io.File;
+
+public class BandwidthPrefs extends Preferences {
     public static final int UNLIMITED_BANDWIDTH = Integer.MAX_VALUE;
 
     /**
@@ -34,51 +36,52 @@ public class BandwidthPrefs extends PhexCorePrefs {
      * Phex.
      * The default of 6144 matches a DSL/Cable connection.
      */
-    public static final Setting<Integer> NetworkSpeedKbps;
+    public final Setting<Integer> NetworkSpeedKbps;
 
     /**
      * This is the maximal bandwidth in bytes per second Phex is allowed to use
      * in total. This means network, download and upload bandwidth combined.
      * The default is UNLIMITED_BANDWIDTH for full bandwidth usage.
      */
-    public static final Setting<Integer> MaxTotalBandwidth;
+    public final Setting<Integer> MaxTotalBandwidth;
 
     /**
      * This is the maximal bandwidth in bytes per second Phex is allowed to use
      * for Gnutella network connections.
      * The default is UNLIMITED_BANDWIDTH for full bandwidth usage.
      */
-    public static final Setting<Integer> MaxNetworkBandwidth;
+    public final Setting<Integer> MaxNetworkBandwidth;
 
     /**
      * This is the maximal bandwidth in bytes per second Phex is allowed to use
      * for download connections.
      * The default is UNLIMITED_BANDWIDTH for full bandwidth usage.
      */
-    public static final Setting<Integer> MaxDownloadBandwidth;
+    public final Setting<Integer> MaxDownloadBandwidth;
 
     /**
      * This is the maximal bandwidth in bytes per second Phex is allowed to use
      * for upload connections.
      * The default is UNLIMITED_BANDWIDTH for full bandwidth usage.
      */
-    public static final Setting<Integer> MaxUploadBandwidth;
+    public final Setting<Integer> MaxUploadBandwidth;
 
 
-    static {
-        NetworkSpeedKbps = PreferencesFactory.createIntSetting(
-                "Bandwidth.NetworkSpeedKbps", 6144, instance);
+    public BandwidthPrefs(File file) {
+        super(file);
+        NetworkSpeedKbps = createIntSetting(
+                "Bandwidth.NetworkSpeedKbps", 6144);
 
-        MaxTotalBandwidth = PreferencesFactory.createIntSetting(
-                "Bandwidth.MaxTotalBandwidth", UNLIMITED_BANDWIDTH, instance);
+        MaxTotalBandwidth = createIntSetting(
+                "Bandwidth.MaxTotalBandwidth", UNLIMITED_BANDWIDTH);
 
-        MaxNetworkBandwidth = PreferencesFactory.createIntSetting(
-                "Bandwidth.MaxNetworkBandwidth", UNLIMITED_BANDWIDTH, instance);
+        MaxNetworkBandwidth = createIntSetting(
+                "Bandwidth.MaxNetworkBandwidth", UNLIMITED_BANDWIDTH);
 
-        MaxDownloadBandwidth = PreferencesFactory.createIntSetting(
-                "Bandwidth.MaxDownloadBandwidth", UNLIMITED_BANDWIDTH, instance);
+        MaxDownloadBandwidth = createIntSetting(
+                "Bandwidth.MaxDownloadBandwidth", UNLIMITED_BANDWIDTH);
 
-        MaxUploadBandwidth = PreferencesFactory.createIntSetting(
-                "Bandwidth.MaxUploadBandwidth", UNLIMITED_BANDWIDTH, instance);
+        MaxUploadBandwidth = createIntSetting(
+                "Bandwidth.MaxUploadBandwidth", UNLIMITED_BANDWIDTH);
     }
 }

@@ -24,7 +24,7 @@ package phex.rules.consequence;
 
 import phex.download.RemoteFile;
 import phex.query.Search;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.xml.sax.rules.DConsequence;
 
 public interface Consequence extends Cloneable {

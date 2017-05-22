@@ -31,9 +31,9 @@ import phex.msg.*;
 import phex.net.connection.Connection;
 import phex.net.connection.SocketFactory;
 import phex.net.repres.SocketFacade;
-import phex.prefs.core.MessagePrefs;
+import phex.MessagePrefs;
 import phex.query.BrowseHostResults;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 import java.io.IOException;
 import java.io.InputStream;

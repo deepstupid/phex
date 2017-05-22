@@ -28,7 +28,6 @@ import phex.common.address.DestAddress;
 import phex.common.bandwidth.TransferAverage;
 import phex.common.log.LogRecord;
 import phex.common.log.NLogger;
-import phex.prefs.core.UploadPrefs;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -38,7 +37,7 @@ public class UploadState implements TransferDataProvider {
     /**
      * The upload manager.
      */
-    private final UploadManager uploadManager;
+    private final UploadManager uploads;
     private final TransferAverage transferAverage;
     /**
      * This is a List holding all AltLocs already send to this connection during
@@ -85,13 +84,13 @@ public class UploadState implements TransferDataProvider {
      * @param hostAddress the host address of the host.
      * @param vendor      the vendor string of the host.
      */
-    public UploadState(DestAddress hostAddress, String vendor, UploadManager uploadManager) {
-        this(hostAddress, vendor, null, null, -1, uploadManager);
+    public UploadState(DestAddress hostAddress, String vendor, UploadManager uploads) {
+        this(hostAddress, vendor, null, null, -1, uploads);
     }
 
     public UploadState(DestAddress hostAddress, String vendor,
-                       String fileName, URN fileURN, long contentLength, UploadManager uploadManager) {
-        this.uploadManager = uploadManager;
+                       String fileName, URN fileURN, long contentLength, UploadManager uploads) {
+        this.uploads = uploads;
         transferredDataSize = 0;
         previousSegmentsSize = 0;
         currentProgress = 0;
@@ -165,9 +164,9 @@ public class UploadState implements TransferDataProvider {
     }
 
     public void addToUploadLog(String message) {
-        if (UploadPrefs.UploadStateLogBufferSize.get().intValue() > 0) {
+        if (uploads.UploadStateLogBufferSize.get().intValue() > 0) {
             LogRecord record = new LogRecord(this, message);
-            uploadManager.getUploadStateLogBuffer().addLogRecord(record);
+            uploads.getUploadStateLogBuffer().addLogRecord(record);
         }
     }
 
@@ -202,7 +201,7 @@ public class UploadState implements TransferDataProvider {
         if (uploadEngine != null) {
             uploadEngine.stopUpload();
         }
-        boolean succ = uploadManager.trySetUploadStatus(this, UploadStatus.ABORTED);
+        boolean succ = uploads.trySetUploadStatus(this, UploadStatus.ABORTED);
         if (!succ) {
             // setting to aborted should never fail.
             throw new RuntimeException("Status transition from "

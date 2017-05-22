@@ -31,10 +31,9 @@ import phex.host.NetworkHostsContainer;
 import phex.net.repres.PresentationManager;
 import phex.net.repres.SocketFacade;
 import phex.net.repres.def.DefaultSocketFacade;
-import phex.prefs.core.NetworkPrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityException;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 import java.io.IOException;
 import java.net.*;
@@ -87,7 +86,7 @@ public class OIOServer extends Server {
      */
     private void handleIncomingSocket(SocketFacade clientSocket)
             throws IOException, PhexSecurityException {
-        clientSocket.setSoTimeout(NetworkPrefs.TcpRWTimeout.get());
+        clientSocket.setSoTimeout(peer.netPrefs.TcpRWTimeout.get());
 
         DestAddress address = clientSocket.getRemoteAddress();
         NetworkHostsContainer netHostsContainer = peer.getHostService()

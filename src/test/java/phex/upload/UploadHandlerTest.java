@@ -7,8 +7,8 @@ import phex.http.GnutellaHeaderNames;
 import phex.http.GnutellaRequest;
 import phex.http.HTTPHeader;
 import phex.http.HTTPRequest;
-import phex.prefs.core.UploadPrefs;
-import phex.servent.Peer;
+import phex.UploadPrefs;
+import phex.peer.Peer;
 import phex.share.ShareFile;
 import phex.share.SharedFilesService;
 import phex.upload.handler.AbstractUploadHandler;
@@ -84,7 +84,7 @@ public class UploadHandlerTest extends TestCase {
 
         @Override
         protected ShareFile findShareFile(GnutellaRequest request,
-                                          UploadState uploadState) {
+                                          UploadState uploadState, UploadManager uploadMgr) {
             return new ShareFile(new File("dummy"));
         }
     }

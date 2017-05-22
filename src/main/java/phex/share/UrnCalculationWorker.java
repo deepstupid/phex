@@ -27,7 +27,7 @@ import phex.common.URN;
 import phex.common.log.NLogger;
 import phex.download.swarming.SWDownloadFile;
 import phex.download.swarming.SwarmingManager;
-import phex.prefs.core.LibraryPrefs;
+import phex.LibraryPrefs;
 import phex.util.IOUtil;
 import phex.util.bitzi.Base32;
 import phex.util.bitzi.SHA1;
@@ -38,13 +38,13 @@ import java.security.MessageDigest;
 
 class UrnCalculationWorker implements Runnable {
     private final SwarmingManager downloadService;
-    private final SharedFilesService sharedFilesService;
+    private final SharedFilesService sharing;
     private final ShareFile shareFile;
 
-    UrnCalculationWorker(ShareFile shareFile, SharedFilesService sharedFilesService) {
+    UrnCalculationWorker(ShareFile shareFile, SharedFilesService sharing) {
         this.shareFile = shareFile;
-        this.sharedFilesService = sharedFilesService;
-        this.downloadService = sharedFilesService.peer.getDownloadService();
+        this.sharing = sharing;
+        this.downloadService = sharing.peer.getDownloadService();
     }
 
     public void run() {
@@ -52,8 +52,8 @@ class UrnCalculationWorker implements Runnable {
         // if calculation succeed
         if (succ) {
             // add the urn to the map to share by urn
-            sharedFilesService.addUrn2FileMapping(shareFile);
-            sharedFilesService.triggerSaveSharedFiles();
+            sharing.addUrn2FileMapping(shareFile);
+            sharing.triggerSaveSharedFiles();
         }
     }
 
@@ -64,7 +64,7 @@ class UrnCalculationWorker implements Runnable {
      * representation.
      */
     private boolean calculateURN() {
-        int urnCalculationMode = LibraryPrefs.UrnCalculationMode.get().intValue();
+        int urnCalculationMode = sharing.peer.libPrefs.UrnCalculationMode.get().intValue();
         FileInputStream inStream = null;
         try {
             inStream = new FileInputStream(shareFile.getSystemFile());

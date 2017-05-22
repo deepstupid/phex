@@ -27,7 +27,7 @@ import phex.query.Search;
 import phex.rules.condition.AndConcatCondition;
 import phex.rules.condition.Condition;
 import phex.rules.consequence.Consequence;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 import java.util.ArrayList;
 import java.util.Collections;

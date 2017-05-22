@@ -26,13 +26,12 @@ import phex.common.address.DestAddress;
 import phex.common.bandwidth.BandwidthController;
 import phex.common.log.NLogger;
 import phex.net.connection.Connection;
-import phex.prefs.core.NetworkPrefs;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 import java.io.IOException;
 
 public class ChatService {
-    private final Peer peer;
+    public final Peer peer;
 
     /**
      * A Set containing all
@@ -74,10 +73,10 @@ public class ChatService {
      * Accepts a connection to start a instant message chat.
      */
     public void acceptChat(Connection connection) {
-        if (!NetworkPrefs.AllowChatConnection.get().booleanValue()) {
-            connection.disconnect();
-            return;
-        }
+//        if (!peer.prefs.AllowChatConnection.get().booleanValue()) {
+//            connection.disconnect();
+//            return;
+//        }
 
         DestAddress hostAddress = connection.getSocket().getRemoteAddress();
 

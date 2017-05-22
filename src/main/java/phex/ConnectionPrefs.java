@@ -20,19 +20,21 @@
  *  --- CVS Information ---
  *  $Id: ConnectionPrefs.java 4367 2009-01-18 18:52:03Z gregork $
  */
-package phex.prefs.core;
+package phex;
 
-import phex.prefs.api.PreferencesFactory;
-import phex.prefs.api.RangeSetting;
-import phex.prefs.api.Setting;
+import phex.prefs.Preferences;
+import phex.prefs.RangeSetting;
+import phex.prefs.Setting;
 
-public class ConnectionPrefs extends PhexCorePrefs {
-    public static final Setting<Boolean> AutoConnectOnStartup;
+import java.io.File;
+
+public class ConnectionPrefs extends Preferences {
+    public final Setting<Boolean> AutoConnectOnStartup;
 
     /**
      * Indicates if this node is allowed to become a Ultrapeer.
      */
-    public static final Setting<Boolean> AllowToBecomeUP;
+    public final Setting<Boolean> AllowToBecomeUP;
 
     /**
      * Indicates if this node force to be a Ultrapeer.
@@ -40,7 +42,7 @@ public class ConnectionPrefs extends PhexCorePrefs {
      * allowToBecomeUP is false, a forceToBeUltrapeer value of true must be
      * ignored.
      */
-    public static final Setting<Boolean> ForceToBeUltrapeer;
+    public final Setting<Boolean> ForceToBeUltrapeer;
 
     /**
      * The number of ultrapeer to ultrapeer connections the nodes is allowed to
@@ -48,64 +50,64 @@ public class ConnectionPrefs extends PhexCorePrefs {
      * This value is used for the X-Degree header. To reach high out degree
      * for dynamic query the value must be above 15.
      */
-    public static final Setting<Integer> Up2UpConnections;
+    public final Setting<Integer> Up2UpConnections;
 
     /**
      * The number of ultrapeer to leaf connections the nodes is allowed to
      * have open.
      */
-    public static final Setting<Integer> Up2LeafConnections;
+    public final Setting<Integer> Up2LeafConnections;
 
     /**
      * The number of leaf to ultrapeer connections the nodes is allowed to
      * have open. The max should be 5.
      */
-    public static final RangeSetting<Integer> Leaf2UpConnections;
+    public final RangeSetting<Integer> Leaf2UpConnections;
 
     /**
      * Indicates if the peers has connected incoming the last time it was
      * shutdown. The value is only updated in case of a server shutdown, but
      * the Server maintains and holds the state changes during runtime.
      */
-    public static final Setting<Boolean> HasConnectedIncomming;
+    public final Setting<Boolean> HasConnectedIncomming;
 
     /**
      * The number of consecutive failed connection after which the servent
      * is called as offline.
      */
-    public static final Setting<Integer> OfflineConnectionFailureCount;
+    public final Setting<Integer> OfflineConnectionFailureCount;
 
     /**
      * Enables QueryHit Snooping.
      */
-    public static final Setting<Boolean> EnableQueryHitSnooping;
+    public final Setting<Boolean> EnableQueryHitSnooping;
 
     /**
      * Indicates if we accept deflated connections.
      */
-    public static final Setting<Boolean> AcceptDeflateConnection;
+    public final Setting<Boolean> AcceptDeflateConnection;
 
-    static {
-        AutoConnectOnStartup = PreferencesFactory.createBoolSetting(
-                "Connection.AutoConnectOnStartup", true, instance);
-        AllowToBecomeUP = PreferencesFactory.createBoolSetting(
-                "Connection.AllowToBecomeUP", true, instance);
-        ForceToBeUltrapeer = PreferencesFactory.createBoolSetting(
+    public ConnectionPrefs(File file) { super(file);
+        AutoConnectOnStartup = createBoolSetting(
+                "Connection.AutoConnectOnStartup", true);
+        AllowToBecomeUP = createBoolSetting(
+                "Connection.AllowToBecomeUP", true);
+        ForceToBeUltrapeer = createBoolSetting(
                 "Connection.ForceToBeUltrapeer",
-                PrivateNetworkConstants.DEFAULT_FORCE_TOBE_ULTRAPEER, instance);
-        Up2UpConnections = PreferencesFactory.createIntRangeSetting(
-                "Connection.Up2UpConnections", 32, 16, 999, instance);
-        Up2LeafConnections = PreferencesFactory.createIntRangeSetting(
-                "Connection.Up2LeafConnections", 30, 0, 999, instance);
-        Leaf2UpConnections = PreferencesFactory.createIntRangeSetting(
-                "Connection.Leaf2UpConnections", 5, 1, 5, instance);
-        HasConnectedIncomming = PreferencesFactory.createBoolSetting(
-                "Connection.HasConnectedIncomming", false, instance);
-        OfflineConnectionFailureCount = PreferencesFactory.createIntSetting(
-                "Connection.OfflineConnectionFailureCount", 61, instance);
-        EnableQueryHitSnooping = PreferencesFactory.createBoolSetting(
-                "Connection.EnableQueryHitSnooping", true, instance);
-        AcceptDeflateConnection = PreferencesFactory.createBoolSetting(
-                "Connection.AcceptDeflateConnection", true, instance);
+                PrivateNetworkConstants.DEFAULT_FORCE_TOBE_ULTRAPEER);
+        Up2UpConnections = createIntRangeSetting(
+                "Connection.Up2UpConnections", 32, 16, 999);
+        Up2LeafConnections = createIntRangeSetting(
+                "Connection.Up2LeafConnections", 30, 0, 999);
+        Leaf2UpConnections = createIntRangeSetting(
+                "Connection.Leaf2UpConnections", 5, 1, 5);
+        HasConnectedIncomming = createBoolSetting(
+                "Connection.HasConnectedIncomming", false);
+        OfflineConnectionFailureCount = createIntSetting(
+                "Connection.OfflineConnectionFailureCount", 61);
+        EnableQueryHitSnooping = createBoolSetting(
+                "Connection.EnableQueryHitSnooping", true);
+        AcceptDeflateConnection = createBoolSetting(
+                "Connection.AcceptDeflateConnection", true);
     }
 }

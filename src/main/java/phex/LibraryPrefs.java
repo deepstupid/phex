@@ -20,25 +20,30 @@
  *  --- CVS Information ---
  *  $Id: LibraryPrefs.java 3807 2007-05-19 17:06:46Z gregork $
  */
-package phex.prefs.core;
+package phex;
 
-import phex.prefs.api.PreferencesFactory;
-import phex.prefs.api.Setting;
+import phex.prefs.Preferences;
+import phex.prefs.Setting;
 
+import java.io.File;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 // TODO changes to List or Set Settings do not cause a set call and a "saveRequiredNotify"
-public class LibraryPrefs extends PhexCorePrefs {
+public class LibraryPrefs extends Preferences {
+
+    @Deprecated public static final AtomicBoolean AllowBrowsing = new AtomicBoolean(true);
+
     /**
      * @since 2.1.5.80
      */
-    public static final Setting<Set<String>> SharedDirectoriesSet;
+    public final Setting<Set<String>> SharedDirectoriesSet;
 
     /**
      * @since 2.1.9.83
      */
-    public static final Setting<List<String>> LibraryExclusionRegExList;
+    public final Setting<List<String>> LibraryExclusionRegExList;
 
     /**
      * Determines the urn calculation speed mode. Values should range
@@ -47,7 +52,7 @@ public class LibraryPrefs extends PhexCorePrefs {
      * the wait cycles between each 64K segment. A value of 2 means
      * wait twice as long as you needed to calculate the last 64K.
      */
-    public static final Setting<Integer> UrnCalculationMode;
+    public final Setting<Integer> UrnCalculationMode;
 
     /**
      * Determines the thex calculation speed mode. Values should range
@@ -56,28 +61,27 @@ public class LibraryPrefs extends PhexCorePrefs {
      * the wait cycles between each 128K segment. A value of 2 means
      * wait twice as long as you needed to calculate the last 128K.
      */
-    public static final Setting<Integer> ThexCalculationMode;
+    public final Setting<Integer> ThexCalculationMode;
 
-    public static final Setting<Boolean> AllowBrowsing;
 
     /**
      * The max of this value should be 255. The protocol is not able to handle
      * more.
      */
-    public static final Setting<Integer> MaxResultsPerQuery;
+    public final Setting<Integer> MaxResultsPerQuery;
 
-    static {
-        SharedDirectoriesSet = PreferencesFactory.createSetSetting(
-                "Library.SharedDirectoriesSet", instance);
-        LibraryExclusionRegExList = PreferencesFactory.createListSetting(
-                "Library.LibraryExclusionRegExList", instance);
-        UrnCalculationMode = PreferencesFactory.createIntSetting(
-                "Library.UrnCalculationMode", 2, instance);
-        ThexCalculationMode = PreferencesFactory.createIntSetting(
-                "Library.ThexCalculationMode", 2, instance);
-        AllowBrowsing = PreferencesFactory.createBoolSetting(
-                "Library.AllowBrowsing", true, instance);
-        MaxResultsPerQuery = PreferencesFactory.createIntSetting(
-                "Library.MaxResultsPerQuery", 64, instance);
+    public LibraryPrefs(File file) { super(file);
+        SharedDirectoriesSet = createSetSetting(
+                "Library.SharedDirectoriesSet");
+        LibraryExclusionRegExList = createListSetting(
+                "Library.LibraryExclusionRegExList");
+        UrnCalculationMode = createIntSetting(
+                "Library.UrnCalculationMode", 2);
+        ThexCalculationMode = createIntSetting(
+                "Library.ThexCalculationMode", 2);
+//        AllowBrowsing = createBoolSetting(
+//                "Library.AllowBrowsing", true);
+        MaxResultsPerQuery = createIntSetting(
+                "Library.MaxResultsPerQuery", 64);
     }
 }

@@ -25,7 +25,7 @@ import phex.common.URN;
 import phex.common.address.DestAddress;
 import phex.msg.GUID;
 import phex.msg.QueryFactory;
-import phex.servent.Peer;
+import phex.peer.Peer;
 
 public class BackgroundSearchContainer extends SearchContainer {
     public BackgroundSearchContainer(QueryFactory queryFactory,

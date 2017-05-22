@@ -29,7 +29,7 @@ import phex.msg.PushRequestMsg;
 import phex.net.connection.Connection;
 import phex.net.connection.SocketFactory;
 import phex.net.repres.SocketFacade;
-import phex.servent.Peer;
+import phex.peer.Peer;
 import phex.share.HttpRequestDispatcher;
 import phex.share.ShareFile;
 import phex.statistic.SimpleStatisticProvider;
@@ -47,10 +47,12 @@ public class PushWorker implements Runnable {
     private final PushRequestMsg pushMsg;
 
     private Connection connection;
+    private SocketFactory socketFactory;
 
     public PushWorker(PushRequestMsg msg, UploadManager uploadMgr) {
         this.uploadMgr = uploadMgr;
         pushMsg = msg;
+        this.socketFactory = new SocketFactory(uploadMgr.peer);
         Environment.getInstance().executeOnThreadPool(this,
                 "PushWorker-" + Integer.toHexString(hashCode()));
 
@@ -111,7 +113,7 @@ public class PushWorker implements Runnable {
             HTTPRequest httpRequest;
             NLogger.debug(PushWorker.class,
                     "Try PUSH connect to: " + pushMsg.getRequestAddress());
-            SocketFacade sock = SocketFactory.connect(pushMsg.getRequestAddress(),
+            SocketFacade sock = socketFactory.connect(pushMsg.getRequestAddress(),
                     PUSH_TIMEOUT);
             BandwidthController bwController = uploadMgr.getUploadBandwidthController();
             connection = new Connection(sock, bwController);

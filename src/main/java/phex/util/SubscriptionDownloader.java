@@ -26,8 +26,8 @@ import org.apache.commons.httpclient.URIException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.Environment;
-import phex.prefs.core.SubscriptionPrefs;
-import phex.servent.Peer;
+import phex.SubscriptionPrefs;
+import phex.peer.Peer;
 import phex.share.FileRescanRunner;
 
 import java.io.BufferedReader;
@@ -45,7 +45,7 @@ public class SubscriptionDownloader extends TimerTask {
         Environment.getInstance().scheduleTimerTask(this, 0, 14 * 24 * 3600 * 1000);
     }
 
-    private static List<String> loadSubscriptionList() {
+    private List<String> loadSubscriptionList() {
         String name = "/subscription.list";
         InputStream stream = SubscriptionDownloader.class
                 .getResourceAsStream(name);
@@ -53,11 +53,11 @@ public class SubscriptionDownloader extends TimerTask {
         // TODO verify the code inside this if{}... is this really correct what
         // happens here?? looks strange...
         if (stream == null) {
-            List<String> subscriptionMagnets = SubscriptionPrefs.SubscriptionMagnets.get();
-            List<String> list = SubscriptionPrefs.SubscriptionMagnets.get();
+            List<String> subscriptionMagnets = peer.subPrefs.SubscriptionMagnets.get();
+            List<String> list = peer.subPrefs.SubscriptionMagnets.get();
             if (subscriptionMagnets != null
-                    && SubscriptionPrefs.default_subscriptionMagnets != null) {
-                subscriptionMagnets.add(SubscriptionPrefs.default_subscriptionMagnets);
+                    && peer.subPrefs.default_subscriptionMagnets != null) {
+                subscriptionMagnets.add(peer.subPrefs.default_subscriptionMagnets);
             }
             return list;
         }
@@ -71,7 +71,7 @@ public class SubscriptionDownloader extends TimerTask {
                 list.add(line);
                 line = reader.readLine();
             }
-            List<String> oldSubscriptionMagnets = SubscriptionPrefs.SubscriptionMagnets.get();
+            List<String> oldSubscriptionMagnets = peer.subPrefs.SubscriptionMagnets.get();
             list.addAll(oldSubscriptionMagnets);
             return list;
         } catch (IOException exp) {
@@ -103,7 +103,7 @@ public class SubscriptionDownloader extends TimerTask {
 
             while (iterator.hasNext()) {
                 uriStr = iterator.next();
-                if (SubscriptionPrefs.DownloadSilently.get().booleanValue()) {
+                if (peer.subPrefs.DownloadSilently.get().booleanValue()) {
                     try {
                         createDownload(uriStr);
                     } //This donwloads the magma via magnet silently in the background.

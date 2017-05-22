@@ -20,46 +20,48 @@
  *  --- CVS Information ---
  *  $Id: SecurityPrefs.java 3807 2007-05-19 17:06:46Z gregork $
  */
-package phex.prefs.core;
+package phex;
 
-import phex.prefs.api.PreferencesFactory;
-import phex.prefs.api.Setting;
+import phex.prefs.Preferences;
+import phex.prefs.Setting;
 
+import java.io.File;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class SecurityPrefs extends PhexCorePrefs {
+public class SecurityPrefs extends Preferences {
     /**
      * Indicates if the internal hostile host list should be loaded.
      */
-    public static final Setting<Boolean> LoadHostileHostList;
+    public static final AtomicBoolean LoadHostileHostList = new AtomicBoolean(false);
 
     /**
      * Indicates if the internal hostile sha1 urn list should be loaded.
      */
-    public static final Setting<Boolean> LoadHostileSha1List;
+    public static final AtomicBoolean LoadHostileSha1List = new AtomicBoolean(false);
 
     /**
      * Indicates if nodes with no vendor code are disconnected.
      */
-    public static final Setting<Boolean> DisconnectNoVendorHosts;
+    public static final AtomicBoolean DisconnectNoVendorHosts = new AtomicBoolean(false);
 
-    /**
-     * When the HostCatcher finds hosts it will first use the port filter
-     * to see if it is allowed to use the host
-     */
-    public static final Setting<List<String>> FilteredPorts;
+//    /**
+//     * When the HostCatcher finds hosts it will first use the port filter
+//     * to see if it is allowed to use the host
+//     */
+//    public static final Setting<List<String>> FilteredPorts;
 
-    static {
-        LoadHostileHostList = PreferencesFactory.createBoolSetting(
-                "Security.LoadHostileHostList", true, instance);
-
-        LoadHostileSha1List = PreferencesFactory.createBoolSetting(
-                "Security.LoadHostileSha1List", true, instance);
-
-        DisconnectNoVendorHosts = PreferencesFactory.createBoolSetting(
-                "Security.DisconnectNoVendorHosts", true, instance);
-
-        FilteredPorts = PreferencesFactory.createListSetting(
-                "Security.FilteredPorts", instance);
-    }
+//    static {
+//        LoadHostileHostList = createBoolSetting(
+//                "Security.LoadHostileHostList", true);
+//
+//        LoadHostileSha1List = createBoolSetting(
+//                "Security.LoadHostileSha1List", true);
+//
+//        DisconnectNoVendorHosts = createBoolSetting(
+//                "Security.DisconnectNoVendorHosts", true);
+//
+//        FilteredPorts = createListSetting(
+//                "Security.FilteredPorts");
+//    }
 }

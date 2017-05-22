@@ -17,36 +17,16 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * 
  *  --- SVN Information ---
- *  $Id: Setting.java 4046 2007-11-19 17:13:59Z gregork $
+ *  $Id: PreferencesFactory.java 4524 2011-06-27 10:04:38Z gregork $
  */
-package phex.prefs.api;
+package phex.prefs;
 
-/**
- * Generic change event class holding a source, the old value and the new value.
- * To indication what has changed the event topic of the event service should be
- * used.
- */
-public class SettingChangedEvent<T> {
-    private final Setting<T> source;
-    private final T oldValue;
-    private final T newValue;
+import phex.util.StringUtils;
 
-    public SettingChangedEvent(Setting<T> source, T oldValue, T newValue) {
-        super();
-        this.source = source;
-        this.oldValue = oldValue;
-        this.newValue = newValue;
-    }
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
-    public Setting<T> getSource() {
-        return source;
-    }
 
-    public T getOldValue() {
-        return oldValue;
-    }
-
-    public T getNewValue() {
-        return newValue;
-    }
+public final class PreferencesFactory {
 }

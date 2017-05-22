@@ -29,8 +29,8 @@ import phex.http.GnutellaHeaderNames;
 import phex.http.HTTPHeader;
 import phex.http.HTTPHeaderGroup;
 import phex.http.HTTPHeaderNames;
-import phex.prefs.core.ConnectionPrefs;
-import phex.servent.Peer;
+import phex.ConnectionPrefs;
+import phex.peer.Peer;
 
 public abstract class HandshakeHandler implements ConnectionConstants {
     protected final Peer peer;

@@ -65,8 +65,8 @@ public class Environment {
      * @return the File representing the complete path to the configuration file
      * with the given configFileName.
      */
-    public static File getPhexConfigFile(String configFileName) {
-        return new File(SystemProperties.getPhexConfigRoot(), configFileName);
+    public static File getPhexConfigFile(File path, String configFileName) {
+        return new File(path, configFileName);
     }
 
     /**

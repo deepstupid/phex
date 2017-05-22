@@ -1,10 +1,10 @@
-package phex.servent;
+package phex.peer;
 
 import phex.common.GnutellaNetwork;
 import phex.common.address.DestAddress;
 import phex.msg.GUID;
 
-public interface ServentInfo {
+public interface PeerInfo {
     /**
      * Returns true if this node is currently a ultrapeer, false otherwise.
      * This node is currently a ultrapeer if it is forced to be a ultrapeer or
