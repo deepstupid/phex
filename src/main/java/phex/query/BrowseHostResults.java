@@ -33,7 +33,7 @@ import phex.msg.GUID;
 import phex.msg.InvalidMessageException;
 import phex.msg.QueryResponseMsg;
 import phex.msg.QueryResponseRecord;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,8 +45,8 @@ public class BrowseHostResults extends Search {
     private final GUID hostGUID;
     private BrowseHostStatus browseHostStatus;
 
-    public BrowseHostResults(Servent servent, DestAddress hostAddress, GUID aHostGUID) {
-        super(servent);
+    public BrowseHostResults(Peer peer, DestAddress hostAddress, GUID aHostGUID) {
+        super(peer);
         this.destAddress = hostAddress;
         hostGUID = aHostGUID;
         browseHostStatus = BrowseHostStatus.INITIALIZING;
@@ -68,7 +68,7 @@ public class BrowseHostResults extends Search {
         isSearchFinished = false;
         Runnable runner = () -> {
             BrowseHostConnection connection = new BrowseHostConnection(
-                    servent, destAddress, hostGUID, BrowseHostResults.this);
+                    peer, destAddress, hostGUID, BrowseHostResults.this);
             try {
                 connection.sendBrowseHostRequest();
                 browseHostStatus = BrowseHostStatus.FINISHED;
@@ -124,7 +124,7 @@ public class BrowseHostResults extends Search {
     @Override
     public void processResponse(QueryResponseMsg msg)
             throws InvalidMessageException {
-        QueryHitHost qhHost = QueryHitHost.createFrom(msg);
+        QueryHitHost qhHost = QueryHitHost.createFrom(peer, msg);
 
         RemoteFile rfile;
         QueryResponseRecord[] records = msg.getMsgRecords();

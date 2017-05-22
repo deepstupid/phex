@@ -19,7 +19,7 @@
  *  --- SVN Information ---
  *  $Id$
  */
-package phex.test;
+package phex;
 
 import junit.framework.TestCase;
 import phex.http.HTTPRangeSet;

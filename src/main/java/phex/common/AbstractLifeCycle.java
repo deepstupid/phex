@@ -37,29 +37,34 @@ public abstract class AbstractLifeCycle implements LifeCycle {
     protected void doStop() throws Exception {
     }
 
-    public final void start() throws Exception {
+    public boolean start() throws Exception {
         try {
-            if (status == Status.STARTED)
-                return;
-            status = Status.STARTING;
-            doStart();
-            NLogger.debug(getClass(), "lifecycle started");
-            status = Status.STARTED;
+            if (status != Status.STARTED) {
+                status = Status.STARTING;
+                doStart();
+                NLogger.debug(getClass(), "start");
+                status = Status.STARTED;
+            }
+            return true;
         } catch (Exception | Error exp) {
             NLogger.error(getClass(), exp);
             status = Status.FAILED;
             throw exp;
         }
+
     }
 
-    public final void stop() throws Exception {
+    public boolean stop() throws Exception {
         try {
-            if (status == Status.STOPPING || status == Status.STOPPED)
-                return;
-            status = Status.STOPPING;
-            doStop();
-            NLogger.debug(getClass(), "lifecycle stopped");
-            status = Status.STOPPED;
+            if (status == Status.STOPPING || status == Status.STOPPED) {
+
+            } else {
+                status = Status.STOPPING;
+                doStop();
+                NLogger.debug(getClass(), "stop");
+                status = Status.STOPPED;
+            }
+            return true;
         } catch (Exception | Error exp) {
             NLogger.error(getClass(), exp);
             status = Status.FAILED;

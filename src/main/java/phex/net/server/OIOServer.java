@@ -34,14 +34,14 @@ import phex.net.repres.def.DefaultSocketFacade;
 import phex.prefs.core.NetworkPrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityException;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.io.IOException;
 import java.net.*;
 
 public class OIOServer extends Server {
-    public OIOServer(Servent servent) {
-        super(servent);
+    public OIOServer(Peer peer) {
+        super(peer);
     }
 
     // The listening thread.
@@ -90,7 +90,7 @@ public class OIOServer extends Server {
         clientSocket.setSoTimeout(NetworkPrefs.TcpRWTimeout.get());
 
         DestAddress address = clientSocket.getRemoteAddress();
-        NetworkHostsContainer netHostsContainer = servent.getHostService()
+        NetworkHostsContainer netHostsContainer = peer.getHostService()
                 .getNetworkHostsContainer();
 
         // if not already connected and connection is not from a private address.
@@ -108,7 +108,7 @@ public class OIOServer extends Server {
 
         // Create a Host object for the incoming connection
         // and hand it off to a ReadWorker to handle.
-        AccessType access = servent.getSecurityService()
+        AccessType access = peer.getSecurityService()
                 .controlHostAddressAccess(address);
         switch (access) {
             case ACCESS_DENIED:
@@ -121,7 +121,7 @@ public class OIOServer extends Server {
                         + address.getFullHostName());
 
         IncomingConnectionDispatcher dispatcher = new IncomingConnectionDispatcher(
-                clientSocket, servent);
+                clientSocket, peer);
         Environment.getInstance().executeOnThreadPool(dispatcher,
                 "IncomingConnectionDispatcher-" + Integer.toHexString(hashCode()));
     }

@@ -40,7 +40,7 @@ import phex.prefs.core.BandwidthPrefs;
 import phex.prefs.core.MessagePrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.share.QueryResultSearchEngine;
 import phex.share.ShareFile;
 import phex.share.SharedFilesService;
@@ -48,7 +48,6 @@ import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticProvider;
 import phex.statistic.StatisticsManager;
 import phex.upload.PushWorker;
-import phex.util.HexConverter;
 import phex.util.StringUtils;
 
 import java.io.IOException;
@@ -60,7 +59,7 @@ class MessageDispatcher {
     private static final Logger logger = LoggerFactory.getLogger(
             MessageDispatcher.class);
 
-    private final Servent servent;
+    private final Peer peer;
     private final MessageRouting msgRouting;
     private final Map<Class<? extends Message>, MessageSubscriber<? extends Message>> messageSubscribers;
     private final Map<Class<? extends Message>, UdpMessageSubscriber<? extends Message>> udpMessageSubscribers;
@@ -79,16 +78,16 @@ class MessageDispatcher {
     private SimpleStatisticProvider totalInMsgCounter;
     private StatisticProvider uptimeStatsProvider;
 
-    public MessageDispatcher(Servent servent, MessageRouting msgRouting,
+    public MessageDispatcher(Peer peer, MessageRouting msgRouting,
                              PongFactory pongFactory) {
-        this.servent = servent;
+        this.peer = peer;
         this.msgRouting = msgRouting;
         this.pongFactory = pongFactory;
         messageSubscribers = new HashMap<Class<? extends Message>, MessageSubscriber<? extends Message>>();
         udpMessageSubscribers = new HashMap<Class<? extends Message>, UdpMessageSubscriber<? extends Message>>();
-        hostMgr = servent.getHostService();
-        sharedFilesService = servent.getSharedFilesService();
-        securityService = servent.getSecurityService();
+        hostMgr = peer.getHostService();
+        sharedFilesService = peer.getSharedFilesService();
+        securityService = peer.getSecurityService();
     }
 
     // temporary workaround until stats are reworked.
@@ -283,8 +282,8 @@ class MessageDispatcher {
 
         // Get my host:port for InitResponse.
         PongMsg pong = pongFactory.createMyOutgoingPong(header.getMsgID(),
-                servent.getLocalAddress(), newTTL, shareFileCount, shareFileSize,
-                servent.isUltrapeer(), avgDailyUptime, sourceHost.isGgepSupported());
+                peer.getLocalAddress(), newTTL, shareFileCount, shareFileSize,
+                peer.isUltrapeer(), avgDailyUptime, sourceHost.isGgepSupported());
         sourceHost.queueMessageToSend(pong);
 
         // send pongs from pong cache
@@ -294,7 +293,7 @@ class MessageDispatcher {
             return;
         }
         GUID guid = header.getMsgID();
-        List<PongMsg> pongs = servent.getMessageService().getCachedPongs();
+        List<PongMsg> pongs = peer.getMessageService().getCachedPongs();
         for (PongMsg pMsg : pongs) {
             if (ip.equals(pMsg.getPongAddress().getIpAddress())) {
                 continue;
@@ -335,7 +334,7 @@ class MessageDispatcher {
         if (access == AccessType.ACCESS_GRANTED) {
             boolean isNew = hostMgr.catchHosts(msg);
             if (isNew) {
-                servent.getMessageService().addPongToCache(msg);
+                peer.getMessageService().addPongToCache(msg);
             }
         }
 
@@ -441,19 +440,19 @@ class MessageDispatcher {
         int recPos = 0;
         for (ShareFile shareFile : resultFiles) {
             record = QueryResponseRecord.createFromShareFile(shareFile,
-                    servent.getLocalAddress());
+                    peer.getLocalAddress());
             records[recPos] = record;
             recPos++;
         }
 
-        DestAddress hostAddress = servent.getLocalAddress();
-        GUID serventGuid = servent.getServentGuid();
+        DestAddress hostAddress = peer.getLocalAddress();
+        GUID serventGuid = peer.getServentGuid();
 
         QueryResponseMsg response = new QueryResponseMsg(
                 newHeader, serventGuid, hostAddress,
                 Math.round(BandwidthPrefs.MaxUploadBandwidth.get().floatValue() / NumberFormatUtils.ONE_KB),
                 records, hostMgr.getNetworkHostsContainer().getPushProxies(),
-                !servent.isFirewalled(), servent.isUploadLimitReached());
+                !peer.isFirewalled(), peer.isUploadLimitReached());
 
         sourceHost.queueMessageToSend(response);
     }
@@ -482,7 +481,7 @@ class MessageDispatcher {
 
         // validate remote client id
         GUID respServentId = queryResponseMsg.getRemoteServentID();
-        if (respServentId.equals(servent.getServentGuid())) {
+        if (respServentId.equals(peer.getServentGuid())) {
             dropMessage(queryResponseMsg, "My query response should never reach me.", sourceHost);
             return;
         }
@@ -565,7 +564,7 @@ class MessageDispatcher {
                 // local query routing table. This needs to be done since
                 // have our leaves QRT aggregated our QRT and are checking
                 // during a query against our QRT if leaves might have a hit.
-                servent.getMessageService().triggerQueryRoutingTableUpdate();
+                peer.getMessageService().triggerQueryRoutingTableUpdate();
             }
         } catch (InvalidMessageException exp) {// drop message
             dropMessage(message, "Invalid QRT update message.", sourceHost);
@@ -598,14 +597,14 @@ class MessageDispatcher {
         sourceHost.setSupportedVMsgs(msg);
 
         // if push proxy is supported request it..
-        boolean isFirewalled = servent.isFirewalled();
+        boolean isFirewalled = peer.isFirewalled();
         // if we are a leave or are firewalled and connected to a ultrapeer
         // and the connection supports push proxy.
         if ((sourceHost.isLeafUltrapeerConnection() ||
                 (isFirewalled && sourceHost.isUltrapeer()))
                 && sourceHost.isPushProxySupported()) {
             PushProxyRequestVMsg pprmsg = new PushProxyRequestVMsg(
-                    servent.getServentGuid());
+                    peer.getServentGuid());
             // TODO2 remove this once Limewire support PPR v2
             if (sourceHost.getVendor() != null &&
                     sourceHost.getVendor().contains("LimeWire")) {
@@ -614,12 +613,12 @@ class MessageDispatcher {
             sourceHost.queueMessageToSend(pprmsg);
         }
         if (isFirewalled &&
-                servent.getMessageService().isTCPRedirectAllowed() &&
+                peer.getMessageService().isTCPRedirectAllowed() &&
                 sourceHost.isTCPConnectBackSupported()) {
-            DestAddress localAddress = servent.getLocalAddress();
+            DestAddress localAddress = peer.getLocalAddress();
             VendorMsg tcpConnectBack = new TCPConnectBackVMsg(localAddress.getPort());
             sourceHost.queueMessageToSend(tcpConnectBack);
-            servent.getMessageService().incNumberOfTCPRedirectsSent();
+            peer.getMessageService().incNumberOfTCPRedirectsSent();
         }
     }
 
@@ -660,7 +659,7 @@ class MessageDispatcher {
                 DestAddress connectBackAddress = new DefaultDestAddress(address.getHostName(),
                         address.getPort());
                 connection = ConnectionFactory.createConnection(
-                        connectBackAddress, 2000, servent.getBandwidthService().getNetworkBandwidthController());
+                        connectBackAddress, 2000, peer.getBandwidthService().getNetworkBandwidthController());
                 connection.write(ByteBuffer.wrap(StringUtils.getBytesInUsAscii("\n\n")));
                 connection.flush();
             } catch (IOException exp) { // failed.. don't care..
@@ -677,7 +676,7 @@ class MessageDispatcher {
         if (!sourceHost.isUltrapeerLeafConnection()) {
             return;
         }
-        DestAddress localAddress = servent.getLocalAddress();
+        DestAddress localAddress = peer.getLocalAddress();
         // PP only works if we have a valid IP to use in the PPAck message.
         if (localAddress.getIpAddress() == null) {
             logger.warn("Local address has no IP to use for PPAck.");
@@ -695,7 +694,7 @@ class MessageDispatcher {
 
     private void handlePushProxyAcknowledgementVMsg(PushProxyAcknowledgementVMsg ppavmsg, Host sourceHost) {
         // the candidate is able to be a push proxy if the ack contains my guid.
-        if (servent.getServentGuid().equals(ppavmsg.getHeader().getMsgID())) {
+        if (peer.getServentGuid().equals(ppavmsg.getHeader().getMsgID())) {
             sourceHost.setPushProxyAddress(ppavmsg.getHostAddress());
         }
     }
@@ -720,15 +719,15 @@ class MessageDispatcher {
             return;
         }
 
-        if (servent.getServentGuid().equals(msg.getClientGUID())) {
+        if (peer.getServentGuid().equals(msg.getClientGUID())) {
             if (access == AccessType.ACCESS_GRANTED) {
-                new PushWorker(msg, servent.getUploadService());
+                new PushWorker(msg, peer.getUploadService());
             }
             return;
         }
 
         if (msg.getHeader().getTTL() > 0) {
-            servent.getMessageService().routePushMessage(msg);
+            peer.getMessageService().routePushMessage(msg);
         }
     }
 

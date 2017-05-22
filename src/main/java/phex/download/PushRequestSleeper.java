@@ -35,7 +35,7 @@ import phex.msg.PushRequestMsg;
 import phex.msghandling.MessageService;
 import phex.net.repres.SocketFacade;
 import phex.prefs.core.DownloadPrefs;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticsManager;
 
@@ -57,11 +57,11 @@ public class PushRequestSleeper {
      */
     private SocketFacade givenSocket;
 
-    public PushRequestSleeper(Servent servent, GUID aClientGUID, long aFileIndex,
+    public PushRequestSleeper(Peer peer, GUID aClientGUID, long aFileIndex,
                               DestAddress[] pushProxyAddresses) {
-        this.statsService = servent.getStatisticsService();
-        this.msgService = servent.getMessageService();
-        this.serventAddress = servent.getLocalAddress();
+        this.statsService = peer.getStatisticsService();
+        this.msgService = peer.getMessageService();
+        this.serventAddress = peer.getLocalAddress();
         this.clientGUID = aClientGUID;
         this.fileIndex = aFileIndex;
         this.pushProxyAddresses = pushProxyAddresses;

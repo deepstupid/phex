@@ -24,7 +24,7 @@ package phex.connection;
 import phex.host.Host;
 import phex.msg.Message;
 import phex.msg.MsgHeader;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticProviderConstants;
 import phex.statistic.StatisticsManager;
@@ -80,6 +80,7 @@ public class MessageQueue {
      * The array of FlowControlQueues.
      */
     private final FlowControlQueue[] flowControlQueue;
+    private final Peer peer;
     private int queuedCount;
 
 
@@ -88,8 +89,10 @@ public class MessageQueue {
      */
     private int lastPriorityAdded;
 
-    public MessageQueue(Host host) {
+    public MessageQueue(Peer peer, Host host) {
         this.host = host;
+        this.peer = peer;
+
         // burst rates are taken from Limewire.
 
         flowControlQueue = new FlowControlQueue[PRIORITY_COUNT];
@@ -163,20 +166,19 @@ public class MessageQueue {
         }
     }
 
-    public void addMessage(Message msg, Host.SendEngine sendEngine) {
+    public void addMessage(Peer peer, Message msg, Host.SendEngine sendEngine) {
         int priority = calculatePriority(msg);
-        synchronized (this) {
-            //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
-            //    "Adding message to queue: " + msg );
 
-            flowControlQueue[priority].addMessage(msg);
-        }
+        //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
+        //    "Adding message to queue: " + msg );
+
+        flowControlQueue[priority].addMessage(msg);
 
         int tmpDropCount = flowControlQueue[priority].getAndResetDropCount();
         // count sent drop
         host.incSentDropCount(tmpDropCount);
 
-        StatisticsManager statMgr = Servent.servent.getStatisticsService();
+        StatisticsManager statMgr = peer.getStatisticsService();
         ((SimpleStatisticProvider) statMgr.getStatisticProvider(
                 StatisticProviderConstants.DROPEDMSG_OUT_PROVIDER)).increment(tmpDropCount);
         // update queuedCount.
@@ -208,7 +210,7 @@ public class MessageQueue {
                     // count sent drop
                     host.incSentDropCount(tmpDropCount);
 
-                    StatisticsManager statMgr = Servent.servent.getStatisticsService();
+                    StatisticsManager statMgr = peer.getStatisticsService();
                     ((SimpleStatisticProvider) statMgr.getStatisticProvider(
                             StatisticProviderConstants.DROPEDMSG_OUT_PROVIDER)).increment(tmpDropCount);
                     if (msg == null) {

@@ -24,17 +24,17 @@ package phex.host;
 import phex.bootstrap.BootstrapManager;
 import phex.bootstrap.UdpHostCacheContainer;
 import phex.common.log.NLogger;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 public class DefaultHostFetchingStrategy implements HostFetchingStrategy {
     private final BootstrapManager gWebCacheMgr;
     private final UdpHostCacheContainer udpHostCacheContainer;
 
-    public DefaultHostFetchingStrategy(Servent servent, UdpHostCacheContainer udpHostCacheContainer) {
+    public DefaultHostFetchingStrategy(Peer peer, UdpHostCacheContainer udpHostCacheContainer) {
         if (udpHostCacheContainer == null) {
             throw new IllegalArgumentException("UHC is null");
         }
-        this.gWebCacheMgr = new BootstrapManager(servent);
+        this.gWebCacheMgr = new BootstrapManager(peer);
         this.udpHostCacheContainer = udpHostCacheContainer;
     }
 

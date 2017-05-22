@@ -71,7 +71,7 @@ public class DownloadCandidateSnoop implements MessageSubscriber<QueryResponseMs
                 }
 
                 if (qhHost == null) {
-                    qhHost = QueryHitHost.createFrom(message);
+                    qhHost = QueryHitHost.createFrom(swarmingMgr.peer, message);
                 }
                 // add record as candidate...
                 RemoteFile rFile = new RemoteFile(qhHost, rec.getFileIndex(),

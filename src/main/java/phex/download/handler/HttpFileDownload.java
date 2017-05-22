@@ -44,7 +44,7 @@ import phex.prefs.core.DownloadPrefs;
 import phex.prefs.core.NetworkPrefs;
 import phex.prefs.core.UploadPrefs;
 import phex.security.PhexSecurityManager;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.util.IOUtil;
 import phex.util.LengthLimitedInputStream;
 
@@ -301,8 +301,8 @@ public class HttpFileDownload extends AbstractHttpDownload {
 
         Connection connection = downloadEngine.getConnection();
         SWDownloadSet downloadSet = downloadEngine.getDownloadSet();
-        Servent servent = downloadSet.getServent();
-        PhexSecurityManager securityService = servent.getSecurityService();
+        Peer peer = downloadSet.getPeer();
+        PhexSecurityManager securityService = peer.getSecurityService();
         SWDownloadCandidate candidate = downloadSet.getCandidate();
         SWDownloadFile downloadFile = downloadSet.getDownloadFile();
         SWDownloadSegment segment = downloadSet.getDownloadSegment();
@@ -339,11 +339,11 @@ public class HttpFileDownload extends AbstractHttpDownload {
         }
 
         buildAltLocRequestHeader(downloadFile, candidate, request,
-                servent.getLocalAddress(), servent.isFirewalled());
+                peer.getLocalAddress(), peer.isFirewalled());
 
-        DestAddress localAdress = servent.getLocalAddress();
+        DestAddress localAdress = peer.getLocalAddress();
         IpAddress myIp = localAdress.getIpAddress();
-        if (!servent.isFirewalled() && (myIp == null || !myIp.isSiteLocalIP())) {
+        if (!peer.isFirewalled() && (myIp == null || !myIp.isSiteLocalIP())) {
             request.addHeader(new HTTPHeader(GnutellaHeaderNames.X_NODE,
                     localAdress.getFullHostName()));
             if (NetworkPrefs.AllowChatConnection.get().booleanValue()) {
@@ -433,7 +433,7 @@ public class HttpFileDownload extends AbstractHttpDownload {
             if (remoteIP != null) {
                 IpAddress ip = new IpAddress(remoteIP);
                 DestAddress address = PresentationManager.getInstance().createHostAddress(ip, -1);
-                servent.updateLocalAddress(address);
+                peer.updateLocalAddress(address);
             }
         }
 

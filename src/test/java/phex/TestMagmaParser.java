@@ -20,7 +20,7 @@
  *  --- CVS Information ---
  *  $Id: TestMagmaParser.java 3362 2006-03-30 22:27:26Z gregork $
  */
-package phex.test;
+package phex;
 
 import junit.framework.TestCase;
 import phex.util.MagmaParser;
@@ -50,7 +50,7 @@ public class TestMagmaParser extends TestCase
         throws Throwable
     {
         InputStream stream  = ClassLoader.getSystemResourceAsStream(
-            "phex/test/resources/valid_magma_1.magma");
+                "phex/test/resources/valid_magma_1.magma");
         MagmaParser parser = new MagmaParser( stream );
         parser.start();
         List magnets = parser.getMagnets();
@@ -58,7 +58,7 @@ public class TestMagmaParser extends TestCase
         assertEquals( 119, magnets.size() );
         
         stream  = ClassLoader.getSystemResourceAsStream(
-            "phex/test/resources/bracken_magma.magma");
+                "phex/test/resources/bracken_magma.magma");
         parser = new MagmaParser( stream );
         parser.start();
         magnets = parser.getMagnets();
@@ -75,7 +75,7 @@ public class TestMagmaParser extends TestCase
         assertEquals( 5, magnets.size() );
         
         stream  = ClassLoader.getSystemResourceAsStream(
-            "phex/test/resources/magmatest.magma");
+                "phex/test/resources/magmatest.magma");
         parser = new MagmaParser( stream );
         parser.start();
         magnets = parser.getMagnets();

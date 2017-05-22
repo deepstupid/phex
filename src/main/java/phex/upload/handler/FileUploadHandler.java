@@ -26,7 +26,6 @@ import phex.common.address.DestAddress;
 import phex.common.file.ManagedFileException;
 import phex.http.*;
 import phex.http.Range.RangeAvailability;
-import phex.servent.Servent;
 import phex.share.PartialShareFile;
 import phex.share.ShareFile;
 import phex.share.SharedFilesService;
@@ -39,15 +38,14 @@ import phex.util.URLUtil;
 import java.io.IOException;
 
 public class FileUploadHandler extends AbstractUploadHandler {
-    private final Servent servent;
+
     private Range uploadRangeEntry;
 
     private long startOffset;
     private long endOffset;
 
-    public FileUploadHandler(SharedFilesService sharedFilesService, Servent servent) {
+    public FileUploadHandler(SharedFilesService sharedFilesService) {
         super(sharedFilesService);
-        this.servent = servent;
     }
 
     @Override
@@ -165,16 +163,16 @@ public class FileUploadHandler extends AbstractUploadHandler {
                     .getAsString()));
         }
         UploadResponse.appendAltLocs(response, requestedFile, uploadState);
-        DestAddress[] pushProxies = servent.getHostService().
+        DestAddress[] pushProxies = sharing.peer.getHostService().
                 getNetworkHostsContainer().getPushProxies();
         UploadResponse.addPushProxyResponseHeader(pushProxies, response);
 
         if (sharedFileURN != null) {
             handleAltLocRequestHeader(httpRequest, uploadState, requestedFile,
-                    sharedFileURN, servent.getSecurityService());
+                    sharedFileURN, sharing.peer.getSecurityService());
 
             // add thex download url
-            ShareFileThexData thexData = requestedFile.getThexData(sharedFilesService);
+            ShareFileThexData thexData = requestedFile.getThexData(sharing);
             if (thexData != null) {
                 String thexRootHash = thexData.getRootHash();
                 HTTPHeader thexHeader = new HTTPHeader(GnutellaHeaderNames.X_THEX_URI,

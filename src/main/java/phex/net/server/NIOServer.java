@@ -32,7 +32,7 @@ import phex.net.repres.def.DefaultSocketFacade;
 import phex.prefs.core.NetworkPrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityException;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.io.IOException;
 import java.net.BindException;
@@ -50,8 +50,8 @@ public class NIOServer extends Server {
     private ServerSocketChannel listeningChannel;
     private Selector selector;
 
-    public NIOServer(Servent servent) {
-        super(servent);
+    public NIOServer(Peer peer) {
+        super(peer);
     }
 
     // The listening thread.
@@ -123,7 +123,7 @@ public class NIOServer extends Server {
         IpAddress ip = new IpAddress(clientSocket.getInetAddress().getAddress());
         PresentationManager presentationMgr = PresentationManager.getInstance();
         DestAddress address = presentationMgr.createHostAddress(ip, clientSocket.getPort());
-        NetworkHostsContainer netHostsContainer = servent.getHostService()
+        NetworkHostsContainer netHostsContainer = peer.getHostService()
                 .getNetworkHostsContainer();
 
         // if not already connected and connection is not from a private address.
@@ -140,7 +140,7 @@ public class NIOServer extends Server {
 
         // Create a Host object for the incoming connection
         // and hand it off to a ReadWorker to handle.
-        AccessType access = servent.getSecurityService()
+        AccessType access = peer.getSecurityService()
                 .controlHostAddressAccess(address);
         switch (access) {
             case ACCESS_DENIED:
@@ -156,7 +156,7 @@ public class NIOServer extends Server {
         // facade socket
         DefaultSocketFacade clientFacade = new DefaultSocketFacade(clientSocket);
         IncomingConnectionDispatcher dispatcher = new IncomingConnectionDispatcher(
-                clientFacade, servent);
+                clientFacade, peer);
         Environment.getInstance().executeOnThreadPool(dispatcher,
                 "IncomingConnectionDispatcher-" + Integer.toHexString(hashCode()));
     }

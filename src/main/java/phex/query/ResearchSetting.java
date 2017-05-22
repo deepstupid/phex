@@ -28,7 +28,7 @@ import phex.rules.Rule;
 import phex.rules.condition.FileSizeCondition;
 import phex.rules.condition.NotCondition;
 import phex.rules.consequence.RemoveFromSearchConsequence;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 public class ResearchSetting {
     private final BackgroundSearchContainer searchContainer;
@@ -36,7 +36,7 @@ public class ResearchSetting {
     // download file this solution is ok... later we need to find a different
     // way
     private final SWDownloadFile downloadFile;
-    private final Servent servent;
+    private final Peer peer;
 
     private long lastResearchStartTime;
     /**
@@ -55,8 +55,8 @@ public class ResearchSetting {
     private boolean hasNewSearchResults;
 
     public ResearchSetting(SWDownloadFile file, QueryManager queryService,
-                           Servent servent) {
-        this.servent = servent;
+                           Peer peer) {
+        this.peer = peer;
 
         downloadFile = file;
         searchContainer = queryService.getBackgroundSearchContainer();
@@ -117,7 +117,7 @@ public class ResearchSetting {
         rule.addCondition(new NotCondition(new FileSizeCondition(
                 downloadFile.getTotalDataSize(),
                 downloadFile.getTotalDataSize())));
-        ruledSearch = new RuleFilteredSearch(search, rule, servent);
+        ruledSearch = new RuleFilteredSearch(search, rule, peer);
 
         DefaultSearchProgress searchProgress = DefaultSearchProgress.createForForMeProgress(
                 queryURN != null);

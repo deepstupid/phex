@@ -30,13 +30,13 @@ import phex.msg.QueryMsg;
 import phex.msg.QueryResponseMsg;
 import phex.msg.QueryResponseRecord;
 import phex.security.AccessType;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 public abstract class Search {
     private static final Logger logger = LoggerFactory.getLogger(
             Search.class);
 
-    protected final Servent servent;
+    public final Peer peer;
     /**
      * Associated class that is able to hold search results. Access to this
      * should be locked by holding 'this'.
@@ -56,8 +56,8 @@ public abstract class Search {
 
     protected volatile boolean isSearchFinished;
 
-    protected Search(Servent servent) {
-        this.servent = servent;
+    protected Search(Peer peer) {
+        this.peer = peer;
         searchResultHolder = new SearchResultHolder();
         isSearchFinished = false;
     }
@@ -92,7 +92,7 @@ public abstract class Search {
         // will prevent the query to timeout before it could be send
         queryMsg.setCreationTime(System.currentTimeMillis());
         logger.debug("Sending Query '{}'.", queryMsg);
-        queryEngine = servent.getQueryService().sendMyQuery(queryMsg, searchProgress);
+        queryEngine = peer.getQueryService().sendMyQuery(queryMsg, searchProgress);
 
         fireSearchStarted();
     }
@@ -121,7 +121,7 @@ public abstract class Search {
         // MERGE with FilteredQueryResponseMonitor.isResponseRecordValid()
 
         URN urn = record.getURN();
-        if (urn != null && servent.getSecurityService().controlUrnAccess(urn) != AccessType.ACCESS_GRANTED) {
+        if (urn != null && peer.getSecurityService().controlUrnAccess(urn) != AccessType.ACCESS_GRANTED) {
             logger.debug("Record contains blocked URN: {}", urn.getAsString());
             return false;
         }

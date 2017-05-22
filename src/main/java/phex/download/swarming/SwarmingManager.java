@@ -39,10 +39,9 @@ import phex.event.UserMessageListener;
 import phex.msg.QueryResponseMsg;
 import phex.prefs.core.DownloadPrefs;
 import phex.query.DownloadCandidateSnoop;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.share.SharedFilesService;
 import phex.util.FileUtils;
-import phex.util.InternalFileHandler;
 import phex.util.SubscriptionDownloader;
 import phex.xml.sax.DPhex;
 import phex.xml.sax.DSubElementList;
@@ -129,11 +128,12 @@ public class SwarmingManager extends AbstractLifeCycle {
     private SharedFilesService sharedFilesService;
     private DownloadCandidateSnoop candidateSnoop;
 
-    private Servent servent;
+    public final Peer peer;
+    private SubscriptionDownloader subscriptionDownloader;
 
 
-    public SwarmingManager(Servent servent, SharedFilesService sharedFilesService) {
-        if (servent == null) {
+    public SwarmingManager(Peer peer, SharedFilesService sharedFilesService) {
+        if (peer == null) {
             throw new NullPointerException("Servent is null.");
         }
 //        if ( eventService == null )
@@ -145,7 +145,7 @@ public class SwarmingManager extends AbstractLifeCycle {
         }
 
 
-        this.servent = servent;
+        this.peer = peer;
         this.sharedFilesService = sharedFilesService;
 
         downloadListChangedSinceSave = false;
@@ -175,8 +175,8 @@ public class SwarmingManager extends AbstractLifeCycle {
         job.start();
 
         candidateSnoop = new DownloadCandidateSnoop(this,
-                servent.getSecurityService());
-        servent.getMessageService().addMessageSubscriber(
+                peer.getSecurityService());
+        peer.getMessageService().addMessageSubscriber(
                 QueryResponseMsg.class, candidateSnoop);
 
         workerLauncher = new DownloadWorkerLauncher();
@@ -189,7 +189,7 @@ public class SwarmingManager extends AbstractLifeCycle {
                 new SaveDownloadListTimer(), SaveDownloadListTimer.TIMER_PERIOD,
                 SaveDownloadListTimer.TIMER_PERIOD);
 
-        new SubscriptionDownloader();
+        this.subscriptionDownloader = new SubscriptionDownloader(peer);
     }
 
     /**
@@ -240,7 +240,7 @@ public class SwarmingManager extends AbstractLifeCycle {
     protected BandwidthController createBandwidthControllerFor(SWDownloadFile downloadFile) {
         BandwidthController bandwidthController = new BandwidthController(
                 "DownloadFile-" + downloadFile.toString(), Long.MAX_VALUE,
-                servent.getBandwidthService().getDownloadBandwidthController());
+                peer.getBandwidthService().getDownloadBandwidthController());
         bandwidthController.activateShortTransferAvg(1000, 15);
         return bandwidthController;
     }
@@ -764,7 +764,7 @@ public class SwarmingManager extends AbstractLifeCycle {
                 downloadFile.incrementWorkerCount();
 
                 // build download set
-                SWDownloadSet set = new SWDownloadSet(servent, downloadFile,
+                SWDownloadSet set = new SWDownloadSet(peer, downloadFile,
                         downloadCandidate);
                 if (worker == temporaryWorker) {
                     unsetTemporaryWorker();
@@ -929,41 +929,41 @@ public class SwarmingManager extends AbstractLifeCycle {
         workerLauncher.triggerCycle();
     }
 
-    //@EventTopicSubscriber(topic=PhexEventTopics.Download_File_Completed)
-    public static void onDownloadFileCompletedEvent(String topic, SWDownloadFile file) {
-        // this executes a command after completion.
-        // if ( ServiceManager.sCfg.completionNotifyMethod != null )
-        // {
-        //     Executer exec = new Executer ( destinationFile,
-        //     ServiceManager.sCfg.completionNotifyMethod );
-        //     Environment.getInstance().executeOnThreadPool( exec, "DownloadExecuter" );
-        // }
-
-
-        // Readouts must happen in an distinct thread. Otherwise deadlock 
-        // situations will be caused!
-
-
-        // Interprets a downloaded magma-list in Phex automatically.
-        // TODO should we honor the content type?
-        final File destFile = file.getDestinationFile();
-        if (DownloadPrefs.AutoReadoutMagmaFiles.get().booleanValue()
-                && destFile.getName().endsWith(".magma")) {
-            Environment.getInstance().executeOnThreadPool(() -> InternalFileHandler.magmaReadout(destFile), "Readout Magma");
-        }
-
-        if (DownloadPrefs.AutoReadoutMetalinkFiles.get().booleanValue()
-                && destFile.getName().endsWith(".metalink")) {
-            Environment.getInstance().executeOnThreadPool(() -> InternalFileHandler.metalinkReadout(destFile), "Readout Metalink");
-        }
-
-        // Interprets a downloaded rss-feed in Phex automatically.
-        // TODO should we honor the content type?
-        if (DownloadPrefs.AutoReadoutRSSFiles.get().booleanValue()
-                && destFile.getName().endsWith(".rss.xml")) {
-            Environment.getInstance().executeOnThreadPool(() -> InternalFileHandler.rssReadout(destFile), "Readout RSS");
-        }
-    }
+//    //@EventTopicSubscriber(topic=PhexEventTopics.Download_File_Completed)
+//    public static void onDownloadFileCompletedEvent(String topic, SWDownloadFile file) {
+//        // this executes a command after completion.
+//        // if ( ServiceManager.sCfg.completionNotifyMethod != null )
+//        // {
+//        //     Executer exec = new Executer ( destinationFile,
+//        //     ServiceManager.sCfg.completionNotifyMethod );
+//        //     Environment.getInstance().executeOnThreadPool( exec, "DownloadExecuter" );
+//        // }
+//
+//
+//        // Readouts must happen in an distinct thread. Otherwise deadlock
+//        // situations will be caused!
+//
+//
+//        // Interprets a downloaded magma-list in Phex automatically.
+//        // TODO should we honor the content type?
+//        final File destFile = file.getDestinationFile();
+//        if (DownloadPrefs.AutoReadoutMagmaFiles.get().booleanValue()
+//                && destFile.getName().endsWith(".magma")) {
+//            Environment.getInstance().executeOnThreadPool(() -> InternalFileHandler.magmaReadout(destFile), "Readout Magma");
+//        }
+//
+//        if (DownloadPrefs.AutoReadoutMetalinkFiles.get().booleanValue()
+//                && destFile.getName().endsWith(".metalink")) {
+//            Environment.getInstance().executeOnThreadPool(() -> InternalFileHandler.metalinkReadout(destFile), "Readout Metalink");
+//        }
+//
+//        // Interprets a downloaded rss-feed in Phex automatically.
+//        // TODO should we honor the content type?
+//        if (DownloadPrefs.AutoReadoutRSSFiles.get().booleanValue()
+//                && destFile.getName().endsWith(".rss.xml")) {
+//            Environment.getInstance().executeOnThreadPool(() -> InternalFileHandler.rssReadout(destFile), "Readout RSS");
+//        }
+//    }
 
     //@EventTopicSubscriber(topic=PhexEventTopics.Download_Candidate)
     public void onDownloadCandidateEvent(String topic,

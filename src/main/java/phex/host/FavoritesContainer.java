@@ -33,7 +33,7 @@ import phex.common.file.ManagedFile;
 import phex.common.file.ManagedFileException;
 import phex.event.ChangeEvent;
 import phex.event.UserMessageListener;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.xml.sax.DPhex;
 import phex.xml.sax.DSubElementList;
 import phex.xml.sax.XMLBuilder;
@@ -51,12 +51,12 @@ import java.util.TimerTask;
  */
 public class FavoritesContainer {
     private static final Logger logger = LoggerFactory.getLogger(FavoritesContainer.class);
-    private final Servent servent;
+    private final Peer peer;
     private final ArrayList<FavoriteHost> favoritesList;
     private boolean hasChangedSinceLastSave;
 
-    public FavoritesContainer(Servent servent) {
-        this.servent = servent;
+    public FavoritesContainer(Peer peer) {
+        this.peer = peer;
         favoritesList = new ArrayList<>();
         hasChangedSinceLastSave = false;
         Environment.getInstance().scheduleTimerTask(
@@ -114,7 +114,7 @@ public class FavoritesContainer {
 
         DPhex dPhex;
         try {
-            File favoritesFile = servent.getGnutellaNetwork().getFavoritesFile();
+            File favoritesFile = peer.getGnutellaNetwork().getFavoritesFile();
             if (!favoritesFile.exists()) {
                 return;
             }
@@ -193,7 +193,7 @@ public class FavoritesContainer {
                 list.add(dHost);
             }
 
-            File favoritesFile = servent.getGnutellaNetwork().getFavoritesFile();
+            File favoritesFile = peer.getGnutellaNetwork().getFavoritesFile();
             ManagedFile managedFile = Phex.files.getReadWriteManagedFile(favoritesFile);
 
             XMLBuilder.saveToFile(managedFile, dPhex);

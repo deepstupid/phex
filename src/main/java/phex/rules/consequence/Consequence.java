@@ -24,11 +24,11 @@ package phex.rules.consequence;
 
 import phex.download.RemoteFile;
 import phex.query.Search;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.xml.sax.rules.DConsequence;
 
 public interface Consequence extends Cloneable {
-    void invoke(Search search, RemoteFile remoteFile, Servent servent);
+    void invoke(Search search, RemoteFile remoteFile, Peer peer);
 
     Object clone();
 

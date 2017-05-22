@@ -19,7 +19,7 @@
  *  --- SVN Information ---
  *  $Id: TestAlternateLocation.java 4273 2008-09-28 16:40:00Z gregork $
  */
-package phex.test;
+package phex;
 
 import junit.framework.TestCase;
 import phex.common.AltLocContainer;

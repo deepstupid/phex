@@ -35,7 +35,7 @@ import phex.host.NetworkHostsContainer;
 import phex.msg.*;
 import phex.msg.vendor.*;
 import phex.security.PhexSecurityManager;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.share.SharedFilesService;
 
 import java.util.Iterator;
@@ -46,7 +46,7 @@ public class MessageService extends AbstractLifeCycle {
     private static final Logger logger = LoggerFactory.getLogger(
             MessageService.class);
 
-    private final Servent servent;
+    private final Peer peer;
     private final MessageRouting messageRouting;
     private final MessageDispatcher messageDispatcher;
     private final QueryMsgRoutingHandler queryMsgRoutingHandler;
@@ -76,22 +76,22 @@ public class MessageService extends AbstractLifeCycle {
 
     public MessageService(NetworkHostsContainer netHostsContainer,
                           CaughtHostsContainer caughtHostsContainer, UdpHostCacheContainer uhcContainer,
-                          PhexSecurityManager securityService, Servent servent) {
-        if (servent == null) {
+                          PhexSecurityManager securityService, Peer peer) {
+        if (peer == null) {
             throw new NullPointerException("Servent missing.");
         }
 
-        this.servent = servent;
-        pongCache = new PongCache(servent);
+        this.peer = peer;
+        pongCache = new PongCache(peer);
 
         messageRouting = new MessageRouting();
 
         pongFactory = new PongFactory(netHostsContainer, caughtHostsContainer,
                 securityService);
-        messageDispatcher = new MessageDispatcher(servent, messageRouting,
+        messageDispatcher = new MessageDispatcher(peer, messageRouting,
                 pongFactory);
 
-        queryMsgRoutingHandler = new QueryMsgRoutingHandler(servent, messageRouting);
+        queryMsgRoutingHandler = new QueryMsgRoutingHandler(peer, messageRouting);
         messageDispatcher.addMessageSubscriber(QueryMsg.class, queryMsgRoutingHandler);
 
     }
@@ -102,15 +102,15 @@ public class MessageService extends AbstractLifeCycle {
 
     @Override
     public void doStart() {
-        messageDispatcher.initStats(servent.getStatisticsService());
+        messageDispatcher.initStats(peer.getStatisticsService());
 
-        udpHandler = new UdpMessageDataHandler(servent, servent.getStatisticsService(),
-                servent.getSharedFilesService(), pongFactory,
-                servent.getSecurityService(), servent.getHostService(),
-                this, servent.getUdpService());
-        servent.getUdpService().setUdpDataHandler(udpHandler);
+        udpHandler = new UdpMessageDataHandler(peer, peer.getStatisticsService(),
+                peer.getSharedFilesService(), pongFactory,
+                peer.getSecurityService(), peer.getHostService(),
+                this, peer.getUdpService());
+        peer.getUdpService().setUdpDataHandler(udpHandler);
 
-        qrpUpdateTimer = new QRPUpdateTimer(servent.getSharedFilesService());
+        qrpUpdateTimer = new QRPUpdateTimer(peer.getSharedFilesService());
         Environment.getInstance().scheduleTimerTask(
                 qrpUpdateTimer, QRPUpdateTimer.TIMER_PERIOD,
                 QRPUpdateTimer.TIMER_PERIOD);
@@ -368,9 +368,9 @@ public class MessageService extends AbstractLifeCycle {
 
 
     public boolean requestTCPConnectBack() {
-        DestAddress localAddress = servent.getLocalAddress();
+        DestAddress localAddress = peer.getLocalAddress();
         VendorMsg tcpConnectBack = new TCPConnectBackVMsg(localAddress.getPort());
-        Host[] hosts = servent.getHostService().getUltrapeerConnections();
+        Host[] hosts = peer.getHostService().getUltrapeerConnections();
         int sentCount = 0;
         for (int i = 0; sentCount <= 5 && i < hosts.length; i++) {
             if (hosts[i].isTCPConnectBackSupported()) {
@@ -416,7 +416,7 @@ public class MessageService extends AbstractLifeCycle {
      * This method sends a udp ping to the given host address
      */
     public void sendUdpPing(DestAddress address) {
-        PingMsg udpPing = PingMsg.createUdpPingMsg(servent.isUltrapeer());
+        PingMsg udpPing = PingMsg.createUdpPingMsg(peer.isUltrapeer());
         udpHandler.sendUdpPing(udpPing, address);
 //        logger.debug("Sent Udp Ping to" + address + " : " + udpPing + " with Scp Byte : " +
 //                udpPing.getScpByte() != null ? String.valueOf(udpPing.getScpByte()[0]) : "null"
@@ -457,11 +457,11 @@ public class MessageService extends AbstractLifeCycle {
         @Override
         public void run() {
             try {
-                if (!servent.getHostService().isShieldedLeafNode()) {
+                if (!peer.getHostService().isShieldedLeafNode()) {
                     return;
                 }
-                Host[] ultrapeers = servent.getHostService().getUltrapeerConnections();
-                boolean isHostBusy = servent.isUploadLimitReached();
+                Host[] ultrapeers = peer.getHostService().getUltrapeerConnections();
+                boolean isHostBusy = peer.isUploadLimitReached();
 
                 byte hopsFlowLimit;
                 if (isHostBusy) {
@@ -506,14 +506,14 @@ public class MessageService extends AbstractLifeCycle {
          * been updated for a while.
          */
         private void sendQueryRoutingTable() {
-            boolean isUltrapeer = servent.isUltrapeer();
+            boolean isUltrapeer = peer.isUltrapeer();
             // check if we are a shielded leaf node or a Ultrapeer.
             // Forwarding QRT is not wanted otherwise.
-            if (!(servent.isShieldedLeafNode() || isUltrapeer)) {
+            if (!(peer.isShieldedLeafNode() || isUltrapeer)) {
                 return;
             }
 
-            Host[] hosts = servent.getHostService().getUltrapeerConnections();
+            Host[] hosts = peer.getHostService().getUltrapeerConnections();
 
             QueryRoutingTable shareQRT = sharedFilesService.getLocalRoutingTable();
 
@@ -539,7 +539,7 @@ public class MessageService extends AbstractLifeCycle {
                 if (currentTable == null) {// lazy initialize
                     currentTable = new QueryRoutingTable(shareQRT.getTableSize());
                     currentTable.aggregateToRouteTable(shareQRT);
-                    QueryRoutingTable.fillQRTWithLeaves(currentTable, servent);
+                    QueryRoutingTable.fillQRTWithLeaves(currentTable, peer);
                     lastSentQueryRoutingTable = currentTable;
                 }
                 lastSentTable = hosts[i].getLastSentRoutingTable();

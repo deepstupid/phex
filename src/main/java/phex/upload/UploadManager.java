@@ -31,7 +31,7 @@ import phex.common.log.LogBuffer;
 import phex.http.HTTPRequest;
 import phex.net.connection.Connection;
 import phex.prefs.core.UploadPrefs;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +39,6 @@ import java.util.TimerTask;
 
 public class UploadManager {
     private static final Logger logger = LoggerFactory.getLogger(UploadManager.class);
-    private final Servent servent;
 
     private final AddressCounter uploadIPCounter;
 
@@ -48,9 +47,10 @@ public class UploadManager {
     private final List<UploadState> queuedStateList;
 
     private LogBuffer uploadStateLogBuffer;
+    public final Peer peer;
 
-    public UploadManager(Servent servent) {
-        this.servent = servent;
+    public UploadManager(Peer peer) {
+        this.peer = peer;
         uploadStateList = new ArrayList<UploadState>();
         queuedStateList = new ArrayList<UploadState>();
         uploadIPCounter = new AddressCounter(
@@ -65,12 +65,12 @@ public class UploadManager {
     }
 
     public BandwidthController getUploadBandwidthController() {
-        return servent.getBandwidthService().getUploadBandwidthController();
+        return peer.getBandwidthService().getUploadBandwidthController();
     }
 
     public void handleUploadRequest(Connection connection, HTTPRequest httpRequest) {
         UploadEngine uploadEngine = new UploadEngine(connection, httpRequest,
-                this, servent.getSharedFilesService());
+                this, peer.getSharedFilesService());
         uploadEngine.startUpload();
     }
 

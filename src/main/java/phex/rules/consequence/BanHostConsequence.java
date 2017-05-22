@@ -26,7 +26,7 @@ import phex.common.ExpiryDate;
 import phex.download.RemoteFile;
 import phex.query.Search;
 import phex.security.BanHostBatch;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.util.DateUtils;
 import phex.xml.sax.rules.DBanHostConsequence;
 import phex.xml.sax.rules.DConsequence;
@@ -36,7 +36,7 @@ public class BanHostConsequence implements Consequence {
 
     private static final DBanHostConsequence DELEMENT = new DBanHostConsequence();
 
-    public void invoke(Search search, final RemoteFile remoteFile, Servent servent) {
+    public void invoke(Search search, final RemoteFile remoteFile, Peer peer) {
         // handle a ban like a remove we dont like to see the RemoteHost
         // again in this consequence
         remoteFile.setFilteredRemoved(true);
@@ -45,7 +45,7 @@ public class BanHostConsequence implements Consequence {
                 .currentTimeMillis()
                 + DateUtils.MILLIS_PER_DAY * 7);
         BanHostBatch.addDestAddress(remoteFile.getHostAddress(), expDate,
-                servent.getSecurityService());
+                peer.getSecurityService());
     }
 
     @Override

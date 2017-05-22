@@ -19,7 +19,7 @@
  *  --- CVS Information ---
  *  $Id: TestCircularQueue.java 3942 2007-09-29 15:41:44Z gregork $
  */
-package phex.test;
+package phex;
 
 import junit.framework.TestCase;
 import phex.util.AccessUtils;

@@ -19,12 +19,12 @@
  *  --- SVN Information ---
  *  $Id: TestQueryRoutingTable.java 4381 2009-02-21 23:21:40Z gregork $
  */
-package phex.test;
+package phex;
 
 import junit.framework.TestCase;
 import phex.common.QueryRoutingTable;
 import phex.msg.*;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.share.ShareFile;
 import phex.util.AccessUtils;
 
@@ -38,6 +38,7 @@ import java.util.List;
 public class TestQueryRoutingTable extends TestCase
 {
     private QueryRoutingTable qrTable;
+    private Peer peer;
 
     public TestQueryRoutingTable(String s)
     {
@@ -49,13 +50,13 @@ public class TestQueryRoutingTable extends TestCase
         /// should not depend on these
         //        PhexGuiPrefs.init();
 //        Localizer.initialize( InterfacePrefs.LocaleName.get() );
-        Servent servent = Servent.servent;
-        
+
         qrTable = new QueryRoutingTable();
+        this.peer = new Peer();
         try
         {
             // words added once with not more then 5 chars...
-            AccessUtils.invokeMethod( qrTable, "addWord", "phex" );
+            AccessUtils.invokeMethod( qrTable, "addWord", "phex");
             AccessUtils.invokeMethod( qrTable, "addWord", "java" );
             AccessUtils.invokeMethod( qrTable, "add", "test query route table" );
     
@@ -86,7 +87,7 @@ public class TestQueryRoutingTable extends TestCase
     {
         String[] trueSearchStrings =
         {
-            "phex",
+                "phex",
             "java",
             "route",
             "test query table",
@@ -226,9 +227,9 @@ public class TestQueryRoutingTable extends TestCase
         return qrTable;
     }
     
-    private static QueryMsg createDummyMsg(String searchStr)
+    private QueryMsg createDummyMsg(String searchStr)
     {
-        return new QueryMsg( new GUID(), (byte)7, searchStr, null, false, 
+        return new QueryMsg( peer.getLocalAddress(), new GUID(), (byte)7, searchStr, null, false,
             false, false, QueryMsg.NO_FEATURE_QUERY_SELECTOR );
     }
 }

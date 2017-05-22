@@ -36,7 +36,7 @@ import phex.net.UPnPMapper;
 import phex.prefs.core.ConnectionPrefs;
 import phex.prefs.core.NetworkPrefs;
 import phex.prefs.core.ProxyPrefs;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -52,7 +52,7 @@ public abstract class Server implements Runnable {
     /**
      * The servent this server acts for.
      */
-    protected final Servent servent;
+    protected final Peer peer;
     /**
      * The local address of this server.
      */
@@ -71,8 +71,8 @@ public abstract class Server implements Runnable {
     private FirewallCheckTimer firewallCheckTimer;
 
 
-    public Server(Servent servent) {
-        this.servent = servent;
+    public Server(Peer peer) {
+        this.peer = peer;
         hasConnectedIncomming = ConnectionPrefs.HasConnectedIncomming.get();
         lastInConnectionTime = -1;
         isRunning = false;
@@ -84,7 +84,7 @@ public abstract class Server implements Runnable {
             localAddress.setForcedHostIP(ip);
         }
 
-        upnpMapper = new UPnPMapper();
+        upnpMapper = new UPnPMapper(peer);
     }
 
     public synchronized void startup() throws IOException {
@@ -95,8 +95,8 @@ public abstract class Server implements Runnable {
         isRunning = true;
 
         firewallCheckTimer = new FirewallCheckTimer(
-                servent.getHostService().getNetworkHostsContainer(),
-                servent.getMessageService());
+                peer.getHostService().getNetworkHostsContainer(),
+                peer.getMessageService());
         Environment.getInstance().scheduleTimerTask(firewallCheckTimer,
                 FirewallCheckTimer.TIMER_PERIOD,
                 FirewallCheckTimer.TIMER_PERIOD);

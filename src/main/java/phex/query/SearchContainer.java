@@ -29,7 +29,7 @@ import phex.msg.vendor.OOBReplyCountVMsg;
 import phex.msghandling.MessageSubscriber;
 import phex.msghandling.UdpMessageSubscriber;
 import phex.servent.OnlineStatus;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,15 +37,15 @@ import java.util.List;
 
 public class SearchContainer implements MessageSubscriber<QueryResponseMsg>,
         UdpMessageSubscriber<Message> {
-    protected final Servent servent;
+    protected final Peer peer;
     protected final QueryFactory queryFactory;
 
     // to let the background search container share.
     protected final List<Search> searchList;
     protected final HashMap<GUID, Search> idSearchMap;
 
-    public SearchContainer(QueryFactory queryFactory, Servent servent) {
-        this.servent = servent;
+    public SearchContainer(QueryFactory queryFactory, Peer peer) {
+        this.peer = peer;
         this.queryFactory = queryFactory;
         searchList = new ArrayList<Search>();
         idSearchMap = new HashMap<GUID, Search>();
@@ -56,7 +56,7 @@ public class SearchContainer implements MessageSubscriber<QueryResponseMsg>,
      * Create a KeywordSearch without starting it.
      */
     public synchronized Search createSearch(String queryStr) {
-        KeywordSearch search = new KeywordSearch(queryStr, queryFactory, servent);
+        KeywordSearch search = new KeywordSearch(queryStr, queryFactory, peer);
         insertToSearchList(search, 0);
         return search;
     }
@@ -65,7 +65,7 @@ public class SearchContainer implements MessageSubscriber<QueryResponseMsg>,
      * Create a WhatsNewSearch without starting it.
      */
     public synchronized Search createWhatsNewSearch() {
-        WhatsNewSearch search = new WhatsNewSearch(queryFactory, servent);
+        WhatsNewSearch search = new WhatsNewSearch(queryFactory, peer);
         insertToSearchList(search, 0);
         return search;
     }
@@ -75,7 +75,7 @@ public class SearchContainer implements MessageSubscriber<QueryResponseMsg>,
      */
     public synchronized BrowseHostResults createBrowseHostSearch(
             DestAddress hostAddress, GUID hostGUID) {
-        BrowseHostResults search = new BrowseHostResults(servent, hostAddress, hostGUID);
+        BrowseHostResults search = new BrowseHostResults(peer, hostAddress, hostGUID);
         insertToSearchList(search, 0);
         return search;
     }

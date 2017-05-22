@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import phex.common.Environment;
 import phex.prefs.core.SubscriptionPrefs;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.share.FileRescanRunner;
 
 import java.io.BufferedReader;
@@ -38,8 +38,10 @@ import java.util.*;
 
 public class SubscriptionDownloader extends TimerTask {
     private static final Logger logger = LoggerFactory.getLogger(SubscriptionDownloader.class);
+    private final Peer peer;
 
-    public SubscriptionDownloader() {
+    public SubscriptionDownloader(Peer peer) {
+        this.peer = peer;
         Environment.getInstance().scheduleTimerTask(this, 0, 14 * 24 * 3600 * 1000);
     }
 
@@ -80,12 +82,12 @@ public class SubscriptionDownloader extends TimerTask {
         return Collections.emptyList();
     }
 
-    public static void createDownload(String uriStr) throws URIException {
+    public void createDownload(String uriStr) throws URIException {
         if (uriStr.length() == 0) {
             return;
         }
         URI uri = new URI(uriStr, true);
-        Servent.servent.getDownloadService().addFileToDownload(uri, true);
+        peer.getDownloadService().addFileToDownload(uri, true);
     }
 
     @Override

@@ -30,7 +30,7 @@ import phex.common.address.DestAddress;
 import phex.connection.ProtocolNotSupportedException;
 import phex.event.ChangeEvent;
 import phex.host.CaughtHostsContainer;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.util.IOUtil;
 import phex.util.NormalizableURL;
 import phex.util.StringUtils;
@@ -100,14 +100,14 @@ public class GWebCacheContainer {
     private final TreeSet<GWebCacheHost> sortedGWebCaches;
     private final Random random;
 
-    private final Servent servent;
+    private final Peer peer;
 
-    public GWebCacheContainer(Servent servent) {
-        if (servent == null) {
+    public GWebCacheContainer(Peer peer) {
+        if (peer == null) {
             throw new NullPointerException("Servent missing.");
         }
         logger.debug("Initializing GWebCacheContainer");
-        this.servent = servent;
+        this.peer = peer;
         allGWebCaches = new HashSet<GWebCacheHost>();
         phexGWebCaches = new HashSet<GWebCacheHost>();
         functionalGWebCaches = new HashSet<GWebCacheHost>();
@@ -156,13 +156,13 @@ public class GWebCacheContainer {
             if (connection == null) {
                 continue;
             }
-            DestAddress[] hosts = connection.sendHostFileRequest(servent.getSecurityService());
+            DestAddress[] hosts = connection.sendHostFileRequest(peer.getSecurityService());
             // continue if cache is bad or data is null...
             if (!verifyGWebCache(connection) || hosts == null) {
                 continue;
             }
             // everything looks good add data..
-            CaughtHostsContainer container = servent.getHostService().
+            CaughtHostsContainer container = peer.getHostService().
                     getCaughtHostsContainer();
             for (int i = 0; i < hosts.length; i++) {
                 // gwebcache should only return Ultrapeers therefore we have
@@ -517,7 +517,7 @@ public class GWebCacheContainer {
             return;
         }
 
-        if (!(servent.getGnutellaNetwork() instanceof GeneralGnutellaNetwork)) {// not on general gnutella network... cant use default list
+        if (!(peer.getGnutellaNetwork() instanceof GeneralGnutellaNetwork)) {// not on general gnutella network... cant use default list
             return;
         }
 
@@ -545,7 +545,7 @@ public class GWebCacheContainer {
     }
 
     private void seedWebCaches() {
-        if (!(servent.getGnutellaNetwork() instanceof GeneralGnutellaNetwork)) {// not on general gnutella network... can't use default list
+        if (!(peer.getGnutellaNetwork() instanceof GeneralGnutellaNetwork)) {// not on general gnutella network... can't use default list
             return;
         }
         URL url;
@@ -601,7 +601,7 @@ public class GWebCacheContainer {
     private void loadFromConfigInBackgrd() {
         Runnable runner = () -> {
             try {
-                File gWebCacheFile = servent.getGnutellaNetwork().getGWebCacheFile();
+                File gWebCacheFile = peer.getGnutellaNetwork().getGWebCacheFile();
                 if (!gWebCacheFile.exists()) {
                     return;
                 }
@@ -647,7 +647,7 @@ public class GWebCacheContainer {
         logger.info("Saving GWebCaches ({})", c);
         BufferedWriter writer = null;
         try {
-            File file = servent.getGnutellaNetwork().getGWebCacheFile();
+            File file = peer.getGnutellaNetwork().getGWebCacheFile();
             writer = new BufferedWriter(new FileWriter(file));
 
             synchronized (allGWebCaches) {

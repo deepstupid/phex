@@ -26,7 +26,7 @@ import phex.common.format.HostSpeedFormatUtils;
 import phex.msg.GUID;
 import phex.msg.InvalidMessageException;
 import phex.msg.QueryResponseMsg;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.util.VendorCodes;
 
 /**
@@ -37,6 +37,7 @@ public class QueryHitHost {
      * The host address of the query hit host.
      */
     private final DestAddress hostAddress;
+    private final Peer peer;
     /**
      * The unique identifier of the host.
      */
@@ -86,7 +87,8 @@ public class QueryHitHost {
      */
     private boolean isUdpHost;
 
-    public QueryHitHost(GUID aHostGUID, DestAddress address, int aHostSpeed) {
+    public QueryHitHost(Peer peer, GUID aHostGUID, DestAddress address, int aHostSpeed) {
+        this.peer = peer;
         hostGUID = aHostGUID;
         hostAddress = address;
         hostSpeed = aHostSpeed;
@@ -96,9 +98,9 @@ public class QueryHitHost {
         hostRating = -1;
     }
 
-    public static QueryHitHost createFrom(QueryResponseMsg sourceMsg)
+    public static QueryHitHost createFrom(Peer peer, QueryResponseMsg sourceMsg)
             throws InvalidMessageException {
-        QueryHitHost qhh = new QueryHitHost(sourceMsg.getRemoteServentID(),
+        QueryHitHost qhh = new QueryHitHost(peer, sourceMsg.getRemoteServentID(),
                 sourceMsg.getDestAddress(), sourceMsg.getRemoteHostSpeed());
         qhh.setQHDFlags(sourceMsg.getPushNeededFlag(), sourceMsg.getServerBusyFlag(),
                 sourceMsg.getHasUploadedFlag(), sourceMsg.getUploadSpeedFlag());
@@ -315,9 +317,8 @@ public class QueryHitHost {
 
 
         // remote host and local host is firewalled... download not possible
-        Servent servent = Servent.servent;
         if (pushNeededFlag == QHDFlag.QHD_TRUE_FLAG
-                && servent.isFirewalled()) {
+                && peer.isFirewalled()) {
             hostRating = 0;
             return;
         }
@@ -346,7 +347,7 @@ public class QueryHitHost {
             }
         } else // pushNeededFlag == QHDFlag.QHD_UNKNOWN_FLAG
         {// serverBusyFlag != QHDFlag.QHD_TRUE_FLAG
-            if (servent.isFirewalled()) {// I'm firewalled
+            if (peer.isFirewalled()) {// I'm firewalled
                 tmpHostRating = 3;
             } else {// I'm not firewalled
                 tmpHostRating = 4;

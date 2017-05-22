@@ -19,7 +19,7 @@
  *  --- CVS Information ---
  *  $Id: TestIp2CountryManager.java 3952 2007-09-30 22:53:04Z gregork $
  */
-package phex.test;
+package phex;
 
 import junit.framework.TestCase;
 

@@ -28,7 +28,7 @@ import phex.msg.InvalidMessageException;
 import phex.msg.QueryFactory;
 import phex.msg.QueryResponseMsg;
 import phex.msg.QueryResponseRecord;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.util.SearchEngine;
 
 import java.util.ArrayList;
@@ -48,13 +48,13 @@ public class KeywordSearch extends QuerySearch {
     private URN searchURN;
 
 
-    public KeywordSearch(String aSearchString, QueryFactory queryFactory, Servent servent) {
-        this(aSearchString, null, queryFactory, servent);
+    public KeywordSearch(String aSearchString, QueryFactory queryFactory, Peer peer) {
+        this(aSearchString, null, queryFactory, peer);
     }
 
     public KeywordSearch(String aSearchString, URN aSearchURN, QueryFactory queryFactory,
-                         Servent servent) {
-        super(servent);
+                         Peer peer) {
+        super(peer);
         this.queryFactory = queryFactory;
         searchString = aSearchString;
         searchURN = aSearchURN;
@@ -110,7 +110,7 @@ public class KeywordSearch extends QuerySearch {
 
         // remoteHost.log("Got response to my query.  " + msg);
 
-        QueryHitHost qhHost = QueryHitHost.createFrom(msg);
+        QueryHitHost qhHost = QueryHitHost.createFrom(peer, msg);
         RemoteFile rfile;
         QueryResponseRecord[] records = msg.getMsgRecords();
         ArrayList<RemoteFile> newHitList = new ArrayList<RemoteFile>(records.length);
@@ -159,7 +159,7 @@ public class KeywordSearch extends QuerySearch {
                 if (urn != null && alternateLocations != null) {
                     for (int j = 0; j < alternateLocations.length; j++) {
                         // find duplicate from same host...
-                        QueryHitHost qhh = new QueryHitHost(null, alternateLocations[j], -1);
+                        QueryHitHost qhh = new QueryHitHost(peer,null, alternateLocations[j], -1);
 
                         availableHit = searchResultHolder.findQueryHit(qhHost,
                                 urn, filename, fileSize, fileIndex);

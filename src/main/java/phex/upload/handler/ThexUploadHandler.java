@@ -35,10 +35,10 @@ import phex.upload.response.UploadResponse;
 import java.io.IOException;
 
 public class ThexUploadHandler extends AbstractUploadHandler {
+
     public ThexUploadHandler(SharedFilesService sharedFilesService) {
         super(sharedFilesService);
     }
-
 
     protected UploadResponse determineFailFastResponse(HTTPRequest httpRequest,
                                                        UploadState uploadState, ShareFile requestedFile) {
@@ -54,7 +54,7 @@ public class ThexUploadHandler extends AbstractUploadHandler {
         // form ok response...
 
         ThexUploadResponse response = new ThexUploadResponse(requestedFile,
-                sharedFilesService);
+                sharing);
 
         response.addHttpHeader(new HTTPHeader(HTTPHeaderNames.CONTENT_TYPE,
                 "application/dime"));

@@ -31,7 +31,7 @@ import phex.connection.PingWorker;
 import phex.msg.PongMsg;
 import phex.prefs.core.ConnectionPrefs;
 import phex.prefs.core.NetworkPrefs;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.util.TimerTask;
 
@@ -42,22 +42,22 @@ final public class HostManager extends AbstractLifeCycle {
     private static final Logger logger = LoggerFactory.getLogger(HostManager.class);
     private static final int MAX_PARALLEL_CONNECTION_TRIES = 20;
 
-    private final Servent servent;
+    private final Peer peer;
     private final NetworkHostsContainer networkHostsContainer;
     private final CaughtHostsContainer caughtHostsContainer;
     private final UdpHostCacheContainer udpHostCacheContainer;
     private final FavoritesContainer favoritesContainer;
 
-    public HostManager(Servent servent, boolean useUdpHostCache) {
-        this.servent = servent;
-        networkHostsContainer = new NetworkHostsContainer(servent);
-        caughtHostsContainer = new CaughtHostsContainer(servent);
+    public HostManager(Peer peer, boolean useUdpHostCache) {
+        this.peer = peer;
+        networkHostsContainer = new NetworkHostsContainer(peer);
+        caughtHostsContainer = new CaughtHostsContainer(peer);
         if (useUdpHostCache) {
-            udpHostCacheContainer = new UdpHostCacheContainer(servent);
+            udpHostCacheContainer = new UdpHostCacheContainer(peer);
         } else {
             udpHostCacheContainer = null;
         }
-        favoritesContainer = new FavoritesContainer(servent);
+        favoritesContainer = new FavoritesContainer(peer);
 
     }
 
@@ -65,8 +65,8 @@ final public class HostManager extends AbstractLifeCycle {
     protected void doStart() throws Exception {
         networkHostsContainer.start();
         caughtHostsContainer.setHostFetchingStrategy(
-                servent.getHostFetchingStrategy());
-        PingWorker pingWorker = new PingWorker(servent);
+                peer.getHostFetchingStrategy());
+        PingWorker pingWorker = new PingWorker(peer);
         pingWorker.start();
         Environment.getInstance().scheduleTimerTask(
                 new HostCheckTimer(), HostCheckTimer.TIMER_PERIOD,
@@ -204,14 +204,14 @@ final public class HostManager extends AbstractLifeCycle {
         }
 
         public void doAutoConnectCheck() {
-            if (!servent.getOnlineStatus().isNetworkOnline()) {
+            if (!peer.getOnlineStatus().isNetworkOnline()) {
                 return;
             }
 
             int hostCount;
             int requiredHostCount;
 
-            if (servent.isAbleToBecomeUltrapeer()) {
+            if (peer.isAbleToBecomeUltrapeer()) {
                 // as a ultrapeer I'm primary searching for Ultrapeers only...
                 // to make sure I'm well connected...
                 hostCount = networkHostsContainer.getUltrapeerConnectionCount();
@@ -247,7 +247,7 @@ final public class HostManager extends AbstractLifeCycle {
             if (outConnectCount > 0) {
                 logger.debug("Auto-connect to {} new hosts.", outConnectCount);
                 OutgoingConnectionDispatcher.dispatchConnectToNextHosts(
-                        outConnectCount, servent);
+                        outConnectCount, peer);
             }
         }
     }

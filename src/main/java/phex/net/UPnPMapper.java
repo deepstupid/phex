@@ -19,7 +19,7 @@ import org.teleal.cling.registry.RegistryListener;
 import org.teleal.cling.support.igd.callback.PortMappingAdd;
 import org.teleal.cling.support.igd.callback.PortMappingDelete;
 import org.teleal.cling.support.model.PortMapping;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -32,8 +32,13 @@ public class UPnPMapper {
     private static final ServiceType IP_SERVICE_TYPE = new UDAServiceType("WANIPConnection", 1);
     private static final ServiceType PPP_SERVICE_TYPE = new UDAServiceType("WANPPPConnection", 1);
     private final Map<Service, PortMapping> activePortMappings = new HashMap<>();
+    private final Peer peer;
     RegistryListener listener = new PhexRegistryListener();
     private UpnpService upnpService;
+
+    public UPnPMapper(Peer peer) {
+        this.peer = peer;
+    }
 
     private static Service discoverConnectionService(Device device) {
         if (!device.getType().equals(IGD_DEVICE_TYPE)) {
@@ -96,7 +101,7 @@ public class UPnPMapper {
             } else {
                 address = upnpService.getRouter().getNetworkAddressFactory().getBindAddresses()[0].getHostAddress();
             }
-            int port = Servent.servent.getLocalAddress().getPort();
+            int port = peer.getLocalAddress().getPort();
             final PortMapping desiredMapping = new PortMapping(port, address,
                     PortMapping.Protocol.TCP, "Phex NAT");
 

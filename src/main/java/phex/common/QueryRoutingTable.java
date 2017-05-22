@@ -27,7 +27,7 @@ import phex.common.log.NLogger;
 import phex.host.Host;
 import phex.msg.*;
 import phex.query.DynamicQueryConstants;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.share.ShareFile;
 import phex.util.IOUtil;
 import phex.util.StringUtils;
@@ -220,14 +220,14 @@ public class QueryRoutingTable {
      * QueryRoutingTables of connected leafs, when the servent is an ultrapeer.
      *
      * @param qrTable the QueryRoutingTable to fill.
-     * @param servent the Servent to act for.
+     * @param peer the Servent to act for.
      */
-    public static void fillQRTWithLeaves(QueryRoutingTable qrTable, Servent servent) {
-        if (!servent.isUltrapeer()) {
+    public static void fillQRTWithLeaves(QueryRoutingTable qrTable, Peer peer) {
+        if (!peer.isUltrapeer()) {
             return;
         }
         // add QRT of leafs...
-        Host[] leaves = servent.getHostService().getNetworkHostsContainer().getLeafConnections();
+        Host[] leaves = peer.getHostService().getNetworkHostsContainer().getLeafConnections();
         QueryRoutingTable hostQRT;
         for (Host leave : leaves) {
             // http://groups.yahoo.com/group/the_gdf/message/23092

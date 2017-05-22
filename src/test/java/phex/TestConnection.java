@@ -1,4 +1,4 @@
-package phex.test;
+package phex;
 
 import junit.framework.TestCase;
 import phex.common.bandwidth.BandwidthController;

@@ -33,7 +33,7 @@ import phex.common.file.ManagedFileException;
 import phex.event.UserMessageListener;
 import phex.msg.QueryMsg;
 import phex.prefs.core.LibraryPrefs;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.thex.FileHashCalculationHandler;
 import phex.thex.ThexCalculationWorker;
 import phex.util.FileUtils;
@@ -118,6 +118,7 @@ public class SharedFilesService extends AbstractLifeCycle
      * urns.
      */
     private final RunnerQueueWorker urnThexCalculationRunner;
+    public final Peer peer;
     /**
      * The total size of the shared files.
      */
@@ -137,8 +138,9 @@ public class SharedFilesService extends AbstractLifeCycle
      */
     private SaveSharedFilesJob saveSharedFilesJob;
 
-    public SharedFilesService(Servent servent) {
+    public SharedFilesService(Peer peer) {
 
+        this.peer = peer;
         rwLock = new ReentrantReadWriteLock();
         urnThexCalculationRunner = new RunnerQueueWorker(Thread.NORM_PRIORITY - 1);
 
@@ -146,7 +148,7 @@ public class SharedFilesService extends AbstractLifeCycle
                 new FileRescanTimer(), FileRescanTimer.TIMER_PERIOD,
                 FileRescanTimer.TIMER_PERIOD);
 
-        searchEngine = new QueryResultSearchEngine(servent, this);
+        searchEngine = new QueryResultSearchEngine(peer, this);
 
         directoryShareMap = new HashMap<File, SharedDirectory>();
         sharedDirectories = new ArrayList<SharedDirectory>();

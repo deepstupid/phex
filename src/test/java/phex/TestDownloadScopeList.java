@@ -19,7 +19,7 @@
  *  --- CVS Information ---
  *  $Id: TestDownloadScopeList.java 3536 2006-08-05 22:16:44Z gregork $
  */
-package phex.test;
+package phex;
 
 import junit.framework.TestCase;
 import phex.download.DownloadScope;

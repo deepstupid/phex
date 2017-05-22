@@ -32,7 +32,7 @@ import phex.msg.QueryResponseMsg;
 import phex.msg.QueryResponseRecord;
 import phex.msghandling.MessageSubscriber;
 import phex.security.AccessType;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.util.ArrayList;
 
@@ -41,7 +41,7 @@ import java.util.ArrayList;
  * The data is used to look into query results.
  */
 public class FilteredQueryResponseMonitor implements MessageSubscriber<QueryResponseMsg> {
-    private final Servent servent;
+    private final Peer peer;
 
     /**
      * The list of query hits returned by the query. Contains the RemoteFile
@@ -54,9 +54,9 @@ public class FilteredQueryResponseMonitor implements MessageSubscriber<QueryResp
      */
     private SearchFilter searchFilter;
 
-    public FilteredQueryResponseMonitor(Servent servent) {
+    public FilteredQueryResponseMonitor(Peer peer) {
         queryHitList = new ArrayList<RemoteFile>();
-        this.servent = servent;
+        this.peer = peer;
     }
 
     /**
@@ -94,7 +94,7 @@ public class FilteredQueryResponseMonitor implements MessageSubscriber<QueryResp
         QueryHitHost qhHost;
         QueryResponseRecord[] records;
         try {
-            qhHost = QueryHitHost.createFrom(message);
+            qhHost = QueryHitHost.createFrom(peer, message);
             records = message.getMsgRecords();
         } catch (InvalidMessageException e) {
             // message is invalid
@@ -133,7 +133,7 @@ public class FilteredQueryResponseMonitor implements MessageSubscriber<QueryResp
         // MERGE with Search.isResponseRecordValid()
 
         URN urn = record.getURN();
-        if (urn != null && servent.getSecurityService().controlUrnAccess(urn) != AccessType.ACCESS_GRANTED) {
+        if (urn != null && peer.getSecurityService().controlUrnAccess(urn) != AccessType.ACCESS_GRANTED) {
             NLogger.debug(FilteredQueryResponseMonitor.class, "Record contains blocked URN: " + urn.getAsString());
             return false;
         }
@@ -180,7 +180,7 @@ public class FilteredQueryResponseMonitor implements MessageSubscriber<QueryResp
             if (urn != null && alternateLocations != null) {
                 for (int j = 0; j < alternateLocations.length; j++) {
                     // find duplicate from same host...
-                    QueryHitHost qhh = new QueryHitHost(null, alternateLocations[j], -1);
+                    QueryHitHost qhh = new QueryHitHost(peer, null, alternateLocations[j], -1);
 
                     availableHit = findQueryHit(qhHost, urn, filename, fileSize,
                             fileIndex);

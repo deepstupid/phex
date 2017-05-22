@@ -28,7 +28,7 @@ import phex.common.LongObj;
 import phex.common.bandwidth.BandwidthController;
 import phex.prefs.core.BandwidthPrefs;
 import phex.prefs.core.ConnectionPrefs;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.statistic.StatisticProviderConstants;
 import phex.statistic.StatisticsManager;
 import phex.statistic.UptimeStatisticProvider;
@@ -48,7 +48,7 @@ public class UltrapeerCapabilityChecker extends TimerTask {
     private static final long ONE_HOUR = 60 * 60 * 1000;
     private static final long HALF_HOUR = 30 * 60 * 1000;
 
-    private final Servent servent;
+    private final Peer peer;
     private final StatisticsManager statisticsService;
     private final boolean isUltrapeerOS;
 
@@ -56,15 +56,15 @@ public class UltrapeerCapabilityChecker extends TimerTask {
     private volatile boolean isPerfectUltrapeer;
 
 
-    public UltrapeerCapabilityChecker(Servent servent,
+    public UltrapeerCapabilityChecker(Peer peer,
                                       StatisticsManager statisticsService) {
-        if (servent == null) {
+        if (peer == null) {
             throw new NullPointerException("servent missing.");
         }
         if (statisticsService == null) {
             throw new NullPointerException("statisticsService missing.");
         }
-        this.servent = servent;
+        this.peer = peer;
         this.statisticsService = statisticsService;
 
         Environment env = Environment.getInstance();
@@ -98,7 +98,7 @@ public class UltrapeerCapabilityChecker extends TimerTask {
                 // if not we don't need to continue checking...
                 ConnectionPrefs.AllowToBecomeUP.get() &&
                         // host should not be firewalled.
-                        !servent.isFirewalled() &&
+                        !peer.isFirewalled() &&
                         // host should provide a Ultrapeer capable OS
                         isUltrapeerOS &&
                         // the connection speed should be more then single ISDN
@@ -118,12 +118,12 @@ public class UltrapeerCapabilityChecker extends TimerTask {
 
         isUltrapeerCapable = isCapable;
 
-        if (isUltrapeerCapable && !servent.isUltrapeer()) {
+        if (isUltrapeerCapable && !peer.isUltrapeer()) {
             long now = System.currentTimeMillis();
 
-            long lastQueryTime = servent.getQueryService().getLastQueryTime();
+            long lastQueryTime = peer.getQueryService().getLastQueryTime();
 
-            BandwidthController upBandCont = servent.getBandwidthService().getUploadBandwidthController();
+            BandwidthController upBandCont = peer.getBandwidthService().getUploadBandwidthController();
             long upAvg = upBandCont.getLongTransferAvg().getAverage();
 
             boolean isPerfect =
@@ -132,7 +132,7 @@ public class UltrapeerCapabilityChecker extends TimerTask {
                             upAvg < 2 * 1024;
 
             isPerfectUltrapeer = isPerfect;
-            servent.upgradeToUltrapeer();
+            peer.upgradeToUltrapeer();
         } else {
             isPerfectUltrapeer = false;
         }
@@ -143,7 +143,7 @@ public class UltrapeerCapabilityChecker extends TimerTask {
         if (!ConnectionPrefs.AllowToBecomeUP.get()) {
             logger.trace("Not allowed to become UP.");
         }
-        if (servent.isFirewalled()) {
+        if (peer.isFirewalled()) {
             logger.trace("Servent is firewalled.");
         }
         if (!isUltrapeerOS) {

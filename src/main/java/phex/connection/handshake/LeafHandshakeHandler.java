@@ -26,12 +26,12 @@ import phex.http.HTTPHeaderGroup;
 import phex.http.HTTPHeaderNames;
 import phex.prefs.core.ConnectionPrefs;
 import phex.prefs.core.MessagePrefs;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 public class LeafHandshakeHandler extends HandshakeHandler
         implements ConnectionConstants {
-    public LeafHandshakeHandler(Servent servent, Host connectedHost) {
-        super(servent, connectedHost);
+    public LeafHandshakeHandler(Peer peer, Host connectedHost) {
+        super(peer, connectedHost);
     }
 
     @Override
@@ -100,7 +100,7 @@ public class LeafHandshakeHandler extends HandshakeHandler
             return new HandshakeStatus(STATUS_CODE_OK, STATUS_MESSAGE_OK,
                     myHeaders);
         } else {
-            if (servent.isShieldedLeafNode()) {
+            if (peer.isShieldedLeafNode()) {
                 // a none ultrapeer incoming connections and I'm a shielded leaf..
                 // we don't accept this on incoming...
                 return new HandshakeStatus(STATUS_CODE_REJECTED,

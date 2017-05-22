@@ -27,26 +27,26 @@ import phex.common.bandwidth.BandwidthController;
 import phex.common.log.NLogger;
 import phex.net.connection.Connection;
 import phex.prefs.core.NetworkPrefs;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.io.IOException;
 
 public class ChatService {
-    private final Servent servent;
+    private final Peer peer;
 
     /**
      * A Set containing all
      */
     private final AddressCounter addressCounter;
 
-    public ChatService(Servent servent) {
-        this.servent = servent;
+    public ChatService(Peer peer) {
+        this.peer = peer;
         addressCounter = new AddressCounter(1, false);
     }
 
     public BandwidthController getChatBandwidthController() {
         // chat will use bandwidth from network. 
-        return servent.getBandwidthService().getNetworkBandwidthController();
+        return peer.getBandwidthService().getNetworkBandwidthController();
     }
 
     /**

@@ -25,12 +25,12 @@ import phex.common.URN;
 import phex.common.address.DestAddress;
 import phex.msg.GUID;
 import phex.msg.QueryFactory;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 public class BackgroundSearchContainer extends SearchContainer {
     public BackgroundSearchContainer(QueryFactory queryFactory,
-                                     Servent servent) {
-        super(queryFactory, servent);
+                                     Peer peer) {
+        super(queryFactory, peer);
     }
 
     /**
@@ -55,7 +55,7 @@ public class BackgroundSearchContainer extends SearchContainer {
     @Override
     public synchronized BrowseHostResults createBrowseHostSearch(
             DestAddress hostAddress, GUID hostGUID) {
-        BrowseHostResults search = new BrowseHostResults(servent, hostAddress, hostGUID);
+        BrowseHostResults search = new BrowseHostResults(peer, hostAddress, hostGUID);
         int idx = searchList.size();
         insertToSearchList(search, idx);
         return search;
@@ -64,7 +64,7 @@ public class BackgroundSearchContainer extends SearchContainer {
 
     public synchronized Search createSearch(String queryStr, URN queryURN) {
         KeywordSearch search = new KeywordSearch(queryStr, queryURN,
-                queryFactory, servent);
+                queryFactory, peer);
         int idx = searchList.size();
         insertToSearchList(search, idx);
         return search;

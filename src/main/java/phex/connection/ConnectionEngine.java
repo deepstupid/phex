@@ -44,7 +44,7 @@ import phex.prefs.core.MessagePrefs;
 import phex.query.DynamicQueryConstants;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.util.Localizer;
 
 import java.io.IOException;
@@ -67,7 +67,7 @@ import java.util.StringTokenizer;
 public class ConnectionEngine implements ConnectionConstants {
     private static final Logger logger = LoggerFactory.getLogger(ConnectionEngine.class);
 
-    private final Servent servent;
+    private final Peer peer;
     private final MessageService messageService;
     private final PhexSecurityManager securityService;
     private final Host connectedHost;
@@ -79,10 +79,10 @@ public class ConnectionEngine implements ConnectionConstants {
     private HTTPHeaderGroup headersRead;
     private HTTPHeaderGroup headersSend;
 
-    public ConnectionEngine(Servent servent, Host connectedHost) {
-        this.servent = servent;
-        this.messageService = servent.getMessageService();
-        this.securityService = servent.getSecurityService();
+    public ConnectionEngine(Peer peer, Host connectedHost) {
+        this.peer = peer;
+        this.messageService = peer.getMessageService();
+        this.securityService = peer.getSecurityService();
         this.connectedHost = connectedHost;
         this.connection = connectedHost.getConnection();
     }
@@ -229,14 +229,14 @@ public class ConnectionEngine implements ConnectionConstants {
 
         // Connection to remote gnutella host is completed at this point.
         connectedHost.setStatus(HostStatus.CONNECTED);
-        servent.getHostService().addConnectedHost(connectedHost);
+        peer.getHostService().addConnectedHost(connectedHost);
 
         // send UDP ping as soon as we have recognized host
-        servent.getMessageService().sendUdpPing(connectedHost.getHostAddress());
+        peer.getMessageService().sendUdpPing(connectedHost.getHostAddress());
 
         // queue first Ping msg to send.
         // add ping routing to local host to track my initial pings...
-        servent.getMessageService().pingHost(connectedHost,
+        peer.getMessageService().pingHost(connectedHost,
                 MessagePrefs.TTL.get().byteValue());
 
         // after initial handshake ping send message supported VM.
@@ -262,7 +262,7 @@ public class ConnectionEngine implements ConnectionConstants {
         // create appropriate handshake handler that takes care about headers
         // and logic...
         HandshakeHandler handshakeHandler = HandshakeHandler.createHandshakeHandler(
-                servent, connectedHost);
+                peer, connectedHost);
         HandshakeStatus myResponse = handshakeHandler.createHandshakeResponse(
                 new HandshakeStatus(headersRead), false);
         headersSend = myResponse.getResponseHeaders();
@@ -305,7 +305,7 @@ public class ConnectionEngine implements ConnectionConstants {
                 Localizer.getString("Negotiate0_6Handshake"));
 
         // Send the first handshake greeting to the remote host.
-        String greeting = servent.getGnutellaNetwork().getNetworkGreeting();
+        String greeting = peer.getGnutellaNetwork().getNetworkGreeting();
 
         String requestLine = greeting + '/' + PROTOCOL_06 + "\r\n";
         StringBuffer requestBuffer = new StringBuffer(100);
@@ -314,7 +314,7 @@ public class ConnectionEngine implements ConnectionConstants {
         // create appropriate handshake handler that takes care about headers
         // and logic...
         HandshakeHandler handshakeHandler = HandshakeHandler.createHandshakeHandler(
-                servent, connectedHost);
+                peer, connectedHost);
 
         HTTPHeaderGroup handshakeHeaders =
                 handshakeHandler.createOutgoingHandshakeHeaders();
@@ -418,7 +418,7 @@ public class ConnectionEngine implements ConnectionConstants {
         } else {
             priority = CaughtHostsContainer.NORMAL_PRIORITY;
         }
-        CaughtHostsContainer hostContainer = servent.getHostService().getCaughtHostsContainer();
+        CaughtHostsContainer hostContainer = peer.getHostService().getCaughtHostsContainer();
 
         for (HTTPHeader xtryHostAdress : xtryHostAdresses) {
             StringTokenizer tokenizer = new StringTokenizer(
@@ -480,7 +480,7 @@ public class ConnectionEngine implements ConnectionConstants {
             if (remoteIP != null) {
                 IpAddress ip = new IpAddress(remoteIP);
                 DestAddress address = PresentationManager.getInstance().createHostAddress(ip, -1);
-                servent.updateLocalAddress(address);
+                peer.updateLocalAddress(address);
             }
         }
 

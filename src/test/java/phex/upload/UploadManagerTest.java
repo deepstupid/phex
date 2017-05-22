@@ -8,7 +8,7 @@ import net.sourceforge.groboutils.junit.v1.TestRunnable;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.IpAddress;
 import phex.prefs.core.UploadPrefs;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.util.RandomUtils;
 
 import java.util.HashSet;
@@ -26,8 +26,8 @@ public class UploadManagerTest extends TestCase
     {
         //        PhexGuiPrefs.init();
 //        Localizer.initialize( InterfacePrefs.LocaleName.get() );
-        Servent servent = Servent.servent;
-        uploadManager = new UploadManager( servent );
+
+        uploadManager = new UploadManager( new Peer() );
     }
 
     public void testMultiConcurrency() throws Throwable

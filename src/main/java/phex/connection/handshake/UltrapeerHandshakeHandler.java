@@ -30,12 +30,12 @@ import phex.http.HTTPHeaderGroup;
 import phex.http.HTTPHeaderNames;
 import phex.prefs.core.ConnectionPrefs;
 import phex.prefs.core.MessagePrefs;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 public class UltrapeerHandshakeHandler extends HandshakeHandler
         implements ConnectionConstants {
-    public UltrapeerHandshakeHandler(Servent servent, Host connectedHost) {
-        super(servent, connectedHost);
+    public UltrapeerHandshakeHandler(Peer peer, Host connectedHost) {
+        super(peer, connectedHost);
     }
 
     private static boolean isBearshare(HTTPHeaderGroup headers) {
@@ -96,7 +96,7 @@ public class UltrapeerHandshakeHandler extends HandshakeHandler
 
         // add ultrapeer needed header for leaf guidance
         if (upHeader != null && Boolean.valueOf(upHeader.getValue())) {
-            boolean isUltrapeerNeeded = servent.getHostService().
+            boolean isUltrapeerNeeded = peer.getHostService().
                     getNetworkHostsContainer().hasUltrapeerSlotsAvailable();
             String isUltrapeedNeededStr = isUltrapeerNeeded ? "true" :
                     "false";
@@ -136,7 +136,7 @@ public class UltrapeerHandshakeHandler extends HandshakeHandler
         // and we are not talking to a bearshare, since bearshare will not
         // accept us as a leaf.
         if (upNeededHeader != null && !upNeededHeader.booleanValue() &&
-                !isBearshare(headers) && servent.allowDowngradeToLeaf()) {
+                !isBearshare(headers) && peer.allowDowngradeToLeaf()) {
             // create new HTTPHeaderGroup since we used empty headers earlier.
             myHeaders = new HTTPHeaderGroup(false);
             myHeaders.addHeader(new HTTPHeader(
@@ -159,7 +159,7 @@ public class UltrapeerHandshakeHandler extends HandshakeHandler
             return false;
         }
 
-        NetworkHostsContainer netHostContainer = servent.getHostService().getNetworkHostsContainer();
+        NetworkHostsContainer netHostContainer = peer.getHostService().getNetworkHostsContainer();
         // this is an Ultrapeer connection
         // we accept it if we have ultrapeer slots or leaf slots for ultrapeers
         // (for leaf guidance) unfortunately we don't know if leaf guidance is accepted

@@ -33,7 +33,7 @@ import phex.download.swarming.SwarmingManager;
 import phex.http.*;
 import phex.prefs.core.UploadPrefs;
 import phex.security.PhexSecurityManager;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.share.PartialShareFile;
 import phex.share.ShareFile;
 import phex.share.SharedFilesService;
@@ -48,7 +48,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractUploadHandler implements UploadHandler {
-    protected final SharedFilesService sharedFilesService;
+    protected final SharedFilesService sharing;
     /**
      * Indicates whether the connection is persistent or not. Like Keep-Alive
      * connections.
@@ -68,9 +68,11 @@ public abstract class AbstractUploadHandler implements UploadHandler {
      * request before it times out.
      */
     private int queueMaxNextPollTime;
+    private Peer peer;
 
-    protected AbstractUploadHandler(SharedFilesService sharedFilesService) {
-        this.sharedFilesService = sharedFilesService;
+    protected AbstractUploadHandler(SharedFilesService sharing) {
+        this.peer = sharing.peer;
+        this.sharing = sharing;
     }
 
     public UploadResponse determineUploadResponse(HTTPRequest httpRequest,
@@ -314,10 +316,10 @@ public abstract class AbstractUploadHandler implements UploadHandler {
             if (!(requestURN.isSha1Nid())) {
                 requestURN = new URN("urn:sha1:" + requestURN.getSHA1Nss());
             }
-            shareFile = sharedFilesService.getFileByURN(requestURN);
+            shareFile = sharing.getFileByURN(requestURN);
             // look for partials..
             if (shareFile == null && UploadPrefs.SharePartialFiles.get().booleanValue()) {
-                SwarmingManager swMgr = Servent.servent.getDownloadService();
+                SwarmingManager swMgr = peer.getDownloadService();
                 SWDownloadFile dwFile = swMgr.getDownloadFileByURN(requestURN);
                 if (dwFile != null) {
                     shareFile = new PartialShareFile(dwFile);
@@ -327,7 +329,7 @@ public abstract class AbstractUploadHandler implements UploadHandler {
         // file index is -1 when parsing was wrong
         else if (gRequest.getFileIndex() != -1) {
             int index = gRequest.getFileIndex();
-            shareFile = sharedFilesService.getFileByIndex(index);
+            shareFile = sharing.getFileByIndex(index);
             if (shareFile != null) {
                 String shareFileName = shareFile.getFileName();
                 // if filename dosn't match
@@ -348,7 +350,7 @@ public abstract class AbstractUploadHandler implements UploadHandler {
                 // TODO this should be also used if the index returns a file
                 // with a different filename then the requested filename
                 if (gRequest.getFileName() != null) {
-                    shareFile = sharedFilesService.getFileByName(gRequest.getFileName());
+                    shareFile = sharing.getFileByName(gRequest.getFileName());
                 }
             }
         }

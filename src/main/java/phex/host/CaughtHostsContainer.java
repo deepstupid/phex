@@ -36,7 +36,7 @@ import phex.msg.PongMsg;
 import phex.prefs.core.NetworkPrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.util.DateUtils;
 import phex.util.IPUtils;
 
@@ -77,12 +77,12 @@ public class CaughtHostsContainer {
      * these are added by parsing the UP ggep extension in MsgPongs
      */
     private final Set<CaughtHost> freeUltrapeerSlotSet;
-    private final Servent servent;
+    private final Peer peer;
     private boolean hasChangedSinceLastSave;
     private HostFetchingStrategy hostFetchingStrategy;
 
-    public CaughtHostsContainer(Servent servent) {
-        this.servent = servent;
+    public CaughtHostsContainer(Peer peer) {
+        this.peer = peer;
 
         int[] capacities = new int[3];
         capacities[HIGH_PRIORITY] = (int) Math.round(NetworkPrefs.MaxHostInHostCache.get().doubleValue()
@@ -436,7 +436,7 @@ public class CaughtHostsContainer {
      * @return true if the address is valid, false otherwise.
      */
     private boolean isValidCaughtHostAddress(DestAddress address) {
-        if (address.isLocalHost(servent.getLocalAddress())
+        if (address.isLocalHost(peer.getLocalAddress())
                 || !address.isValidAddress()
                 || address.isSiteLocalAddress()) {
             return false;
@@ -509,7 +509,7 @@ public class CaughtHostsContainer {
     private void loadHostsFromFile() {
         logger.debug("Loading hosts file.");
         try {
-            File file = servent.getGnutellaNetwork().getHostsFile();
+            File file = peer.getGnutellaNetwork().getHostsFile();
             BufferedReader br;
             if (file.exists()) {
                 br = new BufferedReader(new FileReader(file));
@@ -526,7 +526,7 @@ public class CaughtHostsContainer {
             }
 
             long now = System.currentTimeMillis();
-            PhexSecurityManager securityMgr = servent.getSecurityService();
+            PhexSecurityManager securityMgr = peer.getSecurityService();
             String line;
             short usedPriority = LOW_PRIORITY;
             while ((line = br.readLine()) != null) {
@@ -583,7 +583,7 @@ public class CaughtHostsContainer {
     private void saveCaughtHosts() {
         logger.debug("Start saving caught hosts.");
         try {
-            File file = servent.getGnutellaNetwork().getHostsFile();
+            File file = peer.getGnutellaNetwork().getHostsFile();
             BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 
             synchronized (catchedHostCache) {

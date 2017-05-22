@@ -27,7 +27,7 @@ import phex.common.Environment;
 import phex.common.address.DestAddress;
 import phex.common.address.IpAddress;
 import phex.host.NetworkHostsContainer;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.util.TimerTask;
 
@@ -36,7 +36,7 @@ import java.util.TimerTask;
  */
 public class BootstrapManager {
     private static final Logger logger = LoggerFactory.getLogger(BootstrapManager.class);
-    private final Servent servent;
+    private final Peer peer;
     private final GWebCacheContainer gWebCacheContainer;
 
     /**
@@ -46,9 +46,9 @@ public class BootstrapManager {
      */
     private volatile boolean isThreadRequestRunning = false;
 
-    public BootstrapManager(Servent servent) {
-        this.servent = servent;
-        gWebCacheContainer = new GWebCacheContainer(servent);
+    public BootstrapManager(Peer peer) {
+        this.peer = peer;
+        gWebCacheContainer = new GWebCacheContainer(peer);
     }
 
     /**
@@ -98,7 +98,7 @@ public class BootstrapManager {
 
     // temporary workaround method for post manager initialization
     public void postManagerInitRoutine() {
-        NetworkHostsContainer netCont = servent.getHostService().getNetworkHostsContainer();
+        NetworkHostsContainer netCont = peer.getHostService().getNetworkHostsContainer();
 //        Environment.getInstance().scheduleTimerTask( 
 //            new QueryGWebCacheTimer( netCont ), 0,
 //            QueryGWebCacheTimer.TIMER_PERIOD );
@@ -214,11 +214,11 @@ public class BootstrapManager {
             try {
                 // no gwebcache actions if we have no auto connect and are
                 // not connected to any host
-                if (servent.getOnlineStatus().isNetworkOnline() ||
+                if (peer.getOnlineStatus().isNetworkOnline() ||
                         netHostsContainer.getTotalConnectionCount() > 0) {
                     DestAddress localAddress = null;
-                    if (!servent.isFirewalled()) {
-                        localAddress = servent.getLocalAddress();
+                    if (!peer.isFirewalled()) {
+                        localAddress = peer.getLocalAddress();
                         IpAddress localIp = localAddress.getIpAddress();
                         if (localIp != null && localIp.isSiteLocalIP()) {
                             localAddress = null;

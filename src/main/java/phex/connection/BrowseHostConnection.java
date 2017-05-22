@@ -33,7 +33,7 @@ import phex.net.connection.SocketFactory;
 import phex.net.repres.SocketFacade;
 import phex.prefs.core.MessagePrefs;
 import phex.query.BrowseHostResults;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,14 +42,14 @@ import java.io.InputStream;
  * This class implements the basic functionality of the new Browse Host protocol.
  */
 public class BrowseHostConnection {
-    private final Servent servent;
+    private final Peer peer;
     private final BrowseHostResults results;
     private final DestAddress address;
     private final GUID hostGUID;
 
-    public BrowseHostConnection(Servent servent, DestAddress aAddress,
+    public BrowseHostConnection(Peer peer, DestAddress aAddress,
                                 GUID aHostGUID, BrowseHostResults results) {
-        this.servent = servent;
+        this.peer = peer;
         address = aAddress;
         hostGUID = aHostGUID;
         this.results = results;
@@ -68,7 +68,7 @@ public class BrowseHostConnection {
                 throw exp;
             }
 
-            socket = PushHandler.requestSocketViaPush(servent, hostGUID,
+            socket = PushHandler.requestSocketViaPush(peer, hostGUID,
                     // HEX for Phex
                     50484558);
             if (socket == null) {
@@ -77,7 +77,7 @@ public class BrowseHostConnection {
         }
 
         Connection connection = new Connection(socket,
-                servent.getBandwidthService().getNetworkBandwidthController());
+                peer.getBandwidthService().getNetworkBandwidthController());
 
 
         HTTPRequest request = new HTTPRequest("GET", "/", true);
@@ -140,12 +140,12 @@ public class BrowseHostConnection {
                 }
                 try {
                     QueryResponseMsg message = (QueryResponseMsg) MessageProcessor.parseMessage(
-                            header, inStream, servent.getSecurityService());
+                            header, inStream, peer.getSecurityService());
                     // prevent further routing of query response message...
                     message.getHeader().setTTL((byte) 0);
 
                     // Unfortunately we don't have a host instance..
-                    servent.getMessageService().dispatchMessage(message, null);
+                    peer.getMessageService().dispatchMessage(message, null);
                     results.processResponse(message);
                 } catch (InvalidMessageException exp) {
                     NLogger.debug(BrowseHostConnection.class, exp, exp);

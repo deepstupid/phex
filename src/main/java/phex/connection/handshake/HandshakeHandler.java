@@ -30,15 +30,15 @@ import phex.http.HTTPHeader;
 import phex.http.HTTPHeaderGroup;
 import phex.http.HTTPHeaderNames;
 import phex.prefs.core.ConnectionPrefs;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 public abstract class HandshakeHandler implements ConnectionConstants {
-    protected final Servent servent;
+    protected final Peer peer;
     protected final Host connectedHost;
 
 
-    public HandshakeHandler(Servent servent, Host connectedHost) {
-        this.servent = servent;
+    public HandshakeHandler(Peer peer, Host connectedHost) {
+        this.peer = peer;
         this.connectedHost = connectedHost;
     }
 
@@ -50,14 +50,14 @@ public abstract class HandshakeHandler implements ConnectionConstants {
         return openHeaders;
     }
 
-    public static HandshakeHandler createHandshakeHandler(Servent servent, Host connectedHost) {
-        if (servent.isAbleToBecomeUltrapeer()) {
-            return new UltrapeerHandshakeHandler(servent, connectedHost);
+    public static HandshakeHandler createHandshakeHandler(Peer peer, Host connectedHost) {
+        if (peer.isAbleToBecomeUltrapeer()) {
+            return new UltrapeerHandshakeHandler(peer, connectedHost);
         }
         // we dont support legacy peers anymore ( since 3.0 ) therefore we only
         // handle leaf mode here
         else {
-            return new LeafHandshakeHandler(servent, connectedHost);
+            return new LeafHandshakeHandler(peer, connectedHost);
         }
     }
 
@@ -102,7 +102,7 @@ public abstract class HandshakeHandler implements ConnectionConstants {
 
         // add Listen-IP even though it might be 127.0.0.1 the port is the
         // most important part...
-        DestAddress myAddress = servent.getLocalAddress();
+        DestAddress myAddress = peer.getLocalAddress();
         openHeaders.addHeader(new HTTPHeader(GnutellaHeaderNames.LISTEN_IP,
                 myAddress.getFullHostName()));
 
@@ -132,14 +132,14 @@ public abstract class HandshakeHandler implements ConnectionConstants {
         HTTPHeaderGroup crawlerHeaders = new HTTPHeaderGroup(
                 HTTPHeaderGroup.COMMON_HANDSHAKE_GROUP);
 
-        boolean isUltrapeer = servent.isUltrapeer();
+        boolean isUltrapeer = peer.isUltrapeer();
 
         crawlerHeaders.addHeader(new HTTPHeader(
                 GnutellaHeaderNames.X_ULTRAPEER, String.valueOf(isUltrapeer)));
 
         if (isUltrapeer) {
             // add connected leaves...
-            Host[] leafs = servent.getHostService().getLeafConnections();
+            Host[] leafs = peer.getHostService().getLeafConnections();
             if (leafs.length > 0) {
                 String leafAddressString = buildHostAddressString(leafs, leafs.length);
                 crawlerHeaders.addHeader(new HTTPHeader(GnutellaHeaderNames.LEAVES,
@@ -148,7 +148,7 @@ public abstract class HandshakeHandler implements ConnectionConstants {
         }
 
         // add connected ultrapeers
-        Host[] ultrapeers = servent.getHostService().getUltrapeerConnections();
+        Host[] ultrapeers = peer.getHostService().getUltrapeerConnections();
         if (ultrapeers.length > 0) {
             String ultrapeerAddressString = buildHostAddressString(ultrapeers, ultrapeers.length);
             crawlerHeaders.addHeader(new HTTPHeader(GnutellaHeaderNames.PEERS,
@@ -172,7 +172,7 @@ public abstract class HandshakeHandler implements ConnectionConstants {
                 connectedHost.getHostAddress().getHostName()));
 
         // add X-Try-Ultrapeer
-        Host[] ultrpeers = servent.getHostService().getUltrapeerConnections();
+        Host[] ultrpeers = peer.getHostService().getUltrapeerConnections();
         String ultrapeerAddressString = buildHostAddressString(ultrpeers,
                 10);
         openHeaders.addHeader(new HTTPHeader(GnutellaHeaderNames.X_TRY_ULTRAPEERS,

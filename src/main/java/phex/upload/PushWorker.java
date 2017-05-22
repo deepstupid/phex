@@ -29,7 +29,7 @@ import phex.msg.PushRequestMsg;
 import phex.net.connection.Connection;
 import phex.net.connection.SocketFactory;
 import phex.net.repres.SocketFacade;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.share.HttpRequestDispatcher;
 import phex.share.ShareFile;
 import phex.statistic.SimpleStatisticProvider;
@@ -54,7 +54,7 @@ public class PushWorker implements Runnable {
         Environment.getInstance().executeOnThreadPool(this,
                 "PushWorker-" + Integer.toHexString(hashCode()));
 
-        StatisticsManager statMgr = Servent.servent.getStatisticsService();
+        StatisticsManager statMgr = uploadMgr.peer.getStatisticsService();
         ((SimpleStatisticProvider) statMgr.getStatisticProvider(
                 StatisticProviderConstants.PUSH_UPLOAD_ATTEMPTS_PROVIDER)).increment(1);
     }
@@ -64,7 +64,7 @@ public class PushWorker implements Runnable {
         try {
             httpRequest = connectAndGetRequest();
             if (httpRequest == null) {
-                StatisticsManager statMgr = Servent.servent.getStatisticsService();
+                StatisticsManager statMgr = uploadMgr.peer.getStatisticsService();
                 ((SimpleStatisticProvider) statMgr.getStatisticProvider(
                         StatisticProviderConstants.PUSH_UPLOAD_FAILURE_PROVIDER)).increment(1);
                 return;
@@ -90,7 +90,7 @@ public class PushWorker implements Runnable {
     private void handleRequest(HTTPRequest httpRequest) {
         NLogger.debug(PushWorker.class, "Handle PUSH request: "
                 + httpRequest.buildHTTPRequestString());
-        StatisticsManager statMgr = Servent.servent.getStatisticsService();
+        StatisticsManager statMgr = uploadMgr.peer.getStatisticsService();
         ((SimpleStatisticProvider) statMgr.getStatisticProvider(
                 StatisticProviderConstants.PUSH_UPLOAD_SUCESS_PROVIDER)).increment(1);
         if (httpRequest.isGnutellaRequest()) {
@@ -98,7 +98,7 @@ public class PushWorker implements Runnable {
         } else {
             // Handle the HTTP GET as a normal HTTP GET to upload file.
             // This is most likely a usual browse host request.
-            new HttpRequestDispatcher().httpRequestHandler(connection,
+            new HttpRequestDispatcher(uploadMgr.peer).httpRequestHandler(connection,
                     httpRequest);
         }
     }
@@ -129,9 +129,9 @@ public class PushWorker implements Runnable {
      * @throws IOException
      */
     private void sendGIV(Connection connection) throws IOException {
-        Servent servent = Servent.servent;
+        Peer peer = uploadMgr.peer;
         // I only give out file indexes in the int range
-        ShareFile sfile = servent.getSharedFilesService().getFileByIndex(
+        ShareFile sfile = peer.getSharedFilesService().getFileByIndex(
                 (int) pushMsg.getFileIndex());
 
         // Send the push greeting.

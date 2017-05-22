@@ -24,7 +24,7 @@ package phex.msg;
 import phex.common.URN;
 import phex.common.address.DestAddress;
 import phex.prefs.core.MessagePrefs;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 public class QueryFactory {
     /**
@@ -33,23 +33,23 @@ public class QueryFactory {
      */
     public static final boolean IS_PHEX_CAPABLE_OF_XML_RESULTS = false;
     private static final String WHAT_IS_NEW_QUERY_STRING = "WhatIsNewXOXO";
-    private final Servent servent;
+    private final Peer peer;
 
-    public QueryFactory(Servent servent) {
-        this.servent = servent;
+    public QueryFactory(Peer peer) {
+        this.peer = peer;
     }
 
     public QueryMsg createOOBKeywordQuery(String searchString, URN searchURN) {
         GUID guid = new GUID();
-        DestAddress localAddress = servent.getLocalAddress();
+        DestAddress localAddress = peer.getLocalAddress();
         GUID.applyOOBQueryMarkings(guid, localAddress.getIpAddress(), localAddress.getPort());
 
-        return new QueryMsg(
+        return new QueryMsg(peer.getLocalAddress(),
                 guid,
                 MessagePrefs.TTL.get().byteValue(),
                 searchString, searchURN,
                 IS_PHEX_CAPABLE_OF_XML_RESULTS,
-                servent.isFirewalled(),
+                peer.isFirewalled(),
                 true,
                 QueryMsg.NO_FEATURE_QUERY_SELECTOR);
     }
@@ -58,12 +58,12 @@ public class QueryFactory {
      * Creates outgoing keyword query.
      */
     public QueryMsg createKeywordQuery(String searchString, URN searchURN) {
-        return new QueryMsg(
+        return new QueryMsg(peer.getLocalAddress(),
                 new GUID(),
                 MessagePrefs.TTL.get().byteValue(),
                 searchString, searchURN,
                 IS_PHEX_CAPABLE_OF_XML_RESULTS,
-                servent.isFirewalled(),
+                peer.isFirewalled(),
                 false,
                 QueryMsg.NO_FEATURE_QUERY_SELECTOR);
     }
@@ -72,12 +72,12 @@ public class QueryFactory {
      * Creates a outgoing WhatIsNew query.
      */
     public QueryMsg createWhatsNewQuery() {
-        return new QueryMsg(
+        return new QueryMsg(peer.getLocalAddress(),
                 new GUID(),
                 MessagePrefs.TTL.get().byteValue(),
                 WHAT_IS_NEW_QUERY_STRING, null,
                 IS_PHEX_CAPABLE_OF_XML_RESULTS,
-                servent.isFirewalled(),
+                peer.isFirewalled(),
                 false,
                 QueryMsg.WHAT_IS_NEW_FEATURE_QUERY_SELECTOR);
     }

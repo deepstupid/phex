@@ -23,7 +23,7 @@ package phex.common;
 
 import phex.common.collections.PriorityQueue;
 import phex.msg.PongMsg;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -41,10 +41,10 @@ public class PongCache {
 
     private final PriorityQueue pongQueue;
 
-    private final Servent servent;
+    private final Peer peer;
 
-    public PongCache(Servent servent) {
-        this.servent = servent;
+    public PongCache(Peer peer) {
+        this.peer = peer;
         int[] capacities = new int[MAX_HOPS];
         Arrays.fill(capacities, PONGS_PER_HOP);
         pongQueue = new PriorityQueue(capacities);
@@ -91,7 +91,7 @@ public class PongCache {
         }
 
         // no caching needed if we are no ultrapeer
-        if (!servent.isUltrapeer()) {
+        if (!peer.isUltrapeer()) {
             return;
         }
 

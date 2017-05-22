@@ -29,7 +29,6 @@ import phex.common.address.DestAddress;
 import phex.common.address.IpAddress;
 import phex.io.buffer.ByteBuffer;
 import phex.prefs.core.MessagePrefs;
-import phex.servent.Servent;
 import phex.util.IOUtil;
 import phex.util.StringUtils;
 
@@ -139,7 +138,7 @@ public class QueryMsg extends Message {
      * <p>The header will be modified so that its function property becomes
      * MsgHeader.sQuery. The header argument is owned by this object.</p>
      */
-    public QueryMsg(GUID guid, byte ttl, String aSearchString, URN queryURN,
+    public QueryMsg(DestAddress localAddress, GUID guid, byte ttl, String aSearchString, URN queryURN,
                     boolean isRequesterCapableOfXmlResults, boolean isRequesterBehindFirewall,
                     boolean isOOBReplyAllowed, int featureQuerySelector) {// TODO3 extend query to dispatch a couple of URNs, this can be used
         // for researching multiple candidates for multiple files. But verify
@@ -162,7 +161,7 @@ public class QueryMsg extends Message {
         requesterIsXmlResultsCapable = isRequesterCapableOfXmlResults;
         this.requestSecureOOBReplies = isOOBReplyAllowed;
         try {
-            buildBody();
+            buildBody(localAddress);
         } catch (IOException e) {// should never happen
             logger.error(e.toString(), e);
         }
@@ -391,9 +390,8 @@ public class QueryMsg extends Message {
         return buf.toString();
     }
 
-    private static void addPhexExtendedOriginGGEP(GGEPBlock ggepBlock) {
+    private static void addPhexExtendedOriginGGEP(DestAddress localAddress, GGEPBlock ggepBlock) {
         DestAddress[] addresses = new DestAddress[1];
-        DestAddress localAddress = Servent.servent.getLocalAddress();
         addresses[0] = new DefaultDestAddress(localAddress.getIpAddress(),
                 localAddress.getPort());
         ggepBlock.addExtension(GGEPBlock.PHEX_EXTENDED_ORIGIN, addresses, 1);
@@ -407,7 +405,7 @@ public class QueryMsg extends Message {
         return this.originIpAddress;
     }
 
-    private void buildBody()
+    private void buildBody(DestAddress localAddress)
             throws IOException {
         ByteArrayOutputStream bodyStream = new ByteArrayOutputStream();
         short complexMinSpeed = buildComplexMinSpeed();
@@ -444,7 +442,7 @@ public class QueryMsg extends Message {
         }
 
         if (MessagePrefs.UseExtendedOriginIpAddress.get()) {
-            addPhexExtendedOriginGGEP(ggepBlock);
+            addPhexExtendedOriginGGEP(localAddress, ggepBlock);
         }
 
         byte[] ggepData = ggepBlock.getBytes();

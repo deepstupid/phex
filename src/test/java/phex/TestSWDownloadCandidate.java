@@ -19,7 +19,7 @@
  *  --- SVN Information ---
  *  $Id: TestSWDownloadCandidate.java 4377 2009-02-21 20:46:52Z gregork $
  */
-package phex.test;
+package phex;
 
 import junit.framework.TestCase;
 import phex.common.address.DefaultDestAddress;
@@ -28,7 +28,7 @@ import phex.download.swarming.SWDownloadCandidate;
 import phex.download.swarming.SWDownloadFile;
 import phex.msg.GUID;
 import phex.query.QueryHitHost;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 /**
  * 
@@ -45,11 +45,12 @@ public class TestSWDownloadCandidate extends TestCase
     
     public void testSetVendor() throws Exception
     {
+        Peer p = new Peer();
         RemoteFile remoteFile = new RemoteFile(
-            new QueryHitHost(new GUID(), new DefaultDestAddress("1.1.1.1", 1111 ), 0),
+            new QueryHitHost(p,  new GUID(), new DefaultDestAddress("1.1.1.1", 1111 ), 0),
             1, "", "",  1, null, "", (short)1);
         SWDownloadFile downloadFile = new SWDownloadFile(
-            "", "", 1, null, Servent.servent.getDownloadService()
+            "", "", 1, null, p.getDownloadService()
         );
         SWDownloadCandidate candidate = new SWDownloadCandidate( remoteFile,
             downloadFile, null );

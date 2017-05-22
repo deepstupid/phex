@@ -32,7 +32,6 @@ import phex.io.buffer.ByteBuffer;
 import phex.net.connection.Connection;
 import phex.net.repres.SocketFacade;
 import phex.prefs.core.NetworkPrefs;
-import phex.servent.Servent;
 import phex.share.SharedFilesService;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticProviderConstants;
@@ -101,7 +100,7 @@ public class UploadEngine {
                     if (httpRequest.getGnutellaRequest().isTigerTreeRequest()) {
                         uploadHandler = new ThexUploadHandler(sharedFilesService);
                     } else {
-                        uploadHandler = new FileUploadHandler(sharedFilesService, Servent.servent);
+                        uploadHandler = new FileUploadHandler(sharedFilesService);
                     }
 
                     UploadResponse response = uploadHandler.determineUploadResponse(
@@ -200,7 +199,7 @@ public class UploadEngine {
             response.countUpload();
 
             // Increment the completed uploads count
-            StatisticsManager statMgr = Servent.servent.getStatisticsService();
+            StatisticsManager statMgr = uploadMgr.peer.getStatisticsService();
             SimpleStatisticProvider provider = (SimpleStatisticProvider) statMgr
                     .getStatisticProvider(StatisticProviderConstants.SESSION_UPLOAD_COUNT_PROVIDER);
             provider.increment(1);

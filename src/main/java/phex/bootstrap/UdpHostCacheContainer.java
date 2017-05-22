@@ -30,7 +30,7 @@ import phex.common.address.MalformedDestAddressException;
 import phex.event.ChangeEvent;
 import phex.msg.PongMsg;
 import phex.net.repres.PresentationManager;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.io.*;
 import java.util.*;
@@ -61,7 +61,7 @@ public class UdpHostCacheContainer {
         Collections.shuffle(defaultCaches);
     }
 
-    private final Servent servent;
+    private final Peer peer;
 
     /**
      * contains all the known functional caches in this session.
@@ -86,8 +86,8 @@ public class UdpHostCacheContainer {
     private final AtomicBoolean isThreadRequestRunning;
 
 
-    public UdpHostCacheContainer(Servent servent) {
-        this.servent = servent;
+    public UdpHostCacheContainer(Peer peer) {
+        this.peer = peer;
         functionalUdpCaches = new ArrayList<UdpHostCache>();
         generalUdpCaches = new ArrayList<UdpHostCache>();
         isThreadRequestRunning = new AtomicBoolean(false);
@@ -243,7 +243,7 @@ public class UdpHostCacheContainer {
         cache.setLastRequestTime(System.currentTimeMillis());
 
         // ping 
-        servent.getMessageService().sendUdpPing(
+        peer.getMessageService().sendUdpPing(
                 cache.getHostAddress());
 
         //assumed it has failed
@@ -279,7 +279,7 @@ public class UdpHostCacheContainer {
 
     private void loadCachesFromFile() {
         try {
-            File file = servent.getGnutellaNetwork().getUdpHostCacheFile();
+            File file = peer.getGnutellaNetwork().getUdpHostCacheFile();
             if (!file.exists()) {
                 logger.debug("No UDP host cache file found.");
                 return;
@@ -360,7 +360,7 @@ public class UdpHostCacheContainer {
 
     public void saveCachesToFile() {
         try {
-            File file = servent.getGnutellaNetwork().getUdpHostCacheFile();
+            File file = peer.getGnutellaNetwork().getUdpHostCacheFile();
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
             writeCachesToFile(writer, functionalUdpCaches);

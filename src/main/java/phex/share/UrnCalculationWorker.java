@@ -28,7 +28,6 @@ import phex.common.log.NLogger;
 import phex.download.swarming.SWDownloadFile;
 import phex.download.swarming.SwarmingManager;
 import phex.prefs.core.LibraryPrefs;
-import phex.servent.Servent;
 import phex.util.IOUtil;
 import phex.util.bitzi.Base32;
 import phex.util.bitzi.SHA1;
@@ -45,7 +44,7 @@ class UrnCalculationWorker implements Runnable {
     UrnCalculationWorker(ShareFile shareFile, SharedFilesService sharedFilesService) {
         this.shareFile = shareFile;
         this.sharedFilesService = sharedFilesService;
-        this.downloadService = Servent.servent.getDownloadService();
+        this.downloadService = sharedFilesService.peer.getDownloadService();
     }
 
     public void run() {

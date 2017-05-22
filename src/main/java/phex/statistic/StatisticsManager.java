@@ -27,15 +27,17 @@ import phex.common.LongObj;
 import phex.common.bandwidth.BandwidthManager;
 import phex.msg.PongMsg;
 import phex.prefs.core.StatisticPrefs;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.statistic.HorizonStatisticProvider.Type;
 
 import java.util.HashMap;
 
 public class StatisticsManager extends AbstractLifeCycle implements StatisticProviderConstants {
     private final HashMap<String, StatisticProvider> statisticProviderMap;
+    private final Peer peer;
 
-    public StatisticsManager() {
+    public StatisticsManager(Peer peer) {
+        this.peer = peer;
         statisticProviderMap = new HashMap<String, StatisticProvider>();
 
         registerStatisticProvider(UPTIME_PROVIDER,
@@ -61,8 +63,7 @@ public class StatisticsManager extends AbstractLifeCycle implements StatisticPro
      */
     @Override
     public void doStart() {
-        Servent servent = Servent.servent;
-        BandwidthManager manager = servent.getBandwidthService();
+        BandwidthManager manager = peer.getBandwidthService();
 
         registerStatisticProvider(TOTAL_BANDWIDTH_PROVIDER,
                 new TransferAverageStatisticProvider(manager.getServentBandwidthController()));
@@ -75,7 +76,7 @@ public class StatisticsManager extends AbstractLifeCycle implements StatisticPro
 
 
         HorizonTracker horizonTracker = new HorizonTracker();
-        servent.getMessageService().addMessageSubscriber(PongMsg.class, horizonTracker);
+        peer.getMessageService().addMessageSubscriber(PongMsg.class, horizonTracker);
 
         registerStatisticProvider(HORIZON_HOST_COUNT_PROVIDER,
                 new HorizonStatisticProvider(Type.HOST_COUNT, horizonTracker));

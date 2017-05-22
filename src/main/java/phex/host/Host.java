@@ -39,6 +39,7 @@ import phex.msg.vendor.MessagesSupportedVMsg;
 import phex.net.connection.Connection;
 import phex.prefs.core.SecurityPrefs;
 import phex.query.DynamicQueryConstants;
+import phex.servent.Peer;
 import phex.util.GnutellaInputStream;
 import phex.util.GnutellaOutputStream;
 import phex.util.Localizer;
@@ -97,6 +98,7 @@ public class Host {
      */
     private final MessageQueue messageQueue;
     private final SendEngine sendEngine = new SendEngine();
+    private final Peer peer;
     private DestAddress hostAddress;
     private final AtomicReference<Connection> connection = new AtomicReference<Connection>();
     private HostStatus status;
@@ -230,10 +232,13 @@ public class Host {
      */
     private DestAddress pushProxyAddress;
 
+    private Host() {
+        this((Peer)null);
+    }
     /**
      * Create a new Host with type OUTGOING.
      */
-    private Host() {
+    private Host(Peer peer) {
         connection.set(null);
         status = HostStatus.NOT_CONNECTED;
         type = Type.OUTGOING;
@@ -249,7 +254,11 @@ public class Host {
         receivedDropMsgCount = 0;
         maxTTL = DynamicQueryConstants.DEFAULT_MAX_TTL;
         hopsFlowLimit = -1;
-        messageQueue = new MessageQueue(this);
+
+        this.peer = peer;
+
+
+        messageQueue = peer !=null ? new MessageQueue(peer, this) : null;
     }
 
     /**
@@ -269,7 +278,7 @@ public class Host {
         setConnection(connection);
     }
 
-    public static boolean isFreeloader(long currentTime) {
+//    public static boolean isFreeloader(long currentTime) {
 // freeloaders are no real problem...
 //        // never count a ultrapeer as freeloader...
 //        if ( isUltrapeer() ) { return false; }
@@ -283,8 +292,8 @@ public class Host {
 //            if ( ServiceManager.sCfg.freeloaderShareSize > 0
 //                && (shareSize / 1024) < ServiceManager.sCfg.freeloaderShareSize ) { return true; }
 //        }
-        return false;
-    }
+//        return false;
+//    }
 
     public DestAddress getHostAddress() {
         return hostAddress;
@@ -816,7 +825,7 @@ public class Host {
         }
 
         //logger.debug("Queuing message: {}", message);
-        messageQueue.addMessage(message, sendEngine);
+        messageQueue.addMessage(peer, message, sendEngine);
     }
 
 //    /**

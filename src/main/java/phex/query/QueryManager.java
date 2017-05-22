@@ -31,14 +31,14 @@ import phex.msg.QueryMsg;
 import phex.msg.QueryResponseMsg;
 import phex.msg.vendor.OOBReplyCountVMsg;
 import phex.msghandling.MessageService;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.io.File;
 import java.util.TimerTask;
 
 public class QueryManager extends AbstractLifeCycle {
     private static final Logger logger = LoggerFactory.getLogger(QueryManager.class);
-    private final Servent servent;
+    private final Peer peer;
     private final MessageService msgService;
     private final SearchContainer searchContainer;
     private final BackgroundSearchContainer backgroundSearchContainer;
@@ -50,11 +50,11 @@ public class QueryManager extends AbstractLifeCycle {
      */
     private volatile long lastQueryTime;
 
-    public QueryManager(MessageService msgService, Servent servent) {
-        this.servent = servent;
+    public QueryManager(MessageService msgService, Peer peer) {
+        this.peer = peer;
         this.msgService = msgService;
-        queryFactory = new QueryFactory(servent);
-        searchContainer = new SearchContainer(queryFactory, servent);
+        queryFactory = new QueryFactory(peer);
+        searchContainer = new SearchContainer(queryFactory, peer);
         msgService.addMessageSubscriber(QueryResponseMsg.class,
                 searchContainer);
         msgService.addUdpMessageSubscriber(OOBReplyCountVMsg.class,
@@ -63,11 +63,11 @@ public class QueryManager extends AbstractLifeCycle {
                 searchContainer);
 
         backgroundSearchContainer = new BackgroundSearchContainer(queryFactory,
-                servent);
+                peer);
         msgService.addMessageSubscriber(QueryResponseMsg.class,
                 backgroundSearchContainer);
 
-        File filterFile = servent.getGnutellaNetwork().getSearchFilterFile();
+        File filterFile = peer.getGnutellaNetwork().getSearchFilterFile();
         //researchService = new ResearchService( new ResearchServiceConfig() );
         dynamicQueryWorker = new DynamicQueryWorker();
 
@@ -124,7 +124,7 @@ public class QueryManager extends AbstractLifeCycle {
     public DynamicQueryEngine sendDynamicQuery(QueryMsg query, Host sourceHost,
                                                SearchProgress searchProgress) {
         DynamicQueryEngine engine = new DynamicQueryEngine(query, sourceHost,
-                searchProgress, servent.getHostService().getNetworkHostsContainer(),
+                searchProgress, peer.getHostService().getNetworkHostsContainer(),
                 msgService);
         dynamicQueryWorker.addDynamicQueryEngine(engine);
         return engine;
@@ -143,7 +143,7 @@ public class QueryManager extends AbstractLifeCycle {
         msgService.updateMyQueryRouting(queryMsg);
         searchProgress.searchStarted();
 
-        if (servent.isUltrapeer()) {
+        if (peer.isUltrapeer()) {
             return sendDynamicQuery(queryMsg, Host.LOCAL_HOST, searchProgress);
         } else {
             msgService.forwardMyQueryToUltrapeers(queryMsg);

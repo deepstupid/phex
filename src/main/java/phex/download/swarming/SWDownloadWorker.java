@@ -339,7 +339,7 @@ public class SWDownloadWorker implements Runnable {
 
         // if we are behind a firewall there is no chance to successfully push
         // if the candidate is not reachable through LAN.
-        if (downloadSet.getServent().isFirewalled() && !isLANReachable) {
+        if (downloadSet.getPeer().isFirewalled() && !isLANReachable) {
             NLogger.debug(SWDownloadWorker.class,
                     this.toString() + downloadCandidate.toString()
                             + " Cant PUSH -> I'm firewalled and candidate not reachable by LAN");
@@ -376,7 +376,7 @@ public class SWDownloadWorker implements Runnable {
         downloadCandidate.setStatus(
                 CandidateStatus.PUSH_REQUEST);
         SocketFacade socket = PushHandler.requestSocketViaPush(
-                downloadSet.getServent(), downloadCandidate);
+                downloadSet.getPeer(), downloadCandidate);
         if (socket == null) {
             downloadCandidate.setStatus(
                     CandidateStatus.CONNECTION_FAILED);

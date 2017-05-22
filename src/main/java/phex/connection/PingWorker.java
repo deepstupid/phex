@@ -23,7 +23,7 @@ package phex.connection;
 
 import phex.common.ThreadTracking;
 import phex.host.Host;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 /**
  * This class is responsible to ping the neighborhood and find new hosts for the
@@ -31,10 +31,10 @@ import phex.servent.Servent;
  */
 public class PingWorker implements Runnable {
     private static final int SLEEP_TIME = 5000;
-    private final Servent servent;
+    private final Peer peer;
 
-    public PingWorker(Servent servent) {
-        this.servent = servent;
+    public PingWorker(Peer peer) {
+        this.peer = peer;
     }
 
     public void start() {
@@ -50,11 +50,11 @@ public class PingWorker implements Runnable {
         while (true) {
 
 
-            if (servent.isUltrapeer()) {
-                Host[] hosts = servent.getHostService().getUltrapeerConnections();
+            if (peer.isUltrapeer()) {
+                Host[] hosts = peer.getHostService().getUltrapeerConnections();
                 // TODO only forward to a selected amount (75%) of node if there are more
                 // then 4-5 node.
-                servent.getMessageService().pingHosts((byte) 3, hosts);
+                peer.getMessageService().pingHosts((byte) 3, hosts);
             }
 
             // Sleep some time...

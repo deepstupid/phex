@@ -2,7 +2,7 @@
  * Created on 24.05.2004
  *
  */
-package phex.test.performance;
+package phex.performance;
 
 import phex.util.bitzi.Base32;
 import phex.util.bitzi.SHA1;

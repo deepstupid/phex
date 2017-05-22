@@ -42,7 +42,7 @@ import phex.event.UserMessageListener;
 import phex.http.HTTPRangeSet;
 import phex.prefs.core.DownloadPrefs;
 import phex.query.ResearchSetting;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticsManager;
 import phex.util.DateUtils;
@@ -64,7 +64,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
 
     private static final Random random = new Random();
     private static final int CANDIDATE_WORKER_COUNT_TIMEOUT = 1000;
-    private final SwarmingManager downloadService;
+    private final SwarmingManager mgr;
 
     /**
      * A lock object used to lock access to good and bad download candidate lists.
@@ -270,12 +270,12 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
      */
     private ThexVerificationData thexVerificationData;
 
-    private SWDownloadFile(SwarmingManager downloadService) {
-        if (downloadService == null) {
+    private SWDownloadFile(SwarmingManager mgr) {
+        if (mgr == null) {
             throw new NullPointerException("DownloadService is null.");
         }
 
-        this.downloadService = downloadService;
+        this.mgr = mgr;
 
 
         allCandidatesList = new ArrayList<SWDownloadCandidate>();
@@ -299,7 +299,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
         thexVerificationData = new ThexVerificationData();
 
         status = STATUS_FILE_WAITING;
-        bandwidthController = downloadService.createBandwidthControllerFor(this);
+        bandwidthController = mgr.createBandwidthControllerFor(this);
     }
 
     public SWDownloadFile(String filename, String searchString,
@@ -350,7 +350,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
                 }
                 DestAddress address = new DefaultDestAddress(host, port);
                 SWDownloadCandidate candidate = new SWDownloadCandidate(address,
-                        uri, this, downloadService.getCandidateLogBuffer());
+                        uri, this, mgr.getCandidateLogBuffer());
                 addDownloadCandidate(candidate);
             }
 
@@ -377,7 +377,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
                 }
                 DestAddress address = new DefaultDestAddress(host, port);
                 SWDownloadCandidate candidate = new SWDownloadCandidate(address,
-                        downloadUri, this, downloadService.getCandidateLogBuffer());
+                        downloadUri, this, mgr.getCandidateLogBuffer());
                 addDownloadCandidate(candidate);
             }
         }
@@ -494,12 +494,12 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
         fileSize = aFileSize;
         previewSize = fileSize / 10;
 
-        Servent servent = Servent.servent;
-        researchSetting = new ResearchSetting(this, servent.getQueryService(),
-                servent);
+        Peer peer = mgr.peer;
+        researchSetting = new ResearchSetting(this, peer.getQueryService(),
+                peer);
         researchSetting.setSearchTerm(searchTerm);
 
-        memoryFile = downloadService.createMemoryFile(this);
+        memoryFile = mgr.createMemoryFile(this);
     }
 
     public void setFileSize(long fileSize) {
@@ -562,7 +562,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
      */
     public void releaseDownloadCandidate(SWDownloadCandidate candidate) {
         synchronized (candidatesLock) {
-            downloadService.releaseCandidateAddress(candidate);
+            mgr.releaseCandidateAddress(candidate);
             logger.debug("Release allocation {}.", candidate);
             // Sets the segment to be not allocated by a worker.
             allocatedCandidateWorkerMap.remove(candidate);
@@ -580,7 +580,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
 
     public boolean addDownloadCandidate(RemoteFile remoteFile) {
         SWDownloadCandidate candidate = new SWDownloadCandidate(remoteFile, this,
-                downloadService.getCandidateLogBuffer());
+                mgr.getCandidateLogBuffer());
         return addDownloadCandidate(candidate);
     }
 
@@ -593,11 +593,11 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
 
         // use get request class to parse url
         DestAddress hostAddress = altLoc.getHostAddress();
-        if (hostAddress.isLocalHost(Servent.servent.getLocalAddress())) {// don't add myself as candidate.
+        if (hostAddress.isLocalHost( mgr.peer.getLocalAddress())) {// don't add myself as candidate.
             return false;
         }
         SWDownloadCandidate candidate = new SWDownloadCandidate(hostAddress,
-                0, null, altLocURN, this, downloadService.getCandidateLogBuffer());
+                0, null, altLocURN, this, mgr.getCandidateLogBuffer());
         return addDownloadCandidate(candidate);
     }
 
@@ -1099,7 +1099,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
                 case STATUS_FILE_COMPLETED:
                     // count the completed download
                     SimpleStatisticProvider provider = (SimpleStatisticProvider)
-                            Servent.servent.getStatisticsService().getStatisticProvider(
+                            mgr.peer.getStatisticsService().getStatisticProvider(
                                     StatisticsManager.SESSION_DOWNLOAD_COUNT_PROVIDER);
                     provider.increment(1);
                     // stop possible running search...
@@ -1402,10 +1402,10 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
 
                 //auto remove download file if set
                 if (DownloadPrefs.AutoRemoveCompleted.get().booleanValue()) {
-                    downloadService.removeDownloadFile(this);
+                    mgr.removeDownloadFile(this);
                     // removeDownloadFile triggers save...
                 } else {
-                    downloadService.notifyDownloadListChange();
+                    mgr.notifyDownloadListChange();
                 }
             } finally {
                 getIncompleteDownloadFile().releaseFileLock();
@@ -1460,7 +1460,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
     public void startDownload() {
         setStatus(STATUS_FILE_WAITING);
         verifyStatus();
-        downloadService.notifyWaitingWorkers();
+        mgr.notifyWaitingWorkers();
     }
 
     /**
@@ -1567,7 +1567,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
                 modifiedDate = new Date(transferStopTime);
             }
         }
-        downloadService.notifyDownloadListChange();
+        mgr.notifyDownloadListChange();
 
         // make sure incomplete file is available/can be inited to prevent
         // race condition in initIncompleteFile()
@@ -1808,7 +1808,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
                 try {
                     dCandidate = iterator.next();
                     candidate = new SWDownloadCandidate(dCandidate, this,
-                            downloadService.getCandidateLogBuffer());
+                            mgr.getCandidateLogBuffer());
                     logger.debug("Adding download candidate {}", candidate);
 
                     int pos = allCandidatesList.size();

@@ -26,7 +26,7 @@ import phex.common.log.NLogger;
 import phex.download.swarming.SWDownloadCandidate;
 import phex.msg.GUID;
 import phex.net.repres.SocketFacade;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticsManager;
 
@@ -56,12 +56,12 @@ public class PushHandler {
                 givenFileName);
     }
 
-    public static SocketFacade requestSocketViaPush(Servent servent,
+    public static SocketFacade requestSocketViaPush(Peer peer,
                                                     SWDownloadCandidate downloadCandidate) {
         if (downloadCandidate.getGUID() == null) {
             return null;
         }
-        return singleton.internalRequestSocketViaPush(servent,
+        return singleton.internalRequestSocketViaPush(peer,
                 downloadCandidate.getGUID(),
                 downloadCandidate.getFileIndex(),
                 downloadCandidate.getPushProxyAddresses());
@@ -73,9 +73,9 @@ public class PushHandler {
      * @param aFileName
      * @return Returns null if push request fails.
      */
-    public static SocketFacade requestSocketViaPush(Servent servent,
+    public static SocketFacade requestSocketViaPush(Peer peer,
                                                     GUID aClientGUID, long aFileIndex) {
-        return singleton.internalRequestSocketViaPush(servent,
+        return singleton.internalRequestSocketViaPush(peer,
                 aClientGUID, aFileIndex, null);
     }
 
@@ -106,13 +106,13 @@ public class PushHandler {
                 "No Push request for GIV found: " + givenFileName);
     }
 
-    private SocketFacade internalRequestSocketViaPush(Servent servent,
+    private SocketFacade internalRequestSocketViaPush(Peer peer,
                                                       GUID aClientGUID, long aFileIndex, DestAddress[] pushProxyAddresses) {
         NLogger.debug(PushHandler.class, "Perform PUSH request...");
 
-        ((SimpleStatisticProvider) servent.getStatisticsService().getStatisticProvider(
+        ((SimpleStatisticProvider) peer.getStatisticsService().getStatisticProvider(
                 StatisticsManager.PUSH_DOWNLOAD_ATTEMPTS_PROVIDER)).increment(1);
-        PushRequestSleeper pushSleeper = new PushRequestSleeper(servent,
+        PushRequestSleeper pushSleeper = new PushRequestSleeper(peer,
                 aClientGUID, aFileIndex, pushProxyAddresses);
         synchronized (pushSleeperList) {
             pushSleeperList.add(pushSleeper);
@@ -120,11 +120,11 @@ public class PushHandler {
         SocketFacade socket = pushSleeper.requestSocketViaPush();
         if (socket == null) {
             NLogger.debug(PushHandler.class, "PUSH request failed.");
-            ((SimpleStatisticProvider) servent.getStatisticsService().getStatisticProvider(
+            ((SimpleStatisticProvider) peer.getStatisticsService().getStatisticProvider(
                     StatisticsManager.PUSH_DOWNLOAD_FAILURE_PROVIDER)).increment(1);
         } else {
             NLogger.debug(PushHandler.class, "PUSH request successful.");
-            ((SimpleStatisticProvider) servent.getStatisticsService().getStatisticProvider(
+            ((SimpleStatisticProvider) peer.getStatisticsService().getStatisticProvider(
                     StatisticsManager.PUSH_DOWNLOAD_SUCESS_PROVIDER)).increment(1);
         }
         return socket;

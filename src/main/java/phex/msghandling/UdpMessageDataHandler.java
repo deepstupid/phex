@@ -36,7 +36,7 @@ import phex.net.UdpService;
 import phex.prefs.core.MessagePrefs;
 import phex.security.AccessType;
 import phex.security.PhexSecurityManager;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.share.SharedFilesService;
 import phex.statistic.StatisticProvider;
 import phex.statistic.StatisticsManager;
@@ -50,7 +50,7 @@ public class UdpMessageDataHandler implements UdpDataHandler {
 
     private static final int UDP_PING_PERIOD = 1000 * 3 * 10;
 
-    private final Servent servent;
+    private final Peer peer;
     private final StatisticsManager statsService;
     private final SharedFilesService sharedFilesService;
     private final PongFactory pongFactory;
@@ -62,13 +62,13 @@ public class UdpMessageDataHandler implements UdpDataHandler {
     private final UdpGuidRoutingTable pingRoutingTable;
 
 
-    public UdpMessageDataHandler(Servent servent,
+    public UdpMessageDataHandler(Peer peer,
                                  StatisticsManager statsService, SharedFilesService sharedFilesService,
                                  PongFactory pongFactory, PhexSecurityManager securityService,
                                  HostManager hostService, MessageService messageService,
                                  UdpService udpService) {
         super();
-        this.servent = servent;
+        this.peer = peer;
         this.statsService = statsService;
         this.sharedFilesService = sharedFilesService;
         this.pongFactory = pongFactory;
@@ -157,11 +157,11 @@ public class UdpMessageDataHandler implements UdpDataHandler {
         int shareFileCount = sharedFilesService.getFileCount();
         int shareFileSize = sharedFilesService.getTotalFileSizeInKb();
 
-        DestAddress localAddress = servent.getLocalAddress();
-        boolean isUdpHostCache = Servent.isUdpHostCache();
+        DestAddress localAddress = peer.getLocalAddress();
+        boolean isUdpHostCache = Peer.isUdpHostCache();
 
         PongMsg pong = pongFactory.createUdpPongMsg(pingMsg, localAddress, isUdpHostCache,
-                avgDailyUptime, shareFileCount, shareFileSize, servent.isUltrapeer());
+                avgDailyUptime, shareFileCount, shareFileSize, peer.isUltrapeer());
 
         udpService.sendDatagram(pong.getbytes(), orgin);
     }

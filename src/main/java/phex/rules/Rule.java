@@ -27,7 +27,7 @@ import phex.query.Search;
 import phex.rules.condition.AndConcatCondition;
 import phex.rules.condition.Condition;
 import phex.rules.consequence.Consequence;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -156,7 +156,7 @@ public class Rule implements Cloneable {
         return this;
     }
 
-    public void process(Search search, RemoteFile[] remoteFiles, Servent servent) {
+    public void process(Search search, RemoteFile[] remoteFiles, Peer peer) {
         for (int i = 0; i < remoteFiles.length; i++) {
             // we stop further process if already marked for remove...
             // TODO we might also support a consequence 'stop further processing'
@@ -171,7 +171,7 @@ public class Rule implements Cloneable {
             }
 
             for (Consequence conseq : consequences) {
-                conseq.invoke(search, remoteFiles[i], servent);
+                conseq.invoke(search, remoteFiles[i], peer);
             }
         }
     }

@@ -55,10 +55,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-public class Servent extends AbstractLifeCycle implements ServentInfo {
-    private static final Logger logger = LoggerFactory.getLogger(Servent.class);
+public class Peer extends AbstractLifeCycle implements ServentInfo {
 
-    public static final Servent servent = new Servent();
+    private static final Logger logger = LoggerFactory.getLogger(Peer.class);
+
     private final List<LifeCycle> dependentLifeCycles;
     private final Server server;
     private final UdpService udpService;
@@ -90,7 +90,7 @@ public class Servent extends AbstractLifeCycle implements ServentInfo {
     private OnlineStatus onlineStatus;
     private UltrapeerCapabilityChecker upChecker;
 
-    private Servent() {
+    public Peer() {
         dependentLifeCycles = new ArrayList<LifeCycle>();
 
         String serventGuidStr = NetworkPrefs.ServentGuid.get();
@@ -134,7 +134,7 @@ public class Servent extends AbstractLifeCycle implements ServentInfo {
 
         uploadService = new UploadManager(this);
 
-        statisticsService = new StatisticsManager();
+        statisticsService = new StatisticsManager(this);
         dependentLifeCycles.add(statisticsService);
 
         hostService = new HostManager(this, true);

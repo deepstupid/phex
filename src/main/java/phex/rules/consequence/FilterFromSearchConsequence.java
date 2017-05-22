@@ -24,7 +24,7 @@ package phex.rules.consequence;
 
 import phex.download.RemoteFile;
 import phex.query.Search;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.xml.sax.rules.DConsequence;
 import phex.xml.sax.rules.DFilterFromSearchConsequence;
 
@@ -34,7 +34,7 @@ public class FilterFromSearchConsequence implements Consequence {
     private static final DFilterFromSearchConsequence DELEMENT =
             new DFilterFromSearchConsequence();
 
-    public void invoke(Search search, RemoteFile remoteFile, Servent servent) {
+    public void invoke(Search search, RemoteFile remoteFile, Peer peer) {
         remoteFile.setFilteredHidden(true);
     }
 

@@ -19,7 +19,7 @@
  *  --- CVS Information ---
  *  $Id: TestLogBuffer.java 4231 2008-07-15 16:01:10Z gregork $
  */
-package phex.test;
+package phex;
 
 import junit.framework.TestCase;
 import phex.common.log.LogBuffer;

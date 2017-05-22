@@ -35,7 +35,7 @@ import phex.net.connection.Connection;
 import phex.prefs.core.BandwidthPrefs;
 import phex.prefs.core.LibraryPrefs;
 import phex.security.PhexSecurityManager;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.share.export.ExportEngine;
 import phex.statistic.SimpleStatisticProvider;
 import phex.statistic.StatisticsManager;
@@ -46,8 +46,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HttpRequestDispatcher {
+
+    private final Peer peer;
+
+    public HttpRequestDispatcher(Peer s) {
+        this.peer = s;
+    }
+
     // Called by ReadWorker to handle a HTTP GET request from the remote host.
-    public static void httpRequestHandler(Connection connection,
+    public void httpRequestHandler(Connection connection,
                                           HTTPRequest httpRequest) {
         try {
             // GET / HTTP/1.1 (Browse Host request)
@@ -105,7 +112,7 @@ public class HttpRequestDispatcher {
                 StringUtils.getBytesInUsAscii(content.toString())));
     }
 
-    private static void sendFileListing(HTTPRequest httpRequest, Connection connection)
+    private void sendFileListing(HTTPRequest httpRequest, Connection connection)
             throws IOException {
         if (!LibraryPrefs.AllowBrowsing.get().booleanValue()) {
             HTTPHeaderGroup headers = HTTPHeaderGroup.createDefaultResponseHeaders();
@@ -127,7 +134,6 @@ public class HttpRequestDispatcher {
             connection.disconnect();
             return;
         }
-        Servent servent = Servent.servent;
         String acceptHeaderStr = acceptHeader.getValue();
         if (acceptHeaderStr.contains("application/x-gnutella-packets")) {// return file listing via gnutella packages...
             HTTPHeaderGroup headers = HTTPHeaderGroup.createDefaultResponseHeaders();
@@ -141,12 +147,12 @@ public class HttpRequestDispatcher {
             connection.flush();
 
             // now send QueryReplys...
-            PhexSecurityManager securityService = servent.getSecurityService();
-            List<ShareFile> shareFiles = servent.getSharedFilesService().getSharedFiles();
+            PhexSecurityManager securityService = peer.getSecurityService();
+            List<ShareFile> shareFiles = peer.getSharedFilesService().getSharedFiles();
             ArrayList<ShareFile> eligibleShareFiles = new ArrayList<ShareFile>();
             try {
                 for (ShareFile shareFile : shareFiles) {
-                    SharedDirectory dir = servent.getSharedFilesService().getSharedDirectory(shareFile.getSystemFile().getParentFile());
+                    SharedDirectory dir = peer.getSharedFilesService().getSharedDirectory(shareFile.getSystemFile().getParentFile());
                     if (!securityService.isEligibleIpAddress(connection.getSocket().getRemoteAddress().getIpAddress().getHostIP(), dir))
                         continue;
                     eligibleShareFiles.add(shareFile);
@@ -169,17 +175,17 @@ public class HttpRequestDispatcher {
                 for (int i = 0; i < currentSendCount; i++) {
                     sfile = shareFiles.get(sendCount + i);
                     record = QueryResponseRecord.createFromShareFile(sfile,
-                            servent.getLocalAddress());
+                            peer.getLocalAddress());
                     records[i] = record;
                 }
 
-                DestAddress hostAddress = servent.getLocalAddress();
+                DestAddress hostAddress = peer.getLocalAddress();
                 QueryResponseMsg queryResponse = new QueryResponseMsg(header,
-                        servent.getServentGuid(), hostAddress,
+                        peer.getServentGuid(), hostAddress,
                         Math.round(BandwidthPrefs.MaxUploadBandwidth.get().floatValue()
                                 / NumberFormatUtils.ONE_KB),
-                        records, servent.getHostService().getNetworkHostsContainer().getPushProxies(),
-                        !servent.isFirewalled(), servent.isUploadLimitReached());
+                        records, peer.getHostService().getNetworkHostsContainer().getPushProxies(),
+                        !peer.isFirewalled(), peer.isUploadLimitReached());
 
                 // send msg over the wire 
                 ByteBuffer headerBuf = queryResponse.createHeaderBuffer();
@@ -188,7 +194,7 @@ public class HttpRequestDispatcher {
                 connection.write(messageBuf);
 
                 // and count message
-                ((SimpleStatisticProvider) servent.getStatisticsService().getStatisticProvider(
+                ((SimpleStatisticProvider) peer.getStatisticsService().getStatisticProvider(
                         StatisticsManager.QUERYMSG_OUT_PROVIDER)).increment(1);
 
                 sendCount += currentSendCount;
@@ -208,9 +214,9 @@ public class HttpRequestDispatcher {
 
             // now send html
             ExportEngine exportEngine = new ExportEngine(
-                    servent.getLocalAddress(),
+                    peer.getLocalAddress(),
                     connection.getOutputStream(),
-                    servent.getSharedFilesService().getSharedFiles());
+                    peer.getSharedFilesService().getSharedFiles());
             exportEngine.startExport();
 
             connection.flush();

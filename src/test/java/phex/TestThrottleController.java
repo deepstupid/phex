@@ -19,7 +19,7 @@
  *  --- CVS Information ---
  *  $Id: TestThrottleController.java 4316 2008-11-24 13:08:09Z gregork $
  */
-package phex.test;
+package phex;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;

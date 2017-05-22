@@ -20,7 +20,7 @@
  *  --- CVS Information ---
  *  $Id: TestFileCopy.java 3362 2006-03-30 22:27:26Z gregork $
  */
-package phex.test.performance;
+package phex.performance;
 
 import junit.framework.TestCase;
 

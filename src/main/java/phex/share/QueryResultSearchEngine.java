@@ -28,7 +28,7 @@ import phex.common.log.NLogger;
 import phex.msg.QueryMsg;
 import phex.prefs.core.LibraryPrefs;
 import phex.security.PhexSecurityManager;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.util.StringUtils;
 
 import java.util.ArrayList;
@@ -40,10 +40,10 @@ public class QueryResultSearchEngine {
     public static final String INDEX_QUERY_STRING = "    ";
 
     private final SharedFilesService sharedFilesService;
-    private final Servent servent;
+    private final Peer peer;
 
-    public QueryResultSearchEngine(Servent servent, SharedFilesService sharedFilesService) {
-        this.servent = servent;
+    public QueryResultSearchEngine(Peer peer, SharedFilesService sharedFilesService) {
+        this.peer = peer;
         this.sharedFilesService = sharedFilesService;
     }
 
@@ -65,12 +65,12 @@ public class QueryResultSearchEngine {
 
         // If the query source and the local host are both firewalled, return no results
         // as per http://groups.yahoo.com/group/the_gdf/files/Proposals/MinSpeed.html
-        if (queryMsg.isRequesterFirewalled() && servent.isFirewalled()) {
+        if (queryMsg.isRequesterFirewalled() && peer.isFirewalled()) {
             return Collections.emptyList();
         }
         // if all upload slots are filled dont return any search results.
         // This holds away unnecessary connection attempts.
-        if (servent.isUploadLimitReached()) {
+        if (peer.isUploadLimitReached()) {
             return Collections.emptyList();
         }
 
@@ -175,7 +175,7 @@ public class QueryResultSearchEngine {
             return Collections.emptyList();
         }
 
-        PhexSecurityManager securityService = servent.getSecurityService();
+        PhexSecurityManager securityService = peer.getSecurityService();
         List<ShareFile> resultList = new ArrayList<ShareFile>();
         final int maxResults = LibraryPrefs.MaxResultsPerQuery.get().intValue();
         int resultListSize = 0;

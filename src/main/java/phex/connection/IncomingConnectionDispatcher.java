@@ -37,7 +37,7 @@ import phex.msg.GUID;
 import phex.net.connection.Connection;
 import phex.net.repres.SocketFacade;
 import phex.prefs.core.NetworkPrefs;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.share.HttpRequestDispatcher;
 import phex.util.GnutellaInputStream;
 import phex.util.IOUtil;
@@ -60,19 +60,19 @@ public class IncomingConnectionDispatcher implements Runnable {
     public static final String RSS_DOWNLOAD_PREFIX = "PHEX_RSS ";
     private static final Logger logger = LoggerFactory.getLogger(
             IncomingConnectionDispatcher.class);
-    private final Servent servent;
+    private final Peer peer;
     private final SocketFacade socket;
 
-    public IncomingConnectionDispatcher(SocketFacade socket, Servent servent) {
+    public IncomingConnectionDispatcher(SocketFacade socket, Peer peer) {
         this.socket = socket;
-        this.servent = servent;
+        this.peer = peer;
     }
 
     public void run() {
         GnutellaInputStream gInStream = null;
         try {
             socket.setSoTimeout(NetworkPrefs.TcpRWTimeout.get());
-            BandwidthController bwController = servent.getBandwidthService()
+            BandwidthController bwController = peer.getBandwidthService()
                     .getNetworkBandwidthController();
             Connection connection = new Connection(socket, bwController);
 
@@ -95,15 +95,15 @@ public class IncomingConnectionDispatcher implements Runnable {
             }
             logger.debug("ConnectionRequest {}", requestLine);
 
-            DestAddress localAddress = servent.getLocalAddress();
-            String greeting = servent.getGnutellaNetwork().getNetworkGreeting();
+            DestAddress localAddress = peer.getLocalAddress();
+            String greeting = peer.getGnutellaNetwork().getNetworkGreeting();
             if (requestLine.startsWith(greeting + '/')) {
                 handleGnutellaRequest(connection);
             }
             // used from PushWorker
             else if (requestLine.startsWith(GET_REQUEST_PREFIX)
                     || requestLine.startsWith(HEAD_REQUEST_PREFIX)) {
-                if (!servent.getOnlineStatus().isTransfersOnline()
+                if (!peer.getOnlineStatus().isTransfersOnline()
                         && !socket.getRemoteAddress().isLocalHost(localAddress)) {
                     throw new IOException("Transfers not connected.");
                 }
@@ -115,17 +115,17 @@ public class IncomingConnectionDispatcher implements Runnable {
                 logger.debug("{} Request: {}", httpRequest.getRequestMethod(), httpRequest.buildHTTPRequestString());
                 if (httpRequest.isGnutellaRequest()) {
                     // file upload request
-                    servent.getUploadService().handleUploadRequest(
+                    peer.getUploadService().handleUploadRequest(
                             connection, httpRequest);
                 } else {
                     // other requests like browse host..
-                    new HttpRequestDispatcher().httpRequestHandler(
+                    new HttpRequestDispatcher(peer).httpRequestHandler(
                             connection, httpRequest);
                 }
             }
             // used when requesting push transfer
             else if (requestLine.startsWith(GIV_REQUEST_PREFIX)) {
-                if (!servent.getOnlineStatus().isTransfersOnline()
+                if (!peer.getOnlineStatus().isTransfersOnline()
                         && !socket.getRemoteAddress().isLocalHost(localAddress)) {
                     throw new IOException("Transfers not connected.");
                 }
@@ -133,13 +133,13 @@ public class IncomingConnectionDispatcher implements Runnable {
             }
             // used when requesting chat connection
             else if (requestLine.startsWith(CHAT_REQUEST_PREFIX)) {
-                if (!servent.getOnlineStatus().isNetworkOnline()
+                if (!peer.getOnlineStatus().isNetworkOnline()
                         && !socket.getRemoteAddress().isLocalHost(localAddress)) {
                     throw new IOException("Network not connected.");
                 }
                 DestAddress address = socket.getRemoteAddress();
                 logger.debug("Chat request from: {}", address);
-                servent.getChatService().acceptChat(connection);
+                peer.getChatService().acceptChat(connection);
             } else if (requestLine.startsWith(URI_DOWNLOAD_PREFIX)) {
                 handleIncommingUriDownload(requestLine);
             } else if (requestLine.startsWith(MAGMA_DOWNLOAD_PREFIX)) {
@@ -163,18 +163,18 @@ public class IncomingConnectionDispatcher implements Runnable {
 
     private void handleGnutellaRequest(Connection connection)
             throws IOException {
-        DestAddress localAddress = servent.getLocalAddress();
-        if (!servent.getOnlineStatus().isNetworkOnline()
+        DestAddress localAddress = peer.getLocalAddress();
+        if (!peer.getOnlineStatus().isNetworkOnline()
                 && !socket.getRemoteAddress().isLocalHost(localAddress)) {
             throw new IOException("Network not connected.");
         }
         DestAddress address = socket.getRemoteAddress();
 
-        NetworkHostsContainer netHostsCont = servent.getHostService().getNetworkHostsContainer();
+        NetworkHostsContainer netHostsCont = peer.getHostService().getNetworkHostsContainer();
         Host host = netHostsCont.createIncomingHost(address, connection);
         host.setStatus(HostStatus.ACCEPTING, "");
         try {
-            ConnectionEngine engine = new ConnectionEngine(servent, host);
+            ConnectionEngine engine = new ConnectionEngine(peer, host);
             engine.initHostHandshake();
             engine.processIncomingData();
         } catch (IOException exp) {
@@ -197,7 +197,7 @@ public class IncomingConnectionDispatcher implements Runnable {
      */
     private void handleIncommingUriDownload(String requestLine) throws IOException {
         try {
-            DestAddress localAddress = servent.getLocalAddress();
+            DestAddress localAddress = peer.getLocalAddress();
             // this must be a request from local host
             if (!socket.getRemoteAddress().isLocalHost(localAddress)) {
                 return;
@@ -217,7 +217,7 @@ public class IncomingConnectionDispatcher implements Runnable {
      */
     private void handleIncommingMagmaDownload(String requestLine) throws IOException {
         try {
-            DestAddress localAddress = servent.getLocalAddress();
+            DestAddress localAddress = peer.getLocalAddress();
             // this must be a request from local host
             if (!socket.getRemoteAddress().isLocalHost(localAddress)) {
                 return;
@@ -233,7 +233,7 @@ public class IncomingConnectionDispatcher implements Runnable {
 
     private void handleIncommingRSSDownload(String requestLine) throws IOException {
         try {
-            DestAddress localAddress = servent.getLocalAddress();
+            DestAddress localAddress = peer.getLocalAddress();
             // this must be a request from local host
             if (!socket.getRemoteAddress().isLocalHost(localAddress)) {
                 return;

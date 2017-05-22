@@ -23,12 +23,12 @@ package phex.query;
 
 import phex.download.RemoteFile;
 import phex.rules.Rule;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.util.ArrayList;
 
 public class RuleFilteredSearch {
-    private final Servent servent;
+    private final Peer peer;
 
 
 
@@ -50,13 +50,13 @@ public class RuleFilteredSearch {
 
     private DefaultSearchProgress searchProgress;
 
-    public RuleFilteredSearch(Search search, Rule ruleFilter, Servent servent) {
-        this(search, new Rule[]{ruleFilter}, servent);
+    public RuleFilteredSearch(Search search, Rule ruleFilter, Peer peer) {
+        this(search, new Rule[]{ruleFilter}, peer);
     }
 
-    public RuleFilteredSearch(Search search, Rule[] ruleFilters, Servent servent) {
+    public RuleFilteredSearch(Search search, Rule[] ruleFilters, Peer peer) {
         super();
-        this.servent = servent;
+        this.peer = peer;
 
         displayedSearchResults = new SearchResultHolder();
         hiddenSearchResults = new SearchResultHolder();
@@ -101,7 +101,7 @@ public class RuleFilteredSearch {
 
     private void processRules(RemoteFile[] remoteFiles) {
         for (int i = 0; i < searchFilterRules.length; i++) {
-            searchFilterRules[i].process(search, remoteFiles, servent);
+            searchFilterRules[i].process(search, remoteFiles, peer);
         }
 
         ArrayList<RemoteFile> newHitList = new ArrayList<RemoteFile>(remoteFiles.length);

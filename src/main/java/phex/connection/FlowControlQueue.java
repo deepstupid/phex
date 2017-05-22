@@ -61,14 +61,13 @@ public class FlowControlQueue extends CircularQueue {
     }
 
     public void addMessage(Message message) {
-        Object dropObj;
         synchronized (this) {
-            dropObj = addToTail(message);
-        }
-        if (dropObj != null) {// count dropped msg for stats
-            //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
-            //    "Dropping overflowing message: " + message );
-            dropCount++;
+            Object dropObj = addToTail(message);
+            if (dropObj != null) { // count dropped msg for stats
+                //Logger.logMessage( Logger.FINEST, Logger.NETWORK,
+                //    "Dropping overflowing message: " + message );
+                dropCount++;
+            }
         }
     }
 

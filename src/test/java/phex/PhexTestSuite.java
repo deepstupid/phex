@@ -19,7 +19,7 @@
  *  --- SVN Information ---
  *  $Id: PhexTestSuite.java 4273 2008-09-28 16:40:00Z gregork $
  */
-package phex.test;
+package phex;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -32,7 +32,7 @@ import phex.xml.thex.ThexHashTreeCodecTest;
 
 import java.io.File;
 
-import static phex.test.performance.PhexPerformanceSuite.tempPath;
+import static phex.performance.PhexPerformanceSuite.tempPath;
 
 
 public class PhexTestSuite extends TestSuite
@@ -80,26 +80,26 @@ public class PhexTestSuite extends TestSuite
         suite.addTestSuite(TestRatedDownloadScopeList.class);
         suite.addTestSuite(TestLogBuffer.class);
         suite.addTestSuite(TestMagmaParser.class);
-        suite.addTestSuite(phex.test.TestStringUtils.class);
-        suite.addTestSuite(phex.test.TestIp2CountryManager.class);
-        suite.addTestSuite(phex.test.TestFileUtils.class);
-        suite.addTestSuite(phex.test.TestAlternateLocation.class);
+        suite.addTestSuite(TestStringUtils.class);
+        suite.addTestSuite(TestIp2CountryManager.class);
+        suite.addTestSuite(TestFileUtils.class);
+        suite.addTestSuite(TestAlternateLocation.class);
         suite.addTestSuite(AltLocContainerTest.class);
-        suite.addTestSuite(phex.test.TestSWDownloadCandidate.class);
-        suite.addTestSuite(phex.test.TestCatchedHostCache.class);
-        suite.addTestSuite(phex.test.TestGGEPBlock.class);
-        suite.addTestSuite(phex.test.TestURN.class);
+        suite.addTestSuite(TestSWDownloadCandidate.class);
+        suite.addTestSuite(TestCatchedHostCache.class);
+        suite.addTestSuite(TestGGEPBlock.class);
+        suite.addTestSuite(TestURN.class);
         suite.addTestSuite(phex.msg.PongMsgTest.class);
-        suite.addTestSuite(phex.test.TestHTTPProcessor.class);
-        suite.addTestSuite(phex.test.TestHostAddress.class);
-        suite.addTestSuite(phex.test.TestXQueueParameters.class);
+        suite.addTestSuite(TestHTTPProcessor.class);
+        suite.addTestSuite(TestHostAddress.class);
+        suite.addTestSuite(TestXQueueParameters.class);
         suite.addTestSuite(phex.msghandling.MessageRoutingTest.class);
-        suite.addTestSuite(phex.test.TestGUID.class);
-        suite.addTestSuite(phex.test.TestQueryRoutingTable.class);
+        suite.addTestSuite(TestGUID.class);
+        suite.addTestSuite(TestQueryRoutingTable.class);
         suite.addTestSuite(phex.msg.QueryResponseMsgTest.class);
         suite.addTestSuite(phex.msg.QueryMsgTest.class);
-        suite.addTestSuite(phex.test.TestCircularQueue.class);
-        suite.addTestSuite(phex.test.TestDownload.class);
+        suite.addTestSuite(TestCircularQueue.class);
+        suite.addTestSuite(TestDownload.class);
 
         
         //suite.addTestSuite(phex.test.TestThrottleController.class);

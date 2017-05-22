@@ -28,7 +28,7 @@ import phex.event.ChangeEvent;
 import phex.net.connection.Connection;
 import phex.prefs.core.ConnectionPrefs;
 import phex.servent.OnlineStatus;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.util.Localizer;
 
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ import java.util.List;
  * Responsible for holding all hosts of the current network neighbor hood.
  */
 public final class NetworkHostsContainer extends AbstractLifeCycle {
-    private final Servent servent;
+    private final Peer peer;
 
     /**
      * The complete neighbor hood. Contains all connected and not connected
@@ -63,8 +63,8 @@ public final class NetworkHostsContainer extends AbstractLifeCycle {
      */
     private int leafUltrapeerConnectionCount;
 
-    public NetworkHostsContainer(Servent servent) {
-        this.servent = servent;
+    public NetworkHostsContainer(Peer peer) {
+        this.peer = peer;
 
         networkHosts = new ArrayList<>();
         ultrapeerConnections = new ArrayList<>();
@@ -75,7 +75,7 @@ public final class NetworkHostsContainer extends AbstractLifeCycle {
     @Override
     protected void doStart() {
         ConnectionObserver observer = new ConnectionObserver(this,
-                servent.getMessageService());
+                peer.getMessageService());
         observer.start();
     }
 
@@ -164,7 +164,7 @@ public final class NetworkHostsContainer extends AbstractLifeCycle {
      * @return the number of open slots for leaf nodes.
      */
     public int getOpenLeafSlotsCount() {
-        if (servent.isUltrapeer()) {
+        if (peer.isUltrapeer()) {
             return ConnectionPrefs.Up2LeafConnections.get() - leafConnections.size();
         }
         return 0;

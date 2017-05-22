@@ -19,7 +19,7 @@
  *  --- SVN Information ---
  *  $Id: TestHTTPProcessor.java 4156 2008-03-22 22:51:41Z gregork $
  */
-package phex.test;
+package phex;
 
 import junit.framework.TestCase;
 import phex.common.bandwidth.BandwidthController;

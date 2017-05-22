@@ -32,7 +32,7 @@ import phex.host.HostFetchingStrategy.FetchingReason;
 import phex.host.NetworkHostsContainer;
 import phex.prefs.core.ConnectionPrefs;
 import phex.servent.OnlineStatus;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.util.DateUtils;
 
 import java.util.TimerTask;
@@ -51,7 +51,7 @@ public class OnlineObserver {
      * The number of failed connections in a row.
      */
     private final AtomicInteger failedConnections;
-    private final Servent servent;
+    private final Peer peer;
     private final HostFetchingStrategy fetchingStrategy;
     private AutoReconnectTimer autoReconnectTimer;
     private long lastOfflineTime;
@@ -61,9 +61,9 @@ public class OnlineObserver {
      */
     private long lastHostFetchTime;
 
-    public OnlineObserver(Servent servent, HostFetchingStrategy fetchingStrategy) {
+    public OnlineObserver(Peer peer, HostFetchingStrategy fetchingStrategy) {
         this.fetchingStrategy = fetchingStrategy;
-        this.servent = servent;
+        this.peer = peer;
         failedConnections = new AtomicInteger(0);
 
     }
@@ -73,7 +73,7 @@ public class OnlineObserver {
         if (event.getStatus() == Status.CONNECTION_FAILED) {
             // only count if there are no active connections in the network
             NetworkHostsContainer networkHostsContainer =
-                    servent.getHostService().getNetworkHostsContainer();
+                    peer.getHostService().getNetworkHostsContainer();
             if (networkHostsContainer.getTotalConnectionCount() > 0) {
                 failedConnections.set(0);
                 return;
@@ -104,8 +104,8 @@ public class OnlineObserver {
     }
 
     private synchronized void triggerReconnectTimer() {
-        OnlineStatus oldStatus = servent.getOnlineStatus();
-        servent.setOnlineStatus(OnlineStatus.OFFLINE);
+        OnlineStatus oldStatus = peer.getOnlineStatus();
+        peer.setOnlineStatus(OnlineStatus.OFFLINE);
         if (autoReconnectTimer != null) {
             autoReconnectTimer.setOfflineTime(lastOfflineTime);
             return;
@@ -121,7 +121,7 @@ public class OnlineObserver {
     private synchronized void autoReconnectTry(OnlineStatus status) {
         logger.debug("Triggering auto-reconnect");
         failedConnections.set(0);
-        servent.setOnlineStatus(status);
+        peer.setOnlineStatus(status);
     }
 
     private synchronized void resetAutoReconnect() {
@@ -161,7 +161,7 @@ public class OnlineObserver {
                     cancel();
                     return;
                 }
-                if (!servent.getOnlineStatus().isNetworkOnline()) {
+                if (!peer.getOnlineStatus().isNetworkOnline()) {
                     autoReconnectTry(reconnectStatus);
                 }
             } catch (Throwable th) {

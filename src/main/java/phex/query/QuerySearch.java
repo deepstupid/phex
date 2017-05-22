@@ -27,7 +27,7 @@ import phex.common.address.DestAddress;
 import phex.msg.InvalidMessageException;
 import phex.msg.QueryResponseMsg;
 import phex.msg.vendor.OOBReplyCountVMsg;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.util.IOUtil;
 import phex.util.RandomUtils;
 
@@ -40,8 +40,8 @@ public abstract class QuerySearch extends Search {
     private HashMap<Long, OOBQueryToken> queryTokens;
     private volatile int totalExpectedResults;
 
-    public QuerySearch(Servent servent) {
-        super(servent);
+    public QuerySearch(Peer peer) {
+        super(peer);
     }
 
     /**
@@ -141,7 +141,7 @@ public abstract class QuerySearch extends Search {
         logger.debug("Prepare UDP response for {}.", sourceAddress);
         byte[] secToken = generateSecurityToken(msg.getResultCount(),
                 sourceAddress);
-        servent.getMessageService().sendUdpMessageAcknowledgementVMsg(
+        peer.getMessageService().sendUdpMessageAcknowledgementVMsg(
                 msg.getHeader().getMsgID(), msg.getResultCount(), secToken,
                 sourceAddress);
     }

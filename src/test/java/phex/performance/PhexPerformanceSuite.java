@@ -19,7 +19,7 @@
  *  --- SVN Information ---
  *  $Id: PhexPerformanceSuite.java 4226 2008-07-13 10:03:45Z gregork $
  */
-package phex.test.performance;
+package phex.performance;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

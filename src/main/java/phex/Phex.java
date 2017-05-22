@@ -38,7 +38,7 @@ import phex.prefs.core.LibraryPrefs;
 import phex.prefs.core.PrivateNetworkConstants;
 import phex.query.*;
 import phex.servent.OnlineStatus;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.util.StringUtils;
 
 import java.io.File;
@@ -46,8 +46,10 @@ import java.io.IOException;
 import java.util.*;
 
 
-/** Phex Peer */
-public class Phex implements IPhexDriver {
+/**
+ * Phex Peer
+ */
+public class Phex extends Peer implements IPhexDriver {
 
     static {
         boolean DEBUG = true;
@@ -58,7 +60,7 @@ public class Phex implements IPhexDriver {
     }
 
     public static void main(String args[]) throws Exception {
-        Phex.the().start();
+        new Phex().start();
     }
 
     public static final FileManager files = new FileManager();
@@ -69,29 +71,15 @@ public class Phex implements IPhexDriver {
     // Maximum number of results (hits).
     private static final int DESIRED_RESULTS = DefaultSearchProgress.DESIRED_RESULTS;
 
-    private static Phex the = null;
 
     private long _nextSearchId = 0;
     private long _nextHitId = 0;
     private HashMap<Long, SearchItem> _searches = null;
-    private KeyAllocator<SearchItem> _searchIdAllocator = null;
+    private KeyAllocator<SearchItem> _searchIdAllocator = new KeyAllocator<SearchItem>();
     private HashMap<Long, SearchResultItem> _hits = null;
-    private KeyAllocator<SearchResultItem> _hitIdAllocator = null;
+    private KeyAllocator<SearchResultItem> _hitIdAllocator = new KeyAllocator<SearchResultItem>();
     private QueryManager queries = null;
     private SwarmingManager downloads;
-
-    private Phex() {
-        _searchIdAllocator = new KeyAllocator<SearchItem>();
-
-        _hitIdAllocator = new KeyAllocator<SearchResultItem>();
-    }
-
-    public synchronized static Phex the() {
-        if (the == null) {
-            the = new Phex();
-        }
-        return the;
-    }
 
     static final Logger logger = LoggerFactory.getLogger(Phex.class);
 
@@ -104,14 +92,6 @@ public class Phex implements IPhexDriver {
         return "Phex " + PrivateNetworkConstants.PRIVATE_BUILD_ID + PhexVersion.getFullVersion();
     }
 
-    /**
-     * Returns the Phex vendor name.
-     *
-     * @return vendor name.
-     */
-    public static String getPhexVendorName() {
-        return "Phex";
-    }
 
     public static boolean isPhexVendor(String vendor) {
         if (vendor.length() > 4) {
@@ -121,47 +101,41 @@ public class Phex implements IPhexDriver {
         }
     }
 
-    public boolean start() {
+    public synchronized boolean start() {
 
-        Servent s = Servent.servent;
 
         try {
-            s.start();
+            if (!super.start()) {
+                return false;
+            }
         } catch (Exception e) {
             logger.error("start: {}", e);
             return false;
         }
 
-        queries = s.getQueryService();
-        downloads = s.getDownloadService();
+        queries = this.getQueryService();
+        downloads = this.getDownloadService();
 
-        // Register this class to process annotations.
 
         return true;
     }
 
     public OnlineStatus getServentStatus() {
-        Servent s = Servent.servent;
-        if (s != null) {
-            return s.getOnlineStatus();
+        if (this != null) {
+            return this.getOnlineStatus();
         } else {
             return OnlineStatus.OFFLINE;
         }
     }
 
-    public boolean stop() {
-        Servent s = Servent.servent;
-        if (s == null) {
-            return false;
-        } else {
-            try {
-                s.stop();
+    public synchronized boolean stop() {
 
-                return true;
-            } catch (Exception ex) {
-                return false;
-            }
+        try {
+            return super.stop();
+        } catch (Exception ex) {
+            return false;
         }
+
     }
 
     public long startSearch(String searchString) {

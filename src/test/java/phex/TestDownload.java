@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-package phex.test;
+package phex;
 
 import junit.framework.TestCase;
 import phex.common.AddressCounter;
@@ -25,7 +25,7 @@ import phex.download.RemoteFile;
 import phex.download.swarming.*;
 import phex.msg.GUID;
 import phex.query.QueryHitHost;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.util.AccessUtils;
 
 public class TestDownload extends TestCase
@@ -47,24 +47,27 @@ public class TestDownload extends TestCase
     public void testEmptyURN()
         throws Throwable
     {
-        RemoteFile remoteFile = new RemoteFile( new QueryHitHost( new GUID(),
-            new DefaultDestAddress( "127.0.0.1", 6346 ), 1 ), 1, "acw21.exe", "", 1, null, "",
-            (short)1 );
+        Peer p = new Peer();
+
+        RemoteFile remoteFile = new RemoteFile(
+            new QueryHitHost( p, new GUID(),
+                new DefaultDestAddress( "127.0.0.1", 6346 ), 1 ), 1, "acw21.exe", "", 1, null, "",
+                (short)1 );
         SWDownloadFile downloadFile = new SWDownloadFile( "test",
             "test", remoteFile.getFileSize(), remoteFile.getURN(), 
-            Servent.servent.getDownloadService()
+            p.getDownloadService()
         );
         downloadFile.addDownloadCandidate( remoteFile );
         downloadFile.setStatus( SWDownloadConstants.STATUS_FILE_WAITING );
 
-        SWDownloadWorker worker = new SWDownloadWorker( Servent.servent.getDownloadService() );
+        SWDownloadWorker worker = new SWDownloadWorker( p.getDownloadService() );
 
         AddressCounter counter = new AddressCounter( Integer.MAX_VALUE, false );
         SWDownloadCandidate candidate = downloadFile.allocateDownloadCandidate( worker, counter );
         assertNotNull( candidate );
         // init avail range set
         candidate.getAvailableScopeList();
-        SWDownloadSet set = new SWDownloadSet(Servent.servent, downloadFile, candidate );
+        SWDownloadSet set = new SWDownloadSet(p, downloadFile, candidate );
         
         AccessUtils.invokeMethod( worker, "handleDownload", set );
     }

@@ -26,7 +26,6 @@ import phex.common.address.AddressUtils;
 import phex.common.address.DefaultDestAddress;
 import phex.common.address.DestAddress;
 import phex.security.PhexSecurityManager;
-import phex.servent.Servent;
 
 import java.util.Collection;
 

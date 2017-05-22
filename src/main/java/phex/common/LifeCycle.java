@@ -31,14 +31,14 @@ public interface LifeCycle {
      *
      * @throws Exception if the component fails to start
      */
-    void start() throws Exception;
+    boolean start() throws Exception;
 
     /**
      * Stops the component.
      *
      * @throws Exception If the component fails to stop
      */
-    void stop() throws Exception;
+    boolean stop() throws Exception;
 
     /**
      * @return true if the component is starting or has been started.

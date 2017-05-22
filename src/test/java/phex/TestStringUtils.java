@@ -19,7 +19,7 @@
  *  --- CVS Information ---
  *  $Id: TestStrUtil.java 3362 2006-03-30 22:27:26Z gregork $
  */
-package phex.test;
+package phex;
 
 import junit.framework.TestCase;
 import phex.util.StringUtils;

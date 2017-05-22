@@ -27,20 +27,20 @@ import phex.host.NetworkHostsContainer;
 import phex.msg.QueryMsg;
 import phex.query.LeafGuidedSearchProgress;
 import phex.query.SearchProgress;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.util.QueryGUIDRoutingPair;
 
 
 class QueryMsgRoutingHandler implements MessageSubscriber<QueryMsg> {
-    private final Servent servent;
+    private final Peer peer;
     private final MessageRouting msgRouting;
     private final NetworkHostsContainer hostsContainer;
 
 
-    public QueryMsgRoutingHandler(Servent servent, MessageRouting msgRouting) {
-        this.servent = servent;
+    public QueryMsgRoutingHandler(Peer peer, MessageRouting msgRouting) {
+        this.peer = peer;
         this.msgRouting = msgRouting;
-        this.hostsContainer = servent.getHostService().getNetworkHostsContainer();
+        this.hostsContainer = peer.getHostService().getNetworkHostsContainer();
     }
 
     /**
@@ -65,7 +65,7 @@ class QueryMsgRoutingHandler implements MessageSubscriber<QueryMsg> {
      */
     public void onMessage(QueryMsg queryMsg, Host sourceHost) {
         // Never forward a message coming from a ultrapeer when in leaf mode!
-        if (servent.isShieldedLeafNode()) {
+        if (peer.isShieldedLeafNode()) {
             return;
         }
         if (sourceHost.isUltrapeerLeafConnection()) {// do dynamic query for my leaf.
@@ -74,7 +74,7 @@ class QueryMsgRoutingHandler implements MessageSubscriber<QueryMsg> {
             SearchProgress searchProgress = new LeafGuidedSearchProgress(
                     routingPair, queryMsg.hasQueryURNs());
 
-            servent.getQueryService().sendDynamicQuery(queryMsg, sourceHost,
+            peer.getQueryService().sendDynamicQuery(queryMsg, sourceHost,
                     searchProgress);
         } else {
             // only forward to ultrapeers if TTL > 0

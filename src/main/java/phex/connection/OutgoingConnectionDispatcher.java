@@ -29,7 +29,7 @@ import phex.common.log.NLogger;
 import phex.host.*;
 import phex.net.connection.Connection;
 import phex.net.connection.ConnectionFactory;
-import phex.servent.Servent;
+import phex.servent.Peer;
 
 import java.io.IOException;
 
@@ -41,33 +41,33 @@ public class OutgoingConnectionDispatcher implements Runnable {
 
     final static Logger logger = LoggerFactory.getLogger(OutgoingConnectionDispatcher.class);
 
-    private final Servent servent;
+    private final Peer peer;
     private final DestAddress hostAddress;
 
-    private OutgoingConnectionDispatcher(DestAddress hostAddress, Servent servent) {
+    private OutgoingConnectionDispatcher(DestAddress hostAddress, Peer peer) {
         this.hostAddress = hostAddress;
-        this.servent = servent;
+        this.peer = peer;
     }
 
     /**
      * Dispatches a outgoing Gnutella network connection to the next
      * best host from the host catcher.
      */
-    public static void dispatchConnectToNextHost(Servent servent) {
-        dispatchConnectToNextHosts(1, servent);
+    public static void dispatchConnectToNextHost(Peer peer) {
+        dispatchConnectToNextHosts(1, peer);
     }
 
     /**
      * Dispatches <tt>count</tt> number of outgoing Gnutella network connection
      * to the next best hosts from the host catcher.
      */
-    public static void dispatchConnectToNextHosts(int count, Servent servent) {
+    public static void dispatchConnectToNextHosts(int count, Peer peer) {
         // creating OCDs in batches could cause unneeded thread use and heavy
         // HostFetchingStrategy requests in case no hosts are in host catcher.
         // Instead host lookup is now done before creating OCD and dispatching
         // is stopped in case no hosts are available.
 
-        HostManager hostService = servent.getHostService();
+        HostManager hostService = peer.getHostService();
         CaughtHostsContainer caughtHostsContainer = hostService.getCaughtHostsContainer();
         NetworkHostsContainer networkHostsCont = hostService.getNetworkHostsContainer();
         for (int i = 0; i < count; i++) {
@@ -82,7 +82,7 @@ public class OutgoingConnectionDispatcher implements Runnable {
             }
             while (networkHostsCont.isConnectedToHost(caughtHost));
 
-            dispatchConnectToHost(caughtHost, servent);
+            dispatchConnectToHost(caughtHost, peer);
         }
     }
 
@@ -92,9 +92,9 @@ public class OutgoingConnectionDispatcher implements Runnable {
      *
      * @param hostAddress the hostAddress to connect to.
      */
-    public static void dispatchConnectToHost(DestAddress hostAddress, Servent servent) {
+    public static void dispatchConnectToHost(DestAddress hostAddress, Peer peer) {
         OutgoingConnectionDispatcher dispatcher = new OutgoingConnectionDispatcher(
-                hostAddress, servent);
+                hostAddress, peer);
 
         Environment.getInstance().executeOnThreadPool(dispatcher,
                 "OutgoingConnectionDispatcher-" + Integer.toHexString(dispatcher.hashCode()));
@@ -109,14 +109,14 @@ public class OutgoingConnectionDispatcher implements Runnable {
     }
 
     private void connectToHostAddress() {
-        NetworkHostsContainer netHostsCont = servent.getHostService().getNetworkHostsContainer();
+        NetworkHostsContainer netHostsCont = peer.getHostService().getNetworkHostsContainer();
         Host host = netHostsCont.createOutgoingHost(hostAddress);
         host.setStatus(HostStatus.CONNECTING);
 
         Connection connection;
         try {
             connection = ConnectionFactory.createConnection(hostAddress,
-                    servent.getBandwidthService().getNetworkBandwidthController());
+                    peer.getBandwidthService().getNetworkBandwidthController());
         } catch (Exception exp) {
 
             host.setStatus(HostStatus.ERROR, exp.getMessage());
@@ -130,7 +130,7 @@ public class OutgoingConnectionDispatcher implements Runnable {
 
         ConnectionEngine engine;
         try {
-            engine = new ConnectionEngine(servent, host);
+            engine = new ConnectionEngine(peer, host);
             engine.initHostHandshake();
         } catch (ConnectionRejectedException exp) {
 

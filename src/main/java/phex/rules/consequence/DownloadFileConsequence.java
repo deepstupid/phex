@@ -26,7 +26,7 @@ import phex.common.URN;
 import phex.download.RemoteFile;
 import phex.download.swarming.SwarmingManager;
 import phex.query.Search;
-import phex.servent.Servent;
+import phex.servent.Peer;
 import phex.share.SharedFilesService;
 import phex.util.StringUtils;
 import phex.xml.sax.rules.DConsequence;
@@ -38,19 +38,19 @@ public class DownloadFileConsequence implements Consequence {
     private static final DDownloadFileConsequence DELEMENT =
             new DDownloadFileConsequence();
 
-    public void invoke(Search search, final RemoteFile remoteFile, Servent servent) {
+    public void invoke(Search search, final RemoteFile remoteFile, Peer peer) {
         URN urn = remoteFile.getURN();
         if (urn == null) {
             // don't do automated stuff with files without an URN,
             // to dangerous and unsecure.
             return;
         }
-        SwarmingManager swarmingMgr = servent.getDownloadService();
+        SwarmingManager swarmingMgr = peer.getDownloadService();
         if (swarmingMgr.isURNDownloaded(urn)) {
             // file already downloading...
             return;
         }
-        SharedFilesService fileService = servent.getSharedFilesService();
+        SharedFilesService fileService = peer.getSharedFilesService();
         if (fileService.isURNShared(urn)) {
             // file already shared... don't download...
             return;
