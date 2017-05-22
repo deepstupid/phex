@@ -42,7 +42,7 @@ public class HTTPHeaderGroup {
         EMPTY_HEADERGROUP = new EmptyHTTPHeaders();
         COMMON_HANDSHAKE_GROUP = new HTTPHeaderGroup(false);
         COMMON_HANDSHAKE_GROUP.addHeader(new HTTPHeader(HTTPHeaderNames.USER_AGENT,
-                Phex.getFullPhexVendor()));
+                Phex.getAgent()));
 
         ACCEPT_HANDSHAKE_GROUP = new HTTPHeaderGroup(COMMON_HANDSHAKE_GROUP);
         ACCEPT_HANDSHAKE_GROUP.addHeader(new HTTPHeader(GnutellaHeaderNames.GGEP,
@@ -90,13 +90,13 @@ public class HTTPHeaderGroup {
 
     public static HTTPHeaderGroup createDefaultRequestHeaders() {
         HTTPHeaderGroup headers = new HTTPHeaderGroup(false);
-        headers.addHeader(new HTTPHeader(HTTPHeaderNames.USER_AGENT, Phex.getFullPhexVendor()));
+        headers.addHeader(new HTTPHeader(HTTPHeaderNames.USER_AGENT, Phex.getAgent()));
         return headers;
     }
 
     public static HTTPHeaderGroup createDefaultResponseHeaders() {
         HTTPHeaderGroup headers = new HTTPHeaderGroup(false);
-        headers.addHeader(new HTTPHeader(HTTPHeaderNames.SERVER, Phex.getFullPhexVendor()));
+        headers.addHeader(new HTTPHeader(HTTPHeaderNames.SERVER, Phex.getAgent()));
         return headers;
     }
 

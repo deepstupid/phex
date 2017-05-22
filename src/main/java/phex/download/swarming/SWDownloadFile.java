@@ -401,7 +401,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
         String incompleteFileName = dFile.getIncompleteFileName();
         if (!StringUtils.isEmpty(incompleteFileName)) {
             try {
-                incompleteManagedFile = Phex.files.getReadWriteManagedFile(
+                incompleteManagedFile = mgr.peer.files.getReadWriteManagedFile(
                         new File(incompleteFileName));
             } catch (ManagedFileException exp) {
                 logger.error(exp.toString(), exp);
@@ -1774,7 +1774,7 @@ public class SWDownloadFile implements TransferDataProvider, SWDownloadConstants
             return;
         }
         try {
-            incompleteManagedFile = Phex.files.getReadWriteManagedFile(
+            incompleteManagedFile = mgr.peer.files.getReadWriteManagedFile(
                     createIncompleteFile(fileName));
         } catch (FileHandlingException exp) {
             String filename = exp.getFileName();

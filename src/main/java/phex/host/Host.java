@@ -358,7 +358,6 @@ public class Host {
         }
 
         vendor = aVendor;
-        isPhexVendor = Phex.isPhexVendor(vendor);
         return true;
     }
 
@@ -366,9 +365,6 @@ public class Host {
         return vendor;
     }
 
-    public boolean isPhex() {
-        return isPhexVendor;
-    }
 
     /**
      * @return the serventId

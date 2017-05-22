@@ -128,7 +128,7 @@ public class FileUploadHandler extends AbstractUploadHandler {
 
         ShareFileUploadResponse response;
         try {
-            response = new ShareFileUploadResponse(requestedFile,
+            response = new ShareFileUploadResponse(sharing.peer.files, requestedFile,
                     startOffset, contentLength);
         } catch (ManagedFileException exp) {
             IOException ioExp = new IOException("ManagedFileException: "

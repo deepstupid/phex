@@ -68,10 +68,8 @@ public abstract class AbstractUploadHandler implements UploadHandler {
      * request before it times out.
      */
     private int queueMaxNextPollTime;
-    private Peer peer;
 
     protected AbstractUploadHandler(SharedFilesService sharing) {
-        this.peer = sharing.peer;
         this.sharing = sharing;
     }
 
@@ -319,7 +317,7 @@ public abstract class AbstractUploadHandler implements UploadHandler {
             shareFile = sharing.getFileByURN(requestURN);
             // look for partials..
             if (shareFile == null && UploadPrefs.SharePartialFiles.get().booleanValue()) {
-                SwarmingManager swMgr = peer.getDownloadService();
+                SwarmingManager swMgr = sharing.peer.getDownloadService();
                 SWDownloadFile dwFile = swMgr.getDownloadFileByURN(requestURN);
                 if (dwFile != null) {
                     shareFile = new PartialShareFile(dwFile);

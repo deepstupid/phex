@@ -754,7 +754,7 @@ public class MemoryFile {
 
             finalizationLock.lock();
             try {
-                list = new ArrayList<DataDownloadScope>(bufferedDataScopeList);
+                list = new ArrayList<>(bufferedDataScopeList);
             } finally {
                 finalizationLock.unlock();
             }

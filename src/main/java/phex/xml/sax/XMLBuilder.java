@@ -35,9 +35,8 @@ import java.io.*;
  * resources.
  */
 public class XMLBuilder {
-    public static DPhex loadDPhexFromFile(File file)
+    public static DPhex loadDPhexFromFile(FileManager fileMgr, File file)
             throws IOException {
-        FileManager fileMgr = Phex.files;
         ManagedFile managedFile;
         try {
             managedFile = fileMgr.getReadWriteManagedFile(file);
@@ -114,11 +113,10 @@ public class XMLBuilder {
         return bos.toByteArray();
     }
 
-    public static void saveToFile(File file, DPhex dPhex)
+    public static void saveToFile(FileManager mgr, File file, DPhex dPhex)
             throws IOException {
         try {
-            ManagedFile managedFile = Phex.files
-                    .getReadWriteManagedFile(file);
+            ManagedFile managedFile = mgr.getReadWriteManagedFile(file);
             saveToFile(managedFile, dPhex);
         } catch (ManagedFileException exp) {
             // TODO refactor for Java 6

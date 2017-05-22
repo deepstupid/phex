@@ -30,6 +30,7 @@ import phex.common.LifeCycle;
 import phex.common.MultipleException;
 import phex.common.address.DestAddress;
 import phex.common.bandwidth.BandwidthManager;
+import phex.common.file.FileManager;
 import phex.download.swarming.SwarmingManager;
 import phex.host.DefaultHostFetchingStrategy;
 import phex.host.HostFetchingStrategy;
@@ -89,8 +90,11 @@ public class Peer extends AbstractLifeCycle implements ServentInfo {
      */
     private OnlineStatus onlineStatus;
     private UltrapeerCapabilityChecker upChecker;
+    public FileManager files;
 
     public Peer() {
+
+        this.files = new FileManager();
         dependentLifeCycles = new ArrayList<LifeCycle>();
 
         String serventGuidStr = NetworkPrefs.ServentGuid.get();

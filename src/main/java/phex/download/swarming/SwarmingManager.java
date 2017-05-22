@@ -1093,7 +1093,7 @@ public class SwarmingManager extends AbstractLifeCycle {
             try {
                 NLogger.debug(SwarmingManager.class,
                         "Try to load from default download list.");
-                FileManager fileMgr = Phex.files;
+                FileManager fileMgr = peer.files;
                 ManagedFile managedFile = fileMgr.getReadWriteManagedFile(downloadFile);
                 dPhex = XMLBuilder.loadDPhexFromFile(managedFile);
 
@@ -1208,7 +1208,7 @@ public class SwarmingManager extends AbstractLifeCycle {
                             EnvironmentConstants.XML_DOWNLOAD_FILE_NAME);
                     File downloadFileBak = new File(downloadFile.getAbsolutePath() + ".bak");
 
-                    ManagedFile managedFile = Phex.files.getReadWriteManagedFile(downloadFileBak);
+                    ManagedFile managedFile = peer.files.getReadWriteManagedFile(downloadFileBak);
                     XMLBuilder.saveToFile(managedFile, dPhex);
 
                     // Write to a backup file and copy over to ensure that at

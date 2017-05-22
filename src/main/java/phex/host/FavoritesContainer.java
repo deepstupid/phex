@@ -118,7 +118,7 @@ public class FavoritesContainer {
             if (!favoritesFile.exists()) {
                 return;
             }
-            FileManager fileMgr = Phex.files;
+            FileManager fileMgr = peer.files;
             ManagedFile managedFile = fileMgr.getReadWriteManagedFile(favoritesFile);
             dPhex = XMLBuilder.loadDPhexFromFile(managedFile);
             if (dPhex == null) {
@@ -194,7 +194,7 @@ public class FavoritesContainer {
             }
 
             File favoritesFile = peer.getGnutellaNetwork().getFavoritesFile();
-            ManagedFile managedFile = Phex.files.getReadWriteManagedFile(favoritesFile);
+            ManagedFile managedFile = peer.files.getReadWriteManagedFile(favoritesFile);
 
             XMLBuilder.saveToFile(managedFile, dPhex);
             hasChangedSinceLastSave = false;

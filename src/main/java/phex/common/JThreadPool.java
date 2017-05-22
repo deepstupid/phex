@@ -25,23 +25,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class JThreadPool {
     private static final Logger logger = LoggerFactory.getLogger(JThreadPool.class);
-    private final ThreadPoolExecutor pool;
+    private final ExecutorService pool;
 
     public JThreadPool() {
-        pool = new ThreadPoolExecutor(1, Integer.MAX_VALUE, 30, TimeUnit.SECONDS,
-                new SynchronousQueue<>(), new DefaultThreadFactory());
+        this(ForkJoinPool.commonPool());
+    }
+
+    public JThreadPool(ExecutorService pool) {
+        this.pool = pool;
+        //        pool = new ThreadPoolExecutor(1, Integer.MAX_VALUE, 30, TimeUnit.SECONDS,
+//                new SynchronousQueue<>(), new DefaultThreadFactory());
         //pool = new ForkJoinPool(4);
     }
 
-    public Executor getThreadPool() {
+    public ExecutorService getThreadPool() {
         return pool;
     }
 
-    public void executeNamed(final Runnable runnable, final String name) {
+    public void execute(final Runnable runnable, final String name) {
         pool.execute(new NamedThreadRunnable(name, runnable));
     }
 
@@ -73,31 +77,31 @@ public class JThreadPool {
             }
         }
     }
-
-    /**
-     * The default thread factory
-     */
-    private class DefaultThreadFactory implements ThreadFactory {
-        final ThreadGroup group;
-        final AtomicInteger threadNumber = new AtomicInteger(1);
-        final String namePrefix;
-
-        DefaultThreadFactory() {
-            SecurityManager s = System.getSecurityManager();
-            group = (s != null) ? s.getThreadGroup() :
-                    Thread.currentThread().getThreadGroup();
-            namePrefix = "PhexPool-thread-";
-        }
-
-        public Thread newThread(Runnable r) {
-            logger.debug("Creating new thread for pool: {} {}", pool.getPoolSize(), pool.getActiveCount());
-            Thread t = new Thread(group, r,
-                    namePrefix + threadNumber.getAndIncrement(), 0);
-            if (t.isDaemon())
-                t.setDaemon(false);
-            if (t.getPriority() != Thread.NORM_PRIORITY)
-                t.setPriority(Thread.NORM_PRIORITY);
-            return t;
-        }
-    }
+//
+//    /**
+//     * The default thread factory
+//     */
+//    private class DefaultThreadFactory implements ThreadFactory {
+//        final ThreadGroup group;
+//        final AtomicInteger threadNumber = new AtomicInteger(1);
+//        final String namePrefix;
+//
+//        DefaultThreadFactory() {
+//            SecurityManager s = System.getSecurityManager();
+//            group = (s != null) ? s.getThreadGroup() :
+//                    Thread.currentThread().getThreadGroup();
+//            namePrefix = "PhexPool-thread-";
+//        }
+//
+//        public Thread newThread(Runnable r) {
+//            logger.debug("Creating new thread for pool: {} {}", pool.getPoolSize(), pool.getActiveCount());
+//            Thread t = new Thread(group, r,
+//                    namePrefix + threadNumber.getAndIncrement(), 0);
+//            if (t.isDaemon())
+//                t.setDaemon(false);
+//            if (t.getPriority() != Thread.NORM_PRIORITY)
+//                t.setPriority(Thread.NORM_PRIORITY);
+//            return t;
+//        }
+//    }
 }

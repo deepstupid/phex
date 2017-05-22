@@ -41,7 +41,7 @@ public class GWebCacheListBuilder {
     public static void main(String[] args)
             throws Exception {
         dataList = new ArrayList<String>();
-        System.setProperty("http.agent", Phex.getFullPhexVendor());
+        System.setProperty("http.agent", Phex.getAgent());
 
         URL url = new URL(listUrl);
         URLConnection connection = url.openConnection();

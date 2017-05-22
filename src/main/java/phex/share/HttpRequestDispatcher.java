@@ -99,7 +99,7 @@ public class HttpRequestDispatcher {
 
         StringBuffer buf = new StringBuffer(300);
         buf.append("HTTP/1.1 ").append(statusStr).append(HTTPRequest.CRLF);
-        buf.append("Server: ").append(Phex.getFullPhexVendor()).append(HTTPRequest.CRLF);
+        buf.append("Server: ").append(Phex.getAgent()).append(HTTPRequest.CRLF);
         buf.append("Connection: close").append(HTTPRequest.CRLF);
         buf.append("Content-Type: text/plain").append(HTTPRequest.CRLF);
         buf.append("Content-Length: ").append(content.length()).append(HTTPRequest.CRLF);

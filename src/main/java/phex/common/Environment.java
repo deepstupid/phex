@@ -29,6 +29,7 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ForkJoinPool;
 
 /**
  * This class can not be implemented as a manager since manager initialization
@@ -117,7 +118,7 @@ public class Environment {
      * @param name     the name.
      */
     public void executeOnThreadPool(Runnable runnable, String name) {
-        threadPool.executeNamed(runnable, name);
+        threadPool.execute(runnable, name);
     }
 
     public Executor getThreadPool() {

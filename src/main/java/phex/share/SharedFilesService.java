@@ -162,7 +162,7 @@ public class SharedFilesService extends AbstractLifeCycle
         localQRTNeedsUpdate = true;
     }
 
-    public static DSharedLibrary loadSharedLibrary() {
+    public static DSharedLibrary loadSharedLibrary(FileManager files) {
         logger.debug("Load shared library configuration file.");
 
         File file = Environment.getPhexConfigFile(
@@ -170,7 +170,7 @@ public class SharedFilesService extends AbstractLifeCycle
 
         DPhex dPhex;
         try {
-            ManagedFile managedFile = Phex.files.getReadWriteManagedFile(file);
+            ManagedFile managedFile = files.getReadWriteManagedFile(file);
             dPhex = XMLBuilder.loadDPhexFromFile(managedFile);
             if (dPhex == null) {
                 logger.debug("No shared library configuration file found.");
@@ -777,7 +777,7 @@ public class SharedFilesService extends AbstractLifeCycle
                 // save shared files is already in progress. we rerequest a save.
                 saveSharedFilesJob.triggerFollowUpSave();
             } else {
-                saveSharedFilesJob = new SaveSharedFilesJob();
+                saveSharedFilesJob = new SaveSharedFilesJob(peer.files);
                 saveSharedFilesJob.start();
             }
         }
@@ -806,10 +806,12 @@ public class SharedFilesService extends AbstractLifeCycle
     }
 
     private class SaveSharedFilesJob extends Thread {
+        private final FileManager files;
         private volatile boolean isFollowUpSaveTriggered;
 
-        public SaveSharedFilesJob() {
+        public SaveSharedFilesJob(FileManager files) {
             super(ThreadTracking.rootThreadGroup, "SaveSharedFilesJob");
+            this.files = files;
             setPriority(Thread.MIN_PRIORITY);
         }
 
@@ -823,7 +825,6 @@ public class SharedFilesService extends AbstractLifeCycle
          */
         @Override
         public void run() {
-            FileManager fileMgr = Phex.files;
             File libraryFile = Environment.getPhexConfigFile(
                     EnvironmentConstants.XML_SHARED_LIBRARY_FILE_NAME);
             File tmpFile = Environment.getPhexConfigFile(
@@ -841,11 +842,11 @@ public class SharedFilesService extends AbstractLifeCycle
                     dPhex.setSharedLibrary(dLibrary);
 
                     // first save into temporary file...
-                    ManagedFile tmpMgFile = fileMgr.getReadWriteManagedFile(tmpFile);
+                    ManagedFile tmpMgFile = files.getReadWriteManagedFile(tmpFile);
                     XMLBuilder.saveToFile(tmpMgFile, dPhex);
 
                     // after saving copy temporary file to real file.
-                    ManagedFile libraryMgFile = fileMgr.getReadWriteManagedFile(libraryFile);
+                    ManagedFile libraryMgFile = files.getReadWriteManagedFile(libraryFile);
                     // lock library file.
                     try {
                         libraryMgFile.acquireFileLock();

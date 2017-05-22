@@ -38,7 +38,7 @@ public class FileManager {
      * Both references are weak to let them be cleaned by garbage collector when
      * unused anywhere.
      */
-    private final ReferenceMap fileManagedFileMap;
+    private final ReferenceMap<File,ManagedFile> fileManagedFileMap;
 
     /**
      * A set to maintain and count all open files.
@@ -82,12 +82,8 @@ public class FileManager {
     private ManagedFile getManagedFile(File file) {
         synchronized (fileManagedFileMap) {
             // find if we already have a ManagedFile in cache
-            ManagedFile managedFile = (ManagedFile) fileManagedFileMap.get(file);
-            if (managedFile == null) {
-                managedFile = new ManagedFile(file);
-                fileManagedFileMap.put(file, managedFile);
-            }
-            return managedFile;
+            return fileManagedFileMap.computeIfAbsent(file,
+                    (f) -> new ManagedFile(this, f));
         }
     }
 

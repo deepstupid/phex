@@ -40,10 +40,13 @@ public class ManagedFile implements ReadOnlyManagedFile {
     private static final int MAX_WRITE_TRIES = 10;
     private static final int WRITE_RETRY_DELAY = 100;
     private final ReentrantLock lock;
+    private final FileManager files;
     private File fsFile;
     private AccessMode accessMode;
     private RandomAccessFile raFile;
-    public ManagedFile(File file) {
+
+    public ManagedFile(FileManager files, File file) {
+        this.files = files;
         fsFile = file;
         lock = new ReentrantLock();
     }
@@ -102,10 +105,10 @@ public class ManagedFile implements ReadOnlyManagedFile {
         try {
             // check if already open.
             if (raFile != null) {
-                Phex.files.trackFileInUse(this);
+                files.trackFileInUse(this);
                 return;
             }
-            Phex.files.trackFileOpen(this);
+            files.trackFileOpen(this);
 
             try {
                 raFile = new RandomAccessFile(fsFile, accessMode.fileMode);
@@ -133,7 +136,7 @@ public class ManagedFile implements ReadOnlyManagedFile {
                 throw new ManagedFileException("failed to close", exp);
             } finally {
                 raFile = null;
-                Phex.files.trackFileClose(this);
+                files.trackFileClose(this);
             }
         } finally {
             lock.unlock();

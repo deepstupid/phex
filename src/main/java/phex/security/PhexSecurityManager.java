@@ -379,115 +379,115 @@ public class PhexSecurityManager extends AbstractLifeCycle {
         return xjbRule;
     }
 
-    private void loadSecurityRuleList() {
-        NLogger.debug(PhexSecurityManager.class,
-                "Loading security rule list...");
-
-        DPhex dPhex;
-        try {
-            File securityFile = Environment.getPhexConfigFile(
-                    EnvironmentConstants.XML_SECURITY_FILE_NAME);
-            if (securityFile.exists()) {
-                FileManager fileMgr = Phex.files;
-                ManagedFile managedFile = fileMgr.getReadWriteManagedFile(securityFile);
-                dPhex = XMLBuilder.loadDPhexFromFile(managedFile);
-            } else {
-                dPhex = new DPhex();
-            }
-            DSecurity dSecurity = dPhex.getSecurityList();
-            if (dSecurity == null) {
-                NLogger.debug(PhexSecurityManager.class,
-                        "No security definition found.");
-                dSecurity = new DSecurity();
-            }
-
-            synchronized (ipAccessRuleList) {
-                List<DSecurityRule> dRuleList = dSecurity.getIpAccessRuleList();
-                Map<String, DIpAccessRule> systemRuleMap = new HashMap<String, DIpAccessRule>();
-                for (DSecurityRule dRule : dRuleList) {
-                    // currently we only have DIpAccessRules
-                    DIpAccessRule dIpRule = (DIpAccessRule) dRule;
-                    if (dIpRule.hasDenyingRule() && !dIpRule.isDenyingRule()) {
-                        // currently we don't support ACCEPT IP rules
-                        // this is done to improve performance in the lookup 
-                        // process. A different solution would be to inverse
-                        // all ACCEPT rules to achieve the same effect. Is it 
-                        // worth the extra work? TODO3
-                        continue;
-                    }
-                    if (!dRule.isSystemRule()) {
-                        if (dIpRule.hasCidr()) {
-                            IpUserSecurityRule rule = new IpUserSecurityRule(
-                                    dIpRule.getDescription(), dIpRule.getIp(),
-                                    dIpRule.getCidr(), dIpRule.isDisabled(),
-                                    dIpRule.isDeletedOnExpiry(), dIpRule.getExpiryDate());
-                            rule.setTriggerCount(dIpRule.getTriggerCount());
-                            ipAccessRuleList.add(rule);
-                            ipUserRuleList.add(rule);
-                        } else {
-                            if (dIpRule.getAddressType() == DIpAccessRule.NETWORK_MASK) {
-                                IpUserSecurityRule rule = new IpUserSecurityRule(
-                                        dIpRule.getDescription(), dIpRule.getIp(),
-                                        AddressUtils.calculateCidr(dIpRule.getCompareIp()),
-                                        dIpRule.isDisabled(), dIpRule.isDeletedOnExpiry(),
-                                        dIpRule.getExpiryDate());
-                                rule.setTriggerCount(dIpRule.getTriggerCount());
-                                ipAccessRuleList.add(rule);
-                                ipUserRuleList.add(rule);
-                            } else if (dIpRule.getAddressType() == DIpAccessRule.SINGLE_ADDRESS) {
-                                IpUserSecurityRule rule = new IpUserSecurityRule(
-                                        dIpRule.getDescription(), dIpRule.getIp(),
-                                        (byte) 32, dIpRule.isDisabled(),
-                                        dIpRule.isDeletedOnExpiry(), dIpRule.getExpiryDate());
-                                rule.setTriggerCount(dIpRule.getTriggerCount());
-                                ipAccessRuleList.add(rule);
-                                ipUserRuleList.add(rule);
-                            } else if (dIpRule.getAddressType() == DIpAccessRule.NETWORK_RANGE) {
-
-                                List<IpCidrPair> pairList = AddressUtils.range2cidr(
-                                        dIpRule.getIp(), dIpRule.getCompareIp());
-                                for (IpCidrPair pair : pairList) {
-                                    IpUserSecurityRule rule = new IpUserSecurityRule(
-                                            dIpRule.getDescription(), pair.ipAddr,
-                                            pair.cidr, dIpRule.isDisabled(),
-                                            dIpRule.isDeletedOnExpiry(), dIpRule.getExpiryDate());
-                                    rule.setTriggerCount(dIpRule.getTriggerCount());
-                                    ipAccessRuleList.add(rule);
-                                    ipUserRuleList.add(rule);
-                                }
-                            }
-                        }
-                    } else {
-                        if (dIpRule.hasCidr()) {
-                            String keyStr = AddressUtils.ip2string(dIpRule.getIp())
-                                    + '/' + String.valueOf(dIpRule.getCidr());
-                            systemRuleMap.put(keyStr, dIpRule);
-                        } else {
-                            StringBuffer keyBuf = new StringBuffer(AddressUtils.ip2string(dIpRule.getIp()));
-                            keyBuf.append('/');
-                            if (dIpRule.getCompareIp() == null) {
-                                keyBuf.append("32");
-                            } else {
-                                keyBuf.append(AddressUtils.calculateCidr(
-                                        dIpRule.getCompareIp()));
-                            }
-                            systemRuleMap.put(keyBuf.toString(), dIpRule);
-                        }
-                    }
-                }
-                loadHostileHostList(systemRuleMap);
-
-                // optimize ipAccessRuleList
-                ipAccessRuleList.trimToSize();
-            }
-        } catch (IOException | ManagedFileException exp) {
-            NLogger.error(PhexSecurityManager.class, exp, exp);
-            Environment.getInstance().fireDisplayUserMessage(
-                    UserMessageListener.SecuritySettingsLoadFailed,
-                    new String[]{exp.toString()});
-            return;
-        }
-    }
+//    private void loadSecurityRuleList() {
+//        NLogger.debug(PhexSecurityManager.class,
+//                "Loading security rule list...");
+//
+//        DPhex dPhex;
+//        try {
+//            File securityFile = Environment.getPhexConfigFile(
+//                    EnvironmentConstants.XML_SECURITY_FILE_NAME);
+//            if (securityFile.exists()) {
+//                FileManager fileMgr = Phex.files;
+//                ManagedFile managedFile = fileMgr.getReadWriteManagedFile(securityFile);
+//                dPhex = XMLBuilder.loadDPhexFromFile(managedFile);
+//            } else {
+//                dPhex = new DPhex();
+//            }
+//            DSecurity dSecurity = dPhex.getSecurityList();
+//            if (dSecurity == null) {
+//                NLogger.debug(PhexSecurityManager.class,
+//                        "No security definition found.");
+//                dSecurity = new DSecurity();
+//            }
+//
+//            synchronized (ipAccessRuleList) {
+//                List<DSecurityRule> dRuleList = dSecurity.getIpAccessRuleList();
+//                Map<String, DIpAccessRule> systemRuleMap = new HashMap<String, DIpAccessRule>();
+//                for (DSecurityRule dRule : dRuleList) {
+//                    // currently we only have DIpAccessRules
+//                    DIpAccessRule dIpRule = (DIpAccessRule) dRule;
+//                    if (dIpRule.hasDenyingRule() && !dIpRule.isDenyingRule()) {
+//                        // currently we don't support ACCEPT IP rules
+//                        // this is done to improve performance in the lookup
+//                        // process. A different solution would be to inverse
+//                        // all ACCEPT rules to achieve the same effect. Is it
+//                        // worth the extra work? TODO3
+//                        continue;
+//                    }
+//                    if (!dRule.isSystemRule()) {
+//                        if (dIpRule.hasCidr()) {
+//                            IpUserSecurityRule rule = new IpUserSecurityRule(
+//                                    dIpRule.getDescription(), dIpRule.getIp(),
+//                                    dIpRule.getCidr(), dIpRule.isDisabled(),
+//                                    dIpRule.isDeletedOnExpiry(), dIpRule.getExpiryDate());
+//                            rule.setTriggerCount(dIpRule.getTriggerCount());
+//                            ipAccessRuleList.add(rule);
+//                            ipUserRuleList.add(rule);
+//                        } else {
+//                            if (dIpRule.getAddressType() == DIpAccessRule.NETWORK_MASK) {
+//                                IpUserSecurityRule rule = new IpUserSecurityRule(
+//                                        dIpRule.getDescription(), dIpRule.getIp(),
+//                                        AddressUtils.calculateCidr(dIpRule.getCompareIp()),
+//                                        dIpRule.isDisabled(), dIpRule.isDeletedOnExpiry(),
+//                                        dIpRule.getExpiryDate());
+//                                rule.setTriggerCount(dIpRule.getTriggerCount());
+//                                ipAccessRuleList.add(rule);
+//                                ipUserRuleList.add(rule);
+//                            } else if (dIpRule.getAddressType() == DIpAccessRule.SINGLE_ADDRESS) {
+//                                IpUserSecurityRule rule = new IpUserSecurityRule(
+//                                        dIpRule.getDescription(), dIpRule.getIp(),
+//                                        (byte) 32, dIpRule.isDisabled(),
+//                                        dIpRule.isDeletedOnExpiry(), dIpRule.getExpiryDate());
+//                                rule.setTriggerCount(dIpRule.getTriggerCount());
+//                                ipAccessRuleList.add(rule);
+//                                ipUserRuleList.add(rule);
+//                            } else if (dIpRule.getAddressType() == DIpAccessRule.NETWORK_RANGE) {
+//
+//                                List<IpCidrPair> pairList = AddressUtils.range2cidr(
+//                                        dIpRule.getIp(), dIpRule.getCompareIp());
+//                                for (IpCidrPair pair : pairList) {
+//                                    IpUserSecurityRule rule = new IpUserSecurityRule(
+//                                            dIpRule.getDescription(), pair.ipAddr,
+//                                            pair.cidr, dIpRule.isDisabled(),
+//                                            dIpRule.isDeletedOnExpiry(), dIpRule.getExpiryDate());
+//                                    rule.setTriggerCount(dIpRule.getTriggerCount());
+//                                    ipAccessRuleList.add(rule);
+//                                    ipUserRuleList.add(rule);
+//                                }
+//                            }
+//                        }
+//                    } else {
+//                        if (dIpRule.hasCidr()) {
+//                            String keyStr = AddressUtils.ip2string(dIpRule.getIp())
+//                                    + '/' + String.valueOf(dIpRule.getCidr());
+//                            systemRuleMap.put(keyStr, dIpRule);
+//                        } else {
+//                            StringBuffer keyBuf = new StringBuffer(AddressUtils.ip2string(dIpRule.getIp()));
+//                            keyBuf.append('/');
+//                            if (dIpRule.getCompareIp() == null) {
+//                                keyBuf.append("32");
+//                            } else {
+//                                keyBuf.append(AddressUtils.calculateCidr(
+//                                        dIpRule.getCompareIp()));
+//                            }
+//                            systemRuleMap.put(keyBuf.toString(), dIpRule);
+//                        }
+//                    }
+//                }
+//                loadHostileHostList(systemRuleMap);
+//
+//                // optimize ipAccessRuleList
+//                ipAccessRuleList.trimToSize();
+//            }
+//        } catch (IOException | ManagedFileException exp) {
+//            NLogger.error(PhexSecurityManager.class, exp, exp);
+//            Environment.getInstance().fireDisplayUserMessage(
+//                    UserMessageListener.SecuritySettingsLoadFailed,
+//                    new String[]{exp.toString()});
+//            return;
+//        }
+//    }
 
     public void clearTriggerCount() {
         synchronized (ipAccessRuleList) {
@@ -500,48 +500,48 @@ public class PhexSecurityManager extends AbstractLifeCycle {
         }
     }
 
-    private void saveSecurityRuleList() {
-        NLogger.debug(PhexSecurityManager.class, "Saving security rule list...");
-
-        try {
-            DPhex dPhex = new DPhex();
-            dPhex.setPhexVersion(PhexVersion.getFullVersion());
-
-            DSecurity security = new DSecurity();
-            dPhex.setSecurityList(security);
-
-            synchronized (ipAccessRuleList) {
-                for (IpSecurityRule rule : ipAccessRuleList) {
-                    if (!rule.isSystemRule() && rule.isDeletedOnExpiry() &&
-                            (rule.getExpiryDate().isExpiringEndOfSession() ||
-                                    rule.getExpiryDate().isExpired())) {// skip session expiry rules that get deleted on expiry...
-                        // except if they are system rules
-                        continue;
-                    }
-
-                    if (rule.isSystemRule() && rule.getTriggerCount() == 0) {// we don't care about system rules with no trigger count.
-                        continue;
-                    }
-
-                    DSecurityRule dRule = rule.createDSecurityRule();
-                    security.getIpAccessRuleList().add(dRule);
-                }
-            }
-
-            File securityFile = Environment.getPhexConfigFile(
-                    EnvironmentConstants.XML_SECURITY_FILE_NAME);
-            ManagedFile managedFile = Phex.files.getReadWriteManagedFile(securityFile);
-            XMLBuilder.saveToFile(managedFile, dPhex);
-        } catch (IOException | ManagedFileException exp) {
-            // TODO during close this message is never displayed since application
-            // will exit too fast. A solution to delay exit process in case 
-            // SlideInWindows are open needs to be found.
-            NLogger.error(PhexSecurityManager.class, exp, exp);
-            Environment.getInstance().fireDisplayUserMessage(
-                    UserMessageListener.SecuritySettingsSaveFailed,
-                    new String[]{exp.toString()});
-        }
-    }
+//    private void saveSecurityRuleList() {
+//        NLogger.debug(PhexSecurityManager.class, "Saving security rule list...");
+//
+//        try {
+//            DPhex dPhex = new DPhex();
+//            dPhex.setPhexVersion(PhexVersion.getFullVersion());
+//
+//            DSecurity security = new DSecurity();
+//            dPhex.setSecurityList(security);
+//
+//            synchronized (ipAccessRuleList) {
+//                for (IpSecurityRule rule : ipAccessRuleList) {
+//                    if (!rule.isSystemRule() && rule.isDeletedOnExpiry() &&
+//                            (rule.getExpiryDate().isExpiringEndOfSession() ||
+//                                    rule.getExpiryDate().isExpired())) {// skip session expiry rules that get deleted on expiry...
+//                        // except if they are system rules
+//                        continue;
+//                    }
+//
+//                    if (rule.isSystemRule() && rule.getTriggerCount() == 0) {// we don't care about system rules with no trigger count.
+//                        continue;
+//                    }
+//
+//                    DSecurityRule dRule = rule.createDSecurityRule();
+//                    security.getIpAccessRuleList().add(dRule);
+//                }
+//            }
+//
+//            File securityFile = Environment.getPhexConfigFile(
+//                    EnvironmentConstants.XML_SECURITY_FILE_NAME);
+//            ManagedFile managedFile = Phex.files.getReadWriteManagedFile(securityFile);
+//            XMLBuilder.saveToFile(managedFile, dPhex);
+//        } catch (IOException | ManagedFileException exp) {
+//            // TODO during close this message is never displayed since application
+//            // will exit too fast. A solution to delay exit process in case
+//            // SlideInWindows are open needs to be found.
+//            NLogger.error(PhexSecurityManager.class, exp, exp);
+//            Environment.getInstance().fireDisplayUserMessage(
+//                    UserMessageListener.SecuritySettingsSaveFailed,
+//                    new String[]{exp.toString()});
+//        }
+//    }
 
     //////////////////////// Start LifeCycle Methods ///////////////////////////
 
@@ -550,7 +550,7 @@ public class PhexSecurityManager extends AbstractLifeCycle {
      */
     @Override
     public void doStart() {
-        loadSecurityRuleList();
+        //loadSecurityRuleList();
         loadHostileSha1List();
     }
 
@@ -559,7 +559,7 @@ public class PhexSecurityManager extends AbstractLifeCycle {
      */
     @Override
     public void doStop() {
-        saveSecurityRuleList();
+        //saveSecurityRuleList();
     }
     //////////////////////// End LifeCycle Methods ///////////////////////////
 

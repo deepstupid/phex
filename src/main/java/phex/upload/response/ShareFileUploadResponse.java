@@ -22,6 +22,7 @@
 package phex.upload.response;
 
 import phex.Phex;
+import phex.common.file.FileManager;
 import phex.common.file.ManagedFileException;
 import phex.common.file.ReadOnlyManagedFile;
 import phex.common.log.NLogger;
@@ -41,12 +42,11 @@ public class ShareFileUploadResponse extends UploadResponse {
 
     private long length;
 
-    public ShareFileUploadResponse(ShareFile shareFile, long offset, long length)
+    public ShareFileUploadResponse(FileManager files, ShareFile shareFile, long offset, long length)
             throws ManagedFileException {
         super();
         this.shareFile = shareFile;
-        uploadFile = Phex.files.
-                getReadOnlyManagedFile(shareFile.getSystemFile());
+        uploadFile = files.getReadOnlyManagedFile(shareFile.getSystemFile());
 
         startOffset = offset;
         currentOffset = startOffset;

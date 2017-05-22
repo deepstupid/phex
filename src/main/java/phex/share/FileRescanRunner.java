@@ -48,7 +48,7 @@ public class FileRescanRunner implements Runnable {
      * if this thread is alive a rescan is running.
      */
     private static Thread rescanThread;
-    private final SharedFilesService sharedFilesService;
+    private final SharedFilesService sharing;
     private final List<Pattern> exclusionPatterns;
     /**
      * In between storage for shared directories.
@@ -62,7 +62,7 @@ public class FileRescanRunner implements Runnable {
     private FileRescanRunner(SharedFilesService sharedFilesSerivce,
                              boolean isInitialRescan) {
         this.isInitialRescan = isInitialRescan;
-        this.sharedFilesService = sharedFilesSerivce;
+        this.sharing = sharedFilesSerivce;
         exclusionPatterns = new ArrayList<Pattern>();
         sharedDirectoryMap = new HashMap<File, SharedDirectory>();
         sharedDirectoryList = new HashSet<SharedDirectory>(5);
@@ -143,7 +143,7 @@ public class FileRescanRunner implements Runnable {
         }
 
         if (isInitialRescan) {
-            sharedFilesService.clearSharedFiles();
+            sharing.clearSharedFiles();
             if (rescanThread.isInterrupted()) {
                 return;
             }
@@ -156,7 +156,7 @@ public class FileRescanRunner implements Runnable {
         }
 
         try {
-            sharedFilesService.setCalculationRunnerPause(true);
+            sharing.setCalculationRunnerPause(true);
             HashMap<String, String> scannedDirMap = new HashMap<String, String>();
 
             for (File dir : sharedDirectoryFiles) {
@@ -165,17 +165,17 @@ public class FileRescanRunner implements Runnable {
                     return;
                 }
             }
-            sharedFilesService.updateSharedDirecotries(sharedDirectoryMap,
+            sharing.updateSharedDirecotries(sharedDirectoryMap,
                     sharedDirectoryList);
-            sharedFilesService.triggerSaveSharedFiles();
+            sharing.triggerSaveSharedFiles();
         } finally {
-            sharedFilesService.setCalculationRunnerPause(false);
+            sharing.setCalculationRunnerPause(false);
         }
     }
 
     private void buildSharedFilesCache() {
         sharedFilesCache = new HashMap<String, DSharedFile>();
-        DSharedLibrary library = SharedFilesService.loadSharedLibrary();
+        DSharedLibrary library = SharedFilesService.loadSharedLibrary(sharing.peer.files);
         if (library == null) {
             // no library found to load...
             return;
@@ -278,37 +278,37 @@ public class FileRescanRunner implements Runnable {
                     dFile.getLastModified() == file.lastModified()) {
                 shareFile.updateFromCache(dFile);
                 // add the urn to the map to share by urn
-                sharedFilesService.addUrn2FileMapping(shareFile);
+                sharing.addUrn2FileMapping(shareFile);
             } else {
-                sharedFilesService.queueUrnCalculation(shareFile);
+                sharing.queueUrnCalculation(shareFile);
                 if (rescanThread.isInterrupted()) {
                     return;
                 }
             }
-            sharedFilesService.addSharedFile(shareFile);
+            sharing.addSharedFile(shareFile);
         } else {
             // try to find file in already existing share
-            shareFile = sharedFilesService.getFileByName(file.getAbsolutePath());
+            shareFile = sharing.getFileByName(file.getAbsolutePath());
             if (shareFile == null) {// create new file
                 shareFile = new ShareFile(file);
-                sharedFilesService.queueUrnCalculation(shareFile);
+                sharing.queueUrnCalculation(shareFile);
                 if (rescanThread.isInterrupted()) {
                     return;
                 }
-                sharedFilesService.addSharedFile(shareFile);
+                sharing.addSharedFile(shareFile);
             }
         }
     }
 
     private void removeUnsharedFiles() {
-        List<ShareFile> sharedFiles = sharedFilesService.getSharedFiles();
+        List<ShareFile> sharedFiles = sharing.getSharedFiles();
         for (ShareFile shareFile : sharedFiles) {
             if (rescanThread.isInterrupted()) {
                 return;
             }
             File file = shareFile.getSystemFile();
             if (!isInSharedDirectory(file) || !file.exists()) {
-                sharedFilesService.removeSharedFile(shareFile);
+                sharing.removeSharedFile(shareFile);
             }
         }
     }

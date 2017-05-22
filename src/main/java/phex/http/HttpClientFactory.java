@@ -36,7 +36,7 @@ public class HttpClientFactory {
     static {
         HttpParams globalParams = DefaultHttpParams.getDefaultParams();
         globalParams.setParameter(HttpMethodParams.USER_AGENT,
-                Phex.getFullPhexVendor());
+                Phex.getAgent());
         globalParams.setIntParameter(HttpClientParams.MAX_REDIRECTS, 10);
 
         connectionManager = new MultiThreadedHttpConnectionManager();

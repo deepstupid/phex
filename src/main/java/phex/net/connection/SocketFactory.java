@@ -52,16 +52,16 @@ public final class SocketFactory {
                 null);
     }
 
-    /**
-     * @param address
-     * @return
-     * @throws IOException
-     */
-    public static SocketFacade connect(DestAddress address, Runnable acquireCallback)
-            throws IOException {
-        return connect(address, NetworkPrefs.TcpConnectTimeout.get(),
-                acquireCallback);
-    }
+//    /**
+//     * @param address
+//     * @return
+//     * @throws IOException
+//     */
+//    public static SocketFacade connect(DestAddress address, Runnable acquireCallback)
+//            throws IOException {
+//        return connect(address, NetworkPrefs.TcpConnectTimeout.get(),
+//                acquireCallback);
+//    }
 
     /**
      * The operation might block to acquire a concurrentConnectAttempts lock

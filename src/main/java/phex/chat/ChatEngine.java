@@ -165,13 +165,13 @@ public final class ChatEngine {
         NLogger.debug(ChatEngine.class, "Sending: CHAT/0.1 200 OK");
         if (foundPhexEncoded) {
             connection.write(ByteBuffer.wrap(("CHAT/0.1 200 OK\r\n" +
-                    "User-Agent: " + Phex.getFullPhexVendor() + "\r\n" +
+                    "User-Agent: " + Phex.getAgent() + "\r\n" +
                     //"X-Nickname: " + StrUtil.getAppNameVersion() + "\r\n" +
                     "X-Phex-Encoded: true" + "\r\n" +
                     "\r\n").getBytes()));
         } else {
             connection.write(ByteBuffer.wrap(("CHAT/0.1 200 OK\r\n" +
-                    "User-Agent: " + Phex.getFullPhexVendor() + "\r\n" +
+                    "User-Agent: " + Phex.getAgent() + "\r\n" +
                     //"X-Nickname: " + StrUtil.getAppNameVersion() + "\r\n" +
                     "\r\n").getBytes()));
         }
@@ -203,7 +203,7 @@ public final class ChatEngine {
         // First send "CHAT CONNECT/0.1\r\n" and header data
         // only header currently is user agent.
         String message = "CHAT CONNECT/0.1\r\n" +
-                "User-Agent: " + Phex.getFullPhexVendor() + "\r\n" +
+                "User-Agent: " + Phex.getAgent() + "\r\n" +
                 //"X-Nickname: " + StrUtil.getAppNameVersion() + "\r\n" +
                 "X-Phex-Encoded: true" + "\r\n" +
                 "\r\n";
@@ -240,7 +240,7 @@ public final class ChatEngine {
 
         // we respond with "CHAT/0.1 200 OK\r\n\r\n" to finish the handshake.
         connection.write(ByteBuffer.wrap(("CHAT/0.1 200 OK\r\n" +
-                "User-Agent: " + Phex.getFullPhexVendor() + "\r\n\r\n").getBytes()));
+                "User-Agent: " + Phex.getAgent() + "\r\n\r\n").getBytes()));
         connection.getSocket().setSoTimeout(0);
         // chat connection open notification will be fired through the chat manager
     }

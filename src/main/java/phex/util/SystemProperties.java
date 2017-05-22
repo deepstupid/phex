@@ -43,7 +43,7 @@ public class SystemProperties {
      * For a HTTPURLConnection java uses configured proxy settings.
      */
     public static void updateProxyProperties() {
-        System.setProperty("http.agent", Phex.getFullPhexVendor());
+        System.setProperty("http.agent", Phex.getAgent());
         if (ProxyPrefs.UseHttp.get().booleanValue()) {
             System.setProperty("http.proxyHost", ProxyPrefs.HttpHost.get());
             System.setProperty("http.proxyPort", ProxyPrefs.HttpPort.get().toString());

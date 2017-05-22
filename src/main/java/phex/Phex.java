@@ -21,6 +21,7 @@
  */
 package phex;
 
+
 import ch.qos.logback.classic.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +52,8 @@ import java.util.*;
  */
 public class Phex extends Peer implements IPhexDriver {
 
+    static final Logger logger = LoggerFactory.getLogger(Phex.class);
+
     static {
         boolean DEBUG = true;
         if (!DEBUG) {
@@ -63,7 +66,18 @@ public class Phex extends Peer implements IPhexDriver {
         new Phex().start();
     }
 
-    public static final FileManager files = new FileManager();
+    public final FileManager files;
+
+
+    public Phex() {
+        this(null);
+    }
+
+    public Phex(String configPath) {
+        super();
+        files = new FileManager();
+    }
+
 
     // Query time out in milliseconds.
     private static final long DEFAULT_QUERY_TIMEOUT = DefaultSearchProgress.DEFAULT_QUERY_TIMEOUT;
@@ -81,28 +95,17 @@ public class Phex extends Peer implements IPhexDriver {
     private QueryManager queries = null;
     private SwarmingManager downloads;
 
-    static final Logger logger = LoggerFactory.getLogger(Phex.class);
 
     /**
      * Returns the Phex full vendor string including the version.
      *
      * @return full vendor string including version.
      */
-    public static String getFullPhexVendor() {
+    public static String getAgent() {
         return "Phex " + PrivateNetworkConstants.PRIVATE_BUILD_ID + PhexVersion.getFullVersion();
     }
 
-
-    public static boolean isPhexVendor(String vendor) {
-        if (vendor.length() > 4) {
-            return vendor.startsWith("Phex ");
-        } else {
-            return vendor.equals("Phex");
-        }
-    }
-
     public synchronized boolean start() {
-
 
         try {
             if (!super.start()) {
